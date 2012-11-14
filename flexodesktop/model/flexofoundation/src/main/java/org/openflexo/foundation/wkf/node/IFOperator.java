@@ -217,11 +217,11 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 	}
 
 	public boolean isPositiveEvaluationPostcondition(FlexoPostCondition post) {
-		return (getPositiveEvaluationPostConditions().contains(post));
+		return getPositiveEvaluationPostConditions().contains(post);
 	}
 
 	public boolean isNegativeEvaluationPostcondition(FlexoPostCondition post) {
-		return (getNegativeEvaluationPostConditions().contains(post));
+		return getNegativeEvaluationPostConditions().contains(post);
 	}
 
 	public Status getNewStatusForPositiveEvaluation() {

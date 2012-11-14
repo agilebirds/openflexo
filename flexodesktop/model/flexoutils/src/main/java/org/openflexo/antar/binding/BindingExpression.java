@@ -756,9 +756,9 @@ public class BindingExpression extends AbstractBinding {
 
 			Expression evaluatedExpression = resolvedExpression.evaluate();
 
-		if (evaluatedExpression instanceof Constant) {
-			return ((Constant) evaluatedExpression).getValue();
-		}
+			if (evaluatedExpression instanceof Constant) {
+				return ((Constant) evaluatedExpression).getValue();
+			}
 
 			logger.warning("Cannot evaluate " + getStringRepresentation() + " max reduction is " + evaluatedExpression);
 			return null;
@@ -766,8 +766,8 @@ public class BindingExpression extends AbstractBinding {
 		} catch (TransformException e1) {
 			logger.warning("TransformException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
 			e1.printStackTrace();
-		return null;
-	}
+			return null;
+		}
 
 	}
 

@@ -53,8 +53,8 @@ public class InsertColAfter extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && ((object instanceof IETDWidget) || ((object instanceof IESequenceWidget) && ((IESequenceWidget) object)
-					.isInTD())));
+			return object != null
+					&& (object instanceof IETDWidget || object instanceof IESequenceWidget && ((IESequenceWidget) object).isInTD());
 		}
 
 	};
@@ -65,7 +65,7 @@ public class InsertColAfter extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if ((getFocusedTD() != null) && (getFocusedTD().htmlTable() != null)) {
+		if (getFocusedTD() != null && getFocusedTD().htmlTable() != null) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Inserting new column " + (getFocusedTD().getXLocation() + 1));
 			}

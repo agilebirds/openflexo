@@ -68,7 +68,7 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 
 	@Override
 	public synchronized void delete(boolean deleteFile) {
-		if ((getCGFile() != null) && !getCGFile().isMarkedForDeletion()) {
+		if (getCGFile() != null && !getCGFile().isMarkedForDeletion()) {
 			getCGFile().setMarkedForDeletion(true);
 			getCGFile().delete(deleteFile);
 		}
@@ -80,7 +80,7 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 		if (isDeleted()) {
 			return false;
 		}
-		if (!isDeleted() && !project.isDeserializing() && (getProject() != null) && (getProject().getResourceManagerInstance() != null)
+		if (!isDeleted() && !project.isDeserializing() && getProject() != null && getProject().getResourceManagerInstance() != null
 				&& !getProject().getResourceManagerInstance().isLoadingAProject()) {
 			if (resourceToCopy == null) {
 				if (logger.isLoggable(Level.INFO)) {
@@ -184,7 +184,7 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 	}
 
 	public FlexoFileResource getResourceToCopy() {
-		if ((resourceToCopy != null) && resourceToCopy.isDeleted()) {
+		if (resourceToCopy != null && resourceToCopy.isDeleted()) {
 			return null;
 		}
 		return resourceToCopy;
@@ -203,7 +203,7 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof ResourceRemoved) && (((ResourceRemoved) dataModification).getRemovedResource() == resourceToCopy)) {
+		if (dataModification instanceof ResourceRemoved && ((ResourceRemoved) dataModification).getRemovedResource() == resourceToCopy) {
 			if (getCGFile() == null) {
 				this.delete();
 			} else {

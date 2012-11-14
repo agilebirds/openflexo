@@ -56,7 +56,7 @@ public class DeleteExampleDrawingElements extends
 		@Override
 		public boolean isEnabledForSelection(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection) {
 			Vector<ExampleDrawingObject> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
-			return (objectsToDelete.size() > 0);
+			return objectsToDelete.size() > 0;
 		}
 
 	};

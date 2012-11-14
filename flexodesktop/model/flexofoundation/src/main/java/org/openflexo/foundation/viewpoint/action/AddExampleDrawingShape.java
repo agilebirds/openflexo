@@ -55,7 +55,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 
 		@Override
 		public boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
-			return (object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape);
+			return object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape;
 		}
 
 	};

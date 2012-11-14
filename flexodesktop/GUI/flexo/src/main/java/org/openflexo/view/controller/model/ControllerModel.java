@@ -15,6 +15,7 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -291,7 +292,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 						}
 					}
 					if (!objects.remove(currentObject)) {
-						registrationManager.new PropertyChangeListenerRegistration(FlexoModelObject.DELETED_PROPERTY, this, currentObject);
+						registrationManager.new PropertyChangeListenerRegistration(FlexoObservable.DELETED_PROPERTY, this, currentObject);
 					}
 					objects.add(currentObject);
 					HistoryLocation old = currentLocation;
@@ -435,7 +436,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					setCurrentEditor(null);
 				}
 			}
-		} else if (evt.getPropertyName().equals(FlexoModelObject.DELETED_PROPERTY)) {
+		} else if (evt.getPropertyName().equals(FlexoObservable.DELETED_PROPERTY)) {
 			FlexoModelObject deletedObject = (FlexoModelObject) evt.getOldValue();
 			handleObjectDeletion(deletedObject);
 		}
@@ -454,7 +455,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				setCurrentObject(null);
 			}
 		}
-		registrationManager.removeListener(FlexoModelObject.DELETED_PROPERTY, this, deletedObject);
+		registrationManager.removeListener(FlexoObservable.DELETED_PROPERTY, this, deletedObject);
 	}
 
 	private void updateHistoryForDeletedObject(Stack<HistoryLocation> history, FlexoModelObject deletedObject) {

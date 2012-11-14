@@ -70,7 +70,7 @@ public class RefreshTemplates extends FlexoAction<RefreshTemplates, CGTemplateOb
 		if (getFocusedObject() != null) {
 			getFocusedObject().refresh();
 		}
-		if ((getGlobalSelection() != null) && (getGlobalSelection().size() > 0)) {
+		if (getGlobalSelection() != null && getGlobalSelection().size() > 0) {
 			for (CGTemplateObject o : getGlobalSelection()) {
 				o.refresh();
 			}

@@ -27,7 +27,6 @@ import javax.swing.Icon;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.action.EditCustomTemplateFile;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
@@ -52,12 +51,12 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, EditCustomTemplateFile action) {
 				DGTemplateFileModuleView editor;
-				if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView)
-						&& (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+				if (action.getInvoker() != null && action.getInvoker() instanceof DGTemplateFileModuleView
+						&& ((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					editor = (DGTemplateFileModuleView) action.getInvoker();
 				} else {
 					editor = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController().moduleViewForObject(
-							(CGTemplate) action.getFocusedObject());
+							action.getFocusedObject());
 				}
 				if (editor != null) {
 					action.setTemplateFileContentEditor(editor);
@@ -73,8 +72,8 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
 			@Override
 			public boolean run(EventObject e, EditCustomTemplateFile action) {
-				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof DGTemplateFileModuleView)
-						|| !(((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+				if (action.getInvoker() == null || !(action.getInvoker() instanceof DGTemplateFileModuleView)
+						|| !((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 					getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
 				}

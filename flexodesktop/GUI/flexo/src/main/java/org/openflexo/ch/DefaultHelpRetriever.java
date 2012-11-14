@@ -51,7 +51,7 @@ public class DefaultHelpRetriever implements HelpRetriever {
 		}
 		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
 
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor((InspectableObject) object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				return "<html>" + propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
@@ -72,7 +72,7 @@ public class DefaultHelpRetriever implements HelpRetriever {
 		}
 		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
 
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor((InspectableObject) object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				String returned = "<html>"

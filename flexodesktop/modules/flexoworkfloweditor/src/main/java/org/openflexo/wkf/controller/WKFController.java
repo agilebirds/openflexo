@@ -147,6 +147,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
+	@Override
 	protected void initializePerspectives() {
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);

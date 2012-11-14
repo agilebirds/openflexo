@@ -19,11 +19,11 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.util.EventObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;

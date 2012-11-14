@@ -63,13 +63,13 @@ public class WSEOperationTableModel extends AbstractModel<ServiceInterface, Serv
 			addToColumns(new StringColumn<ServiceOperation>("name", 190) {
 				@Override
 				public String getValue(ServiceOperation object) {
-					return (object).getName();
+					return object.getName();
 				}
 			});
 			addToColumns(new StringColumn<ServiceOperation>("description", 365) {
 				@Override
 				public String getValue(ServiceOperation object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 
 				/*          public void setValue(FlexoModelObject object, String aValue)
@@ -81,13 +81,13 @@ public class WSEOperationTableModel extends AbstractModel<ServiceInterface, Serv
 			addToColumns(new EditableStringColumn<ServiceOperation>("name", 190) {
 				@Override
 				public String getValue(ServiceOperation object) {
-					return (object).getName();
+					return object.getName();
 				}
 
 				@Override
 				public void setValue(ServiceOperation object, String aValue) {
 					try {
-						(object).setName(aValue);
+						object.setName(aValue);
 					} catch (DuplicateWKFObjectException e) {
 						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
 					}
@@ -97,12 +97,12 @@ public class WSEOperationTableModel extends AbstractModel<ServiceInterface, Serv
 			addToColumns(new EditableStringColumn<ServiceOperation>("description", 365) {
 				@Override
 				public String getValue(ServiceOperation object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 
 				@Override
 				public void setValue(ServiceOperation object, String aValue) {
-					(object).setDescription(aValue);
+					object.setDescription(aValue);
 				}
 			});
 		}
@@ -119,7 +119,7 @@ public class WSEOperationTableModel extends AbstractModel<ServiceInterface, Serv
 
 	@Override
 	public ServiceOperation elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getOperations().get(row);
 		} else {
 			return null;

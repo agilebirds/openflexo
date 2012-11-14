@@ -722,7 +722,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 				logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 				// TODO: Please implement this better later
 				// Used editor will be null
-				ApproveVersion approveAction = (ApproveVersion) ApproveVersion.actionType.makeNewAction(version.getItem(), null);
+				ApproveVersion approveAction = ApproveVersion.actionType.makeNewAction(version.getItem(), null);
 				approveAction.setVersion(version);
 				approveAction.doAction();
 			}

@@ -90,7 +90,7 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 
 			// HYPOTHESE: ca marche que pour des WSObject des WSObjects ! (hum hum...)
 			if (anObject instanceof WSObject) {
-				WSObject parentObject = (WSObject) ((WSObject) anObject).getParent();
+				WSObject parentObject = ((WSObject) anObject).getParent();
 				if (next.getModel().indexOf(parentObject) > -1) {
 					if (next.getSelectedObjects().contains(parentObject)) {
 						next.selectObject(parentObject);

@@ -47,7 +47,8 @@ public class FIBFont extends FIBWidget {
 	}
 
 	/**
-	 * @param sampleText the sampleText to set
+	 * @param sampleText
+	 *            the sampleText to set
 	 */
 	public void setSampleText(String sampleText) {
 		this.sampleText = sampleText;

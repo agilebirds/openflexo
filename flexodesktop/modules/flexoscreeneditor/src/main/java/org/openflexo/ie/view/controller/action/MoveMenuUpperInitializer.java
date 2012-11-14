@@ -52,7 +52,7 @@ public class MoveMenuUpperInitializer extends ActionInitializer {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
 					doable = item.getFather() != null && item.getFather().getFather() != null;
 					if (doable) {
-						(action).setItemMenu(item);
+						action.setItemMenu(item);
 					}
 				}
 				return doable;

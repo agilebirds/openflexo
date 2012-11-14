@@ -51,7 +51,7 @@ public class DeleteMetricsDefinition extends FlexoAction<DeleteMetricsDefinition
 
 		@Override
 		public boolean isEnabledForSelection(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection) {
-			return (focusedObject != null || (globalSelection != null && globalSelection.size() > 0));
+			return focusedObject != null || globalSelection != null && globalSelection.size() > 0;
 		}
 
 	};

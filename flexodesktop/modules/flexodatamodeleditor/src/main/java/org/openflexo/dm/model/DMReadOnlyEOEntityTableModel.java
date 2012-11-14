@@ -54,15 +54,15 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 			@Override
 			public Icon getIcon(DMEOEntity dmEOEntity) {
 				if (dmEOEntity != null) {
-					return (dmEOEntity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+					return dmEOEntity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 				}
 				return null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOEntity entity) {
-				return (entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMEOEntity>("name", 150) {

@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TExp extends Token
-{
-    public TExp()
-    {
-        super.setText("exp");
-    }
+public final class TExp extends Token {
+	public TExp() {
+		super.setText("exp");
+	}
 
-    public TExp(int line, int pos)
-    {
-        super.setText("exp");
-        setLine(line);
-        setPos(pos);
-    }
+	public TExp(int line, int pos) {
+		super.setText("exp");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TExp(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TExp(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTExp(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTExp(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TExp text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TExp text.");
+	}
 }

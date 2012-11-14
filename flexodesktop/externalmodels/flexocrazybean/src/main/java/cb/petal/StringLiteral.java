@@ -103,7 +103,7 @@ public class StringLiteral extends Literal {
 	}
 
 	public boolean isMultiLine() {
-		return (values.size() > 1) || multi;
+		return values.size() > 1 || multi;
 	}
 
 	@Override
@@ -128,6 +128,6 @@ public class StringLiteral extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof StringLiteral) && (((StringLiteral) o).values.equals(this.values));
+		return o instanceof StringLiteral && ((StringLiteral) o).values.equals(this.values);
 	}
 }

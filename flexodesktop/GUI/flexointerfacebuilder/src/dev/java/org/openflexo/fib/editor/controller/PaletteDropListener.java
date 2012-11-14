@@ -67,7 +67,7 @@ public class PaletteDropListener implements DropTargetListener {
 	 */
 	private boolean isDragFlavorSupported(DropTargetDragEvent e) {
 		boolean ok = false;
-		if (e.isDataFlavorSupported(PaletteElementDrag.defaultFlavor())) {
+		if (e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
 			ok = true;
 		}
 		return ok;
@@ -81,8 +81,8 @@ public class PaletteDropListener implements DropTargetListener {
 	 * @return the chosen DataFlavor or null if none match
 	 */
 	private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
-		if (e.isLocalTransfer() == true && e.isDataFlavorSupported(PaletteElementDrag.defaultFlavor())) {
-			return PaletteElementDrag.defaultFlavor();
+		if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
+			return ElementDrag.defaultFlavor();
 		}
 		return null;
 	}
@@ -106,7 +106,7 @@ public class PaletteDropListener implements DropTargetListener {
 		}
 
 		try {
-			PaletteElement element = (PaletteElement) e.getTransferable().getTransferData(PaletteElementDrag.defaultFlavor());
+			PaletteElement element = (PaletteElement) e.getTransferable().getTransferData(ElementDrag.defaultFlavor());
 			if (element == null) {
 				return false;
 			}

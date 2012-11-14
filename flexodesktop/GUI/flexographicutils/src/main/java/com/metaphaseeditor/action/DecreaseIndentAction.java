@@ -50,7 +50,7 @@ public class DecreaseIndentAction extends HTMLEditorKit.StyledTextAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (!(this.isEnabled())) {
+		if (!this.isEnabled()) {
 			return;
 		}
 

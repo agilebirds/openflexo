@@ -141,10 +141,14 @@ public class FlexoFileChooser {
 	int _mode;
 
 	/**
-	 * <p>All extensions should be prefaced with '*.'
-	 * <p>For more than one entry, use the ',' character
-	 * <p>Example: '*.xsd, *.owl'
-	 * <p>Note: trims whitespaces before and after extensions, and ignores case
+	 * <p>
+	 * All extensions should be prefaced with '*.'
+	 * <p>
+	 * For more than one entry, use the ',' character
+	 * <p>
+	 * Example: '*.xsd, *.owl'
+	 * <p>
+	 * Note: trims whitespaces before and after extensions, and ignores case
 	 * 
 	 * @param filter
 	 */
@@ -152,8 +156,8 @@ public class FlexoFileChooser {
 		if (filter == null) {
 			return;
 		}
-		final String [] extensions = filter.split(",");
-		for (int i = 0; i < extensions.length ; i++) {
+		final String[] extensions = filter.split(",");
+		for (int i = 0; i < extensions.length; i++) {
 			extensions[i] = extensions[i].trim();
 			extensions[i] = extensions[i].substring(1); // removes '*' from the string
 		}
@@ -167,7 +171,7 @@ public class FlexoFileChooser {
 				}
 				return false;
 			}
-			
+
 			@Override
 			public boolean accept(File f) {
 				if (getImplementationType() == ImplementationType.FileDialogImplementation) {

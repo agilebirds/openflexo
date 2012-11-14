@@ -56,7 +56,7 @@ public class DeleteDocItemFolder extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) || ((globalSelection != null) && (globalSelection.size() > 0)));
+			return object != null || globalSelection != null && globalSelection.size() > 0;
 		}
 
 	};

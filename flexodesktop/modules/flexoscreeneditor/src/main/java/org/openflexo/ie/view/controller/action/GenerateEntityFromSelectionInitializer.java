@@ -144,7 +144,7 @@ public class GenerateEntityFromSelectionInitializer extends ActionInitializer {
 									.localizedForKey("the_selected_eomodel_cannot_be_modified_please_choose_another_one_or_create_a_new_one");
 							return false;
 						}
-						if (eoModelMode.getValue().equals(CREATE_EOMODEL) && (newEOModelName.getValue() == null)) {
+						if (eoModelMode.getValue().equals(CREATE_EOMODEL) && newEOModelName.getValue() == null) {
 							errorMessage = FlexoLocalization.localizedForKey("please_specify_an_eomodelfilename");
 							return false;
 						}

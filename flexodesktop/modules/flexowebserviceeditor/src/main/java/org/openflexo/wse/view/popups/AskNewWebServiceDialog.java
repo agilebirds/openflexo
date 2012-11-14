@@ -42,6 +42,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FileSelector;
@@ -94,13 +95,13 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 		externalWSButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("ws_external_webservice"), DM_REPOSITORY_ICON_FILE,
 				true);
 		externalWSButton.addActionListener(this);
-		externalWSButton.setActionCommand(CreateNewWebService.EXTERNAL_WS);
+		externalWSButton.setActionCommand(AbstractCreateNewWebService.EXTERNAL_WS);
 
 		internalWSButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("ws_internal_webservice"), DM_REPOSITORY_ICON_FILE);
 		internalWSButton.addActionListener(this);
-		internalWSButton.setActionCommand(CreateNewWebService.INTERNAL_WS);
+		internalWSButton.setActionCommand(AbstractCreateNewWebService.INTERNAL_WS);
 
-		wsdlFileSelector = (new FileSelector(ResourceLocator.getUserHomeDirectory(), new FileFilter() {
+		wsdlFileSelector = new FileSelector(ResourceLocator.getUserHomeDirectory(), new FileFilter() {
 			@Override
 			public boolean accept(File f) {
 				// return (f.getName().endsWith(".mdl"));
@@ -115,8 +116,8 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 			@Override
 			public void fireEditedObjectChanged() {
 				super.fireEditedObjectChanged();
-				if ((getEditedObject() != null) && (getEditedObject() instanceof File) && (newWebServiceNameTF != null)) {
-					String newSelectedName = (getEditedObject()).getName();
+				if (getEditedObject() != null && getEditedObject() instanceof File && newWebServiceNameTF != null) {
+					String newSelectedName = getEditedObject().getName();
 					String newName = null;
 					if (newSelectedName.indexOf(".") > 0) {
 						newName = newSelectedName.substring(0, newSelectedName.indexOf("."));
@@ -126,9 +127,9 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 					newWebServiceNameTF.setText(newName);
 				}
 				externalWSButton.setSelected(true);
-				selectWebServiceType(CreateNewWebService.EXTERNAL_WS);
+				selectWebServiceType(AbstractCreateNewWebService.EXTERNAL_WS);
 			}
-		});
+		};
 
 		// Group the radio buttons.
 		ButtonGroup group = new ButtonGroup();
@@ -216,7 +217,7 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 		choicePanel.add(internalWSButton);
 		choicePanel.add(new JPanel());
 
-		selectWebServiceType(CreateNewWebService.EXTERNAL_WS);
+		selectWebServiceType(AbstractCreateNewWebService.EXTERNAL_WS);
 	}
 
 	public void performConfirm() {
@@ -238,16 +239,16 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 
 	protected void selectWebServiceType(String wsType) {
 		_flexoAction.setWebServiceType(wsType);
-		if (wsType.equals(CreateNewWebService.INTERNAL_WS)) {
+		if (wsType.equals(AbstractCreateNewWebService.INTERNAL_WS)) {
 			webserviceDescriptionTA.setText(FlexoLocalization.localizedForKey("ws_create_internal_ws_description"));
-		} else if (wsType.equals(CreateNewWebService.EXTERNAL_WS)) {
+		} else if (wsType.equals(AbstractCreateNewWebService.EXTERNAL_WS)) {
 			webserviceDescriptionTA.setText(FlexoLocalization.localizedForKey("ws_create_external_ws_description"));
 		}
 	}
 
 	protected boolean checkWebServiceOKForCreation() {
 		String newWebServiceName = newWebServiceNameTF.getText();
-		if ((newWebServiceName == null) || (newWebServiceName.trim().equals(""))) {
+		if (newWebServiceName == null || newWebServiceName.trim().equals("")) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_a_valid_name"));
 			return false;
 		}
@@ -260,7 +261,7 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 			FlexoController.showError(FlexoLocalization.localizedForKey("wsgroup_already_registered"));
 			return false;
 		}
-		if (currentChoice.equals(CreateNewWebService.EXTERNAL_WS)) {
+		if (currentChoice.equals(AbstractCreateNewWebService.EXTERNAL_WS)) {
 
 			File newWSDLFile = wsdlFileSelector.getEditedFile();
 			if (newWSDLFile != null) {
@@ -271,7 +272,7 @@ public class AskNewWebServiceDialog extends FlexoDialog implements ActionListene
 				return false;
 			}
 
-		} else if (currentChoice.equals(CreateNewWebService.INTERNAL_WS)) {
+		} else if (currentChoice.equals(AbstractCreateNewWebService.INTERNAL_WS)) {
 			FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
 			return false;
 		}

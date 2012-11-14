@@ -46,7 +46,7 @@ public class PropsTokenMarker extends TokenMarker {
 		int lastOffset = offset;
 		int length = line.count + offset;
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			switch (token) {
 			case Token.NULL:

@@ -56,7 +56,7 @@ public class CreateDMEORelationship extends FlexoAction<CreateDMEORelationship, 
 
 		@Override
 		public boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
-			return ((object != null) && (!(object).getIsReadOnly()));
+			return object != null && !object.getIsReadOnly();
 		}
 
 	};

@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -74,7 +75,7 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 	private Role _newRole;
 
 	static {
-		FlexoWorkflow.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
 	}
 
 	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {

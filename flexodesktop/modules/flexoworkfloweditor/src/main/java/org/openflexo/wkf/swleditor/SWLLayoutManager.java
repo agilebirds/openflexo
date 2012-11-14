@@ -183,7 +183,7 @@ public class SWLLayoutManager extends WKFLayoutManager {
 	private void layoutPath(AutoLayoutNodePath path, FlexoProgress progress) {
 		SwimmingLane previousLane = null;
 		AbstractNode previousNode = null;
-		boolean isMainPath = (path == getMainPath());
+		boolean isMainPath = path == getMainPath();
 		double x;
 
 		if (isMainPath) {
@@ -244,7 +244,7 @@ public class SWLLayoutManager extends WKFLayoutManager {
 			if (height + 2 * MARGIN > pool.maxLaneHeight) {
 				pool.maxLaneHeight = height + 2 * MARGIN;
 			}
-			if (previousLane != null && lane != previousLane && (n != path.lastElement())) {
+			if (previousLane != null && lane != previousLane && n != path.lastElement()) {
 				x += SPACE_WHEN_CHANGING_LANE;
 				if (lane.nodes.size() > 1) {
 					AutoLayoutNode previousNodeInLane = lane.nodes.get(lane.nodes.size() - 2);

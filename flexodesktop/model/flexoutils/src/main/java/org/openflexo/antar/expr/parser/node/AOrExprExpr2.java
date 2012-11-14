@@ -2,179 +2,143 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class AOrExprExpr2 extends PExpr2
-{
-    private PExpr2 _left_;
-    private TOr _or_;
-    private PExpr3 _right_;
+public final class AOrExprExpr2 extends PExpr2 {
+	private PExpr2 _left_;
+	private TOr _or_;
+	private PExpr3 _right_;
 
-    public AOrExprExpr2()
-    {
-        // Constructor
-    }
+	public AOrExprExpr2() {
+		// Constructor
+	}
 
-    public AOrExprExpr2(
-        @SuppressWarnings("hiding") PExpr2 _left_,
-        @SuppressWarnings("hiding") TOr _or_,
-        @SuppressWarnings("hiding") PExpr3 _right_)
-    {
-        // Constructor
-        setLeft(_left_);
+	public AOrExprExpr2(@SuppressWarnings("hiding") PExpr2 _left_, @SuppressWarnings("hiding") TOr _or_,
+			@SuppressWarnings("hiding") PExpr3 _right_) {
+		// Constructor
+		setLeft(_left_);
 
-        setOr(_or_);
+		setOr(_or_);
 
-        setRight(_right_);
+		setRight(_right_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new AOrExprExpr2(
-            cloneNode(this._left_),
-            cloneNode(this._or_),
-            cloneNode(this._right_));
-    }
+	@Override
+	public Object clone() {
+		return new AOrExprExpr2(cloneNode(this._left_), cloneNode(this._or_), cloneNode(this._right_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAOrExprExpr2(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAOrExprExpr2(this);
+	}
 
-    public PExpr2 getLeft()
-    {
-        return this._left_;
-    }
+	public PExpr2 getLeft() {
+		return this._left_;
+	}
 
-    public void setLeft(PExpr2 node)
-    {
-        if(this._left_ != null)
-        {
-            this._left_.parent(null);
-        }
+	public void setLeft(PExpr2 node) {
+		if (this._left_ != null) {
+			this._left_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._left_ = node;
-    }
+		this._left_ = node;
+	}
 
-    public TOr getOr()
-    {
-        return this._or_;
-    }
+	public TOr getOr() {
+		return this._or_;
+	}
 
-    public void setOr(TOr node)
-    {
-        if(this._or_ != null)
-        {
-            this._or_.parent(null);
-        }
+	public void setOr(TOr node) {
+		if (this._or_ != null) {
+			this._or_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._or_ = node;
-    }
+		this._or_ = node;
+	}
 
-    public PExpr3 getRight()
-    {
-        return this._right_;
-    }
+	public PExpr3 getRight() {
+		return this._right_;
+	}
 
-    public void setRight(PExpr3 node)
-    {
-        if(this._right_ != null)
-        {
-            this._right_.parent(null);
-        }
+	public void setRight(PExpr3 node) {
+		if (this._right_ != null) {
+			this._right_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._right_ = node;
-    }
+		this._right_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._left_)
-            + toString(this._or_)
-            + toString(this._right_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._left_) + toString(this._or_) + toString(this._right_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._left_ == child)
-        {
-            this._left_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._left_ == child) {
+			this._left_ = null;
+			return;
+		}
 
-        if(this._or_ == child)
-        {
-            this._or_ = null;
-            return;
-        }
+		if (this._or_ == child) {
+			this._or_ = null;
+			return;
+		}
 
-        if(this._right_ == child)
-        {
-            this._right_ = null;
-            return;
-        }
+		if (this._right_ == child) {
+			this._right_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._left_ == oldChild)
-        {
-            setLeft((PExpr2) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._left_ == oldChild) {
+			setLeft((PExpr2) newChild);
+			return;
+		}
 
-        if(this._or_ == oldChild)
-        {
-            setOr((TOr) newChild);
-            return;
-        }
+		if (this._or_ == oldChild) {
+			setOr((TOr) newChild);
+			return;
+		}
 
-        if(this._right_ == oldChild)
-        {
-            setRight((PExpr3) newChild);
-            return;
-        }
+		if (this._right_ == oldChild) {
+			setRight((PExpr3) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

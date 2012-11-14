@@ -37,69 +37,62 @@ import org.openflexo.fib.model.FIBRemovingNotification;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableBrowserWidget extends FIBBrowserWidget implements FIBEditableView<FIBBrowser,JTree> {
+public class FIBEditableBrowserWidget extends FIBBrowserWidget implements FIBEditableView<FIBBrowser, JTree> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableBrowserWidget.class.getPackage().getName());
 
-	private final FIBEditableViewDelegate<FIBBrowser,JTree> delegate;
-	
+	private final FIBEditableViewDelegate<FIBBrowser, JTree> delegate;
+
 	private final FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableBrowserWidget(FIBBrowser model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableBrowserWidget(FIBBrowser model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBBrowser,JTree>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBBrowser, JTree>(this);
 		model.addObserver(this);
-	}	
-	
+	}
+
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	}
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBBrowser,JTree> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBBrowser, JTree> getDelegate() {
 		return delegate;
 	}
-	
+
 	@Override
-	public void update(Observable o, Object dataModification) 
-	{
-		 if (dataModification instanceof FIBAddingNotification
-				 || dataModification instanceof FIBRemovingNotification) {
-			 	updateBrowser();
-		 }
-		 else if (dataModification instanceof FIBAttributeNotification) {			 
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				/*if (n.getAttribute() == FIBBrowser.Parameters.iteratorClassName
-						|| n.getAttribute() == FIBBrowser.Parameters.rowHeight
-						|| n.getAttribute() == FIBBrowser.Parameters.visibleRowCount) {
-					updateBrowser();
-				}*/
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBAddingNotification || dataModification instanceof FIBRemovingNotification) {
+			updateBrowser();
+		} else if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			/*if (n.getAttribute() == FIBBrowser.Parameters.iteratorClassName
+					|| n.getAttribute() == FIBBrowser.Parameters.rowHeight
+					|| n.getAttribute() == FIBBrowser.Parameters.visibleRowCount) {
 				updateBrowser();
+			}*/
+			updateBrowser();
 
-		 }
-		 
+		}
+
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
-
 
 }

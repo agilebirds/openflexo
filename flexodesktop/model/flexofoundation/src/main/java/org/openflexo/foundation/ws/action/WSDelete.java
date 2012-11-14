@@ -71,12 +71,12 @@ public class WSDelete extends FlexoUndoableAction {
 			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				// Only ExternalWSService and InternalWSService
-				if ((next instanceof ExternalWSService) && (((ExternalWSService) next).isDeletable())) {
+				if (next instanceof ExternalWSService && ((ExternalWSService) next).isDeletable()) {
 					return true;
-				} else if ((next instanceof InternalWSService) && (((InternalWSService) next).isDeletable())) {
+				} else if (next instanceof InternalWSService && ((InternalWSService) next).isDeletable()) {
 					return true;
-				} else if ((next instanceof ServiceInterface)) {
-					WSService ws = next.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) next));
+				} else if (next instanceof ServiceInterface) {
+					WSService ws = next.getProject().getFlexoWSLibrary().getParentOfServiceInterface((ServiceInterface) next);
 					if (ws != null && ws instanceof InternalWSService) {
 						return true;
 					}
@@ -131,14 +131,14 @@ public class WSDelete extends FlexoUndoableAction {
 			while (en.hasMoreElements()) {
 				FlexoModelObject object = (FlexoModelObject) en.nextElement();
 				// only externalWSGroup and InternalWSService
-				if ((object instanceof ExternalWSService || object instanceof InternalWSService) && (((WSObject) object).isDeletable())) {
+				if ((object instanceof ExternalWSService || object instanceof InternalWSService) && ((WSObject) object).isDeletable()) {
 
 					_objectsToDelete.add(object);
 
 				}
 				// WARNING: assumption that THERE IS ONLY ONE PortType for a ServiceInterface !
-				else if ((object instanceof ServiceInterface)) {
-					WSService ws = object.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) object));
+				else if (object instanceof ServiceInterface) {
+					WSService ws = object.getProject().getFlexoWSLibrary().getParentOfServiceInterface((ServiceInterface) object);
 					if (ws != null && ws instanceof InternalWSService) {
 						_objectsToDelete.add(object);
 					}
@@ -168,9 +168,9 @@ public class WSDelete extends FlexoUndoableAction {
 		} else if (object instanceof InternalWSService) {
 			((InternalWSService) object).delete();
 		} else if (object instanceof ServiceInterface) {
-			ServiceInterface si = ((ServiceInterface) object);
+			ServiceInterface si = (ServiceInterface) object;
 			WSPortType pt = si.getProject().getFlexoWSLibrary().getWSPortTypeNamed(si.getName());
-			if (pt != null && (pt.getWSService() instanceof InternalWSService)) {
+			if (pt != null && pt.getWSService() instanceof InternalWSService) {
 				pt.delete();
 			}
 

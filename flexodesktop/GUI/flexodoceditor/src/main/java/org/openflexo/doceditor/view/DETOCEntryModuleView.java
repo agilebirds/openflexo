@@ -143,8 +143,8 @@ public class DETOCEntryModuleView extends JPanel implements ModuleView<TOCEntry>
 			textarea.setEnabled(false);
 			String key = "description_"
 					+ (_entry.getIdentifier() != null ? _entry.getIdentifier().name().toLowerCase()
-							: (_entry.getObjectReference() != null ? _entry.getObjectReference().getKlass().getSimpleName()
-									: "unknown_section"));
+							: _entry.getObjectReference() != null ? _entry.getObjectReference().getKlass().getSimpleName()
+									: "unknown_section");
 			textarea.setText(FlexoLocalization.localizedForKey(key, textarea));
 			panel.add(textarea);
 			add(panel, BorderLayout.CENTER);

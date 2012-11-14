@@ -54,7 +54,7 @@ public class OverrideAndUpdateFiles extends MultipleFileCVSAction<OverrideAndUpd
 
 		@Override
 		protected boolean accept(CVSFile aFile) {
-			return (aFile.getStatus().isConflicting());
+			return aFile.getStatus().isConflicting();
 		}
 
 	};

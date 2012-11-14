@@ -25,8 +25,6 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.openflexo.foundation.utils.FlexoProjectUtil;
-import org.openflexo.foundation.utils.UnreadableProjectException;
 import org.openflexo.toolbox.FlexoVersion;
 
 public class FlexoProjectUtilTest extends TestCase {

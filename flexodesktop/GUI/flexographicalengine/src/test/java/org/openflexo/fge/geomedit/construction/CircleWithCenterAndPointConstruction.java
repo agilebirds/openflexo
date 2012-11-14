@@ -45,7 +45,7 @@ public class CircleWithCenterAndPointConstruction extends CircleConstruction {
 		FGEPoint p = pointConstruction.getPoint();
 
 		double radius = FGESegment.getLength(center, p);
-		return new FGECircle(center, radius, (getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED));
+		return new FGECircle(center, radius, getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED);
 	}
 
 	@Override

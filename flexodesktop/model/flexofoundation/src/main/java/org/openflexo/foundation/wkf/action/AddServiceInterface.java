@@ -68,7 +68,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 	}
 
 	public FlexoProcess getProcess() {
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof WKFObject)) {
+		if (getFocusedObject() != null && getFocusedObject() instanceof WKFObject) {
 			return ((WKFObject) getFocusedObject()).getProcess();
 		}
 		return null;

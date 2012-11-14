@@ -107,22 +107,22 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	@Override
 	public int getTopBorder() {
-		return (isInPalette ? 1 : super.getTopBorder());
+		return isInPalette ? 1 : super.getTopBorder();
 	}
 
 	@Override
 	public int getBottomBorder() {
-		return (isInPalette ? 1 : super.getBottomBorder());
+		return isInPalette ? 1 : super.getBottomBorder();
 	}
 
 	@Override
 	public int getLeftBorder() {
-		return (isInPalette ? 1 : super.getLeftBorder());
+		return isInPalette ? 1 : super.getLeftBorder();
 	}
 
 	@Override
 	public int getRightBorder() {
-		return (isInPalette ? 1 : super.getRightBorder());
+		return isInPalette ? 1 : super.getRightBorder();
 	}
 
 	private void updateBackgroundForeground() {
@@ -170,7 +170,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof DataModification) {
-			if ("eventType".equals((dataModification).propertyName()) || "isCatching".equals((dataModification).propertyName())) {
+			if ("eventType".equals(dataModification.propertyName()) || "isCatching".equals(dataModification.propertyName())) {
 				updateBackgroundForeground();
 				notifyShapeNeedsToBeRedrawn();
 			} else {

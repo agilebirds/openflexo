@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ontology;
 
-
 import com.hp.hpl.jena.rdf.model.Literal;
 
 public enum OntologicDataType implements W3URIDefinitions {

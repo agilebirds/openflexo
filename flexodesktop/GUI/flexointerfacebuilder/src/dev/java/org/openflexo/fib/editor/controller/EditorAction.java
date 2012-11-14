@@ -10,9 +10,8 @@ public class EditorAction {
 	private Icon actionIcon;
 	private ActionPerformer performer;
 	private ActionAvailability availability;
-	
-	public EditorAction(String actionName, Icon actionIcon, ActionPerformer performer, ActionAvailability availability) 
-	{
+
+	public EditorAction(String actionName, Icon actionIcon, ActionPerformer performer, ActionAvailability availability) {
 		super();
 		this.actionName = actionName;
 		this.actionIcon = actionIcon;
@@ -20,33 +19,27 @@ public class EditorAction {
 		this.availability = availability;
 	}
 
-	public static abstract class ActionPerformer
-	{
+	public static abstract class ActionPerformer {
 		public abstract FIBModelObject performAction(FIBModelObject object);
 	}
 
-	public static abstract class ActionAvailability
-	{
+	public static abstract class ActionAvailability {
 		public abstract boolean isAvailableFor(FIBModelObject object);
 	}
 
-	public String getActionName() 
-	{
+	public String getActionName() {
 		return actionName;
 	}
 
-	public Icon getActionIcon()
-	{
+	public Icon getActionIcon() {
 		return actionIcon;
 	}
 
-	public ActionPerformer getPerformer() 
-	{
+	public ActionPerformer getPerformer() {
 		return performer;
 	}
-	
-	public ActionAvailability getAvailability()
-	{
+
+	public ActionAvailability getAvailability() {
 		return availability;
 	}
 }

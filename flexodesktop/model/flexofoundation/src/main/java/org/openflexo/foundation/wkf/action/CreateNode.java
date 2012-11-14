@@ -59,15 +59,15 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 		NORMAL_ACTION;
 
 		boolean concernProcess() {
-			return (this == BEGIN_ACTIVITY || this == END_ACTIVITY || this == NORMAL_ACTIVITY);
+			return this == BEGIN_ACTIVITY || this == END_ACTIVITY || this == NORMAL_ACTIVITY;
 		}
 
 		boolean concernActivity() {
-			return (this == BEGIN_OPERATION || this == END_OPERATION || this == NORMAL_OPERATION);
+			return this == BEGIN_OPERATION || this == END_OPERATION || this == NORMAL_OPERATION;
 		}
 
 		boolean concernOperation() {
-			return (this == BEGIN_ACTION || this == END_ACTION || this == NORMAL_ACTION);
+			return this == BEGIN_ACTION || this == END_ACTION || this == NORMAL_ACTION;
 		}
 	}
 

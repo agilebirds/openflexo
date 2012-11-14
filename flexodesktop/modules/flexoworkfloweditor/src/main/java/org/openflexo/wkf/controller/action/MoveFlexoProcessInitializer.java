@@ -91,7 +91,7 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 								+ "</b></center></html>", new AskParametersDialog.ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
-								if (modeSelector.getValue().equals(CHOOSE_PARENT_PROCESS) && (parentProcessParameter.getValue() != null)) {
+								if (modeSelector.getValue().equals(CHOOSE_PARENT_PROCESS) && parentProcessParameter.getValue() != null) {
 									return true;
 								}
 								if (modeSelector.getValue().equals(MAKE_CONTEXT_FREE)) {

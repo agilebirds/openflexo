@@ -54,14 +54,14 @@ public class MarkAsMergedAllTrivialMergableFilesInitializer extends ActionInitia
 				if (action.getTrivialMergableFiles().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_found_as_trivially_mergable"));
 					return false;
-				} else if (action.getTrivialMergableFiles().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+				} else if (action.getTrivialMergableFiles().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
 					SelectFilesPopup popup = new SelectFilesPopup(
 							FlexoLocalization.localizedForKey("mark_as_merged_all_trivially_mergable_files"),
 							FlexoLocalization.localizedForKey("mark_as_merged_all_trivially_mergable_files_description"), "mark_as_merged",
 							action.getTrivialMergableFiles(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
 						action.setTrivialMergableFiles(popup.getFileSet().getSelectedFiles());
 					} else {
 						return false;

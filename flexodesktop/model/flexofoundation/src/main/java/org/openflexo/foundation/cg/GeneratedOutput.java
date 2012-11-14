@@ -191,7 +191,7 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
-		return (obj == this);
+		return obj == this;
 	}
 
 	@Override

@@ -157,7 +157,7 @@ public class TabModel extends Observable implements XMLSerializable {
 		Iterator it = properties.values().iterator();
 		PropertyModel prop = null;
 		while (it.hasNext()) {
-			prop = ((PropertyModel) it.next());
+			prop = (PropertyModel) it.next();
 			if (prop.name.equals(propName)) {
 				return prop.getWidget();
 			}

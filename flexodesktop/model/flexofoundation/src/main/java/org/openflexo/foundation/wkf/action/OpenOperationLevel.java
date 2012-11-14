@@ -92,8 +92,8 @@ public class OpenOperationLevel extends FlexoUndoableAction<OpenOperationLevel, 
 
 	@Override
 	public String getLocalizedName() {
-		if ((getFocusedObject()).getOperationPetriGraph() != null) {
-			if ((getFocusedObject()).getOperationPetriGraph().getIsVisible()) {
+		if (getFocusedObject().getOperationPetriGraph() != null) {
+			if (getFocusedObject().getOperationPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_operation_level");
 			} else {
 				return FlexoLocalization.localizedForKey("open_operation_level");

@@ -21,13 +21,11 @@ package org.openflexo.fib.editor.notifications;
 
 import org.openflexo.fib.model.FIBComponent;
 
-public class FocusedObjectChange extends FIBEditorNotification<FIBComponent>
-{
+public class FocusedObjectChange extends FIBEditorNotification<FIBComponent> {
 	public static String FOCUS = "focus";
-	
-	public FocusedObjectChange(FIBComponent oldValue, FIBComponent newValue)
-	{
-		super(FOCUS,oldValue,newValue);
+
+	public FocusedObjectChange(FIBComponent oldValue, FIBComponent newValue) {
+		super(FOCUS, oldValue, newValue);
 	}
-	
+
 }

@@ -60,8 +60,8 @@ public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<SaveCustomTemplateFile>() {
 			@Override
 			public boolean run(EventObject e, SaveCustomTemplateFile action) {
-				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof CGTemplateFileModuleView)
-						|| !(((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+				if (action.getInvoker() == null || !(action.getInvoker() instanceof CGTemplateFileModuleView)
+						|| !((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					getControllerActionInitializer().getSGController().selectAndFocusObject(action.getFocusedObject());
 				}
 				return true;

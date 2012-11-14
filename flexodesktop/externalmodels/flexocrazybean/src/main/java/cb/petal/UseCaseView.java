@@ -45,7 +45,7 @@ public class UseCaseView extends QuiduView implements Qualified {
 
 	@Override
 	public String getQualifiedNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public UseCaseView() {

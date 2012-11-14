@@ -53,7 +53,7 @@ public class OverrideAndCommitFiles extends MultipleFileCVSAction<OverrideAndCom
 
 		@Override
 		protected boolean accept(CVSFile aFile) {
-			return (aFile.getStatus().isConflicting() && aFile.getContentOnDisk() != null);
+			return aFile.getStatus().isConflicting() && aFile.getContentOnDisk() != null;
 		}
 
 	};

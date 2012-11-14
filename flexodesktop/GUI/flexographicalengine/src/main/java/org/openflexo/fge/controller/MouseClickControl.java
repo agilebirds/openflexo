@@ -108,7 +108,7 @@ public class MouseClickControl extends MouseControl {
 					logger.fine("Translating, mod=" + e.getModifiers() + " button=" + e.getButton());
 				}
 				boolean wasConsumed = e.isConsumed();
-				int mod = (e.getModifiers() & (~InputEvent.BUTTON1_MASK) & (~InputEvent.CTRL_MASK)) | InputEvent.BUTTON3_MASK;
+				int mod = e.getModifiers() & ~InputEvent.BUTTON1_MASK & ~InputEvent.CTRL_MASK | InputEvent.BUTTON3_MASK;
 				e = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), mod, e.getX(), e.getY(), e.getClickCount(), false);
 				if (wasConsumed) {
 					e.consume();
@@ -119,7 +119,7 @@ public class MouseClickControl extends MouseControl {
 		if (!super.isApplicable(graphicalRepresentation, controller, e)) {
 			return false;
 		}
-		return (e.getClickCount() == clickCount);
+		return e.getClickCount() == clickCount;
 	}
 
 	/**

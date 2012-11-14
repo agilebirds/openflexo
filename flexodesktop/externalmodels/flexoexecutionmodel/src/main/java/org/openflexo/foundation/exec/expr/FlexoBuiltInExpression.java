@@ -21,7 +21,6 @@ package org.openflexo.foundation.exec.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.TransformException;

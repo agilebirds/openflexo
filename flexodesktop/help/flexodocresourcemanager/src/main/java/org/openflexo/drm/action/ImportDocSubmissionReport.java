@@ -54,7 +54,7 @@ public class ImportDocSubmissionReport extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+			return object != null && object instanceof DocItemFolder && ((DocItemFolder) object).isRootFolder();
 		}
 
 	};

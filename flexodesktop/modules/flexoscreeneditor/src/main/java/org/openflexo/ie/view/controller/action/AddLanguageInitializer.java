@@ -54,7 +54,7 @@ public class AddLanguageInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddLanguageAction>() {
 			@Override
 			public boolean run(EventObject e, AddLanguageAction action) {
-				DKVModel model = (action.getFocusedObject()).getDkvModel();
+				DKVModel model = action.getFocusedObject().getDkvModel();
 				boolean ok = false;
 				while (!ok) {
 					String name = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_the_name_of_the_new_language"));
@@ -67,8 +67,8 @@ public class AddLanguageInitializer extends ActionInitializer {
 					}
 					try {
 						if (model.isLanguageNameLegal(name)) {
-							(action).setDkvModel(model);
-							(action).setLanguageName(name);
+							action.setDkvModel(model);
+							action.setLanguageName(name);
 						}
 						ok = true;
 					} catch (DuplicateDKVObjectException e2) {
@@ -86,7 +86,7 @@ public class AddLanguageInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddLanguageAction>() {
 			@Override
 			public boolean run(EventObject e, AddLanguageAction action) {
-				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewLanguage());
+				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject(action.getNewLanguage());
 				// getController().setCurrentEditedObjectAsModuleView(((AddLanguageAction)
 				// action).getNewLanguage());
 				return true;

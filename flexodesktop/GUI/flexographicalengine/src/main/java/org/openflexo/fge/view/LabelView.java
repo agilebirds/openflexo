@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -168,8 +169,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		this.textComponentListener = new LabelDocumentListener();
 		textComponent.addMouseListener(new InOutMouseListener());
 		setViewportView(textComponent);
-		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
 		getViewport().setBorder(null);
 		setBorder(null);

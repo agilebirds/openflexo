@@ -84,7 +84,7 @@ public abstract class FPSBrowserElement extends BrowserElement {
 			} else if (cvsObject.getDerivedStatus() == CVSStatus.Conflicting) {
 				markers.add(UtilsIconLibrary.CONFLICT);
 				if (cvsObject instanceof CVSFile) {
-					if ((((CVSFile) cvsObject).getMerge() != null) && ((CVSFile) cvsObject).getMerge().isResolved()) {
+					if (((CVSFile) cvsObject).getMerge() != null && ((CVSFile) cvsObject).getMerge().isResolved()) {
 						markers.add(IconLibrary.MERGE_OK);
 						// logger.info("Merge for "+((CVSFile)cvsObject).getFileName()+" is resolved");
 					}

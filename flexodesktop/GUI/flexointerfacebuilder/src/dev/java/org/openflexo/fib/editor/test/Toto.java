@@ -19,18 +19,17 @@
  */
 package org.openflexo.fib.editor.test;
 
-public class Toto 
-{
+public class Toto {
 	public String name;
 	public String description;
 
-	public Toto(String aName,String aDescription) {
+	public Toto(String aName, String aDescription) {
 		name = aName;
 		description = aDescription;
 	}
 
 	@Override
 	public String toString() {
-		return "Toto: name="+name+" description="+description;
+		return "Toto: name=" + name + " description=" + description;
 	}
 }

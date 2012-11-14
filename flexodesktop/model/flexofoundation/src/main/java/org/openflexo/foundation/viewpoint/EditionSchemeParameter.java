@@ -201,7 +201,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return (getScheme() != null ? getScheme().getEditionPattern() : null);
+		return getScheme() != null ? getScheme().getEditionPattern() : null;
 	}
 
 	@Override
@@ -226,11 +226,11 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
-				: null);
+		ViewPointPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
+				: null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && (paletteElement != null)) {
+		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
 			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {

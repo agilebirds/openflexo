@@ -172,7 +172,7 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 
 	@Override
 	public boolean hasAppendingException() {
-		return (javaAppendingException != null);
+		return javaAppendingException != null;
 	}
 
 	public void addImport(String neededImport) {

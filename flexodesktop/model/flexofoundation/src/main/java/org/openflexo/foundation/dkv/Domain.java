@@ -601,8 +601,8 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	public String randomValue() {
-		int r = (new Random()).nextInt(keys.size());
-		return getValue((Key) (getKeyList().getKeyList()[r]), getDkvModel().getLanguages().get(0)).getDisplayString();
+		int r = new Random().nextInt(keys.size());
+		return getValue((Key) getKeyList().getKeyList()[r], getDkvModel().getLanguages().get(0)).getDisplayString();
 	}
 
 	public void putValueForLanguage(Key key, String value, Language language) {

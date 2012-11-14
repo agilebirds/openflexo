@@ -2,179 +2,143 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ALtExprExpr extends PExpr
-{
-    private PExpr _left_;
-    private TLt _lt_;
-    private PExpr2 _right_;
+public final class ALtExprExpr extends PExpr {
+	private PExpr _left_;
+	private TLt _lt_;
+	private PExpr2 _right_;
 
-    public ALtExprExpr()
-    {
-        // Constructor
-    }
+	public ALtExprExpr() {
+		// Constructor
+	}
 
-    public ALtExprExpr(
-        @SuppressWarnings("hiding") PExpr _left_,
-        @SuppressWarnings("hiding") TLt _lt_,
-        @SuppressWarnings("hiding") PExpr2 _right_)
-    {
-        // Constructor
-        setLeft(_left_);
+	public ALtExprExpr(@SuppressWarnings("hiding") PExpr _left_, @SuppressWarnings("hiding") TLt _lt_,
+			@SuppressWarnings("hiding") PExpr2 _right_) {
+		// Constructor
+		setLeft(_left_);
 
-        setLt(_lt_);
+		setLt(_lt_);
 
-        setRight(_right_);
+		setRight(_right_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ALtExprExpr(
-            cloneNode(this._left_),
-            cloneNode(this._lt_),
-            cloneNode(this._right_));
-    }
+	@Override
+	public Object clone() {
+		return new ALtExprExpr(cloneNode(this._left_), cloneNode(this._lt_), cloneNode(this._right_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseALtExprExpr(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseALtExprExpr(this);
+	}
 
-    public PExpr getLeft()
-    {
-        return this._left_;
-    }
+	public PExpr getLeft() {
+		return this._left_;
+	}
 
-    public void setLeft(PExpr node)
-    {
-        if(this._left_ != null)
-        {
-            this._left_.parent(null);
-        }
+	public void setLeft(PExpr node) {
+		if (this._left_ != null) {
+			this._left_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._left_ = node;
-    }
+		this._left_ = node;
+	}
 
-    public TLt getLt()
-    {
-        return this._lt_;
-    }
+	public TLt getLt() {
+		return this._lt_;
+	}
 
-    public void setLt(TLt node)
-    {
-        if(this._lt_ != null)
-        {
-            this._lt_.parent(null);
-        }
+	public void setLt(TLt node) {
+		if (this._lt_ != null) {
+			this._lt_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._lt_ = node;
-    }
+		this._lt_ = node;
+	}
 
-    public PExpr2 getRight()
-    {
-        return this._right_;
-    }
+	public PExpr2 getRight() {
+		return this._right_;
+	}
 
-    public void setRight(PExpr2 node)
-    {
-        if(this._right_ != null)
-        {
-            this._right_.parent(null);
-        }
+	public void setRight(PExpr2 node) {
+		if (this._right_ != null) {
+			this._right_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._right_ = node;
-    }
+		this._right_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._left_)
-            + toString(this._lt_)
-            + toString(this._right_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._left_) + toString(this._lt_) + toString(this._right_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._left_ == child)
-        {
-            this._left_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._left_ == child) {
+			this._left_ = null;
+			return;
+		}
 
-        if(this._lt_ == child)
-        {
-            this._lt_ = null;
-            return;
-        }
+		if (this._lt_ == child) {
+			this._lt_ = null;
+			return;
+		}
 
-        if(this._right_ == child)
-        {
-            this._right_ = null;
-            return;
-        }
+		if (this._right_ == child) {
+			this._right_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._left_ == oldChild)
-        {
-            setLeft((PExpr) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._left_ == oldChild) {
+			setLeft((PExpr) newChild);
+			return;
+		}
 
-        if(this._lt_ == oldChild)
-        {
-            setLt((TLt) newChild);
-            return;
-        }
+		if (this._lt_ == oldChild) {
+			setLt((TLt) newChild);
+			return;
+		}
 
-        if(this._right_ == oldChild)
-        {
-            setRight((PExpr2) newChild);
-            return;
-        }
+		if (this._right_ == oldChild) {
+			setRight((PExpr2) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

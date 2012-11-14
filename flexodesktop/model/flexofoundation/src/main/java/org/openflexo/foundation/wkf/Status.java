@@ -111,9 +111,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 
 	@Override
 	public void setName(String aName) throws DuplicateStatusException {
-		if ((statusName == null && aName != null) || (statusName != null && aName == null)
-				|| (statusName != null && aName != null && !statusName.equals(aName))) {
-			if ((getStatusList() != null) && (getStatusList().statusWithName(aName) != null)) {
+		if (statusName == null && aName != null || statusName != null && aName == null || statusName != null && aName != null
+				&& !statusName.equals(aName)) {
+			if (getStatusList() != null && getStatusList().statusWithName(aName) != null) {
 				if (isDeserializing()) {
 					setName(aName + "-1");
 				}

@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.antar.binding.Bindable;
-
 public class Function extends Expression {
 
 	private String name;

@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.util.EventObject;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;

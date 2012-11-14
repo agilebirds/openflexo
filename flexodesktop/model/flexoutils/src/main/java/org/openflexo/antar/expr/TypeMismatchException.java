@@ -102,7 +102,7 @@ public class TypeMismatchException extends TransformException {
 		StringBuffer sb = new StringBuffer();
 		boolean isFirst = true;
 		for (EvaluationType t : types) {
-			sb.append((isFirst ? t.getLocalizedName() : "," + t.getLocalizedName()));
+			sb.append(isFirst ? t.getLocalizedName() : "," + t.getLocalizedName());
 			isFirst = false;
 		}
 		return sb.toString();

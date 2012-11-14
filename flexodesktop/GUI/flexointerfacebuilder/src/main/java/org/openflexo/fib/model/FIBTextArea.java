@@ -50,7 +50,8 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	/**
-	 * @param columns the columns to set
+	 * @param columns
+	 *            the columns to set
 	 */
 	public void setColumns(Integer columns) {
 		this.columns = columns;
@@ -64,7 +65,8 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	/**
-	 * @param rows the rows to set
+	 * @param rows
+	 *            the rows to set
 	 */
 	public void setRows(Integer rows) {
 		this.rows = rows;
@@ -78,7 +80,8 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param text
+	 *            the text to set
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -92,7 +95,8 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	/**
-	 * @param validateOnReturn the validateOnReturn to set
+	 * @param validateOnReturn
+	 *            the validateOnReturn to set
 	 */
 	public void setValidateOnReturn(boolean validateOnReturn) {
 		this.validateOnReturn = validateOnReturn;

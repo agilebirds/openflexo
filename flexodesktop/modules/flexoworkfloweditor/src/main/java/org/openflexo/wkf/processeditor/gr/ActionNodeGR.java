@@ -95,7 +95,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 				}
 				return (index % 4 ) * 50 + xOffset + 75;
 		*/
-		return (index % 4) * 50 + 50;
+		return index % 4 * 50 + 50;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 				}
 				return ((index / 4 )) * 50+yOffset;
 		*/
-		return (index / 4) * 50;
+		return index / 4 * 50;
 	}
 
 	@Override

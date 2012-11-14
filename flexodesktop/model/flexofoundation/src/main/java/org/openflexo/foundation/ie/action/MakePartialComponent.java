@@ -194,20 +194,20 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 		}
 
 		// 5. create a new ReusableWidget to store the ComponentInstance
-		if ((widget instanceof InnerBlocWidgetInterface) && (parent instanceof IEBlocWidget)) {
+		if (widget instanceof InnerBlocWidgetInterface && parent instanceof IEBlocWidget) {
 			reusableWidget = new InnerBlocReusableWidget(woComponent, compDef, (IEBlocWidget) parent, widget.getProject());
-		} else if ((widget instanceof AbstractInnerTableWidget) && (parent instanceof IEWidget)) {
+		} else if (widget instanceof AbstractInnerTableWidget && parent instanceof IEWidget) {
 			reusableWidget = new InnerTableReusableWidget(woComponent, compDef, (IEWidget) parent, widget.getProject());
-		} else if (widget.isTopComponent() && (parent instanceof IESequenceWidget)) {
+		} else if (widget.isTopComponent() && parent instanceof IESequenceWidget) {
 			reusableWidget = new TopComponentReusableWidget(woComponent, compDef, (IESequenceWidget) parent, widget.getProject());
-		} else if ((widget instanceof IESequenceTR) && (parent instanceof IESequenceTR)) {
+		} else if (widget instanceof IESequenceTR && parent instanceof IESequenceTR) {
 			reusableWidget = new ITableRowReusableWidget(woComponent, compDef, parent, widget.getProject());
 		}
 		// 6. Insert the reusableWidget in its parent
 		if (reusableWidget != null) {
-			if ((reusableWidget instanceof InnerBlocReusableWidget) && (parent instanceof IEBlocWidget)) {
+			if (reusableWidget instanceof InnerBlocReusableWidget && parent instanceof IEBlocWidget) {
 				((IEBlocWidget) parent).replaceWidgetByReusable(widget, (InnerBlocReusableWidget) reusableWidget);
-			} else if ((reusableWidget instanceof InnerTableReusableWidget) || (reusableWidget instanceof TopComponentReusableWidget)) {
+			} else if (reusableWidget instanceof InnerTableReusableWidget || reusableWidget instanceof TopComponentReusableWidget) {
 				if (parent instanceof IESequenceWidget) {
 					for (IEWidget w : widgets) {
 						((IESequenceWidget) parent).removeFromInnerWidgets(w, false);

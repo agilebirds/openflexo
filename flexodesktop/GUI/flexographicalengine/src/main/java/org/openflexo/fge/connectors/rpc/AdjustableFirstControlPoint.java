@@ -86,8 +86,8 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 		FGEPoint nextCPLocation = initialPolylin.getPointAt(2);
 		SimplifiedCardinalDirection initialStartOrientation = initialPolylin.getApproximatedOrientationOfSegment(0);
 		SimplifiedCardinalDirection initialFirstOrientation = initialPolylin.getApproximatedOrientationOfSegment(1);
-		SimplifiedCardinalDirection initialNextOrientation = (initialPolylin.getSegmentNb() > 2 ? initialPolylin
-				.getApproximatedOrientationOfSegment(2) : null);
+		SimplifiedCardinalDirection initialNextOrientation = initialPolylin.getSegmentNb() > 2 ? initialPolylin
+				.getApproximatedOrientationOfSegment(2) : null;
 
 		if (startArea.getOrthogonalPerspectiveArea(initialStartOrientation).containsPoint(newFirstCPLocation)) {
 
@@ -114,8 +114,8 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				FGERectPolylin appendingPath2 = new FGERectPolylin(newFirstCPLocation, initialFirstOrientation, oppositeSegment.getP2(),
 						initialPolylin.getApproximatedOrientationOfSegment(2), true, getConnector().getOverlapXResultingFromPixelOverlap(),
 						getConnector().getOverlapYResultingFromPixelOverlap());
-				FGERectPolylin appendingPath = (appendingPath1.getPointsNb() <= appendingPath2.getPointsNb() ? appendingPath1
-						: appendingPath2);
+				FGERectPolylin appendingPath = appendingPath1.getPointsNb() <= appendingPath2.getPointsNb() ? appendingPath1
+						: appendingPath2;
 
 				// debugPolylin = appendingPath;
 

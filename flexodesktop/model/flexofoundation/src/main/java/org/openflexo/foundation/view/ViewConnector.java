@@ -122,7 +122,7 @@ public class ViewConnector extends ViewElement {
 		if (o == this) {
 			return true;
 		}
-		if ((getParent() != null) && (getParent() == o)) {
+		if (getParent() != null && getParent() == o) {
 			return true;
 		}
 		if (getParent() != null) {

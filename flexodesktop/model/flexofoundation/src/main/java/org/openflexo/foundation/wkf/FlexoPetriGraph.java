@@ -268,7 +268,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("insertNode() with " + aNode + " of " + aNode.getClass().getName());
 		}
-		if ((getLevel() != aNode.getLevel()) && (!(aNode instanceof OperatorNode)) && (!(aNode instanceof EventNode))) {
+		if (getLevel() != aNode.getLevel() && !(aNode instanceof OperatorNode) && !(aNode instanceof EventNode)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Invalid level: cannot insert node");
 			}
@@ -702,7 +702,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		returned.add(this);
 		Enumeration<AbstractNode> en = new Vector<AbstractNode>(_nodes).elements();
 		while (en.hasMoreElements()) {
-			returned.addAll((en.nextElement()).getAllEmbeddedDeleted());
+			returned.addAll(en.nextElement().getAllEmbeddedDeleted());
 		}
 		for (WKFGroup group : getGroups()) {
 			returned.addAll(group.getAllEmbeddedWKFObjects());

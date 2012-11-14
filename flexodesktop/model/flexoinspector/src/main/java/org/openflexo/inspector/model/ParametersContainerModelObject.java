@@ -55,7 +55,7 @@ public abstract class ParametersContainerModelObject extends ModelObject {
 	public boolean getBooleanValueForParameter(String name) {
 		String stringValue = getValueForParameter(name);
 		if (stringValue != null) {
-			return ((stringValue.equalsIgnoreCase("true")) || (stringValue.equalsIgnoreCase("yes")));
+			return stringValue.equalsIgnoreCase("true") || stringValue.equalsIgnoreCase("yes");
 		}
 		return false;
 	}
@@ -103,7 +103,7 @@ public abstract class ParametersContainerModelObject extends ModelObject {
 	}
 
 	public boolean hasValueForParameter(String name) {
-		return (parameters.get(name) != null);
+		return parameters.get(name) != null;
 	}
 
 	public void setBooleanValueForParameter(String name, boolean aBoolean) {

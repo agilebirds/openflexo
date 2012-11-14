@@ -21,7 +21,6 @@ package org.openflexo.foundation.ontology.owl;
 
 import java.util.logging.Logger;
 
-
 import com.hp.hpl.jena.ontology.UnionClass;
 
 public class OWLUnionClass extends OWLOperatorClass {

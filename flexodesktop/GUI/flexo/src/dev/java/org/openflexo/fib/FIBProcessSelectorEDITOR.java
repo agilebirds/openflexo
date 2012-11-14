@@ -33,11 +33,9 @@ public class FIBProcessSelectorEDITOR extends ProjectDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoEditor editor = loadProject(new FileResource(
-						"Prj/TestVE.prj"));
+				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 				FlexoProject project = editor.getProject();
-				FIBProcessSelector selector = new FIBProcessSelector(
-						project.getRootFlexoProcess());
+				FIBProcessSelector selector = new FIBProcessSelector(project.getRootFlexoProcess());
 				selector.setProject(project);
 				return makeArray(selector);
 			}

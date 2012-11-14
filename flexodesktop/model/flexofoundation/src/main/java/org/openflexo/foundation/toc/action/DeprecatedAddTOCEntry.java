@@ -30,9 +30,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.DuplicateSectionException;
 import org.openflexo.foundation.cg.action.InvalidLevelException;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.ProcessSection;
-import org.openflexo.foundation.toc.ProcessSection.ProcessDocSectionSubType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -60,7 +58,7 @@ public class DeprecatedAddTOCEntry extends FlexoAction<DeprecatedAddTOCEntry, TO
 
 		@Override
 		public boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
-			return (object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren());
+			return object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren();
 		}
 
 	};
@@ -106,10 +104,10 @@ public class DeprecatedAddTOCEntry extends FlexoAction<DeprecatedAddTOCEntry, TO
 					getRepository().addToTocEntries(entry);
 				} else {
 					if (getFocusedObject() instanceof TOCRepository
-							|| (((TOCEntry) getFocusedObject()).getLevel() + 1 < entry.getPreferredLevel())) {
+							|| ((TOCEntry) getFocusedObject()).getLevel() + 1 < entry.getPreferredLevel()) {
 						throw new InvalidLevelException();
 					} else {
-						TOCEntry parent = ((TOCEntry) getFocusedObject());
+						TOCEntry parent = (TOCEntry) getFocusedObject();
 						while (parent.getLevel() >= entry.getPreferredLevel()) {
 							parent = parent.getParent();
 						}

@@ -86,7 +86,7 @@ public class KeySelector extends AbstractBrowserSelector<Key> {
 	protected class KeyBrowser extends ProjectBrowser {
 
 		protected KeyBrowser() {
-			super((getDKVModel() != null ? getDKVModel().getProject() : null), false);
+			super(getDKVModel() != null ? getDKVModel().getProject() : null, false);
 			init();
 		}
 

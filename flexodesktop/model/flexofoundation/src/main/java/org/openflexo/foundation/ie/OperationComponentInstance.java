@@ -105,7 +105,7 @@ public class OperationComponentInstance extends ComponentInstance {
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
 		super.update(o, dataModification);
-		if ((o == getComponentDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
+		if (o == getComponentDefinition() && (dataModification instanceof BindingAdded || dataModification instanceof BindingRemoved)) {
 			if (_operationNode != null) {
 				_operationNode.notifyBindingsChanged();
 			}

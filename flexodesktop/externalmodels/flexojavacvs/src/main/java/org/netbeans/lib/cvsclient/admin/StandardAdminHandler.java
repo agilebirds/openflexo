@@ -254,7 +254,7 @@ public class StandardAdminHandler implements AdminHandler {
 				boolean written = false;
 				while ((line = reader.readLine()) != null) {
 					final Entry currentEntry = new Entry(line);
-					if ((currentEntry.getName() != null) && currentEntry.getName().equals(entry.getName())) {
+					if (currentEntry.getName() != null && currentEntry.getName().equals(entry.getName())) {
 						writer.write(entry.toString());
 						written = true;
 					} else {
@@ -310,7 +310,7 @@ public class StandardAdminHandler implements AdminHandler {
 		try {
 			reader = new BufferedReader(new FileReader(entriesFile));
 			String line;
-			while (!found && ((line = reader.readLine()) != null)) {
+			while (!found && (line = reader.readLine()) != null) {
 				entry = new Entry(line);
 				// can have a name of null in the case of the single
 				// D entry line spec, indicating no subdirectories
@@ -468,7 +468,7 @@ public class StandardAdminHandler implements AdminHandler {
 				boolean directoriesExist = false;
 				while ((line = reader.readLine()) != null) {
 					final Entry currentEntry = new Entry(line);
-					if ((currentEntry.getName() != null) &&
+					if (currentEntry.getName() != null &&
 
 					!currentEntry.getName().equals(file.getName())) {
 						writer.write(currentEntry.toString());
@@ -610,7 +610,7 @@ public class StandardAdminHandler implements AdminHandler {
 				reader.close();
 			}
 
-			if ((additionsList.size() > 0) || (removalSet.size() > 0)) {
+			if (additionsList.size() > 0 || removalSet.size() > 0) {
 				final File backup = new File(directory, "Entries.Backup"); // NOI18N
 				final BufferedWriter writer = new BufferedWriter(new FileWriter(backup));
 				final File entriesFile = new File(directory, "Entries"); // NOI18N

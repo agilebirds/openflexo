@@ -69,7 +69,7 @@ public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<Fl
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getMenu() != null)) {
+		if (!isObserverRegistered && getMenu() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

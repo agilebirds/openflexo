@@ -78,8 +78,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			logger.warning("Edge: " + edge + " first visible object for " + edge.getEndNode() + " is null !");
 		}
 		edge.addObserver(this);
-		isInduced = (aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode())
-				|| (aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode());
+		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
+				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
@@ -110,7 +110,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	protected static WKFObject getRepresentedEndObject(WKFObject declaredEndObject, ProcessRepresentation aDrawing) {
-		if ((declaredEndObject instanceof FlexoPreCondition) && (((FlexoPreCondition) declaredEndObject).getAttachedBeginNode() != null)
+		if (declaredEndObject instanceof FlexoPreCondition && ((FlexoPreCondition) declaredEndObject).getAttachedBeginNode() != null
 				&& aDrawing.isVisible(((FlexoPreCondition) declaredEndObject).getAttachedBeginNode())) {
 			return ((FlexoPreCondition) declaredEndObject).getAttachedBeginNode();
 		}
@@ -188,8 +188,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	@Override
 	public void notifyObjectHierarchyWillBeUpdated() {
 		super.notifyObjectHierarchyWillBeUpdated();
-		if ((getDrawing().getFirstVisibleObject(getRepresentedStartObject(getEdge().getStartNode(), getDrawing())) != startObject)
-				|| (getDrawing().getFirstVisibleObject(getRepresentedEndObject(getEdge().getEndNode(), getDrawing())) != endObject)) {
+		if (getDrawing().getFirstVisibleObject(getRepresentedStartObject(getEdge().getStartNode(), getDrawing())) != startObject
+				|| getDrawing().getFirstVisibleObject(getRepresentedEndObject(getEdge().getEndNode(), getDrawing())) != endObject) {
 			dismissGraphicalRepresentation();
 		}
 	}
@@ -197,7 +197,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
-		if ((polylinIWillBeAdustedTo != null) && (getConnector() instanceof RectPolylinConnector) && !getEdge().isDeleted()) {
+		if (polylinIWillBeAdustedTo != null && getConnector() instanceof RectPolylinConnector && !getEdge().isDeleted()) {
 			// logger.info("Post: "+getPostCondition().getName()+" manuallySetPolylin to "+polylinIWillBeAdustedTo);
 			((RectPolylinConnector) getConnector()).manuallySetPolylin(polylinIWillBeAdustedTo);
 			polylinIWillBeAdustedTo = null;
@@ -336,7 +336,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if ((getConnector() instanceof RectPolylinConnector) && (getEndObject() instanceof PreConditionGR)) {
+		if (getConnector() instanceof RectPolylinConnector && getEndObject() instanceof PreConditionGR) {
 			PreConditionGR preGR = (PreConditionGR) getEndObject();
 			AbstractNodeGR<?> nodeGR = (AbstractNodeGR<?>) preGR.getContainerGraphicalRepresentation();
 			FGEPoint preLocationInNode = GraphicalRepresentation.convertNormalizedPoint(preGR, new FGEPoint(0.5, 0.5), nodeGR);
@@ -523,11 +523,11 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		 * logger.info("isRegistered() = "+isRegistered()); }
 		 */
 
-		if ((getConnector() instanceof RectPolylinConnector) && isRegistered()) {
+		if (getConnector() instanceof RectPolylinConnector && isRegistered()) {
 			RectPolylinConnector connector = (RectPolylinConnector) getConnector();
 			if (connector.getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
 				ensurePolylinConverterIsRegistered();
-				if (connector.getWasManuallyAdjusted() && (connector._getPolylin() != null)) {
+				if (connector.getWasManuallyAdjusted() && connector._getPolylin() != null) {
 					if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Edge " + getPostCondition().getName() + ": store new layout for " + getStoredPolylinKey() + " to "
@@ -574,7 +574,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 					getEdge()._removeGraphicalPropertyWithKey(getFixedEndLocationKey());
 				}
 			}
-		} else if ((getConnector() instanceof CurveConnector) && isRegistered()) {
+		} else if (getConnector() instanceof CurveConnector && isRegistered()) {
 			CurveConnector connector = (CurveConnector) getConnector();
 			ensurePointConverterIsRegistered();
 			getEdge()._setGraphicalPropertyForKey(connector._getCpPosition(), getStoredCurveCPKey());
@@ -660,7 +660,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getModel()) {
-			if ((dataModification instanceof PostInserted) || (dataModification instanceof PostRemoved)) {
+			if (dataModification instanceof PostInserted || dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
 				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(FlexoPostCondition.EDGE_REPRESENTATION)) {
@@ -684,11 +684,11 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	public boolean isInsideSameActionPetriGraph() {
-		return (getPostCondition() != null)
-				&& (getPostCondition().getStartNode() instanceof ActionNode)
-				&& (getPostCondition().getNextNode() instanceof ActionNode)
-				&& (((ActionNode) getPostCondition().getStartNode()).getParentPetriGraph() == ((ActionNode) getPostCondition()
-						.getNextNode()).getParentPetriGraph());
+		return getPostCondition() != null
+				&& getPostCondition().getStartNode() instanceof ActionNode
+				&& getPostCondition().getNextNode() instanceof ActionNode
+				&& ((ActionNode) getPostCondition().getStartNode()).getParentPetriGraph() == ((ActionNode) getPostCondition().getNextNode())
+						.getParentPetriGraph();
 	}
 
 	@Override

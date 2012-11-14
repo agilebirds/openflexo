@@ -42,7 +42,8 @@ public class TestLibraryToXML extends FlexoTestCase {
 			library.addChild(book2);
 
 			if (logger.isLoggable(Level.INFO)) {
-				TransformerFactory transformerFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+				TransformerFactory transformerFactory = TransformerFactory.newInstance(
+						"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
 				System.out.println(transformerFactory.getClass().getName());
 				System.out.println(transformerFactory.getClass().getClassLoader());
 				Transformer transformer = transformerFactory.newTransformer();

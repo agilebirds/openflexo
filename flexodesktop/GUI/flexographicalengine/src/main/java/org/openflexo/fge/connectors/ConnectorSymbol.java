@@ -78,7 +78,7 @@ public interface ConnectorSymbol {
 				return FGEIconLibrary.START_PLAIN_SQUARE_ICON;
 			} else if (this == FILLED_SQUARE) {
 				return FGEIconLibrary.START_FILLED_SQUARE_ICON;
-			} else if ((this == PLAIN_DIAMOND) || (this == PLAIN_LONG_DIAMOND)) {
+			} else if (this == PLAIN_DIAMOND || this == PLAIN_LONG_DIAMOND) {
 				return FGEIconLibrary.START_PLAIN_DIAMOND_ICON;
 			} else if (this == FILLED_DIAMOND) {
 				return FGEIconLibrary.START_FILLED_DIAMOND_ICON;

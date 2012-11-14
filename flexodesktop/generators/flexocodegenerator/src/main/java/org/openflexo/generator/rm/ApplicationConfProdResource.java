@@ -56,7 +56,7 @@ public class ApplicationConfProdResource extends TextFileResource<ApplicationCon
 		}
 		if (resource instanceof GeneratedCodeResource) {
 			GeneratedCodeResource res = (GeneratedCodeResource) resource;
-			if (res.isLoaded() && (getRepository() != null)) {
+			if (res.isLoaded() && getRepository() != null) {
 				if ((getRepository().getLastWarNameUpdate().before(requestDate) || getRepository().getLastWarNameUpdate().equals(
 						requestDate))
 						&& (getRepository().getLastLoginPasswordUpdate().before(requestDate) || getRepository()

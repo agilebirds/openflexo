@@ -58,8 +58,8 @@ public class CreateDMEOModelInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateDMEOModel>() {
 			@Override
 			public boolean run(EventObject e, CreateDMEOModel action) {
-				return (CreatesNewEOModelDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
-						getControllerActionInitializer().getDMController().getFlexoFrame()) == CreatesNewEOModelDialog.VALIDATE);
+				return CreatesNewEOModelDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == CreatesNewEOModelDialog.VALIDATE;
 			}
 		};
 	}

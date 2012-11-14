@@ -251,7 +251,7 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 	}
 
 	public Color getColorForObject(BindingValue value) {
-		return (value.isBindingValid() ? Color.BLACK : Color.RED);
+		return value.isBindingValid() ? Color.BLACK : Color.RED;
 	}
 
 	@Override

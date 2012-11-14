@@ -101,7 +101,7 @@ public class FGEHalfPlane implements FGEArea {
 			if (l.isParallelTo(line)) {
 				return true;
 			}
-			return (!l.containsPoint(line.getLineIntersection(l))) || line.containsPoint(((FGEHalfLine) l).getLimit());
+			return !l.containsPoint(line.getLineIntersection(l)) || line.containsPoint(((FGEHalfLine) l).getLimit());
 		} else if (l instanceof FGESegment) {
 			return true;
 		} else if (l instanceof FGELine) {
@@ -413,7 +413,7 @@ public class FGEHalfPlane implements FGEArea {
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEHalfPlane) {
 			FGEHalfPlane hp = (FGEHalfPlane) obj;
-			return (line.overlap(hp.line) && containsPoint(hp.testPoint));
+			return line.overlap(hp.line) && containsPoint(hp.testPoint);
 		}
 		return super.equals(obj);
 	}

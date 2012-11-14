@@ -66,7 +66,7 @@ public class RegisterNewCGRelease extends AbstractGCAction<RegisterNewCGRelease,
 
 		@Override
 		public boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

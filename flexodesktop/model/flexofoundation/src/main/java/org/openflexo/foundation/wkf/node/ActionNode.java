@@ -669,7 +669,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		public ValidationIssue<ActionNodeCanBeBoundToFlexoActionOrDisplayActionButton, ActionNode> applyValidation(ActionNode object) {
 			if (object.getAssociatedButtonWidget() != null) {
 				HyperlinkType type = object.getAssociatedButtonWidget().getHyperlinkType();
-				if (type == null || (!type.isFlexoAction() && !type.isDisplayAction())) {
+				if (type == null || !type.isFlexoAction() && !type.isDisplayAction()) {
 					Vector<FixProposal<ActionNodeCanBeBoundToFlexoActionOrDisplayActionButton, ActionNode>> fixes = new Vector<FixProposal<ActionNodeCanBeBoundToFlexoActionOrDisplayActionButton, ActionNode>>();
 					fixes.add(new ChangeButtonType());
 					fixes.add(new DeleteNode());
@@ -858,8 +858,8 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 				}
 
 				if (post.getIsConditional()
-						&& (post.getConditionPrimitive() != null || (post.getConditionDescription() != null && post
-								.getConditionDescription().trim().length() > 0))) {
+						&& (post.getConditionPrimitive() != null || post.getConditionDescription() != null
+								&& post.getConditionDescription().trim().length() > 0)) {
 					duplicatedWorkflowPath.addCondition(post.getProcess(), post.getConditionDescription(), post.getConditionPrimitive(),
 							true);
 				}
@@ -950,8 +950,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	private static boolean isBeginNode(AbstractNode node) {
-		return (node instanceof FlexoNode && ((FlexoNode) node).isBeginNode())
-				|| (node instanceof EventNode && ((EventNode) node).isStart());
+		return node instanceof FlexoNode && ((FlexoNode) node).isBeginNode() || node instanceof EventNode && ((EventNode) node).isStart();
 	}
 
 	private static boolean isDeleteProcess(PetriGraphNode node, boolean isDeadEnd) {
@@ -963,7 +962,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	private static boolean isEndNode(AbstractNode node) {
-		return (node instanceof FlexoNode && ((FlexoNode) node).isEndNode()) || (node instanceof EventNode && ((EventNode) node).isEnd());
+		return node instanceof FlexoNode && ((FlexoNode) node).isEndNode() || node instanceof EventNode && ((EventNode) node).isEnd();
 	}
 
 	private static List<WorkflowPathToOperationNode> getNextOperationForProcess(List<AbstractNode> visitedNodes,
@@ -991,7 +990,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		if (getTabComponentName() != null && getTabComponentName().equals(aComponentName)) {
 			return;
 		}
-		if (_tabComponentInstance == null && ((aComponentName == null) || (aComponentName.trim().equals("")))) {
+		if (_tabComponentInstance == null && (aComponentName == null || aComponentName.trim().equals(""))) {
 			return;
 		}
 		ComponentDefinition foundComponent = getProject().getFlexoComponentLibrary().getComponentNamed(aComponentName);
@@ -1023,7 +1022,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	public void setTabComponent(TabComponentDefinition aComponentDefinition) {
-		if ((_tabComponentInstance != null) && (_tabComponentInstance.getComponentDefinition() == aComponentDefinition)) {
+		if (_tabComponentInstance != null && _tabComponentInstance.getComponentDefinition() == aComponentDefinition) {
 			return;
 		}
 		if (_tabComponentInstance != null && aComponentDefinition == null) {
@@ -1051,8 +1050,8 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		if (_tabComponentInstance != null) {
 			removeTabComponentInstance();
 		}
-		if (tabComponentInstance.getComponentDefinition() != null
-				|| (isCreatedByCloning() && tabComponentInstance.getComponentName() != null)) {
+		if (tabComponentInstance.getComponentDefinition() != null || isCreatedByCloning()
+				&& tabComponentInstance.getComponentName() != null) {
 			_tabComponentInstance = tabComponentInstance;
 			_tabComponentInstance.setActionNode(this);
 			setChanged();

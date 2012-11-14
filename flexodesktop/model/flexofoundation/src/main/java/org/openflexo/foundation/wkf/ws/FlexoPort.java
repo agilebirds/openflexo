@@ -109,7 +109,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable {
 	@Override
 	public void setName(String aName) {
 		String oldValue = getName();
-		if ((oldValue == null) || (!oldValue.equals(aName))) {
+		if (oldValue == null || !oldValue.equals(aName)) {
 			super.setName(findNextName(aName));
 			if (stringHasChanged(aName, getName())) {
 				setChanged();
@@ -124,7 +124,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable {
 		}
 		String base = aName;
 		int i = 1;
-		while ((getPortRegistery().portWithName(aName) != null) && (getPortRegistery().portWithName(aName) != this)) {
+		while (getPortRegistery().portWithName(aName) != null && getPortRegistery().portWithName(aName) != this) {
 			aName = base + "-" + i;
 			i++;
 		}
@@ -181,7 +181,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable {
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if ((index == -1) && (getCollection() != null)) {
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -217,7 +217,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable {
 		this.index = index;
 		setChanged();
 		notifyAttributeModification("index", old, index);
-		if (!isDeserializing() && (getPortRegistery() != null)) {
+		if (!isDeserializing() && getPortRegistery() != null) {
 			getPortRegistery().setChanged();
 			getPortRegistery().notifyObservers(new ChildrenOrderChanged());
 		}

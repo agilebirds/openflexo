@@ -95,7 +95,7 @@ public class Parser {
 			throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind + " at line " + t.line);
 		}
 
-		if ((match != null) && !match.equals(t.image)) {
+		if (match != null && !match.equals(t.image)) {
 			throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image + " at line " + t.line);
 		}
 
@@ -296,7 +296,7 @@ public class Parser {
 			}
 
 		default:
-			if ((t.kind == Lexer.RPAREN) && rparen_ok) {
+			if (t.kind == Lexer.RPAREN && rparen_ok) {
 				return null;
 			} else {
 				throw new RuntimeException("Unexpected " + t.image);

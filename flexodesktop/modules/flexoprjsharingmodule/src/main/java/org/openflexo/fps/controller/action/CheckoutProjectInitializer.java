@@ -58,23 +58,23 @@ public class CheckoutProjectInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, final CheckoutProject action) {
 				final DirectoryParameter directoryParameter = new DirectoryParameter("localDirectory", "local_directory",
-						(action.getLocalDirectory() != null ? action.getLocalDirectory() : lastCheckoutDirectory));
+						action.getLocalDirectory() != null ? action.getLocalDirectory() : lastCheckoutDirectory);
 				final TextFieldParameter localNameParameter = new TextFieldParameter("localName", "local_name", action.getLocalName());
 				final ReadOnlyTextFieldParameter checkoutDirectoryFileName = new ReadOnlyTextFieldParameter("checkoutDirectoryFileName",
 						"project_will_be_checkouted_in",
-						(new File(directoryParameter.getValue(), action.getFocusedObject().getModuleName())).getAbsolutePath(), 40);
+						new File(directoryParameter.getValue(), action.getFocusedObject().getModuleName()).getAbsolutePath(), 40);
 				checkoutDirectoryFileName.setDepends("localDirectory,localName");
 				directoryParameter.addValueListener(new ParameterDefinition.ValueListener<File>() {
 					@Override
 					public void newValueWasSet(ParameterDefinition param, File oldValue, File newValue) {
-						checkoutDirectoryFileName.setValue((new File(directoryParameter.getValue(), localNameParameter.getValue()))
+						checkoutDirectoryFileName.setValue(new File(directoryParameter.getValue(), localNameParameter.getValue())
 								.getAbsolutePath());
 					}
 				});
 				localNameParameter.addValueListener(new ParameterDefinition.ValueListener<String>() {
 					@Override
 					public void newValueWasSet(ParameterDefinition param, String oldValue, String newValue) {
-						checkoutDirectoryFileName.setValue((new File(directoryParameter.getValue(), localNameParameter.getValue()))
+						checkoutDirectoryFileName.setValue(new File(directoryParameter.getValue(), localNameParameter.getValue())
 								.getAbsolutePath());
 					}
 				});

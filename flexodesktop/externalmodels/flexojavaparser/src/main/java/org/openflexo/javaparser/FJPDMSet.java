@@ -67,7 +67,7 @@ public class FJPDMSet extends DMSet {
 	}
 
 	private FJPPackageReference packageForClass(FJPJavaClass aClass) {
-		String packageName = (aClass.getPackage() != null ? aClass.getPackage() : DMPackage.DEFAULT_PACKAGE_NAME);
+		String packageName = aClass.getPackage() != null ? aClass.getPackage() : DMPackage.DEFAULT_PACKAGE_NAME;
 		return packageNamed(packageName);
 	}
 
@@ -129,7 +129,7 @@ public class FJPDMSet extends DMSet {
 							next.getType().getStringRepresentation(), next.getType().getSimplifiedStringRepresentation());
 					propertyReference.setResolvable(next.isResolvable());
 					_properties.add(propertyReference);
-					if ((entity != null) && (entity.getDMProperty(next.getName()) != null)) {
+					if (entity != null && entity.getDMProperty(next.getName()) != null) {
 						addToSelectedObjects(propertyReference);
 						propertyReference.setNewlyDiscovered(false);
 					} else {
@@ -146,7 +146,7 @@ public class FJPDMSet extends DMSet {
 								next.getReturnType().getStringRepresentation(), next.getReturnType().getSimplifiedStringRepresentation());
 						methodReference.setResolvable(next.isResolvable());
 						_methods.add(methodReference);
-						if ((entity != null) && (entity.getDeclaredMethod(next.getSignature()) != null)) {
+						if (entity != null && entity.getDeclaredMethod(next.getSignature()) != null) {
 							addToSelectedObjects(methodReference);
 							methodReference.setNewlyDiscovered(false);
 						} else {
@@ -181,7 +181,7 @@ public class FJPDMSet extends DMSet {
 
 	public boolean containsSelectedClass(FJPJavaClass aClass) {
 		ClassReference searchedClass = getClassReference(aClass);
-		return ((searchedClass != null) && (searchedClass.isSelected()));
+		return searchedClass != null && searchedClass.isSelected();
 	}
 
 	public void notifyKnownAndIgnoredProperties(Hashtable<FJPJavaClass, Vector<String>> ignoredProperties) {

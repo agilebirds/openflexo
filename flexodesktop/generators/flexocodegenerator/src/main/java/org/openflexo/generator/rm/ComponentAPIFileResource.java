@@ -86,7 +86,7 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 
 	@Override
 	public String getCurrentGeneration() {
-		if ((getGenerator() != null) && (!hasGenerationError())) {
+		if (getGenerator() != null && !hasGenerationError()) {
 			if (getGenerator().getGeneratedCode() == null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Generator is not null and there are no generation errors but the generated code is null");
@@ -182,7 +182,7 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+		if (!isObserverRegistered && getComponentDefinition() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());

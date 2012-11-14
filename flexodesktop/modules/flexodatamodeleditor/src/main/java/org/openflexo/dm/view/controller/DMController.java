@@ -98,6 +98,7 @@ public class DMController extends FlexoController {
 		super(module);
 	}
 
+	@Override
 	protected void initializePerspectives() {
 		addToPerspectives(REPOSITORY_PERSPECTIVE = new RepositoryPerspective(this));
 		addToPerspectives(PACKAGE_PERSPECTIVE = new PackagePerspective(this));

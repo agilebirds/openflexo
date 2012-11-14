@@ -121,8 +121,9 @@ public class OWLObjectProperty extends OWLProperty implements OntologyObjectProp
 		return true;
 	}
 
+	@Override
 	public boolean isLiteralRange() {
-		return (getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI));
+		return getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI);
 	}
 
 	@Override

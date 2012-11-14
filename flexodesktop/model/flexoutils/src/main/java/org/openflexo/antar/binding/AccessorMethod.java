@@ -88,8 +88,8 @@ public class AccessorMethod implements Comparable {
 
 				for (int i = 0; i < getMethod().getParameterTypes().length; i++) {
 
-					Class localParameterType = (getMethod().getParameterTypes())[i];
-					Class comparedParameterType = (comparedAccessorMethod.getMethod().getParameterTypes())[i];
+					Class localParameterType = getMethod().getParameterTypes()[i];
+					Class comparedParameterType = comparedAccessorMethod.getMethod().getParameterTypes()[i];
 
 					if (!localParameterType.equals(comparedParameterType)) {
 

@@ -99,7 +99,7 @@ public class DiffInformation extends FileInfoContainer {
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer(30);
-		buf.append("\nFile: " + ((file != null) ? file.getAbsolutePath() : "null")); // NOI18N
+		buf.append("\nFile: " + (file != null ? file.getAbsolutePath() : "null")); // NOI18N
 		buf.append("\nRCS file: " + repositoryFileName); // NOI18N
 		buf.append("\nRevision: " + leftRevision); // NOI18N
 		if (rightRevision != null) {
@@ -238,10 +238,10 @@ public class DiffInformation extends FileInfoContainer {
 
 		public boolean isInRange(int number, boolean left) {
 			if (left) {
-				return (number >= leftBeginning && number <= leftEnd);
+				return number >= leftBeginning && number <= leftEnd;
 			}
 
-			return (number >= rightBeginning && number <= rightEnd);
+			return number >= rightBeginning && number <= rightEnd;
 		}
 
 		public String getLine(int number, boolean left) {

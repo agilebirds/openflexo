@@ -63,7 +63,7 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProject() != null)) {
+		if (!isObserverRegistered && getProject() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

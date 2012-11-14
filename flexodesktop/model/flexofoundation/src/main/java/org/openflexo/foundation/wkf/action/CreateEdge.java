@@ -249,7 +249,7 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 		}
 		if (endNode instanceof FlexoNode) {
 			FlexoNode endFlexoNode = (FlexoNode) endNode;
-			if ((endFlexoNode.isBeginNode()) && (!(startingNode instanceof AbstractInPort))) {
+			if (endFlexoNode.isBeginNode() && !(startingNode instanceof AbstractInPort)) {
 				// This is a induced edge construction
 				if (endFlexoNode.getAttachedPreCondition() != null) {
 					endNodePreCondition = endFlexoNode.getAttachedPreCondition();

@@ -56,7 +56,7 @@ public class PortRegisteryGR extends ContainerGR<PortRegistery> {
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getModel()) {
-			if ((dataModification instanceof PortInserted) || (dataModification instanceof PortRemoved)) {
+			if (dataModification instanceof PortInserted || dataModification instanceof PortRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				notifyShapeNeedsToBeRedrawn();
 				notifyObjectMoved();

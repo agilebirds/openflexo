@@ -129,42 +129,42 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 			InvalidModelException {
 		if (node instanceof AbstractActivityNode) {
 			if (node instanceof SubProcessNode) {
-				return (new SubProcessActivityNodeActivation((SubProcessNode) node, pre));
+				return new SubProcessActivityNodeActivation((SubProcessNode) node, pre);
 			} else if (node instanceof ActivityNode) {
 				if (node instanceof SelfExecutableActivityNode) {
-					return (new SelfExecutableActivityNodeActivation((SelfExecutableActivityNode) node, pre));
+					return new SelfExecutableActivityNodeActivation((SelfExecutableActivityNode) node, pre);
 				} else {
 					if (node.getNodeType() == NodeType.BEGIN) {
-						return (new BeginActivityNodeActivation((ActivityNode) node, pre));
+						return new BeginActivityNodeActivation((ActivityNode) node, pre);
 					} else if (node.getNodeType() == NodeType.END) {
-						return (new EndActivityNodeActivation((ActivityNode) node, pre));
+						return new EndActivityNodeActivation((ActivityNode) node, pre);
 					} else { // Normal node
-						return (new NormalActivityNodeActivation((ActivityNode) node, pre));
+						return new NormalActivityNodeActivation((ActivityNode) node, pre);
 					}
 				}
 			}
 		} else if (node instanceof OperationNode) {
 			if (node instanceof SelfExecutableOperationNode) {
-				return (new SelfExecutableOperationNodeActivation((SelfExecutableOperationNode) node, pre));
+				return new SelfExecutableOperationNodeActivation((SelfExecutableOperationNode) node, pre);
 			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginOperationNodeActivation((OperationNode) node, pre));
+					return new BeginOperationNodeActivation((OperationNode) node, pre);
 				} else if (node.getNodeType() == NodeType.END) {
-					return (new EndOperationNodeActivation((OperationNode) node, pre));
+					return new EndOperationNodeActivation((OperationNode) node, pre);
 				} else { // Normal node
-					return (new NormalOperationNodeActivation((OperationNode) node, pre));
+					return new NormalOperationNodeActivation((OperationNode) node, pre);
 				}
 			}
 		} else if (node instanceof ActionNode) {
 			if (node instanceof SelfExecutableActionNode) {
-				return (new SelfExecutableActionNodeActivation((SelfExecutableActionNode) node, pre));
+				return new SelfExecutableActionNodeActivation((SelfExecutableActionNode) node, pre);
 			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginActionNodeActivation((ActionNode) node, pre));
+					return new BeginActionNodeActivation((ActionNode) node, pre);
 				} else if (node.getNodeType() == NodeType.END) {
-					return (new EndActionNodeActivation((ActionNode) node, pre));
+					return new EndActionNodeActivation((ActionNode) node, pre);
 				} else { // Normal node
-					return (new NormalActionNodeActivation((ActionNode) node, pre));
+					return new NormalActionNodeActivation((ActionNode) node, pre);
 				}
 			}
 		}

@@ -130,6 +130,7 @@ public class FPSController extends FlexoController {
 		_instance = this;
 	}
 
+	@Override
 	protected void initializePerspectives() {
 		logger.info("Create CVSRepositoryList");
 		_repositories = new CVSRepositoryList();

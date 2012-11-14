@@ -51,7 +51,7 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {
-		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
+		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 	}
 
 	public static class ClassPatternRoleMustDefineAValidConceptClass extends

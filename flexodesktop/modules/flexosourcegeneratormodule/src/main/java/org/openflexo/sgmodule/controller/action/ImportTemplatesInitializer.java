@@ -19,8 +19,8 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.util.EventObject;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;

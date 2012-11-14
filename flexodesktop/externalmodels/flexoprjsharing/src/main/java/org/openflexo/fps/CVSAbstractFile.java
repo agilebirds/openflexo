@@ -264,7 +264,7 @@ public abstract class CVSAbstractFile extends CVSObject {
 	}
 
 	public synchronized boolean isCommitting() {
-		return (_committingThread != null);
+		return _committingThread != null;
 	}
 
 	public static enum CommitStatus {
@@ -584,7 +584,7 @@ public abstract class CVSAbstractFile extends CVSObject {
 
 		@Override
 		public void commandTerminated(TerminationEvent e) {
-			status = (e.isError() ? CommitStatus.Error : CommitStatus.OK);
+			status = e.isError() ? CommitStatus.Error : CommitStatus.OK;
 		}
 
 		@Override
@@ -686,7 +686,7 @@ public abstract class CVSAbstractFile extends CVSObject {
 	}
 
 	public synchronized boolean isUpdating() {
-		return (_updatingThread != null);
+		return _updatingThread != null;
 	}
 
 	public static enum UpdateStatus {
@@ -769,7 +769,7 @@ public abstract class CVSAbstractFile extends CVSObject {
 
 		@Override
 		public void commandTerminated(TerminationEvent e) {
-			status = (e.isError() ? UpdateStatus.Error : UpdateStatus.OK);
+			status = e.isError() ? UpdateStatus.Error : UpdateStatus.OK;
 		}
 
 		@Override

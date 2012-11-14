@@ -79,8 +79,8 @@ public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery, Fl
 
 	@Override
 	public String getLocalizedName() {
-		if ((getFocusedObject()).getPortRegistery() != null) {
-			if ((getFocusedObject()).getPortRegistery().getIsVisible()) {
+		if (getFocusedObject().getPortRegistery() != null) {
+			if (getFocusedObject().getPortRegistery().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_port_registery");
 			} else {
 				return FlexoLocalization.localizedForKey("open_port_registery");

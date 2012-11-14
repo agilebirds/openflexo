@@ -91,7 +91,7 @@ public class AnnotateInformation extends FileInfoContainer {
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer(30);
-		buf.append("\nFile: " + ((file != null) ? file.getAbsolutePath() : "null")); // NOI18N
+		buf.append("\nFile: " + (file != null ? file.getAbsolutePath() : "null")); // NOI18N
 		return buf.toString();
 	}
 

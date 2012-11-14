@@ -250,6 +250,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		return o.isContainedIn(this);
 	}
 
+	@Override
 	public abstract String getDisplayableDescription();
 
 }

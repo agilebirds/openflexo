@@ -19,7 +19,6 @@
  */
 package org.openflexo.ve.controller;
 
-
 class ShemaBrowser extends VEBrowser {
 
 	protected ShemaBrowser(VEController controller) {

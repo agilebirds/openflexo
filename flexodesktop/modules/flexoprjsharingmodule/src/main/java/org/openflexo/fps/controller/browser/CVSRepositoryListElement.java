@@ -39,7 +39,7 @@ public class CVSRepositoryListElement extends FPSBrowserElement {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("buildChildrenVector() for CVSRepositoryListElement");
 		}
-		for (CVSRepository rep : ((Vector<CVSRepository>) getCVSRepositoryList().getCVSRepositories().clone())) {
+		for (CVSRepository rep : (Vector<CVSRepository>) getCVSRepositoryList().getCVSRepositories().clone()) {
 			addToChilds(rep);
 		}
 	}

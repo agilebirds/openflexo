@@ -34,51 +34,49 @@ import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.view.widget.FIBCheckBoxWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableCheckboxWidget extends FIBCheckBoxWidget implements FIBEditableView<FIBCheckBox,JCheckBox> {
+public class FIBEditableCheckboxWidget extends FIBCheckBoxWidget implements FIBEditableView<FIBCheckBox, JCheckBox> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableCheckboxWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBCheckBox,JCheckBox> delegate;
-	
+	private FIBEditableViewDelegate<FIBCheckBox, JCheckBox> delegate;
+
 	private FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableCheckboxWidget(FIBCheckBox model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableCheckboxWidget(FIBCheckBox model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBCheckBox,JCheckBox>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBCheckBox, JCheckBox>(this);
 		model.addObserver(this);
 	}
-	
-	public void delete() 
-	{
+
+	@Override
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
 	}
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBCheckBox,JCheckBox> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBCheckBox, JCheckBox> getDelegate() {
 		return delegate;
 	}
 
-	public void update(Observable o, Object dataModification) 
-	{
+	@Override
+	public void update(Observable o, Object dataModification) {
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
 
 }

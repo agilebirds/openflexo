@@ -32,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -113,7 +114,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		// GPO: Isn't there a bit too much panels here?
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
 		// EMPTY_CONTENT.setPreferredSize(new Dimension(400,400));
-		EMPTY_CONTENT.add(new JLabel("No selection", JLabel.CENTER), BorderLayout.CENTER);
+		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
 
 		rootPane = new JPanel(new BorderLayout());
 		inspectorDialog.getContentPane().setLayout(new BorderLayout());

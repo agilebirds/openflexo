@@ -508,7 +508,7 @@ public class PropertyListColumn extends PropertyModel {
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = object;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (strTok.hasMoreTokens()) {
 				if (currentObject != null) {

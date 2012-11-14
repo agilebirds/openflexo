@@ -107,7 +107,7 @@ public final class NewPort extends AbstractInPort {
 		for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
 			InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
 			AbstractNode nextNode = next.getNextNode();
-			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isBeginNode())) {
+			if (nextNode instanceof ActivityNode && ((ActivityNode) nextNode).isBeginNode()) {
 				if (!foundValidEdge) {
 					foundValidEdge = true;
 					isCorrectelyLinked = true;
@@ -128,7 +128,7 @@ public final class NewPort extends AbstractInPort {
 		for (Enumeration<FlexoPostCondition<AbstractNode, AbstractNode>> e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
 			FlexoPostCondition<AbstractNode, AbstractNode> next = e.nextElement();
 			AbstractNode nextNode = next.getNextNode();
-			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isBeginNode())) {
+			if (nextNode instanceof ActivityNode && ((ActivityNode) nextNode).isBeginNode()) {
 				if (!foundValidEdge) {
 					foundValidEdge = true;
 					// isCorrectelyLinked = true;

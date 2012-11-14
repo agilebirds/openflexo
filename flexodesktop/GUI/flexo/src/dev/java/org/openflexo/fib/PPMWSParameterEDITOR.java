@@ -25,22 +25,19 @@ import java.util.Locale;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.view.controller.WebServiceURLDialog;
 
-
 public class PPMWSParameterEDITOR {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		System.err.println(Locale.getDefault().getDisplayName());
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData()
-			{
+			public Object[] getData() {
 				WebServiceURLDialog o = new WebServiceURLDialog();
-				System.out.println("WebServiceURLDialog="+o);
-				System.out.println("AddressBook="+o.getAddressBook().getInstances());
+				System.out.println("WebServiceURLDialog=" + o);
+				System.out.println("AddressBook=" + o.getAddressBook().getInstances());
 				return FIBAbstractEditor.makeArray(o);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return WebServiceURLDialog.FIB_FILE;

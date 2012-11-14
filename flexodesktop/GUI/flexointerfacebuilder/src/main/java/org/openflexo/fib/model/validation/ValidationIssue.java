@@ -77,7 +77,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 	}
 
 	public String getLocalizedMessage() {
-		if ((_localizedMessage == null) && (_message != null) && _isLocalized) {
+		if (_localizedMessage == null && _message != null && _isLocalized) {
 			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(VALIDATION_LOCALIZATION, _message, this);
 		}
 		return _localizedMessage;

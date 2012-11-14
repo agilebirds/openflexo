@@ -47,9 +47,9 @@ public class CGFileElement extends SGBrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if ((getFile() != null) && (getFile().getRepository() != null) && getFile().getRepository().getManageHistory()
-				&& (getFile().getResource() != null) && getFile().getResource().isLoaded()
-				&& (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getFile() != null && getFile().getRepository() != null && getFile().getRepository().getManageHistory()
+				&& getFile().getResource() != null && getFile().getResource().isLoaded()
+				&& getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			for (CGFileReleaseVersion releaseVersion : ((AbstractGeneratedFile) getFile().getResource().getGeneratedResourceData())
 					.getHistory().getReleasesVersion()) {
 				addToChilds(releaseVersion);
@@ -80,11 +80,11 @@ public class CGFileElement extends SGBrowserElement {
 		if (returned == null) {
 			returned = super.getBaseIcon();
 		}
-		if ((getProjectBrowser() != null) && (getProjectBrowser() instanceof SGBrowser)) {
+		if (getProjectBrowser() != null && getProjectBrowser() instanceof SGBrowser) {
 			SGBrowser browser = (SGBrowser) getProjectBrowser();
-			if ((browser.getController() != null)
-					&& (browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE)
-					&& (getFile() instanceof SGJavaFile) && (((SGJavaFile) getFile()).getParseException() != null)) {
+			if (browser.getController() != null
+					&& browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE
+					&& getFile() instanceof SGJavaFile && ((SGJavaFile) getFile()).getParseException() != null) {
 				returned = IconFactory.getImageIcon(returned, IconLibrary.ERROR2);
 			}
 		}
@@ -107,10 +107,10 @@ public class CGFileElement extends SGBrowserElement {
 
 	@Override
 	public boolean isEnabled() {
-		if ((getProjectBrowser() != null) && (getProjectBrowser() instanceof SGBrowser)) {
+		if (getProjectBrowser() != null && getProjectBrowser() instanceof SGBrowser) {
 			SGBrowser browser = (SGBrowser) getProjectBrowser();
-			if ((browser.getController() != null)
-					&& (browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE)
+			if (browser.getController() != null
+					&& browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE
 					&& !getFile().supportModelReinjection()) {
 				return false;
 			}

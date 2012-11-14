@@ -31,7 +31,7 @@ public class DefaultAutomaticMergeResolvingModel extends AutomaticMergeResolving
 	public static final AutomaticMergeResolvingRule SAME_CONCURRENT_CHANGES = new AutomaticMergeResolvingRule() {
 		@Override
 		public String getMergedResult(MergeChange change) {
-			return (change.getLeftText());
+			return change.getLeftText();
 		}
 
 		@Override
@@ -39,7 +39,7 @@ public class DefaultAutomaticMergeResolvingModel extends AutomaticMergeResolving
 			// System.out.println("change.getLeftText()="+change.getLeftText());
 			// System.out.println("change.getRightText()="+change.getRightText());
 			// System.out.println("return="+change.getLeftText().equals(change.getRightText()));
-			return (change.getLeftText().equals(change.getRightText()));
+			return change.getLeftText().equals(change.getRightText());
 		}
 
 		@Override

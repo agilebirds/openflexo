@@ -81,7 +81,7 @@ public class ImportDMEOModel extends FlexoAction {
 
 	public DMEORepository getRepository() {
 		if (_repository == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMEORepository)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DMEORepository) {
 				_repository = (DMEORepository) getFocusedObject();
 			}
 		}

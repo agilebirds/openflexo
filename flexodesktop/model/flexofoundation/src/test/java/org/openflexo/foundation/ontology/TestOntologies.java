@@ -28,7 +28,6 @@ import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.owl.OWLClass;
 import org.openflexo.foundation.ontology.owl.OWLDataProperty;
 import org.openflexo.foundation.ontology.owl.OWLIndividual;
-import org.openflexo.foundation.ontology.owl.OWLObject;
 import org.openflexo.foundation.ontology.owl.OWLObjectProperty;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
@@ -72,50 +71,50 @@ public class TestOntologies extends FlexoTestCase {
 		assertNotNull(rdfsOntology);
 		assertTrue(rdfsOntology.isLoaded());
 
-		OWLClass LITERAL = rdfsOntology.getClass(OWLObject.RDFS_LITERAL_URI);
+		OWLClass LITERAL = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_LITERAL_URI);
 		assertNotNull(LITERAL);
-		OWLClass RESOURCE = rdfsOntology.getClass(OWLObject.RDFS_RESOURCE_URI);
+		OWLClass RESOURCE = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_RESOURCE_URI);
 		assertNotNull(RESOURCE);
-		OWLClass CLASS = rdfsOntology.getClass(OWLObject.RDFS_CLASS_URI);
+		OWLClass CLASS = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_CLASS_URI);
 		assertNotNull(CLASS);
-		OWLClass DATATYPE = rdfsOntology.getClass(OWLObject.RDFS_DATATYPE_URI);
+		OWLClass DATATYPE = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_DATATYPE_URI);
 		assertNotNull(DATATYPE);
-		OWLClass CONTAINER = rdfsOntology.getClass(OWLObject.RDFS_CONTAINER_URI);
+		OWLClass CONTAINER = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_CONTAINER_URI);
 		assertNotNull(CONTAINER);
 
-		OntologyProperty DOMAIN = rdfsOntology.getProperty(OWLObject.RDFS_DOMAIN_URI);
+		OntologyProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);
 		assertNotNull(DOMAIN);
 		assertFalse(DOMAIN.isAnnotationProperty());
 
-		OntologyProperty RANGE = rdfsOntology.getProperty(OWLObject.RDFS_RANGE_URI);
+		OntologyProperty RANGE = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_RANGE_URI);
 		assertNotNull(RANGE);
 		assertFalse(RANGE.isAnnotationProperty());
 
-		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(OWLObject.RDFS_SUB_CLASS_URI);
+		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_CLASS_URI);
 		assertNotNull(SUB_CLASS);
 		assertFalse(SUB_CLASS.isAnnotationProperty());
 
-		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(OWLObject.RDFS_SUB_PROPERTY_URI);
+		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_PROPERTY_URI);
 		assertNotNull(SUB_PROPERTY);
 		assertFalse(SUB_PROPERTY.isAnnotationProperty());
 
-		OntologyProperty MEMBER = rdfsOntology.getProperty(OWLObject.RDFS_MEMBER_URI);
+		OntologyProperty MEMBER = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_MEMBER_URI);
 		assertNotNull(MEMBER);
 		assertFalse(MEMBER.isAnnotationProperty());
 
-		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(OWLObject.RDFS_SEE_ALSO_URI);
+		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 
-		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(OWLObject.RDFS_IS_DEFINED_BY_URI);
+		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_IS_DEFINED_BY_URI);
 		assertNotNull(IS_DEFINED_BY);
 		assertTrue(IS_DEFINED_BY.isAnnotationProperty());
 
-		OntologyProperty LABEL = rdfsOntology.getProperty(OWLObject.RDFS_LABEL_URI);
+		OntologyProperty LABEL = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_LABEL_URI);
 		assertNotNull(LABEL);
 		assertTrue(LABEL.isAnnotationProperty());
 
-		OntologyProperty COMMENT = rdfsOntology.getProperty(OWLObject.RDFS_COMMENT_URI);
+		OntologyProperty COMMENT = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -457,7 +456,7 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(4, activity1.getAnnotationStatements().size());
 
-		OWLDataProperty COMMENT = ontology.getDataProperty(OWLObject.RDFS_COMMENT_URI);
+		OWLDataProperty COMMENT = ontology.getDataProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -480,7 +479,7 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(1, activity1.getAnnotationObjectStatements().size());
 
-		OWLObjectProperty SEE_ALSO = ontology.getObjectProperty(OWLObject.RDFS_SEE_ALSO_URI);
+		OWLObjectProperty SEE_ALSO = ontology.getObjectProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 

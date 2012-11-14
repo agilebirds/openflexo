@@ -50,7 +50,7 @@ public class ShowDifferences extends FlexoGUIAction<ShowDifferences, CGObject, C
 
 		@Override
 		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && ((object instanceof CGFile) || (object instanceof AbstractCGFileVersion)));
+			return object != null && (object instanceof CGFile || object instanceof AbstractCGFileVersion);
 		}
 
 		@Override
@@ -59,10 +59,10 @@ public class ShowDifferences extends FlexoGUIAction<ShowDifferences, CGObject, C
 				return false;
 			}
 			if (object instanceof CGFile) {
-				return (((CGFile) object).getRepository().getManageHistory());
+				return ((CGFile) object).getRepository().getManageHistory();
 			}
 			if (object instanceof AbstractCGFileVersion) {
-				return (((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory());
+				return ((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory();
 			}
 			return false;
 		}

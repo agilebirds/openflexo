@@ -49,7 +49,7 @@ public class MoveTabLeft extends FlexoUndoableAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof IETabWidget) && ((IETabWidget) object).getRootParent().getTabCount() > 1;
+			return object != null && object instanceof IETabWidget && ((IETabWidget) object).getRootParent().getTabCount() > 1;
 		}
 
 	};

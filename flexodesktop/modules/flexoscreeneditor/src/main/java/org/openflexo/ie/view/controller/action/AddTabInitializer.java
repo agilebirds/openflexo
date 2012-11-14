@@ -118,8 +118,8 @@ public class AddTabInitializer extends ActionInitializer<AddTab, IEWidget, IEWid
 					}
 					if (alreadyInContainer) {
 						if (FlexoController.confirm("add_tab_already_in_tab_container")) {
-							DuplicateComponentAction dupAction = (DuplicateComponentAction) DuplicateComponentAction.actionType
-									.makeNewAction(compDef, EmptyVector.EMPTY_VECTOR, action.getEditor());
+							DuplicateComponentAction dupAction = DuplicateComponentAction.actionType.makeNewAction(compDef,
+									EmptyVector.EMPTY_VECTOR, action.getEditor());
 							dupAction.doAction();
 							compDef = dupAction.getComponentDefinition();
 							if (compDef == null) {

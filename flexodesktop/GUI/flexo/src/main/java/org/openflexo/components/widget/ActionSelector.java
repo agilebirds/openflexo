@@ -32,7 +32,7 @@ public class ActionSelector extends NodeSelector<ActionNode> {
 	protected static final String EMPTY_STRING = "";
 
 	public ActionSelector(ActionNode node) {
-		super((node != null ? node.getProject() : null), node, ActionNode.class);
+		super(node != null ? node.getProject() : null, node, ActionNode.class);
 	}
 
 }

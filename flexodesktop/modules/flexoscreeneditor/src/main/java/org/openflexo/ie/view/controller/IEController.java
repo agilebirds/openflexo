@@ -135,6 +135,7 @@ public class IEController extends FlexoController implements Serializable, Flexo
 		super(module);
 	}
 
+	@Override
 	protected void initializePerspectives() {
 		componentLibraryBrowser = new ComponentLibraryBrowser(this);
 		componentBrowser = new ComponentBrowser(this);

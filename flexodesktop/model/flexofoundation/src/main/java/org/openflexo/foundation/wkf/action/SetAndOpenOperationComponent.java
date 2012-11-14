@@ -53,13 +53,13 @@ public class SetAndOpenOperationComponent extends FlexoAction<SetAndOpenOperatio
 
 		@Override
 		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && !(object instanceof SelfExecutableNode) && ((object).getNodeType() == NodeType.NORMAL) && ((object)
-					.getComponentInstance() == null));
+			return object != null && !(object instanceof SelfExecutableNode) && object.getNodeType() == NodeType.NORMAL
+					&& object.getComponentInstance() == null;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object.getNodeType() == NodeType.NORMAL) && (object.getComponentInstance() == null));
+			return object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() == null;
 		}
 
 	};

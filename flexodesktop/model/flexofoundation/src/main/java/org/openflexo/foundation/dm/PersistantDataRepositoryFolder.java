@@ -43,7 +43,7 @@ public class PersistantDataRepositoryFolder extends DMRepositoryFolder {
 
 	@Override
 	public DMRepository getRepositoryAtIndex(int index) {
-		if ((index >= 0) && (index < getRepositoriesCount())) {
+		if (index >= 0 && index < getRepositoriesCount()) {
 			int d1 = getDMModel().getProjectDatabaseRepositories().size();
 			if (index < getDMModel().getProjectDatabaseRepositories().size()) {
 				return getDMModel().getProjectDatabaseRepositories().elementAt(index);

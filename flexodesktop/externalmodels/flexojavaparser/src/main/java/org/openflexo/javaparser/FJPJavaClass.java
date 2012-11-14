@@ -437,7 +437,7 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 					}
 				}
 			}
-			for (Enumeration en = (new Vector<DMProperty>(propertiesToDelete)).elements(); en.hasMoreElements();) {
+			for (Enumeration en = new Vector<DMProperty>(propertiesToDelete).elements(); en.hasMoreElements();) {
 				DMProperty toDelete = (DMProperty) en.nextElement();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete property " + toDelete);
@@ -470,7 +470,7 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 					}
 				}
 			}
-			for (Enumeration en = (new Vector<DMMethod>(methodsToDelete)).elements(); en.hasMoreElements();) {
+			for (Enumeration en = new Vector<DMMethod>(methodsToDelete).elements(); en.hasMoreElements();) {
 				DMMethod toDelete = (DMMethod) en.nextElement();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete method " + toDelete);

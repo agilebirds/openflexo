@@ -44,7 +44,7 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 
 	@Override
 	public boolean targetAcceptsSource(BrowserElement target, BrowserElement source) {
-		if (!(target instanceof ComponentFolderElement) && (target.getParent() instanceof ComponentFolderElement)) {
+		if (!(target instanceof ComponentFolderElement) && target.getParent() instanceof ComponentFolderElement) {
 			target = (ComponentFolderElement) target.getParent();
 		}
 		if (target instanceof ComponentFolderElement) {
@@ -67,8 +67,8 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 				} else {
 					return false;
 				}
-			} else if ((source instanceof ReusableComponentDefinitionElement) || (source instanceof ComponentElement)
-					|| (source instanceof MonitoringScreenDefinitionElement)) {
+			} else if (source instanceof ReusableComponentDefinitionElement || source instanceof ComponentElement
+					|| source instanceof MonitoringScreenDefinitionElement) {
 				ComponentDefinition sourceComp = null;
 				FlexoComponentFolder srcFolder = null;
 				if (source instanceof ReusableComponentDefinitionElement) {
@@ -100,7 +100,7 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 		if (!(destination instanceof ComponentFolderElement) && !(destination.getParent() instanceof ComponentFolderElement)) {
 			return false;
 		}
-		if (!(destination instanceof ComponentFolderElement) && (destination.getParent() instanceof ComponentFolderElement)) {
+		if (!(destination instanceof ComponentFolderElement) && destination.getParent() instanceof ComponentFolderElement) {
 			destination = (ComponentFolderElement) destination.getParent();
 		}
 		FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) destination).getObject();
@@ -128,8 +128,8 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 			} else {
 				return false;
 			}
-		} else if ((moved instanceof ReusableComponentDefinitionElement) || (moved instanceof ComponentElement)
-				|| (moved instanceof MonitoringScreenDefinitionElement)) {
+		} else if (moved instanceof ReusableComponentDefinitionElement || moved instanceof ComponentElement
+				|| moved instanceof MonitoringScreenDefinitionElement) {
 			ComponentDefinition movedComp = null;
 			FlexoComponentFolder srcFolder = null;
 			if (moved instanceof ReusableComponentDefinitionElement) {

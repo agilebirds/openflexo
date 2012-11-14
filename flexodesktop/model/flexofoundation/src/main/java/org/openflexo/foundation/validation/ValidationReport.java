@@ -124,7 +124,7 @@ public class ValidationReport extends AbstractTableModel {
 	}
 
 	public boolean hasCustomLocalizedTitle() {
-		return (_localizedTitle != null);
+		return _localizedTitle != null;
 	}
 
 	public String getLocalizedTitle() {
@@ -144,8 +144,8 @@ public class ValidationReport extends AbstractTableModel {
 	}
 
 	public String getLocalizedSubTitle() {
-		return ("" + getErrorNb() + " " + FlexoLocalization.localizedForKey("errors") + ", " + getWarningNb() + " " + FlexoLocalization
-				.localizedForKey("warnings"));
+		return "" + getErrorNb() + " " + FlexoLocalization.localizedForKey("errors") + ", " + getWarningNb() + " "
+				+ FlexoLocalization.localizedForKey("warnings");
 	}
 
 	@Override
@@ -202,29 +202,29 @@ public class ValidationReport extends AbstractTableModel {
 		switch (mode) {
 		case ERRORS:
 			if (columnIndex == 0) {
-				return (_validationIssues.errors.elementAt(rowIndex));
+				return _validationIssues.errors.elementAt(rowIndex);
 			} else if (columnIndex == 1) {
-				return (_validationIssues.errors.elementAt(rowIndex)).getLocalizedMessage();
+				return _validationIssues.errors.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return (_validationIssues.errors.elementAt(rowIndex)).getObject().getFullyQualifiedName();
+				return _validationIssues.errors.elementAt(rowIndex).getObject().getFullyQualifiedName();
 			}
 			break;
 		case WARNINGS:
 			if (columnIndex == 0) {
-				return (_validationIssues.warnings.elementAt(rowIndex));
+				return _validationIssues.warnings.elementAt(rowIndex);
 			} else if (columnIndex == 1) {
-				return (_validationIssues.warnings.elementAt(rowIndex)).getLocalizedMessage();
+				return _validationIssues.warnings.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return (_validationIssues.warnings.elementAt(rowIndex)).getObject().getFullyQualifiedName();
+				return _validationIssues.warnings.elementAt(rowIndex).getObject().getFullyQualifiedName();
 			}
 			break;
 		default:
 			if (columnIndex == 0) {
-				return (_validationIssues.elementAt(rowIndex));
+				return _validationIssues.elementAt(rowIndex);
 			} else if (columnIndex == 1) {
-				return (_validationIssues.elementAt(rowIndex)).getLocalizedMessage();
+				return _validationIssues.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return (_validationIssues.elementAt(rowIndex)).getObject().getFullyQualifiedName();
+				return _validationIssues.elementAt(rowIndex).getObject().getFullyQualifiedName();
 			}
 		}
 		return null;

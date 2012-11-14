@@ -46,12 +46,12 @@ public class SaveCVSFile extends CVSAction<SaveCVSFile, CVSFile> {
 
 		@Override
 		public boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return (object != null && object.getSharedProject() != null);
+			return object != null && object.getSharedProject() != null;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return ((object != null) && (object.isEdited()));
+			return object != null && object.isEdited();
 		}
 
 	};

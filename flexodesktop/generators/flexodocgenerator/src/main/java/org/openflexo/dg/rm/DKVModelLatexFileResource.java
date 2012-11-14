@@ -69,7 +69,7 @@ public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerato
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getDKV() != null)) {
+		if (!isObserverRegistered && getDKV() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

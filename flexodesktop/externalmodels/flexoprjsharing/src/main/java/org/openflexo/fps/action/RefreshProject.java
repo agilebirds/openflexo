@@ -52,7 +52,7 @@ public class RefreshProject extends CVSAction<RefreshProject, SharedProject> {
 
 		@Override
 		public boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

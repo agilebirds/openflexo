@@ -121,7 +121,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		this.context = context;
 		if (this.context != null) {
 			((FlexoObservable) context).addObserver(this);
-	}
+		}
 	}
 
 	@Override

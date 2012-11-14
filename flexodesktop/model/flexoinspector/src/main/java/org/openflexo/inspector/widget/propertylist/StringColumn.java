@@ -81,7 +81,7 @@ public abstract class StringColumn extends AbstractColumn {
 	 */
 	@Override
 	public boolean requireCellRenderer() {
-		return (font != null);
+		return font != null;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class StringColumn extends AbstractColumn {
 		private Font customFont;
 
 		CustomFontCellRenderer(String fontAsString) {
-			customFont = (new WidgetFont(fontAsString)).getTheFont();
+			customFont = new WidgetFont(fontAsString).getTheFont();
 		}
 
 		@Override

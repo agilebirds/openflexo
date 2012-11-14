@@ -54,7 +54,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 		@Override
 		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object != null
-					&& ((object instanceof FlexoProcess && !((FlexoProcess) object).isImported()) || object instanceof StatusList || object instanceof Status);
+					&& (object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof StatusList || object instanceof Status);
 		}
 
 	};
@@ -69,7 +69,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 
 	public FlexoProcess getProcess() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getProcess();
+			return getFocusedObject().getProcess();
 		}
 		return null;
 	}

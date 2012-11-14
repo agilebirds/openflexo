@@ -218,14 +218,14 @@ public final class Entry {
 				// (inclusive, exclusive)
 				name = entryLine.substring(slashPositions[0] + 1, slashPositions[1]);
 				revision = entryLine.substring(slashPositions[1] + 1, slashPositions[2]);
-				if ((slashPositions[3] - slashPositions[2]) > 1) {
+				if (slashPositions[3] - slashPositions[2] > 1) {
 					String conflict = entryLine.substring(slashPositions[2] + 1, slashPositions[3]);
 					setConflict(conflict);
 				}
-				if ((slashPositions[4] - slashPositions[3]) > 1) {
+				if (slashPositions[4] - slashPositions[3] > 1) {
 					options = entryLine.substring(slashPositions[3] + 1, slashPositions[4]);
 				}
-				if (slashPositions[4] != (entryLine.length() - 1)) {
+				if (slashPositions[4] != entryLine.length() - 1) {
 					String tagOrDate = entryLine.substring(slashPositions[4] + 1);
 					if (tagOrDate.startsWith(TAG)) {
 						setTag(tagOrDate.substring(1));
@@ -441,7 +441,7 @@ public final class Entry {
 	 * @return true if the entry has a date, false otherwise
 	 */
 	public boolean hasDate() {
-		return (date != null);
+		return date != null;
 	}
 
 	/**
@@ -450,7 +450,7 @@ public final class Entry {
 	 * @return true if the entry has a tag, false otherwise
 	 */
 	public boolean hasTag() {
-		return (tag != null);
+		return tag != null;
 	}
 
 	/**
@@ -527,7 +527,7 @@ public final class Entry {
 	 * @return true if the timpestamp does match the file, false otherwise
 	 */
 	public boolean timestampMatchesFile() {
-		return (conflict.charAt(1) == TIMESTAMP_MATCHES_FILE);
+		return conflict.charAt(1) == TIMESTAMP_MATCHES_FILE;
 	}
 
 	/**

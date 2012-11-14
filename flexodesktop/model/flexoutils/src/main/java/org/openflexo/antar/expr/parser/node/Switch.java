@@ -2,7 +2,6 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-public interface Switch
-{
-        // Empty body
+public interface Switch {
+	// Empty body
 }

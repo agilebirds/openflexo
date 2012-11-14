@@ -87,8 +87,9 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	}
 
 	public Expression getExpression() {
-		if (topLevel != null)
+		if (topLevel != null) {
 			return expressionNodes.get(topLevel);
+		}
 		return null;
 	}
 

@@ -351,8 +351,8 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	public Vector<ComponentInstanceBinding> getBindings() {
 		/*if (isBeingCloned())
 		    return EmptyVector.EMPTY_VECTOR(ComponentInstanceBinding.class);*/
-		if ((_bindings != null) && (getComponentDefinition() != null)
-				&& (_bindings.size() != getComponentDefinition().getBindingDefinitions().size())) {
+		if (_bindings != null && getComponentDefinition() != null
+				&& _bindings.size() != getComponentDefinition().getBindingDefinitions().size()) {
 			updateBindings();
 		}
 		return _bindings;
@@ -439,7 +439,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in ComponentInstance " + dataModification);
 		}
-		if ((o == getComponentDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
+		if (o == getComponentDefinition() && (dataModification instanceof BindingAdded || dataModification instanceof BindingRemoved)) {
 			updateBindings();
 		}
 	}
@@ -628,7 +628,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			while (en.hasMoreElements()) {
 				ComponentInstanceBinding ciBinding = (ComponentInstanceBinding) en.nextElement();
 				AbstractBinding bv = ciBinding.getBindingValue();
-				if ((bv != null) && (!bv.isBindingValid())) {
+				if (bv != null && !bv.isBindingValid()) {
 					ValidationError<CheckAllBindingsRule, ComponentInstance> error;
 					error = new MissingRequiredBinding(ci, ciBinding) {
 						@Override
@@ -660,7 +660,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 				ComponentInstanceBinding ciBinding = (ComponentInstanceBinding) en.nextElement();
 				if (ciBinding.getBindingDefinition() != null && ciBinding.getBindingDefinition().getIsMandatory()) {
 					AbstractBinding bv = ciBinding.getBindingValue();
-					if ((bv == null) || (!bv.isBindingValid())) {
+					if (bv == null || !bv.isBindingValid()) {
 						ValidationError<CheckAllBindingsRule, ComponentInstance> error;
 						if (bv == null) {
 							error = new MissingRequiredBinding(ci, ciBinding) {
@@ -797,8 +797,8 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			private static ParameterDefinition[] buildParameters(BindingDefinition bd) {
 				ParameterDefinition[] returned = new ParameterDefinition[3];
 				returned[0] = new TextFieldParameter("variableName", "variable_name", "");
-				returned[1] = new DMEntityParameter("variableType", "variable_type", (bd.getType() != null ? bd.getType().getBaseEntity()
-						: null));
+				returned[1] = new DMEntityParameter("variableType", "variable_type", bd.getType() != null ? bd.getType().getBaseEntity()
+						: null);
 				returned[2] = new ChoiceListParameter<DMPropertyImplementationType>("implementationType", "implementation_type",
 						DMPropertyImplementationType.PUBLIC_FIELD);
 				returned[2].addParameter("format", "localizedName");

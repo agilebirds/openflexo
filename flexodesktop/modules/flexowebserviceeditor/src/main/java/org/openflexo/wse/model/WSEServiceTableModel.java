@@ -73,13 +73,13 @@ public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 			addToColumns(new StringColumn<WSService>("name", 300) {
 				@Override
 				public String getValue(WSService object) {
-					return (object).getLocalizedName();
+					return object.getLocalizedName();
 				}
 			});
 			addToColumns(new StringColumn<WSService>("description", 570) {
 				@Override
 				public String getValue(WSService object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 			});
 
@@ -87,13 +87,13 @@ public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 			addToColumns(new EditableStringColumn<WSService>("name", 300) {
 				@Override
 				public String getValue(WSService object) {
-					return (object).getLocalizedName();
+					return object.getLocalizedName();
 				}
 
 				@Override
 				public void setValue(WSService object, String aValue) {
 					try {
-						(object).setName(aValue);
+						object.setName(aValue);
 					} catch (DuplicateWSObjectException e) {
 						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
 					}
@@ -103,12 +103,12 @@ public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 			addToColumns(new EditableStringColumn<WSService>("description", 570) {
 				@Override
 				public String getValue(WSService object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 
 				@Override
 				public void setValue(WSService object, String aValue) {
-					(object).setDescription(aValue);
+					object.setDescription(aValue);
 				}
 			});
 		}
@@ -125,7 +125,7 @@ public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 
 	@Override
 	public WSService elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (WSService) getWSServices().get(row);
 		} else {
 			return null;

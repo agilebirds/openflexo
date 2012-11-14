@@ -63,7 +63,7 @@ public class CGTemplateRepositoryElement extends BrowserElement {
 
 	@Override
 	public boolean isNameEditable() {
-		return (getCGTemplateRepository() instanceof CustomCGTemplateRepository);
+		return getCGTemplateRepository() instanceof CustomCGTemplateRepository;
 	}
 
 	@Override

@@ -98,8 +98,8 @@ public class CGFileVersionPopup extends FlexoDialog {
 		private boolean isEdited = false;
 
 		private void updateView() {
-			if ((generationStatus == GenerationStatus.Unknown) || (generationStatus != _cgFile.getGenerationStatus())
-					|| (generationStatus == GenerationStatus.GenerationError) || (isEdited != _cgFile.isEdited())) {
+			if (generationStatus == GenerationStatus.Unknown || generationStatus != _cgFile.getGenerationStatus()
+					|| generationStatus == GenerationStatus.GenerationError || isEdited != _cgFile.isEdited()) {
 				logger.info("CGFileVersionPanel :" + _cgFile.getFileName() + " rebuild view for new status "
 						+ _cgFile.getGenerationStatus());
 				rebuildView();

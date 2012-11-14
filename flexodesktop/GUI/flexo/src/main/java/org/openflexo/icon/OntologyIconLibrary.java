@@ -55,7 +55,7 @@ public class OntologyIconLibrary {
 			return ONTOLOGY_CLASS_ICON;
 		} else if (object instanceof OntologyIndividual) {
 			return ONTOLOGY_INDIVIDUAL_ICON;
-		} else if ((object instanceof OntologyProperty) && ((OntologyProperty) object).isAnnotationProperty()) {
+		} else if (object instanceof OntologyProperty && ((OntologyProperty) object).isAnnotationProperty()) {
 			return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 		} else if (object instanceof OntologyObjectProperty) {
 			return ONTOLOGY_OBJECT_PROPERTY_ICON;

@@ -210,7 +210,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof AttributeDataModification)
+		if (dataModification instanceof AttributeDataModification
 				&& "subProcess".equals(((AttributeDataModification) dataModification).propertyName())) {
 			getDrawing().updateGraphicalObjectsHierarchy();
 		}

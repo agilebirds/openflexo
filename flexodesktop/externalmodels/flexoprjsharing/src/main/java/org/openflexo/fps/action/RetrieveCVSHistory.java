@@ -45,12 +45,12 @@ public class RetrieveCVSHistory extends CVSAction<RetrieveCVSHistory, CVSFile> {
 
 		@Override
 		public boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return (object != null && object.getSharedProject() != null);
+			return object != null && object.getSharedProject() != null;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return ((object != null) && (object.isCVSHistoryRetrievable()));
+			return object != null && object.isCVSHistoryRetrievable();
 		}
 
 	};

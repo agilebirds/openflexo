@@ -148,9 +148,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		}
 		if (_warRepository == null) {
 			try {
-				_warRepository = getProject().setDirectoryForRepositoryName(
-						getName() + "WAR",
-						getDefaultWARDirectory());
+				_warRepository = getProject().setDirectoryForRepositoryName(getName() + "WAR", getDefaultWARDirectory());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -159,8 +157,8 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	private File getDefaultWARDirectory() throws IOException {
-		return getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject()
-				.getProjectName() + "Application", ".war");
+		return getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject().getProjectName()
+				+ "Application", ".war");
 	}
 
 	public File getWarDirectory() {

@@ -74,8 +74,8 @@ public class SuroundWithConditional extends IEOperatorAction {
 	@Override
 	protected void doAction(Object context) {
 		IEObject currentCommonFather = ((IEWidget) getGlobalSelection().elementAt(0)).getParent();
-		IEWOComponent wo = (currentCommonFather instanceof IEWOComponent ? (IEWOComponent) currentCommonFather
-				: ((IEWidget) currentCommonFather).getWOComponent());
+		IEWOComponent wo = currentCommonFather instanceof IEWOComponent ? (IEWOComponent) currentCommonFather
+				: ((IEWidget) currentCommonFather).getWOComponent();
 		sequenceIsNew = false;
 		IESequence seq = findSequenceSurrounding(true);
 		if (seq != null) {

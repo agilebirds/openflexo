@@ -47,7 +47,7 @@ public abstract class FatherNode extends FlexoNode {
 	}
 
 	public boolean hasContainedPetriGraph() {
-		return (containedPetriGraph != null);
+		return containedPetriGraph != null;
 	}
 
 	public void setContainedPetriGraph(FlexoPetriGraph aPetriGraph) {

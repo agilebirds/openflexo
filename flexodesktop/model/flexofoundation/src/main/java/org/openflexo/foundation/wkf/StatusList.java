@@ -185,7 +185,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	private void notifyStatusAdded(Status status, FlexoProcess process) {
 		setChanged();
 		notifyObservers(new StatusInserted(status, process));
-		if ((getProcess() != null) && (getProcess().getSubProcesses() != null)) {
+		if (getProcess() != null && getProcess().getSubProcesses() != null) {
 			for (Enumeration e = getProcess().getSubProcesses().elements(); e.hasMoreElements();) {
 				FlexoProcess subProcess = (FlexoProcess) e.nextElement();
 				subProcess.getStatusList().notifyStatusAdded(status, process);
@@ -232,7 +232,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		}
 		for (Enumeration e = _status.elements(); e.hasMoreElements();) {
 			Status temp = (Status) e.nextElement();
-			if ((temp != null) && (temp.getName().equals(aStatusName))) {
+			if (temp != null && temp.getName().equals(aStatusName)) {
 				return temp;
 			}
 		}

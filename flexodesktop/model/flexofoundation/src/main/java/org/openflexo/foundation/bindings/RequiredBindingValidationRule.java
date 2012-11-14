@@ -82,7 +82,7 @@ public class RequiredBindingValidationRule<T extends IEObject> extends Validatio
 					+ "' binding definition");
 			return null;
 		} else if (bd.getIsMandatory()) {
-			if ((bv == null) || (!bv.isBindingValid())) {
+			if (bv == null || !bv.isBindingValid()) {
 				ValidationError<RequiredBindingValidationRule<T>, T> error;
 				if (bv == null) {
 					error = new ValidationError<RequiredBindingValidationRule<T>, T>(this, object, null) {

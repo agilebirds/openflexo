@@ -84,7 +84,7 @@ public abstract class View extends PetalObject implements Named, Tagged {
 
 	@Override
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public Tag getClient() {

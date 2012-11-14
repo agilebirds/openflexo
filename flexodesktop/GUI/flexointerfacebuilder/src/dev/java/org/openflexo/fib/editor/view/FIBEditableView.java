@@ -29,7 +29,6 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 
-
 public interface FIBEditableView<M extends FIBComponent, J extends JComponent> extends Observer {
 
 	public abstract FIBEditorController getEditorController();
@@ -58,8 +57,8 @@ public interface FIBEditableView<M extends FIBComponent, J extends JComponent> e
 
 	public abstract FIBView getParentView();
 
-	public Vector<PlaceHolder> getPlaceHolders(); 
+	public Vector<PlaceHolder> getPlaceHolders();
 
-	public FIBEditableViewDelegate<M,J> getDelegate();
+	public FIBEditableViewDelegate<M, J> getDelegate();
 
 }

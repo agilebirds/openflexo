@@ -57,19 +57,19 @@ public class WSERepositoryTableModel extends AbstractModel<WSService, DMReposito
 		addToColumns(new IconColumn<DMRepository>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMRepository object) {
-				return ((object).isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return object.isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMRepository repository) {
-				return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMRepository>("name", 190) {
 			@Override
 			public String getValue(DMRepository object) {
-				return (object).getLocalizedName();
+				return object.getLocalizedName();
 			}
 		});
 		addToColumns(new StringColumn<DMRepository>("type", 190) {
@@ -81,7 +81,7 @@ public class WSERepositoryTableModel extends AbstractModel<WSService, DMReposito
 		addToColumns(new StringColumn<DMRepository>("description", 365) {
 			@Override
 			public String getValue(DMRepository object) {
-				return (object).getDescription();
+				return object.getDescription();
 			}
 			/*
 			            public void setValue(FlexoModelObject object, String aValue)
@@ -110,7 +110,7 @@ public class WSERepositoryTableModel extends AbstractModel<WSService, DMReposito
 
 	@Override
 	public DMRepository elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return ((WSRepository) getWSDLRepositories().get(row)).getWSDLRepository();
 		} else {
 			return null;

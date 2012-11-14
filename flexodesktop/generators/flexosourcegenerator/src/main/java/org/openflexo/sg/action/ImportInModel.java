@@ -52,7 +52,7 @@ public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 
 		@Override
 		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return (object instanceof AbstractCGFile);
+			return object instanceof AbstractCGFile;
 		}
 
 		@Override

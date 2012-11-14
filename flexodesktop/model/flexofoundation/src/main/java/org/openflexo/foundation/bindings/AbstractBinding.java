@@ -293,7 +293,7 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 					return false;
 				}
 			}
-			return ((_owner == bv._owner) && (getStringRepresentation().equals(bv.getStringRepresentation())));
+			return _owner == bv._owner && getStringRepresentation().equals(bv.getStringRepresentation());
 		} else {
 			return super.equals(object);
 		}

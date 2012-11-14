@@ -752,7 +752,7 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 			int level = 0;
 			while (st.hasMoreElements()) {
 				String next = st.nextToken();
-				if ((next.equals(",")) && (current.trim().length() > 0) && (level == 0)) {
+				if (next.equals(",") && current.trim().length() > 0 && level == 0) {
 					_tokens.add(current);
 					current = "";
 				} else if (next.equals("(")) {
@@ -765,7 +765,7 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 					current += next;
 				}
 			}
-			if ((current.trim().length() > 0) && (level == 0)) {
+			if (current.trim().length() > 0 && level == 0) {
 				_tokens.add(current);
 				current = "";
 			}

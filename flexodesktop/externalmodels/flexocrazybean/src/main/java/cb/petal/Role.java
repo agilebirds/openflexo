@@ -47,7 +47,7 @@ public class Role extends QuiduObject implements AccessQualified, HasSupplier, N
 
 	@Override
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class Role extends QuiduObject implements AccessQualified, HasSupplier, N
 	 */
 	public Role getOtherRole() {
 		Association assoc = (Association) getParent();
-		return (assoc.getFirstRole() == this) ? assoc.getSecondRole() : assoc.getFirstRole();
+		return assoc.getFirstRole() == this ? assoc.getSecondRole() : assoc.getFirstRole();
 	}
 
 	/**

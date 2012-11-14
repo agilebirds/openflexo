@@ -198,7 +198,7 @@ public class WKFValidationModel extends ValidationModel {
 	 */
 	@Override
 	protected boolean shouldNotifyValidation(Validable next) {
-		return ((next instanceof FlexoWorkflow) || (next instanceof FlexoProcess));
+		return next instanceof FlexoWorkflow || next instanceof FlexoProcess;
 	}
 
 	/**

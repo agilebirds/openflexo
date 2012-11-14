@@ -57,7 +57,7 @@ public class ShemaNameChanged extends OEDataModification implements RMNotificati
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
 		// return true;
-		if (originResource == shema.getShemaLibrary().getFlexoResource() && (targetResource instanceof FlexoOEShemaResource)) {
+		if (originResource == shema.getShemaLibrary().getFlexoResource() && targetResource instanceof FlexoOEShemaResource) {
 			return true;
 		} else {
 			return false;

@@ -73,7 +73,7 @@ public class ObjectFactory {
 	 *            some objects have a "tag", like @12
 	 */
 	public PetalObject createObject(PetalNode parent, String id, ArrayList params, String tag) {
-		int l = (tag != null) ? Integer.parseInt(tag.substring(1)) : -1;
+		int l = tag != null ? Integer.parseInt(tag.substring(1)) : -1;
 
 		ArrayList params2 = new ArrayList();
 

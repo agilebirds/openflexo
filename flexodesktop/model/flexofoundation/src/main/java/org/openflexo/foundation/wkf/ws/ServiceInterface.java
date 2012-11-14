@@ -118,7 +118,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		Vector allInterfaces = process.getServiceInterfaces();
 		for (Enumeration e = allInterfaces.elements(); e.hasMoreElements();) {
 			ServiceInterface p = (ServiceInterface) e.nextElement();
-			if (p != currentInt && (p.getName().equals(aName))) {
+			if (p != currentInt && p.getName().equals(aName)) {
 				throw new DuplicateWKFObjectException(p, "a_service_interface_with_the_same_name_already_exist");
 			}
 		}

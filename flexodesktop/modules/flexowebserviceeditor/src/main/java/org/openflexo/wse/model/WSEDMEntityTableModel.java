@@ -52,7 +52,7 @@ public class WSEDMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 		addToColumns(new StringColumn<DMEntity>("name", 150) {
 			@Override
 			public String getValue(DMEntity object) {
-				return (object).getName();
+				return object.getName();
 			}
 
 			/*  public void setValue(FlexoModelObject object, String aValue)
@@ -67,7 +67,7 @@ public class WSEDMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 		addToColumns(new StringColumn<DMEntity>("class", 150) {
 			@Override
 			public String getValue(DMEntity object) {
-				return (object).getEntityClassName();
+				return object.getEntityClassName();
 			}
 			/*
 			            public void setValue(FlexoModelObject object, String aValue)
@@ -97,7 +97,7 @@ public class WSEDMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 		addToColumns(new StringColumn<DMEntity>("description", 250) {
 			@Override
 			public String getValue(DMEntity object) {
-				return (object).getDescription();
+				return object.getDescription();
 			}
 
 			/*  public void setValue(FlexoModelObject object, String aValue)
@@ -113,7 +113,7 @@ public class WSEDMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 
 	@Override
 	public DMEntity elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMPackage().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

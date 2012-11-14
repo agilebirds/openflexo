@@ -48,12 +48,12 @@ public class ActionNodeShapePainter implements ShapePainter {
 		Vector<FGEPoint> points = new Vector<FGEPoint>();
 		for (int i = 0; i < NUMBER_OF_TEETH; i++) {
 			FGEArc arc = new FGEArc(GEAR_DIST1 / 2 + 1 / 30, GEAR_DIST1 / 2 + 1 / 30, 1 - GEAR_DIST1, 1 - GEAR_DIST1, -180
-					/ (2 * NUMBER_OF_TEETH) + (i * 360 / NUMBER_OF_TEETH), 180 / NUMBER_OF_TEETH);
+					/ (2 * NUMBER_OF_TEETH) + i * 360 / NUMBER_OF_TEETH, 180 / NUMBER_OF_TEETH);
 			points.add(arc.getStartPoint());
 			points.add(arc.getEndPoint());
 			double offset = 180 / (1.5 * NUMBER_OF_TEETH);
-			FGEArc arc2 = new FGEArc(GEAR_DIST2 / 2 + 1 / 30, GEAR_DIST2 / 2 + 1 / 30, 1 - GEAR_DIST2, 1 - GEAR_DIST2, offset
-					+ (i * 360 / NUMBER_OF_TEETH), offset);
+			FGEArc arc2 = new FGEArc(GEAR_DIST2 / 2 + 1 / 30, GEAR_DIST2 / 2 + 1 / 30, 1 - GEAR_DIST2, 1 - GEAR_DIST2, offset + i * 360
+					/ NUMBER_OF_TEETH, offset);
 			points.add(arc2.getStartPoint());
 			points.add(arc2.getEndPoint());
 		}

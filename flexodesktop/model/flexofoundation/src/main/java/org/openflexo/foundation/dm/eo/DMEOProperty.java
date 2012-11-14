@@ -127,7 +127,7 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 
 	public void setIsClassProperty(boolean aBoolean) {
 		if (getIsClassProperty() != aBoolean) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null) && (getEOProperty() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null && getEOProperty() != null) {
 				List<EOProperty> arrayOfClassProperties = getDMEOEntity().getEOEntity().getClassProperties();
 				if (aBoolean) {
 					arrayOfClassProperties.add(getEOProperty());

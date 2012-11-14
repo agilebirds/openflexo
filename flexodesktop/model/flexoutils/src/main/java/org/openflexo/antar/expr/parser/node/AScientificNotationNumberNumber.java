@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class AScientificNotationNumberNumber extends PNumber
-{
-    private TScientificNotationNumber _scientificNotationNumber_;
+public final class AScientificNotationNumberNumber extends PNumber {
+	private TScientificNotationNumber _scientificNotationNumber_;
 
-    public AScientificNotationNumberNumber()
-    {
-        // Constructor
-    }
+	public AScientificNotationNumberNumber() {
+		// Constructor
+	}
 
-    public AScientificNotationNumberNumber(
-        @SuppressWarnings("hiding") TScientificNotationNumber _scientificNotationNumber_)
-    {
-        // Constructor
-        setScientificNotationNumber(_scientificNotationNumber_);
+	public AScientificNotationNumberNumber(@SuppressWarnings("hiding") TScientificNotationNumber _scientificNotationNumber_) {
+		// Constructor
+		setScientificNotationNumber(_scientificNotationNumber_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new AScientificNotationNumberNumber(
-            cloneNode(this._scientificNotationNumber_));
-    }
+	@Override
+	public Object clone() {
+		return new AScientificNotationNumberNumber(cloneNode(this._scientificNotationNumber_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAScientificNotationNumberNumber(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAScientificNotationNumberNumber(this);
+	}
 
-    public TScientificNotationNumber getScientificNotationNumber()
-    {
-        return this._scientificNotationNumber_;
-    }
+	public TScientificNotationNumber getScientificNotationNumber() {
+		return this._scientificNotationNumber_;
+	}
 
-    public void setScientificNotationNumber(TScientificNotationNumber node)
-    {
-        if(this._scientificNotationNumber_ != null)
-        {
-            this._scientificNotationNumber_.parent(null);
-        }
+	public void setScientificNotationNumber(TScientificNotationNumber node) {
+		if (this._scientificNotationNumber_ != null) {
+			this._scientificNotationNumber_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._scientificNotationNumber_ = node;
-    }
+		this._scientificNotationNumber_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._scientificNotationNumber_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._scientificNotationNumber_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._scientificNotationNumber_ == child)
-        {
-            this._scientificNotationNumber_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._scientificNotationNumber_ == child) {
+			this._scientificNotationNumber_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._scientificNotationNumber_ == oldChild)
-        {
-            setScientificNotationNumber((TScientificNotationNumber) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._scientificNotationNumber_ == oldChild) {
+			setScientificNotationNumber((TScientificNotationNumber) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

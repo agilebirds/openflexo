@@ -79,7 +79,7 @@ public class DocItemFolderTableModel extends AbstractModel<DocItemFolder, DocIte
 
 	@Override
 	public DocItemFolder elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDocItemFolder().getChildFolders().elementAt(row);
 		} else {
 			return null;

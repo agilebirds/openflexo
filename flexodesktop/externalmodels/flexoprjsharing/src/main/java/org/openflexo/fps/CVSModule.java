@@ -114,7 +114,7 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 		} else if (obj instanceof CVSRepository) {
 			return getCVSRepository() == obj;
 		}
-		return (obj == this);
+		return obj == this;
 	}
 
 	private Vector<CVSModule> _modules;

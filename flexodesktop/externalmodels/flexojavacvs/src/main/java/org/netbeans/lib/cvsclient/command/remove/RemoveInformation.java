@@ -60,7 +60,7 @@ public class RemoveInformation extends FileInfoContainer {
 	public String toString() {
 		StringBuffer buf = new StringBuffer(30);
 		buf.append("  "); // NOI18N
-		buf.append((file != null) ? file.getAbsolutePath() : "null"); // NOI18N
+		buf.append(file != null ? file.getAbsolutePath() : "null"); // NOI18N
 		return buf.toString();
 	}
 }

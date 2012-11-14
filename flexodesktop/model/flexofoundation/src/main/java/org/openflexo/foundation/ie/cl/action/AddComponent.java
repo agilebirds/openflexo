@@ -69,7 +69,8 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 
 		@Override
 		public boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
-			return (object instanceof FlexoComponentFolder || object instanceof ComponentDefinition || object instanceof FlexoComponentLibrary);
+			return object instanceof FlexoComponentFolder || object instanceof ComponentDefinition
+					|| object instanceof FlexoComponentLibrary;
 		}
 
 	};
@@ -264,11 +265,11 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 
 	public FlexoComponentFolder getFolder() {
 		if (_folder == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof ComponentDefinition)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof ComponentDefinition) {
 				_folder = ((ComponentDefinition) getFocusedObject()).getFolder();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof FlexoComponentFolder)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof FlexoComponentFolder) {
 				_folder = (FlexoComponentFolder) getFocusedObject();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof FlexoComponentLibrary)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof FlexoComponentLibrary) {
 				_folder = ((FlexoComponentLibrary) getFocusedObject()).getRootFolder();
 			}
 

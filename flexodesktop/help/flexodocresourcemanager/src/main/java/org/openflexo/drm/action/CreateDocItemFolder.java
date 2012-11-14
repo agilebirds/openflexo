@@ -50,7 +50,7 @@ public class CreateDocItemFolder extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder));
+			return object != null && object instanceof DocItemFolder;
 		}
 
 	};
@@ -92,7 +92,7 @@ public class CreateDocItemFolder extends FlexoAction {
 
 	public DocItemFolder getParentDocItemFolder() {
 		if (_parentDocItemFolder == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItemFolder)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItemFolder) {
 				_parentDocItemFolder = (DocItemFolder) getFocusedObject();
 			}
 		}

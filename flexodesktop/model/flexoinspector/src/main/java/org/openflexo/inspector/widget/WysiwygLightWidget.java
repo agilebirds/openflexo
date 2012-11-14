@@ -63,7 +63,7 @@ public class WysiwygLightWidget extends DenaliWidget<String> {
 		boolean wasReadOnly = isReadOnly();
 		super.setModel(value);
 		boolean isReadOnly = isReadOnly();
-		if (forceRefresh || (wasReadOnly != isReadOnly)) {
+		if (forceRefresh || wasReadOnly != isReadOnly) {
 			wysiwyg.setPreviewModeOnly(isReadOnly);
 			wysiwyg.revalidate();
 		}

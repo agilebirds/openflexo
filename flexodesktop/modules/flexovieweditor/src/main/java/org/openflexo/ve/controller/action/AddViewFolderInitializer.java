@@ -58,11 +58,11 @@ public class AddViewFolderInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, AddViewFolder action) {
 				ViewFolder parentFolder = null;
-				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ViewDefinition)) {
+				if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewDefinition) {
 					parentFolder = ((ViewDefinition) action.getFocusedObject()).getFolder();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ViewFolder)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewFolder) {
 					parentFolder = (ViewFolder) action.getFocusedObject();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ViewLibrary)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewLibrary) {
 					parentFolder = ((ViewLibrary) action.getFocusedObject()).getRootFolder();
 				}
 				if (parentFolder != null) {
@@ -85,8 +85,8 @@ public class AddViewFolderInitializer extends ActionInitializer {
 							newFolderName = null;
 						}
 					}
-					(action).setParentFolder(parentFolder);
-					(action).setNewFolderName(newFolderName);
+					action.setParentFolder(parentFolder);
+					action.setNewFolderName(newFolderName);
 					return true;
 				} else {
 					return false;

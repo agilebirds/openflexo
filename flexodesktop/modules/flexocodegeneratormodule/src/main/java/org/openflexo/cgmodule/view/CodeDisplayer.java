@@ -174,8 +174,8 @@ public class CodeDisplayer {
 	}
 
 	protected String getASCIIContentForFile(CGFile aFile, ContentSource contentSource) {
-		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
-				&& (aFile.getResource().getGeneratedResourceData() instanceof ASCIIFile)) {
+		if (aFile != null && aFile.getResource() != null && aFile.getResource().getGeneratedResourceData() != null
+				&& aFile.getResource().getGeneratedResourceData() instanceof ASCIIFile) {
 			return ((ASCIIFile) aFile.getResource().getGeneratedResourceData()).getContent(contentSource);
 		}
 		return null;
@@ -237,8 +237,8 @@ public class CodeDisplayer {
 	}
 
 	protected String getHTMLContentForFile(CGFile aFile, ContentSource contentSource) {
-		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
-				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
+		if (aFile != null && aFile.getResource() != null && aFile.getResource().getGeneratedResourceData() != null
+				&& aFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getHTMLFile().getContent(contentSource);
 		}
 		return null;
@@ -249,8 +249,8 @@ public class CodeDisplayer {
 	}
 
 	protected String getWODContentForFile(CGFile aFile, ContentSource contentSource) {
-		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
-				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
+		if (aFile != null && aFile.getResource() != null && aFile.getResource().getGeneratedResourceData() != null
+				&& aFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getWODFile().getContent(contentSource);
 		}
 		return null;
@@ -261,8 +261,8 @@ public class CodeDisplayer {
 	}
 
 	protected String getWOOContentForFile(CGFile aFile, ContentSource contentSource) {
-		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
-				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
+		if (aFile != null && aFile.getResource() != null && aFile.getResource().getGeneratedResourceData() != null
+				&& aFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getWOOFile().getContent(contentSource);
 		}
 		return null;

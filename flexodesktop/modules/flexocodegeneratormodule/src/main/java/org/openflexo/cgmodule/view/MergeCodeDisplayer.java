@@ -204,13 +204,13 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 		@Override
 		public void setDisplayContext(DisplayContext context) {
 			if (context != null) {
-				if ((context.getContent() != null) && context.getContent().equals(GENERATION_MERGE)) {
+				if (context.getContent() != null && context.getContent().equals(GENERATION_MERGE)) {
 					setSelectedComponent(_generationMergeEditor);
 					if (_generationMergeEditor != null) {
 						_generationMergeEditor.setFirstVisibleLine(context.getFirstVisibleLine());
 					}
 				}
-				if ((context.getContent() != null) && context.getContent().equals(RESULT_FILE_MERGE)) {
+				if (context.getContent() != null && context.getContent().equals(RESULT_FILE_MERGE)) {
 					setSelectedComponent(_fileMergeEditor);
 					if (_fileMergeEditor != null) {
 						_fileMergeEditor.setFirstVisibleLine(context.getFirstVisibleLine());
@@ -267,7 +267,7 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 
 		@Override
 		public void update(Observable o, Object arg) {
-			if ((o == getResultFileMerge()) && (arg instanceof MergeRecomputed)) {
+			if (o == getResultFileMerge() && arg instanceof MergeRecomputed) {
 				logger.info("update() received in ASCIIFileMergeCodeDisplayer for MergeRecomputed");
 				// logger.info("left: "+getResultFileMerge().getLeftSource().getSourceString());
 				int selectedIndex = getSelectedIndex();

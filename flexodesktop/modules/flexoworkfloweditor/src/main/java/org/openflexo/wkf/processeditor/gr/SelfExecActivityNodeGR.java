@@ -129,12 +129,12 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 				updatePropertiesFromWKFPreferences();
 			}
 		}
-		if ((dataModification instanceof RoleColorChange) || "color".equals(dataModification.propertyName())) {
+		if (dataModification instanceof RoleColorChange || "color".equals(dataModification.propertyName())) {
 			updatePropertiesFromWKFPreferences();
 		}
 		if (getDrawable().hasExecutionPetriGraph()) {
 			if (observable == getDrawable().getExecutionPetriGraph()) {
-				if ((dataModification instanceof GroupInserted) || (dataModification instanceof GroupRemoved)) {
+				if (dataModification instanceof GroupInserted || dataModification instanceof GroupRemoved) {
 					getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable().getProcess());
 					getDrawing().updateGraphicalObjectsHierarchy();
 				}

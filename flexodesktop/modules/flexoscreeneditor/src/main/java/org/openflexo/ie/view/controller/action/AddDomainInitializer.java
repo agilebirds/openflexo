@@ -87,9 +87,9 @@ public class AddDomainInitializer extends ActionInitializer {
 
 						try {
 							if (model.isDomainNameLegal(newDomainName)) {
-								(action).setDkvModel(model);
-								(action).setNewDomainName(newDomainName);
-								(action).setNewDomainDescription((String) dialog.parameterValueWithName("description"));
+								action.setDkvModel(model);
+								action.setNewDomainName(newDomainName);
+								action.setNewDomainDescription((String) dialog.parameterValueWithName("description"));
 							}
 							ok = true;
 						} catch (DuplicateDKVObjectException e2) {
@@ -113,7 +113,7 @@ public class AddDomainInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddDomainAction>() {
 			@Override
 			public boolean run(EventObject e, AddDomainAction action) {
-				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewDomain());
+				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject(action.getNewDomain());
 				// getController().setCurrentEditedObjectAsModuleView(((AddDomainAction)
 				// action).getNewDomain());
 				return true;

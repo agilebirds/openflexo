@@ -179,7 +179,7 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 
 	public FlexoProcess getProcess() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getProcess();
+			return getFocusedObject().getProcess();
 		}
 		return null;
 	}
@@ -207,7 +207,7 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Add port");
-		if ((getProcess() != null) && (!getProcess().isImported())) {
+		if (getProcess() != null && !getProcess().isImported()) {
 			if (getNewPortType() == CreatedPortType.NEW_PORT) {
 				_newPort = new NewPort(getProcess(), getNewPortName());
 				setPositionWhenRequired();

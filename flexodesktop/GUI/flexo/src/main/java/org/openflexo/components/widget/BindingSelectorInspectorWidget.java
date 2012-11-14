@@ -374,7 +374,7 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 	}*/
 
 	public Color getColorForObject(BindingValue value) {
-		return (value.isBindingValid() ? Color.BLACK : Color.RED);
+		return value.isBindingValid() ? Color.BLACK : Color.RED;
 	}
 
 	@Override

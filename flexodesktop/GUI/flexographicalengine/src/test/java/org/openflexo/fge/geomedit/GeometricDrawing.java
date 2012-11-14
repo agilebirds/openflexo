@@ -50,7 +50,7 @@ public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 		if (aDrawable instanceof GeometricObject) {
 			return ((GeometricObject) aDrawable).getGraphicalRepresentation();
 		}
-		(new Exception("???")).printStackTrace();
+		new Exception("???").printStackTrace();
 		return null;
 	}
 

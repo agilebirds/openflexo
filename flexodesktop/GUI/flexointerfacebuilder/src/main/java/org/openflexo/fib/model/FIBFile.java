@@ -70,7 +70,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param columns the columns to set
+	 * @param columns
+	 *            the columns to set
 	 */
 	public void setColumns(Integer columns) {
 		this.columns = columns;
@@ -84,7 +85,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param defaultDirectory the defaultDirectory to set
+	 * @param defaultDirectory
+	 *            the defaultDirectory to set
 	 */
 	public void setDefaultDirectory(File defaultDirectory) {
 		this.defaultDirectory = defaultDirectory;
@@ -98,7 +100,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param filter the filter to set
+	 * @param filter
+	 *            the filter to set
 	 */
 	public void setFilter(String filter) {
 		this.filter = filter;
@@ -112,7 +115,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param directory the directory to set
+	 * @param directory
+	 *            the directory to set
 	 */
 	public void setDirectory(boolean directory) {
 		this.directory = directory;
@@ -126,7 +130,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param mode the mode to set
+	 * @param mode
+	 *            the mode to set
 	 */
 	public void setMode(FileMode mode) {
 		this.mode = mode;
@@ -140,7 +145,8 @@ public class FIBFile extends FIBWidget {
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param title
+	 *            the title to set
 	 */
 	public void setTitle(String title) {
 		this.title = title;

@@ -43,293 +43,275 @@ public class FIBEditableNumberWidget {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableNumberWidget.class.getPackage().getName());
 
-	public static class FIBEditableByteWidget extends FIBByteWidget implements FIBEditableView<FIBNumber,JSpinner> {
+	public static class FIBEditableByteWidget extends FIBByteWidget implements FIBEditableView<FIBNumber, JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableByteWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableByteWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-			
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
-			
+
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
 
-		public void update(Observable o, Object dataModification) 
-		{
+		@Override
+		public void update(Observable o, Object dataModification) {
 			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
 		}
-
 
 	}
-	
-	public static class FIBEditableShortWidget extends FIBShortWidget implements FIBEditableView<FIBNumber,JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+	public static class FIBEditableShortWidget extends FIBShortWidget implements FIBEditableView<FIBNumber, JSpinner> {
+
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableShortWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableShortWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-			
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
-		
-		public void update(Observable o, Object dataModification) 
-		{
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
-		}
 
+		@Override
+		public void update(Observable o, Object dataModification) {
+			if (dataModification instanceof FIBModelNotification) {
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
+		}
 
 	}
-	
-	public static class FIBEditableIntegerWidget extends FIBIntegerWidget implements FIBEditableView<FIBNumber,JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+	public static class FIBEditableIntegerWidget extends FIBIntegerWidget implements FIBEditableView<FIBNumber, JSpinner> {
+
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableIntegerWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableIntegerWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-			
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
-		
-		public void update(Observable o, Object dataModification) 
-		{
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
-		}
 
+		@Override
+		public void update(Observable o, Object dataModification) {
+			if (dataModification instanceof FIBModelNotification) {
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
+		}
 
 	}
-	
-	public static class FIBEditableLongWidget extends FIBLongWidget implements FIBEditableView<FIBNumber,JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+	public static class FIBEditableLongWidget extends FIBLongWidget implements FIBEditableView<FIBNumber, JSpinner> {
+
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableLongWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableLongWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-		
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
-		
-		public void update(Observable o, Object dataModification) 
-		{
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
-		}
 
+		@Override
+		public void update(Observable o, Object dataModification) {
+			if (dataModification instanceof FIBModelNotification) {
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
+		}
 
 	}
-	
-	public static class FIBEditableFloatWidget extends FIBFloatWidget implements FIBEditableView<FIBNumber,JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+	public static class FIBEditableFloatWidget extends FIBFloatWidget implements FIBEditableView<FIBNumber, JSpinner> {
+
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableFloatWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableFloatWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-			
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
-		
-		public void update(Observable o, Object dataModification) 
-		{
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
-		}
 
+		@Override
+		public void update(Observable o, Object dataModification) {
+			if (dataModification instanceof FIBModelNotification) {
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
+		}
 
 	}
-	
-	public static class FIBEditableDoubleWidget extends FIBDoubleWidget implements FIBEditableView<FIBNumber,JSpinner> {
 
-		private FIBEditableViewDelegate<FIBNumber,JSpinner> delegate;
-		
+	public static class FIBEditableDoubleWidget extends FIBDoubleWidget implements FIBEditableView<FIBNumber, JSpinner> {
+
+		private FIBEditableViewDelegate<FIBNumber, JSpinner> delegate;
+
 		private FIBEditorController editorController;
-		
+
 		@Override
-		public FIBEditorController getEditorController() 
-		{
+		public FIBEditorController getEditorController() {
 			return editorController;
 		}
-		
-		public FIBEditableDoubleWidget(FIBNumber model, FIBEditorController editorController)
-		{
-			super(model,editorController.getController());
+
+		public FIBEditableDoubleWidget(FIBNumber model, FIBEditorController editorController) {
+			super(model, editorController.getController());
 			this.editorController = editorController;
-			
-			delegate = new FIBEditableViewDelegate<FIBNumber,JSpinner>(this);
+
+			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
 			model.addObserver(this);
 		}
-		
-		public void delete() 
-		{
+
+		@Override
+		public void delete() {
 			delegate.delete();
 			getComponent().deleteObserver(this);
 			super.delete();
-		}	
-		
-		public Vector<PlaceHolder> getPlaceHolders() 
-		{
+		}
+
+		@Override
+		public Vector<PlaceHolder> getPlaceHolders() {
 			return null;
 		}
-		
-		public FIBEditableViewDelegate<FIBNumber,JSpinner> getDelegate()
-		{
+
+		@Override
+		public FIBEditableViewDelegate<FIBNumber, JSpinner> getDelegate() {
 			return delegate;
 		}
-		
-		public void update(Observable o, Object dataModification) 
-		{
+
+		@Override
+		public void update(Observable o, Object dataModification) {
 			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-			}		
+				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+			}
 		}
 
-
 	}
-	
+
 }

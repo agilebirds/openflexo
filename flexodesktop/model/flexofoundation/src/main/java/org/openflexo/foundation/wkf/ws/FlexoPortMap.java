@@ -111,7 +111,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	}
 
 	public FlexoProcess getRelatedSubProcess() {
-		if ((getPortMapRegistery() != null) && (getPortMapRegistery().getSubProcessNode() != null)) {
+		if (getPortMapRegistery() != null && getPortMapRegistery().getSubProcessNode() != null) {
 			return getPortMapRegistery().getSubProcessNode().getSubProcess();
 		}
 		return null;
@@ -151,7 +151,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("getOperation(): op=" + _operation + " name:" + _portName);
 		}
-		if ((_operation == null) && (_portName != null)) {
+		if (_operation == null && _portName != null) {
 			lookupOperation();
 		}
 		return _operation;
@@ -172,7 +172,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("lookupOperation:" + getServiceInterface());
 		}
-		if ((getServiceInterface() != null) && (_portName != null)) {
+		if (getServiceInterface() != null && _portName != null) {
 			_operation = getServiceInterface().operationWithName(_portName);
 
 			if (_operation == null) {
@@ -210,7 +210,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 
 	public void setPortName(String name) {
 		_portName = name;
-		if ((_operation != null) && (!_portName.equals(_operation.getName()))) {
+		if (_operation != null && !_portName.equals(_operation.getName())) {
 			lookupOperation();
 		}
 	}
@@ -273,7 +273,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	private boolean isRegisteredUnderSubProcessNode = false;
 
 	public void registerUnderSubProcessNode() {
-		if ((getSubProcessNode() != null) && (!isRegisteredUnderSubProcessNode)) {
+		if (getSubProcessNode() != null && !isRegisteredUnderSubProcessNode) {
 			getSubProcessNode().addObserver(this);
 			isRegisteredUnderSubProcessNode = true;
 		}
@@ -441,7 +441,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if ((index == -1) && (getCollection() != null)) {
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -477,7 +477,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		this.index = index;
 		setChanged();
 		notifyAttributeModification("index", old, index);
-		if (!isDeserializing() && (getPortMapRegistery() != null)) {
+		if (!isDeserializing() && getPortMapRegistery() != null) {
 			getPortMapRegistery().setChanged();
 			getPortMapRegistery().notifyObservers(new ChildrenOrderChanged());
 		}

@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class AFalseConstant extends PConstant
-{
-    private TFalse _false_;
+public final class AFalseConstant extends PConstant {
+	private TFalse _false_;
 
-    public AFalseConstant()
-    {
-        // Constructor
-    }
+	public AFalseConstant() {
+		// Constructor
+	}
 
-    public AFalseConstant(
-        @SuppressWarnings("hiding") TFalse _false_)
-    {
-        // Constructor
-        setFalse(_false_);
+	public AFalseConstant(@SuppressWarnings("hiding") TFalse _false_) {
+		// Constructor
+		setFalse(_false_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new AFalseConstant(
-            cloneNode(this._false_));
-    }
+	@Override
+	public Object clone() {
+		return new AFalseConstant(cloneNode(this._false_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAFalseConstant(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAFalseConstant(this);
+	}
 
-    public TFalse getFalse()
-    {
-        return this._false_;
-    }
+	public TFalse getFalse() {
+		return this._false_;
+	}
 
-    public void setFalse(TFalse node)
-    {
-        if(this._false_ != null)
-        {
-            this._false_.parent(null);
-        }
+	public void setFalse(TFalse node) {
+		if (this._false_ != null) {
+			this._false_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._false_ = node;
-    }
+		this._false_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._false_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._false_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._false_ == child)
-        {
-            this._false_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._false_ == child) {
+			this._false_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._false_ == oldChild)
-        {
-            setFalse((TFalse) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._false_ == oldChild) {
+			setFalse((TFalse) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

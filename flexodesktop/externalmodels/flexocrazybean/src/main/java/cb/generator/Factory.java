@@ -95,7 +95,7 @@ public class Factory {
 		for (int i = 0; i < chars.length; i++) {
 			char ch = chars[i];
 
-			if ((ch == ':') && (chars[i + 1] == ':')) {
+			if (ch == ':' && chars[i + 1] == ':') {
 				buf.append('.');
 				i++;
 			} else {

@@ -21,7 +21,6 @@ package org.openflexo.foundation.ontology.owl;
 
 import java.util.logging.Logger;
 
-
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;

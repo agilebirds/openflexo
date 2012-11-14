@@ -54,7 +54,7 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 			public boolean run(EventObject e, AddEditionPattern action) {
 				action.setNewEditionPatternName(FlexoController.askForString(FlexoLocalization
 						.localizedForKey("name_for_new_edition_pattern")));
-				return (action.getNewEditionPatternName() != null);
+				return action.getNewEditionPatternName() != null;
 			}
 		};
 	}

@@ -273,7 +273,7 @@ public class HTMLListDescriptor {
 	public IEWidget findWidgetMatchingHeader(IEHeaderWidget h) {
 		IETRWidget firstTR = getRepeatedSequenceTR().getFirstTR();
 		if (firstTR != null) {
-			int gridx = (((IESequenceWidget) h.getParent()).td()).constraints.gridx;
+			int gridx = ((IESequenceWidget) h.getParent()).td().constraints.gridx;
 
 			Enumeration en = firstTR.colsEnumeration();
 			while (en.hasMoreElements()) {
@@ -304,7 +304,7 @@ public class HTMLListDescriptor {
 		while (en1.hasMoreElements()) {
 			IETRWidget firstTR = (IETRWidget) en1.nextElement();
 			if (firstTR != null) {
-				int gridx = (((IESequenceWidget) h.getParent()).td()).constraints.gridx;
+				int gridx = ((IESequenceWidget) h.getParent()).td().constraints.gridx;
 
 				Enumeration en = firstTR.colsEnumeration();
 				while (en.hasMoreElements()) {

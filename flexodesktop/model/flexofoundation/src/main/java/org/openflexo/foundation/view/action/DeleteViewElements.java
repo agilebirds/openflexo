@@ -61,7 +61,7 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		@Override
 		public boolean isEnabledForSelection(ViewElement focusedObject, Vector<ViewElement> globalSelection) {
 			Vector<ViewElement> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
-			return (objectsToDelete.size() > 0);
+			return objectsToDelete.size() > 0;
 		}
 
 	};
@@ -190,11 +190,11 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		Collections.sort(epiThatWillBeDeleted, new Comparator<EditionPatternInstance>() {
 			@Override
 			public int compare(EditionPatternInstance o1, EditionPatternInstance o2) {
-				if ((o1.getEditionPattern().getPrimaryRepresentationRole() instanceof ShapePatternRole)
-						&& (o2.getEditionPattern().getPrimaryRepresentationRole() instanceof ConnectorPatternRole)) {
+				if (o1.getEditionPattern().getPrimaryRepresentationRole() instanceof ShapePatternRole
+						&& o2.getEditionPattern().getPrimaryRepresentationRole() instanceof ConnectorPatternRole) {
 					return 1;
-				} else if ((o1.getEditionPattern().getPrimaryRepresentationRole() instanceof ConnectorPatternRole)
-						&& (o2.getEditionPattern().getPrimaryRepresentationRole() instanceof ShapePatternRole)) {
+				} else if (o1.getEditionPattern().getPrimaryRepresentationRole() instanceof ConnectorPatternRole
+						&& o2.getEditionPattern().getPrimaryRepresentationRole() instanceof ShapePatternRole) {
 					return -1;
 				}
 				return 0;

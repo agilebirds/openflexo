@@ -53,7 +53,8 @@ public class AddComponentFolder extends FlexoAction<AddComponentFolder, IECLObje
 
 		@Override
 		public boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
-			return ((object != null) && ((object instanceof FlexoComponentFolder) || (object instanceof FlexoComponentLibrary) || (object instanceof ComponentDefinition)));
+			return object != null
+					&& (object instanceof FlexoComponentFolder || object instanceof FlexoComponentLibrary || object instanceof ComponentDefinition);
 		}
 
 	};

@@ -75,7 +75,7 @@ public class JavaFileResource<G extends IFlexoResourceGenerator, F extends CGFil
 	private Date _lastModelReinjectingDate;
 
 	public Date getLastModelReinjectingDate() {
-		if ((_lastModelReinjectingDate == null) || (getLastGenerationDate().getTime() > _lastModelReinjectingDate.getTime())) {
+		if (_lastModelReinjectingDate == null || getLastGenerationDate().getTime() > _lastModelReinjectingDate.getTime()) {
 			_lastModelReinjectingDate = getLastGenerationDate();
 		}
 		return _lastModelReinjectingDate;

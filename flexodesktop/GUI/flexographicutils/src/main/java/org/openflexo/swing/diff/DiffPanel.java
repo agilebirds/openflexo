@@ -77,11 +77,11 @@ public class DiffPanel extends JLayeredPane {
 
 	static Icon iconForChange(DiffChange value, boolean isLeftOriented) {
 		if (value instanceof ModificationChange) {
-			return (isLeftOriented ? UtilsIconLibrary.MODIFICATION_LEFT_ICON : UtilsIconLibrary.MODIFICATION_RIGHT_ICON);
+			return isLeftOriented ? UtilsIconLibrary.MODIFICATION_LEFT_ICON : UtilsIconLibrary.MODIFICATION_RIGHT_ICON;
 		} else if (value instanceof AdditionChange) {
-			return (isLeftOriented ? UtilsIconLibrary.REMOVAL_LEFT_ICON : UtilsIconLibrary.ADDITION_RIGHT_ICON);
+			return isLeftOriented ? UtilsIconLibrary.REMOVAL_LEFT_ICON : UtilsIconLibrary.ADDITION_RIGHT_ICON;
 		} else if (value instanceof RemovalChange) {
-			return (isLeftOriented ? UtilsIconLibrary.ADDITION_LEFT_ICON : UtilsIconLibrary.REMOVAL_RIGHT_ICON);
+			return isLeftOriented ? UtilsIconLibrary.ADDITION_LEFT_ICON : UtilsIconLibrary.REMOVAL_RIGHT_ICON;
 		}
 		return null;
 	}
@@ -166,7 +166,7 @@ public class DiffPanel extends JLayeredPane {
 		// topPanel.add(title,BorderLayout.NORTH);
 		topPanel.add(new JScrollPane(changesList), BorderLayout.CENTER);
 
-		if ((leftLabel != null) || (rightLabel != null)) {
+		if (leftLabel != null || rightLabel != null) {
 
 			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
 			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);

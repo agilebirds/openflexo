@@ -61,7 +61,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof ViewObject);
+			return object instanceof ViewObject;
 		}
 
 	};

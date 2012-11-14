@@ -98,12 +98,13 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		}
 
 		public boolean isMainEntry() {
-			return (graphicalObject == getFocusedObject());
+			return graphicalObject == getFocusedObject();
 		}
 
 		public boolean getSelectThis() {
-			if (isMainEntry())
+			if (isMainEntry()) {
 				return true;
+			}
 			return selectThis;
 		}
 
@@ -121,8 +122,9 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	public int getSelectedEntriesCount() {
 		int returned = 0;
 		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
-			if (e.selectThis)
+			if (e.selectThis) {
 				returned++;
+			}
 		}
 		return returned;
 	}

@@ -49,7 +49,7 @@ public class RemoveDocType extends FlexoAction<RemoveDocType, DocType, DocType> 
 			boolean ok = v.size() > 0;
 			for (FlexoModelObject o : v) {
 				for (DefaultDocType defaultDocType : DefaultDocType.values()) {
-					ok &= (o != o.getProject().getDocTypeNamed(defaultDocType.name()));
+					ok &= o != o.getProject().getDocTypeNamed(defaultDocType.name());
 				}
 			}
 			return ok;

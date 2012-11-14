@@ -52,7 +52,7 @@ public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObje
 
 		@Override
 		public boolean isEnabledForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
-			return ((entity != null) && (!entity.getIsReadOnly()));
+			return entity != null && !entity.getIsReadOnly();
 		}
 
 	};

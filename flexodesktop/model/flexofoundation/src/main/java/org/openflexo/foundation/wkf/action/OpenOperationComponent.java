@@ -47,12 +47,12 @@ public class OpenOperationComponent extends FlexoGUIAction<OpenOperationComponen
 
 		@Override
 		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+			return object != null && object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() != null;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+			return object != null && object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() != null;
 		}
 
 	};

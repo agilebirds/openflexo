@@ -58,7 +58,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 
 		@Override
 		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
-			return (object instanceof View || object instanceof ViewShape);
+			return object instanceof View || object instanceof ViewShape;
 		}
 
 	};

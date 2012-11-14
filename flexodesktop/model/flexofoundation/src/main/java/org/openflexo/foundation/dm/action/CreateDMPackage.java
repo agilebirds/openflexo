@@ -55,9 +55,9 @@ public class CreateDMPackage extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DMRepository) && !(object instanceof DMEORepository)
-					&& (!(object instanceof ComponentRepository)) && (!(object instanceof WORepository))
-					&& (!(object instanceof ProcessInstanceRepository)) && (!((DMRepository) object).isReadOnly()));
+			return object != null && object instanceof DMRepository && !(object instanceof DMEORepository)
+					&& !(object instanceof ComponentRepository) && !(object instanceof WORepository)
+					&& !(object instanceof ProcessInstanceRepository) && !((DMRepository) object).isReadOnly();
 		}
 
 	};
@@ -80,7 +80,7 @@ public class CreateDMPackage extends FlexoAction {
 
 	public DMRepository getRepository() {
 		if (_repository == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DMRepository) {
 				_repository = (DMRepository) getFocusedObject();
 			}
 		}

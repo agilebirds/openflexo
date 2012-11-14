@@ -41,7 +41,7 @@ public class ParameterizedClass extends DerivedClass {
 	}
 
 	public String getFormalParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public String getModule() {

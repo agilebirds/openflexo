@@ -110,7 +110,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 		browser.setLocallyModifiedFilter(new FPSFileFilter("locally_modified_files", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
-				return (file.getStatus().isLocallyModified());
+				return file.getStatus().isLocallyModified();
 			}
 		});
 		browser.addToCustomFilters(browser.getLocallyModifiedFilter());
@@ -118,7 +118,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 		browser.setRemotelyModifiedFilter(new FPSFileFilter("remotely_modified_files", UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
-				return (file.getStatus().isRemotelyModified());
+				return file.getStatus().isRemotelyModified();
 			}
 		});
 		browser.addToCustomFilters(browser.getRemotelyModifiedFilter());

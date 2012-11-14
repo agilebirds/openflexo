@@ -75,19 +75,19 @@ public class IntegerStaticBinding extends StaticBinding<Long> {
 		}
 
 		if (getBindingDefinition().getType().equals(Integer.class) || getBindingDefinition().getType().equals(Integer.TYPE)) {
-			return (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE);
+			return getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE;
 		}
 
 		if (getBindingDefinition().getType().equals(Short.class) || getBindingDefinition().getType().equals(Short.TYPE)) {
-			return (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE);
+			return getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE;
 		}
 
 		if (getBindingDefinition().getType().equals(Byte.class) || getBindingDefinition().getType().equals(Byte.TYPE)) {
-			return (getValue() >= Byte.MIN_VALUE && getValue() <= Byte.MAX_VALUE);
+			return getValue() >= Byte.MIN_VALUE && getValue() <= Byte.MAX_VALUE;
 		}
 
 		if (getBindingDefinition().getType().equals(Character.class) || getBindingDefinition().getType().equals(Character.TYPE)) {
-			return (getValue() >= Character.MIN_VALUE && getValue() <= Character.MAX_VALUE);
+			return getValue() >= Character.MIN_VALUE && getValue() <= Character.MAX_VALUE;
 		}
 
 		return super._areTypesMatching();

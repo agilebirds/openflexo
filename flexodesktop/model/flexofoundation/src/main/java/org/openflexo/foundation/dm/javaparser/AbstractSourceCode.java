@@ -78,7 +78,7 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 	protected abstract boolean isJavaParserInstalled();
 
 	public boolean isEdited() {
-		return (_editedCode != null);
+		return _editedCode != null;
 	}
 
 	public boolean hasParseErrors() {
@@ -100,7 +100,7 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 	}
 
 	public void setParseErrorWarning(String warning) {
-		if ((warning == null && _parseErrorWarning != null) || (warning != null && !warning.equals(_parseErrorWarning))) {
+		if (warning == null && _parseErrorWarning != null || warning != null && !warning.equals(_parseErrorWarning)) {
 			String oldValue = _parseErrorWarning;
 			_parseErrorWarning = warning;
 			if (_parseErrorWarningPropertyName != null) {

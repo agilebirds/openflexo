@@ -56,10 +56,10 @@ public class DecreaseRowSpanInitializer extends ActionInitializer {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
-					(action).setSelectedTD(invoker.td());
+					action.setSelectedTD(invoker.td());
 					return true;
 				} else if (action.getFocusedObject() instanceof IETDWidget) {
-					(action).setSelectedTD((IETDWidget) action.getFocusedObject());
+					action.setSelectedTD((IETDWidget) action.getFocusedObject());
 					return true;
 				}
 				return false;

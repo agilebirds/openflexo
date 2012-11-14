@@ -72,7 +72,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 
 		@Override
 		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -183,9 +183,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 
 	public IEWOComponent getWOComponent() {
 		if (getContainer() instanceof IEWOComponent) {
-			return ((IEWOComponent) getContainer());
+			return (IEWOComponent) getContainer();
 		} else if (getContainer() instanceof IEWidget) {
-			return (((IEWidget) getContainer()).getWOComponent());
+			return ((IEWidget) getContainer()).getWOComponent();
 		} else {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot resolve component!");
@@ -200,7 +200,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			logger.info("IEWidget=" + model);
 		}
 
-		if ((container instanceof IESequenceTopComponent) && (model instanceof IETopComponent)) {
+		if (container instanceof IESequenceTopComponent && model instanceof IETopComponent) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -216,7 +216,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			}
 		}
 
-		if ((container instanceof IEBlocWidget) && (model instanceof IEHTMLTableWidget)) {
+		if (container instanceof IEBlocWidget && model instanceof IEHTMLTableWidget) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 3: insert IEHTMLTableWidget in IEBlocWidget (DropTableZone)");
 			}
@@ -224,7 +224,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof ButtonedWidgetInterface) && (model instanceof IEHyperlinkWidget)) {
+		if (container instanceof ButtonedWidgetInterface && model instanceof IEHyperlinkWidget) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -235,7 +235,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof IESequenceTab) && (model instanceof IETabWidget)) {
+		if (container instanceof IESequenceTab && model instanceof IETabWidget) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 7: insert IETabWidget in IESequenceTab (DropTabZone)");
 			}
@@ -243,7 +243,7 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof IESequenceWidget)) {
+		if (container instanceof IESequenceWidget) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -346,8 +346,8 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 					return aFile.isFile() && aFile.getName().endsWith(".properties");
 				}
 			})) {
-				if ((file.getName().equalsIgnoreCase(paletteElementName))
-						|| (file.getName().equalsIgnoreCase(paletteElementName + ".properties"))) {
+				if (file.getName().equalsIgnoreCase(paletteElementName)
+						|| file.getName().equalsIgnoreCase(paletteElementName + ".properties")) {
 					return file;
 				}
 			}

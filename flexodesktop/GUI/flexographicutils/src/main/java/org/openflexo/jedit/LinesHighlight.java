@@ -103,7 +103,7 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setBeginLineNb(int beginLineNb) {
 		this.beginLineNb = beginLineNb;
-		if ((textArea != null) && (textArea.getPainter() != null)) {
+		if (textArea != null && textArea.getPainter() != null) {
 			textArea.getPainter().repaint();
 		}
 	}
@@ -114,7 +114,7 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setBgColor(Color color) {
 		this.bgColor = color;
-		if ((textArea != null) && (textArea.getPainter() != null)) {
+		if (textArea != null && textArea.getPainter() != null) {
 			textArea.getPainter().invalidateLineRange(beginLineNb, endLineNb);
 		}
 	}
@@ -125,7 +125,7 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setFgColor(Color color) {
 		this.fgColor = color;
-		if ((textArea != null) && (textArea.getPainter() != null)) {
+		if (textArea != null && textArea.getPainter() != null) {
 			textArea.getPainter().invalidateLineRange(beginLineNb, endLineNb);
 		}
 	}
@@ -136,7 +136,7 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setEndLineNb(int endLineNb) {
 		this.endLineNb = endLineNb;
-		if ((textArea != null) && (textArea.getPainter() != null)) {
+		if (textArea != null && textArea.getPainter() != null) {
 			textArea.getPainter().repaint();
 		}
 	}

@@ -48,7 +48,7 @@ public class FlexoProcessImageBuilder {
 	private static void saveImageOfProcess(FlexoProcess process, File dest) {
 
 		IModuleLoader moduleLoader = process.getProject().getModuleLoader();
-		if (moduleLoader==null || !moduleLoader.isWKFLoaded()) {
+		if (moduleLoader == null || !moduleLoader.isWKFLoaded()) {
 			return;
 		}
 		ExternalWKFModule wkfModule = null;

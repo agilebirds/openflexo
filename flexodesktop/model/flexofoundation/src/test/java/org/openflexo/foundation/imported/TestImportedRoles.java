@@ -27,6 +27,9 @@ import java.util.Vector;
 
 import javax.activation.DataHandler;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.imported.FlexoImportedRoleLibraryDelta.RoleDelta;
@@ -42,9 +45,6 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 public class TestImportedRoles extends FlexoTestCase {
 

@@ -47,7 +47,7 @@ public abstract class OWLStatement extends AbstractOWLObject implements Inspecta
 
 	@Override
 	public void delete() {
-		if ((getSubject() != null) && (getStatement() != null)) {
+		if (getSubject() != null && getStatement() != null) {
 			getSubject().getFlexoOntology().getOntModel().remove(getStatement());
 			getSubject().update();
 		}

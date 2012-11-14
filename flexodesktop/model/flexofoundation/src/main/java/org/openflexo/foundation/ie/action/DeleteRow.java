@@ -55,7 +55,7 @@ public class DeleteRow extends FlexoAction {
 			while (en.hasMoreElements()) {
 				FlexoModelObject o = en.nextElement();
 				if (!(o instanceof IETDWidget) && !(o instanceof IETRWidget)
-						&& !((o instanceof IESequenceWidget) && ((IESequenceWidget) o).isInTD())) {
+						&& !(o instanceof IESequenceWidget && ((IESequenceWidget) o).isInTD())) {
 					return false;
 				}
 			}
@@ -75,7 +75,7 @@ public class DeleteRow extends FlexoAction {
 			FlexoModelObject o = en.nextElement();
 			if (o instanceof IETRWidget) {
 				IETRWidget tr = (IETRWidget) o;
-				if (!tr.isDeleted() && (tr.getAllTD().size() > 0) && !tr.getAllTD().firstElement().isDeleted()) {
+				if (!tr.isDeleted() && tr.getAllTD().size() > 0 && !tr.getAllTD().firstElement().isDeleted()) {
 					tr.getAllTD().firstElement().deleteRow();
 				}
 			} else if (o instanceof IETDWidget) {
@@ -86,7 +86,7 @@ public class DeleteRow extends FlexoAction {
 			} else if (o instanceof IESequenceWidget) {
 				IESequenceWidget seq = (IESequenceWidget) o;
 				IETDWidget td = seq.td();
-				if ((td != null) && !td.isDeleted()) {
+				if (td != null && !td.isDeleted()) {
 					td.deleteRow();
 				}
 			}

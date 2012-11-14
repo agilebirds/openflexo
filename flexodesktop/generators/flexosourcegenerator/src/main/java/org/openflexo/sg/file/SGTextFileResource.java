@@ -109,7 +109,7 @@ public class SGTextFileResource extends TextFileResource<SGTextFileGenerator, SG
 
 	public FileFormat getFileFormat() {
 		if (getGenerator() instanceof SGTextFileGenerator) {
-			return (getGenerator()).getFileFormat();
+			return getGenerator().getFileFormat();
 		}
 		return FileFormat.UNKNOWN_ASCII_FILE;
 	}

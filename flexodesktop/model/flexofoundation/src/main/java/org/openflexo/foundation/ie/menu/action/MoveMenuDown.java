@@ -56,8 +56,8 @@ public class MoveMenuDown extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
-					&& !((((FlexoItemMenu) object).getFather()).getSubItems().lastElement().equals(object));
+			return object != null && object instanceof FlexoItemMenu && ((FlexoItemMenu) object).getFather() != null
+					&& !((FlexoItemMenu) object).getFather().getSubItems().lastElement().equals(object);
 		}
 
 	};

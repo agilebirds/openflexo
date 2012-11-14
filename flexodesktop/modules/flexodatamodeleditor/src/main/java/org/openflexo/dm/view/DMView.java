@@ -71,7 +71,7 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 			if (next.getModel().indexOf(anObject) > -1) {
 				return next;
 			}
-			DMObject parentObject = (DMObject) anObject.getParent();
+			DMObject parentObject = anObject.getParent();
 			if (next.getModel().indexOf(parentObject) > -1) {
 				if (next.getSelectedObjects().contains(parentObject)) {
 					next.selectObject(parentObject);

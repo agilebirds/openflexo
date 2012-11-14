@@ -51,7 +51,7 @@ public class MarkAsMergedFiles extends MultipleFileCVSAction<MarkAsMergedFiles> 
 
 		@Override
 		protected boolean accept(CVSFile aFile) {
-			return (aFile.getStatus().isConflicting() && aFile.getMerge().isResolved());
+			return aFile.getStatus().isConflicting() && aFile.getMerge().isResolved();
 		}
 
 	};

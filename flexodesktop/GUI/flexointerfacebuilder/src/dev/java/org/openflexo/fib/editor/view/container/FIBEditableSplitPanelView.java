@@ -115,8 +115,9 @@ public class FIBEditableSplitPanelView extends FIBSplitPanelView implements FIBE
 
 	@Override
 	protected void retrieveContainedJComponentsAndConstraints() {
-		if (placeholders == null)
+		if (placeholders == null) {
 			placeholders = new Vector<PlaceHolder>();
+		}
 		placeholders.removeAllElements();
 
 		super.retrieveContainedJComponentsAndConstraints();

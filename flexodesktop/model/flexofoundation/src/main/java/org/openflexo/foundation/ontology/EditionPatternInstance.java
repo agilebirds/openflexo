@@ -279,8 +279,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	public List<FlexoModelObject> objectsThatWillBeDeleted() {
 		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
 		for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-			if ((pr instanceof GraphicalElementPatternRole) || (pr instanceof IndividualPatternRole)
-					|| (pr instanceof StatementPatternRole)) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
 				returned.add(getPatternActor(pr));
 			}
 		}

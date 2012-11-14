@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TCos extends Token
-{
-    public TCos()
-    {
-        super.setText("cos");
-    }
+public final class TCos extends Token {
+	public TCos() {
+		super.setText("cos");
+	}
 
-    public TCos(int line, int pos)
-    {
-        super.setText("cos");
-        setLine(line);
-        setPos(pos);
-    }
+	public TCos(int line, int pos) {
+		super.setText("cos");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TCos(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TCos(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTCos(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTCos(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TCos text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TCos text.");
+	}
 }

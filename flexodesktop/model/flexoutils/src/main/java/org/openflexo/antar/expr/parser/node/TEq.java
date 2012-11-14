@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TEq extends Token
-{
-    public TEq()
-    {
-        super.setText("=");
-    }
+public final class TEq extends Token {
+	public TEq() {
+		super.setText("=");
+	}
 
-    public TEq(int line, int pos)
-    {
-        super.setText("=");
-        setLine(line);
-        setPos(pos);
-    }
+	public TEq(int line, int pos) {
+		super.setText("=");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TEq(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TEq(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTEq(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTEq(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TEq text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TEq text.");
+	}
 }

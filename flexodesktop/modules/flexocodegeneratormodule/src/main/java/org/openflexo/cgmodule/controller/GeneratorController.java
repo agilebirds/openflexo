@@ -125,6 +125,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
 	}
 
+	@Override
 	protected void initializePerspectives() {
 		browser = new GeneratorBrowser(this);
 		browserView = new GeneratorBrowserView(this, browser);

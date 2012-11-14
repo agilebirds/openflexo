@@ -188,7 +188,7 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 			_bindingDisplayStringCustomBindingModel = new BindingModel() {
 				@Override
 				public int getBindingVariablesCount() {
-					if ((getBindingItem() != null) && (getBindingItem().isBindingValid())) {
+					if (getBindingItem() != null && getBindingItem().isBindingValid()) {
 						return 1;
 					}
 					return 0;
@@ -196,7 +196,7 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 
 				@Override
 				public BindingVariable getBindingVariableAt(int index) {
-					if ((index == 0) && (getBindingItem() != null) && (getBindingItem().isBindingValid())) {
+					if (index == 0 && getBindingItem() != null && getBindingItem().isBindingValid()) {
 						return getBindingItem().getBindingVariable();
 					}
 					return null;
@@ -493,7 +493,7 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 
 		@Override
 		public ValidationIssue<DropDownWithKeyValueMustDefineADomain, IEAbstractListWidget> applyValidation(IEAbstractListWidget dropDown) {
-			if ((dropDown.isDKV() && dropDown.getDomain() == null)) {
+			if (dropDown.isDKV() && dropDown.getDomain() == null) {
 				ValidationError<DropDownWithKeyValueMustDefineADomain, IEAbstractListWidget> error = new ValidationError<DropDownWithKeyValueMustDefineADomain, IEAbstractListWidget>(
 						this, dropDown, "dropdown_with_key_value_must_define_a_domain");
 				return error;

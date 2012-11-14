@@ -50,7 +50,8 @@ public class FIBTextField extends FIBWidget {
 	}
 
 	/**
-	 * @param columns the columns to set
+	 * @param columns
+	 *            the columns to set
 	 */
 	public void setColumns(Integer columns) {
 		this.columns = columns;
@@ -64,7 +65,8 @@ public class FIBTextField extends FIBWidget {
 	}
 
 	/**
-	 * @param passwd the passwd to set
+	 * @param passwd
+	 *            the passwd to set
 	 */
 	public void setPasswd(boolean passwd) {
 		this.passwd = passwd;
@@ -78,7 +80,8 @@ public class FIBTextField extends FIBWidget {
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param text
+	 *            the text to set
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -92,7 +95,8 @@ public class FIBTextField extends FIBWidget {
 	}
 
 	/**
-	 * @param validateOnReturn the validateOnReturn to set
+	 * @param validateOnReturn
+	 *            the validateOnReturn to set
 	 */
 	public void setValidateOnReturn(boolean validateOnReturn) {
 		this.validateOnReturn = validateOnReturn;

@@ -27,18 +27,17 @@ import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 
-
 public class BackgroundStylePanelEDITOR {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
-				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(BackgroundStyle.makeEmptyBackground());//BackgroundStyle.makeColoredBackground(Color.BLUE);
+			@Override
+			public Object[] getData() {
+				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(BackgroundStyle.makeEmptyBackground());// BackgroundStyle.makeColoredBackground(Color.BLUE);
 				return FIBAbstractEditor.makeArray(bsFactory);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return FIBBackgroundStyleSelector.FIB_FILE;
 			}

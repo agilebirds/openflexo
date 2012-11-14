@@ -57,7 +57,7 @@ public class ImplModelNameChanged extends SGDataModification implements RMNotifi
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
 		// return true;
-		if (originResource == implModel.getGeneratedSources().getFlexoResource() && (targetResource instanceof ImplementationModelResource)) {
+		if (originResource == implModel.getGeneratedSources().getFlexoResource() && targetResource instanceof ImplementationModelResource) {
 			return true;
 		} else {
 			return false;

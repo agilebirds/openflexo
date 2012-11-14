@@ -138,7 +138,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
 				if (importedOntology instanceof OWLOntology) {
-					newOntology.importOntology((OWLOntology) importedOntology);
+					newOntology.importOntology(importedOntology);
 				} else {
 					logger.warning("Could not import anything else than an OWL ontology");
 				}
@@ -252,7 +252,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 			return false;
 		}
 		if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
-			return (getOntologyFile() != null);
+			return getOntologyFile() != null;
 		}
 		return true;
 	}

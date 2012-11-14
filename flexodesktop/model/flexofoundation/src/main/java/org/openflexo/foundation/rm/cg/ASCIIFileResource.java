@@ -68,7 +68,7 @@ public abstract class ASCIIFileResource<G extends IFlexoResourceGenerator, F ext
 	}
 
 	public String getCurrentGeneration() {
-		if ((getGenerator() != null) && (!hasGenerationError())) {
+		if (getGenerator() != null && !hasGenerationError()) {
 			if (getGenerator().getGeneratedCode() == null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Generator is not null and there are no generation errors but the generated code is null");

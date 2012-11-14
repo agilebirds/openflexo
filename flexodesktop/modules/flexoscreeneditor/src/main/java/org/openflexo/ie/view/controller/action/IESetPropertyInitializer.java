@@ -80,7 +80,7 @@ public class IESetPropertyInitializer extends ActionInitializer {
 
 				}*/
 				if (action.getKey().equals("hyperlinkType") && action.getFocusedObject() instanceof IEHyperlinkWidget) {
-					IEHyperlinkWidget link = ((IEHyperlinkWidget) action.getFocusedObject());
+					IEHyperlinkWidget link = (IEHyperlinkWidget) action.getFocusedObject();
 					HyperlinkType type = (HyperlinkType) action.getPreviousValue();
 					if (type != null && link.getHyperlinkType() != type) {
 						if (type.isDisplayAction()) {

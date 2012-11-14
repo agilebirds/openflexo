@@ -55,11 +55,11 @@ public class CreateDMEntity extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DMPackage) && ((DMPackage) object).getRepository() != null)
-					&& (!(((DMPackage) object).getRepository() instanceof ComponentRepository))
-					&& (!(((DMPackage) object).getRepository() instanceof WORepository))
-					&& (!(((DMPackage) object).getRepository() instanceof ProcessInstanceRepository))
-					&& (!((DMPackage) object).getRepository().isReadOnly());
+			return object != null && object instanceof DMPackage && ((DMPackage) object).getRepository() != null
+					&& !(((DMPackage) object).getRepository() instanceof ComponentRepository)
+					&& !(((DMPackage) object).getRepository() instanceof WORepository)
+					&& !(((DMPackage) object).getRepository() instanceof ProcessInstanceRepository)
+					&& !((DMPackage) object).getRepository().isReadOnly();
 		}
 
 	};
@@ -88,7 +88,7 @@ public class CreateDMEntity extends FlexoAction {
 
 	public DMPackage getPackage() {
 		if (_package == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMPackage)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DMPackage) {
 				_package = (DMPackage) getFocusedObject();
 			}
 		}

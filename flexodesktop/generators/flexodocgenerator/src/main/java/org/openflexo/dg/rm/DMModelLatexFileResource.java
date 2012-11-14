@@ -69,7 +69,7 @@ public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getModel() != null)) {
+		if (!isObserverRegistered && getModel() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getModel());

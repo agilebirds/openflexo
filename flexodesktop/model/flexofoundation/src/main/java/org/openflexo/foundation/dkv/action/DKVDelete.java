@@ -59,7 +59,7 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 					return false;
 				}
 			}
-			return (object.isDeleteAble()) || (globalSelection.size() > 0);
+			return object.isDeleteAble() || globalSelection.size() > 0;
 		}
 
 		private String[] persistentProperties = { "objectsToDelete" };

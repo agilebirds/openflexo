@@ -108,7 +108,7 @@ public class DiffPrint {
 		 * If using LinePrint class results are returned as string
 		 */
 		public String getDiffResult() {
-			return (diffResult != null ? diffResult.toString() : null);
+			return diffResult != null ? diffResult.toString() : null;
 		}
 
 		/**
@@ -137,7 +137,7 @@ public class DiffPrint {
 			int f0, l0 = 0, f1, l1 = 0, show_from = 0, show_to = 0;
 			int i;
 			Diff.change next;
-			boolean nontrivial = (ignore == null);
+			boolean nontrivial = ignore == null;
 
 			show_from = show_to = 0;
 

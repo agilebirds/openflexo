@@ -345,7 +345,7 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public boolean isRootFolder() {
-		return (getDocResourceCenter().getRootFolder() == this);
+		return getDocResourceCenter().getRootFolder() == this;
 	}
 
 	@Override

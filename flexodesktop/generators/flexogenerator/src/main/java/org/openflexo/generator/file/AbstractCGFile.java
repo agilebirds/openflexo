@@ -66,7 +66,7 @@ public abstract class AbstractCGFile extends CGFile {
 
 	@Override
 	public boolean isCodeGenerationAvailable() {
-		return (getGenerator() != null);
+		return getGenerator() != null;
 	}
 
 	public GenerationException getGenerationException() {
@@ -81,7 +81,7 @@ public abstract class AbstractCGFile extends CGFile {
 		if (getMarkedAsDoNotGenerate()) {
 			return false;
 		}
-		hasGenerationErrors = (getGenerationException() != null);
+		hasGenerationErrors = getGenerationException() != null;
 		return hasGenerationErrors;
 	}
 

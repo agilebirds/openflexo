@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class AExpr2Expr extends PExpr
-{
-    private PExpr2 _expr2_;
+public final class AExpr2Expr extends PExpr {
+	private PExpr2 _expr2_;
 
-    public AExpr2Expr()
-    {
-        // Constructor
-    }
+	public AExpr2Expr() {
+		// Constructor
+	}
 
-    public AExpr2Expr(
-        @SuppressWarnings("hiding") PExpr2 _expr2_)
-    {
-        // Constructor
-        setExpr2(_expr2_);
+	public AExpr2Expr(@SuppressWarnings("hiding") PExpr2 _expr2_) {
+		// Constructor
+		setExpr2(_expr2_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new AExpr2Expr(
-            cloneNode(this._expr2_));
-    }
+	@Override
+	public Object clone() {
+		return new AExpr2Expr(cloneNode(this._expr2_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAExpr2Expr(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAExpr2Expr(this);
+	}
 
-    public PExpr2 getExpr2()
-    {
-        return this._expr2_;
-    }
+	public PExpr2 getExpr2() {
+		return this._expr2_;
+	}
 
-    public void setExpr2(PExpr2 node)
-    {
-        if(this._expr2_ != null)
-        {
-            this._expr2_.parent(null);
-        }
+	public void setExpr2(PExpr2 node) {
+		if (this._expr2_ != null) {
+			this._expr2_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._expr2_ = node;
-    }
+		this._expr2_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._expr2_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._expr2_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._expr2_ == child)
-        {
-            this._expr2_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._expr2_ == child) {
+			this._expr2_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._expr2_ == oldChild)
-        {
-            setExpr2((PExpr2) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._expr2_ == oldChild) {
+			setExpr2((PExpr2) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

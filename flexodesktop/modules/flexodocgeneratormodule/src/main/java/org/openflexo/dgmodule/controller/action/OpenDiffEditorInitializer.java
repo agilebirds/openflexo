@@ -90,14 +90,14 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_choose_sources_that_you_want_to_compare"), leftSourceParam,
 						versionLeftParameter, rightSourceParam, versionRightParameter);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					if ((rightSourceParam.getValue() == null) || (leftSourceParam.getValue() == null)) {
+					if (rightSourceParam.getValue() == null || leftSourceParam.getValue() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("please_select_valid_sources"));
 						return false;
 					}
 					ContentSource rightSource = ContentSource.getContentSource(rightSourceParam.getValue(),
-							(versionRightParameter.getValue() != null ? versionRightParameter.getValue().getVersionId() : null));
+							versionRightParameter.getValue() != null ? versionRightParameter.getValue().getVersionId() : null);
 					ContentSource leftSource = ContentSource.getContentSource(leftSourceParam.getValue(),
-							(versionLeftParameter.getValue() != null ? versionLeftParameter.getValue().getVersionId() : null));
+							versionLeftParameter.getValue() != null ? versionLeftParameter.getValue().getVersionId() : null);
 					action.setRightSource(rightSource);
 					action.setLeftSource(leftSource);
 					return true;

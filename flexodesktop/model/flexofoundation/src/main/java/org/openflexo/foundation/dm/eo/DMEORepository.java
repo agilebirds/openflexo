@@ -186,7 +186,7 @@ public abstract class DMEORepository extends DMRepository {
 	@Override
 	public void removeEntityWithKey(String entityName, boolean notify) {
 		DMEntity entity = getDMEntity(entityName);
-		if ((entity != null) && (entity instanceof DMEOEntity)) {
+		if (entity != null && entity instanceof DMEOEntity) {
 			DMEOEntity dmEOEntity = (DMEOEntity) entity;
 			internallyUnregisterDMEOEntity(dmEOEntity);
 			if (dmEOEntity.getDMEOModel() != null) {
@@ -428,7 +428,7 @@ public abstract class DMEORepository extends DMRepository {
 
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

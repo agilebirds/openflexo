@@ -42,7 +42,7 @@ public class NonPersistantDataRepositoryFolder extends DMRepositoryFolder {
 
 	@Override
 	public DMRepository getRepositoryAtIndex(int index) {
-		if ((index >= 0) && (index < getDMModel().getProjectRepositories().size())) {
+		if (index >= 0 && index < getDMModel().getProjectRepositories().size()) {
 			return getDMModel().getProjectRepositories().elementAt(index);
 		}
 		logger.warning("Index out of range: " + index);

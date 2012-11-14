@@ -137,7 +137,7 @@ public abstract class MetaFileGenerator extends FlexoResourceGenerator<FlexoMode
 
 	@Override
 	public GeneratedTextResource getGeneratedCode() {
-		if ((generatedCode == null) && (textResource != null) && (textResource.getASCIIFile() != null)
+		if (generatedCode == null && textResource != null && textResource.getASCIIFile() != null
 				&& textResource.getASCIIFile().hasLastAcceptedContent()) {
 			generatedCode = new GeneratedTextResource(getFileName(), textResource.getASCIIFile().getLastAcceptedContent());
 		}

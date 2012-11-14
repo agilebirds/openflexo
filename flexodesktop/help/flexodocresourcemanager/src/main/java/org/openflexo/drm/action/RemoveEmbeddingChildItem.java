@@ -47,7 +47,7 @@ public class RemoveEmbeddingChildItem extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItem) && (((DocItem) object).getEmbeddingParentItem() != null));
+			return object != null && object instanceof DocItem && ((DocItem) object).getEmbeddingParentItem() != null;
 		}
 
 	};
@@ -60,7 +60,7 @@ public class RemoveEmbeddingChildItem extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if ((getParentDocItem() != null) && (getDocItemToRemove() != null)) {
+		if (getParentDocItem() != null && getDocItemToRemove() != null) {
 			getParentDocItem().removeFromEmbeddingChildItems(getDocItemToRemove());
 		}
 	}
@@ -71,7 +71,7 @@ public class RemoveEmbeddingChildItem extends FlexoAction {
 
 	public DocItem getDocItemToRemove() {
 		if (_docItemToRemove == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
 				_docItemToRemove = (DocItem) getFocusedObject();
 			}
 		}

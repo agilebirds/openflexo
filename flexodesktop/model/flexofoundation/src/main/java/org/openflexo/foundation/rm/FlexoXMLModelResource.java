@@ -2,7 +2,6 @@ package org.openflexo.foundation.rm;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,7 +34,8 @@ public class FlexoXMLModelResource extends FlexoStorageResource<ProjectXSOntolog
 		super(aProject);
 	}
 
-	public FlexoXMLModelResource(FlexoProject project, ProjectXSOntology newProjectOntology, FlexoProjectFile ontologyFile) throws InvalidFileNameException, DuplicateResourceException {
+	public FlexoXMLModelResource(FlexoProject project, ProjectXSOntology newProjectOntology, FlexoProjectFile ontologyFile)
+			throws InvalidFileNameException, DuplicateResourceException {
 		super(project);
 		_resourceData = newProjectOntology;
 		newProjectOntology.setFlexoResource(this);
@@ -69,7 +69,8 @@ public class FlexoXMLModelResource extends FlexoStorageResource<ProjectXSOntolog
 		try {
 			out = new FileOutputStream(getFile());
 			StreamResult result = new StreamResult(out);
-			TransformerFactory factory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+			TransformerFactory factory = TransformerFactory.newInstance(
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
 			Transformer transformer = factory.newTransformer();
 			DOMSource source = new DOMSource(this.getResourceData().getOntology().toXML());
 			transformer.transform(source, result);

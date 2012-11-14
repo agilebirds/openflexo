@@ -59,8 +59,9 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	}
 
 	public String getFeatureName() {
-		if (feature == null)
+		if (feature == null) {
 			return featureName;
+		}
 		return feature.getName();
 	}
 
@@ -106,7 +107,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return (getPatternRole() != null ? getPatternRole().getEditionPattern() : null);
+		return getPatternRole() != null ? getPatternRole().getEditionPattern() : null;
 	}
 
 	@Override
@@ -127,7 +128,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return (getEditionPattern() != null ? getEditionPattern().getViewPoint() : null);
+		return getEditionPattern() != null ? getEditionPattern().getViewPoint() : null;
 	}
 
 	/**

@@ -311,7 +311,7 @@ public abstract class InputHandler extends KeyAdapter {
 	 * Returns the number of times the next action will be repeated.
 	 */
 	public int getRepeatCount() {
-		return (repeat ? Math.max(1, repeatCount) : 1);
+		return repeat ? Math.max(1, repeatCount) : 1;
 	}
 
 	/**
@@ -601,7 +601,7 @@ public abstract class InputHandler extends KeyAdapter {
 			}
 
 			try {
-				textArea.getDocument().remove(start, (caret + lineStart) - start);
+				textArea.getDocument().remove(start, caret + lineStart - start);
 			} catch (BadLocationException bl) {
 				bl.printStackTrace();
 			}
@@ -626,7 +626,7 @@ public abstract class InputHandler extends KeyAdapter {
 			if (lastVisibleLine >= textArea.getLineCount()) {
 				lastVisibleLine = Math.min(textArea.getLineCount() - 1, lastVisibleLine);
 			} else {
-				lastVisibleLine -= (textArea.getElectricScroll() + 1);
+				lastVisibleLine -= textArea.getElectricScroll() + 1;
 			}
 
 			int lastVisible = textArea.getLineEndOffset(lastVisibleLine) - 1;
@@ -687,7 +687,7 @@ public abstract class InputHandler extends KeyAdapter {
 			int firstLine = textArea.getFirstLine();
 
 			int firstOfLine = textArea.getLineStartOffset(textArea.getCaretLine());
-			int firstVisibleLine = (firstLine == 0 ? 0 : firstLine + textArea.getElectricScroll());
+			int firstVisibleLine = firstLine == 0 ? 0 : firstLine + textArea.getElectricScroll();
 			int firstVisible = textArea.getLineStartOffset(firstVisibleLine);
 
 			if (caret == 0) {

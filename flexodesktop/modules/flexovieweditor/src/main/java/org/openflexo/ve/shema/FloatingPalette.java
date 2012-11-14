@@ -383,7 +383,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getOEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getOEController()
 					.getEditor());
 			action.setLinkScheme(availableConnectors.firstElement());
 			action.setFromShape(from);
@@ -401,7 +401,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller)
+						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller
 								.getOEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
@@ -429,7 +429,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {
-			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getOEController()
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, controller.getOEController()
 					.getEditor());
 			action.setToShape(to);
 			action.setAutomaticallyCreateConnector(true);

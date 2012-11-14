@@ -37,7 +37,7 @@ public class PopupLinkComponentWOFileResource extends ComponentWOFileResource<Po
 	protected static final Logger logger = FlexoLogger.getLogger(PopupLinkComponentWOFileResource.class.getPackage().getName());
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+		if (!isObserverRegistered && getComponentDefinition() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());

@@ -52,7 +52,7 @@ public class DeleteRoleSpecialization extends FlexoAction<DeleteRoleSpecializati
 
 		@Override
 		public boolean isEnabledForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
-			return (role != null || (globalSelection != null && globalSelection.size() > 0));
+			return role != null || globalSelection != null && globalSelection.size() > 0;
 		}
 
 	};

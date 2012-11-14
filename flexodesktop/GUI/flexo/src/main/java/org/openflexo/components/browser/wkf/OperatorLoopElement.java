@@ -131,7 +131,7 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getLOOPOperator().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getLOOPOperator().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -142,8 +142,8 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getLOOPOperator());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
-			if ((edge.getNextNode() != null && edge.getNextNode().isContainedIn(getLOOPOperator()))
-					&& (edge.getStartNode() != null && edge.getStartNode().isContainedIn(getLOOPOperator()))) {
+			if (edge.getNextNode() != null && edge.getNextNode().isContainedIn(getLOOPOperator()) && edge.getStartNode() != null
+					&& edge.getStartNode().isContainedIn(getLOOPOperator())) {
 				return true;
 			}
 			return false;

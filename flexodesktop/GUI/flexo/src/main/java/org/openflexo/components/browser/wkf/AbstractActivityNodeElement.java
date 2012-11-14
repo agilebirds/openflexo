@@ -155,7 +155,7 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getAbstractActivityNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getAbstractActivityNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -230,8 +230,8 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getAbstractActivityNode());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
-			if ((edge.getNextNode() != null && edge.getNextNode().isContainedIn(getAbstractActivityNode()))
-					&& (edge.getStartNode() != null && edge.getStartNode().isContainedIn(getAbstractActivityNode()))) {
+			if (edge.getNextNode() != null && edge.getNextNode().isContainedIn(getAbstractActivityNode()) && edge.getStartNode() != null
+					&& edge.getStartNode().isContainedIn(getAbstractActivityNode())) {
 				return true;
 			}
 			return false;

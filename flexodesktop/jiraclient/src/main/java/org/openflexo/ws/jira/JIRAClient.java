@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.activation.MimetypesFileTypeMap;
+import javax.activation.FileTypeMap;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openflexo.ws.jira.action.JIRAAction;
@@ -201,7 +201,7 @@ public class JIRAClient {
 	}
 
 	private void writeContentType(UTF8OutputStream os, File file) throws UnsupportedEncodingException, IOException {
-		String type = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+		String type = FileTypeMap.getDefaultFileTypeMap().getContentType(file);
 		if (type == null) {
 			type = "attachment/octet-stream";
 		}

@@ -60,13 +60,13 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 			browser.setHoldStructure();
 			super.getTreeCellRendererComponent(arg0, object, _selected, expanded, leaf, arg5, arg6);
 			BrowserElement element = (BrowserElement) object;
-			if (!(element.isDeleted())) {
+			if (!element.isDeleted()) {
 				String fullName = element.getName();
 				if (element.getSuffixName() != null) {
 					fullName += element.getSuffixName();
 				}
 				setText(fullName);
-				setIcon(expanded ? (element).getExpandedIcon() : (element).getIcon());
+				setIcon(expanded ? element.getExpandedIcon() : element.getIcon());
 				if (!element.isSelectable()) {
 					setForeground(Color.LIGHT_GRAY);
 				}

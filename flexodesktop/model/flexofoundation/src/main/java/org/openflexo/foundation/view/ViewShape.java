@@ -157,7 +157,7 @@ public class ViewShape extends ViewElement {
 		if (o == this) {
 			return true;
 		}
-		if ((getParent() != null) && (getParent() == o)) {
+		if (getParent() != null && getParent() == o) {
 			return true;
 		}
 		if (getParent() != null) {
@@ -200,7 +200,7 @@ public class ViewShape extends ViewElement {
 
 		for (EditionPattern ep1 : calc.getEditionPatterns()) {
 			for (DropScheme ds : ep1.getDropSchemes()) {
-				if (ds.getTargetEditionPattern() == targetEditionPattern || (ds.getTopTarget() && targetEditionPattern == null)) {
+				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
 					for (EditionPattern ep2 : calc.getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
 							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())

@@ -125,7 +125,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			@Override
 			public Icon getTabHeaderIcon(JComponent tab) {
 				if (tab instanceof ModuleView) {
-					return FlexoMainPane.this.controller.iconForObject(((ModuleView<?>) tab).getRepresentedObject());
+					return FlexoController.iconForObject(((ModuleView<?>) tab).getRepresentedObject());
 				}
 				return null;
 			}

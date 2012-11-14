@@ -34,52 +34,49 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.view.widget.FIBTextFieldWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableTextFieldWidget extends FIBTextFieldWidget implements FIBEditableView<FIBTextField,JTextField> {
+public class FIBEditableTextFieldWidget extends FIBTextFieldWidget implements FIBEditableView<FIBTextField, JTextField> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableTextFieldWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBTextField,JTextField> delegate;
-	
+	private FIBEditableViewDelegate<FIBTextField, JTextField> delegate;
+
 	private FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableTextFieldWidget(FIBTextField model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableTextFieldWidget(FIBTextField model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBTextField,JTextField>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBTextField, JTextField>(this);
 		model.addObserver(this);
 	}
-	
-	public void delete() 
-	{
+
+	@Override
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
-		return null;
-	}
-	
-	public FIBEditableViewDelegate<FIBTextField,JTextField> getDelegate()
-	{
-		return delegate;
-	}
-	
-	public void update(Observable o, Object dataModification) 
-	{
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
 	}
 
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
+		return null;
+	}
+
+	@Override
+	public FIBEditableViewDelegate<FIBTextField, JTextField> getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBModelNotification) {
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
+	}
 
 }

@@ -93,8 +93,7 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 				if (language == null) {
 					return false;
 				}
-				SubmitVersion action = (SubmitVersion) SubmitVersion.actionType.makeNewAction(docItem, null, DocResourceManager.instance()
-						.getEditor());
+				SubmitVersion action = SubmitVersion.actionType.makeNewAction(docItem, null, DocResourceManager.instance().getEditor());
 				SubmitNewVersionPopup editVersionPopup = new SubmitNewVersionPopup(action.getDocItem(), language, getController()
 						.getFlexoFrame(), DocResourceManager.instance().getEditor());
 				action.setVersion(editVersionPopup.getVersionToSubmit());

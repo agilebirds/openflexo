@@ -195,7 +195,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 					ValidationIssue issue = _validationReport.getIssueAt(selectedRow);
 					setCurrentIssue(issue);
 					if (_consistencyCheckDialog.getController() instanceof FlexoController) {
-						((FlexoController) _consistencyCheckDialog.getController()).selectAndFocusObject(issue.getSelectableObject());
+						_consistencyCheckDialog.getController().selectAndFocusObject(issue.getSelectableObject());
 					}
 					ValidationReportEditor.this.grabFocus();
 				}

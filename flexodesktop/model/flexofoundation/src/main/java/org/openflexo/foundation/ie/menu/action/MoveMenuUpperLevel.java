@@ -56,8 +56,8 @@ public class MoveMenuUpperLevel extends FlexoAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
-					&& (((FlexoItemMenu) object).getFather().getFather() != null);
+			return object != null && object instanceof FlexoItemMenu && ((FlexoItemMenu) object).getFather() != null
+					&& ((FlexoItemMenu) object).getFather().getFather() != null;
 		}
 
 	};
@@ -81,7 +81,7 @@ public class MoveMenuUpperLevel extends FlexoAction {
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		FlexoItemMenu item = getItemMenu();
-		if ((item.getFather() != null) && (item.getFather().getFather() != null)) {
+		if (item.getFather() != null && item.getFather().getFather() != null) {
 			FlexoItemMenu newFather = item.getFather().getFather();
 			item.getFather().removeFromSubItems(item);
 			newFather.addToSubItems(item);

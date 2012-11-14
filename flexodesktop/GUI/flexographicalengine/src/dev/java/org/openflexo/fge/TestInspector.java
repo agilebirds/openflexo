@@ -33,10 +33,9 @@ public class TestInspector extends InspectorController {
 	private static final Logger logger = FlexoLogger.getLogger(TestInspector.class.getPackage().getName());
 
 	private InspectorWindow window;
-	
-	public TestInspector()
-	{
-		super(null,null);
+
+	public TestInspector() {
+		super(null, null);
 		logger.info("Load inspectors...");
 		try {
 			importInspectorFile(new FileResource("DrawingEditorInspectors/GraphicalRepresentation.inspector"));
@@ -49,19 +48,17 @@ public class TestInspector extends InspectorController {
 		} finally {
 			updateSuperInspectors();
 		}
-		
+
 		window = createInspectorWindow(null);
 	}
 
-	public InspectorWindow getWindow()
-	{
+	public InspectorWindow getWindow() {
 		return window;
 	}
-	
+
 	@Override
-	public void update(Observable observable, Object selection)
-	{
+	public void update(Observable observable, Object selection) {
 		super.update(observable, selection);
 	}
-	
+
 }

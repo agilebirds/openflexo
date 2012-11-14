@@ -312,7 +312,7 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 	}
 
 	public void setAttachedBeginNode(FlexoNode beginNode) {
-		if ((_attachedBeginNode != null) && (_attachedBeginNode != beginNode)) {
+		if (_attachedBeginNode != null && _attachedBeginNode != beginNode) {
 			_attachedBeginNode.setAttachedPreCondition(null);
 		}
 		if (beginNode != null) {
@@ -441,8 +441,9 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 
 		@Override
 		public ValidationIssue<PreConditionMustBeLinkedToABeginNode, FlexoPreCondition> applyValidation(FlexoPreCondition pre) {
-			if ((pre.getAttachedNode() != null && !pre.getAttachedNode().isEndNode())
-					&& (pre.getAttachedNode() instanceof FatherNode)
+			if (pre.getAttachedNode() != null
+					&& !pre.getAttachedNode().isEndNode()
+					&& pre.getAttachedNode() instanceof FatherNode
 					&& (!(pre.getAttachedNode() instanceof AbstractActivityNode) || ((AbstractActivityNode) pre.getAttachedNode())
 							.mightHaveOperationPetriGraph())) {
 				ValidationError<PreConditionMustBeLinkedToABeginNode, FlexoPreCondition> error = null;

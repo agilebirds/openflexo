@@ -65,7 +65,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 
 		@Override
 		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.getGeneratedCode() != null));
+			return object != null && object.getGeneratedCode() != null;
 		}
 
 	};
@@ -160,7 +160,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 					woSymbDir.getFile().mkdirs();
 					webSymbDir.getFile().mkdirs();
 					libSymbDir.getFile().mkdirs();
-					(new File(projectSymbDir.getFile(), "docs")).mkdirs();
+					new File(projectSymbDir.getFile(), "docs").mkdirs();
 				}
 
 			} else if (gc instanceof GeneratedDoc) {

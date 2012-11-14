@@ -46,7 +46,7 @@ public class ClassCategory extends QuidObject implements AccessQualified, Named,
 
 	@Override
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class ClassCategory extends QuidObject implements AccessQualified, Named,
 	protected java.lang.Object lookupDiagram(java.lang.Class clazz) {
 		List list = getLogicalPresentations();
 
-		if ((list == null) || (list.size() == 0)) {
+		if (list == null || list.size() == 0) {
 			return null;
 		} else {
 			for (Iterator i = list.getElements().iterator(); i.hasNext();) {

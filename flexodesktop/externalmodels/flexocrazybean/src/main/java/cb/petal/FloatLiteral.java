@@ -70,6 +70,6 @@ public class FloatLiteral extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof FloatLiteral) && (((FloatLiteral) o).value == this.value);
+		return o instanceof FloatLiteral && ((FloatLiteral) o).value == this.value;
 	}
 }

@@ -46,12 +46,12 @@ public class ConnectCGRepository extends AbstractGCAction<ConnectCGRepository, G
 
 		@Override
 		public boolean isVisibleForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
-			return ((repository != null) && (!repository.isEnabled()));
+			return repository != null && !repository.isEnabled();
 		}
 
 		@Override
 		public boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
-			return ((repository != null) && (!repository.isEnabled()));
+			return repository != null && !repository.isEnabled();
 		}
 
 	};

@@ -86,7 +86,7 @@ public class Conditional extends ControlGraph {
 
 	@Override
 	public ControlGraph normalize() {
-		return new Conditional(condition, thenStatement.normalize(), (elseStatement != null ? elseStatement.normalize() : null),
+		return new Conditional(condition, thenStatement.normalize(), elseStatement != null ? elseStatement.normalize() : null,
 				getHeaderComment(), getInlineComment());
 	}
 

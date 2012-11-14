@@ -72,7 +72,7 @@ public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getEditionPattern()) {
 			// logger.info("Notified " + dataModification);
-			if ((dataModification instanceof PatternRoleInserted) || (dataModification instanceof PatternRoleRemoved)) {
+			if (dataModification instanceof PatternRoleInserted || dataModification instanceof PatternRoleRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}

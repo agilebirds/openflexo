@@ -21,8 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.binding.Bindable;
-
 public class UnaryOperatorExpression extends Expression {
 
 	private UnaryOperator operator;

@@ -58,7 +58,7 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 
 		@Override
 		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.getGeneratedCode() instanceof GeneratedSources));
+			return object != null && object.getGeneratedCode() instanceof GeneratedSources;
 		}
 
 	};

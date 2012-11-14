@@ -57,13 +57,13 @@ public class DMEOModelTableModel extends AbstractModel<DMEORepository, DMEOModel
 		addToColumns(new IconColumn<DMEOModel>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEOModel dmEOModel) {
-				return (dmEOModel.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return dmEOModel.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOModel dmEOModel) {
-				return (dmEOModel.getRepository().isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return dmEOModel.getRepository().isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMEOModel>("name", 200) {
@@ -109,7 +109,7 @@ public class DMEOModelTableModel extends AbstractModel<DMEORepository, DMEOModel
 
 	@Override
 	public DMEOModel elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (DMEOModel) getDMEORepository().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

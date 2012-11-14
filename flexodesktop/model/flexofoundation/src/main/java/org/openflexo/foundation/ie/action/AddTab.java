@@ -64,7 +64,7 @@ public class AddTab extends FlexoAction<AddTab, IEWidget, IEWidget> {
 
 		@Override
 		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
-			return ((object != null) && ((object instanceof IESequenceTab) || (object instanceof IETabWidget)));
+			return object != null && (object instanceof IESequenceTab || object instanceof IETabWidget);
 		}
 
 	};

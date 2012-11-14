@@ -37,75 +37,68 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBImageWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableImageWidget extends FIBImageWidget implements FIBEditableView<FIBImage,JLabel> {
+public class FIBEditableImageWidget extends FIBImageWidget implements FIBEditableView<FIBImage, JLabel> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableImageWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBImage,JLabel> delegate;
-	
+	private FIBEditableViewDelegate<FIBImage, JLabel> delegate;
+
 	private FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableImageWidget(FIBImage model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableImageWidget(FIBImage model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBImage,JLabel>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBImage, JLabel>(this);
 		model.addObserver(this);
 	}
-	
-	
-	public void delete() 
-	{
+
+	@Override
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
-		return null;
-	}
-	
-	public FIBEditableViewDelegate<FIBImage,JLabel> getDelegate()
-	{
-		return delegate;
-	}
-	
-	public void update(Observable o, Object dataModification) 
-	{
-		 if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBImage.Parameters.align) {
-					updateAlign();
-				}
-				else if ((n.getAttribute() == FIBImage.Parameters.imageFile)
-						|| (n.getAttribute() == FIBImage.Parameters.sizeAdjustment)
-						|| (n.getAttribute() == FIBImage.Parameters.imageHeight)
-						|| (n.getAttribute() == FIBImage.Parameters.imageWidth)) {
-					relayoutParentBecauseImageChanged();
-				}
-		 }
-		 
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
 	}
 
-	protected void relayoutParentBecauseImageChanged()
-	{
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
+		return null;
+	}
+
+	@Override
+	public FIBEditableViewDelegate<FIBImage, JLabel> getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBImage.Parameters.align) {
+				updateAlign();
+			} else if (n.getAttribute() == FIBImage.Parameters.imageFile || n.getAttribute() == FIBImage.Parameters.sizeAdjustment
+					|| n.getAttribute() == FIBImage.Parameters.imageHeight || n.getAttribute() == FIBImage.Parameters.imageWidth) {
+				relayoutParentBecauseImageChanged();
+			}
+		}
+
+		if (dataModification instanceof FIBModelNotification) {
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
+	}
+
+	protected void relayoutParentBecauseImageChanged() {
 		FIBView parentView = getParentView();
 		FIBEditorController controller = getEditorController();
 		if (parentView instanceof FIBContainerView) {
-			((FIBContainerView)parentView).updateLayout();
+			((FIBContainerView) parentView).updateLayout();
 		}
 		controller.notifyFocusedAndSelectedObject();
- 	}
+	}
 
 }

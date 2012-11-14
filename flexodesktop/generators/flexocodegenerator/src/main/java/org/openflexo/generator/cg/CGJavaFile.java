@@ -94,7 +94,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 	private FJPJavaParseException _parseException;
 
 	public FJPJavaSource getParsedJavaSource() {
-		if ((_parsedJavaSource == null) && (_parseException == null) && (getGeneratedResourceData() != null)
+		if (_parsedJavaSource == null && _parseException == null && getGeneratedResourceData() != null
 				&& getGeneratedResourceData().hasCurrentDiskContent()) {
 			try {
 				// Date date0 = new Date();
@@ -188,11 +188,11 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 		if (!supportModelReinjection()) {
 			return false;
 		}
-		return (getResource().getLastModelReinjectingDate().before(getResource().getDiskLastModifiedDate()));
+		return getResource().getLastModelReinjectingDate().before(getResource().getDiskLastModifiedDate());
 	}
 
 	public Date getLastModelReinjectingDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getLastModelReinjectingDate();
 		}
 		return null;
@@ -203,7 +203,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 			if (getLastModelReinjectingDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastModelReinjectingDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastModelReinjectingDate());
 		}
 		return "???";
 	}
@@ -227,7 +227,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 			File javaStructureFile = getResource().getJavaModelFile();
 			StringBuffer contentToWriteOnDisk = new StringBuffer();
 			// Date date1 = new Date();
-			if ((getModelEntity() == null) || (getParsedJavaSource() == null)) {
+			if (getModelEntity() == null || getParsedJavaSource() == null) {
 				return;
 			}
 			FJPDMSet parsedJavaStructure = new FJPDMSet(getProject(), "java_structure", getParsedJavaSource(), getModelEntity());
@@ -322,7 +322,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 		FJPJavaClass parsedClass = parsedSource.getRootClass();
 		ClassReference classReference = updateContext.getClassReference(parsedClass);
 		DMEntity entity = getModelEntity();
-		if ((classReference != null) && classReference.isSelected() && (entity != null)) {
+		if (classReference != null && classReference.isSelected() && entity != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update " + getFileName() + " according to " + classReference);
 			}
@@ -369,7 +369,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 
 	private void updateIsTemplateStatus(Vector<DMObject> newObjects) {
 		FJPJavaSource pureGenerationSource;
-		if ((getGeneratedResourceData() != null) && (getGeneratedResourceData().getCurrentGeneration() != null)) {
+		if (getGeneratedResourceData() != null && getGeneratedResourceData().getCurrentGeneration() != null) {
 			try {
 				String pureGeneration = getGeneratedResourceData().getCurrentGeneration();
 				String sourceName = getResource().getFileName();
@@ -422,7 +422,7 @@ public class CGJavaFile extends AbstractCGFile implements ModelReinjectableFile 
 		if (getResource() instanceof ComponentJavaFileResource) {
 			ComponentJavaFileResource res = (ComponentJavaFileResource) getResource();
 			ComponentDefinition cd = res.getComponentDefinition();
-			if ((cd != null) && (cd.getComponentResource() != null)) {
+			if (cd != null && cd.getComponentResource() != null) {
 				try {
 					cd.getComponentResource().backwardSynchronizeWith(entity.getDMModel().getFlexoResource());
 				} catch (FlexoException e) {

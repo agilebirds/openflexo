@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.util.EventObject;
 import java.io.IOException;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.DGPreferences;

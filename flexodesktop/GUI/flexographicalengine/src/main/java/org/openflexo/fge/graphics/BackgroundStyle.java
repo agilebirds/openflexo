@@ -555,7 +555,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 				File oldFile = imageFile;
 				imageFile = anImageFile;
 				if (anImageFile != null && anImageFile.exists()) {
-					image = (new ImageIcon(anImageFile.getAbsolutePath())).getImage();
+					image = new ImageIcon(anImageFile.getAbsolutePath()).getImage();
 				} else {
 					image = null;
 				}

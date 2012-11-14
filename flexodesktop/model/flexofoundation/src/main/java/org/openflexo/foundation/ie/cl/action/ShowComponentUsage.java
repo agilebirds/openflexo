@@ -53,7 +53,7 @@ public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObj
 
 		@Override
 		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object instanceof ComponentDefinition || object instanceof IEWOComponent);
+			return object instanceof ComponentDefinition || object instanceof IEWOComponent;
 		}
 
 	};

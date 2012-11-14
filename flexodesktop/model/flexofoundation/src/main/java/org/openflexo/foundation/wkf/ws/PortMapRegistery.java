@@ -142,7 +142,7 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	}
 
 	public ServiceInterface getServiceInterface() {
-		if ((getSubProcessNode() != null) && (getSubProcessNode().getSubProcess() != null)) {
+		if (getSubProcessNode() != null && getSubProcessNode().getSubProcess() != null) {
 			if (getSubProcessNode().getActiveServiceInterface() != null) {
 				getSubProcessNode().getActiveServiceInterface().addObserver(this);
 			} else {

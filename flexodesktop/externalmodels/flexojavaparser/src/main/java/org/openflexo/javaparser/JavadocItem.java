@@ -140,7 +140,7 @@ public class JavadocItem extends FlexoObject implements ParsedJavadoc {
 		for (FJPDocletTag tag : _docletTags) {
 			int indentLength = (" @" + tag.getTag() + " " + tag.getParameterName()/*+" "*/).length();
 			String indent = null;
-			String tagValue = (!tag.getParameterName().equals(tag.getParameterValue()) ? tag.getParameterValue() : "");
+			String tagValue = !tag.getParameterName().equals(tag.getParameterValue()) ? tag.getParameterValue() : "";
 			StringTokenizer st2 = new StringTokenizer(tagValue, StringUtils.LINE_SEPARATOR);
 			boolean isFirst = true;
 			while (st2.hasMoreTokens()) {

@@ -59,10 +59,10 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 						}
 					}
 					if (doable) {
-						(action).setItemMenu(item);
+						action.setItemMenu(item);
 					}
 				}
-				return (getModule().isActive()) && doable;
+				return getModule().isActive() && doable;
 			}
 		};
 	}

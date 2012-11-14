@@ -32,14 +32,14 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 
 	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
 		super();
-		
+
 		this.name = name;
 		this.uri = uri;
 		this.ontology = ontology;
 		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
 		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
 	}
-	
+
 	protected AbstractXSOntObject() {
 		this(null, null, null);
 	}

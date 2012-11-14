@@ -21,7 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.binding.Bindable;
 public class Variable extends Expression {
 
 	private String name;

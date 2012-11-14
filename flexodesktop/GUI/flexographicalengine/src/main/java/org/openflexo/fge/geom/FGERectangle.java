@@ -89,7 +89,7 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 	@Override
 	public void setIsFilled(boolean filled) {
-		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
+		_filling = filled ? Filling.FILLED : Filling.NOT_FILLED;
 	}
 
 	@Override
@@ -730,9 +730,9 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 		if (area instanceof FGERectangle && ((FGERectangle) area).getIsFilled() == getIsFilled()) {
 			FGERectangle r = (FGERectangle) area;
-			if ((containsArea(r.getNorth()) && getWidth() == r.getWidth()) || (containsArea(r.getSouth()) && getWidth() == r.getWidth())
-					|| (containsArea(r.getEast()) && getHeight() == r.getHeight())
-					|| (containsArea(r.getWest()) && getHeight() == r.getHeight())) {
+			if (containsArea(r.getNorth()) && getWidth() == r.getWidth() || containsArea(r.getSouth()) && getWidth() == r.getWidth()
+					|| containsArea(r.getEast()) && getHeight() == r.getHeight() || containsArea(r.getWest())
+					&& getHeight() == r.getHeight()) {
 				return rectangleUnion(r);
 			}
 		}
@@ -755,14 +755,14 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		if ((p.x >= getX() - EPSILON) && (p.x <= getX() + getWidth() + EPSILON) && (p.y >= getY() - EPSILON)
-				&& (p.y <= getY() + getHeight() + EPSILON)) {
+		if (p.x >= getX() - EPSILON && p.x <= getX() + getWidth() + EPSILON && p.y >= getY() - EPSILON
+				&& p.y <= getY() + getHeight() + EPSILON) {
 			if (!getIsFilled()) {
 				FGESegment north = new FGESegment(new FGEPoint(x, y), new FGEPoint(x + width, y));
 				FGESegment south = new FGESegment(new FGEPoint(x, y + height), new FGEPoint(x + width, y + height));
 				FGESegment west = new FGESegment(new FGEPoint(x, y), new FGEPoint(x, y + height));
 				FGESegment east = new FGESegment(new FGEPoint(x + width, y), new FGEPoint(x + width, y + height));
-				return (north.contains(p) || south.contains(p) || east.contains(p) || west.contains(p));
+				return north.contains(p) || south.contains(p) || east.contains(p) || west.contains(p);
 			} else {
 				return true;
 			}
@@ -776,7 +776,7 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 			return false;
 		}
 		if (l instanceof FGESegment) {
-			return (containsPoint(l.getP1()) && containsPoint(l.getP2()));
+			return containsPoint(l.getP1()) && containsPoint(l.getP2());
 		}
 		return false;
 	}
@@ -799,10 +799,10 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	public FGEArea transform(AffineTransform t) {
 		// Better implementation allowing rotations
 
-		FGEPoint p1 = (new FGEPoint(getX(), getY())).transform(t);
-		FGEPoint p2 = (new FGEPoint(getX() + getWidth(), getY())).transform(t);
-		FGEPoint p3 = (new FGEPoint(getX(), getY() + getHeight())).transform(t);
-		FGEPoint p4 = (new FGEPoint(getX() + getWidth(), getY() + getHeight())).transform(t);
+		FGEPoint p1 = new FGEPoint(getX(), getY()).transform(t);
+		FGEPoint p2 = new FGEPoint(getX() + getWidth(), getY()).transform(t);
+		FGEPoint p3 = new FGEPoint(getX(), getY() + getHeight()).transform(t);
+		FGEPoint p4 = new FGEPoint(getX() + getWidth(), getY() + getHeight()).transform(t);
 
 		return FGEPolygon.makeArea(_filling, p1, p2, p3, p4);
 
@@ -852,8 +852,8 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-			return ((Math.abs(getX() - p.getX()) <= EPSILON) && (Math.abs(getY() - p.getY()) <= EPSILON)
-					&& (Math.abs(getWidth() - p.getWidth()) <= EPSILON) && (Math.abs(getHeight() - p.getHeight()) <= EPSILON));
+			return Math.abs(getX() - p.getX()) <= EPSILON && Math.abs(getY() - p.getY()) <= EPSILON
+					&& Math.abs(getWidth() - p.getWidth()) <= EPSILON && Math.abs(getHeight() - p.getHeight()) <= EPSILON;
 		}
 		return super.equals(obj);
 	}

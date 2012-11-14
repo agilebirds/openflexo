@@ -57,7 +57,7 @@ public class TopComponentDown extends FlexoAction<TopComponentDown, IEWidget, IE
 
 		@Override
 		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
-			return (object != null) && object.isTopComponent();
+			return object != null && object.isTopComponent();
 		}
 
 	};
@@ -83,7 +83,7 @@ public class TopComponentDown extends FlexoAction<TopComponentDown, IEWidget, IE
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Do action top component down");
 		}
-		if ((getComponent() != null) && (getComponent().getParent() instanceof IESequence)) {
+		if (getComponent() != null && getComponent().getParent() instanceof IESequence) {
 			IESequence<IWidget> c = (IESequence<IWidget>) getComponent().getParent();
 			int i = c.indexOf(getComponent());
 			if (i + 1 < c.length()) {

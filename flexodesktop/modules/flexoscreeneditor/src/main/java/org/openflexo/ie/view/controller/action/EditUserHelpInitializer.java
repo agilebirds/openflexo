@@ -53,7 +53,7 @@ public class EditUserHelpInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<EditUserHelpAction>() {
 			@Override
 			public boolean run(EventObject e, EditUserHelpAction action) {
-				return (action.getFocusedObject() instanceof InspectableObject);
+				return action.getFocusedObject() instanceof InspectableObject;
 			}
 		};
 	}

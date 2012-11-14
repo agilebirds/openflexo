@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;

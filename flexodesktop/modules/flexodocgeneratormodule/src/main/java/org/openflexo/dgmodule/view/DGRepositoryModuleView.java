@@ -160,7 +160,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			public void actionPerformed(ActionEvent e) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
 				File directory = codeRepository.getDirectory();
-				if (directory!=null) {
+				if (directory != null) {
 					fileChooser.setCurrentDirectory(directory);
 				} else {
 					fileChooser.setCurrentDirectory(codeRepository.getDefaultSourceDirectory());

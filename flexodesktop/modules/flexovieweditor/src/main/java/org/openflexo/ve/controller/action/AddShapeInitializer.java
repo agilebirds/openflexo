@@ -54,7 +54,7 @@ public class AddShapeInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddShape>() {
 			@Override
 			public boolean run(EventObject e, AddShape action) {
-				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && (action.getParent() != null)) {
+				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && action.getParent() != null) {
 					return true;
 				}
 

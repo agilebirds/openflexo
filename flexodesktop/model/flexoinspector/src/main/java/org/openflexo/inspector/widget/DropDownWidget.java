@@ -132,7 +132,7 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
-		if ((_jComboBox != null) && (_jComboBox.getParent() != null)) {
+		if (_jComboBox != null && _jComboBox.getParent() != null) {
 			dimTemp = _jComboBox.getSize();
 			locTemp = _jComboBox.getLocation();
 			parentTemp = _jComboBox.getParent();
@@ -209,7 +209,7 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget with " + _jComboBox.getSelectedItem());
 		}
-		if ((_jComboBox.getSelectedItem() != null) && (!widgetUpdating)) {
+		if (_jComboBox.getSelectedItem() != null && !widgetUpdating) {
 			setObjectValue(_jComboBox.getSelectedItem());
 		}
 		modelUpdating = false;

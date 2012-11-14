@@ -151,8 +151,8 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 			return false;
 		}
 		if (insideOnly) {
-			if (intersection.equals(getP1()) || intersection.equals(getP2())
-					|| ((line instanceof FGESegment) && (intersection.equals(line.getP1()) || intersection.equals(line.getP2())))) {
+			if (intersection.equals(getP1()) || intersection.equals(getP2()) || line instanceof FGESegment
+					&& (intersection.equals(line.getP1()) || intersection.equals(line.getP2()))) {
 				return false;
 			}
 		}
@@ -254,7 +254,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 			if (!overlap(s)) {
 				return false;
 			}
-			return ((getP1().equals(s.getP1()) || getP1().equals(s.getP2())) && (getP2().equals(s.getP1()) || getP2().equals(s.getP2())));
+			return (getP1().equals(s.getP1()) || getP1().equals(s.getP2())) && (getP2().equals(s.getP1()) || getP2().equals(s.getP2()));
 		}
 		return false;
 	}
@@ -279,7 +279,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	}
 
 	public static double getLength(FGEPoint p1, FGEPoint p2) {
-		return (new FGESegment(p1, p2)).getLength();
+		return new FGESegment(p1, p2).getLength();
 	}
 
 	@Override
@@ -430,7 +430,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 		 */
 		if (Math.abs(angle) < EPSILON) {
 			return SimplifiedCardinalDirection.WEST;
-		} else if ((Math.abs(angle - Math.PI) < EPSILON) || (Math.abs(angle + Math.PI) < EPSILON)) {
+		} else if (Math.abs(angle - Math.PI) < EPSILON || Math.abs(angle + Math.PI) < EPSILON) {
 			return SimplifiedCardinalDirection.EAST;
 		} else if (Math.abs(angle - Math.PI / 2) < EPSILON) {
 			return SimplifiedCardinalDirection.SOUTH;

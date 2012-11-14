@@ -117,8 +117,8 @@ public final class ExternalMessageInEdge extends ExternalMessageEdge<PetriGraphN
 		// SubProcessNode
 		// is located
 
-		if ((getStartNode() == null) || (getEndNode() == null) || !(getEndNode().isInputPort()) || (getPortMapRegistery() == null)
-				|| (getPortMapRegistery().getSubProcessNode() == null)) {
+		if (getStartNode() == null || getEndNode() == null || !getEndNode().isInputPort() || getPortMapRegistery() == null
+				|| getPortMapRegistery().getSubProcessNode() == null) {
 			return false;
 		}
 

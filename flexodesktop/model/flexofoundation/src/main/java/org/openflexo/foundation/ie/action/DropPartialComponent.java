@@ -69,7 +69,7 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 
 		@Override
 		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -212,7 +212,7 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
 		}
-		if ((container instanceof IEBlocWidget) && getPartialComponent().getWOComponent().isASingleHTMLTable()) {
+		if (container instanceof IEBlocWidget && getPartialComponent().getWOComponent().isASingleHTMLTable()) {
 			IEReusableWidget newWidget = new InnerBlocReusableWidget(woComponent, getPartialComponent(), (IEBlocWidget) container,
 					container.getProject());
 
@@ -313,18 +313,18 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	private boolean isDropAcceptable(IEWidget rootWidget, IEObject container) {
-		if ((container instanceof IESequenceWidget) && (rootWidget instanceof IETopComponent) && getIndex() != -1) {
+		if (container instanceof IESequenceWidget && rootWidget instanceof IETopComponent && getIndex() != -1) {
 			return true;
 		}
-		if ((container instanceof IEBlocWidget) && (rootWidget instanceof IEHTMLTableWidget)) {
+		if (container instanceof IEBlocWidget && rootWidget instanceof IEHTMLTableWidget) {
 			return ((IEBlocWidget) container).getContent() == null;
 		}
 
-		if ((container instanceof ButtonedWidgetInterface) && (rootWidget instanceof IEButtonWidget) && getIndex() != -1) {
+		if (container instanceof ButtonedWidgetInterface && rootWidget instanceof IEButtonWidget && getIndex() != -1) {
 			return true;
 		}
 
-		if ((container instanceof IESequenceTab) && (rootWidget instanceof IETabWidget)) {
+		if (container instanceof IESequenceTab && rootWidget instanceof IETabWidget) {
 			return true;
 		}
 
@@ -332,7 +332,7 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 			return findSuitableSequenceTRForDroppedITableRow(container) != null;
 		}
 
-		if ((container instanceof IESequenceWidget) && getIndex() != -1) {
+		if (container instanceof IESequenceWidget && getIndex() != -1) {
 			// if (model instanceof IETDWidget) {
 			// if (logger.isLoggable(Level.INFO))
 			// logger.info("CASE 9: insert IETDWidget in IESequenceWidget (IESequenceWidgetWidgetView)");

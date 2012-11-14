@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class AFunctionTerm extends PTerm
-{
-    private PFunction _function_;
+public final class AFunctionTerm extends PTerm {
+	private PFunction _function_;
 
-    public AFunctionTerm()
-    {
-        // Constructor
-    }
+	public AFunctionTerm() {
+		// Constructor
+	}
 
-    public AFunctionTerm(
-        @SuppressWarnings("hiding") PFunction _function_)
-    {
-        // Constructor
-        setFunction(_function_);
+	public AFunctionTerm(@SuppressWarnings("hiding") PFunction _function_) {
+		// Constructor
+		setFunction(_function_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new AFunctionTerm(
-            cloneNode(this._function_));
-    }
+	@Override
+	public Object clone() {
+		return new AFunctionTerm(cloneNode(this._function_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAFunctionTerm(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAFunctionTerm(this);
+	}
 
-    public PFunction getFunction()
-    {
-        return this._function_;
-    }
+	public PFunction getFunction() {
+		return this._function_;
+	}
 
-    public void setFunction(PFunction node)
-    {
-        if(this._function_ != null)
-        {
-            this._function_.parent(null);
-        }
+	public void setFunction(PFunction node) {
+		if (this._function_ != null) {
+			this._function_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._function_ = node;
-    }
+		this._function_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._function_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._function_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._function_ == child)
-        {
-            this._function_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._function_ == child) {
+			this._function_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._function_ == oldChild)
-        {
-            setFunction((PFunction) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._function_ == oldChild) {
+			setFunction((PFunction) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }
