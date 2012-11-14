@@ -1560,7 +1560,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void updateConstraints() {
 		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
-		logger.info("Called updateConstraints()");
+		logger.info("Called updateConstraints(), drawable=" + getDrawable() + " index=" + getIndex());
 		if (xConstraints != null && xConstraints.isValid()) {
 			// System.out.println("x was " + getX() + " constraint=" + xConstraints);
 			updateXPosition();
