@@ -50,7 +50,7 @@
     </Tab>
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="new_status" localize="true" name="NewStatusLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatus" data="data.newStatus" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+      <DropDown format="object.nameAndProcess" localize="true" name="NewStatus" data="data.newStatus" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status"  showReset="true"/>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

@@ -12,9 +12,9 @@
     </Tab>
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="status_for_positive_evaluation" localize="true" name="NewStatusForPositiveEvaluationLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForPositiveEvaluation" data="data.newStatusForPositiveEvaluation" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForPositiveEvaluation" data="data.newStatusForPositiveEvaluation" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status"  showReset="true"/>
       <Label label="status_for_negative_evaluation" localize="true" name="NewStatusForNegativeEvaluationLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForNegativeEvaluation" data="data.newStatusForNegativeEvaluation" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForNegativeEvaluation" data="data.newStatusForNegativeEvaluation" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status"  showReset="true"/>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
