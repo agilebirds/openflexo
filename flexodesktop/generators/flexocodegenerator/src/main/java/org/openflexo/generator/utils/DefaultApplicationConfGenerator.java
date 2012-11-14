@@ -28,6 +28,7 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
+import org.openflexo.generator.rm.ProjectTextFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
@@ -49,6 +50,12 @@ public class DefaultApplicationConfGenerator extends MetaFileGenerator {
 	 */
 	public DefaultApplicationConfGenerator(ProjectGenerator projectGenerator) {
 		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, FILE_NAME, IDENTIFIER);
+	}
+
+	@Override
+	public void rebuildDependanciesForResource(ProjectTextFileResource resource) {
+		super.rebuildDependanciesForResource(resource);
+		resource.addToDependentResources(getProject().getFlexoDKVResource());
 	}
 
 	@Override
