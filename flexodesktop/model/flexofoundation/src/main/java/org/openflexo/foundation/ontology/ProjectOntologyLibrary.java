@@ -21,8 +21,8 @@ package org.openflexo.foundation.ontology;
 
 import java.io.File;
 
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 
 public class ProjectOntologyLibrary extends OntologyLibrary {

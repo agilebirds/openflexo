@@ -137,6 +137,7 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
+			setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		}
 
 		@Override

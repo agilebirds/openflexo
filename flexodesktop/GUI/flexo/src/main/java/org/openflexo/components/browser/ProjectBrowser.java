@@ -548,7 +548,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (_rootElement != null) {
 			_rootElement.delete();
 		}
-		for (Object obj : _elements.values()) {
+		for (Object obj : new ArrayList<Object>(_elements.values())) {
 			if (obj instanceof BrowserElement) {
 				((BrowserElement) obj).delete();
 			} else if (obj instanceof Vector) {

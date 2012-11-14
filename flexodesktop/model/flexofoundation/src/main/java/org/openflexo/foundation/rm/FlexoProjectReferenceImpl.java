@@ -30,7 +30,6 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 
 	@Override
 	public FlexoProject getReferredProject() throws ProjectLoadingCancelledException {
-		System.err.println("coucou");
 		if (referredProject == null) {
 			referredProject = (FlexoProject) performSuperGetter(REFERRED_PROJECT);
 			if (referredProject == null && getReferringProject() != null && getProjectURI() != null && getProjectRevision() != null) {

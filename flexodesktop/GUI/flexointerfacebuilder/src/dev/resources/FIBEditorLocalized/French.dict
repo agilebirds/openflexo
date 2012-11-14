@@ -1,5 +1,3 @@
-#French
-#Thu Oct 18 16:40:43 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -194,6 +192,7 @@ save_interface=Sauver le composant
 save_interface_as=Sauver le composant sous...
 setter_method_javadoc=Sets value for property
 shape=Forme
+show_palette=Voir la palette
 source_generator=G\u00E9n\u00E9rateur de code source
 square_root=Racine carr\u00E9e
 submit_documentation=Soumettre de la documentation

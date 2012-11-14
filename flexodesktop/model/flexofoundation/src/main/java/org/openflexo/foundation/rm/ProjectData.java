@@ -5,6 +5,7 @@ import java.util.List;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -30,6 +31,9 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	@Setter(FLEXO_RESOURCE)
 	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
+
+	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.PROJECT_URI, isMultiValued = false)
+	public FlexoProjectReference getProjectReferenceWithURI(String uri);
 
 	public FlexoProject getImportedProjectWithURI(String uri);
 

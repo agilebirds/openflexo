@@ -63,6 +63,7 @@ import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;

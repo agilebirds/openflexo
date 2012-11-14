@@ -61,16 +61,23 @@
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
+  <entity name="org.openflexo.foundation.rm.ResourceList" abstract="YES">
 	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+	<property name="externalResources" contains="org.openflexo.foundation.rm.ResourceList$ExternalResource" type="vector" primary="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
   </entity>
   
   <entity name="org.openflexo.foundation.rm.AlteredResources" xmlTag="AlteredResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.SynchronizedResources" xmlTag="SynchronizedResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.ResourceList$ExternalResource" xmlTag="ExternalResource">
+    <property name="projectURI" xmlTag="projectURI"/>
+    <property name="resourceIdentifier" xmlTag="resourceIdentifier"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoFileResource" abstract="YES" contexts="Copy">

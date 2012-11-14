@@ -21,7 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 
-import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;

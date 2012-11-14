@@ -13547,7 +13547,11 @@ forward to the next nodes.</description>
               <EmbeddingChildDocItem id="DMModelView-add_repository..." identifier="DMModelView-add_repository..." embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-update_repository" identifier="DMModelView-update_repository" embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-delete" identifier="DMModelView-delete" embedded="false" hidden="false" />
+              <EmbeddingChildDocItem id="DMModelView-add_repository" identifier="DMModelView-add_repository" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
             </DocItem>
+            <DocItem idref="DMModelView-add_repository" />
             <DocItem idref="DMModelView-add_repository..." />
             <DocItem idref="DMModelView-delete" />
             <DocItem idref="DMModelView-update_repository" />
@@ -15709,8 +15713,18 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem id="component-browser-minus" identifier="component-browser-minus" embedded="false" hidden="true" />
           <EmbeddingChildDocItem id="component-browser-options" identifier="component-browser-options" embedded="false" hidden="true" />
         </EmbeddingChildDocItem>
-        <EmbeddingChildDocItem id="ie-palette" identifier="ie-palette" embedded="false" hidden="true">
+        <EmbeddingChildDocItem id="ie-palette" identifier="ie-palette" embedded="false" hidden="true" />
+        <EmbeddingChildDocItem id="dm-browser" identifier="dm-browser" embedded="false" hidden="true">
           <description />
+          <EmbeddingChildDocItem id="dm-browser-plus" identifier="dm-browser-plus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="dm-browser-minus" identifier="dm-browser-minus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15733,6 +15747,10 @@ forward to the next nodes.</description>
       <DocItem idref="component-library-browser-minus" />
       <DocItem idref="component-library-browser-options" />
       <DocItem idref="component-library-browser-plus" />
+      <DocItem idref="dm-browser" />
+      <DocItem idref="dm-browser-minus" />
+      <DocItem idref="dm-browser-options" />
+      <DocItem idref="dm-browser-plus" />
       <DocItem idref="forward" />
       <DocItem idref="ie-palette" />
       <DocItem idref="minus" />
@@ -15763,4 +15781,3 @@ forward to the next nodes.</description>
     </DocItem>
   </DocItemFolder>
 </DocResourceCenter>
-

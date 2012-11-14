@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -35,15 +38,97 @@ import org.openflexo.xmlcode.XMLSerializable;
 public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable {
 	private static final Logger logger = Logger.getLogger(ResourceList.class.getPackage().getName());
 
+	public static class ExternalResource implements FlexoObserver, XMLSerializable {
+		private ResourceList resourceList;
+		private String projectURI;
+		private String resourceIdentifier;
+		private FlexoProject project;
+
+		// Created by deserialization
+		public ExternalResource(FlexoProjectBuilder builder) {
+			this.project = builder.project;
+			this.project.addObserver(this);
+		}
+
+		// Created during serialization
+		public ExternalResource(FlexoResource<?> resource) {
+			this.projectURI = resource.getProject().getProjectURI();
+			this.resourceIdentifier = resource.getResourceIdentifier();
+		}
+
+		public void delete() {
+			if (project != null) {
+				project.deleteObserver(this);
+			}
+			if (getResourceList() != null) {
+				getResourceList().removeFromExternalResources(this);
+			}
+		}
+
+		public String getProjectURI() {
+			return projectURI;
+		}
+
+		public void setProjectURI(String projectURI) {
+			this.projectURI = projectURI;
+		}
+
+		public String getResourceIdentifier() {
+			return resourceIdentifier;
+		}
+
+		public void setResourceIdentifier(String resourceIdentifier) {
+			this.resourceIdentifier = resourceIdentifier;
+		}
+
+		public ResourceList getResourceList() {
+			return resourceList;
+		}
+
+		public void setResourceList(ResourceList resourceList) {
+			if (resourceList != null) {
+				this.resourceList = resourceList;
+			}
+		}
+
+		@Override
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			if (dataModification instanceof ImportedProjectLoaded) {
+				if (getResourceList().getProject().getProjectData() != null) {
+					FlexoProject project = getResourceList().getProject().getProjectData().getImportedProjectWithURI(getProjectURI());
+					if (project != null) {
+						FlexoResource<FlexoResourceData> resource = (FlexoResource<FlexoResourceData>) project
+								.resourceForKey(getResourceIdentifier());
+						if (resource != null) {
+							getResourceList().addToResources(resource);
+							delete();
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private FlexoResource<? extends FlexoResourceData> relatedResource;
+
+	private List<ExternalResource> externalResources;
 
 	public ResourceList() {
 		super();
+		externalResources = new ArrayList<ResourceList.ExternalResource>();
 	}
 
 	public ResourceList(FlexoResource<? extends FlexoResourceData> relatedResource) {
-		super();
+		this();
 		setRelatedResource(relatedResource);
+	}
+
+	private FlexoProject getProject() {
+		if (getRelatedResource() != null) {
+			return getRelatedResource().getProject();
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -77,9 +162,9 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	public List<FlexoResource<FlexoResourceData>> getSerialisationResources() {
 		List<FlexoResource<FlexoResourceData>> resources = new ArrayList<FlexoResource<FlexoResourceData>>(size());
 		for (FlexoResource<FlexoResourceData> resource : this) {
-			if (!resource.isToBeSerialized() || getRelatedResource().getProject().getFlexoResource() != null
-					&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()
-					|| getRelatedResource().getProject() != resource.getProject()) {
+			if (!resource.isToBeSerialized() || getProject().getFlexoResource() != null
+					&& !getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()
+					|| getProject() != resource.getProject()) {
 				continue;
 			}
 			resources.add(resource);
@@ -105,8 +190,8 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		}
 		if (!contains(resource)) {
 			add(resource);
-			if (getRelatedResource() != null) {
-				getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
+			if (getProject() != null) {
+				getProject().notifyResourceChanged(getRelatedResource());
 			}
 			update();
 		}
@@ -115,10 +200,38 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	public void removeFromResources(FlexoResource<FlexoResourceData> resource) {
 		if (contains(resource)) {
 			remove(resource);
-			if (getRelatedResource() != null) {
-				getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
+			if (getProject() != null) {
+				getProject().notifyResourceChanged(getRelatedResource());
 			}
 			update();
+		}
+	}
+
+	public List<ExternalResource> getExternalResources() {
+		List<ExternalResource> returned = new ArrayList<ResourceList.ExternalResource>(externalResources);
+		for (FlexoResource<?> resource : this) {
+			if (resource.getProject() != getProject()) {
+				returned.add(new ExternalResource(resource));
+			}
+		}
+		return returned;
+	}
+
+	public void setExternalResources(List<ExternalResource> externalResources) {
+		this.externalResources = externalResources;
+	}
+
+	public void addToExternalResources(ExternalResource externalResource) {
+		if (!externalResources.contains(externalResource)) {
+			externalResources.add(externalResource);
+			externalResource.setResourceList(this);
+		}
+	}
+
+	public void removeFromExternalResources(ExternalResource externalResource) {
+		if (externalResources.contains(externalResource)) {
+			externalResources.remove(externalResource);
+			externalResource.setResourceList(null);
 		}
 	}
 

@@ -63,12 +63,6 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	public void testRMMappings() {
 		checkClassModels(FlexoProject.class);
-		try {
-			checkXMLMapping(FlexoXMLMappings.getRMTSMapping());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
 	}
 
 	public void testWorkflowMappings() {

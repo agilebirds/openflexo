@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" titleFont="Tahoma,0,11" darkLevel="0">
+  <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="Tahoma,0,11" darkLevel="0" constraints="border(location=center)">
+    <TextArea validateOnReturn="true" columns="8" rows="3" text="TextArea" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>

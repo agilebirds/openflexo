@@ -67,9 +67,6 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 
 	@Override
 	protected void buildChildrenVector() {
-		if (observedRole == null) {
-			observedRole = new HashSet<Role>();
-		}
 		clearObserving();
 		// We add the roles
 		if (!getRoleList().isImportedRoleList()) {
@@ -87,7 +84,7 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 				for (Enumeration<Role> e = getRoleList().getSortedRoles(); e.hasMoreElements();) {
 					Role r = e.nextElement();
 					Vector<Role> v = r.getRolesSpecializingMyself();
-					if (v.size() == 0 || (v.size() == 1 && v.firstElement() == r)) {
+					if (v.size() == 0 || v.size() == 1 && v.firstElement() == r) {
 						observeRole(r);
 						addToChilds(r);
 					}
@@ -110,13 +107,12 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	}
 
 	private void clearObserving() {
-		if (observedRole == null) {
-			observedRole = new HashSet<Role>();
+		if (observedRole != null) {
+			for (Role r : observedRole) {
+				r.deleteObserver(this);
+			}
+			observedRole.clear();
 		}
-		for (Role r : observedRole) {
-			r.deleteObserver(this);
-		}
-		observedRole.clear();
 	}
 
 	private void observeRole(Role role) {

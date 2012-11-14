@@ -59,6 +59,7 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.imported.dm.ProcessAlreadyImportedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoWorkflowResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -71,6 +72,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -1236,20 +1238,31 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public Vector<Role> getAllAssignableRoles() {
 		Vector<Role> reply = new Vector<Role>();
-
-		for (Role r : getRoleList().getRoles()) {
-			if (r.getIsAssignable()) {
-				reply.add(r);
+		RoleList roleList = getRoleList();
+		appendRoles(roleList, reply);
+		if (getProject().getProjectData() != null) {
+			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+				try {
+					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+						appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), reply);
+					}
+				} catch (ProjectLoadingCancelledException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		if (getImportedRoleList() != null) {
-			for (Role r : getImportedRoleList().getRoles()) {
+		appendRoles(getImportedRoleList(), reply);
+		return reply;
+	}
+
+	public void appendRoles(RoleList roleList, Vector<Role> reply) {
+		if (roleList != null) {
+			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
 					reply.add(r);
 				}
 			}
 		}
-		return reply;
 	}
 
 	public Vector<Role> getAllSortedRoles() {

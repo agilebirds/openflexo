@@ -35,6 +35,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -399,6 +400,14 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void setVisible(boolean b) {
+		if (getOwner() instanceof JFrame) {
+			((JFrame) getOwner()).getGlassPane().setVisible(b);
+		}
+		super.setVisible(b);
 	}
 
 	/**

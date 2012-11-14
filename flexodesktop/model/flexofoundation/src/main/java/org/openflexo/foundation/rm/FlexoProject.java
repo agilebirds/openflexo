@@ -65,7 +65,6 @@ import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
@@ -126,6 +125,7 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
@@ -4297,6 +4297,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				ref.getReferredProject();
 			}
 		}
+		notifyObservers(new ImportedProjectLoaded());
 	}
 
 	public String canImportProject(FlexoProject project) {

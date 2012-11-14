@@ -1,5 +1,3 @@
-#Dutch
-#Thu Oct 18 16:40:43 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -194,6 +192,7 @@ save_interface=Save component
 save_interface_as=Save component as
 setter_method_javadoc=Sets value for property
 shape=Shape
+show_palette=Show palette
 source_generator=Source Code Generator
 square_root=Square root
 submit_documentation=Submit documentation

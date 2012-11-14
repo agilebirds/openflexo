@@ -55,7 +55,6 @@ public class BarButton extends JButton {
 
 	private void updateInternalUI() {
 		setEnabled(true);
-		setFocusable(false);
 		setBorderPainted(false);
 		setRolloverEnabled(true);
 		setContentAreaFilled(false);

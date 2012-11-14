@@ -123,6 +123,8 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	};
 
+	private static final String RESOURCE_LOCATION = "_location";
+
 	static {
 		getPreferences().addObserver(observer);
 	}
@@ -559,5 +561,13 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setLocalResourceCenterDirectory(File directory) {
 		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
+	}
+
+	public static File getLocationForResource(String uri) {
+		return getPreferences().getFileProperty(uri + RESOURCE_LOCATION);
+	}
+
+	public static void setLocationForResource(File file, String uri) {
+		getPreferences().setFileProperty(uri + RESOURCE_LOCATION, file, false);
 	}
 }

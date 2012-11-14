@@ -102,6 +102,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		FlexoProcess subProcess = createSubProcess(SUB_PROCESS_NAME, null, importedProjectEditor);
 		SubProcessNode subProcessNode = instanciateLoopSubProcess(subProcess, rootProject.getRootProcess(), 400, 200, rootEditor);
 		subProcessNode.setName(SUB_PROCESS_NODE_NAME);
+		assertDepends(rootProject.getRootProcess().getFlexoResource(), subProcess.getFlexoResource());
 		importedProject.save();
 		rootProject.save();
 		rootProject.close();
@@ -117,6 +118,6 @@ public class TestProjectReuse extends FlexoTestCase {
 		assertEquals(subProcessNode.getSubProcess(), subProcess);
 		assertEquals(subProcessNode.getSubProcess().getProject(), subProcess.getProject());
 		assertEquals(importedProject, subProcessNode.getSubProcess().getProject());
-
+		assertDepends(rootProject.getRootProcess().getFlexoResource(), subProcess.getFlexoResource());
 	}
 }
