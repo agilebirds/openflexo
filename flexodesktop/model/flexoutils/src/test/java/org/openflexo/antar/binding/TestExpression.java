@@ -38,11 +38,11 @@ public class TestExpression extends TestCase {
 
 	public void testVariable2() {
 		try {
-			List<Variable> vars = Expression.extractVariables("this+(is-a/test)+2");
+			List<Variable> vars = Expression.extractVariables("i+(am-a/test)+2");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("this")));
-			assertTrue(vars.contains(new Variable("is")));
+			assertTrue(vars.contains(new Variable("i")));
+			assertTrue(vars.contains(new Variable("am")));
 			assertTrue(vars.contains(new Variable("a")));
 			assertTrue(vars.contains(new Variable("test")));
 		} catch (ParseException e) {
@@ -74,11 +74,11 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive1() {
 		try {
-			List<Expression> vars = Expression.extractPrimitives("this+is+a+test");
+			List<Expression> vars = Expression.extractPrimitives("i+am+a+test");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("this")));
-			assertTrue(vars.contains(new Variable("is")));
+			assertTrue(vars.contains(new Variable("i")));
+			assertTrue(vars.contains(new Variable("am")));
 			assertTrue(vars.contains(new Variable("a")));
 			assertTrue(vars.contains(new Variable("test")));
 		} catch (ParseException e) {
@@ -92,11 +92,11 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive2() {
 		try {
-			List<Expression> vars = Expression.extractPrimitives("this+(is-a/test)+2");
+			List<Expression> vars = Expression.extractPrimitives("i+(am-a/test)+2");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("this")));
-			assertTrue(vars.contains(new Variable("is")));
+			assertTrue(vars.contains(new Variable("i")));
+			assertTrue(vars.contains(new Variable("am")));
 			assertTrue(vars.contains(new Variable("a")));
 			assertTrue(vars.contains(new Variable("test")));
 		} catch (ParseException e) {
@@ -110,12 +110,12 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive3() {
 		try {
-			List<Expression> vars = Expression.extractPrimitives("this.is.a.little.test+and+this+is.not()");
+			List<Expression> vars = Expression.extractPrimitives("i.am.a.little.test+and+following+is.not()");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("this.is.a.little.test")));
+			assertTrue(vars.contains(new Variable("i.am.a.little.test")));
 			assertTrue(vars.contains(new Variable("and")));
-			assertTrue(vars.contains(new Variable("this")));
+			assertTrue(vars.contains(new Variable("following")));
 			assertTrue(vars.contains(new Variable("is.not()")));
 		} catch (ParseException e) {
 			e.printStackTrace();

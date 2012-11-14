@@ -60,6 +60,10 @@ public class UpdateDMRepository extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMRepository.class);
+	}
+
 	UpdateDMRepository(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

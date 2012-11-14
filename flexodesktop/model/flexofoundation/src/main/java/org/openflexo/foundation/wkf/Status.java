@@ -24,10 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
-import org.openflexo.foundation.wkf.action.AddStatus;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -91,13 +89,6 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 	@Override
 	public String getInspectorName() {
 		return "Status.inspector";
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddStatus.actionType);
-		return returned;
 	}
 
 	@Override

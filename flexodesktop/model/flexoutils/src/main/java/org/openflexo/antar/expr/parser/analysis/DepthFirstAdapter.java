@@ -42,6 +42,7 @@ import org.openflexo.antar.expr.parser.node.ANegativeTerm;
 import org.openflexo.antar.expr.parser.node.ANeqExprExpr;
 import org.openflexo.antar.expr.parser.node.ANonEmptyListArgList;
 import org.openflexo.antar.expr.parser.node.ANotExprExpr3;
+import org.openflexo.antar.expr.parser.node.ANullConstant;
 import org.openflexo.antar.expr.parser.node.ANumberTerm;
 import org.openflexo.antar.expr.parser.node.AOr2ExprExpr2;
 import org.openflexo.antar.expr.parser.node.AOrExprExpr2;
@@ -1013,6 +1014,23 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 			node.getFalse().apply(this);
 		}
 		outAFalseConstant(node);
+	}
+
+	public void inANullConstant(ANullConstant node) {
+		defaultIn(node);
+	}
+
+	public void outANullConstant(ANullConstant node) {
+		defaultOut(node);
+	}
+
+	@Override
+	public void caseANullConstant(ANullConstant node) {
+		inANullConstant(node);
+		if (node.getNull() != null) {
+			node.getNull().apply(this);
+		}
+		outANullConstant(node);
 	}
 
 	public void inAPiConstant(APiConstant node) {

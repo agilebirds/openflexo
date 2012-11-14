@@ -183,6 +183,10 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
 	}
 
+	public void delete() {
+		choicePanel.delete();
+	}
+
 	public JPanel getAdditionalPanel() {
 		return null;
 	}

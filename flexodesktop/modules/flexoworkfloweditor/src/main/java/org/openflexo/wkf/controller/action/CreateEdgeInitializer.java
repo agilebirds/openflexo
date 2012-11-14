@@ -221,20 +221,6 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					return false;
 				}
 
-				// BEGIN Node to BEGIN Node not allowed
-				if (action.getEndNode() instanceof FlexoNode && ((FlexoNode) action.getEndNode()).isBeginNode()
-						&& action.getStartingNode() instanceof FlexoNode && ((FlexoNode) action.getStartingNode()).isBeginNode()) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
-					return false;
-				}
-
-				// END Node to END Node not allowed
-				if (action.getEndNode() instanceof FlexoNode && ((FlexoNode) action.getEndNode()).isEndNode()
-						&& action.getStartingNode() instanceof FlexoNode && ((FlexoNode) action.getStartingNode()).isEndNode()) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
-					return false;
-				}
-
 				if (action.getEndNode() instanceof FlexoNode && action.getEndNode() instanceof FatherNode
 						&& action.getEndNodePreCondition() == null && !skipEndNodeCheck) {
 

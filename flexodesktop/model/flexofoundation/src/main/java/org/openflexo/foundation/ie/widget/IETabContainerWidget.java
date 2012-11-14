@@ -25,16 +25,10 @@ import java.util.Vector;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.action.AddTab;
-import org.openflexo.foundation.ie.action.MoveTabLeft;
-import org.openflexo.foundation.ie.action.MoveTabRight;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentDeleteRequest;
@@ -84,17 +78,6 @@ public class IETabContainerWidget extends AbstractButtonedWidget implements IETo
 	@Override
 	public String getDefaultInspectorName() {
 		return Inspectors.IE.TAB_CONTAINER_INSPECTOR;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddTab.actionType);
-		returned.add(MoveTabLeft.actionType);
-		returned.add(MoveTabRight.actionType);
-		returned.add(TopComponentUp.actionType);
-		returned.add(TopComponentDown.actionType);
-		return returned;
 	}
 
 	private void deleteTabWidgets() {

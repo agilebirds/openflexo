@@ -326,6 +326,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Decoded as VALID binding: " + newEditedBinding);
 					}
+					getTextField().setForeground(Color.BLACK);
+					getTextField().setSelectedTextColor(Color.BLACK);
 					if (!newEditedBinding.equals(getEditedObject())) {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("This is a new one, i take this");
@@ -336,7 +338,6 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Skipping as it represents the same binding");
 						}
-						getTextField().setForeground(Color.BLACK);
 						return;
 					}
 				} else {
@@ -344,6 +345,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						logger.fine("Decoded as INVALID binding: " + newEditedBinding + " trying to synchronize panel");
 					}
 					getTextField().setForeground(Color.RED);
+					getTextField().setSelectedTextColor(Color.RED);
 					if (_selectorPanel != null) {
 						_selectorPanel.synchronizePanelWithTextFieldValue(textValue);
 					}
@@ -356,6 +358,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					logger.fine("Couldn't decode as binding, trying to synchronize panel anyway");
 				}
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 				if (_selectorPanel != null) {
 					_selectorPanel.synchronizePanelWithTextFieldValue(textValue);
 				}
@@ -410,8 +413,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 		if (getEditedObject() != null && getEditedObject().isBindingValid()) {
 			getTextField().setForeground(Color.BLACK);
+			getTextField().setSelectedTextColor(Color.BLACK);
 		} else {
 			getTextField().setForeground(Color.RED);
+			getTextField().setSelectedTextColor(Color.RED);
 		}
 
 	}
@@ -515,8 +520,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			}
 			if (getEditedObject() != null) {
 				getTextField().setForeground(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
+				getTextField().setSelectedTextColor(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
 			} else {
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 			}
 			_isProgrammaticalySet = false;
 		}
@@ -1055,8 +1062,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					((BindingValue) bindingValue).connect();
 				}
 				getTextField().setForeground(Color.BLACK);
+				getTextField().setSelectedTextColor(Color.BLACK);
 			} else {
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 			}
 			_revertBindingValue = bindingValue.clone();
 		} else {

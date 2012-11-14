@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
@@ -58,6 +59,11 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 		}
 		super.delete();
 		deleteObservers();
+	}
+
+	@Override
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	@Override

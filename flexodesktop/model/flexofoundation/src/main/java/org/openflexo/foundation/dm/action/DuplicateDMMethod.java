@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod;
@@ -56,6 +57,10 @@ public class DuplicateDMMethod extends FlexoAction<DuplicateDMMethod, DMMethod, 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMMethod.class);
+	}
 
 	private DMMethod _methodToDuplicate;
 	private String _newMethodName;

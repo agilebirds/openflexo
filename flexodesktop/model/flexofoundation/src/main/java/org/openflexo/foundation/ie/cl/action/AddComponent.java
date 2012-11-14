@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -74,6 +75,12 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentLibrary.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentFolder.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	public enum ComponentType implements StringRepresentable {
 		OPERATION_COMPONENT {

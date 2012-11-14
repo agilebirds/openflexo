@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
@@ -57,6 +58,10 @@ public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObje
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
+
 	private DMEntity _entity;
 	private String _newMethodName;
 	private DMMethod _newMethod;
@@ -74,7 +79,7 @@ public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObje
 			if (_newMethodName == null || getEntity().getMethod(_newMethodName + "()") != null) {
 				_newMethodName = getEntity().getDMModel().getNextDefautMethodName(getEntity());
 			}
-			_newMethod = new DMMethod(getEntity().getDMModel(),/* getEntity(),*/_newMethodName);
+			_newMethod = new DMMethod(getEntity().getDMModel(),/* getEntity(), */_newMethodName);
 			_newMethod.setEntity(getEntity());
 			getEntity().registerMethod(_newMethod);
 		}

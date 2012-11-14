@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.editor.view;
 
+import java.util.List;
 import java.util.Observer;
 import java.util.Vector;
 
@@ -43,7 +44,7 @@ public interface FIBEditableView<M extends FIBComponent, J extends JComponent> e
 
 	public abstract J getDynamicJComponent();
 
-	public abstract void update();
+	public boolean update(List<FIBComponent> callers);
 
 	public abstract boolean isComponentVisible();
 

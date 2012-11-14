@@ -23,11 +23,8 @@
 package com.metaphaseeditor;
 
 public enum LinkTarget {
-	NONE("None", null),
-	NEW_WINDOW("New Window", "_blank"),
-	TOPMOST_WINDOW("Topmost Window", "_top"),
-	SAME_WINDOW("Same Window", "_self"),
-	PARENT_WINDOW("Parent Window", "_parent");
+	NONE("None", null), NEW_WINDOW("New Window", "_blank"), TOPMOST_WINDOW("Topmost Window", "_top"), SAME_WINDOW("Same Window", "_self"), PARENT_WINDOW(
+			"Parent Window", "_parent");
 
 	private String text;
 	private String attrValue;

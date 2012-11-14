@@ -60,7 +60,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * 
  * @author sguerin
  */
-public abstract class FlexoMainPane extends JPanel implements PropertyChangeListener {
+public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 

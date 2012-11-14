@@ -35,7 +35,6 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.bindings.ComponentBindingDefinition;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
@@ -76,11 +75,7 @@ import org.openflexo.foundation.wkf.OperationPetriGraph;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.AddOperationMetricsValue;
-import org.openflexo.foundation.wkf.action.BindButtonsToActionNode;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
-import org.openflexo.foundation.wkf.action.GenerateOperationScreenshot;
-import org.openflexo.foundation.wkf.action.OpenActionLevel;
-import org.openflexo.foundation.wkf.action.OpenOperationComponent;
 import org.openflexo.foundation.wkf.action.SetAndOpenOperationComponent;
 import org.openflexo.foundation.wkf.dm.ComponentTextColorChanged;
 import org.openflexo.foundation.wkf.dm.OperationComponentHasBeenRemoved;
@@ -142,17 +137,6 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		super(process);
 		metricsValues = new Vector<MetricsValue>();
 		// _petriGraph = new ActionPetriGraph(getProcess());
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(OpenActionLevel.actionType);
-		returned.add(SetAndOpenOperationComponent.actionType);
-		returned.add(OpenOperationComponent.actionType);
-		returned.add(BindButtonsToActionNode.actionType);
-		returned.add(GenerateOperationScreenshot.actionType);
-		return returned;
 	}
 
 	@Override
@@ -287,8 +271,7 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
 		returned.addAll(getMetricsValues());
 		/*
-		 * if (getComponentDefinition() != null) {
-		 * returned.addAll(getComponentDefinition().getAllEmbeddedWKFObjects()); }
+		 * if (getComponentDefinition() != null) { returned.addAll(getComponentDefinition().getAllEmbeddedWKFObjects()); }
 		 */
 		return returned;
 	}
@@ -403,23 +386,16 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		if (_componentInstance == null && (aComponentName == null || aComponentName.trim().equals(""))) {
 			return;
 		}
-		/*ComponentDefinition foundComponent = getProject().getFlexoComponentLibrary().getComponentNamed(aComponentName);
-		OperationComponentDefinition newComponent = null;
-		if (foundComponent instanceof OperationComponentDefinition) {
-		    newComponent = (OperationComponentDefinition) foundComponent;
-		} else if (foundComponent != null) {
-		    if (logger.isLoggable(Level.WARNING))
-		        logger.warning("Found a component named " + aComponentName + " but this is not an OperationComponent. Aborting.");
-		    throw new DuplicateResourceException(aComponentName);
-		}
-		if (newComponent == null) {
-		    if (logger.isLoggable(Level.INFO))
-		        logger.info("Creating a new Component named:" + aComponentName);
-		    FlexoComponentFolder selectedFolder = getProject().getFlexoComponentLibrary().getRootFolder();
-		    newComponent = new OperationComponentDefinition(aComponentName, getProject().getFlexoComponentLibrary(), selectedFolder,
-		            getProject());
-		}
-		setOperationComponent(newComponent);*/
+		/*
+		 * ComponentDefinition foundComponent = getProject().getFlexoComponentLibrary().getComponentNamed(aComponentName);
+		 * OperationComponentDefinition newComponent = null; if (foundComponent instanceof OperationComponentDefinition) { newComponent =
+		 * (OperationComponentDefinition) foundComponent; } else if (foundComponent != null) { if (logger.isLoggable(Level.WARNING))
+		 * logger.warning("Found a component named " + aComponentName + " but this is not an OperationComponent. Aborting."); throw new
+		 * DuplicateResourceException(aComponentName); } if (newComponent == null) { if (logger.isLoggable(Level.INFO))
+		 * logger.info("Creating a new Component named:" + aComponentName); FlexoComponentFolder selectedFolder =
+		 * getProject().getFlexoComponentLibrary().getRootFolder(); newComponent = new OperationComponentDefinition(aComponentName,
+		 * getProject().getFlexoComponentLibrary(), selectedFolder, getProject()); } setOperationComponent(newComponent);
+		 */
 		logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 		// TODO: Please implement this better later
 		// Used editor will be null
@@ -778,11 +754,10 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		}
 		if (begin != null) {
 			try {
-				/*FlexoPreCondition pc = null;
-				if (node.getPreConditions().size() == 0) {
-				    pc = new FlexoPreCondition(node);
-				} else
-				    pc = node.getPreConditions().firstElement();*/
+				/*
+				 * FlexoPreCondition pc = null; if (node.getPreConditions().size() == 0) { pc = new FlexoPreCondition(node); } else pc =
+				 * node.getPreConditions().firstElement();
+				 */
 				new TokenEdge(begin, node);
 				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("Created link from begin to node");
@@ -1334,27 +1309,15 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 			return getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(getTabComponent()).getTabKeyForGenerator();
 		}
 		/*
-		if (getTabOperationComponentInstance() != null) {
-		   Enumeration en = ((IEPageComponent) getOperationComponent().getWOComponent()).topComponents();
-		   while (en.hasMoreElements()) {
-		       IETopComponent tcc = (IETopComponent) en.nextElement();
-		       if (tcc instanceof IESequenceTab) {
-		           IESequenceTab w = (IESequenceTab) tcc;
-		           Enumeration en1 = w.getAllTabs().elements();
-		           while (en1.hasMoreElements()) {
-		               IETabWidget tab = (IETabWidget) en1.nextElement();
-		               if (tab.getTabComponentDefinition().equals(
-		                       getTabOperationComponentInstance().getComponentDefinition())) {
-		                   if (logger.isLoggable(Level.INFO))
-		                       logger.info("Selected tab for operation "+getName()+" is "+tab.getTabComponentDefinition().getName());
-		                   return tab.getTabKeyForGenerator();
-		               }
-		           }
-		       }
-		   }
-		   if (logger.isLoggable(Level.WARNING))
-		       logger.warning("Selected tab for operation "+getName()+" could not be found. Expected: "+getTabComponentName());
-		}
+		 * if (getTabOperationComponentInstance() != null) { Enumeration en = ((IEPageComponent)
+		 * getOperationComponent().getWOComponent()).topComponents(); while (en.hasMoreElements()) { IETopComponent tcc = (IETopComponent)
+		 * en.nextElement(); if (tcc instanceof IESequenceTab) { IESequenceTab w = (IESequenceTab) tcc; Enumeration en1 =
+		 * w.getAllTabs().elements(); while (en1.hasMoreElements()) { IETabWidget tab = (IETabWidget) en1.nextElement(); if
+		 * (tab.getTabComponentDefinition().equals( getTabOperationComponentInstance().getComponentDefinition())) { if
+		 * (logger.isLoggable(Level.INFO))
+		 * logger.info("Selected tab for operation "+getName()+" is "+tab.getTabComponentDefinition().getName()); return
+		 * tab.getTabKeyForGenerator(); } } } } if (logger.isLoggable(Level.WARNING))
+		 * logger.warning("Selected tab for operation "+getName()+" could not be found. Expected: "+getTabComponentName()); }
 		 */
 		return null;
 	}

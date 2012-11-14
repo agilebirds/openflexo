@@ -62,6 +62,10 @@ public class MoveMenuDown extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
+
 	private FlexoItemMenu itemMenu;
 
 	/**

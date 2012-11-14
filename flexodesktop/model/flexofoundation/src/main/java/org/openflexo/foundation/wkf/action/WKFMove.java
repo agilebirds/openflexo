@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -56,6 +57,10 @@ public class WKFMove extends FlexoUndoableAction<WKFMove, WKFObject, WKFObject> 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	private String graphicalContext;
 	private Hashtable<WKFObject, Point2D.Double> initialLocations;

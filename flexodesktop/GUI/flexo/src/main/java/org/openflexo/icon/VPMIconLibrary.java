@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddConnector;
@@ -33,8 +32,13 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddShape;
 import org.openflexo.foundation.viewpoint.AddStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.CloneConnector;
+import org.openflexo.foundation.viewpoint.CloneIndividual;
+import org.openflexo.foundation.viewpoint.CloneShape;
+import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
@@ -107,6 +111,7 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
 	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
 	public static final ImageIconResource LINK_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/LinkSchemeIcon.png");
+	public static final ImageIconResource CLONING_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CloningSchemeIcon.png");
 	public static final ImageIconResource CREATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CreationSchemeIcon.png");
 	public static final ImageIconResource DELETION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DeletionSchemeIcon.png");
 	public static final ImageIconResource NAVIGATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/NavigationSchemeIcon.png");
@@ -144,14 +149,20 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof EditionAction) {
 			if (object instanceof AddClass) {
 				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+			} else if (object instanceof CloneIndividual) {
+				return IconFactory.getImageIcon(OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON, DUPLICATE);
 			} else if (object instanceof AddIndividual) {
 				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
 			} else if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPattern) {
 				return EDITION_PATTERN_ICON;
+			} else if (object instanceof CloneShape) {
+				return IconFactory.getImageIcon(CALC_SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
 				return CALC_SHAPE_ICON;
+			} else if (object instanceof CloneConnector) {
+				return IconFactory.getImageIcon(CALC_CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
 				return CALC_CONNECTOR_ICON;
 			} else if (object instanceof AddStatement) {
@@ -183,7 +194,9 @@ public class VPMIconLibrary extends IconLibrary {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {
 			return LINK_SCHEME_ICON;
-		} else if (object instanceof AbstractCreationScheme) {
+		} else if (object instanceof CloningScheme) {
+			return CLONING_SCHEME_ICON;
+		} else if (object instanceof CreationScheme) {
 			return CREATION_SCHEME_ICON;
 		} else if (object instanceof NavigationScheme) {
 			return NAVIGATION_SCHEME_ICON;

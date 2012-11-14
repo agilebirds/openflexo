@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -56,6 +57,10 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
 
 	protected MoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

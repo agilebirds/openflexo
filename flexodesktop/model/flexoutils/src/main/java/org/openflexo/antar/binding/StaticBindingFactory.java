@@ -39,6 +39,8 @@ public class StaticBindingFactory extends StringEncoder.Converter<StaticBinding>
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
 		} else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1) {
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
+		} else if (aValue.equalsIgnoreCase("null")) {
+			return new NullStaticBinding();
 		}
 		try {
 			return new IntegerStaticBinding(Long.parseLong(aValue));

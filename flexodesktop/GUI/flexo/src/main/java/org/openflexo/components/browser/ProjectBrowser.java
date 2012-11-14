@@ -291,24 +291,18 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (_filters.get(elementType) == null) {
 			// first time we see this element type
 			ElementTypeBrowserFilter newBrowserFilter = element.newBrowserFilter(_filterStatus.get(elementType));
-			/*  if (_filterStatus.get(elementType) != null) {
-			      newBrowserFilter.setStatus((_filterStatus.get(elementType)));
-			      if (logger.isLoggable(Level.FINE))
-			          logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() + " status to "
-			                  + (_filterStatus.get(elementType)));
-			      if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-			              || (newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-			          if (logger.isLoggable(Level.FINE))
-			              logger.fine(getClass().getName() + ": Adding optional filter " + newBrowserFilter.getName());
-			          //_elementTypeFilters.add(newBrowserFilter);
-			          if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
-			              newBrowserFilter.setStatus(BrowserFilterStatus.HIDE);
-			          } else if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-			              newBrowserFilter.setStatus(BrowserFilterStatus.SHOW);
-			          }
-			        //  notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
-			      }
-			  }*/
+			/*
+			 * if (_filterStatus.get(elementType) != null) { newBrowserFilter.setStatus((_filterStatus.get(elementType))); if
+			 * (logger.isLoggable(Level.FINE)) logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() +
+			 * " status to " + (_filterStatus.get(elementType))); if ((newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN) || (newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) { if (logger.isLoggable(Level.FINE)) logger.fine(getClass().getName() +
+			 * ": Adding optional filter " + newBrowserFilter.getName()); //_elementTypeFilters.add(newBrowserFilter); if
+			 * ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
+			 * newBrowserFilter.setStatus(BrowserFilterStatus.HIDE); } else if ((newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) { newBrowserFilter.setStatus(BrowserFilterStatus.SHOW); } //
+			 * notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter)); } }
+			 */
 			if (_filterDeepBrowsing.get(elementType) != null) {
 				newBrowserFilter.setDeepBrowsing(_filterDeepBrowsing.get(elementType).booleanValue());
 			}
@@ -327,11 +321,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	/*
-	 * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque
-	 * fois tout l'arbre. On pourrait faire un truc beaucoup plus chiade avec
-	 * des MutableNodeTree qui recoivent plein de DataModification toutes plus
-	 * chiadees les unes que les autres, faire des insert nodes, en notifier le
-	 * modele, tout ca....
+	 * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque fois tout l'arbre. On pourrait faire un truc beaucoup plus
+	 * chiade avec des MutableNodeTree qui recoivent plein de DataModification toutes plus chiadees les unes que les autres, faire des
+	 * insert nodes, en notifier le modele, tout ca....
 	 */
 	/**
 	 * Brutal update of the whole browser. You rarely need to invoke it, except when you have done big structural changes which are not
@@ -394,11 +386,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	/*
-	 * private void expandAll(FlexoModelObject object) { BrowserElement[]
-	 * elements = elementForObject(object); for (int i=0; i<elements.length;
-	 * i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount();
-	 * j++) { BrowserElement el2 = (BrowserElement)el.getChildAt(j);
-	 * expand(el2.getObject()); } } }
+	 * private void expandAll(FlexoModelObject object) { BrowserElement[] elements = elementForObject(object); for (int i=0;
+	 * i<elements.length; i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount(); j++) { BrowserElement el2 =
+	 * (BrowserElement)el.getChildAt(j); expand(el2.getObject()); } } }
 	 */
 
 	private BrowserView leadingView;
@@ -484,12 +474,17 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Rebuild whole tree in ProjectBrowser");
 		}
-		if (getRootObject() != null) {
-			if (_elements != null) {
-				clearTree();
+		setIsRebuildingStructure();
+		try {
+			if (getRootObject() != null) {
+				if (_elements != null) {
+					clearTree();
+				}
+				_elements = new Hashtable<FlexoModelObject, Object>();
+				_rootElement = makeNewElement(getRootObject(), null);
 			}
-			_elements = new Hashtable<FlexoModelObject, Object>();
-			_rootElement = makeNewElement(getRootObject(), null);
+		} finally {
+			resetIsRebuildingStructure();
 		}
 	}
 
@@ -611,6 +606,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	protected void unregisterElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+		if (_elements == null) {
+			return;
+		}
 		if (element.getSelectableObject() != modelObject) {
 			unregisterElementForObject(element, element.getSelectableObject());
 		}
@@ -993,8 +991,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * Notify that selection must be saved to be restored later (modification of the structure)
 	 */
 	/*
-	 * public void restoreSelection() { notifyListeners(new
-	 * RestoreSelectionEvent()); }
+	 * public void restoreSelection() { notifyListeners(new RestoreSelectionEvent()); }
 	 */
 
 	@Override
@@ -1288,7 +1285,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (node instanceof BrowserElement && ((BrowserElement) node).isDeleted()) {
 			return;
 		}
+		setHoldStructure();
 		super.reload(node);
+		resetHoldStructure();
 	}
 
 	// TODO: should NOT be handled at this level

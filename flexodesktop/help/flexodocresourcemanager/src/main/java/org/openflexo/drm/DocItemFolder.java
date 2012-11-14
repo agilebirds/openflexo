@@ -27,16 +27,11 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.drm.action.CreateDocItem;
-import org.openflexo.drm.action.CreateDocItemFolder;
-import org.openflexo.drm.action.GenerateHelpSet;
-import org.openflexo.drm.action.ImportDocSubmissionReport;
 import org.openflexo.drm.dm.DocItemAdded;
 import org.openflexo.drm.dm.DocItemFolderAdded;
 import org.openflexo.drm.dm.StructureModified;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
@@ -346,18 +341,6 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 
 	public boolean isRootFolder() {
 		return getDocResourceCenter().getRootFolder() == this;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDocItem.actionType);
-		returned.add(CreateDocItemFolder.actionType);
-		// returned.add(DeleteDocItemFolder.actionType);
-		// following are applied only on the root folder
-		returned.add(GenerateHelpSet.actionType);
-		returned.add(ImportDocSubmissionReport.actionType);
-		return returned;
 	}
 
 	public String getNextDefautItemName() {

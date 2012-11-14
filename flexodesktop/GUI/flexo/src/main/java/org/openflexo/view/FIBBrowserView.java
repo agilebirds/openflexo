@@ -96,6 +96,18 @@ public abstract class FIBBrowserView<O extends FlexoModelObject> extends Selecti
 		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
 			browser.setRightClickAction(new DataBinding("controller.rightClick(" + browser.getName() + ".selected,event)"));
 		}
+		/*
+		for (FIBBrowserElement el : browser.getElements()) {
+			if (el.getDataClass() != null) {
+				if (FlexoModelObject.class.isAssignableFrom(el.getDataClass())) {
+					Vector<FlexoActionType> actionList = FlexoModelObject.getActionList(el.getDataClass());
+					for (FlexoActionType actionType : actionList) {
+						el.addToActions(new FIBBrowserActionAdapter(actionType));
+					}
+				}
+			}
+		}
+		*/
 	}
 
 	public FIBBrowser getFIBBrowser(FIBComponent component) {

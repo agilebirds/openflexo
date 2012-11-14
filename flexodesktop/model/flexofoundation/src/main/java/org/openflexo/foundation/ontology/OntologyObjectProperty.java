@@ -5,5 +5,4 @@ public interface OntologyObjectProperty extends OntologyProperty {
 	public OntologyObject getRange();
 
 	public boolean isLiteralRange();
-
 }

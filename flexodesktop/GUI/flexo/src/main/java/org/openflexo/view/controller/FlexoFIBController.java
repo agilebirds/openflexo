@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.Flexo;
 import org.openflexo.components.ProgressWindow;
@@ -100,7 +101,16 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification dataModification) {
+	public void update(final FlexoObservable o, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(o, dataModification);
+				}
+			});
+			return;
+		}
 		getRootView().updateDataObject(getDataObject());
 	}
 

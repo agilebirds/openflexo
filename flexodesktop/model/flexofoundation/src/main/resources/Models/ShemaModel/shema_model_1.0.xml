@@ -70,8 +70,9 @@
      <property name="value" xmlTag="value" attribute="yes"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.view.ViewObject" abstract="YES" finalizer="finalizeDeserialization" contexts="Contained">
-    <property name="childs" type="vector" contains="org.openflexo.foundation.view.ViewObject" primary="yes" context="Contained"/>
+  <entity name="org.openflexo.foundation.view.ViewObject" abstract="YES" finalizer="finalizeDeserialization">
+    <property name="childs" type="vector" contains="org.openflexo.foundation.view.ViewElement" primary="yes" context="Contained"/>
+  	 <property name="index" xmlTag="index" attribute="YES"/>
   </entity>
 	
   <entity name="org.openflexo.foundation.view.View" xmlTag="VEShema">
@@ -79,7 +80,8 @@
    	 <property name="graphicalRepresentation" xmlTag="DrawingGraphicalRepresentation"/>
   </entity>
 
-  <entity name="org.openflexo.foundation.view.ViewElement" abstract="yes">
+  <entity name="org.openflexo.foundation.view.ViewElement" abstract="yes" contexts="Contained">
+  	 <property name="indexRelativeToEPType" xmlTag="indexRelativeToEPType" attribute="YES"/>
      <description>Shape or Connector</description>
   	<!--  <property name="editionPatternIdentifier" xmlTag="editionPatternIdentifier" attribute="YES"/>
   	 <property name="editionPatternInstanceId" xmlTag="editionPatternInstanceId" attribute="YES"/>-->

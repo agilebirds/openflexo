@@ -21,6 +21,12 @@ package org.openflexo.antar.expr;
 
 import org.openflexo.localization.FlexoLocalization;
 
+/**
+ * This exception is thrown when an operator is invoked in a type mismatch context
+ * 
+ * @author sylvain
+ * 
+ */
 @SuppressWarnings("serial")
 public class TypeMismatchException extends TransformException {
 

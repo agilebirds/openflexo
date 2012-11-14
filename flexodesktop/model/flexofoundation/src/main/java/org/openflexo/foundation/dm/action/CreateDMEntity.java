@@ -64,6 +64,10 @@ public class CreateDMEntity extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMPackage.class);
+	}
+
 	private DMPackage _package;
 	private String _newEntityName;
 	private DMEntity _newEntity;

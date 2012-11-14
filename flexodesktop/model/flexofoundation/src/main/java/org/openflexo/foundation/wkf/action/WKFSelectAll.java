@@ -25,6 +25,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
+import org.openflexo.foundation.wkf.WKFObject;
 
 public class WKFSelectAll extends FlexoGUIAction<WKFSelectAll, FlexoModelObject, FlexoModelObject> {
 
@@ -50,6 +51,10 @@ public class WKFSelectAll extends FlexoGUIAction<WKFSelectAll, FlexoModelObject,
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	WKFSelectAll(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

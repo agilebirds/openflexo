@@ -78,14 +78,7 @@ public class FIBHtmlEditor extends FIBWidget {
 			MetaphaseEditorPanel.ABOUT_PANEL_KEY, MetaphaseEditorPanel.ABOUT_BUTTON_KEY };
 
 	public static enum Parameters implements FIBModelAttribute {
-		optionsInLine1,
-		optionsInLine2,
-		optionsInLine3,
-		firstLevelOptionsInLine1,
-		firstLevelOptionsInLine2,
-		firstLevelOptionsInLine3,
-		availableOptions,
-		visibleAndUnusedOptions
+		optionsInLine1, optionsInLine2, optionsInLine3, firstLevelOptionsInLine1, firstLevelOptionsInLine2, firstLevelOptionsInLine3, availableOptions, visibleAndUnusedOptions
 	}
 
 	private Vector<FIBHtmlEditorOption> availableOptions;

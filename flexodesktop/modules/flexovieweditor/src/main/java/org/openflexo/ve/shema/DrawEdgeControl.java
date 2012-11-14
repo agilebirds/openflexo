@@ -94,7 +94,7 @@ public class DrawEdgeControl extends MouseDragControl {
 								public void actionPerformed(ActionEvent e) {
 									// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
 									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null,
-											((VEShemaController) controller).getOEController().getEditor());
+											((VEShemaController) controller).getVEController().getEditor());
 									action.setLinkScheme(linkScheme);
 									action.setFromShape(from);
 									action.setToShape(to);
@@ -109,7 +109,7 @@ public class DrawEdgeControl extends MouseDragControl {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
-										.getOEController().getEditor());
+										.getVEController().getEditor());
 								action.setToShape(to);
 								action.setAutomaticallyCreateConnector(true);
 								action.doAction();
@@ -121,7 +121,7 @@ public class DrawEdgeControl extends MouseDragControl {
 						popup.show(event.getComponent(), event.getX(), event.getY());
 					} else {
 						AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
-								.getOEController().getEditor());
+								.getVEController().getEditor());
 						action.setToShape(to);
 						action.setAutomaticallyCreateConnector(true);
 						action.doAction();

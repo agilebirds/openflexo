@@ -67,11 +67,15 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("accept_disk_version_description"), "accept_disk_version",
 							action.getFilesToAccept(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getSGController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation

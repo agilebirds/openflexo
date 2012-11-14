@@ -48,7 +48,7 @@ public class HelpAction extends FlexoGUIAction<HelpAction, FlexoModelObject, Fle
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object != null && object instanceof InspectableObject;
+			return object instanceof InspectableObject;
 		}
 
 	};

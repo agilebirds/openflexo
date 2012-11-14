@@ -22,8 +22,6 @@ package org.openflexo.foundation.cg;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryCreated;
 import org.openflexo.foundation.cg.dm.CGRepositoryDeleted;
 import org.openflexo.foundation.cg.templates.CGTemplates;
@@ -77,13 +75,6 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 		setGeneratedCode(this);
 		_project = project;
 		_generatedRepositories = new Vector<GenerationRepository>();
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddGeneratedCodeRepository.actionType);
-		return returned;
 	}
 
 	@Override

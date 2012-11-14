@@ -40,11 +40,9 @@ import javax.swing.filechooser.FileView;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMPackage;
-import org.openflexo.foundation.dm.action.CreateDMEOEntity;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.EOEntityInserted;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
@@ -402,20 +400,12 @@ public class DMEOModel extends DMObject implements DMEOObject {
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOEntity.actionType);
-		return returned;
-	}
-
 	public EOModel getEOModel() {
 		if (getEOModelResource() != null && getEOModelResourceData() != null) {
 			return getEOModelResourceData().getEOModel();
 		}
 		/*
-		 * else { if (logger.isLoggable(Level.WARNING)) logger.warning("Unable
-		 * to access EOMODEL "); }
+		 * else { if (logger.isLoggable(Level.WARNING)) logger.warning("Unable to access EOMODEL "); }
 		 */
 		return null;
 	}
@@ -815,9 +805,8 @@ public class DMEOModel extends DMObject implements DMEOObject {
 			/*
 			 * if (f.listFiles(new java.io.FileFilter() {
 			 * 
-			 * public boolean accept(File f) { return !f.isDirectory() &&
-			 * f.getName().toLowerCase().endsWith("index.eomodeld"); } }).length >
-			 * 0) return Boolean.FALSE;
+			 * public boolean accept(File f) { return !f.isDirectory() && f.getName().toLowerCase().endsWith("index.eomodeld"); } }).length
+			 * > 0) return Boolean.FALSE;
 			 */
 			return super.isTraversable(f);
 		}
@@ -835,13 +824,11 @@ public class DMEOModel extends DMObject implements DMEOObject {
 			if (f.getName().toLowerCase().endsWith(".eomodeld")) {
 				return EOMODEL_ICON;
 			}/*
-				    * else if (f.isDirectory() && f.listFiles(new
-				    * java.io.FileFilter() {
-				    * 
-				    * public boolean accept(File f) { return !f.isDirectory() &&
-				    * f.getName().toLowerCase().endsWith("index.eomodeld"); }
-				    * }).length > 0) return DM_EOMODEL_ICON;
-				    */else {
+				* else if (f.isDirectory() && f.listFiles(new java.io.FileFilter() {
+				* 
+				* public boolean accept(File f) { return !f.isDirectory() && f.getName().toLowerCase().endsWith("index.eomodeld"); } }).length
+				* > 0) return DM_EOMODEL_ICON;
+				*/else {
 				return super.getIcon(f);
 			}
 		}

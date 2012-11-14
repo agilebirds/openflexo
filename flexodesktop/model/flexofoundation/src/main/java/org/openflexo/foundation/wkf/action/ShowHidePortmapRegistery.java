@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -58,6 +59,11 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, PortMapRegistery.class);
+		FlexoModelObject.addActionForClass(actionType, SubProcessNode.class);
+	}
 
 	ShowHidePortmapRegistery(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

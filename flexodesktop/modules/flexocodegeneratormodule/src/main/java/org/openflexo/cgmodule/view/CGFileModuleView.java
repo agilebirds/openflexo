@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorCst;
@@ -600,11 +601,19 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
 		}
-
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (dataModification instanceof ContentRegenerated) {
 			updateView(true);
 		} else {

@@ -22,7 +22,6 @@ package org.openflexo.vpm.drawingshema;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -50,7 +49,7 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDr
 		super(aDrawing);
 
 		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith((GraphicalRepresentation<?>) aDrawing.getShema().getGraphicalRepresentation());
+			setsWith(aDrawing.getShema().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());

@@ -64,6 +64,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBMultipleValues;
+import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRemovingNotification;
 import org.openflexo.fib.model.FIBWidget;
@@ -71,6 +72,7 @@ import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
+import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements Observer, MouseListener, FocusListener {
@@ -369,14 +371,22 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			}
 		}
 
-		/*	if (o instanceof FIBContainer) {
-				if (dataModification instanceof FIBAttributeNotification) {
-					FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-					if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof FIBContainerView) {
-						((FIBContainerView) view).updateLayout();
-					}
+		if (o instanceof FIBNumber) {
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBNumber.Parameters.allowsNull) {
+					((FIBNumberWidget<?>) view).updateCheckboxVisibility();
+				} else if (n.getAttribute() == FIBNumber.Parameters.columns) {
+					((FIBNumberWidget<?>) view).updateColumns();
 				}
-			}*/
+			}
+		}
+
+		/*
+		 * if (o instanceof FIBContainer) { if (dataModification instanceof FIBAttributeNotification) { FIBAttributeNotification n =
+		 * (FIBAttributeNotification) dataModification; if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof
+		 * FIBContainerView) { ((FIBContainerView) view).updateLayout(); } } }
+		 */
 
 		if (o instanceof FIBComponent) {
 			if (dataModification instanceof FIBAttributeNotification) {
@@ -511,15 +521,14 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			}
 
 			// getDrawingView().resetCapturedNode();
-			if (e.getDropSuccess() == false) {
+			if (!e.getDropSuccess()) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Dropping was not successful");
 				}
 				return;
 			}
 			/*
-			 * the dropAction should be what the drop target specified in
-			 * acceptDrop
+			 * the dropAction should be what the drop target specified in acceptDrop
 			 */
 			// this is the action selected by the drop target
 			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {

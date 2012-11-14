@@ -40,6 +40,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.FloatStaticBinding;
 import org.openflexo.antar.binding.IntegerStaticBinding;
+import org.openflexo.antar.binding.NullStaticBinding;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
@@ -245,7 +246,8 @@ class StaticBindingPanel extends JPanel {
 			final String DATE = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "date");
 			final String DURATION = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "duration");
 			final String DKV = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "enum");
-			String[] availableValues = { SELECT, BOOLEAN, INTEGER, FLOAT, STRING, DATE, DURATION, DKV };
+			final String NULL = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "null");
+			String[] availableValues = { SELECT, BOOLEAN, INTEGER, FLOAT, STRING, DATE, DURATION, DKV, NULL };
 			typeCB = new JComboBox(availableValues);
 			typeCB.addActionListener(new ActionListener() {
 				@Override
@@ -269,6 +271,9 @@ class StaticBindingPanel extends JPanel {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new StringStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(), _bindingSelectorPanel._bindingSelector
 										.getBindable(), ""));
+					} else if (typeCB.getSelectedItem().equals(NULL)) {
+						_bindingSelectorPanel._bindingSelector.setEditedObject(new NullStaticBinding(_bindingSelectorPanel._bindingSelector
+								.getBindingDefinition(), _bindingSelectorPanel._bindingSelector.getBindable()));
 					}
 				}
 			});
@@ -289,6 +294,12 @@ class StaticBindingPanel extends JPanel {
 				typeCB.setSelectedItem(DKV);
 			}
 			isUpdatingPanel = false;
+
+			if (_bindingSelectorPanel._bindingSelector.getEditedObject() instanceof NullStaticBinding) {
+				isUpdatingPanel = true;
+				typeCB.setSelectedItem(NULL);
+				isUpdatingPanel = false;
+			}
 
 			typeCB.setFont(SMALL_FONT);
 			add(typeCB);

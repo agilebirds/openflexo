@@ -30,6 +30,8 @@ import javax.swing.JLabel;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -180,7 +182,14 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			DataBinding variableDB = assign.getVariable();
 			DataBinding valueDB = assign.getValue();
 			if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
-				Object value = valueDB.getBinding().getBindingValue(getController());
+				Object value = null;
+				try {
+					value = valueDB.getBinding().getBindingValue(getController());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				if (variableDB.getBinding().isBindingValid()) {
 					// System.out.println("Assignment " + assign + " set value with " + value);
 					variableDB.getBinding().setBindingValue(value, this);

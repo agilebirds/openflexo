@@ -56,6 +56,7 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 	public Component getTreeCellRendererComponent(JTree arg0, Object object, boolean _selected, boolean expanded, boolean leaf, int arg5,
 			boolean arg6) {
 		ProjectBrowser browser = (ProjectBrowser) arg0.getModel();
+		boolean setHoldStructure = browser.isHoldingStructure();
 		try {
 			browser.setHoldStructure();
 			super.getTreeCellRendererComponent(arg0, object, _selected, expanded, leaf, arg5, arg6);
@@ -80,7 +81,9 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		} finally {
-			browser.resetHoldStructure();
+			if (!setHoldStructure) {
+				browser.resetHoldStructure();
+			}
 		}
 		return this;
 	}
@@ -91,38 +94,26 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 	}
 
 	/*
-	    public Color getBackgroundNonSelectionColor()
-	    {
-	        return Color.WHITE;
-	    }
-
-	    public Color getBackgroundSelectionColor()
-	    {
-	        return FlexoCst.LIGHT_BLUE;
-	    }
-
-	    */
+	 * public Color getBackgroundNonSelectionColor() { return Color.WHITE; }
+	 * 
+	 * public Color getBackgroundSelectionColor() { return FlexoCst.LIGHT_BLUE; }
+	 */
 	/*
-	 * public Icon getIcon() { if (_element != null) { return
-	 * _element.getIcon(); } return null; }
-	 *
-	 * public Icon getClosedIcon() { if (getIcon() != null) { return getIcon(); }
-	 * return super.getClosedIcon(); }
-	 *
-	 * public Icon getOpenIcon() { if (getIcon() != null) { return getIcon(); }
-	 * return super.getOpenIcon(); }
-	 *
-	 * public Icon getLeafIcon() { if (getIcon() != null) { return getIcon(); }
-	 * return super.getLeafIcon(); }
+	 * public Icon getIcon() { if (_element != null) { return _element.getIcon(); } return null; }
+	 * 
+	 * public Icon getClosedIcon() { if (getIcon() != null) { return getIcon(); } return super.getClosedIcon(); }
+	 * 
+	 * public Icon getOpenIcon() { if (getIcon() != null) { return getIcon(); } return super.getOpenIcon(); }
+	 * 
+	 * public Icon getLeafIcon() { if (getIcon() != null) { return getIcon(); } return super.getLeafIcon(); }
 	 */
 
 	/*
 	 * public Icon getDefaultClosedIcon() { return null; }
-	 *
+	 * 
 	 * public Icon getDefaultLeafIcon() { return null; }
-	 *
+	 * 
 	 * public Icon getDefaultOpenIcon() { return null; }
-	 *
 	 */
 
 	/**

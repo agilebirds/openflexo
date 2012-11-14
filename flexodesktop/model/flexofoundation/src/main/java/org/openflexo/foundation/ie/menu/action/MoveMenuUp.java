@@ -62,6 +62,10 @@ public class MoveMenuUp extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
+
 	private FlexoItemMenu itemMenu;
 
 	/**

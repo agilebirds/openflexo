@@ -135,6 +135,16 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		validate();
 
 	}
+	
+	public void delete() {
+		if (getSelectionModel() != null) {
+			getSelectionModel().removeListSelectionListener(this);
+		}
+		if (_model != null) {
+			_model.delete();
+			_model = null;
+		}
+	}
 
 	public FlexoController getController() {
 		return _controller;
@@ -493,7 +503,6 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		}
 
 		if (getSelectionManager() != null && _synchronizeWithSelectionManager) {
-
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
 			}

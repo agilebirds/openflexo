@@ -71,6 +71,10 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+	}
+
 	private ViewObject _parent;
 	private ViewPointPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
@@ -158,7 +162,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected ViewShape performAddShape(AddShape action) {
 		ViewShape newShape = super.performAddShape(action);
 		if (newShape != null) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation();
+			ShapeGraphicalRepresentation<?> gr = newShape.getGraphicalRepresentation();
 			if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
 				// Declare shape as new shape only if it is the primary representation role of the EP
 

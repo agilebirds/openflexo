@@ -31,6 +31,7 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
@@ -705,7 +706,7 @@ public class BindingExpression extends AbstractBinding {
 		return expression.getEvaluationType();
 	}
 
-	public BindingExpression evaluate() throws TypeMismatchException {
+	public BindingExpression evaluate() throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return clone();
 		}

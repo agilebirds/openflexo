@@ -61,6 +61,10 @@ public class RepairTOCEntry extends FlexoAction<RepairTOCEntry, TOCEntry, TOCObj
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
+
 	private FixProposal choice;
 	private FlexoModelObject modelObject;
 

@@ -80,6 +80,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass DATATYPE = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_DATATYPE_URI);
 		assertNotNull(DATATYPE);
 		OWLClass CONTAINER = rdfsOntology.getClass(RDFSURIDefinitions.RDFS_CONTAINER_URI);
+
 		assertNotNull(CONTAINER);
 
 		OntologyProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);

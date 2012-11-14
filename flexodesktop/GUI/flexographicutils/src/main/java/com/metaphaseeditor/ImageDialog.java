@@ -33,8 +33,7 @@ import org.openflexo.toolbox.ImageIconResource;
 public class ImageDialog extends javax.swing.JDialog {
 
 	private enum Alignment {
-		NONE("None", null), TOP("Top", "top"), BOTTOM("Bottom", "bottom"), MIDDLE("Middle", "middle"), LEFT("Left", "left"), RIGHT(
-				"Right",
+		NONE("None", null), TOP("Top", "top"), BOTTOM("Bottom", "bottom"), MIDDLE("Middle", "middle"), LEFT("Left", "left"), RIGHT("Right",
 				"right");
 
 		private String text;

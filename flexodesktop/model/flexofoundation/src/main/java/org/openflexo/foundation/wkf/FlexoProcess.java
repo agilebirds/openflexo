@@ -56,7 +56,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
@@ -125,12 +124,8 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddProcessMetricsValue;
-import org.openflexo.foundation.wkf.action.AddServiceInterface;
 import org.openflexo.foundation.wkf.action.AddStatus;
-import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
-import org.openflexo.foundation.wkf.action.GenerateProcessScreenshot;
-import org.openflexo.foundation.wkf.action.OpenPortRegistery;
 import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.dm.AssociationInserted;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -604,12 +599,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			return false;
 		}
 		/*
-		 * if (getParentProcess()==null && p.getParentProcess()!=null) return
-		 * false; else if(getParentProcess()!=null &&
-		 * p.getParentProcess()==null) return false; else if
-		 * (getParentProcess()!=null && p.getParentProcess()!=null &&
-		 * !(getParentProcess().getURI().equals(p.getParentProcess().getUri())))
-		 * { return false; }
+		 * if (getParentProcess()==null && p.getParentProcess()!=null) return false; else if(getParentProcess()!=null &&
+		 * p.getParentProcess()==null) return false; else if (getParentProcess()!=null && p.getParentProcess()!=null &&
+		 * !(getParentProcess().getURI().equals(p.getParentProcess().getUri()))) { return false; }
 		 */
 		if (compareChildren) {
 			boolean ok = getSubProcesses().size() != 0 && p.getSubProcesses() != null
@@ -830,11 +822,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	}
 
 	/*
-	 * public FlexoPetriGraph getPetriGraph(String context) { return
-	 * getActivityPetriGraph(); }
-	 *
-	 * public void setPetriGraph(FlexoPetriGraph aPetriGraph, String context) {
-	 * setActivityPetriGraph((ActivityPetriGraph) aPetriGraph); }
+	 * public FlexoPetriGraph getPetriGraph(String context) { return getActivityPetriGraph(); }
+	 * 
+	 * public void setPetriGraph(FlexoPetriGraph aPetriGraph, String context) { setActivityPetriGraph((ActivityPetriGraph) aPetriGraph); }
 	 */
 
 	public ActivityPetriGraph getActivityPetriGraph() {
@@ -884,9 +874,10 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	protected StatusList getStatusList(boolean createIfMissing) {
 		if (_statusList == null && createIfMissing) {
 			if (!isDeserializing()) {
-				_statusList = new StatusList(this, true);
+				setStatusList(new StatusList(this, true));
+
 			} else {
-				_statusList = new StatusList(this, false);
+				setStatusList(new StatusList(this, false));
 			}
 		}
 		return _statusList;
@@ -894,6 +885,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 
 	public void setStatusList(StatusList list) {
 		_statusList = list;
+		setChanged();
+		notifyAttributeModification("statusList", null, _statusList);
 	}
 
 	protected void notifyStatusListUpdated() {
@@ -940,10 +933,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 
 	/*
 	 * public String getComponentPrefix() { return componentPrefix; }
-	 *
-	 *
-	 * public void setComponentPrefix(String componentPrefix) {
-	 * this.componentPrefix = componentPrefix; }
+	 * 
+	 * 
+	 * public void setComponentPrefix(String componentPrefix) { this.componentPrefix = componentPrefix; }
 	 */
 
 	@Override
@@ -992,22 +984,6 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddSubProcess.actionType);
-		returned.add(AddStatus.actionType);
-		returned.add(AddServiceInterface.actionType);
-		returned.add(GenerateProcessScreenshot.actionType);
-		returned.add(OpenPortRegistery.actionType);
-		return returned;
-	}
-
-	// ==========================================================================
-	// ============================= InspectableObject
-	// ==========================
-	// ==========================================================================
-
-	@Override
 	public String getInspectorName() {
 		if (isImported()) {
 			return Inspectors.WKF.IMPORTED_PROCESS;
@@ -1024,8 +1000,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 * Same as getParentProcess(), but used in an interactive context (inspector)
 	 */
 	/*
-	 * public FlexoProcess getInteractiveParentProcess() { return
-	 * getParentProcess(); }
+	 * public FlexoProcess getInteractiveParentProcess() { return getParentProcess(); }
 	 */
 
 	/**
@@ -1033,9 +1008,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 * will be caught by a controller which has the responsability to continue process if confirmation was given.
 	 */
 	/*
-	 * public void setInteractiveParentProcess(FlexoProcess aNewParentProcess) {
-	 * if (aNewParentProcess != getInteractiveParentProcess()) { throw new
-	 * ProcessMovingConfirmation(this, aNewParentProcess); } }
+	 * public void setInteractiveParentProcess(FlexoProcess aNewParentProcess) { if (aNewParentProcess != getInteractiveParentProcess()) {
+	 * throw new ProcessMovingConfirmation(this, aNewParentProcess); } }
 	 */
 
 	/**
@@ -1356,10 +1330,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 * @return a Vector of ComponentDefinition
 	 */
 	/*
-	 * public Vector<ComponentDefinition> getAllComponents() {
-	 * Vector<ComponentDefinition> answer = new Vector<ComponentDefinition>();
-	 * answer.addAll(getAllOperationComponents());
-	 * answer.addAll(getAllThumnailComponents()); return answer; }
+	 * public Vector<ComponentDefinition> getAllComponents() { Vector<ComponentDefinition> answer = new Vector<ComponentDefinition>();
+	 * answer.addAll(getAllOperationComponents()); answer.addAll(getAllThumnailComponents()); return answer; }
 	 */
 	public Vector<OperationComponentInstance> getAllComponentInstances() {
 		Vector<OperationComponentInstance> answer = new Vector<OperationComponentInstance>();
@@ -1378,12 +1350,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 */
 	public Vector<TabComponentDefinition> getAllThumnailComponents() {
 		/*
-		 * Vector answer = new Vector(); Enumeration en =
-		 * getAllOperationNodes().elements(); OperationNode cur = null;
-		 * while(en.hasMoreElements()){ cur = (OperationNode)en.nextElement();
-		 * if(cur.getComponentDefinition()!=null){
-		 * answer.addAll(cur.getComponentDefinition
-		 * ().getThumbnailsComponentList()); } }
+		 * Vector answer = new Vector(); Enumeration en = getAllOperationNodes().elements(); OperationNode cur = null;
+		 * while(en.hasMoreElements()){ cur = (OperationNode)en.nextElement(); if(cur.getComponentDefinition()!=null){
+		 * answer.addAll(cur.getComponentDefinition ().getThumbnailsComponentList()); } }
 		 */
 		return getProject().getFlexoComponentLibrary().getTabComponentList();
 	}
@@ -1500,9 +1469,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			String oldName = _name;
 			_name = newName;
 			/*
-			 * if (getProcessNode() != null) { if
-			 * (logger.isLoggable(Level.FINE))
-			 * logger.fine("rename process node with " + newName);
+			 * if (getProcessNode() != null) { if (logger.isLoggable(Level.FINE)) logger.fine("rename process node with " + newName);
 			 * getProcessNode().setName(newName); }
 			 */
 			setChanged();
@@ -1550,12 +1517,10 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	}
 
 	/*
-	 * public BindingVariable getBusinessData() { if (_businessData == null) {
-	 * _businessData = new BindingVariable(this,getProject().getDataModel()); }
-	 * return _businessData; }
-	 *
-	 * public void setBusinessData(BindingVariable businessData) { _businessData
-	 * = businessData; }
+	 * public BindingVariable getBusinessData() { if (_businessData == null) { _businessData = new
+	 * BindingVariable(this,getProject().getDataModel()); } return _businessData; }
+	 * 
+	 * public void setBusinessData(BindingVariable businessData) { _businessData = businessData; }
 	 */
 
 	public DMProperty getBusinessDataProperty() {
@@ -1704,25 +1669,18 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			}
 			appendAllAbstractNodesOfPetriGraph(getActivityPetriGraph(), allAbstractNodes);
 			/*
-			 * allAbstractNodes.addAll(getAllActivities()); if
-			 * (getPortRegistery() != null) {
-			 * allAbstractNodes.addAll(getPortRegistery().getAllPorts()); } for
-			 * (Enumeration e = getAllSubProcessNodes().elements();
-			 * e.hasMoreElements();) { SubProcessNode node = (SubProcessNode)
-			 * e.nextElement(); if (node.getPortMapRegistery() != null) {
-			 * allAbstractNodes
-			 * .addAll(node.getPortMapRegistery().getPortMaps()); } }
-			 *
-			 * // Don't do this, this will be done while adding
-			 * getAllDeepOperatorNodes() // All activity-level operator nodes
-			 * were recorded twice !!!!!!
-			 *
+			 * allAbstractNodes.addAll(getAllActivities()); if (getPortRegistery() != null) {
+			 * allAbstractNodes.addAll(getPortRegistery().getAllPorts()); } for (Enumeration e = getAllSubProcessNodes().elements();
+			 * e.hasMoreElements();) { SubProcessNode node = (SubProcessNode) e.nextElement(); if (node.getPortMapRegistery() != null) {
+			 * allAbstractNodes .addAll(node.getPortMapRegistery().getPortMaps()); } }
+			 * 
+			 * // Don't do this, this will be done while adding getAllDeepOperatorNodes() // All activity-level operator nodes were recorded
+			 * twice !!!!!!
+			 * 
 			 * // allAbstractNodes.addAll(getAllOperatorNodes());
-			 *
-			 * if (_petriGraph != null) {
-			 * allAbstractNodes.addAll(_petriGraph.getAllOperationNodes());
-			 * allAbstractNodes.addAll(_petriGraph.getAllActionNodes());
-			 * allAbstractNodes.addAll(_petriGraph.getAllDeepOperatorNodes()); }
+			 * 
+			 * if (_petriGraph != null) { allAbstractNodes.addAll(_petriGraph.getAllOperationNodes());
+			 * allAbstractNodes.addAll(_petriGraph.getAllActionNodes()); allAbstractNodes.addAll(_petriGraph.getAllDeepOperatorNodes()); }
 			 */
 		}
 		return allAbstractNodes;
@@ -1771,25 +1729,18 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			}
 			appendAllNodesOfPetriGraph(getActivityPetriGraph(), allNodes);
 			/*
-			 * allAbstractNodes.addAll(getAllActivities()); if
-			 * (getPortRegistery() != null) {
-			 * allAbstractNodes.addAll(getPortRegistery().getAllPorts()); } for
-			 * (Enumeration e = getAllSubProcessNodes().elements();
-			 * e.hasMoreElements();) { SubProcessNode node = (SubProcessNode)
-			 * e.nextElement(); if (node.getPortMapRegistery() != null) {
-			 * allAbstractNodes
-			 * .addAll(node.getPortMapRegistery().getPortMaps()); } }
-			 *
-			 * // Don't do this, this will be done while adding
-			 * getAllDeepOperatorNodes() // All activity-level operator nodes
-			 * were recorded twice !!!!!!
-			 *
+			 * allAbstractNodes.addAll(getAllActivities()); if (getPortRegistery() != null) {
+			 * allAbstractNodes.addAll(getPortRegistery().getAllPorts()); } for (Enumeration e = getAllSubProcessNodes().elements();
+			 * e.hasMoreElements();) { SubProcessNode node = (SubProcessNode) e.nextElement(); if (node.getPortMapRegistery() != null) {
+			 * allAbstractNodes .addAll(node.getPortMapRegistery().getPortMaps()); } }
+			 * 
+			 * // Don't do this, this will be done while adding getAllDeepOperatorNodes() // All activity-level operator nodes were recorded
+			 * twice !!!!!!
+			 * 
 			 * // allAbstractNodes.addAll(getAllOperatorNodes());
-			 *
-			 * if (_petriGraph != null) {
-			 * allAbstractNodes.addAll(_petriGraph.getAllOperationNodes());
-			 * allAbstractNodes.addAll(_petriGraph.getAllActionNodes());
-			 * allAbstractNodes.addAll(_petriGraph.getAllDeepOperatorNodes()); }
+			 * 
+			 * if (_petriGraph != null) { allAbstractNodes.addAll(_petriGraph.getAllOperationNodes());
+			 * allAbstractNodes.addAll(_petriGraph.getAllActionNodes()); allAbstractNodes.addAll(_petriGraph.getAllDeepOperatorNodes()); }
 			 */
 		}
 		return allNodes;
@@ -2100,8 +2051,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			}
 		}
 		/*
-		 * FlexoProcessNode processNode = getProcessNode(); if (processNode !=
-		 * null) { processNode.delete(); processNode = null; }
+		 * FlexoProcessNode processNode = getProcessNode(); if (processNode != null) { processNode.delete(); processNode = null; }
 		 */
 		if (_petriGraph != null) {
 			_petriGraph.delete();
@@ -2291,26 +2241,17 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		// Scrum 1.3.2: request to remove disambiguation of node names
 		/*
 		 * Vector allNodes = getAllAbstractNodes();
-		 *
-		 * boolean found = false; int i = 0; String tryWith =
-		 * fullQualifiedBaseName; String returnedName = baseName;
-		 *
-		 * if (logger.isLoggable(Level.FINE))
-		 * logger.fine("findNextInitialName() for " + fullQualifiedBaseName);
-		 *
-		 * while (!found) { boolean alreadyExists = false; if
-		 * (logger.isLoggable(Level.FINE)) logger.fine("look " + tryWith); for
-		 * (Enumeration e = allNodes.elements(); (e.hasMoreElements() &&
-		 * !(alreadyExists));) { String next = ((AbstractNode)
-		 * e.nextElement()).getFullyQualifiedName(); if
-		 * (logger.isLoggable(Level.FINE)) logger.fine("  > already " + next);
-		 * if (next.equalsIgnoreCase(tryWith)) { alreadyExists = true; } }
-		 * alreadyExists |= getName().equalsIgnoreCase(returnedName); if
-		 * (alreadyExists) { i++; tryWith = fullQualifiedBaseName + "-" + i;
-		 * returnedName = baseName + "-" + i; } else { found = true; } } if
-		 * (logger.isLoggable(Level.FINE))
-		 * logger.fine("findNextInitialName() return " + tryWith); return
-		 * returnedName;
+		 * 
+		 * boolean found = false; int i = 0; String tryWith = fullQualifiedBaseName; String returnedName = baseName;
+		 * 
+		 * if (logger.isLoggable(Level.FINE)) logger.fine("findNextInitialName() for " + fullQualifiedBaseName);
+		 * 
+		 * while (!found) { boolean alreadyExists = false; if (logger.isLoggable(Level.FINE)) logger.fine("look " + tryWith); for
+		 * (Enumeration e = allNodes.elements(); (e.hasMoreElements() && !(alreadyExists));) { String next = ((AbstractNode)
+		 * e.nextElement()).getFullyQualifiedName(); if (logger.isLoggable(Level.FINE)) logger.fine("  > already " + next); if
+		 * (next.equalsIgnoreCase(tryWith)) { alreadyExists = true; } } alreadyExists |= getName().equalsIgnoreCase(returnedName); if
+		 * (alreadyExists) { i++; tryWith = fullQualifiedBaseName + "-" + i; returnedName = baseName + "-" + i; } else { found = true; } }
+		 * if (logger.isLoggable(Level.FINE)) logger.fine("findNextInitialName() return " + tryWith); return returnedName;
 		 */
 		return baseName;
 	}
@@ -2321,16 +2262,11 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			// TODO: following must be put in some finalizer
 			/*
 			 * _registery.setX(250,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-			 * _registery.setY(60,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-			 * _registery
-			 * .setWidth(80,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-			 * _registery
-			 * .setHeight(20,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-			 * _registery.setX(250,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-			 * _registery.setY(60,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-			 * _registery
-			 * .setWidth(80,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-			 * _registery
+			 * _registery.setY(60,WKFRepresentableObject.BASIC_PROCESS_EDITOR); _registery
+			 * .setWidth(80,WKFRepresentableObject.BASIC_PROCESS_EDITOR); _registery
+			 * .setHeight(20,WKFRepresentableObject.BASIC_PROCESS_EDITOR); _registery.setX(250,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+			 * _registery.setY(60,WKFRepresentableObject.SWIMMING_LANE_EDITOR); _registery
+			 * .setWidth(80,WKFRepresentableObject.SWIMMING_LANE_EDITOR); _registery
 			 * .setHeight(20,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
 			 */
 		}

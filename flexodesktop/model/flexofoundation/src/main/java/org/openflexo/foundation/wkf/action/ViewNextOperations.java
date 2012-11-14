@@ -56,6 +56,10 @@ public class ViewNextOperations extends FlexoGUIAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ActionNode.class);
+	}
+
 	/**
 	 * @param actionType
 	 * @param focusedObject

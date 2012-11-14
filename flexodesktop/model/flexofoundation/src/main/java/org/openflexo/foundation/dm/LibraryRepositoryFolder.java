@@ -19,10 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Vector;
 import java.util.logging.Logger;
-
-import org.openflexo.foundation.dm.action.ImportJARFileRepository;
 
 public class LibraryRepositoryFolder extends DMRepositoryFolder {
 
@@ -96,15 +93,6 @@ public class LibraryRepositoryFolder extends DMRepositoryFolder {
 	@Override
 	public String getFullyQualifiedName() {
 		return getDMModel().getFullyQualifiedName() + ".LIBRARY_REPOSITORY_FOLDER";
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(ImportJARFileRepository.actionType);
-		// returned.add(ImportRationalRoseRepository.actionType);
-		// returned.add(ImportDenaliFoundationRepository.actionType);
-		return returned;
 	}
 
 	/**

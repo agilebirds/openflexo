@@ -62,6 +62,10 @@ public class CreateDMPackage extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMRepository.class);
+	}
+
 	CreateDMPackage(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

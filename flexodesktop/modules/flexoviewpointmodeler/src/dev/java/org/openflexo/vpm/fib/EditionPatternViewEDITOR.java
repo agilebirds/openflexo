@@ -22,8 +22,8 @@ package org.openflexo.vpm.fib;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;

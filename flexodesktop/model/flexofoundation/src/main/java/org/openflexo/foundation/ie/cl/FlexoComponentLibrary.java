@@ -34,14 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors.IEInspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.action.IECopy;
-import org.openflexo.foundation.ie.action.IECut;
-import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.foundation.ie.cl.dm.CLComponentCreated;
 import org.openflexo.foundation.ie.dm.TreeStructureChanged;
 import org.openflexo.foundation.rm.FlexoComponentLibraryResource;
@@ -112,21 +107,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	@Override
-	public IEObject getParent() {
-		return null;
-	};
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(IECut.actionType);
-		returned.remove(IECopy.actionType);
-		returned.add(AddComponent.actionType);
-		returned.add(AddComponentFolder.actionType);
-		return returned;
-	}
-
-	@Override
 	public FlexoComponentLibraryResource getFlexoResource() {
 		return _resource;
 	}
@@ -134,6 +114,11 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
+	}
+
+	@Override
+	public IEObject getParent() {
+		return null;
 	}
 
 	/**

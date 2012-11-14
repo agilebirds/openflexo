@@ -24,11 +24,13 @@ import java.io.File;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Constants used by the OE module.
+ * Constants used by the ViewEditor module.
  * 
  * @author sylvain
  */
 public class VECst {
+
+	public static final boolean CUT_COPY_PASTE_ENABLED = false;
 
 	public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";
 
@@ -48,6 +50,7 @@ public class VECst {
 	// Shema edition
 	public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
 	public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
+	public static File REINDEX_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexViewElementsDialog.fib");
 
 	// Ontology edition
 	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");

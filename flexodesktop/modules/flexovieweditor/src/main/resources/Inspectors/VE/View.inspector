@@ -12,8 +12,10 @@
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" readOnly="true" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
       <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-     <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.viewPoint.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+      <Label label="version" localize="true" name="ViewpointVersionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewpointVersion" data="data.viewPoint.version" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
+     <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=true)">
  
         <Tab index="0" title="Drawing" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="BasicTab">
       <Label label="width" localize="true" name="WidthLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />

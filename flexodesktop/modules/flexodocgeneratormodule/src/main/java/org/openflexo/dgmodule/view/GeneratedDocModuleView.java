@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.DataModification;
@@ -73,7 +74,16 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		updateView();
 	}
 

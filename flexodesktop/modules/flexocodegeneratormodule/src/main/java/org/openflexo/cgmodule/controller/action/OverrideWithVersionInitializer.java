@@ -89,12 +89,16 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 						}
 
 					};
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
-						action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
+							action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, ask confirmation

@@ -56,6 +56,10 @@ public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEnt
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
+
 	RemoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

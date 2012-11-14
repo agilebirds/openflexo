@@ -51,6 +51,14 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 		getModel().addToSelectionListeners(this);
 	}
 
+	@Override
+	public void delete() {
+		if (getModel() != null) {
+			getModel().removeFromSelectionListeners(this);
+		}
+		super.delete();
+	}
+
 	/**
 	 * @return
 	 */

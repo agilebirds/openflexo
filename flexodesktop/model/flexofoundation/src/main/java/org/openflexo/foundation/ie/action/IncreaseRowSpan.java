@@ -59,6 +59,11 @@ public class IncreaseRowSpan extends FlexoUndoableAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
+
 	protected IncreaseRowSpan(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

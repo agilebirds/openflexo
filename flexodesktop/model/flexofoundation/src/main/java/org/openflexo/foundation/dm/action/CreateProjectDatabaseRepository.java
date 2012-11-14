@@ -24,8 +24,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.PersistantDataRepositoryFolder;
 import org.openflexo.foundation.dm.ProjectDatabaseRepository;
 
 public class CreateProjectDatabaseRepository extends CreateDMRepository<CreateProjectDatabaseRepository> {
@@ -54,6 +57,11 @@ public class CreateProjectDatabaseRepository extends CreateDMRepository<CreatePr
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+		FlexoModelObject.addActionForClass(actionType, PersistantDataRepositoryFolder.class);
+	}
 
 	CreateProjectDatabaseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

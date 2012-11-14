@@ -52,6 +52,10 @@ public class AddToInheritanceChildItem extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+	}
+
 	private DocItem _parentDocItem;
 	private DocItem _childDocItem;
 

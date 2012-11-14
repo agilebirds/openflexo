@@ -75,11 +75,15 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getSGController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence or if the user used the shortcut, continue without confirmation

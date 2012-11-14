@@ -24,9 +24,10 @@ import java.lang.reflect.Type;
 public class FIBNumber extends FIBWidget {
 
 	public static enum Parameters implements FIBModelAttribute {
-		numberType, validateOnReturn, minValue, maxValue, increment, columns
+		numberType, validateOnReturn, minValue, maxValue, increment, allowsNull, columns
 	}
 
+	private boolean allowsNull = true;
 	private boolean validateOnReturn = false;
 	private Number minValue;
 	private Number maxValue;
@@ -194,6 +195,18 @@ public class FIBNumber extends FIBWidget {
 		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.validateOnReturn, validateOnReturn);
 		if (notification != null) {
 			this.validateOnReturn = validateOnReturn;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getAllowsNull() {
+		return allowsNull;
+	}
+
+	public void setAllowsNull(boolean allowsNull) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
+		if (notification != null) {
+			this.allowsNull = allowsNull;
 			hasChanged(notification);
 		}
 	}

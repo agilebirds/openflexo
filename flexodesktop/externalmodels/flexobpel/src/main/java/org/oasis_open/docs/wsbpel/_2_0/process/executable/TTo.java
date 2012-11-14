@@ -80,10 +80,7 @@ import org.w3c.dom.Element;
 public class TTo {
 
 	@XmlElementRefs({
-			@XmlElementRef(
-					name = "documentation",
-					namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable",
-					type = JAXBElement.class),
+			@XmlElementRef(name = "documentation", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class),
 			@XmlElementRef(name = "query", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class) })
 	@XmlMixed
 	@XmlAnyElement(lax = true)

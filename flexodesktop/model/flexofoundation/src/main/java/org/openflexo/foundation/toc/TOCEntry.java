@@ -33,18 +33,12 @@ import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
-import org.openflexo.foundation.toc.action.AddTOCEntry;
-import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
-import org.openflexo.foundation.toc.action.MoveTOCEntry;
-import org.openflexo.foundation.toc.action.RemoveTOCEntry;
-import org.openflexo.foundation.toc.action.RepairTOCEntry;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -175,17 +169,6 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
 		notifyObservers(new AttributeDataModification(attributeName, oldValue, newValue));
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(DeprecatedAddTOCEntry.actionType);
-		v.add(AddTOCEntry.actionType);
-		v.add(RemoveTOCEntry.actionType);
-		v.add(RepairTOCEntry.actionType);
-		v.add(MoveTOCEntry.actionType);
-		return v;
 	}
 
 	public boolean acceptsEntryAsChild(TOCEntry entry) {
@@ -990,30 +973,15 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	private BindingModel inferedBindingModel = null;
 
-	/*@Override
-	public BindingModel getBindingModel() {
-		if (bindingModel == null) {
-			rebuildBindingModel();
-		}
-		return bindingModel;
-	}
-
-	protected void rebuildBindingModel() {
-		bindingModel = buildBindingModel();
-		for (TOCEntry entry : getTocEntries()) {
-			entry.rebuildBindingModel();
-		}
-	}
-
-	protected BindingModel buildBindingModel() {
-		BindingModel returned;
-		if (getParent() == null) {
-			returned = new BindingModel();
-		} else {
-			returned = new BindingModel(getParent().getBindingModel());
-		}
-		return returned;
-	}*/
+	/*
+	 * @Override public BindingModel getBindingModel() { if (bindingModel == null) { rebuildBindingModel(); } return bindingModel; }
+	 * 
+	 * protected void rebuildBindingModel() { bindingModel = buildBindingModel(); for (TOCEntry entry : getTocEntries()) {
+	 * entry.rebuildBindingModel(); } }
+	 * 
+	 * protected BindingModel buildBindingModel() { BindingModel returned; if (getParent() == null) { returned = new BindingModel(); } else
+	 * { returned = new BindingModel(getParent().getBindingModel()); } return returned; }
+	 */
 
 	@Override
 	public BindingFactory getBindingFactory() {

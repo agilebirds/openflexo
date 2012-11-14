@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -38,8 +37,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
-import org.openflexo.foundation.wkf.action.ShowHidePortmapRegistery;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.PortMapInserted;
 import org.openflexo.foundation.wkf.dm.PortMapRegisteryInserted;
@@ -117,14 +114,6 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(OpenEmbeddedProcess.actionType);
-		returned.add(ShowHidePortmapRegistery.actionType);
-		return returned;
-	}
-
 	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess) {
 		if (aProcess == null) {
 			return true; // Null value is allowed in the context of edition
@@ -142,7 +131,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		}
 
 		if (parentProcess == null) {
-			return /*!aProcess.isRootProcess()*/true;// Allowed to invoke the root process
+			return /* !aProcess.isRootProcess() */true;// Allowed to invoke the root process
 		} else {
 			return parentProcess.isAncestorOf(getProcess());
 		}
@@ -394,11 +383,8 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	public void setSubProcessName(String subProcessName) {
 		// Not relevant anymore
 		/*
-		if (getSubProcess() != null) {
-		    _subProcess = null;
-		}
-		_subProcessName = subProcessName;
-		_subProcess = getSubProcess();*/
+		 * if (getSubProcess() != null) { _subProcess = null; } _subProcessName = subProcessName; _subProcess = getSubProcess();
+		 */
 	}
 
 	public PortMapRegistery getPortMapRegistery() {

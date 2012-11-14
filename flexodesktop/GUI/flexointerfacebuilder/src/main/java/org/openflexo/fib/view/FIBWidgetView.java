@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -215,13 +216,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		}
 
-		updateDependancies();
-		/*Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
-		while(it.hasNext()) {
-			FIBComponent c = it.next();
-			logger.info("Modified "+aValue+" now update "+c);
-			getController().viewForComponent(c).update();
-		}*/
+		updateDependancies(new Vector<FIBComponent>());
+		/*
+		 * Iterator<FIBComponent> it = getWidget().getMayAltersIterator(); while(it.hasNext()) { FIBComponent c = it.next();
+		 * logger.info("Modified "+aValue+" now update "+c); getController().viewForComponent(c).update(); }
+		 */
 
 		if (getWidget().getValueChangedAction().isValid()) {
 			getWidget().getValueChangedAction().execute(getController());
@@ -234,8 +233,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects
-				.refreshObserving(getController() /*,getWidget().getName() != null && getWidget().getName().equals("InspectorPropertyTable")*/);
+		dependingObjects.refreshObserving(getController() /*
+															* ,getWidget().getName() != null &&
+															* getWidget().getName().equals("InspectorPropertyTable")
+															*/);
 	}
 
 	@Override
@@ -246,11 +247,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update();
+					update(new Vector<FIBComponent>());
 				}
 			});
 		} else {
-			update();
+			update(new Vector<FIBComponent>());
 		}
 	}
 
@@ -262,11 +263,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update();
+					update(new Vector<FIBComponent>());
 				}
 			});
 		} else {
-			update();
+			update(new Vector<FIBComponent>());
 		}
 	}
 
@@ -301,17 +302,32 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return returned;
 	}
 
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
+	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
+	 * nothing and return.
+	 * 
+	 * @param callers
+	 *            all the components that have been previously updated during current update loop
+	 * @return a flag indicating if component has been updated
+	 */
 	@Override
-	public void update() {
+	public boolean update(List<FIBComponent> callers) {
 		try {
-			super.update();
+			if (!super.update(callers)) {
+				return false;
+			}
 			updateEnability();
 			// logger.info("Updating "+getWidget()+" value="+getValue());
+
+			// Add the component to the list of callers to avoid loops
+			callers.add(getComponent());
+
 			if (isComponentVisible()) {
 				updateDynamicTooltip();
 				updateDependingObjects();
 				if (updateWidgetFromModel()) {
-					updateDependancies();
+					updateDependancies(callers);
 				}
 			} else if ((dependingObjects == null || !dependingObjects.areDependingObjectsComputed()) && checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
@@ -319,13 +335,15 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				// are very important to know, aren'they ?)
 				updateDependingObjects();
 			}
+			return true;
 		} catch (Exception e) {
 			logger.warning("Unexpected exception: " + e.getMessage());
 			e.printStackTrace();
+			return false;
 		}
 	}
 
-	protected void updateDependancies() {
+	protected void updateDependancies(List<FIBComponent> callers) {
 		if (getController() == null) {
 			return;
 		}
@@ -336,7 +354,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			// logger.info("###### Component " + getWidget() + ", has been updated, now update " + c);
 			FIBView<?, ?> v = getController().viewForComponent(c);
 			if (v != null) {
-				v.update();
+				v.update(callers);
 			} else {
 				logger.warning("Cannot find FIBView for component " + c);
 			}
@@ -345,8 +363,20 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	@Override
-	public void updateDataObject(Object aDataObject) {
-		update();
+	public void updateDataObject(final Object aDataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(aDataObject);
+				}
+			});
+			return;
+		}
+		update(new Vector<FIBComponent>());
 	}
 
 	@Override
@@ -481,7 +511,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	public final void updateEnability() {
 		if (isComponentEnabled()) {
-			if (enabled == false) {
+			if (!enabled) {
 				// Becomes enabled
 				logger.fine("Component becomes enabled");
 				// System.out.println("Component  becomes enabled "+getJComponent());
@@ -489,7 +519,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				enabled = true;
 			}
 		} else {
-			if (enabled == true) {
+			if (enabled) {
 				// Becomes disabled
 				logger.fine("Component becomes disabled");
 				// System.out.println("Component  becomes disabled "+getJComponent());

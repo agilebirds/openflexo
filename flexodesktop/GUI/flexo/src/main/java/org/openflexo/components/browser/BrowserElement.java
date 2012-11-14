@@ -277,8 +277,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		// getIcon is only valid when accessed from the BrowserElement.getIcon method, because it
 		// can be overridden. Am I wrong?
 
-		/*return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getFilteredElementType()
-		    .getIcon());*/
+		/*
+		 * return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getFilteredElementType() .getIcon());
+		 */
 		if (initialFilterStatus == null) {
 			initialFilterStatus = BrowserFilterStatus.SHOW;
 		}
@@ -380,7 +381,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				repaintRequested = true;
 			}
 		}
-		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
+		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure() || _browser.isHoldingStructure()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -405,12 +406,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	private boolean refreshRequested = false;
 
-	/*    protected void refresh()
-	    {
-	        refreshRequestedWhenPossible = false;
-	        rebuildChildren();
-	    }
-	    */
+	/*
+	 * protected void refresh() { refreshRequestedWhenPossible = false; rebuildChildren(); }
+	 */
 	// public boolean refreshRequestedWhenPossible = false;
 
 	public void refreshWhenPossible() {
@@ -549,9 +547,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		}
 		return className + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]";
 		/*
-		return getClass().getName() + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]/"
-		        + hashCode() + "/"
-		        + ((_browser == null) ? "browser=null" : "browser=" + _browser.hashCode());*/
+		 * return getClass().getName() + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]/" + hashCode() + "/" + ((_browser == null) ?
+		 * "browser=null" : "browser=" + _browser.hashCode());
+		 */
 	}
 
 	/**

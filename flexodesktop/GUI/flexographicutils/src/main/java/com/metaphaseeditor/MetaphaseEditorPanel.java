@@ -28,6 +28,9 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -62,7 +65,6 @@ import java.util.zip.ZipInputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -99,6 +101,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import org.openflexo.swing.layout.WrapLayout;
+import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.toolbox.ImageIconResource;
 
 import com.metaphaseeditor.action.AddAttributesAction;
@@ -232,8 +236,8 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private enum ParagraphFormat {
 		PARAGRAPH_FORMAT("Format", null), NORMAL("Normal", Tag.P), HEADING1("Heading 1", Tag.H1), HEADING2("Heading 2", Tag.H2), HEADING3(
-				"Heading 3",
-				Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
+
+		"Heading 3", Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
 				"Formatted",
 				Tag.PRE), ADDRESS("Address", Tag.ADDRESS);
 
@@ -1095,8 +1099,8 @@ public class MetaphaseEditorPanel extends JPanel {
 
 		setLayout(new BorderLayout());
 
-		toolbarPanel = new JPanel();
-		toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
+		toolbarPanel = new JPanel(new GridBagLayout());
+		// toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
 
 		add(toolbarPanel, BorderLayout.NORTH);
 		add(mainScrollPane, BorderLayout.CENTER);
@@ -1174,10 +1178,15 @@ public class MetaphaseEditorPanel extends JPanel {
 		if (configuration.hasOption(ABOUT_PANEL_KEY)) {
 			aboutPanel = makeGroup(ABOUT_PANEL_KEY, configuration, aboutButton);
 		}
-
-		toolbarPanel.add(makeLinePanel(1, configuration));
-		toolbarPanel.add(makeLinePanel(2, configuration));
-		toolbarPanel.add(makeLinePanel(3, configuration));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.weightx = 1.0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.insets = new Insets(3, 3, 3, 3);
+		toolbarPanel.add(makeLinePanel(1, configuration), gbc);
+		toolbarPanel.add(makeLinePanel(2, configuration), gbc);
+		toolbarPanel.add(makeLinePanel(3, configuration), gbc);
 
 		toolbarPanel.revalidate();
 		toolbarPanel.repaint();
@@ -1279,7 +1288,8 @@ public class MetaphaseEditorPanel extends JPanel {
 		});
 
 		JPanel returned = new JPanel();
-		returned.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 0));
+		returned.setVisible(components.size() > 0);
+		returned.setLayout(new WrapLayout(FlowLayout.LEADING, 10, 0));
 		for (JComponent c : components) {
 			returned.add(c);
 		}
@@ -1869,18 +1879,23 @@ public class MetaphaseEditorPanel extends JPanel {
 		private Color color;
 
 		public BackgroundColorAction(Color color) {
-			super(StyleConstants.StrikeThrough.toString());
+			super(StyleConstants.Background.toString());
 			this.color = color;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			JEditorPane editor = getEditor(ae);
-			if (editor != null) {
-				SimpleAttributeSet sas = new SimpleAttributeSet();
-				StyleConstants.setBackground(sas, color);
-				setCharacterAttributes(editor, sas, false);
-			}
+			// Add span Tag
+			String htmlStyle = "background-color: #" + HTMLUtils.toHexString(color);
+			SimpleAttributeSet attr = new SimpleAttributeSet();
+			attr.addAttribute(HTML.Attribute.STYLE, htmlStyle);
+			MutableAttributeSet outerAttr = new SimpleAttributeSet();
+			outerAttr.addAttribute(HTML.Tag.SPAN, attr);
+			// Next line is just an instruction to editor to change color
+			StyleConstants.setBackground(outerAttr, this.color);
+			setCharacterAttributes(editor, outerAttr, false);
+
 		}
 	}
 

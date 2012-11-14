@@ -29,9 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
-import org.openflexo.foundation.dm.action.DuplicateDMMethod;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMMethodNameChanged;
@@ -288,10 +286,9 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 
 		if (getEntity() != null && !getSignature().equals(oldSignature)) {
-			/*if (getEntity().getMethod(getSignature()) != null) {
-			    throw new DuplicateMethodSignatureException(getSignature());
-			 }
-			 else {*/
+			/*
+			 * if (getEntity().getMethod(getSignature()) != null) { throw new DuplicateMethodSignatureException(getSignature()); } else {
+			 */
 			if (oldSignature != null) {
 				getEntity().removeMethodWithKey(oldSignature);
 			}
@@ -371,13 +368,6 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	public void setSpecificDescriptionsForKey(String description, String key) {
 		super.setSpecificDescriptionsForKey(description, key);
 		updateCode();
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(DuplicateDMMethod.actionType);
-		return returned;
 	}
 
 	public String getSimplifiedSignature() {
@@ -615,25 +605,14 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		notifyObservers(new DMAttributeDataModification("code", oldCode, getCode()));
 	}
 
-	/*public String getCode()
-	{
-	    return _code;
-	}
-
-	 public void setCode(String code)
-	{
-		if (code.indexOf("{") != 0) code = "{"+StringUtils.LINE_SEPARATOR+code;
-	   	if (!code.endsWith("}")) code = code+StringUtils.LINE_SEPARATOR+"}";
-	    _code = code;
-	    try {
-	        updateSignature();
-	    } catch (DuplicateMethodSignatureException e) {
-	        // Warns about the exception
-	        logger.warning ("Exception raised: "+e.getClass().getName()+". See console for details.");
-	        e.printStackTrace();
-	    }
-	   setChanged();
-	}*/
+	/*
+	 * public String getCode() { return _code; }
+	 * 
+	 * public void setCode(String code) { if (code.indexOf("{") != 0) code = "{"+StringUtils.LINE_SEPARATOR+code; if (!code.endsWith("}"))
+	 * code = code+StringUtils.LINE_SEPARATOR+"}"; _code = code; try { updateSignature(); } catch (DuplicateMethodSignatureException e) { //
+	 * Warns about the exception logger.warning ("Exception raised: "+e.getClass().getName()+". See console for details.");
+	 * e.printStackTrace(); } setChanged(); }
+	 */
 
 	String getDefaultCoreCode() {
 		if (getEntity() instanceof LoadableDMEntity) {
@@ -666,22 +645,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		} else if (getDescription() != null && getDescription().trim().length() > 0) {
 			javadoc.append("  * " + ToolBox.getJavaDocString(getDescription(), "  "));
 		}
-		/*else if (getDescription() != null) {
-			BufferedReader rdr = new BufferedReader(new StringReader(getDescription()));
-			boolean hasMoreLines = true;
-			while (hasMoreLines) {
-				String currentLine = null;
-				try {
-					currentLine = rdr.readLine();
-				}
-				catch (IOException e) {}
-				if (currentLine != null) {
-				    currentLine = ToolBox.getJavaDocString(currentLine);
-					javadoc.append("  * "+currentLine+StringUtils.LINE_SEPARATOR);
-				}
-				hasMoreLines = (currentLine != null);
-			}
-		}*/
+		/*
+		 * else if (getDescription() != null) { BufferedReader rdr = new BufferedReader(new StringReader(getDescription())); boolean
+		 * hasMoreLines = true; while (hasMoreLines) { String currentLine = null; try { currentLine = rdr.readLine(); } catch (IOException
+		 * e) {} if (currentLine != null) { currentLine = ToolBox.getJavaDocString(currentLine);
+		 * javadoc.append("  * "+currentLine+StringUtils.LINE_SEPARATOR); } hasMoreLines = (currentLine != null); } }
+		 */
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
 		Map<String, String> specificDescriptions = getSpecificDescriptions();
@@ -720,7 +689,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	public MethodSourceCode getSourceCode() {
 		if (sourceCode == null) {
-			sourceCode = new MethodSourceCode(this/*,"code","hasParseError","parseErrorWarning"*/) {
+			sourceCode = new MethodSourceCode(this/* ,"code","hasParseError","parseErrorWarning" */) {
 				@Override
 				public String makeComputedCode() {
 					return getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " {" + StringUtils.LINE_SEPARATOR
@@ -1022,15 +991,14 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	public void setName(String newName) throws DuplicateMethodSignatureException {
 		if (name == null || !name.equals(newName)) {
 			DMEntity containerEntity = getEntity();
-			/*if (containerEntity != null) {
-			    containerEntity.unregisterMethod(this, false);
-			}*/
+			/*
+			 * if (containerEntity != null) { containerEntity.unregisterMethod(this, false); }
+			 */
 			String oldName = name;
 			name = newName;
 			/*
-			if (containerEntity != null) {
-			    containerEntity.registerMethod(this, false);
-			}*/
+			 * if (containerEntity != null) { containerEntity.registerMethod(this, false); }
+			 */
 			_signatureFQ = null;
 			_signatureNFQ = null;
 			if (logger.isLoggable(Level.FINE)) {
@@ -1089,10 +1057,10 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	// private String returnTypeAsString;
 
 	public DMType getReturnType() {
-		/*if (_returnType==null && returnTypeAsString!=null) {
-			setReturnType(getDMModel().getDmTypeConverter().convertFromString(returnTypeAsString), false);
-			returnTypeAsString = null;
-		}*/
+		/*
+		 * if (_returnType==null && returnTypeAsString!=null) {
+		 * setReturnType(getDMModel().getDmTypeConverter().convertFromString(returnTypeAsString), false); returnTypeAsString = null; }
+		 */
 		return _returnType;
 	}
 
@@ -1129,18 +1097,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 	}
 
-	/*public String getReturnTypeAsString()
-	{
-		if (getReturnType()!=null)
-			return getDMModel().getDmTypeConverter().convertToString(getReturnType());
-		else
-			return null;
-	}
-
-	public void setReturnTypeAsString(String returnType)
-	{
-		returnTypeAsString = returnType;
-	}*/
+	/*
+	 * public String getReturnTypeAsString() { if (getReturnType()!=null) return
+	 * getDMModel().getDmTypeConverter().convertToString(getReturnType()); else return null; }
+	 * 
+	 * public void setReturnTypeAsString(String returnType) { returnTypeAsString = returnType; }
+	 */
 
 	/**
 	 * @deprecated Use getReturnType() instead, kept for backward compatibility in XML mappings
@@ -1326,10 +1288,10 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 		@Override
 		public DMType getType() {
-			/*if (_type==null && typeAsString!=null) {
-				setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false);
-				typeAsString = null;
-			}*/
+			/*
+			 * if (_type==null && typeAsString!=null) { setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false);
+			 * typeAsString = null; }
+			 */
 			return _type;
 		}
 
@@ -1366,16 +1328,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			}
 		}
 
-		/*public String getTypeAsString() {
-			if (getType()!=null)
-				return getDMModel().getDmTypeConverter().convertToString(getType());
-			else
-				return null;
-		}
-
-		public void setTypeAsString(String typeAsString) {
-			this.typeAsString = typeAsString;
-		}*/
+		/*
+		 * public String getTypeAsString() { if (getType()!=null) return getDMModel().getDmTypeConverter().convertToString(getType()); else
+		 * return null; }
+		 * 
+		 * public void setTypeAsString(String typeAsString) { this.typeAsString = typeAsString; }
+		 */
 
 		/**
 		 * @deprecated Use getType() instead, kept for backward compatibility in XML mappings
@@ -1444,17 +1402,13 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			return EMPTY_VECTOR;
 		}
 
-		/*private Class _unresolvedTypeClass;
-
-		public void setUnresolvedTypeClass(Class aClass)
-		{
-		    _unresolvedTypeClass = aClass;
-		}
-
-		public Class getUnresolvedTypeClass()
-		{
-		    return _unresolvedTypeClass;
-		}*/
+		/*
+		 * private Class _unresolvedTypeClass;
+		 * 
+		 * public void setUnresolvedTypeClass(Class aClass) { _unresolvedTypeClass = aClass; }
+		 * 
+		 * public Class getUnresolvedTypeClass() { return _unresolvedTypeClass; }
+		 */
 
 		/**
 		 * Overrides getClassNameKey
@@ -1466,17 +1420,13 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			return "dm_methode_parameter";
 		}
 
-		/*private DMType _unresolvedType;
-
-		public DMType getUnresolvedType()
-		{
-			return _unresolvedType;
-		}
-
-		public void setUnresolvedType(DMType unresolvedType2)
-		{
-			_unresolvedType = unresolvedType2;
-		}*/
+		/*
+		 * private DMType _unresolvedType;
+		 * 
+		 * public DMType getUnresolvedType() { return _unresolvedType; }
+		 * 
+		 * public void setUnresolvedType(DMType unresolvedType2) { _unresolvedType = unresolvedType2; }
+		 */
 
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
@@ -1567,40 +1517,24 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	// private DMType _unresolvedReturnType;
 
-	/*public DMType getUnresolvedReturnType()
-	{
-		return _unresolvedReturnType;
-	}
-
-	public void setUnresolvedReturnType(DMType unloadedReturnType)
-	{
-		_unresolvedReturnType = unloadedReturnType;
-	}
-
-	public String getUnresolvedReturnTypeName()
-	{
-		if (_unresolvedReturnType != null)
-			return _unresolvedReturnType.getValue();
-		return "???";
-	}*/
+	/*
+	 * public DMType getUnresolvedReturnType() { return _unresolvedReturnType; }
+	 * 
+	 * public void setUnresolvedReturnType(DMType unloadedReturnType) { _unresolvedReturnType = unloadedReturnType; }
+	 * 
+	 * public String getUnresolvedReturnTypeName() { if (_unresolvedReturnType != null) return _unresolvedReturnType.getValue(); return
+	 * "???"; }
+	 */
 
 	// private Vector<DMType> _unresolvedTypes = new Vector<DMType>();
 
-	/*public boolean isResolvable()
-	{
-		return (_unresolvedTypes.size() == 0);
-	}
-
-	public void addToUnresolvedTypes(DMType type)
-	{
-		logger.info(">>>> addToUnresolvedTypes() "+type);
-		_unresolvedTypes.add(type);
-	}
-
-	public Vector<DMType> getUnresolvedTypes()
-	{
-		return _unresolvedTypes;
-	}*/
+	/*
+	 * public boolean isResolvable() { return (_unresolvedTypes.size() == 0); }
+	 * 
+	 * public void addToUnresolvedTypes(DMType type) { logger.info(">>>> addToUnresolvedTypes() "+type); _unresolvedTypes.add(type); }
+	 * 
+	 * public Vector<DMType> getUnresolvedTypes() { return _unresolvedTypes; }
+	 */
 
 	public boolean isResolvable() {
 		if (getReturnType() == null) {

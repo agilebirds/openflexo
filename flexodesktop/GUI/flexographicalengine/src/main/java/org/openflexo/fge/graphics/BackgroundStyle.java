@@ -56,21 +56,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
 	public static enum Parameters implements GRParameter {
-		color,
-		color1,
-		color2,
-		direction,
-		textureType,
-		imageFile,
-		deltaX,
-		deltaY,
-		imageBackgroundType,
-		scaleX,
-		scaleY,
-		fitToShape,
-		imageBackgroundColor,
-		transparencyLevel,
-		useTransparency;
+		color, color1, color2, direction, textureType, imageFile, deltaX, deltaY, imageBackgroundType, scaleX, scaleY, fitToShape, imageBackgroundColor, transparencyLevel, useTransparency;
 	}
 
 	public static BackgroundStyle makeEmptyBackground() {
@@ -420,22 +406,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		}
 
 		public static enum TextureType implements HasIcon {
-			TEXTURE1,
-			TEXTURE2,
-			TEXTURE3,
-			TEXTURE4,
-			TEXTURE5,
-			TEXTURE6,
-			TEXTURE7,
-			TEXTURE8,
-			TEXTURE9,
-			TEXTURE10,
-			TEXTURE11,
-			TEXTURE12,
-			TEXTURE13,
-			TEXTURE14,
-			TEXTURE15,
-			TEXTURE16;
+			TEXTURE1, TEXTURE2, TEXTURE3, TEXTURE4, TEXTURE5, TEXTURE6, TEXTURE7, TEXTURE8, TEXTURE9, TEXTURE10, TEXTURE11, TEXTURE12, TEXTURE13, TEXTURE14, TEXTURE15, TEXTURE16;
 
 			public ImageIcon getImageIcon() {
 				return new ImageIconResource("Motifs/Motif" + (ordinal() + 1) + ".gif");

@@ -22,7 +22,7 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.module.FlexoResourceCenterService;

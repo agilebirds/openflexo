@@ -36,14 +36,8 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMType.DMTypeTokenizer;
-import org.openflexo.foundation.dm.action.CreateComponentFromEntity;
-import org.openflexo.foundation.dm.action.CreateDMMethod;
-import org.openflexo.foundation.dm.action.CreateDMProperty;
-import org.openflexo.foundation.dm.action.CreateDMTranstyper;
-import org.openflexo.foundation.dm.action.ShowTypeHierarchyAction;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
@@ -304,14 +298,11 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		return getEntityClassName();
 	}
 
-	/*protected void updateTypeObject(String oldClassName,String newClassName)
-	{
-		if(isDeserializing())return;
-		Enumeration<Typed> en = getTypedWithThisEntity().elements();
-		while(en.hasMoreElements()){
-			en.nextElement().updateTypeClassNameChange(oldClassName,newClassName);
-		}
-	}*/
+	/*
+	 * protected void updateTypeObject(String oldClassName,String newClassName) { if(isDeserializing())return; Enumeration<Typed> en =
+	 * getTypedWithThisEntity().elements(); while(en.hasMoreElements()){
+	 * en.nextElement().updateTypeClassNameChange(oldClassName,newClassName); } }
+	 */
 
 	public void setEntityClassName(String newEntityClassName) throws DuplicateClassNameException, InvalidNameException {
 		/* if (entityClassName == null) {
@@ -353,9 +344,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				entityPackageName = getRepository().getDefaultPackage().getName();
 			}
 			/*
-			 * else { if (logger.isLoggable(Level.WARNING))
-			 * logger.warning("Could not determine default package since
-			 * repository was not set !"); }
+			 * else { if (logger.isLoggable(Level.WARNING)) logger.warning("Could not determine default package since repository was not set
+			 * !"); }
 			 */
 		}
 		return entityPackageName;
@@ -425,10 +415,10 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public DMType getParentType() {
-		/*if (_parentType==null && parentTypeAsString!=null) {
-			setParentType(getDMModel().getDmTypeConverter().convertFromString(parentTypeAsString), false);
-			parentTypeAsString = null;
-		}*/
+		/*
+		 * if (_parentType==null && parentTypeAsString!=null) {
+		 * setParentType(getDMModel().getDmTypeConverter().convertFromString(parentTypeAsString), false); parentTypeAsString = null; }
+		 */
 		return _parentType;
 	}
 
@@ -465,20 +455,14 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		}
 	}
 
-	/* private String parentTypeAsString;
-
-	 public String getParentTypeAsString()
-	 {
-	 	if (getParentType()!=null)
-	 		return getDMModel().getDmTypeConverter().convertToString(getParentType());
-	 	else
-	 		return null;
-	 }
-
-	 public void setParentTypeAsString(String parentType)
-	 {
-	 	parentTypeAsString = parentType;
-	 }*/
+	/*
+	 * private String parentTypeAsString;
+	 * 
+	 * public String getParentTypeAsString() { if (getParentType()!=null) return
+	 * getDMModel().getDmTypeConverter().convertToString(getParentType()); else return null; }
+	 * 
+	 * public void setParentTypeAsString(String parentType) { parentTypeAsString = parentType; }
+	 */
 
 	public final DMEntity getParentBaseEntity() {
 		if (getParentType() != null) {
@@ -503,25 +487,14 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		childEntities.remove(anEntity);
 	}
 
-	/*public Vector<Typed> getTypedWithThisEntity()
-	{
-	    return typedWithThisEntity;
-	}
-
-	public void addToTypedWithThisType(Typed aTyped)
-	{
-	    if (aTyped.getType().getBaseEntity() == this) {
-	    	typedWithThisEntity.add(aTyped);
-	    } else {
-	        if (logger.isLoggable(Level.WARNING))
-	            logger.warning("Type doesn' match !");
-	    }
-	}
-
-	public void removeFromTypedWithThisType(Typed aTyped)
-	{
-		typedWithThisEntity.remove(aTyped);
-	}*/
+	/*
+	 * public Vector<Typed> getTypedWithThisEntity() { return typedWithThisEntity; }
+	 * 
+	 * public void addToTypedWithThisType(Typed aTyped) { if (aTyped.getType().getBaseEntity() == this) { typedWithThisEntity.add(aTyped); }
+	 * else { if (logger.isLoggable(Level.WARNING)) logger.warning("Type doesn' match !"); } }
+	 * 
+	 * public void removeFromTypedWithThisType(Typed aTyped) { typedWithThisEntity.remove(aTyped); }
+	 */
 
 	// ===========================================================
 	// ===================== FlexoObserver =======================
@@ -550,17 +523,6 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		} else {
 			super.update(observable, dataModification);
 		}
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMProperty.actionType);
-		returned.add(CreateDMMethod.actionType);
-		returned.add(CreateDMTranstyper.actionType);
-		returned.add(ShowTypeHierarchyAction.actionType);
-		returned.add(CreateComponentFromEntity.actionType);
-		return returned;
 	}
 
 	public DMRepository getRepository() {
@@ -977,7 +939,6 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive))*/) {
 			return DMType.makeResolvedDMType(getDMModel().getDMEntity(Object.class));
 		}
-		;
 		if (entity.getParentBaseEntity() != null) {
 			if (isAncestorOf(entity.getParentBaseEntity())) {
 				return entity.getParentType();
@@ -1049,14 +1010,11 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		}
 
 		// Handles 'typedWithThisType' relations
-		/*Vector<Typed> propertiesToUpdate = new Vector<Typed>();
-		propertiesToUpdate.addAll(getTypedWithThisEntity());
-		for (Enumeration en = propertiesToUpdate.elements(); en.hasMoreElements();) {
-		    Typed next = (Typed) en.nextElement();
-		    next.setType(null);
-		    if (logger.isLoggable(Level.FINE))
-		        logger.fine("Sets " + next + " to have null type");
-		}*/
+		/*
+		 * Vector<Typed> propertiesToUpdate = new Vector<Typed>(); propertiesToUpdate.addAll(getTypedWithThisEntity()); for (Enumeration en
+		 * = propertiesToUpdate.elements(); en.hasMoreElements();) { Typed next = (Typed) en.nextElement(); next.setType(null); if
+		 * (logger.isLoggable(Level.FINE)) logger.fine("Sets " + next + " to have null type"); }
+		 */
 
 		super.delete();
 		setChanged();
@@ -1350,17 +1308,12 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		return newProperty;
 	}
 
-	/*public void createBindingVariablesFromEntity(Bindable bindable, BindingModel bdmodel){
-		Enumeration<DMProperty> en = getProperties().elements();
-		DMProperty p = null;
-		while(en.hasMoreElements()){
-			p = en.nextElement();
-			BindingVariable newBV = new BindingVariable(bindable, getDMModel(), "");
-			newBV.setType(p.getType());
-			newBV.setVariableName(p.getName());
-			bdmodel.addToBindingVariables(newBV);
-		}
-	}*/
+	/*
+	 * public void createBindingVariablesFromEntity(Bindable bindable, BindingModel bdmodel){ Enumeration<DMProperty> en =
+	 * getProperties().elements(); DMProperty p = null; while(en.hasMoreElements()){ p = en.nextElement(); BindingVariable newBV = new
+	 * BindingVariable(bindable, getDMModel(), ""); newBV.setType(p.getType()); newBV.setVariableName(p.getName());
+	 * bdmodel.addToBindingVariables(newBV); } }
+	 */
 
 	/**
 	 * This date is use to perform fine tuning resource dependancies computing

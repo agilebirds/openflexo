@@ -85,6 +85,10 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoPetriGraph.class);
+	}
+
 	DropWKFElement(FlexoPetriGraph focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		parameters = new Hashtable<String, FlexoModelObject>();

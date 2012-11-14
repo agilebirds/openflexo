@@ -64,6 +64,12 @@ public class DeleteRow extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETRWidget.class);
+	}
+
 	DeleteRow(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

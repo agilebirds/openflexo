@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -56,6 +57,10 @@ public class OpenOperationComponent extends FlexoGUIAction<OpenOperationComponen
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	OpenOperationComponent(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

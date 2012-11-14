@@ -25,14 +25,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.wkf.action.DropWKFElement;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
 import org.openflexo.foundation.wkf.dm.ArtefactRemoved;
 import org.openflexo.foundation.wkf.dm.GroupInserted;
@@ -205,13 +203,6 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			return false;
 		}
 		return super.contains(obj);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(DropWKFElement.actionType);
-		return returned;
 	}
 
 	public Vector<PetriGraphNode> getNodes() {

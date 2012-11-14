@@ -275,12 +275,18 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 	}
 
 	public void err(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.err(log);
 		}
 	}
 
 	public void warn(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.warn(log);
 		}
@@ -288,6 +294,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 	@Override
 	public void log(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.log(log);
 		}

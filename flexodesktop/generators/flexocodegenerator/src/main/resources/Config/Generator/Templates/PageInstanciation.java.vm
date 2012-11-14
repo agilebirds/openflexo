@@ -596,7 +596,7 @@
             					#end
             					
             					#foreach($newStatus in ${workflowPath.getNewStatuses()})
-            						getBusinessDataStorage().setCurrentProcessBusinessDataStatus(WorkflowProcess.${newStatus.getProcess().getProcessDictionaryKey()}, "${newStatus.getName()}");
+            						getBusinessDataStorage().setCurrentProcessBusinessDataStatus(session().getWorkflowComponentInstance().getProcess(), "${newStatus.getName()}");
             					#end
             					
             					#if (!$button1.isInRepetition())

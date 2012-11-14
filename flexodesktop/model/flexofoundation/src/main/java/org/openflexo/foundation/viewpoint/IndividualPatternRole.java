@@ -6,7 +6,6 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.toolbox.StringUtils;
 
 public class IndividualPatternRole extends OntologicObjectPatternRole {
 
@@ -54,21 +53,6 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 
 	public void setOntologicType(OntologyClass ontologyClass) {
 		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
-	}
-
-	@Override
-	public String getLanguageRepresentation() {
-		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		StringBuffer sb = new StringBuffer();
-		sb.append("PatternRole " + getName() + " as individual of " + getOntologicType().getName() + " in defaultModelSlot");
-		sb.append(" {" + StringUtils.LINE_SEPARATOR);
-		sb.append(StringUtils.LINE_SEPARATOR);
-		/*for (EditionPattern ep : getEditionPatterns()) {
-			sb.append(ep.getLanguageRepresentation());
-			sb.append(StringUtils.LINE_SEPARATOR);
-		}*/
-		sb.append("}" + StringUtils.LINE_SEPARATOR);
-		return sb.toString();
 	}
 
 	public static class IndividualPatternRoleMustDefineAValidConceptClass extends

@@ -97,6 +97,8 @@ public interface Analysis extends Switch {
 
 	void caseAFalseConstant(AFalseConstant node);
 
+	void caseANullConstant(ANullConstant node);
+
 	void caseAPiConstant(APiConstant node);
 
 	void caseADecimalNumberNumber(ADecimalNumberNumber node);
@@ -192,6 +194,8 @@ public interface Analysis extends Switch {
 	void caseTTrue(TTrue node);
 
 	void caseTFalse(TFalse node);
+
+	void caseTNull(TNull node);
 
 	void caseTDecimalNumber(TDecimalNumber node);
 

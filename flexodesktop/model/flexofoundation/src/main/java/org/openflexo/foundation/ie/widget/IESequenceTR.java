@@ -24,10 +24,8 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.action.ExportWidgetToPalette;
 import org.openflexo.foundation.ie.dm.TRInserted;
 import org.openflexo.foundation.ie.util.TRCSSType;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -56,18 +54,6 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 			return (IESequenceTR) getParent();
 		}
 		return this;
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(ExportWidgetToPalette.actionType);
-		return returned;
 	}
 
 	@Override

@@ -26,14 +26,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.action.DropIEElement;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.dm.ColumnInserted;
 import org.openflexo.foundation.ie.dm.ColumnRemoved;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -149,16 +145,17 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 		// causing parent component
 		// to be marked as modified. Just call finalizer on parent again to
 		// clear modifications.
-		/*        if (getWOComponent() != null) {
-		            getWOComponent().finalizeDeserialization(builder);
-		        }
-		*/
+		/*
+		 * if (getWOComponent() != null) { getWOComponent().finalizeDeserialization(builder); }
+		 */
 	}
 
-	/*private void setParentOfSingleWidgetComponentInstance(IEHTMLTableWidget widget) {
-		_sequenceTR.setParentOfSingleWidgetComponentInstance(widget);
-		
-	}*/
+	/*
+	 * private void setParentOfSingleWidgetComponentInstance(IEHTMLTableWidget widget) {
+	 * _sequenceTR.setParentOfSingleWidgetComponentInstance(widget);
+	 * 
+	 * }
+	 */
 
 	private void reIndexTable() {
 		reIndexRows();
@@ -477,10 +474,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 		return true;
 	}
 
-	/*private void applyIncrementToCols(double d)
-	{
-		applyIncrementToCols(d, true);
-	}*/
+	/*
+	 * private void applyIncrementToCols(double d) { applyIncrementToCols(d, true); }
+	 */
 
 	private void applyIncrementToCols(double d, boolean checkAndFix) {
 		initPourcentageArray();
@@ -824,20 +820,6 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 		_isShowingBorder = v;
 		setChanged();
 		notifyObservers(new DisplayBorderChanged(this));
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(TopComponentUp.actionType);
-		v.add(TopComponentDown.actionType);
-		v.add(DropIEElement.actionType);
-		return v;
 	}
 
 	/**

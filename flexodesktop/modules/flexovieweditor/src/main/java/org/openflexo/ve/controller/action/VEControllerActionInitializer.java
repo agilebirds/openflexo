@@ -21,8 +21,9 @@ package org.openflexo.ve.controller.action;
 
 import java.util.logging.Logger;
 
-import org.openflexo.selection.SelectionManager;
+import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
 /**
@@ -39,12 +40,12 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		super(controller);
 	}
 
-	protected VEController getOEController() {
+	protected VEController getVEController() {
 		return (VEController) getController();
 	}
 
-	protected SelectionManager getOESelectionManager() {
-		return getOEController().getSelectionManager();
+	protected VESelectionManager getVESelectionManager() {
+		return (VESelectionManager) getVEController().getSelectionManager();
 	}
 
 	@Override
@@ -52,6 +53,15 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		super.initializeActions();
 
 		new VESetPropertyInitializer(this);
+		new VESetPropertyInitializer(this);
+
+		// Disabled copy/paste
+		if (VECst.CUT_COPY_PASTE_ENABLED) {
+			new VECopyInitializer(this);
+			new VECutInitializer(this);
+			new VEPasteInitializer(this);
+			new VESelectAllInitializer(this);
+		}
 
 		// Shema library perspective
 		new AddViewInitializer(this);

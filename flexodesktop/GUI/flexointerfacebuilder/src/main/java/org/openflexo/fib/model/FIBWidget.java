@@ -58,19 +58,7 @@ public abstract class FIBWidget extends FIBComponent {
 			BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
-		enable,
-		format,
-		icon,
-		tooltip,
-		tooltipText,
-		localize,
-		manageDynamicModel,
-		readOnly,
-		clickAction,
-		doubleClickAction,
-		rightClickAction,
-		enterPressedAction,
-		valueChangedAction
+		enable, format, icon, tooltip, tooltipText, localize, manageDynamicModel, readOnly, clickAction, doubleClickAction, rightClickAction, enterPressedAction, valueChangedAction
 	}
 
 	private DataBinding tooltip;

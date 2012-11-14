@@ -29,8 +29,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
@@ -201,14 +199,6 @@ public class DGRepository extends GenerationRepository {
 			return getFiguresSymbolicDirectory();
 		}
 		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddGeneratedCodeRepository.actionType);
-		// v.add(DeprecatedAddTOCEntry.actionType);
-		return v;
 	}
 
 	public ProjectExternalRepository getPostBuildRepository() {

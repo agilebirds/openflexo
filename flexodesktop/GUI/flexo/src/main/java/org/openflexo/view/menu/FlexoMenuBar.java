@@ -153,7 +153,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
 		// TODO Auto-generated method stub
 		boolean b = super.processKeyBinding(ks, e, condition, pressed);
-		if (!b) {
+		if (!b && ks != null) {
 			AbstractAction actionForKey = _controller.getActionForKeyStroke(ks);
 			if (actionForKey != null) {
 				Object eventSource = e.getSource();

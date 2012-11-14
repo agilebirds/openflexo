@@ -26,7 +26,9 @@ import org.openflexo.dataimporter.DataImporter;
 import org.openflexo.dataimporter.DataImporterLoader;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.RationalRoseRepository;
 import org.openflexo.localization.FlexoLocalization;
@@ -57,6 +59,10 @@ public class ImportRationalRoseRepository extends CreateDMRepository<ImportRatio
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+	}
 
 	ImportRationalRoseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

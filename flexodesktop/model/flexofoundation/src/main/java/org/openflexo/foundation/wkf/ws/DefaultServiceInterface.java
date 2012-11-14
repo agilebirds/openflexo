@@ -30,7 +30,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.LevelledObject;
@@ -38,7 +37,6 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.ServiceOperationInserted;
 import org.openflexo.foundation.wkf.dm.ServiceOperationRemoved;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.toolbox.EmptyVector;
 
 /**
  * A ServiceInteface is attached to a FlexoProcess and contains all the service operations used in the context of WebServices.
@@ -238,11 +236,6 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 		}
 
 		return null;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		return EmptyVector.EMPTY_VECTOR(FlexoActionType.class);
 	}
 
 	@Override

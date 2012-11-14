@@ -22,7 +22,6 @@ package org.openflexo.foundation.cg;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +30,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -100,13 +97,6 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 			getReaderRepository().removeFromRepositoriedUsingAsReader(this);
 		}
 		super.delete(progress, deleteFiles);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddGeneratedCodeRepository.actionType);
-		return returned;
 	}
 
 	@Override

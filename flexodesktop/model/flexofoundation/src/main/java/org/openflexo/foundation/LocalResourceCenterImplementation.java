@@ -21,12 +21,14 @@ package org.openflexo.foundation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.xsd.XSOntology;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -34,6 +36,7 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
+import org.openflexo.toolbox.IProgress;
 
 public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
@@ -103,6 +106,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			baseOntologyLibrary = new OntologyLibrary(this, null);
 			findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
+
+			// Bug fix: compatibility with old versions:
+			// If some of those ontologies were not found, try to copy default ontologies
+			if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
+					|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
+				copyOntologies(localDirectory, CopyStrategy.REPLACE);
+				findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+			}
+
 			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
 			// baseOntologyLibrary.debug();
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
@@ -143,17 +155,6 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	private void findOntologies(File dir, String baseUri, OntologyFolder folder) {
 		if (!dir.exists()) {
 			dir.mkdirs();
-		}
-		boolean forceUpdate = dir.listFiles().length == 0;
-		if (!forceUpdate && baseOntologyLibrary != null && folder == baseOntologyLibrary.getRootFolder()) {
-			// This should fix issue OPENFLEXO-197 until we find a better solution.
-			forceUpdate |= baseOntologyLibrary.getRDFSOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getRDFOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getOWLOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getFlexoConceptOntology() == null;
-		}
-		if (forceUpdate) {
-			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isFile() && (f.getName().endsWith(".owl") || f.getName().endsWith(".xsd"))) {
@@ -268,6 +269,30 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 				FileUtils.deleteDir(sdDir);
 			}
 		}
+	}
+
+	@Override
+	public List<FlexoResource> getAllResources(IProgress progress) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends FlexoResource> T retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends FlexoResource> List<T> retrieveResource(String uri, Class<T> type, IProgress progress) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void publishResource(FlexoResource resource, String newVersion, IProgress progress) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

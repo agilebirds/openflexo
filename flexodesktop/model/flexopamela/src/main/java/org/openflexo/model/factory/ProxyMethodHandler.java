@@ -322,12 +322,12 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return internallyInvokeGetter(property);
 	}
 
-	void internallyInvokeSetter(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
+	private void internallyInvokeSetter(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
 		ModelProperty<? super I> property = modelEntity.getModelProperty(propertyIdentifier);
 		internallyInvokeSetter(property, args[0]);
 	}
 
-	void internallyInvokeAdder(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
+	private void internallyInvokeAdder(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
 		ModelProperty<? super I> property = modelEntity.getModelProperty(propertyIdentifier);
 		internallyInvokeAdder(property, args[0]);
 	}

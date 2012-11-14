@@ -58,6 +58,7 @@ import org.openflexo.antar.expr.BooleanUnaryOperator;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.SymbolicConstant;
@@ -294,6 +295,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				}
 
 			} catch (TypeMismatchException e) {
+				status = ExpressionParsingStatus.INVALID;
+				message = e.getHTMLLocalizedMessage();
+			} catch (NullReferenceException e) {
 				status = ExpressionParsingStatus.INVALID;
 				message = e.getHTMLLocalizedMessage();
 			}

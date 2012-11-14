@@ -251,8 +251,6 @@ public class DropListener implements DropTargetListener {
 				return;
 			}
 
-			System.out.println("Ma donnee c'est: " + data);
-
 			if (data instanceof FIBDraggable) {
 
 				try {

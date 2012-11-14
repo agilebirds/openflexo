@@ -442,9 +442,9 @@ public class FlexoLocalization {
 		} catch (InvalidObjectSpecificationException e) {
 			logger.warning(e.getMessage());
 			return key;
-			/*}catch (InvalidKeyValuePropertyException e) {
-			logger.warning(e.getMessage());
-			return key;*/
+			/*
+			 * }catch (InvalidKeyValuePropertyException e) { logger.warning(e.getMessage()); return key;
+			 */
 		}
 	}
 

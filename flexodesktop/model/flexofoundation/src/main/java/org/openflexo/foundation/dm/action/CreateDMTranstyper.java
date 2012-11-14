@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
@@ -58,6 +59,10 @@ public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	private DMEntity _entity;
 	private String _newTranstyperName;

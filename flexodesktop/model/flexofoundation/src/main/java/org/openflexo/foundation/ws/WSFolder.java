@@ -22,7 +22,6 @@ package org.openflexo.foundation.ws;
 import java.util.Vector;
 
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
 
 public abstract class WSFolder extends WSObject {
 
@@ -34,13 +33,6 @@ public abstract class WSFolder extends WSObject {
 	}
 
 	public abstract Vector<? extends WSService> getWSServices();
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateNewWebService.actionType);
-		return returned;
-	}
 
 	/**
 	 * Overrides getFullyQualifiedName

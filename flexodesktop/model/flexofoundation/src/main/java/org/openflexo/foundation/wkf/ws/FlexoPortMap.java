@@ -29,7 +29,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.utils.FlexoIndexManager;
@@ -42,8 +41,6 @@ import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.ShowHidePortmap;
-import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
@@ -368,19 +365,6 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 			return ((PortMapRegistery) obj).getPortMaps().contains(this);
 		}
 		return super.isContainedIn(obj);
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.wkf.WKFObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(WKFDelete.actionType);
-		returned.add(ShowHidePortmap.actionType);
-		return returned;
 	}
 
 	@Override

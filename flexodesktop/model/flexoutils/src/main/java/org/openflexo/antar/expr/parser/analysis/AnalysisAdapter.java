@@ -265,6 +265,11 @@ public class AnalysisAdapter implements Analysis {
 	}
 
 	@Override
+	public void caseANullConstant(ANullConstant node) {
+		defaultCase(node);
+	}
+
+	@Override
 	public void caseAPiConstant(APiConstant node) {
 		defaultCase(node);
 	}
@@ -501,6 +506,11 @@ public class AnalysisAdapter implements Analysis {
 
 	@Override
 	public void caseTFalse(TFalse node) {
+		defaultCase(node);
+	}
+
+	@Override
+	public void caseTNull(TNull node) {
 		defaultCase(node);
 	}
 

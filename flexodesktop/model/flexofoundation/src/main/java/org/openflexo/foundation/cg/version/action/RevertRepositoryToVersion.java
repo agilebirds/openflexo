@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
@@ -57,6 +58,10 @@ public class RevertRepositoryToVersion extends AbstractGCAction<RevertRepository
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, GenerationRepository.class);
+	}
+
 	RevertRepositoryToVersion(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -65,27 +70,21 @@ public class RevertRepositoryToVersion extends AbstractGCAction<RevertRepository
 	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
 		logger.info("Revert all repository to version");
 
-		/*	makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") +  " "
-					+ getVersionIdentifier().versionAsString(), getFocusedObject().getFiles().size()+1);
-
-		    _newCGRelease = new CGRelease(getFocusedObject());
-		    _newCGRelease.setName(getName());
-		    _newCGRelease.setDescription(getDescription());
-		    _newCGRelease.setDate(getDate());
-		    _newCGRelease.setUserId(getUserId());
-		    _newCGRelease.setVersionIdentifier(getVersionIdentifier());
-		    getFocusedObject().addToReleases(_newCGRelease);
-		    
-		    for (CGFile file : getFocusedObject().getFiles()) {
-				setProgress(FlexoLocalization.localizedForKey("release") +  " " + file.getFileName());
-		    	file.releaseAs(_newCGRelease);
-		    }
-		    
-			// Refreshing repository
-		    getFocusedObject().refresh();
-
-			hideFlexoProgress();
-		*/
+		/*
+		 * makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") + " " + getVersionIdentifier().versionAsString(),
+		 * getFocusedObject().getFiles().size()+1);
+		 * 
+		 * _newCGRelease = new CGRelease(getFocusedObject()); _newCGRelease.setName(getName());
+		 * _newCGRelease.setDescription(getDescription()); _newCGRelease.setDate(getDate()); _newCGRelease.setUserId(getUserId());
+		 * _newCGRelease.setVersionIdentifier(getVersionIdentifier()); getFocusedObject().addToReleases(_newCGRelease);
+		 * 
+		 * for (CGFile file : getFocusedObject().getFiles()) { setProgress(FlexoLocalization.localizedForKey("release") + " " +
+		 * file.getFileName()); file.releaseAs(_newCGRelease); }
+		 * 
+		 * // Refreshing repository getFocusedObject().refresh();
+		 * 
+		 * hideFlexoProgress();
+		 */
 	}
 
 }

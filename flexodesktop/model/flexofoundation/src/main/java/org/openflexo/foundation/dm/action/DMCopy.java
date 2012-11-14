@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMObject;
 
 public class DMCopy extends FlexoAction {
 
@@ -52,6 +53,10 @@ public class DMCopy extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMObject.class);
+	}
 
 	DMCopy(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

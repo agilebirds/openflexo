@@ -65,6 +65,10 @@ public class SuroundWithConditional extends IEOperatorAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
+
 	private ConditionalOperator newConditional;
 
 	SuroundWithConditional(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {

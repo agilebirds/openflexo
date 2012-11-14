@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
@@ -58,6 +59,12 @@ public class AddComponentFolder extends FlexoAction<AddComponentFolder, IECLObje
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentLibrary.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentFolder.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	private FlexoComponentFolder _newFolder;
 	private FlexoComponentFolder _parentFolder;

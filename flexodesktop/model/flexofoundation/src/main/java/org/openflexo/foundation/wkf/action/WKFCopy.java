@@ -29,6 +29,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFObject;
 
 public class WKFCopy extends FlexoAction<WKFCopy, FlexoModelObject, FlexoModelObject> {
 
@@ -57,6 +58,10 @@ public class WKFCopy extends FlexoAction<WKFCopy, FlexoModelObject, FlexoModelOb
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	WKFCopy(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -56,6 +56,10 @@ public class DeleteRole extends FlexoAction<DeleteRole, Role, WorkflowModelObjec
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, Role.class);
+	}
+
 	DeleteRole(Role focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

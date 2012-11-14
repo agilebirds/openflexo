@@ -76,12 +76,16 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<Wr
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getDGController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-						action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
+							action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation

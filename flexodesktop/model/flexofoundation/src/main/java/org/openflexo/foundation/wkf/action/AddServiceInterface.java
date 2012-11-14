@@ -60,6 +60,9 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 	private String _newInterfaceName;
 	private ServiceInterface _serviceInterface;
 

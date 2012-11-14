@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.operator.IEOperator;
@@ -62,6 +63,10 @@ public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IE
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	ExportWidgetToPalette(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

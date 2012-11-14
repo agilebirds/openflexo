@@ -62,6 +62,10 @@ public class MoveMenuUpperLevel extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
+
 	private FlexoItemMenu itemMenu;
 
 	/**

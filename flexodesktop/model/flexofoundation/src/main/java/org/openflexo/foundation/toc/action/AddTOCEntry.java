@@ -35,6 +35,7 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.DuplicateSectionException;
@@ -85,6 +86,10 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
 
 	public static enum KindOfTocEntry {
 		NormalSection {

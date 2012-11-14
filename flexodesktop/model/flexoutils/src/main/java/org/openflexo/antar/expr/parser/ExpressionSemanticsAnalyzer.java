@@ -13,6 +13,7 @@ import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.FloatSymbolicConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
@@ -48,6 +49,7 @@ import org.openflexo.antar.expr.parser.node.AMultExprExpr3;
 import org.openflexo.antar.expr.parser.node.ANegativeTerm;
 import org.openflexo.antar.expr.parser.node.ANeqExprExpr;
 import org.openflexo.antar.expr.parser.node.ANotExprExpr3;
+import org.openflexo.antar.expr.parser.node.ANullConstant;
 import org.openflexo.antar.expr.parser.node.ANumberTerm;
 import org.openflexo.antar.expr.parser.node.AOr2ExprExpr2;
 import org.openflexo.antar.expr.parser.node.AOrExprExpr2;
@@ -418,6 +420,8 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	/* constant = 
 		  {true} true |
 		  {false} false |
+		  {null} null |
+		  {this} this |
 		  {pi} pi;*/
 
 	@Override
@@ -436,6 +440,12 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	public void outAPiConstant(APiConstant node) {
 		super.outAPiConstant(node);
 		registerExpressionNode(node, FloatSymbolicConstant.PI);
+	}
+
+	@Override
+	public void outANullConstant(ANullConstant node) {
+		super.outANullConstant(node);
+		registerExpressionNode(node, ObjectSymbolicConstant.NULL);
 	}
 
 	// Following methods manage following grammar fragment

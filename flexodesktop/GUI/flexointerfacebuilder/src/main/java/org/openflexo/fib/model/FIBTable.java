@@ -55,22 +55,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		iteratorClass,
-		visibleRowCount,
-		rowHeight,
-		createNewRowOnClick,
-		autoSelectFirstRow,
-		boundToSelectionManager,
-		selectionMode,
-		selected,
-		columns,
-		actions,
-		showFooter,
-		textSelectionColor,
-		textNonSelectionColor,
-		backgroundSelectionColor,
-		backgroundSecondarySelectionColor,
-		backgroundNonSelectionColor
+		iteratorClass, visibleRowCount, rowHeight, createNewRowOnClick, autoSelectFirstRow, boundToSelectionManager, selectionMode, selected, columns, actions, showFooter, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor
 	}
 
 	public enum SelectionMode {

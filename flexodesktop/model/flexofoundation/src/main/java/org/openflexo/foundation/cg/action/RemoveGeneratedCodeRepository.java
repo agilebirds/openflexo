@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
@@ -58,6 +59,10 @@ public class RemoveGeneratedCodeRepository extends AbstractGCAction<RemoveGenera
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, GenerationRepository.class);
+	}
 
 	private boolean deleteFiles;
 

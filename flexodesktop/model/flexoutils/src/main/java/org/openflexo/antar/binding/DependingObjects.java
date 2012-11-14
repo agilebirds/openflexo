@@ -136,4 +136,14 @@ public class DependingObjects {
 		return dependingObjectsAreComputed;
 	}
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("DependingObjects for " + observerObject + "\n");
+		for (TargetObject o : dependingObjects) {
+			sb.append("> " + o + "\n");
+		}
+		return sb.toString();
+	}
+
 }

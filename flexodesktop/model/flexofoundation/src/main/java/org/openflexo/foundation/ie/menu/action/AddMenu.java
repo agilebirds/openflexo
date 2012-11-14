@@ -63,6 +63,10 @@ public class AddMenu extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
+
 	private String menuLabel;
 
 	private FlexoItemMenu father;

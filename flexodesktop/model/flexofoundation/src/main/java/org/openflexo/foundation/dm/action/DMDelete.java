@@ -76,6 +76,10 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMObject.class);
+	}
+
 	protected DMDelete(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		_deletionContexts = new Hashtable<DMObject, Boolean>();

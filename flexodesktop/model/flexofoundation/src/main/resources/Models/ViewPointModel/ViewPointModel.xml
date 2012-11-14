@@ -11,6 +11,7 @@
 		<property name="viewPointURI" xmlTag="uri" attribute="YES" />
 		<property name="owlFile" xmlTag="owlFile" attribute="YES" />
 		<property name="description" xmlTag="description" />
+		<property name="version" xmlTag="version" attribute="YES" />
 		<property name="editionPatterns" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
@@ -219,6 +220,9 @@
 		xmlTag="CreationScheme" contexts="Executed">
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.CloningScheme" xmlTag="CloningScheme">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.DropScheme"
 		xmlTag="DropScheme">
 		<property name="target" xmlTag="target" attribute="YES" />
@@ -366,10 +370,16 @@
 		<property name="extendParentBoundsToHostThisShape" xmlTag="extendParentBoundsToHostThisShape" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.CloneShape" xmlTag="CloneShape">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.AddConnector"
 		xmlTag="AddConnector">
 		<property name="fromShape" xmlTag="fromShape" attribute="YES" />
 		<property name="toShape" xmlTag="toShape" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.CloneConnector" xmlTag="CloneConnector">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddDiagram"
@@ -410,6 +420,9 @@
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" xmlTag="CloneIndividual">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddClass"

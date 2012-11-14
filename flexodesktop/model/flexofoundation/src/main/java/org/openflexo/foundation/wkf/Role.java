@@ -35,7 +35,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoImportableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoIndexManager;
@@ -45,13 +44,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
-import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.AddRoleSpecialization;
-import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
@@ -151,19 +144,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddRole.actionType);
-		returned.add(AddRoleSpecialization.actionType);
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFSelectAll.actionType);
-		returned.add(DeleteRole.actionType);
-		return returned;
-	}
-
-	@Override
 	public String getName() {
 		return roleName;
 	}
@@ -194,8 +174,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	/*
 	 * public String getDescription() { return roleDescription; }
 	 * 
-	 * public void setDescription(String aDescription) { roleDescription =
-	 * aDescription; }
+	 * public void setDescription(String aDescription) { roleDescription = aDescription; }
 	 */
 	public Color getColor() {
 		return getBgColor(DEFAULT);
@@ -670,6 +649,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		if (aFlag != isAssignable) {
 			this.isAssignable = aFlag;
 			notifyAttributeModification("isAssignable", !aFlag, aFlag);
+			if (getWorkflow() != null) {
+				getWorkflow().clearAssignableRolesCache();
+			}
 		}
 	}
 

@@ -24,9 +24,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ExternalDatabaseRepository;
+import org.openflexo.foundation.dm.PersistantDataRepositoryFolder;
 
 public class ImportExternalDatabaseRepository extends CreateDMRepository<ImportExternalDatabaseRepository> {
 
@@ -54,6 +57,11 @@ public class ImportExternalDatabaseRepository extends CreateDMRepository<ImportE
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+		FlexoModelObject.addActionForClass(actionType, PersistantDataRepositoryFolder.class);
+	}
 
 	ImportExternalDatabaseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

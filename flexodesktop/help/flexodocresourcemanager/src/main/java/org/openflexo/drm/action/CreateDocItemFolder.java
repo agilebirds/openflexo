@@ -55,6 +55,10 @@ public class CreateDocItemFolder extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
+
 	private DocItemFolder _parentDocItemFolder;
 	private String _newItemFolderIdentifier;
 	private String _newItemFolderDescription;

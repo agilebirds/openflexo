@@ -76,6 +76,8 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, RoleList.class);
+		FlexoModelObject.addActionForClass(actionType, Role.class);
 	}
 
 	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {

@@ -48,15 +48,7 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 	private static final Logger logger = Logger.getLogger(CreateNode.class.getPackage().getName());
 
 	private static enum CreatedNodeType {
-		BEGIN_ACTIVITY,
-		END_ACTIVITY,
-		NORMAL_ACTIVITY,
-		BEGIN_OPERATION,
-		END_OPERATION,
-		NORMAL_OPERATION,
-		BEGIN_ACTION,
-		END_ACTION,
-		NORMAL_ACTION;
+		BEGIN_ACTIVITY, END_ACTIVITY, NORMAL_ACTIVITY, BEGIN_OPERATION, END_OPERATION, NORMAL_OPERATION, BEGIN_ACTION, END_ACTION, NORMAL_ACTION;
 
 		boolean concernProcess() {
 			return this == BEGIN_ACTIVITY || this == END_ACTIVITY || this == NORMAL_ACTIVITY;

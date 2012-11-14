@@ -1,5 +1,5 @@
 #French
-#Thu Oct 18 22:13:18 CEST 2012
+#Tue Nov 13 12:58:52 CET 2012
 apply=Appliquer
 arithmetic=Arithm\u00E9tique
 boolean=Bool\u00E9en
@@ -28,6 +28,7 @@ name=Nom
 no_file=Pas de fichier
 no_selection=Pas de s\u00E9lection
 no_type=Pas de type
+null=null
 please_define_expression=Veuillez d\u00E9finir une expression
 reset=RAZ
 scientific=Scientifique

@@ -107,12 +107,12 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean useOldInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	public static final FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);

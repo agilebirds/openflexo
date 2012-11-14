@@ -36,18 +36,7 @@ public class FIBList extends FIBMultipleValues {
 	private static final Logger logger = Logger.getLogger(FIBList.class.getPackage().getName());
 
 	public static enum Parameters implements FIBModelAttribute {
-		visibleRowCount,
-		rowHeight,
-		createNewRowOnClick,
-		boundToSelectionManager,
-		selectionMode,
-		selected,
-		textSelectionColor,
-		textNonSelectionColor,
-		backgroundSelectionColor,
-		backgroundSecondarySelectionColor,
-		backgroundNonSelectionColor,
-		layoutOrientation
+		visibleRowCount, rowHeight, createNewRowOnClick, boundToSelectionManager, selectionMode, selected, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor, layoutOrientation
 	}
 
 	public static enum LayoutOrientation {

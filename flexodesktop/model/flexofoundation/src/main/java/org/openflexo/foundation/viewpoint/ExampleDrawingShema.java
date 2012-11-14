@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.jdom2.JDOMException;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
@@ -112,7 +113,8 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		}
 	}
 
-	public static ExampleDrawingShema newShema(ViewPoint calc, File shemaFile, Object graphicalRepresentation) {
+	public static ExampleDrawingShema newShema(ViewPoint calc, File shemaFile,
+			DrawingGraphicalRepresentation<ExampleDrawingShema> graphicalRepresentation) {
 		ExampleDrawingShema shema = new ExampleDrawingShema(null);
 		shema.setGraphicalRepresentation(graphicalRepresentation);
 		shema.init(calc, shemaFile);
@@ -128,6 +130,11 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		if (builder != null) {
 			_viewpoint = builder.getViewPoint();
 		}
+	}
+
+	@Override
+	public DrawingGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	private boolean initialized = false;

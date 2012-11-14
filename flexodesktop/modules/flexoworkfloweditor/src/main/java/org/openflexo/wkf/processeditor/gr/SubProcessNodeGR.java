@@ -22,9 +22,9 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -55,7 +55,7 @@ import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.swing.SwingUtils;
+import org.openflexo.swing.ImageUtils;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
@@ -65,9 +65,6 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	private static final int MIN_SPACE = 5;
 	private static final int ICONS_HEIGHT = 20;
-	private BufferedImage cache = null;
-
-	boolean displayImage = false;
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
@@ -77,53 +74,62 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
 
-				if (getSubProcessNode().getDisplaySubProcessImage()) {
-					if (cache != null) {
-						displayImage = true;
-					} else {
+				if (!getSubProcessNode().getDisplaySubProcessImage()) {
+					paintDefaultDecoration(g);
+				} else {
+					ImageIcon snapshot = null;
+					if (getSubProcessNode().getSubProcess() != null) {
 						try {
-							cache = FlexoProcessImageBuilder.getSnapshot(getSubProcessNode().getSubProcess());
+							snapshot = FlexoProcessImageBuilder.getSnapshot(getSubProcessNode().getSubProcess());
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						displayImage = cache != null;
-						if (displayImage) {
-							FlexoProcessImageNotificationCenter.getInstance().addObserver(SubProcessNodeGR.this);
+					}
+					if (snapshot != null) {
+						Image image = ImageUtils.getThumbnail(snapshot, (int) getWidth() - 13, (int) getHeight() - 13).getImage();
+						double x = Math.max(10.0, (getWidth() - 10.0 - image.getWidth(null)) / 2);
+						double y = Math.max(10.0, (getHeight() - 10.0 - image.getHeight(null)) / 2);
+						FGEPoint point = new FGEPoint(x / getWidth(), y / getHeight());
+						g.drawImage(image, point);
+						setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
+						setHasText(false);
+						ImageIcon typeIcon = getImageIcon(getSubProcessNode());
+						if (typeIcon != null) {
+							FGERectangle additionalSymbolRect = getAdditionalSymbolRectWithEmbedded();
+							g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
 						}
+					} else {
+						paintDefaultDecoration(g);
 					}
 				}
-				if (!displayImage) {
-					g.useTextStyle(roleLabelTextStyle);
-					Dimension labelSize = getNormalizedLabelSize();
-					double vGap = getVerticalGap();
-					double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3 + getExtraSpaceAbove();
-					g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
+			}
 
-					FGERectangle expandingRect = getExpandingRect();
-					g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
+			public void paintDefaultDecoration(FGEShapeGraphics g) {
+				g.useTextStyle(roleLabelTextStyle);
+				Dimension labelSize = getNormalizedLabelSize();
+				double vGap = getVerticalGap();
+				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3 + getExtraSpaceAbove();
+				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
 
-					ImageIcon typeIcon = getImageIcon(getSubProcessNode());
-					if (typeIcon != null) {
-						FGERectangle additionalSymbolRect = getAdditionalSymbolRect();
-						g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
-					}
-				} else {
-					g.drawImage(SwingUtils.scaleIt(cache, (int) getWidth() - 13, (int) getHeight() - 13), new FGEPoint(10d / getWidth(),
-							10d / getHeight()));
-					setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
-					// setText("");
-					setHasText(false);
-					ImageIcon typeIcon = getImageIcon(getSubProcessNode());
-					if (typeIcon != null) {
-						FGERectangle additionalSymbolRect = getAdditionalSymbolRectWithEmbedded();
-						g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
-					}
+				FGERectangle expandingRect = getExpandingRect();
+				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
+
+				ImageIcon typeIcon = getImageIcon(getSubProcessNode());
+				if (typeIcon != null) {
+					FGERectangle additionalSymbolRect = getAdditionalSymbolRect();
+					g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
 				}
 			};
 		});
-
+		FlexoProcessImageNotificationCenter.getInstance().addObserver(this);
 		updatePropertiesFromWKFPreferences();
+
+	}
+
+	@Override
+	public void delete() {
+		FlexoProcessImageNotificationCenter.getInstance().deleteObserver(this);
+		super.delete();
 
 	}
 
@@ -307,13 +313,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		}
 		if (dataModification instanceof AttributeDataModification
 				&& "displaySubProcessImage".equals(((AttributeDataModification) dataModification).propertyName())) {
-			cache = null;
-			displayImage = getSubProcessNode().getDisplaySubProcessImage();
-			setHasText(!displayImage);
-			if (!displayImage) {
-				FlexoProcessImageNotificationCenter.getInstance().deleteObserver(this);
-			}
-			getDrawing().updateGraphicalObjectsHierarchy();
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}

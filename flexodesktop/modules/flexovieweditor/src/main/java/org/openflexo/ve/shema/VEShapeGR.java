@@ -119,6 +119,14 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	}
 
 	@Override
+	public int getIndex() {
+		if (getOEShape() != null) {
+			return getOEShape().getIndex();
+		}
+		return super.getIndex();
+	}
+
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getOEShape()) {
 			// logger.info("Notified "+dataModification);
@@ -253,4 +261,5 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	public boolean getContinuousTextEditing() {
 		return false;
 	}
+
 }

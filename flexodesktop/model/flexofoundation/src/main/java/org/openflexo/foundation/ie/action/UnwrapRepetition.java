@@ -57,6 +57,10 @@ public class UnwrapRepetition extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
+
 	UnwrapRepetition(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

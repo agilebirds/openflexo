@@ -58,12 +58,12 @@ public class DEController extends FlexoController implements FlexoObserver {
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean useOldInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	/**

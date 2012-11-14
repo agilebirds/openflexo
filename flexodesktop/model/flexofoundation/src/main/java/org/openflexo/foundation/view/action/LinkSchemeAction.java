@@ -66,6 +66,10 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+	}
+
 	private ViewShape _fromShape;
 	private ViewShape _toShape;
 	private ViewConnector _newConnector;

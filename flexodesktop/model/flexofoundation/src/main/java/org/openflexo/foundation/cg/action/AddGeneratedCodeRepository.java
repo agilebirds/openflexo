@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
@@ -69,6 +70,11 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, GeneratedOutput.class);
+		FlexoModelObject.addActionForClass(actionType, GenerationRepository.class);
+	}
 
 	private GenerationRepository _newGeneratedCodeRepository;
 

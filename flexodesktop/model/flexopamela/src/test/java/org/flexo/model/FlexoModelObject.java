@@ -33,6 +33,10 @@ public interface FlexoModelObject extends AccessibleProxyObject, CloneableProxyO
 	@XMLAttribute(xmlTag = FLEXO_ID)
 	public String getFlexoID();
 
+	// @XMLProperty(id="flexoId",kind=Kind.SETTER)
+	@Setter(FLEXO_ID)
+	public void setFlexoID(String flexoID);
+
 	@Getter(value = NAME, defaultValue = "???")
 	@XMLAttribute(xmlTag = NAME)
 	// @CloningStrategy(StrategyType.FACTORY, factory = "deriveName()")

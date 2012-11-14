@@ -226,10 +226,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			console.clear();
 			console.log(FlexoLocalization.localizedForKey("repository_disconnected"), Color.BLUE);
 		}
-		/*console.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-		console.setFont(FlexoCst.CODE_FONT);
-		console.setForeground(Color.DARK_GRAY);
-		console.setEditable(false);*/
+		/*
+		 * console.setBorder(BorderFactory.createEmptyBorder(5,5,5,5)); console.setFont(FlexoCst.CODE_FONT);
+		 * console.setForeground(Color.DARK_GRAY); console.setEditable(false);
+		 */
 
 		add(bigButtonsPanel, BorderLayout.NORTH);
 		// add(new JScrollPane(console),BorderLayout.CENTER);
@@ -263,11 +263,9 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			}
 		}
 
-		/*public void setEnabled(boolean aBoolean)
-		{
-			super.setEnabled(aBoolean);
-			setForeground(aBoolean?Color.BLACK:Color.GRAY);
-		}*/
+		/*
+		 * public void setEnabled(boolean aBoolean) { super.setEnabled(aBoolean); setForeground(aBoolean?Color.BLACK:Color.GRAY); }
+		 */
 	}
 
 	/**
@@ -281,7 +279,16 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (observable == codeRepository || observable == codeRepository.getReaderRepository()) {
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getWarDirectory() != null ? codeRepository.getWarDirectory()

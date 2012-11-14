@@ -29,13 +29,14 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
-import org.openflexo.swing.SwingUtils;
+import org.openflexo.swing.ImageUtils;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
@@ -71,7 +72,7 @@ public class FlexoProcessImageBuilder {
 				FileUtils.createNewFile(dest);
 			}
 			ImageIO.write(
-					SwingUtils.scaleIt(bi, (int) (bi.getWidth() * wkfModule.getScreenshotQuality()),
+					ImageUtils.scaleImage(bi, (int) (bi.getWidth() * wkfModule.getScreenshotQuality()),
 							(int) (bi.getHeight() * wkfModule.getScreenshotQuality())), "jpg", dest);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,10 +139,10 @@ public class FlexoProcessImageBuilder {
 		}
 	}
 
-	public static BufferedImage getSnapshot(FlexoProcess process) throws IOException {
+	public static ImageIcon getSnapshot(FlexoProcess process) throws IOException {
 		File src = getImageFile(process);
 		if (src != null && src.exists()) {
-			return ImageIO.read(src);
+			return new ImageIcon(src.getAbsolutePath());
 		}
 		return null;
 	}

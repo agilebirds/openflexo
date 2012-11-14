@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
@@ -58,6 +59,12 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, StatusList.class);
+		FlexoModelObject.addActionForClass(actionType, Status.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 
 	private String _newStatusName;
 	private String _newDescription;

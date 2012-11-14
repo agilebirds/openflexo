@@ -54,6 +54,10 @@ public class UnwrapConditional extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
+
 	UnwrapConditional(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

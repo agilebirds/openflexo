@@ -37,11 +37,8 @@ import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.foundation.ie.cl.dm.ComponentFolderDeleted;
 import org.openflexo.foundation.ie.cl.dm.ComponentFolderInserted;
 import org.openflexo.foundation.ie.dm.ComponentInserted;
@@ -131,14 +128,6 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddComponent.actionType);
-		returned.add(AddComponentFolder.actionType);
-		return returned;
-	}
-
 	private static Vector<FlexoComponentFolder> getAllSubFoldersForFolder(FlexoComponentFolder folder) {
 		Vector<FlexoComponentFolder> v = new Vector<FlexoComponentFolder>();
 		if (folder != null) {
@@ -218,14 +207,11 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 			}
 			library.setRootFolder(newFolder);
 		}
-		/*library.notifyObservers(new DataModification(
-				DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null,
-				newFolder));
-		if (parentFolder != null) {
-			parentFolder.setChanged();
-			parentFolder.notifyObservers(new ComponentFolderInserted(
-					parentFolder, newFolder));
-		}*/
+		/*
+		 * library.notifyObservers(new DataModification( DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null, newFolder)); if
+		 * (parentFolder != null) { parentFolder.setChanged(); parentFolder.notifyObservers(new ComponentFolderInserted( parentFolder,
+		 * newFolder)); }
+		 */
 		return newFolder;
 	}
 

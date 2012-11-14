@@ -67,6 +67,8 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 	private FlexoProject _project;
 
 	static {
+		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoProcess.class);
 		FlexoModelObject.addActionForClass(AddSubProcess.actionType, ProcessFolder.class);
 	}
 

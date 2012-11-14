@@ -51,10 +51,14 @@ public class ShowTypeHierarchyAction extends FlexoGUIAction {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return object != null && object instanceof DMEntity;
+			return object instanceof DMEntity;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	ShowTypeHierarchyAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

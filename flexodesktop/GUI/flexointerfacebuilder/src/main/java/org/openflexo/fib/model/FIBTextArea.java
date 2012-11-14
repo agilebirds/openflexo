@@ -21,13 +21,9 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBTextArea extends FIBWidget {
+public class FIBTextArea extends FIBTextWidget {
 
-	// TODO: handle font
-	private boolean validateOnReturn = false;
-	private Integer columns = null;
-	private Integer rows = null;
-	private String text = null;
+	public Integer rows = null;
 
 	public FIBTextArea() {
 	}
@@ -43,21 +39,6 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	/**
-	 * @return the columns
-	 */
-	public Integer getColumns() {
-		return columns;
-	}
-
-	/**
-	 * @param columns
-	 *            the columns to set
-	 */
-	public void setColumns(Integer columns) {
-		this.columns = columns;
-	}
-
-	/**
 	 * @return the rows
 	 */
 	public Integer getRows() {
@@ -70,36 +51,6 @@ public class FIBTextArea extends FIBWidget {
 	 */
 	public void setRows(Integer rows) {
 		this.rows = rows;
-	}
-
-	/**
-	 * @return the text
-	 */
-	public String getText() {
-		return text;
-	}
-
-	/**
-	 * @param text
-	 *            the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	/**
-	 * @return the validateOnReturn
-	 */
-	public boolean isValidateOnReturn() {
-		return validateOnReturn;
-	}
-
-	/**
-	 * @param validateOnReturn
-	 *            the validateOnReturn to set
-	 */
-	public void setValidateOnReturn(boolean validateOnReturn) {
-		this.validateOnReturn = validateOnReturn;
 	}
 
 }

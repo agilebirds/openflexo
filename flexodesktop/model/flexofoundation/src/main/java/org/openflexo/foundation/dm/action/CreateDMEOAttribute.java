@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
@@ -57,6 +58,10 @@ public class CreateDMEOAttribute extends FlexoAction<CreateDMEOAttribute, DMEOEn
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEOEntity.class);
+	}
 
 	private DMEOEntity _entity;
 	private String _newAttributeName;

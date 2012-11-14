@@ -78,11 +78,15 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("reinject_in_model_description"), "reinject_in_model",
 							action.getFilesToReinjectInModel(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// Continue without confirmation nor selection of files

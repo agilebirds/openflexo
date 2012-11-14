@@ -69,6 +69,7 @@ public class DREControllerActionInitializer extends ControllerActionInitializer 
 
 		new GenerateHelpSetInitializer(this);
 		new ImportDocSubmissionReportInitializer(this);
+
 	}
 
 }

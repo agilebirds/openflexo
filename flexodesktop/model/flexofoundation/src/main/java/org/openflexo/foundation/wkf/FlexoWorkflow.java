@@ -39,7 +39,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
@@ -81,7 +80,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
-import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.foundation.wkf.dm.ProcessInserted;
 import org.openflexo.foundation.wkf.dm.ProcessRemoved;
@@ -108,6 +106,8 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
  */
 
 public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
+
+	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
 	public enum GraphicalProperties {
 		CONNECTOR_REPRESENTATION("connectorRepresentation"),
@@ -154,6 +154,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private RoleList _roleList;
 	private RoleList importedRoleList;
+
+	private Vector<Role> allAssignableRoles;
 
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addProcessMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addActivityMetricsDefinitionActionizer;
@@ -458,13 +460,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 			fip = FlexoProcess.createImportedProcessFromProcess(this, process);
 		}
 		return fip;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddSubProcess.actionType);
-		return returned;
 	}
 
 	// Used by templates in doc
@@ -1236,6 +1231,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return reply;
 	}
 
+	public void clearAssignableRolesCache() {
+		allAssignableRoles = null;
+		notifyAttributeModification(ALL_ASSIGNABLE_ROLES, null, null);
+	}
+
 	public Vector<Role> getAllAssignableRoles() {
 		Vector<Role> reply = new Vector<Role>();
 		RoleList roleList = getRoleList();
@@ -1259,7 +1259,14 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
-					reply.add(r);
+					allAssignableRoles.add(r);
+				}
+			}
+			if (getImportedRoleList() != null) {
+				for (Role r : getImportedRoleList().getRoles()) {
+					if (r.getIsAssignable()) {
+						allAssignableRoles.add(r);
+					}
 				}
 			}
 		}

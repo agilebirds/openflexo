@@ -26,60 +26,74 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * XXXClipboard is intented to be the object working with the XXXSelectionManager and storing copied, cutted and pasted objects. Handled
- * objects are instances implementing {@link org.openflexo.selection.SelectableView}.
+ * VEClipboard is intented to be the object working with the VESelectionManager and storing copied, cut and pasted objects.
  * 
- * @author yourname
+ * @author sylvain
  */
 public class VEClipboard extends FlexoClipboard {
 
 	private static final Logger logger = Logger.getLogger(VEClipboard.class.getPackage().getName());
 
-	protected VESelectionManager _xxxSelectionManager;
+	protected VESelectionManager _veSelectionManager;
+
+	private FlexoModelObject _clipboardData;
 
 	public VEClipboard(VESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
 		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
-		_xxxSelectionManager = aSelectionManager;
+		_veSelectionManager = aSelectionManager;
 		resetClipboard();
 	}
 
 	public VESelectionManager getSelectionManager() {
-		return _xxxSelectionManager;
+		return _veSelectionManager;
 	}
 
-	public VEController getXXXController() {
-		return getSelectionManager().getXXXController();
+	public VEController getVEController() {
+		return getSelectionManager().getVEController();
 	}
 
-	@Override
-	public boolean performSelectionPaste() {
-		if (_isPasteEnabled) {
-			return super.performSelectionPaste();
-		} else {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Sorry, PASTE disabled");
+	/*	@Override
+		public boolean performSelectionPaste() {
+			if (_isPasteEnabled) {
+				return super.performSelectionPaste();
+			} else {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Sorry, PASTE disabled");
+				}
+				return false;
 			}
-			return false;
-		}
-	}
+		}*/
 
 	@Override
 	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+		System.out.println("Pasting context = " + pastingContext);
+		System.out.println("graphicalContext = " + graphicalContext);
 		JComponent targetContainer = graphicalContext.targetContainer;
-		if (isTargetValidForPasting(targetContainer)) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Paste is legal");
+		System.out.println("targetContainer = " + targetContainer);
+		System.out.println("pastingLocation=" + graphicalContext.pastingLocation);
+		System.out.println("precisePastingLocation=" + graphicalContext.precisePastingLocation);
+		if (isTargetValidForPasting(pastingContext)) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Pasting " + _clipboardData + " in " + pastingContext);
 				// Handle paste here
+				ViewShape newShape = (ViewShape) _clipboardData.cloneUsingXMLMapping();
+				((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).setLocation(new FGEPoint(
+						graphicalContext.precisePastingLocation));
+				((ViewShape) pastingContext).addToChilds(newShape);
+
 			}
 		} else {
-			FlexoController.notify(FlexoLocalization.localizedForKey("cannot_paste_at_this_place_wrong_level"));
+			FlexoController.notify(FlexoLocalization.localizedForKey("cannot_paste_at_this_place"));
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Paste is NOT legal");
 			}
@@ -92,21 +106,26 @@ public class VEClipboard extends FlexoClipboard {
 	}
 
 	protected void resetClipboard() {
+		_clipboardData = null;
 	}
 
 	/**
 	 * Selection procedure for copy
 	 */
 	@Override
-	protected boolean performCopyOfSelection(Vector currentlySelectedObjects) {
+	protected boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 		resetClipboard();
-		// Put some code here
-		// _clipboardData = ....
+		if (currentlySelectedObjects.size() > 0) {
+			FlexoModelObject o = currentlySelectedObjects.get(0);
+			System.out.println("Copy for " + o + " XML=" + o.getXMLRepresentation());
+			_clipboardData = (FlexoModelObject) o.cloneUsingXMLMapping();
+			System.out.println("Copied data : " + _clipboardData + "XML=" + _clipboardData.getXMLRepresentation());
+		}
+
 		return true;
 	}
 
-	protected boolean isTargetValidForPasting(JComponent targetContainer) {
-		// Put some code here
-		return false;
+	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext) {
+		return _clipboardData instanceof ViewShape && pastingContext instanceof ViewShape;
 	}
 }

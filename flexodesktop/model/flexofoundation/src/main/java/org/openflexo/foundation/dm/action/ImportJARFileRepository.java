@@ -24,9 +24,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ExternalRepository;
+import org.openflexo.foundation.dm.LibraryRepositoryFolder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ImportJARFileRepository extends CreateDMRepository<ImportJARFileRepository> {
@@ -55,6 +58,11 @@ public class ImportJARFileRepository extends CreateDMRepository<ImportJARFileRep
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+		FlexoModelObject.addActionForClass(actionType, LibraryRepositoryFolder.class);
+	}
 
 	ImportJARFileRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -19,11 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Vector;
 import java.util.logging.Logger;
-
-import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
 
 public class PersistantDataRepositoryFolder extends DMRepositoryFolder {
 
@@ -63,14 +59,6 @@ public class PersistantDataRepositoryFolder extends DMRepositoryFolder {
 	@Override
 	public String getFullyQualifiedName() {
 		return getDMModel().getFullyQualifiedName() + ".PERSISTANT_DATA_REPOSITORY_FOLDER";
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateProjectDatabaseRepository.actionType);
-		returned.add(ImportExternalDatabaseRepository.actionType);
-		return returned;
 	}
 
 	/**

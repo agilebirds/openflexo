@@ -22,8 +22,6 @@ package org.openflexo.fib.model;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent.DependencyLoopException;
-
 public class FIBDependancy extends FIBModelObject {
 
 	private static final Logger logger = Logger.getLogger(FIBDependancy.class.getPackage().getName());
@@ -63,12 +61,12 @@ public class FIBDependancy extends FIBModelObject {
 		FIBAttributeNotification<FIBComponent> notification = requireChange(Parameters.masterComponent, masterComponent);
 		if (notification != null) {
 			this.masterComponent = masterComponent;
-			try {
-				getOwner().declareDependantOf(masterComponent);
-			} catch (DependencyLoopException e) {
-				logger.warning("DependencyLoopException raised while applying explicit dependency for " + getOwner() + " and "
+			// try {
+			getOwner().declareDependantOf(masterComponent);
+			/*} catch (DependancyLoopException e) {
+				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
 						+ getMasterComponent() + " message: " + e.getMessage());
-			}
+			}*/
 			hasChanged(notification);
 		}
 	}

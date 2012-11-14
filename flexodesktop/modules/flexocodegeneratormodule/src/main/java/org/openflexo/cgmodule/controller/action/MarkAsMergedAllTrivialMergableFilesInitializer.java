@@ -60,11 +60,15 @@ public class MarkAsMergedAllTrivialMergableFilesInitializer extends ActionInitia
 							FlexoLocalization.localizedForKey("mark_as_merged_all_trivially_mergable_files_description"), "mark_as_merged",
 							action.getTrivialMergableFiles(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setTrivialMergableFiles(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setTrivialMergableFiles(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation

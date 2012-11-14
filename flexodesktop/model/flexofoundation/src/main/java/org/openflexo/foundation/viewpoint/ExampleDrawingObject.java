@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
@@ -45,7 +46,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	// For a CalcDrawingSchema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a CalcDrawingShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a CalcDrawingConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
-	private Object _graphicalRepresentation;
+	private GraphicalRepresentation<?> _graphicalRepresentation;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -138,11 +139,11 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		}
 	}
 
-	public Object getGraphicalRepresentation() {
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 		// setChanged();
 	}

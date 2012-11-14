@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
@@ -79,6 +80,10 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	private String _newComponentName;
 	private FlexoComponentFolder _newComponentFolder;

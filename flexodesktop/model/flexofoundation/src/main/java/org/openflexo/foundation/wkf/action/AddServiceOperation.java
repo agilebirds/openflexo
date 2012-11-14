@@ -61,6 +61,9 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ServiceInterface.class);
+	}
 	private String _newOperationName;
 
 	private FlexoPort _relatedPort;

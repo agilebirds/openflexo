@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +30,7 @@ import javax.swing.JButton;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButton;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBWidgetView;
 
 public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
@@ -84,7 +86,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		if (getWidget().getAction().isValid()) {
 			getWidget().getAction().execute(getController());
 		}
-		updateDependancies();
+		updateDependancies(new Vector<FIBComponent>());
 		updateWidgetFromModel();
 	}
 

@@ -32,7 +32,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.imported.dm.RoleAlreadyImportedException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -41,8 +40,6 @@ import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -209,6 +206,9 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 			aRole.setRoleList(this);
 			if (!isDeserializing()) {
 				notifyRoleAdded(aRole);
+				if (getWorkflow() != null) {
+					getWorkflow().clearAssignableRolesCache();
+				}
 			}
 		}
 	}
@@ -219,6 +219,9 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 			aRole.setRoleList(null);
 			if (!isDeserializing()) {
 				notifyRoleRemoved(aRole);
+				if (getWorkflow() != null) {
+					getWorkflow().clearAssignableRolesCache();
+				}
 			}
 		}
 	}
@@ -267,15 +270,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		}
 		Role.sort(reply);
 		return reply;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddRole.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFSelectAll.actionType);
-		return returned;
 	}
 
 	/**

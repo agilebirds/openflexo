@@ -76,8 +76,9 @@ public class BindingDefinition extends Observable {
 				}
 			}
 			return _type == bd._type && _isMandatory == bd._isMandatory;
+		} else {
+			return super.equals(object);
 		}
-		return false;
 	}
 
 	public boolean getIsMandatory() {

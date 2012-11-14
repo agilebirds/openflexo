@@ -26,23 +26,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.SingleWidgetComponent;
-import org.openflexo.foundation.ie.action.DecreaseColSpan;
-import org.openflexo.foundation.ie.action.DecreaseRowSpan;
-import org.openflexo.foundation.ie.action.DeleteCol;
-import org.openflexo.foundation.ie.action.DeleteRow;
-import org.openflexo.foundation.ie.action.IEDelete;
-import org.openflexo.foundation.ie.action.IncreaseColSpan;
-import org.openflexo.foundation.ie.action.IncreaseRowSpan;
-import org.openflexo.foundation.ie.action.InsertColAfter;
-import org.openflexo.foundation.ie.action.InsertColBefore;
-import org.openflexo.foundation.ie.action.InsertRowAfter;
-import org.openflexo.foundation.ie.action.InsertRowBefore;
 import org.openflexo.foundation.ie.dm.AlignementChanged;
 import org.openflexo.foundation.ie.dm.DisplayNeedsRefresh;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -180,24 +168,6 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 			}
 		}
 		super.delete();
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(InsertColAfter.actionType);
-		returned.add(InsertColBefore.actionType);
-		returned.add(InsertRowAfter.actionType);
-		returned.add(InsertRowBefore.actionType);
-		returned.add(IncreaseColSpan.actionType);
-		returned.add(DecreaseColSpan.actionType);
-		returned.add(IncreaseRowSpan.actionType);
-		returned.add(DecreaseRowSpan.actionType);
-		returned.add(DeleteRow.actionType);
-		returned.add(DeleteCol.actionType);
-		returned.remove(IEDelete.actionType);
-		// returned.remove(ExportWidgetToPalette.actionType);
-		return returned;
 	}
 
 	/**

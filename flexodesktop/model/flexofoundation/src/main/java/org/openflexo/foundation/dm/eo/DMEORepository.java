@@ -30,12 +30,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.dm.EOModelRegistered;
 import org.openflexo.foundation.dm.dm.EOModelUnregistered;
 import org.openflexo.foundation.dm.eo.model.EOEntity;
@@ -198,13 +196,6 @@ public abstract class DMEORepository extends DMRepository {
 
 	public DMEOEntity getDMEOEntity(EOEntity eoEntity) {
 		return _entitiesForEOEntity.get(eoEntity);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOModel.actionType);
-		return returned;
 	}
 
 	public DMEOModel importEOModelFile(FlexoProjectFile eoModelDir, DMModel dmModel, FlexoDMResource dmRes)

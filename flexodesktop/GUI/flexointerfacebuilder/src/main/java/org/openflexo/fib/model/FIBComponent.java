@@ -667,21 +667,21 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return mayAlters.iterator();
 	}
 
-	public void declareDependantOf(FIBComponent aComponent) throws DependencyLoopException {
+	public void declareDependantOf(FIBComponent aComponent) /*throws DependancyLoopException*/{
 		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
 			logger.warning("Forbidden reflexive dependencies");
 			return;
 		}
 		// Look if this dependancy may cause a loop in dependancies
-		try {
+		/*try {
 			Vector<FIBComponent> dependancies = new Vector<FIBComponent>();
 			dependancies.add(aComponent);
 			searchLoopInDependenciesWith(aComponent, dependancies);
 		} catch (DependencyLoopException e) {
 			logger.warning("Forbidden loop in dependencies: " + e.getMessage());
 			throw e;
-		}
+		}*/
 
 		if (!mayDepends.contains(aComponent)) {
 			mayDepends.add(aComponent);
@@ -692,7 +692,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	private void searchLoopInDependenciesWith(FIBComponent aComponent, Vector<FIBComponent> dependencies) throws DependencyLoopException {
+	/*private void searchLoopInDependanciesWith(FIBComponent aComponent, Vector<FIBComponent> dependancies) throws DependancyLoopException {
 		for (FIBComponent c : aComponent.mayDepends) {
 			if (c == this) {
 				throw new DependencyLoopException(dependencies);
@@ -702,10 +702,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			newVector.add(c);
 			searchLoopInDependenciesWith(c, newVector);
 		}
-	}
+	}*/
 
-	protected static class DependencyLoopException extends Exception {
-		private final Vector<FIBComponent> dependencies;
+	/*protected static class DependancyLoopException extends Exception {
+		private final Vector<FIBComponent> dependancies;
 
 		public DependencyLoopException(Vector<FIBComponent> dependancies) {
 			this.dependencies = dependancies;
@@ -715,7 +715,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		public String getMessage() {
 			return "DependencyLoopException: " + dependencies;
 		}
-	}
+	}*/
 
 	public int getIndex() {
 		return index;
@@ -1189,12 +1189,12 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		p.setOwner(this);
 		explicitDependancies.add(p);
 		if (p.getMasterComponent() != null) {
-			try {
-				p.getOwner().declareDependantOf(p.getMasterComponent());
-			} catch (DependencyLoopException e) {
+			// try {
+			p.getOwner().declareDependantOf(p.getMasterComponent());
+			/*} catch (DependancyLoopException e) {
 				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + p.getOwner() + " and "
 						+ p.getMasterComponent() + " message: " + e.getMessage());
-			}
+			}*/
 		}
 		// componentDependancies = null;
 		setChanged();

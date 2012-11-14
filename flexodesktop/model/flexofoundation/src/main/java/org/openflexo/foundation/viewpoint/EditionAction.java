@@ -40,43 +40,11 @@ public abstract class EditionAction extends EditionSchemeObject {
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
 	public static enum EditionActionType {
-		AddClass,
-		AddIndividual,
-		AddObjectPropertyStatement,
-		AddDataPropertyStatement,
-		AddIsAStatement,
-		AddRestrictionStatement,
-		AddConnector,
-		AddShape,
-		AddDiagram,
-		AddEditionPattern,
-		DeclarePatternRole,
-		DeleteAction,
-		GraphicalAction,
-		GoToObject,
-		Iteration,
-		Conditional
+		AddClass, AddIndividual, AddObjectPropertyStatement, AddDataPropertyStatement, AddIsAStatement, AddRestrictionStatement, AddConnector, AddShape, AddDiagram, AddEditionPattern, CloneShape, CloneConnector, CloneIndividual, DeclarePatternRole, DeleteAction, GraphicalAction, GoToObject, Iteration, Conditional
 	}
 
 	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
-		conditional,
-		assignation,
-		individualName,
-		className,
-		container,
-		fromShape,
-		toShape,
-		object,
-		subject,
-		father,
-		value,
-		restrictionType,
-		cardinality,
-		target,
-		diagramName,
-		view,
-		condition,
-		iteration
+		conditional, assignation, individualName, className, container, fromShape, toShape, object, subject, father, value, restrictionType, cardinality, target, diagramName, view, condition, iteration
 	}
 
 	// private EditionScheme _scheme;
@@ -309,6 +277,30 @@ public abstract class EditionAction extends EditionSchemeObject {
 
 	public IterationAction createIterationAction() {
 		IterationAction newAction = new IterationAction(null);
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneShape createCloneShapeAction() {
+		CloneShape newAction = new CloneShape(null);
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneConnector createCloneConnectorAction() {
+		CloneConnector newAction = new CloneConnector(null);
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneIndividual createCloneIndividualAction() {
+		CloneIndividual newAction = new CloneIndividual(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}

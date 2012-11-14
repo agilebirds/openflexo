@@ -33,6 +33,9 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.widget.IESequenceTopComponent;
+import org.openflexo.foundation.ie.widget.IESequenceWidget;
+import org.openflexo.foundation.ie.widget.IETDWidget;
+import org.openflexo.foundation.ie.widget.IETRWidget;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.node.ActionNode;
 
@@ -58,11 +61,18 @@ public class IEDelete extends FlexoUndoableAction<IEDelete, IEObject, IEObject> 
 
 		@Override
 		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object != null || globalSelection != null && globalSelection.size() > 0)
+			return (object != null && !(object instanceof IESequenceWidget) && !(object instanceof IETDWidget)
+					&& !(object instanceof IETRWidget) || globalSelection != null && globalSelection.size() > 0
+					&& !(globalSelection.get(0) instanceof IESequenceWidget) && !(globalSelection.get(0) instanceof IETRWidget)
+					&& !(globalSelection.get(0) instanceof IETDWidget))
 					&& !(object instanceof IESequenceTopComponent && !((IESequenceTopComponent) object).isSubsequence());
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEObject.class);
+	}
 
 	private Vector<TOCEntry> entriesToDelete;
 	private Vector<ActionNode> actionsToDelete;

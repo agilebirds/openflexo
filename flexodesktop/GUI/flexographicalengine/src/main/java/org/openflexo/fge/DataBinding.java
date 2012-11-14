@@ -27,6 +27,8 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation.DependencyLoopException;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.xmlcode.StringConvertable;
@@ -78,7 +80,13 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
-			return getBinding().getBindingValue(context);
+			try {
+				return getBinding().getBindingValue(context);
+			} catch (TypeMismatchException e) {
+				return null;
+			} catch (NullReferenceException e) {
+				return null;
+			}
 		}
 		return null;
 	}

@@ -34,8 +34,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.dkv.dm.KeyAdded;
 import org.openflexo.foundation.dkv.dm.KeyRemoved;
@@ -108,18 +106,6 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 		super.undelete();
 		getDkvModel().addObserver(this);
 		getDkvModel().addToDomains(this);
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddKeyAction.actionType);
-		return v;
 	}
 
 	public boolean isKeyNameLegal(String keyName) throws DuplicateDKVObjectException, EmptyStringException {
@@ -436,18 +422,6 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 		@Override
 		public void undelete() {
 
-		}
-
-		/**
-		 * Overrides getSpecificActionListForThatClass
-		 * 
-		 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-		 */
-		@Override
-		protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-			Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-			v.add(AddKeyAction.actionType);
-			return v;
 		}
 
 		@Override

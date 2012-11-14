@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVObject;
@@ -70,6 +71,10 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVObject.class);
+	}
 
 	private Vector objectsToDelete;
 

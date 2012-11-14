@@ -29,6 +29,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
+import org.openflexo.foundation.ie.widget.IETRWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -58,6 +59,12 @@ public class InsertRowBefore extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETRWidget.class);
+	}
 
 	InsertRowBefore(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.ie.IEObject;
@@ -57,6 +58,11 @@ public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObj
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWOComponent.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	protected ShowComponentUsage(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

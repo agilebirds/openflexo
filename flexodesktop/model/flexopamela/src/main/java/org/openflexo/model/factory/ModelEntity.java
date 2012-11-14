@@ -576,7 +576,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		}
 		if (entity.getDirectSuperEntities() != null) {
 			for (ModelEntity<?> e : entity.getDirectSuperEntities()) {
-				if (entity == this) {
+				if (e == this) {
 					return true;
 				} else if (isAncestorOf(e)) {
 					return true;

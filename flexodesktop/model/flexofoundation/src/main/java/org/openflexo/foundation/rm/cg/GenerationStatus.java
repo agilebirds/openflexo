@@ -23,20 +23,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringRepresentable;
 
 public enum GenerationStatus implements StringRepresentable {
-	UpToDate,
-	GenerationModified,
-	GenerationAdded,
-	GenerationRemoved,
-	OverrideScheduled,
-	DiskModified,
-	DiskRemoved,
-	ConflictingUnMerged,
-	ConflictingMarkedAsMerged,
-	CodeGenerationNotAvailable,
-	CodeGenerationNotSynchronized,
-	GenerationError,
-	NotGenerated,
-	Unknown;
+	UpToDate, GenerationModified, GenerationAdded, GenerationRemoved, OverrideScheduled, DiskModified, DiskRemoved, ConflictingUnMerged, ConflictingMarkedAsMerged, CodeGenerationNotAvailable, CodeGenerationNotSynchronized, GenerationError, NotGenerated, Unknown;
 
 	public boolean isGenerationAvailable() {
 		return this == UpToDate || this == GenerationModified || this == GenerationAdded || this == GenerationRemoved

@@ -160,8 +160,9 @@ public class CreateDMRepository<A extends CreateDMRepository<A>> extends FlexoAc
 		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
 
 		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
+
 		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
+
 		}
 	}
-
 }

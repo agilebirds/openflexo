@@ -32,10 +32,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.CreateDMEntity;
-import org.openflexo.foundation.dm.action.ImportJDKEntity;
-import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
 import org.openflexo.foundation.dm.dm.EntityUnregistered;
@@ -219,15 +215,6 @@ public class DMPackage extends DMObject {
 		/*if (entities.size() == 0) {
 		    getRepository().deletePackage(this);
 		}*/
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEntity.actionType);
-		returned.add(ImportJDKEntity.actionType);
-		returned.add(UpdateLoadableDMEntity.actionType);
-		return returned;
 	}
 
 	@Override

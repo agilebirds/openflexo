@@ -27,16 +27,10 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.drm.action.AddToEmbeddingChildItem;
-import org.openflexo.drm.action.AddToInheritanceChildItem;
-import org.openflexo.drm.action.AddToRelatedToItem;
 import org.openflexo.drm.action.ApproveVersion;
-import org.openflexo.drm.action.RefuseVersion;
-import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.drm.dm.StructureModified;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ProblemIssue;
 import org.openflexo.foundation.validation.Validable;
@@ -193,18 +187,6 @@ public class DocItem extends DRMObject implements InspectableObject {
 	@Override
 	public String getInspectorName() {
 		return Inspectors.DRE.DOC_ITEM_INSPECTOR;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddToInheritanceChildItem.actionType);
-		returned.add(AddToEmbeddingChildItem.actionType);
-		returned.add(AddToRelatedToItem.actionType);
-		returned.add(SubmitVersion.actionType);
-		returned.add(ApproveVersion.actionType);
-		returned.add(RefuseVersion.actionType);
-		return returned;
 	}
 
 	@Override

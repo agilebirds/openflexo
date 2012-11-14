@@ -65,6 +65,10 @@ public class DeprecatedAddTOCEntry extends FlexoAction<DeprecatedAddTOCEntry, TO
 
 	private String tocEntryTitle;
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
+
 	DeprecatedAddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

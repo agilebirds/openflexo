@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
@@ -62,6 +63,11 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, GeneratedSources.class);
+		FlexoModelObject.addActionForClass(actionType, SourceRepository.class);
+	}
 
 	private SourceRepository _newSourceRepository;
 

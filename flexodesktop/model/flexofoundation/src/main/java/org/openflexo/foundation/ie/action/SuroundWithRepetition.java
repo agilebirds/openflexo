@@ -32,6 +32,7 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.dm.SubsequenceModified;
 import org.openflexo.foundation.ie.operator.RepetitionOperator;
 import org.openflexo.foundation.ie.widget.IESequence;
+import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ie.widget.ITableRow;
 
@@ -65,6 +66,11 @@ public class SuroundWithRepetition extends IEOperatorAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETabWidget.class);
+	}
 
 	private RepetitionOperator newRepetition;
 

@@ -169,7 +169,7 @@ public class ContextualPalette extends DrawingPalette {
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
 
-						AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getOEController().getEditor());
+						AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getVEController().getEditor());
 						action.setGraphicalRepresentation(shapeGR);
 						action.setNameSetToNull(false);
 						action.setNewShapeName(getGraphicalRepresentation().getText());
@@ -192,7 +192,7 @@ public class ContextualPalette extends DrawingPalette {
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
-												getController().getOEController().getEditor());
+												getController().getVEController().getEditor());
 										action.dropLocation = dropLocation;
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
@@ -208,7 +208,7 @@ public class ContextualPalette extends DrawingPalette {
 							return true;
 						} else if (availableDropPatterns.size() == 1) {
 							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
-									.getOEController().getEditor());
+									.getVEController().getEditor());
 							action.dropLocation = dropLocation;
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);

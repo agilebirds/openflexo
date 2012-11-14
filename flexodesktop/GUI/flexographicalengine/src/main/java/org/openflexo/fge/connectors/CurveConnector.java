@@ -351,7 +351,9 @@ public class CurveConnector extends Connector {
 	private FGEQuadCurve curve;
 
 	private void refreshCurve() {
-		curve = FGEQuadCurve.makeCurveFromPoints(cp1.getPoint(), cp.getPoint(), cp2.getPoint());
+		if (cp1 != null && cp != null && cp2 != null) {
+			curve = FGEQuadCurve.makeCurveFromPoints(cp1.getPoint(), cp.getPoint(), cp2.getPoint());
+		}
 	}
 
 	@Override

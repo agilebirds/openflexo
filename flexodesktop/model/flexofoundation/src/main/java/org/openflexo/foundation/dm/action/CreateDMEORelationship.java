@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
@@ -60,6 +61,10 @@ public class CreateDMEORelationship extends FlexoAction<CreateDMEORelationship, 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEOEntity.class);
+	}
 
 	private String _newRelationshipName;
 	private boolean _isFlattenRelationShip;

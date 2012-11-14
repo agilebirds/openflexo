@@ -58,8 +58,6 @@ public class IEControllerActionInitializer extends ControllerActionInitializer {
 		new MoveTabLeftInitializer(this);
 		new MoveTabRightInitializer(this);
 
-		// (new MakePartialComponentInitializer(this));
-
 		new InsertRowAfterInitializer(this);
 		new InsertRowBeforeInitializer(this);
 		new InsertColAfterInitializer(this);

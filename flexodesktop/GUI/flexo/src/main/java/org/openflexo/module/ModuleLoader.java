@@ -124,6 +124,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	@Override
 	public String getDeletedProperty() {
 		// TODO Auto-generated method stub
+
 		return null;
 	}
 

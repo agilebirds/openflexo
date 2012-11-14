@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
@@ -45,11 +44,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFDelete;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
@@ -235,21 +229,6 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 		notifyObservers(new AttributeDataModification(key, oldValue, newValue));
 
 	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFDelete.actionType);
-		returned.add(WKFSelectAll.actionType);
-		return returned;
-	}
-
-	// ===================================================================
-	// =========================== FlexoObserver =========================
-	// ===================================================================
 
 	@Override
 	public void delete() {

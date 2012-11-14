@@ -209,6 +209,17 @@ public class ModelProperty {
 					"No attribute 'xmlTag' or 'contains' defined for tag 'property' in model file while xml tag 'text' is not set to true.");
 		}
 
+		if (xmlTag != null && getDefaultXmlTag() != null) {
+			if (getDefaultXmlTag().equalsIgnoreCase(XMLMapping.classNameLabel)) {
+				// throw new InvalidModelException("Invalid xml property name:
+				// "+xmlTag+" is a reserved keyword");
+			}
+			if (getDefaultXmlTag().equalsIgnoreCase(XMLMapping.keyLabel)) {
+				// throw new InvalidModelException("Invalid xml property name:
+				// "+xmlTag+" is a reserved keyword");
+			}
+		}
+
 		if (name.lastIndexOf(".") > -1) {
 			if (!getModel().serializeOnly) {
 				StringBuilder sb = new StringBuilder();

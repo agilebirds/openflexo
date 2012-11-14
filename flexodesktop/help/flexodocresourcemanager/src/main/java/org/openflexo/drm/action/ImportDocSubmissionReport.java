@@ -59,6 +59,10 @@ public class ImportDocSubmissionReport extends FlexoAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
+
 	ImportDocSubmissionReport(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

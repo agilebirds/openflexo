@@ -22,7 +22,6 @@ package org.openflexo.ve.shema;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -49,7 +48,7 @@ public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements G
 		super(aDrawing);
 
 		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith((GraphicalRepresentation<?>) aDrawing.getShema().getGraphicalRepresentation());
+			setsWith(aDrawing.getShema().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());

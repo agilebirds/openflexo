@@ -716,8 +716,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			logger.fine("Feature is " + action.getGraphicalFeature());
 			logger.fine("Value is " + action.getValue().getBindingValue(this));
 		}
-		action.getGraphicalFeature().applyToGraphicalRepresentation(
-				(GraphicalRepresentation<?>) graphicalElement.getGraphicalRepresentation(), action.getValue().getBindingValue(this));
+		action.getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(),
+				action.getValue().getBindingValue(this));
 	}
 
 	protected FlexoModelObject performDeleteAction(DeleteAction action) {
@@ -758,7 +758,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return null;
 	}
 
-	public Object getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+	public GraphicalRepresentation<? extends ViewElement> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;

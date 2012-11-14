@@ -15,7 +15,7 @@
 				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="false" visible="data.layout='flow'"/>
 				    <Label label="axis" constraints="twocols(location=left)" visible="data.layout='box'"/>
 				    <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" showReset="false" visible="data.layout='box'"/>
-					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') || (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">
+					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') | (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">
 				        <Label label="hGap"/>
 				        <Number numberType="IntegerType" data="data.hGap" columns="3"/>
 				        <Label label="vGap"/>
@@ -48,13 +48,13 @@
 					<Panel layout="flow" hGap="0" vGap="0" constraints="twocols(location=right)">
 					  <DropDown data="data.border" showReset="false"/>
 					  <Color data="data.borderColor" showReset="false" visible="data.border='line'"/>
-					  <TextField data="data.borderTitle" visible="data.border='titled' | data.border='rounded3d'"/>
+					  <TextField data="data.borderTitle" visible="(data.border='titled') | (data.border='rounded3d')"/>
 					</Panel>
-				    <Label label="title_font" constraints="twocols(location=left)" visible="data.border='titled' | data.border='rounded3d'"/>
-   		      		<Font data="data.titleFont" constraints="twocols(location=right)" visible="data.border='titled' | data.border='rounded3d'"/>
+				    <Label label="title_font" constraints="twocols(location=left)" visible="(data.border='titled') | (data.border='rounded3d')"/>
+   		      		<Font data="data.titleFont" constraints="twocols(location=right)" visible="(data.border='titled') | (data.border='rounded3d')"/>
 				    <Label label="dark_level" constraints="twocols(location=left)" visible="data.border='rounded3d'"/>
 				    <Number numberType="IntegerType" data="data.darkLevel" columns="3" constraints="twocols(location=right)" visible="data.border='rounded3d'"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=center;expandHorizontally=true)" visible="data.border='empty' | data.border='rounded3d'">
+					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.border='empty') | (data.border='rounded3d')">
 				        <Label label="top"/>
 				        <Number numberType="IntegerType" data="data.borderTop" columns="2"/>
 				        <Label label="left"/>

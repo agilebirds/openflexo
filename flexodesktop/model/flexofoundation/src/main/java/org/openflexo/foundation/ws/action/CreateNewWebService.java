@@ -19,16 +19,45 @@
  */
 package org.openflexo.foundation.ws.action;
 
+import java.io.File;
+import java.util.Enumeration;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.openflexo.dataimporter.DataImporter;
 import org.openflexo.dataimporter.DataImporterLoader.KnownDataImporter;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMPackage;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.DMType;
+import org.openflexo.foundation.dm.JDKRepository;
+import org.openflexo.foundation.dm.WSDLRepository;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.ws.PortRegistery;
+import org.openflexo.foundation.wkf.ws.ServiceInterface;
+import org.openflexo.foundation.ws.ExternalWSService;
+import org.openflexo.foundation.ws.FlexoWSLibrary;
+import org.openflexo.foundation.ws.InternalWSService;
+import org.openflexo.foundation.ws.WSFolder;
 import org.openflexo.foundation.ws.WSObject;
+import org.openflexo.foundation.ws.WSService;
+import org.openflexo.localization.FlexoLocalization;
 
 public class CreateNewWebService extends AbstractCreateNewWebService<CreateNewWebService> {
 
-	public static final FlexoActionType<CreateNewWebService, WSObject, WSObject> actionType = new FlexoActionType<CreateNewWebService, WSObject, WSObject>(
+	private static final Logger logger = Logger.getLogger(CreateNewWebService.class.getPackage().getName());
+
+	public static final String INTERNAL_WS = "INTERNAL_WS";
+	public static final String EXTERNAL_WS = "EXTERNAL_WS";
+
+	public static FlexoActionType<CreateNewWebService, WSObject, WSObject> actionType = new FlexoActionType<CreateNewWebService, WSObject, WSObject>(
 			"ws_add_webservice...", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
@@ -51,8 +80,245 @@ public class CreateNewWebService extends AbstractCreateNewWebService<CreateNewWe
 
 	};
 
-	public CreateNewWebService(WSObject focusedObject, Vector<WSObject> globalSelection, FlexoEditor editor) {
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoWSLibrary.class);
+		FlexoModelObject.addActionForClass(actionType, WSFolder.class);
+		FlexoModelObject.addActionForClass(actionType, ExternalWSService.class);
+		FlexoModelObject.addActionForClass(actionType, InternalWSService.class);
+	}
+
+	CreateNewWebService(WSObject focusedObject, Vector<WSObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	protected CreateNewWebService(FlexoActionType<CreateNewWebService, WSObject, WSObject> anActionType, WSObject focusedObject,
+			Vector<WSObject> globalSelection, FlexoEditor editor) {
+		super(anActionType, focusedObject, globalSelection, editor);
+	}
+
+	private String _newWebServiceName;
+	private PortRegistery _portRegistry;
+	private File _wsdlFile;
+	private FlexoProject _project;
+	private ServiceInterface _serviceInterface;
+
+	@Override
+	public String getNewWebServiceName() {
+		return _newWebServiceName;
+	}
+
+	@Override
+	public void setNewWebServiceName(String name) {
+		_newWebServiceName = name;
+	}
+
+	@Override
+	public File getWsdlFile() {
+		return _wsdlFile;
+	}
+
+	@Override
+	public void setWsdlFile(File file) {
+		_wsdlFile = file;
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		_project = project;
+	}
+
+	/*
+	 * For export, either we specify a
+	 */
+	@Override
+	public PortRegistery getPortRegistry() {
+		return _portRegistry;
+	}
+
+	@Override
+	public void setPortRegistry(PortRegistery a) {
+		_portRegistry = a;
+	}
+
+	@Override
+	public ServiceInterface getServiceInterface() {
+		return _serviceInterface;
+	}
+
+	@Override
+	public void setServiceInterface(ServiceInterface a) {
+		_serviceInterface = a;
+	}
+
+	@Override
+	public FlexoProcess getFlexoProcess() {
+		if (getServiceInterface() != null) {
+			return getServiceInterface().getProcess();
+		}
+		if (getPortRegistry() != null) {
+			return getPortRegistry().getProcess();
+		}
+		return null;
+	}
+
+	private FlexoWSLibrary getWSLibrary() {
+		return getProject().getFlexoWSLibrary();
+	}
+
+	private String _webServiceType;
+
+	@Override
+	public String getWebServiceType() {
+		return _webServiceType;
+	}
+
+	@Override
+	public void setWebServiceType(String type) {
+		_webServiceType = type;
+	}
+
+	private WSService _newWebService = null;
+
+	@Override
+	public WSService getNewWebService() {
+		return _newWebService;
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		logger.info("CREATE EXTERNAL WebService");
+
+		if (_webServiceType.equals(CreateNewWebService.EXTERNAL_WS)) {
+			logger.info("Importing from WSDL...");
+			DataImporter wsdlImporter = KnownDataImporter.WSDL_IMPORTER.getImporter();
+			if (wsdlImporter != null) {
+				Object[] params = new Object[2];
+				params[0] = getNewWebServiceName();
+				params[1] = this;
+				makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getWsdlFile().getName(), 4);
+				_newWebService = (WSService) wsdlImporter.importInProject(getProject(), getWsdlFile(), params);
+				hideFlexoProgress();
+			} else {
+				logger.warning("Sorry, data importer " + KnownDataImporter.WSDL_IMPORTER.getClassName() + " not found ");
+			}
+			logger.info("Importing from WSDL... DONE.");
+		} else if (_webServiceType.equals(CreateNewWebService.INTERNAL_WS)) {
+			logger.info("EXPORT FLEXO PROCESS AS WEBSERVICE");
+
+			makeFlexoProgress(FlexoLocalization.localizedForKey("exporting") + " " + getFlexoProcess().getName(), 4);
+			// _newWebService = (WSService)wsdlImporter.importInProject(getProject(),getWsdlFile(),params);
+
+			// 1. Get/Create internal service group
+			_newWebService = getProject().getFlexoWSLibrary().getInternalWSServiceNamed(getNewWebServiceName());
+			if (_newWebService == null) {
+
+				_newWebService = getWSLibrary().createInternalWSService(getNewWebServiceName());
+				_newWebService = getWSLibrary().addInternalWSServiceNamed((InternalWSService) _newWebService);
+			}
+
+			// 2. add ServiceInterface to the group
+
+			if (getServiceInterface() != null) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("adding ServiceInterface:" + getServiceInterface().getName());
+				}
+				_newWebService.addServiceInterfaceAsPortType(getServiceInterface());
+			} else if (getPortRegistry() != null) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("adding portRegistry:" + getPortRegistry().getName());
+				}
+				ServiceInterface si = getFlexoProcess().addServiceInterface(getNewWebServiceName());
+				si = ServiceInterface.copyPortsFromRegistry(si, getPortRegistry());
+				_newWebService.addServiceInterfaceAsPortType(si);
+				setServiceInterface(si);
+			} else {
+				throw new InvalidArgumentException("Incorrect Argument: missing ServiceInterface or PortRegistery",
+						"ws_no_service_interface_specified");
+			}
+
+			/*
+			 * No more Copy //3. if subprocess is defined with WSDLRepository's data, it's ok. // else refactoring: duplicate data in all
+			 * messageDefinitionBinding // and copy them in a WSDLRepository .
+			 * 
+			 * 
+			 * 
+			 * Vector ports = getFlexoProcess().getPortRegistery().getAllPorts(); if(ports==null) return; Enumeration en = ports.elements();
+			 * while (en.hasMoreElements()) { FlexoPort port = (FlexoPort)en.nextElement(); Vector entries = new Vector();
+			 * if(port.isInPort()){ System.out.println("inport"); AbstractInPort inport=(AbstractInPort)port; entries.addAll(
+			 * inport.getInputMessageDefinition().getEntries() ); } if(port.isOutPort()){ System.out.println("outport"); OutputPort
+			 * outport=(OutputPort)port; entries.addAll(outport.getOutputMessageDefinition().getEntries()); } if(entries!=null){
+			 * System.out.println("enumeration on entries"); Enumeration en1 = entries.elements(); while (en1.hasMoreElements()) {
+			 * MessageEntry entry = (MessageEntry)en1.nextElement(); DMEntity type = entry.getType(); System.out.println("Entry:"+
+			 * entry.getVariableName()+ " type:"+ entry.getType());
+			 * 
+			 * if( type.getRepository() instanceof JDKRepository){ // do nothing. } else{ System.out.println("duplicating"); // duplicate
+			 * repository entry into a the WSDLRepository of this WSService. WSRepository wsRep =
+			 * _newWebService.getWSRepositoryNamed(getNewWebServiceName()); WSDLRepository repo = null; if(wsRep==null){ repo =
+			 * WSDLRepository.createNewWSDLRepository(getNewWebServiceName(),getProject().getDataModel(),null,getFlexoProgress());
+			 * _newWebService.addRepository(repo); } else repo = wsRep.getWSDLRepository();
+			 * 
+			 * DMEntity newType = copyEntity(type, repo); entry.setType(newType);
+			 * 
+			 * } } }
+			 * 
+			 * }
+			 */
+
+			hideFlexoProgress();
+		}
+	}
+
+	private DMEntity copyEntity(DMEntity entity, WSDLRepository toRep) {
+
+		// 0. Check if the entity has no been already duplicated.
+		if (toRep.getDMEntity(entity.getEntityPackageName(), entity.getName()) != null) {
+			return toRep.getDMEntity(entity.getEntityPackageName(), entity.getName());
+		}
+
+		System.out.println("Copying entity:" + entity.getName());
+		// 1. if has a parent entity, copy parent entity.
+		DMEntity newParent = null;
+		if (entity.getParentBaseEntity() != null) {
+			newParent = copyEntity(entity.getParentBaseEntity(), toRep);
+		}
+
+		// 2. copy entity;
+		DMPackage fromPack = entity.getPackage();
+		DMPackage toPack = toRep.getPackageWithName(fromPack.getName());
+		if (toPack == null) {
+			toPack = toRep.createPackage(fromPack.getName());
+		}
+
+		DMEntity newEntity = new DMEntity(toPack.getDMModel(), entity.getName(), toPack.getName(), entity.getName(),
+				DMType.makeResolvedDMType(newParent));
+		toPack.getRepository().registerEntity(newEntity);
+
+		// 3. copy properties
+		Enumeration en = entity.getProperties().keys();
+		while (en.hasMoreElements()) {
+			DMProperty property = entity.getProperty((String) en.nextElement());
+			DMEntity propertyType = null;
+			if (property != null) {
+				// 1. duplicate propertyType. is a complexType not in the wsdl repository...
+				propertyType = property.getType().getBaseEntity();
+				if (propertyType != null) {
+					if (!propertyType.getRepository().equals(toRep) && !(propertyType.getRepository() instanceof JDKRepository)) {
+						// copy entity's property
+						propertyType = copyEntity(propertyType, toRep);
+					}
+				}
+			}
+			DMProperty newProperty = new DMProperty(entity.getDMModel(), property.getName(), DMType.makeResolvedDMType(propertyType),
+					property.getCardinality(), property.getIsReadOnly(), property.getIsSettable(), property.getImplementationType());
+			newEntity.registerProperty(newProperty, false);
+		}
+
+		return newEntity;
 	}
 
 }

@@ -32,9 +32,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.CreateDMPackage;
-import org.openflexo.foundation.dm.action.UpdateDMRepository;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
 import org.openflexo.foundation.dm.dm.EntityUnregistered;
 import org.openflexo.foundation.dm.dm.PackageCreated;
@@ -134,14 +131,6 @@ public abstract class DMRepository extends DMObject {
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMPackage.actionType);
-		returned.add(UpdateDMRepository.actionType);
-		return returned;
-	}
-
-	@Override
 	public boolean isDeletable() {
 		return !isReadOnly();
 	}
@@ -172,10 +161,8 @@ public abstract class DMRepository extends DMObject {
 
 	public DMPackage getDefaultPackage() {
 		/*
-		 * DMPackage defaultPackage = (DMPackage)packages.get("default"); if
-		 * (defaultPackage == null) { defaultPackage = new
-		 * DMPackage(getDMModel(),this,"default_package");
-		 * packages.put("default",defaultPackage); } return defaultPackage;
+		 * DMPackage defaultPackage = (DMPackage)packages.get("default"); if (defaultPackage == null) { defaultPackage = new
+		 * DMPackage(getDMModel(),this,"default_package"); packages.put("default",defaultPackage); } return defaultPackage;
 		 */
 		return packageWithName(DMPackage.DEFAULT_PACKAGE_NAME);
 	}

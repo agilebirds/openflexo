@@ -37,7 +37,6 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
@@ -47,8 +46,6 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.action.CreateDMEOAttribute;
-import org.openflexo.foundation.dm.action.CreateDMEORelationship;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
@@ -638,14 +635,6 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		_eoEntity = eoEntity;
 		_primaryKeyAttributesNeedsRecomputing = true;
 		_attributesUsedForLockingNeedsRecomputing = true;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOAttribute.actionType);
-		returned.add(CreateDMEORelationship.actionType);
-		return returned;
 	}
 
 	@Override

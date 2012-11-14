@@ -80,6 +80,9 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 	private boolean noConfirmation = false;
 
 	public boolean isNoConfirmation() {

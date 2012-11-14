@@ -24,6 +24,7 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -70,7 +71,7 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 
 	public String newShemaName;
 	public String description;
-	public Object graphicalRepresentation;
+	public DrawingGraphicalRepresentation<ExampleDrawingShema> graphicalRepresentation;
 
 	private ExampleDrawingShema _newShema;
 

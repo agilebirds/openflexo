@@ -49,21 +49,7 @@ public class FIBBrowserElement extends FIBModelObject {
 	private FIBBrowser browser;
 
 	public static enum Parameters implements FIBModelAttribute {
-		dataClass,
-		label,
-		icon,
-		tooltip,
-		enabled,
-		visible,
-		imageIconFile,
-		isEditable,
-		editableLabel,
-		font,
-		dynamicFont,
-		filtered,
-		defaultVisible,
-		children,
-		actions;
+		dataClass, label, icon, tooltip, enabled, visible, imageIconFile, isEditable, editableLabel, font, dynamicFont, filtered, defaultVisible, children, actions;
 	}
 
 	public static BindingDefinition LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET, false);

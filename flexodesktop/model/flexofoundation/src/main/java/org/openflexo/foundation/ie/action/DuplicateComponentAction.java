@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEMonitoringScreen;
@@ -69,10 +70,16 @@ public class DuplicateComponentAction extends FlexoAction<DuplicateComponentActi
 		@Override
 		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
-					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
+					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition
+					|| object instanceof IEWOComponent;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWOComponent.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	protected DuplicateComponentAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

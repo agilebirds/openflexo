@@ -24,47 +24,60 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.ScreenshotResource;
 
-public class GenerateComponentScreenshot extends FlexoAction<GenerateComponentScreenshot, ComponentDefinition, ComponentDefinition> {
+public class GenerateComponentScreenshot extends FlexoAction<GenerateComponentScreenshot, IEObject, IEObject> {
 
 	private static final Logger logger = Logger.getLogger(GenerateComponentScreenshot.class.getPackage().getName());
 
-	public static FlexoActionType<GenerateComponentScreenshot, ComponentDefinition, ComponentDefinition> actionType = new FlexoActionType<GenerateComponentScreenshot, ComponentDefinition, ComponentDefinition>(
+	public static FlexoActionType<GenerateComponentScreenshot, IEObject, IEObject> actionType = new FlexoActionType<GenerateComponentScreenshot, IEObject, IEObject>(
 			"generate_screenshot", FlexoActionType.docGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public GenerateComponentScreenshot makeNewAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection,
-				FlexoEditor editor) {
+		public GenerateComponentScreenshot makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 			return new GenerateComponentScreenshot(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+		FlexoModelObject.addActionForClass(actionType, IEWOComponent.class);
+	}
+
 	private boolean _hasBeenRegenerated;
 
-	GenerateComponentScreenshot(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor) {
+	GenerateComponentScreenshot(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public ComponentDefinition getComponent() {
-		return getFocusedObject();
+		if (getFocusedObject() instanceof ComponentDefinition) {
+			return (ComponentDefinition) getFocusedObject();
+		} else if (getFocusedObject() instanceof IEWOComponent) {
+			return ((IEWOComponent) getFocusedObject()).getComponentDefinition();
+		} else {
+			return null;
+		}
 	}
 
 	public ScreenshotResource getScreenshotResource() {

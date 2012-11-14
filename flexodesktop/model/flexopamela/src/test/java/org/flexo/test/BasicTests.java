@@ -96,11 +96,12 @@ public class BasicTests extends TestCase {
 		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
+		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
 
 		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
+		assertTrue(modelObjectEntity.getAllDescendants().contains(processEntity));
 	}
 
 	public void test2() throws Exception {
@@ -330,22 +331,15 @@ public class BasicTests extends TestCase {
 	}
 
 	public void test5() throws Exception {
-		/*FlexoProcess process = loadProcessFromFile();
-		ActivityNode activityNode = (ActivityNode) process.getNodeNamed("MyActivity");
-		StartNode startNode = (StartNode) process.getNodeNamed("Start");
-		WKFAnnotation annotation1 = startNode.getMasterAnnotation();
-		WKFAnnotation annotation2 = startNode.getOtherAnnotations().get(0);
-		TokenEdge edge1 = (TokenEdge) process.getEdgeNamed("edge1");
-		TokenEdge edge2 = (TokenEdge) process.getEdgeNamed("edge2");
-		assertTrue(activityNode.getIncomingEdges().contains(edge1));
-		startNode.delete();
-		assertTrue(startNode.isDeleted());
-		assertTrue(edge1.isDeleted());
-		assertTrue(annotation1.isDeleted());
-		assertTrue(annotation2.isDeleted());
-		assertNull(process.getNodeNamed("Start"));
-		assertNull(process.getEdgeNamed("edge1"));
-		assertTrue(!activityNode.getIncomingEdges().contains(edge1));*/
+		/*
+		 * FlexoProcess process = loadProcessFromFile(); ActivityNode activityNode = (ActivityNode) process.getNodeNamed("MyActivity");
+		 * StartNode startNode = (StartNode) process.getNodeNamed("Start"); WKFAnnotation annotation1 = startNode.getMasterAnnotation();
+		 * WKFAnnotation annotation2 = startNode.getOtherAnnotations().get(0); TokenEdge edge1 = (TokenEdge) process.getEdgeNamed("edge1");
+		 * TokenEdge edge2 = (TokenEdge) process.getEdgeNamed("edge2"); assertTrue(activityNode.getIncomingEdges().contains(edge1));
+		 * startNode.delete(); assertTrue(startNode.isDeleted()); assertTrue(edge1.isDeleted()); assertTrue(annotation1.isDeleted());
+		 * assertTrue(annotation2.isDeleted()); assertNull(process.getNodeNamed("Start")); assertNull(process.getEdgeNamed("edge1"));
+		 * assertTrue(!activityNode.getIncomingEdges().contains(edge1));
+		 */
 	}
 
 	/**
@@ -660,7 +654,6 @@ public class BasicTests extends TestCase {
 
 	public void testModify() {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-
 		process.init("234XX");
 		assertTrue(process.isModified());
 		process.setName("NewProcess");

@@ -27,6 +27,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.ExternalDatabaseRepository;
+import org.openflexo.foundation.dm.ProjectDatabaseRepository;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOAccessException;
@@ -61,6 +63,11 @@ public class ImportDMEOModel extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ExternalDatabaseRepository.class);
+		FlexoModelObject.addActionForClass(actionType, ProjectDatabaseRepository.class);
+	}
 
 	ImportDMEOModel(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

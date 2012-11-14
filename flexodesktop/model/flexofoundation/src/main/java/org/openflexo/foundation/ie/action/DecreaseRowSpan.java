@@ -59,6 +59,11 @@ public class DecreaseRowSpan extends FlexoUndoableAction {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
+
 	DecreaseRowSpan(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

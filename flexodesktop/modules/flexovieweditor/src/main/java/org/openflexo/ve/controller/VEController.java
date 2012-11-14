@@ -120,7 +120,6 @@ public class VEController extends FlexoController {
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
 		}
