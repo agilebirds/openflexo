@@ -368,7 +368,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 				// "http://www.w3.org/2002/07/owl");
-						"http://www.openflexo.org/test/TestProperties.owl");
+						"http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl");
+				// "http://www.openflexo.org/test/TestProperties.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
 				o.loadWhenUnloaded();
 
@@ -380,6 +381,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				selector.setSelectObjectProperties(true);
 				selector.setSelectDataProperties(true);
 				selector.setStrictMode(true);
+				selector.setDomainClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmMode");
+				selector.setRangeClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmSubMode");
 				return makeArray(selector);
 			}
 
@@ -395,5 +398,4 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		};
 		editor.launch();
 	}*/
-
 }
