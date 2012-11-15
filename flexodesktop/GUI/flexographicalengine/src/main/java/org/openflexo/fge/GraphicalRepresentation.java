@@ -105,7 +105,32 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static enum Parameters implements GRParameter {
-		identifier, layer, hasText, text, isMultilineAllowed, lineWrap, continuousTextEditing, textStyle, absoluteTextX, absoluteTextY, horizontalTextAlignment, verticalTextAlignment, paragraphAlignment, isSelectable, isFocusable, isSelected, isFocused, drawControlPointsWhenFocused, drawControlPointsWhenSelected, isReadOnly, isLabelEditable, isVisible, mouseClickControls, mouseDragControls, toolTipText, variables
+		identifier,
+		layer,
+		hasText,
+		text,
+		isMultilineAllowed,
+		lineWrap,
+		continuousTextEditing,
+		textStyle,
+		absoluteTextX,
+		absoluteTextY,
+		horizontalTextAlignment,
+		verticalTextAlignment,
+		paragraphAlignment,
+		isSelectable,
+		isFocusable,
+		isSelected,
+		isFocused,
+		drawControlPointsWhenFocused,
+		drawControlPointsWhenSelected,
+		isReadOnly,
+		isLabelEditable,
+		isVisible,
+		mouseClickControls,
+		mouseDragControls,
+		toolTipText,
+		variables
 	}
 
 	protected int layer;
@@ -412,6 +437,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 					logger.warning("Cannot clone parameter: " + value);
 					e.printStackTrace();
 				}
+			}
+			// IMPORTANT !!!!!!
+			// Special case for DataBinding, just copy unparsed string, and let framework recompute the binding
+			if (type.equals(DataBinding.class)) {
+				value = new DataBinding(((DataBinding) value).toString());
 			}
 			Object currentValue = objectForKey(parameterKey.name());
 			if (value != currentValue) {
