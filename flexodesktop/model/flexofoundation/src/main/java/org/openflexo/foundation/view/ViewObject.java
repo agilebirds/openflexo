@@ -201,7 +201,11 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 				ViewElement previousElement = childsOfRightType.get(newIndex - 1);
 				int previousElementIndex = childs.indexOf(previousElement);
 				childs.remove(aChild);
-				childs.insertElementAt(aChild, previousElementIndex + 1);
+				if (previousElementIndex + 1 <= childs.size()) {
+					childs.insertElementAt(aChild, previousElementIndex + 1);
+				} else {
+					childs.insertElementAt(aChild, childs.size());
+				}
 			} else {
 				ViewElement firstElement = childsOfRightType.get(0);
 				int firstElementIndex = childs.indexOf(firstElement);

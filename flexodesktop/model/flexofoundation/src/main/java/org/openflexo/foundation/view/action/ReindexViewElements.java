@@ -87,6 +87,10 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		init();
 	}
 
+	public boolean skipDialog = false;
+
+	private ViewObject container = null;
+
 	private List<EditionPattern> matchingEditionPatterns = new ArrayList<EditionPattern>();
 	private HashMap<EditionPattern, OrderedElementList> reorderedElements = new HashMap<EditionPattern, OrderedElementList>();
 
@@ -108,6 +112,29 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 					}
 					orderedList.add(e);
 				}
+			}
+		}
+	}
+
+	public void initAsUpReindexing(ViewElement elementToBeReindexed) {
+		skipDialog = true;
+		if (elementToBeReindexed.getEditionPattern() != null) {
+			container = elementToBeReindexed.getParent();
+			init();
+			if (elementToBeReindexed.getIndexRelativeToEPType() > 0) {
+				elementUp(elementToBeReindexed, elementToBeReindexed.getEditionPattern());
+			}
+		}
+	}
+
+	public void initAsDownReindexing(ViewElement elementToBeReindexed) {
+		skipDialog = true;
+		if (elementToBeReindexed.getEditionPattern() != null) {
+			container = elementToBeReindexed.getParent();
+			init();
+			if (elementToBeReindexed.getIndexRelativeToEPType() < getContainer().getChildsOfType(elementToBeReindexed.getEditionPattern())
+					.size() - 1) {
+				elementDown(elementToBeReindexed, elementToBeReindexed.getEditionPattern());
 			}
 		}
 	}
@@ -134,11 +161,14 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 	}
 
 	public ViewObject getContainer() {
-		if (getContainedEditionPattern(getFocusedObject()).size() > 0) {
-			return getFocusedObject();
-		} else {
-			return getFocusedObject().getParent();
+		if (container == null) {
+			if (getContainedEditionPattern(getFocusedObject()).size() > 0) {
+				container = getFocusedObject();
+			} else {
+				container = getFocusedObject().getParent();
+			}
 		}
+		return container;
 	}
 
 	@Override
