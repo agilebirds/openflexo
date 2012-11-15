@@ -208,7 +208,7 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
 				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
 				isLeftOriented = false;
-			} else if ((getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled) {
 				_diffReport = ComputeDiff.diff(getContentToWriteOnDisk(), getContentOnDisk());
 				leftLabel = FlexoLocalization.localizedForKey("overriden_version") + " ["
 						+ getCGFile().getScheduledOverrideVersion().getStringRepresentation() + "]";
@@ -317,25 +317,29 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 			File left = null;
 			File right = null;
 			if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationRemoved) {
-				right = (getResource().getFile());
+				right = getResource().getFile();
 				leftLabel = FlexoLocalization.localizedForKey("current_generation");
 				rightLabel = FlexoLocalization.localizedForKey("file_to_remove_from_disk");
 			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationAdded) {
-				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy() != null ? ((FlexoCopiedResource) getResource())
+						.getResourceToCopy().getFile() : null;
 				leftLabel = FlexoLocalization.localizedForKey("current_generation");
 				rightLabel = FlexoLocalization.localizedForKey("file_to_add_on_disk");
 			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified) {
-				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
-				right = (getResource().getFile());
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy() != null ? ((FlexoCopiedResource) getResource())
+						.getResourceToCopy().getFile() : null;
+				right = getResource().getFile();
 				leftLabel = FlexoLocalization.localizedForKey("current_generation");
 				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
 			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskModified) {
-				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
-				right = (getResource().getFile());
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy() != null ? ((FlexoCopiedResource) getResource())
+						.getResourceToCopy().getFile() : null;
+				right = getResource().getFile();
 				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
 				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
 			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskRemoved) {
-				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy() != null ? ((FlexoCopiedResource) getResource())
+						.getResourceToCopy().getFile() : null;
 				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
 				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
 			} else {

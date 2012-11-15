@@ -94,7 +94,7 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static double getImageRatio(Icon image) {
-		return ((double) image.getIconHeight()) / ((double) image.getIconWidth());
+		return (double) image.getIconHeight() / (double) image.getIconWidth();
 	}
 
 	private boolean isGenerating = false;
@@ -358,11 +358,12 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 			if (r.getFile().exists()) {
 				return new ImageIcon(r.getFile().getAbsolutePath());
 			} else {
-				return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
+				if (r.getResourceToCopy() != null) {
+					return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
+				}
 			}
-		} else {
-			return new ImageIcon(o.getProject().getScreenshotResource(o, true).getFile().getAbsolutePath());
 		}
+		return new ImageIcon(o.getProject().getScreenshotResource(o, true).getFile().getAbsolutePath());
 	}
 
 	public static String getReference(FlexoModelObject object) {

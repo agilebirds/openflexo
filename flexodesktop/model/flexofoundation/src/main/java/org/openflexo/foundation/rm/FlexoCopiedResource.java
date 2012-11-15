@@ -157,7 +157,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 		}
 		String old = super.getName();
 		super.setName(aName);
-		if (!isDeleted() && !project.isDeserializing()) {
+		if (!isDeleted() && !project.isDeserializing() && (getCGFile() == null || !getCGFile().isMarkedForDeletion())) {
 			if (old != null) {
 				try {
 					getProject().renameResource(this, aName);
@@ -288,6 +288,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof ResourceRemoved && ((ResourceRemoved) dataModification).getRemovedResource() == resourceToCopy) {
+			removeFromDependentResources(resourceToCopy);
 			if (getCGFile() == null) {
 				this.delete();
 			} else {
