@@ -34,6 +34,7 @@ import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -162,7 +163,16 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		}
 		if (object instanceof ViewDefinition) {
 			ViewDefinition viewDefinition = (ViewDefinition) object;
-			View shema = viewDefinition.getShema();
+			View shema;
+			if (!viewDefinition.isLoaded()) {
+				FlexoProgress progress = _controller.getEditor().getFlexoProgressFactory()
+						.makeFlexoProgress(FlexoLocalization.localizedForKey("loading_view..."), 3);
+				progress.setProgress("loading_view");
+				shema = viewDefinition.getView(progress);
+				progress.hideWindow();
+			} else {
+				shema = viewDefinition.getView();
+			}
 			if (shema == null) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
 						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
