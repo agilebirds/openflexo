@@ -87,7 +87,47 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// *******************************************************************************
 
 	public static enum Parameters implements GRParameter {
-		x, y, width, height, minimalWidth, minimalHeight, maximalWidth, maximalHeight, dimensionConstraintStep, locationConstraints, locationConstrainedArea, dimensionConstraints, adjustMinimalWidthToLabelWidth, adjustMinimalHeightToLabelHeight, adjustMaximalWidthToLabelWidth, adjustMaximalHeightToLabelHeight, foreground, background, selectedForeground, selectedBackground, focusedForeground, focusedBackground, hasSelectedForeground, hasSelectedBackground, hasFocusedForeground, hasFocusedBackground, border, shapeType, shape, shadowStyle, isFloatingLabel, relativeTextX, relativeTextY, decorationPainter, shapePainter, specificStroke, allowToLeaveBounds, xConstraints, yConstraints, widthConstraints, heightConstraints;
+		x,
+		y,
+		width,
+		height,
+		minimalWidth,
+		minimalHeight,
+		maximalWidth,
+		maximalHeight,
+		dimensionConstraintStep,
+		locationConstraints,
+		locationConstrainedArea,
+		dimensionConstraints,
+		adjustMinimalWidthToLabelWidth,
+		adjustMinimalHeightToLabelHeight,
+		adjustMaximalWidthToLabelWidth,
+		adjustMaximalHeightToLabelHeight,
+		foreground,
+		background,
+		selectedForeground,
+		selectedBackground,
+		focusedForeground,
+		focusedBackground,
+		hasSelectedForeground,
+		hasSelectedBackground,
+		hasFocusedForeground,
+		hasFocusedBackground,
+		border,
+		shapeType,
+		shape,
+		shadowStyle,
+		isFloatingLabel,
+		relativeTextX,
+		relativeTextY,
+		decorationPainter,
+		shapePainter,
+		specificStroke,
+		allowToLeaveBounds,
+		xConstraints,
+		yConstraints,
+		widthConstraints,
+		heightConstraints;
 	}
 
 	private double x = 0;
@@ -1520,7 +1560,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void updateConstraints() {
 		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
-		logger.info("Called updateConstraints(), drawable=" + getDrawable() + " index=" + getIndex());
+		logger.fine("Called updateConstraints(), drawable=" + getDrawable() + " index=" + getIndex() + " class=" + getClass());
 		if (xConstraints != null && xConstraints.isValid()) {
 			// System.out.println("x was " + getX() + " constraint=" + xConstraints);
 			updateXPosition();
@@ -1541,6 +1581,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			updateHeightPosition();
 			// System.out.println("height is now " + getHeight());
 		}
+
 	}
 
 	private void updateXPosition() {
