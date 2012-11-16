@@ -43,8 +43,9 @@ public enum DocxTemplatesEnum {
 			false), SETTINGS_XML("docx_settings.xml.vm", "word/settings.xml", false), WEBSETTINGS_XML("docx_websettings.xml.vm",
 			"word/webSettings.xml", false), STYLES_XML("docx_styles.xml.vm", "word/styles.xml", false), THEME1_XML("docx_theme1.xml.vm",
 			"word/theme/theme1.xml", false), THEME1_XML_RELS("docx_theme1.xml.rels.vm", "word/theme/_rels/theme1.xml.rels", false), FLEXONAMES_XML(
-			"docx_flexonames.xml.vm", "customXml/flexoNames.xml", false), CONTENT_TYPES_XML("docx_content_types.xml.vm",
-			"[Content_Types].xml", false);
+			"docx_flexonames.xml.vm", "customXml/flexoNames.xml", false), EPIVALUES_XML("docx_editionpatterninstancevalues.xml.vm",
+			"customXml/edition_pattern_instance_values.xml", false), CONTENT_TYPES_XML("docx_content_types.xml.vm", "[Content_Types].xml",
+			false);
 
 	private static Map<String, List<DocxTemplatesEnum>> orderedTemplateListGroupedPerGenerator;
 
@@ -127,6 +128,7 @@ public enum DocxTemplatesEnum {
 			orderedTemplateList.add(FONTTABLE_XML);
 			orderedTemplateList.add(FONTTABLE_XML_RELS);
 			orderedTemplateList.add(FLEXONAMES_XML);
+			orderedTemplateList.add(EPIVALUES_XML);
 			orderedTemplateListGroupedPerGenerator.put(DOCUMENT_XML.toString(), orderedTemplateList);
 
 			// SETTINGS_XML can be generated alone
