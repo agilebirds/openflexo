@@ -69,7 +69,21 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	// *******************************************************************************
 
 	public static enum Parameters implements GRParameter {
-		connector, foreground, selectedForeground, focusedForeground, hasSelectedForeground, hasFocusedForeground, startSymbol, endSymbol, middleSymbol, startSymbolSize, endSymbolSize, middleSymbolSize, relativeMiddleSymbolLocation, applyForegroundToSymbols, debugCoveringArea
+		connector,
+		foreground,
+		selectedForeground,
+		focusedForeground,
+		hasSelectedForeground,
+		hasFocusedForeground,
+		startSymbol,
+		endSymbol,
+		middleSymbol,
+		startSymbolSize,
+		endSymbolSize,
+		middleSymbolSize,
+		relativeMiddleSymbolLocation,
+		applyForegroundToSymbols,
+		debugCoveringArea
 	}
 
 	private Connector connector = null;
@@ -334,7 +348,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		return startObject;
 	}
 
-	public final void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
+	public void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
 		startObject = aStartObject;
 		if (!enabledStartObjectObserving) {
 			enableStartObjectObserving(startObject);
@@ -391,7 +405,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		return endObject;
 	}
 
-	public final void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
+	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
 		endObject = anEndObject;
 		if (!enabledEndObjectObserving) {
 			enableEndObjectObserving(endObject);

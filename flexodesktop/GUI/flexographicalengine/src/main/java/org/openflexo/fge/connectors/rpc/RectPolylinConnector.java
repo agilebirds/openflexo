@@ -365,7 +365,16 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	public static enum RectPolylinConstraints {
-		NONE, ORTHOGONAL_LAYOUT, ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST, ORTHOGONAL_LAYOUT_VERTICAL_FIRST, HORIZONTAL_OR_VERTICAL_LAYOUT, HORIZONTAL_LAYOUT, VERTICAL_LAYOUT, ORIENTATIONS_FIXED, START_ORIENTATION_FIXED, END_ORIENTATION_FIXED
+		NONE,
+		ORTHOGONAL_LAYOUT,
+		ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST,
+		ORTHOGONAL_LAYOUT_VERTICAL_FIRST,
+		HORIZONTAL_OR_VERTICAL_LAYOUT,
+		HORIZONTAL_LAYOUT,
+		VERTICAL_LAYOUT,
+		ORIENTATIONS_FIXED,
+		START_ORIENTATION_FIXED,
+		END_ORIENTATION_FIXED
 	}
 
 	private RectPolylinConstraints rectPolylinConstraints = RectPolylinConstraints.NONE;
@@ -2504,4 +2513,24 @@ public class RectPolylinConnector extends Connector {
 		return returned;
 	}
 
+	@Override
+	public RectPolylinConnector clone() {
+		RectPolylinConnector returned = new RectPolylinConnector(null);
+		returned.setRectPolylinConstraints(getRectPolylinConstraints());
+		returned.setStraightLineWhenPossible(getStraightLineWhenPossible());
+		returned.setAdjustability(getAdjustability());
+		returned.setStartOrientation(getStartOrientation());
+		returned.setEndOrientation(getEndOrientation());
+		returned.setIsRounded(getIsRounded());
+		returned.setArcSize(getArcSize());
+		returned.setIsStartingLocationFixed(getIsStartingLocationFixed());
+		returned.setIsEndingLocationFixed(getIsEndingLocationFixed());
+		returned.setIsStartingLocationDraggable(getIsStartingLocationDraggable());
+		returned.setIsEndingLocationDraggable(getIsEndingLocationDraggable());
+		returned.setCrossedControlPoint(getCrossedControlPoint());
+		returned.setFixedStartLocation(getFixedStartLocation());
+		returned.setFixedEndLocation(getFixedEndLocation());
+		returned._setPolylin(_getPolylin());
+		return returned;
+	}
 }

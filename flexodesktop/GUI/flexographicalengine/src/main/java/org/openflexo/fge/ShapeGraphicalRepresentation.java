@@ -171,7 +171,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	private ShadowStyle shadowStyle = ShadowStyle.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
-	private boolean adaptBoundsToContents = true;
+	private boolean adaptBoundsToContents = false;
 
 	/*private boolean drawShadow = true;
 	private int shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;

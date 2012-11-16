@@ -27,7 +27,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -323,12 +325,18 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action) {
 		ViewShape newShape = new ViewShape(retrieveOEShema());
 
+		GraphicalRepresentation<?> grToUse = null;
+
 		// If an overriden graphical representation is defined, use it
 		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
-			newShape.setGraphicalRepresentation(getOverridingGraphicalRepresentation(action.getPatternRole()));
+			grToUse = getOverridingGraphicalRepresentation(action.getPatternRole());
 		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
-			newShape.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
+			grToUse = action.getPatternRole().getGraphicalRepresentation();
 		}
+
+		ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
+		newGR.setsWith(grToUse);
+		newShape.setGraphicalRepresentation(newGR);
 
 		// Register reference
 		newShape.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
@@ -365,12 +373,18 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			throw new IllegalArgumentException("No common ancestor");
 		}
 
+		GraphicalRepresentation<?> grToUse = null;
+
 		// If an overriden graphical representation is defined, use it
 		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
-			newConnector.setGraphicalRepresentation(getOverridingGraphicalRepresentation(action.getPatternRole()));
+			grToUse = getOverridingGraphicalRepresentation(action.getPatternRole());
 		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
-			newConnector.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
+			grToUse = action.getPatternRole().getGraphicalRepresentation();
 		}
+
+		ConnectorGraphicalRepresentation<ViewConnector> newGR = new ConnectorGraphicalRepresentation<ViewConnector>();
+		newGR.setsWith(grToUse);
+		newConnector.setGraphicalRepresentation(newGR);
 
 		parent.addToChilds(newConnector);
 
