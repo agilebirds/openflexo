@@ -462,8 +462,13 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public void launch() {
 		logger.info(">>>>>>>>>>> Loading FIB...");
-		loadFIB();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				loadFIB();
+				frame.setVisible(true);
+			}
+		});
 	}
 
 	public static Object[] makeArray(Object... o) {
