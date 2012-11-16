@@ -38,7 +38,6 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCreateComponent extends FlexoIETestCase {
 
@@ -63,7 +62,6 @@ public class TestCreateComponent extends FlexoIETestCase {
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_COMPONENT, "");

@@ -230,7 +230,6 @@ public class FIBEditor implements FIBGenericEditor {
 		}*/
 
 		try {
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(FIBAbstractEditor.LOCALIZATION);
 		} catch (SecurityException e) {

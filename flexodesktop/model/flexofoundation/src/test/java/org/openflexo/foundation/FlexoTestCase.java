@@ -102,7 +102,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
@@ -188,7 +187,6 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File _projectDirectory = null;
 		try {
@@ -308,7 +306,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertNotModified(FlexoStorageResource resource) {
 		try {
-			assertFalse(resource.isModified());
+			assertFalse("Resource " + resource.getResourceIdentifier() + " should not be modfied", resource.isModified());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT modified");
 			throw e;
@@ -317,7 +315,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertModified(FlexoStorageResource resource) {
 		try {
-			assertTrue(resource.isModified());
+			assertTrue("Resource " + resource.getResourceIdentifier() + " should be modfied", resource.isModified());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be modified");
 			throw e;
@@ -326,7 +324,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertNotLoaded(FlexoStorageResource resource) {
 		try {
-			assertFalse(resource.isLoaded());
+			assertFalse("Resource " + resource.getResourceIdentifier() + " should not be loaded", resource.isLoaded());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT loaded");
 			throw e;
@@ -335,7 +333,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertLoaded(FlexoStorageResource resource) {
 		try {
-			assertTrue(resource.isLoaded());
+			assertTrue("Resource " + resource.getResourceIdentifier() + " should be loaded", resource.isLoaded());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be loaded");
 			throw e;

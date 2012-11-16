@@ -33,7 +33,6 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * Dialog allowing to automatically ask and edit parameters
@@ -87,7 +86,6 @@ public class TestFIB extends JPanel {
 
 	public static void main(String[] args) {
 		try {
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block

@@ -138,7 +138,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	public FIBAbstractEditor() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {

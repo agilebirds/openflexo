@@ -34,7 +34,6 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCGFoundation extends FlexoTestCase {
 
@@ -56,7 +55,6 @@ public class TestCGFoundation extends FlexoTestCase {
 	 */
 	public void test0CreateProject() {
 		logger.info("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");

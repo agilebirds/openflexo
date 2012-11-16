@@ -69,6 +69,35 @@ public class ToolBox {
 
 	public static final String OTHER = "OTHER";
 
+	static {
+		String osName = System.getProperty("os.name");
+		if (osName.indexOf("Mac OS") > -1) {
+			PLATFORM = MACOS;
+		} else if (osName.indexOf("Windows") > -1) {
+			PLATFORM = WINDOWS;
+		} else if (osName.indexOf("Linux") > -1) {
+			PLATFORM = LINUX;
+		} else {
+			PLATFORM = OTHER;
+		}
+	}
+
+	public static boolean isMacOS() {
+		return PLATFORM == MACOS;
+	}
+
+	public static boolean isWindows() {
+		return PLATFORM == WINDOWS;
+	}
+
+	public static boolean isLinux() {
+		return PLATFORM == LINUX;
+	}
+
+	public static boolean isOther() {
+		return PLATFORM == OTHER;
+	}
+
 	/**
      *
      */
@@ -413,26 +442,7 @@ public class ToolBox {
 	 * @return Returns the pLATFORM.
 	 */
 	public static String getPLATFORM() {
-		if (!platformIsSet) {
-			setPlatform();
-		}
 		return PLATFORM;
-	}
-
-	private static boolean platformIsSet = false;
-
-	public static void setPlatform() {
-		String osName = System.getProperty("os.name");
-		if (osName.indexOf("Mac OS") > -1) {
-			PLATFORM = MACOS;
-		} else if (osName.indexOf("Windows") > -1) {
-			PLATFORM = WINDOWS;
-		} else if (osName.indexOf("Linux") > -1) {
-			PLATFORM = LINUX;
-		} else {
-			PLATFORM = OTHER;
-		}
-		platformIsSet = true;
 	}
 
 	public static class RequestResponse {

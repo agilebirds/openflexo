@@ -76,7 +76,6 @@ import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCG extends CGTestCase {
 
@@ -146,7 +145,6 @@ public class TestCG extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
