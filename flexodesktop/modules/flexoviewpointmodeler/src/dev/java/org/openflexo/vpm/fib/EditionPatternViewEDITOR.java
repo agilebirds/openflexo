@@ -37,46 +37,47 @@ public class EditionPatternViewEDITOR {
 			@Override
 			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
+
+
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+				ViewPointLibrary viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 
 				Object[] returned = new Object[13];
 
-				ViewPoint calc1 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = viewPointLibrary
+						.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				returned[0] = calc1.getEditionPattern("Employee");
 				returned[1] = calc1.getEditionPattern("BOTDepartment");
 
-				ViewPoint calc2 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
+				ViewPoint calc2 = viewPointLibrary
+						.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
 				calc2.loadWhenUnloaded();
 				returned[2] = calc2.getEditionPattern("OrganizationalUnit");
 				returned[3] = calc2.getEditionPattern("OrganizationalUnitPosition");
 				returned[12] = calc2.getEditionPattern("PositionTask");
 
-				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
+				ViewPoint calc3 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();
 				returned[4] = calc3.getEditionPattern("Concept");
 				returned[5] = calc3.getEditionPattern("IsARelationship");
 				returned[6] = calc3.getEditionPattern("HasRelationship");
 
-				ViewPoint calc4 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl");
+				ViewPoint calc4 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl");
 				calc4.loadWhenUnloaded();
 				returned[7] = calc4.getEditionPattern("Concept");
 
-				ViewPoint calc5 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl");
+				ViewPoint calc5 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl");
 				calc5.loadWhenUnloaded();
 				returned[8] = calc5.getEditionPattern("Actor");
 
-				ViewPoint calc6 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl");
+				ViewPoint calc6 = viewPointLibrary
+						.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl");
 				calc6.loadWhenUnloaded();
 				returned[9] = calc6.getEditionPattern("ContainsPositionLink");
 				returned[10] = calc6.getEditionPattern("SubOrganizationUnitLink");
 
-				ViewPoint calc7 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
+				ViewPoint calc7 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
 				calc7.loadWhenUnloaded();
 				returned[11] = calc7.getEditionPattern("ImportPackage");
 
