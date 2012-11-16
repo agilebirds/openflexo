@@ -101,6 +101,7 @@ public abstract class InputHandler extends KeyAdapter {
 	public static final ActionListener TOGGLE_SYNTAX_COLORING = new ToggleSyntaxColoring();
 
 	public static final ActionListener FIND = new Find();
+	public static final ActionListener GOTOLINE = new GotoLine();
 
 	public static final ActionListener COPY = new copy();
 	public static final ActionListener CUT = new cut();
@@ -121,6 +122,16 @@ public abstract class InputHandler extends KeyAdapter {
 		public void actionPerformed(ActionEvent e) {
 			JEditTextArea textArea = getTextArea(e);
 			textArea.showFindDialog();
+		}
+
+	}
+
+	public static class GotoLine implements ActionListener, InputHandler.NonRecordable {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JEditTextArea textArea = getTextArea(e);
+			textArea.showGotoLineDialog();
 		}
 
 	}

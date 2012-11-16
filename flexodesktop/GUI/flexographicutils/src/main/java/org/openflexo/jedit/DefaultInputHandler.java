@@ -106,6 +106,8 @@ public class DefaultInputHandler extends InputHandler {
 			addKeyBinding("M+V", PASTE);
 			addKeyBinding("M+A", SELECT_ALL);
 			addKeyBinding("M+F", FIND);
+			addKeyBinding("M+G", GOTOLINE);
+			addKeyBinding("M+L", GOTOLINE);
 
 			addKeyBinding("MA+UP", COPY_LINE_UP);
 			addKeyBinding("MA+DOWN", COPY_LINE_DOWN);
@@ -117,6 +119,8 @@ public class DefaultInputHandler extends InputHandler {
 			addKeyBinding("C+V", PASTE);
 			addKeyBinding("C+A", SELECT_ALL);
 			addKeyBinding("C+F", FIND);
+			addKeyBinding("C+G", GOTOLINE);
+			addKeyBinding("C+L", GOTOLINE);
 			// addKeyBinding("C+Z",UNDO);
 			// addKeyBinding("C+Y",REDO);
 			addKeyBinding("CA+UP", COPY_LINE_UP);
