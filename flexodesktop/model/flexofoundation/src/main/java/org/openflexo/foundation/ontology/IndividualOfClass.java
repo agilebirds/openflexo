@@ -56,4 +56,8 @@ public class IndividualOfClass implements CustomType {
 		return "Individual" + ":" + ontologyClass.getURI();
 	}
 
+	@Override
+	public String toString() {
+		return simpleRepresentation();
+	}
 }
