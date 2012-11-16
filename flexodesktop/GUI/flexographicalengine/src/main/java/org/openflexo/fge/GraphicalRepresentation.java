@@ -308,6 +308,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		setChanged();
 		notifyObservers(new GraphicalRepresentationDeleted(this));
 		deleteObservers();
+		getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
+		pcSupport = null;
 	}
 
 	@Override
@@ -2128,7 +2130,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	@Override
 	public PropertyChangeSupport getPropertyChangeSupport() {
-		if (pcSupport == null) {
+		if (pcSupport == null && !isDeleted) {
 			pcSupport = new PropertyChangeSupport(this);
 		}
 		return pcSupport;
