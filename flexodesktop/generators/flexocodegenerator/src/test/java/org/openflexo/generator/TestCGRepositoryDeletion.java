@@ -63,7 +63,6 @@ import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.rm.OperationComponentJavaFileResource;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCGRepositoryDeletion extends CGTestCase {
 
@@ -129,7 +128,6 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");

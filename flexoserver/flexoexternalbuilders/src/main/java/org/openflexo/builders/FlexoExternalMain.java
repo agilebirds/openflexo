@@ -27,7 +27,6 @@ import org.openflexo.module.Module;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
-import org.openflexo.toolbox.ToolBox;
 
 public abstract class FlexoExternalMain implements Runnable {
 
@@ -102,7 +101,6 @@ public abstract class FlexoExternalMain implements Runnable {
 		if (resourcePath == null && !isDev) {
 			throw new MissingArgumentException(RESOURCE_PATH_ARGUMENT_PREFIX);
 		}
-		ToolBox.setPlatform();
 		if (!isDev) {
 			ResourceLocator.resetFlexoResourceLocation(new File(resourcePath));
 		}

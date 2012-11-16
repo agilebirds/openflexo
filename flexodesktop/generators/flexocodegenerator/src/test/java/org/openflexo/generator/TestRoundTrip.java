@@ -92,7 +92,6 @@ import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.generator.rm.BuildPropertiesResource;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestRoundTrip extends CGTestCase {
 
@@ -140,7 +139,6 @@ public class TestRoundTrip extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");

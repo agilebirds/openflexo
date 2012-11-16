@@ -174,7 +174,6 @@ public class Flexo {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		ToolBox.setPlatform();
 		String userTypeName = null;
 		boolean noSplash = false;
 		if (args.length > 0) {
