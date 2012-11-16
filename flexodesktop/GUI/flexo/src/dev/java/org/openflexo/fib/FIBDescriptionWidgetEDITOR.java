@@ -29,20 +29,19 @@ import org.openflexo.toolbox.FileResource;
 
 public class FIBDescriptionWidgetEDITOR extends ProjectDialogEDITOR {
 
-	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				return FIBAbstractEditor.makeArray(project, project.getFlexoWorkflow().getRootProcess());
-			}
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		return FIBAbstractEditor.makeArray(project, project.getFlexoWorkflow().getRootProcess());
+	}
 
-			@Override
-			public File getFIBFile() {
-				return FIBDescriptionWidget.FIB_FILE;
-			}
-		};
-		editor.launch();
+	@Override
+	public File getFIBFile() {
+		return FIBDescriptionWidget.FIB_FILE;
+	}
+
+	public static void main(String[] args) {
+		main(FIBDescriptionWidgetEDITOR.class);
 	}
 }
