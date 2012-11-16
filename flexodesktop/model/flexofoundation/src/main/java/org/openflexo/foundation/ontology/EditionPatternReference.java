@@ -324,9 +324,17 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 					}
 					return null;
 				}
+				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				if (object == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not find object with URI " + objectURI);
+					}
+					return null;
+				}
 				OntologyObjectProperty property = getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
-				statement = subject.getObjectPropertyStatement(property);
-				// logger.info("Found statement: "+statement);
+				// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
+				statement = subject.getObjectPropertyStatement(property, object);
+				// logger.info("Found statement: " + statement);
 			}
 			if (statement == null) {
 				logger.warning("Could not retrieve object " + objectURI);
