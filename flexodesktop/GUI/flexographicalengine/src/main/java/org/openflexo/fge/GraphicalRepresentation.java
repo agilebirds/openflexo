@@ -1395,6 +1395,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
 		addedGR.updateBindingModel();
+		// logger.info(">>>>>>>>>> NEW GraphicalRepresentationAdded");
 		setChanged();
 		notifyObservers(new GraphicalRepresentationAdded(addedGR));
 	}

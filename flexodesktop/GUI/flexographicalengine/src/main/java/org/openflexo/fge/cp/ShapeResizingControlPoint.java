@@ -32,6 +32,7 @@ import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
@@ -182,6 +183,8 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	private double initialHeight;
 	private FGEDimension offset;
 
+	private FGERectangle initialRequiredBounds;
+
 	@Override
 	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		if (!isDraggable()) {
@@ -203,6 +206,10 @@ public class ShapeResizingControlPoint extends ControlPoint {
 			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 			controller.getPaintManager().invalidate(getGraphicalRepresentation());
 		}*/
+
+		if (getGraphicalRepresentation().getAdaptBoundsToContents()) {
+			initialRequiredBounds = getGraphicalRepresentation().getRequiredBoundsForContents();
+		}
 
 		getGraphicalRepresentation().notifyObjectWillResize();
 	}
@@ -244,9 +251,19 @@ public class ShapeResizingControlPoint extends ControlPoint {
 			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, initialHeight - offset.height));
 		} else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
 			FGEPoint opposite = Shape.NORTH_WEST;
-
 			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
 			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+
+			/*if (getGraphicalRepresentation().getAdaptBoundsToContents()) {
+				// FGERectangle r = getGraphicalRepresentation().getRequiredBoundsForContents();
+				System.out.println("Les bounds mini sont " + initialRequiredBounds);
+				System.out.println("J'essaie " + new FGEDimension(newWidth - offset.width, newHeight - offset.height));
+				getGraphicalRepresentation().setSize(
+						new FGEDimension(Math.max(newWidth - offset.width, initialRequiredBounds.x + initialRequiredBounds.width), Math
+								.max(newHeight - offset.height, initialRequiredBounds.y + initialRequiredBounds.height)));
+			} else {
+				getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
+			}*/
 			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
 		} else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
 			FGEPoint opposite = Shape.NORTH_EAST;
@@ -270,6 +287,11 @@ public class ShapeResizingControlPoint extends ControlPoint {
 			getGraphicalRepresentation().setLocation(
 					new FGEPoint(initialShapePosition.x - (newWidth - initialWidth), initialShapePosition.y - (newHeight - initialHeight)));
 		}
+		/*if (getGraphicalRepresentation().getAdaptBoundsToContents()) {
+			System.out.println("c'etait a " + getGraphicalRepresentation().getSize());
+			getGraphicalRepresentation().extendBoundsToHostContents();
+			System.out.println("je remets a " + getGraphicalRepresentation().getSize());
+		}*/
 		return true;
 	}
 
