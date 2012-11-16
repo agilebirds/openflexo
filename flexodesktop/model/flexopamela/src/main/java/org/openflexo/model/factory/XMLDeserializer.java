@@ -161,7 +161,7 @@ public class XMLDeserializer {
 					try {
 						value = getStringEncoder().fromString(p.getType(), node.getAttributeValue(p.getXMLTag()));
 						if (value != null) {
-							handler.internallyInvokeSetter(p, value);
+							handler.invokeSetterForDeserialization(p, value);
 						}
 					} catch (InvalidDataException e) {
 						throw new InvalidXMLDataException(e.getMessage());
@@ -177,7 +177,7 @@ public class XMLDeserializer {
 								MatchingElement matchingElement = matchingElements.next();
 								// System.out.println("SINGLE, "+matchingElement);
 								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.internallyInvokeSetter(p, value);
+								handler.invokeSetterForDeserialization(p, value);
 							}
 							break;
 						case LIST:
@@ -185,7 +185,7 @@ public class XMLDeserializer {
 								MatchingElement matchingElement = matchingElements.next();
 								// System.out.println("LIST, "+matchingElement);
 								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.internallyInvokeAdder(p, value);
+								handler.invokeAdderForDeserialization(p, value);
 							}
 							break;
 						case MAP:
@@ -206,10 +206,10 @@ public class XMLDeserializer {
 							}
 							switch (p.getCardinality()) {
 							case SINGLE:
-								handler.internallyInvokeSetter(p, value);
+								handler.invokeSetterForDeserialization(p, value);
 								break;
 							case LIST:
-								handler.internallyInvokeAdder(p, value);
+								handler.invokeAdderForDeserialization(p, value);
 								break;
 							default:
 								break;

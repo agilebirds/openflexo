@@ -77,7 +77,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method PERFORM_SUPER_DELETER_ENTITY;
 	private static Method PERFORM_SUPER_FINDER_ENTITY;
 	private static Method PERFORM_SUPER_SET_MODIFIED;
-	private static Method GET_MODEL_FACTORY;
 	private static Method IS_MODIFIED;
 	private static Method SET_MODIFIED;
 	private static Method IS_SERIALIZING;
@@ -113,7 +112,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			SET_MODIFIED = AccessibleProxyObject.class.getMethod("setModified", boolean.class);
 			PERFORM_SUPER_SET_MODIFIED = AccessibleProxyObject.class.getMethod("performSuperSetModified", boolean.class);
 			GET_PROPERTY_CHANGE_SUPPORT = HasPropertyChangeSupport.class.getMethod("getPropertyChangeSupport");
-			GET_MODEL_FACTORY = AccessibleProxyObject.class.getMethod("getModelFactory");
 			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
@@ -261,8 +259,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return createdByCloning;
 		} else if (methodIsEquivalentTo(method, GET_PROPERTY_CHANGE_SUPPORT)) {
 			return getPropertyChangeSuppport();
-		} else if (methodIsEquivalentTo(method, GET_MODEL_FACTORY)) {
-			return getModelFactory();
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		} else if (methodIsEquivalentTo(method, TO_STRING)) {
@@ -583,7 +579,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
-	void internallyInvokeSetter(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+	void invokeSetterForDeserialization(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getSetterMethod() != null) {
+			invokeSetter(property, value);
+		} else {
+			internallyInvokeSetter(property, value);
+		}
+	}
+
+	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
 		switch (property.getCardinality()) {
 		case SINGLE:
 			invokeSetterForSingleCardinality(property, value);
@@ -726,7 +730,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		throw new UnsupportedOperationException("Setter for MAP: not implemented yet");
 	}
 
-	void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+	void invokeAdderForDeserialization(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getAdderMethod() != null) {
+			invokeAdder(property, value);
+		} else {
+			internallyInvokeAdder(property, value);
+		}
+	}
+
+	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
 		// System.out.println("Invoke ADDER "+property.getPropertyIdentifier());
 		switch (property.getCardinality()) {
 		case SINGLE:
