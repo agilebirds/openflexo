@@ -509,6 +509,22 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	/**
+	 * Return statement related to supplied property and referencing supplied object
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public ObjectPropertyStatement getObjectPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+		for (OntologyStatement statement : getStatements()) {
+			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property
+					&& ((ObjectPropertyStatement) statement).getStatementObject() == object) {
+				return (ObjectPropertyStatement) statement;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Return first found statement related to supplied property
 	 * 
 	 * @param property

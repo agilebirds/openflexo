@@ -87,7 +87,48 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// *******************************************************************************
 
 	public static enum Parameters implements GRParameter {
-		x, y, width, height, minimalWidth, minimalHeight, maximalWidth, maximalHeight, dimensionConstraintStep, locationConstraints, locationConstrainedArea, dimensionConstraints, adjustMinimalWidthToLabelWidth, adjustMinimalHeightToLabelHeight, adjustMaximalWidthToLabelWidth, adjustMaximalHeightToLabelHeight, foreground, background, selectedForeground, selectedBackground, focusedForeground, focusedBackground, hasSelectedForeground, hasSelectedBackground, hasFocusedForeground, hasFocusedBackground, border, shapeType, shape, shadowStyle, isFloatingLabel, relativeTextX, relativeTextY, decorationPainter, shapePainter, specificStroke, allowToLeaveBounds, xConstraints, yConstraints, widthConstraints, heightConstraints;
+		x,
+		y,
+		width,
+		height,
+		minimalWidth,
+		minimalHeight,
+		maximalWidth,
+		maximalHeight,
+		dimensionConstraintStep,
+		locationConstraints,
+		locationConstrainedArea,
+		dimensionConstraints,
+		adjustMinimalWidthToLabelWidth,
+		adjustMinimalHeightToLabelHeight,
+		adjustMaximalWidthToLabelWidth,
+		adjustMaximalHeightToLabelHeight,
+		foreground,
+		background,
+		selectedForeground,
+		selectedBackground,
+		focusedForeground,
+		focusedBackground,
+		hasSelectedForeground,
+		hasSelectedBackground,
+		hasFocusedForeground,
+		hasFocusedBackground,
+		border,
+		shapeType,
+		shape,
+		shadowStyle,
+		isFloatingLabel,
+		relativeTextX,
+		relativeTextY,
+		decorationPainter,
+		shapePainter,
+		specificStroke,
+		allowToLeaveBounds,
+		adaptBoundsToContents,
+		xConstraints,
+		yConstraints,
+		widthConstraints,
+		heightConstraints;
 	}
 
 	private double x = 0;
@@ -130,6 +171,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	private ShadowStyle shadowStyle = ShadowStyle.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
+	private boolean adaptBoundsToContents = false;
 
 	/*private boolean drawShadow = true;
 	private int shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
@@ -418,6 +460,13 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// *******************************************************************************
 
 	public void extendParentBoundsToHostThisShape() {
+		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+			parent.extendBoundsToHostContents();
+		}
+	}
+
+	public void extendParentBoundsToHostThisShape2() {
 		// System.out.println("parent=" + getParentGraphicalRepresentation());
 		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
@@ -475,6 +524,86 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				notifyChange(Parameters.y, oldLocation.y, getY());
 			}
 		}
+	}
+
+	/**
+	 * Check and eventually relocate and resize current graphical representation in order to all all contained shape graphical
+	 * representations. Contained graphical representations may substantically be relocated.
+	 */
+	public void extendBoundsToHostContents() {
+
+		// logger.info("Hop: extendBoundsToHostContents");
+
+		boolean needsResize = false;
+		FGEDimension newDimension = new FGEDimension(getWidth(), getHeight());
+		boolean needsRelocate = false;
+		FGEPoint newPosition = new FGEPoint(getX(), getY());
+		double deltaX = 0;
+		double deltaY = 0;
+
+		// First compute the delta to be applied (max of all required delta)
+		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			if (child instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				if (gr.getX() < -deltaX) {
+					deltaX = -gr.getX();
+					needsRelocate = true;
+				}
+				if (gr.getY() < -deltaY) {
+					deltaY = -gr.getY();
+					needsRelocate = true;
+				}
+			}
+		}
+
+		// Relocate
+		if (needsRelocate) {
+			System.out.println("Relocate with deltaX=" + deltaX + " deltaY=" + deltaY);
+			newPosition.x = newPosition.x - deltaX;
+			newPosition.y = newPosition.y - deltaY;
+			setLocation(newPosition);
+			needsResize = true;
+			newDimension = new FGEDimension(getWidth() + deltaX, getHeight() + deltaY);
+			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+				if (child instanceof ShapeGraphicalRepresentation && child != this) {
+					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
+				}
+			}
+		}
+
+		// First compute the resize to be applied
+		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			if (child instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				if (gr.getX() + gr.getWidth() > getWidth()) {
+					newDimension.width = gr.x + gr.getWidth();
+					needsResize = true;
+				}
+				if (gr.y + gr.getHeight() > getHeight()) {
+					newDimension.height = gr.y + gr.getHeight();
+					needsResize = true;
+				}
+			}
+		}
+
+		if (needsResize) {
+			System.out.println("Resize to " + newDimension);
+			setSize(newDimension);
+		}
+
+		/*if (needsRelocate || needsResize) {
+			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+				if (child instanceof ShapeGraphicalRepresentation) {
+					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					FGEPoint oldLocation = new FGEPoint(c.getX() - deltaX, c.getY() - deltaY);
+					c.notifyObjectMoved(oldLocation);
+					c.notifyChange(Parameters.x, oldLocation.x, c.getX());
+					c.notifyChange(Parameters.y, oldLocation.y, c.getY());
+				}
+			}
+		}*/
+
 	}
 
 	public double getX() {
@@ -645,6 +774,46 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		Dimension normalizedLabelSize = getNormalizedLabelSize();
 		Rectangle r = new Rectangle(getLabelLocation(1.0), normalizedLabelSize);
 		return r;
+	}
+
+	public FGERectangle getRequiredBoundsForContents() {
+		FGERectangle requiredBounds = null;
+		if (getContainedGraphicalRepresentations() == null)
+			return new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
+		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+			if (gr instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
+				FGERectangle bounds = shapeGR.getBoundsNoBorder();
+				if (shapeGR.hasText()) {
+					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
+					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
+					bounds = bounds.rectangleUnion(labelBounds2);
+				}
+
+				if (requiredBounds == null) {
+					requiredBounds = bounds;
+				} else {
+					requiredBounds = requiredBounds.rectangleUnion(bounds);
+				}
+			}
+		}
+		if (requiredBounds == null) {
+			requiredBounds = new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
+		} else {
+			if (requiredBounds.width < getMinimalWidth()) {
+				requiredBounds.x = requiredBounds.x - (int) ((getMinimalWidth() - requiredBounds.width) / 2.0);
+				requiredBounds.width = getMinimalWidth();
+			}
+			if (requiredBounds.height < getMinimalHeight()) {
+				requiredBounds.y = requiredBounds.y - (int) ((getMinimalHeight() - requiredBounds.height) / 2.0);
+				requiredBounds.height = getMinimalHeight();
+			}
+		}
+
+		requiredBounds.x = requiredBounds.x - getBorder().left;
+		requiredBounds.y = requiredBounds.y - getBorder().top;
+
+		return requiredBounds;
 	}
 
 	private FGERectangle getRequiredBoundsForChildGRLocation(GraphicalRepresentation<?> child, FGEPoint newChildLocation) {
@@ -1108,6 +1277,21 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public final boolean getAdaptBoundsToContents() {
+		return adaptBoundsToContents;
+	}
+
+	public void setAdaptBoundsToContents(boolean adaptBoundsToContents) {
+		FGENotification notification = requireChange(Parameters.adaptBoundsToContents, adaptBoundsToContents);
+		if (notification != null) {
+			this.adaptBoundsToContents = adaptBoundsToContents;
+			hasChanged(notification);
+			if (adaptBoundsToContents) {
+				extendBoundsToHostContents();
+			}
+		}
+	}
+
 	public DimensionConstraints getDimensionConstraints() {
 		// Shape dimension constraints may override defaults
 
@@ -1208,10 +1392,18 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 		try {
 
+			// if (getAdaptBoundsToContents()) {
+			// extendBoundsToHostContents();
+			// }
+
 			isCheckingDimensionConstraints = true;
+
+			FGERectangle requiredBounds = getRequiredBoundsForContents();
 
 			boolean changed = false;
 			FGEDimension newDimension = getSize();
+			// double minWidth = (getAdaptBoundsToContents() ? Math.max(getMinimalWidth(), requiredBounds.width) : getMinimalWidth());
+			// double minHeight = (getAdaptBoundsToContents() ? Math.max(getMinimalHeight(), requiredBounds.height) : getMinimalHeight());
 			double minWidth = getMinimalWidth();
 			double minHeight = getMinimalHeight();
 			double maxWidth = getMaximalWidth();
@@ -1520,7 +1712,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void updateConstraints() {
 		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
-		logger.info("Called updateConstraints()");
+		logger.fine("Called updateConstraints(), drawable=" + getDrawable() + " index=" + getIndex() + " class=" + getClass());
 		if (xConstraints != null && xConstraints.isValid()) {
 			// System.out.println("x was " + getX() + " constraint=" + xConstraints);
 			updateXPosition();
@@ -1541,6 +1733,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			updateHeightPosition();
 			// System.out.println("height is now " + getHeight());
 		}
+
 	}
 
 	private void updateXPosition() {
@@ -2071,8 +2264,16 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 * @return
 	 */
 	public FGERectangle getBounds() {
-		return new FGERectangle(getX(), getY(), getWidth() + (getBorder() != null ? getBorder().left + getBorder().right : 0),
-				getUnscaledViewHeight());
+		return new FGERectangle(getX(), getY(), getUnscaledViewWidth(), getUnscaledViewHeight());
+	}
+
+	/**
+	 * Return bounds (including border) relative to parent container
+	 * 
+	 * @return
+	 */
+	public FGERectangle getBoundsNoBorder() {
+		return new FGERectangle(getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
@@ -2452,6 +2653,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public void performAutoLayout() {
 		performAutoLayout(getWidth(), getHeight());
+	}
+
+	@Override
+	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
+		super.notifyDrawableAdded(addedGR);
+		if (getAdaptBoundsToContents()) {
+			extendBoundsToHostContents();
+		}
 	}
 
 }
