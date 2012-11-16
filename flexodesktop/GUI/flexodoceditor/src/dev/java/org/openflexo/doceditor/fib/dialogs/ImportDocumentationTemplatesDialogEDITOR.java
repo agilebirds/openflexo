@@ -24,7 +24,6 @@ import java.io.File;
 
 import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.ProjectDialogEDITOR;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -32,22 +31,21 @@ import org.openflexo.toolbox.FileResource;
 
 public class ImportDocumentationTemplatesDialogEDITOR extends ProjectDialogEDITOR {
 
-	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				ImportDocumentationTemplates action = ImportDocumentationTemplates.actionType.makeNewAction(project, null, editor);
-				return makeArray(action);
-			}
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		ImportDocumentationTemplates action = ImportDocumentationTemplates.actionType.makeNewAction(project, null, editor);
+		return makeArray(action);
+	}
 
-			@Override
-			public File getFIBFile() {
-				return DECst.IMPORT_DOCUMENTATION_TEMPLATES_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public File getFIBFile() {
+		return DECst.IMPORT_DOCUMENTATION_TEMPLATES_FIB;
+	}
+
+	public static void main(String[] args) {
+		main(ImportDocumentationTemplatesDialogEDITOR.class);
 	}
 
 }

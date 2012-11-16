@@ -35,7 +35,6 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLMapping;
 
 import com.google.common.base.Predicate;
@@ -272,15 +271,14 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 
 	@Override
 	public void delete() {
-		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		if (this._graphicalRepresentation != null) {
+			this._graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		super.delete();
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO: improve this.
 		setChanged();
 	}
 
@@ -289,13 +287,13 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	}
 
 	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
-		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		if (this._graphicalRepresentation != null) {
+			this._graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
-		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (this._graphicalRepresentation != null) {
+			this._graphicalRepresentation.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 	}
 

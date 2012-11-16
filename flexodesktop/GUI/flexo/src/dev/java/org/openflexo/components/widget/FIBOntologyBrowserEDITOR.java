@@ -14,11 +14,27 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoFIBController;
 
-public class FIBOntologyBrowserEDITOR {
+public class FIBOntologyBrowserEDITOR extends FIBAbstractEditor {
+
+	private static FIBOntologyBrowser selector;
+
+	@Override
+	public Object[] getData() {
+		return makeArray(selector);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return FIBOntologyBrowser.FIB_FILE;
+	}
+
+	@Override
+	public FIBController makeNewController(FIBComponent component) {
+		return new FlexoFIBController<FIBViewPointSelector>(component);
+	}
 
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
 	public static void main(String[] args) {
-
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
@@ -39,7 +55,7 @@ public class FIBOntologyBrowserEDITOR {
 				"http://www.w3.org/2002/07/owl");
 		// "http://www.w3.org/2000/01/rdf-schema");
 		o.loadWhenUnloaded();
-		final FIBOntologyBrowser selector = new FIBOntologyBrowser(o);
+		selector = new FIBOntologyBrowser(o);
 		selector.setOntology(o);
 		selector.setHierarchicalMode(false); // false
 		selector.setShowAnnotationProperties(true);
@@ -48,25 +64,7 @@ public class FIBOntologyBrowserEDITOR {
 		selector.setShowClasses(true);
 		selector.setShowIndividuals(true);
 		selector.setStrictMode(false);
-		// selector.setRootClass(transformationRule);
-
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				return makeArray(selector);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return FIBOntologyBrowser.FIB_FILE;
-			}
-
-			@Override
-			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
-			}
-		};
-		editor.launch();
+		main(FIBOntologyBrowserEDITOR.class);
 	}
 
 	/*public static void main2(String[] args) {

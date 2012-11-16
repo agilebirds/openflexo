@@ -460,6 +460,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		System.exit(0);
 	}
 
+	@Deprecated
 	public void launch() {
 		logger.info(">>>>>>>>>>> Loading FIB...");
 		SwingUtilities.invokeLater(new Runnable() {
@@ -484,5 +485,24 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public boolean showExitMenuItem() {
 		return true;
+	}
+
+	public static <T extends FIBAbstractEditor> void main(final Class<T> klass) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					T abstractEditor = klass.newInstance();
+					abstractEditor.loadFIB();
+					abstractEditor.getFrame().setVisible(true);
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

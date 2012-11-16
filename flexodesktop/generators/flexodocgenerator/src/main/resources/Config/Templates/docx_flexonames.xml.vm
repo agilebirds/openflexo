@@ -1,3 +1,5 @@
-<flexoNames>
+<OpenFlexo>
+    <flexoNames>
 	#renderDataBindings()
-</flexoNames>
+	</flexoNames>
+</OpenFlexo>
