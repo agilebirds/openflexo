@@ -720,6 +720,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (toolbox != null) {
 			toolbox.delete();
 		}
+		focusedObjects.clear();
+		selectedObjects.clear();
+		focusedControlArea = null;
 		toolbox = null;
 		palettes = null;
 		storedSelection = null;
