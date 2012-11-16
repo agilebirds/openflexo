@@ -105,32 +105,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static enum Parameters implements GRParameter {
-		identifier,
-		layer,
-		hasText,
-		text,
-		isMultilineAllowed,
-		lineWrap,
-		continuousTextEditing,
-		textStyle,
-		absoluteTextX,
-		absoluteTextY,
-		horizontalTextAlignment,
-		verticalTextAlignment,
-		paragraphAlignment,
-		isSelectable,
-		isFocusable,
-		isSelected,
-		isFocused,
-		drawControlPointsWhenFocused,
-		drawControlPointsWhenSelected,
-		isReadOnly,
-		isLabelEditable,
-		isVisible,
-		mouseClickControls,
-		mouseDragControls,
-		toolTipText,
-		variables
+		identifier, layer, hasText, text, isMultilineAllowed, lineWrap, continuousTextEditing, textStyle, absoluteTextX, absoluteTextY, horizontalTextAlignment, verticalTextAlignment, paragraphAlignment, isSelectable, isFocusable, isSelected, isFocused, drawControlPointsWhenFocused, drawControlPointsWhenSelected, isReadOnly, isLabelEditable, isVisible, mouseClickControls, mouseDragControls, toolTipText, variables
 	}
 
 	protected int layer;
@@ -325,16 +300,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	// ***************************************************************************
 
 	public void delete() {
-		isDeleted = true;
-		if (textStyle != null) {
-			textStyle.deleteObserver(this);
+		if (!isDeleted) {
+			isDeleted = true;
+			if (textStyle != null) {
+				textStyle.deleteObserver(this);
+			}
+			_bindingModel = null;
+			setChanged();
+			notifyObservers(new GraphicalRepresentationDeleted(this));
+			deleteObservers();
+			getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
+			// pcSupport = null;
 		}
-		_bindingModel = null;
-		setChanged();
-		notifyObservers(new GraphicalRepresentationDeleted(this));
-		deleteObservers();
-		getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
-		pcSupport = null;
 	}
 
 	@Override
@@ -2160,7 +2137,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
+	public final PropertyChangeSupport getPropertyChangeSupport() {
 		if (pcSupport == null && !isDeleted) {
 			pcSupport = new PropertyChangeSupport(this);
 		}
