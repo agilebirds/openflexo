@@ -22,7 +22,6 @@ package org.openflexo.ve.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
@@ -32,22 +31,22 @@ import org.openflexo.ve.VECst;
 
 public class ReindexViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 
-	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				View diagram = project.getShemaLibrary().getShemaNamed("R&DDefinition").getView();
-				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getChilds().get(0), null, null);
-				return makeArray(action);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		View diagram = project.getShemaLibrary().getShemaNamed("R&DDefinition").getView();
+		ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getChilds().get(0), null, null);
+		return makeArray(action);
 	}
+
+	@Override
+	public File getFIBFile() {
+		return VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB;
+	}
+
+	public static void main(String[] args) {
+		main(ReindexViewElementsDialogEDITOR.class);
+	}
+
 }
