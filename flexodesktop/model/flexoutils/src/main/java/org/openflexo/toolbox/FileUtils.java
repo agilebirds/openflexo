@@ -34,6 +34,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -60,6 +62,10 @@ public class FileUtils {
 	public static enum CopyStrategy {
 		REPLACE, REPLACE_OLD_ONLY, IGNORE_EXISTING
 	}
+
+	private static final String WIN_REGISTRY_DOCUMENTS_KEY_PATH = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders";
+
+	private static final String WIN_REGISTRY_DOCUMENTS_ATTRIBUTE = "Personal";
 
 	public static final String BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP = "[\"|\\?\\*/<>:\\\\]|[^\\p{ASCII}]";
 
@@ -985,4 +991,41 @@ public class FileUtils {
 		return dir;
 	}
 
+	private static final String MACOS_DOC_DIRECTORY_KEY = "docs";
+
+	public File getDocumentDirectory() {
+		if (ToolBox.isMacOS()) {
+			try {
+				Class<?> fileManagerClass = Class.forName("com.apple.eio.FileManager");
+				short userDomain = fileManagerClass.getField("kUserDomain").getShort(null);
+				Method typeToInt = fileManagerClass.getDeclaredMethod("OSTypeToInt", String.class);
+				Method findFolder = fileManagerClass.getDeclaredMethod("findFolder", short.class, int.class);
+				int docDirectoryInt = (Integer) typeToInt.invoke(null, MACOS_DOC_DIRECTORY_KEY);
+				String documentDirectory = (String) findFolder.invoke(null, userDomain, docDirectoryInt);
+				return new File(documentDirectory);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		} else if (ToolBox.isWindows()) {
+			String value = WinRegistryAccess.getRegistryValue(WIN_REGISTRY_DOCUMENTS_KEY_PATH, WIN_REGISTRY_DOCUMENTS_ATTRIBUTE,
+					WinRegistryAccess.REG_EXPAND_SZ_TOKEN);
+			value = WinRegistryAccess.substituteEnvironmentVariable(value);
+			if (value != null) {
+				return new File(value);
+			}
+		}
+		return new File(System.getProperty("user.home"), "Documents");
+	}
 }
