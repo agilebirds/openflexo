@@ -88,9 +88,9 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 		return _bindingDefinition;
 	}
 
-	public final void setBindingDefinition(BindingDefinition bindingDefinition) {
+	/*public final void setBindingDefinition(BindingDefinition bindingDefinition) {
 		_bindingDefinition = bindingDefinition;
-	}
+	}*/
 
 	// ==========================================================
 	// ================= Serialization stuff ====================

@@ -19,50 +19,33 @@
  */
 package org.openflexo.antar.binding;
 
-import java.lang.reflect.Type;
-
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
 /**
- * This interface is implemented by all classes modelizing an element of a formal binding path, whichever type it is.
+ * Represents a BindingPathElement which has the ability to be set
  * 
  * @author sylvain
  * 
  */
-public interface BindingPathElement extends Typed {
-	// public Class<?> getDeclaringClass();
-
-	@Override
-	public Type getType();
-
-	// public void addObserver(Observer o);
-
-	// public void deleteObserver(Observer o);
-
-	public String getSerializationRepresentation();
-
-	// public boolean isBindingValid();
-
-	public String getLabel();
-
-	public String getTooltipText(Type resultingType);
-
+public interface SettableBindingPathElement extends BindingPathElement {
 	/**
 	 * Return a flag indicating if this path element is settable or not (settable indicates that a new value can be set)
 	 * 
 	 * @return
 	 */
-	// public boolean isSettable();
+	public boolean isSettable();
 
 	/**
-	 * Evaluate and return value for related path element, given a binding evaluation context
+	 * Sets a new value for related path element, given a binding evaluation context If binding declared as NOT settable, this method will
+	 * do nothing.
 	 * 
+	 * @param value
+	 *            : the new value
 	 * @param target
 	 *            : adress object as target of parent path: the object on which setting will be performed
 	 * @param context
 	 *            : binding evaluation context
-	 * @return accessed value
 	 */
-	public Object getBindingValue(Object target, BindingEvaluationContext context);
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context);
 
 }

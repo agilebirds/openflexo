@@ -55,11 +55,11 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 				public Expression performTransformation(Expression e) throws TransformException {
 					if (e instanceof BindingValueAsExpression) {
 						BindingValueAsExpression bv = (BindingValueAsExpression) e;
-						if (bv.getBindingPath().size() > 0) {
-							AbstractBindingPathElement firstPathElement = bv.getBindingPath().get(0);
+						if (bv.getParsedBindingPath().size() > 0) {
+							AbstractBindingPathElement firstPathElement = bv.getParsedBindingPath().get(0);
 							if (!(firstPathElement instanceof NormalBindingPathElement)
 									|| !((NormalBindingPathElement) firstPathElement).property.equals("object")) {
-								bv.getBindingPath().add(0, new NormalBindingPathElement("object"));
+								bv.getParsedBindingPath().add(0, new NormalBindingPathElement("object"));
 							}
 						}
 						return bv;

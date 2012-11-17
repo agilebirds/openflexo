@@ -131,9 +131,11 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	protected String makeStringRepresentation(BindingValueAsExpression bv) {
 		StringBuffer sb = new StringBuffer();
 		boolean isFirst = true;
-		for (AbstractBindingPathElement e : bv.getBindingPath()) {
-			sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
-			isFirst = false;
+		if (bv != null) {
+			for (AbstractBindingPathElement e : bv.getParsedBindingPath()) {
+				sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
+				isFirst = false;
+			}
 		}
 		return sb.toString();
 	}

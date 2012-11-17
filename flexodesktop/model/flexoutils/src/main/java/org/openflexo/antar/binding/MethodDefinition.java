@@ -55,6 +55,10 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		return method;
 	}
 
+	public String getMethodName() {
+		return method.getName();
+	}
+
 	@Override
 	public Type getType() {
 		return TypeUtils.makeInstantiatedType(getMethod().getGenericReturnType(), declaringType);

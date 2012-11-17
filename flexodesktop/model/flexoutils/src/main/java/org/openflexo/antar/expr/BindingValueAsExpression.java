@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingPathElement;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+
 public class BindingValueAsExpression extends Expression {
 
 	public static abstract class AbstractBindingPathElement {
@@ -75,11 +80,16 @@ public class BindingValueAsExpression extends Expression {
 
 	}
 
-	private List<AbstractBindingPathElement> bindingPath;
+	private List<AbstractBindingPathElement> parsedBindingPath;
+
+	private BindingVariable bindingVariable;
+	private List<BindingPathElement> bindingPath;
 
 	public BindingValueAsExpression(List<AbstractBindingPathElement> aBindingPath) {
 		super();
-		this.bindingPath = aBindingPath;
+		this.parsedBindingPath = aBindingPath;
+		bindingVariable = null;
+		bindingPath = new ArrayList<BindingPathElement>();
 	}
 
 	@Override
@@ -87,12 +97,20 @@ public class BindingValueAsExpression extends Expression {
 		return 0;
 	}
 
-	public List<AbstractBindingPathElement> getBindingPath() {
+	public List<BindingPathElement> getBindingPath() {
 		return bindingPath;
 	}
 
+	public BindingVariable getBindingVariable() {
+		return bindingVariable;
+	}
+
+	public List<AbstractBindingPathElement> getParsedBindingPath() {
+		return parsedBindingPath;
+	}
+
 	public boolean containsAMethodCall() {
-		for (AbstractBindingPathElement e : getBindingPath()) {
+		for (AbstractBindingPathElement e : getParsedBindingPath()) {
 			if (e instanceof MethodCallBindingPathElement) {
 				return true;
 			}
@@ -101,7 +119,7 @@ public class BindingValueAsExpression extends Expression {
 	}
 
 	public boolean isSimpleVariable() {
-		return getBindingPath().size() == 1 && getBindingPath().get(0) instanceof NormalBindingPathElement;
+		return getParsedBindingPath().size() == 1 && getParsedBindingPath().get(0) instanceof NormalBindingPathElement;
 	}
 
 	/*@Override
@@ -128,7 +146,7 @@ public class BindingValueAsExpression extends Expression {
 	public Expression transform(ExpressionTransformer transformer) throws TransformException {
 
 		ArrayList<AbstractBindingPathElement> newBindingPath = new ArrayList<AbstractBindingPathElement>();
-		for (AbstractBindingPathElement e : getBindingPath()) {
+		for (AbstractBindingPathElement e : getParsedBindingPath()) {
 			if (e instanceof NormalBindingPathElement) {
 				newBindingPath.add(new NormalBindingPathElement(((NormalBindingPathElement) e).property));
 			} else if (e instanceof MethodCallBindingPathElement) {
@@ -140,6 +158,7 @@ public class BindingValueAsExpression extends Expression {
 			}
 		}
 		BindingValueAsExpression bv = new BindingValueAsExpression(newBindingPath);
+		bv.setDataBinding(getDataBinding());
 		return transformer.performTransformation(bv);
 	}
 
@@ -154,16 +173,67 @@ public class BindingValueAsExpression extends Expression {
 	}
 
 	public boolean isValid() {
-		return true;
+		if (getDataBinding() == null) {
+			return false;
+		}
+		return performSemanticAnalysis(getDataBinding());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BindingValueAsExpression) {
 			BindingValueAsExpression e = (BindingValueAsExpression) obj;
-			return getBindingPath().equals(e.getBindingPath());
+			return getParsedBindingPath().equals(e.getParsedBindingPath());
 		}
 		return super.equals(obj);
+	}
+
+	private DataBinding dataBinding;
+
+	public boolean performSemanticAnalysis(DataBinding<?> dataBinding) {
+		setDataBinding(dataBinding);
+		bindingVariable = null;
+		bindingPath = new ArrayList<BindingPathElement>();
+		if (getDataBinding() != null && getParsedBindingPath().size() > 0
+				&& getParsedBindingPath().get(0) instanceof NormalBindingPathElement) {
+			// Seems to be valid
+			bindingVariable = dataBinding.getOwner().getBindingModel()
+					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
+			// System.out.println("Found binding variable " + bindingVariable);
+			int i = 0;
+			for (AbstractBindingPathElement pathElement : getParsedBindingPath()) {
+				if (i > 0) {
+					System.out.println("> " + pathElement);
+				}
+				i++;
+			}
+		}
+
+		// TODO
+		return true;
+	}
+
+	public Object getBindingValue(BindingEvaluationContext context) {
+		if (isValid()) {
+			Object current = context.getValue(getBindingVariable());
+			for (BindingPathElement e : getBindingPath()) {
+				current = e.getBindingValue(current, context);
+			}
+			return current;
+		}
+		return null;
+	}
+
+	public void setBindingValue(Object value, BindingEvaluationContext context) {
+		// TODO
+	}
+
+	public DataBinding getDataBinding() {
+		return dataBinding;
+	}
+
+	public void setDataBinding(DataBinding dataBinding) {
+		this.dataBinding = dataBinding;
 	}
 
 }
