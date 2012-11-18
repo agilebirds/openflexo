@@ -53,7 +53,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
-	public static Color SECONDARY_SELECTION_COLOR = new Color(173, 215, 255);
 	public static Color DISABLED_COLOR = Color.GRAY;
 
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
