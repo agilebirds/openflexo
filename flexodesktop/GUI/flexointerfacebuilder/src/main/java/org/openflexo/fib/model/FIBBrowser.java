@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.UIManager;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -58,7 +57,23 @@ public class FIBBrowser extends FIBWidget {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		root, iteratorClass, visibleRowCount, rowHeight, boundToSelectionManager, selectionMode, selected, elements, showFooter, rootVisible, showRootsHandle, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor, borderSelectionColor
+		root,
+		iteratorClass,
+		visibleRowCount,
+		rowHeight,
+		boundToSelectionManager,
+		selectionMode,
+		selected,
+		elements,
+		showFooter,
+		rootVisible,
+		showRootsHandle,
+		textSelectionColor,
+		textNonSelectionColor,
+		backgroundSelectionColor,
+		backgroundSecondarySelectionColor,
+		backgroundNonSelectionColor,
+		borderSelectionColor
 	}
 
 	public enum SelectionMode {
@@ -87,8 +102,8 @@ public class FIBBrowser extends FIBWidget {
 	private DataBinding root;
 	private DataBinding selected;
 
-	private int visibleRowCount = 5;
-	private int rowHeight = 20;
+	private Integer visibleRowCount;
+	private Integer rowHeight;
 	private boolean boundToSelectionManager = false;
 
 	private SelectionMode selectionMode = SelectionMode.DiscontiguousTreeSelection;
@@ -97,12 +112,12 @@ public class FIBBrowser extends FIBWidget {
 	private boolean rootVisible = true;
 	private boolean showRootsHandle = true;
 
-	private Color textSelectionColor = UIManager.getColor("Tree.selectionForeground");
-	private Color textNonSelectionColor = UIManager.getColor("Tree.textForeground");
-	private Color backgroundSelectionColor = UIManager.getColor("Tree.selectionBackground");
-	private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
-	private Color backgroundNonSelectionColor = UIManager.getColor("Tree.textBackground");
-	private Color borderSelectionColor = UIManager.getColor("Tree.selectionBorderColor");
+	private Color textSelectionColor;
+	private Color textNonSelectionColor;
+	private Color backgroundSelectionColor;
+	private Color backgroundSecondarySelectionColor;
+	private Color backgroundNonSelectionColor;
+	private Color borderSelectionColor;
 
 	private Class iteratorClass;
 
@@ -211,11 +226,11 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}*/
 
-	public int getVisibleRowCount() {
+	public Integer getVisibleRowCount() {
 		return visibleRowCount;
 	}
 
-	public void setVisibleRowCount(int visibleRowCount) {
+	public void setVisibleRowCount(Integer visibleRowCount) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
 		if (notification != null) {
 			this.visibleRowCount = visibleRowCount;
@@ -223,11 +238,11 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}
 
-	public int getRowHeight() {
+	public Integer getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight) {
+	public void setRowHeight(Integer rowHeight) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
 		if (notification != null) {
 			this.rowHeight = rowHeight;

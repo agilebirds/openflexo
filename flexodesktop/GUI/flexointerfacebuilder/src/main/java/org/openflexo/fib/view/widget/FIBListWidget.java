@@ -50,10 +50,13 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		_list = new JList(listData);
 		_list.setCellRenderer(getListCellRenderer());
 		_list.setSelectionMode(model.getSelectionMode().getMode());
-
-		_list.setVisibleRowCount(model.getVisibleRowCount());
+		if (model.getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(model.getVisibleRowCount());
+		}
 		// _list.setPrototypeCellValue("0123456789012345");
-		_list.setFixedCellHeight(model.getRowHeight());
+		if (model.getRowHeight() != null) {
+			_list.setFixedCellHeight(model.getRowHeight());
+		}
 
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
 
@@ -149,8 +152,16 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		oldListModel = aListModel;
 		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
-		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
-		_list.setFixedCellHeight(getWidget().getRowHeight());
+		if (getWidget().getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(getWidget().getVisibleRowCount());
+		} else {
+			_list.setVisibleRowCount(-1);
+		}
+		if (getWidget().getRowHeight() != null) {
+			_list.setFixedCellHeight(getWidget().getRowHeight());
+		} else {
+			_list.setFixedCellHeight(-1);
+		}
 		_list.setModel(aListModel);
 		_list.revalidate();
 		_list.repaint();

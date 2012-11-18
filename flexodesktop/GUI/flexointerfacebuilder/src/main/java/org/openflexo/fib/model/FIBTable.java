@@ -27,7 +27,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
@@ -55,7 +54,22 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		iteratorClass, visibleRowCount, rowHeight, createNewRowOnClick, autoSelectFirstRow, boundToSelectionManager, selectionMode, selected, columns, actions, showFooter, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor
+		iteratorClass,
+		visibleRowCount,
+		rowHeight,
+		createNewRowOnClick,
+		autoSelectFirstRow,
+		boundToSelectionManager,
+		selectionMode,
+		selected,
+		columns,
+		actions,
+		showFooter,
+		textSelectionColor,
+		textNonSelectionColor,
+		backgroundSelectionColor,
+		backgroundSecondarySelectionColor,
+		backgroundNonSelectionColor
 	}
 
 	public enum SelectionMode {
@@ -83,8 +97,8 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 
 	private DataBinding selected;
 
-	private int visibleRowCount = 5;
-	private int rowHeight = 20;
+	private Integer visibleRowCount;
+	private Integer rowHeight;
 	private boolean createNewRowOnClick = false;
 	private boolean autoSelectFirstRow = false;
 	private boolean boundToSelectionManager = false;
@@ -100,11 +114,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	private BindingModel tableBindingModel;
 	private BindingModel actionBindingModel;
 
-	private Color textSelectionColor = UIManager.getColor("Table.selectionForeground");
-	private Color textNonSelectionColor = UIManager.getColor("Table.foreground");
-	private Color backgroundSelectionColor = UIManager.getColor("Table.selectionBackground");
-	private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
-	private Color backgroundNonSelectionColor = UIManager.getColor("Table.background");
+	private Color textSelectionColor;
+	private Color textNonSelectionColor;
+	private Color backgroundSelectionColor;
+	private Color backgroundSecondarySelectionColor;
+	private Color backgroundNonSelectionColor;
 
 	public FIBTable() {
 		columns = new Vector<FIBTableColumn>();
@@ -341,11 +355,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		}
 	}
 
-	public int getVisibleRowCount() {
+	public Integer getVisibleRowCount() {
 		return visibleRowCount;
 	}
 
-	public void setVisibleRowCount(int visibleRowCount) {
+	public void setVisibleRowCount(Integer visibleRowCount) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
 		if (notification != null) {
 			this.visibleRowCount = visibleRowCount;
@@ -353,11 +367,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		}
 	}
 
-	public int getRowHeight() {
+	public Integer getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight) {
+	public void setRowHeight(Integer rowHeight) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
 		if (notification != null) {
 			this.rowHeight = rowHeight;

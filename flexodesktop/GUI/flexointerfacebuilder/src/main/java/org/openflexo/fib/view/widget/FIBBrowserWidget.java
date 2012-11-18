@@ -328,8 +328,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		if (_fibBrowser.getShowFooter()) {
 			_dynamicComponent.add(getBrowserModel().getFooter(), BorderLayout.SOUTH);
 		}
+		if (_fibBrowser.getVisibleRowCount() != null) {
+			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
+		}
 
-		setVisibleRowCount(_fibBrowser.getVisibleRowCount());
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
 	}

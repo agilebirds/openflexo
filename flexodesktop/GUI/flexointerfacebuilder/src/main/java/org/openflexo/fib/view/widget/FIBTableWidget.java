@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -87,20 +86,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			_tableModel = new FIBTableModel(_fibTable, this, getController());
 		}
 		return _tableModel;
-	}
-
-	public void setVisibleRowCount(int rows) {
-		int height = 0;
-		for (int row = 0; row < rows; row++) {
-			height += _table.getRowHeight(row);
-		}
-		height += _table.getTableHeader().getPreferredSize().height;
-		int width = 0;
-		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
-			width += getTableModel().getDefaultColumnSize(i);
-		}
-		_dynamicComponent.setMinimumSize(new Dimension(width, height));
-		_dynamicComponent.setPreferredSize(new Dimension(width, height));
 	}
 
 	/*public JLabel getLabel()
@@ -367,7 +352,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			}
 		}
 
-		if (_fibTable.getRowHeight() > 0) {
+		if (_fibTable.getRowHeight() != null) {
 			_table.setRowHeight(_fibTable.getRowHeight());
 		}
 
@@ -420,7 +405,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			_dynamicComponent.add(getTableModel().getFooter(), BorderLayout.SOUTH);
 		}
 
-		setVisibleRowCount(_fibTable.getVisibleRowCount());
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
 	}
@@ -436,12 +420,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public boolean mayRepresent(Object o) {
-		try {
-			if (getValue() != null) {
-				return getValue().contains(o);
-			}
-		} catch (ClassCastException e) {
-			logger.warning("ClassCastException in FIBTableWidget: " + e.getMessage());
+		if (getValue() != null) {
+			return getValue().contains(o);
 		}
 		return false;
 	}
@@ -478,24 +458,22 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		getTableModel().resetSelection();
 	}
 
-	private static boolean areSameValuesOrderIndifferent(List l1, List l2) {
+	private static boolean areSameValuesOrderIndifferent(List<?> l1, List<?> l2) {
 		if (l1 == null || l2 == null) {
 			return false;
 		}
 		if (l1.size() != l2.size()) {
 			return false;
 		}
-		Comparator comparator = new Comparator() {
+		Comparator<Object> comparator = new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
 				return o1.hashCode() - o2.hashCode();
 			}
 		};
-		List sortedL1 = new ArrayList();
-		sortedL1.addAll(l1);
+		List<Object> sortedL1 = new ArrayList<Object>(l1);
 		Collections.sort(sortedL1, comparator);
-		List sortedL2 = new ArrayList();
-		sortedL2.addAll(l2);
+		List<Object> sortedL2 = new ArrayList<Object>(l2);
 		Collections.sort(sortedL2, comparator);
 		for (int i = 0; i < sortedL1.size(); i++) {
 			if (!sortedL1.get(i).equals(sortedL2.get(i))) {
