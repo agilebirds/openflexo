@@ -56,4 +56,14 @@ public class JavaBindingFactory implements BindingFactory {
 		return null;
 	}
 
+	@Override
+	public SimplePathElement makeSimplePathElement(BindingPathElement father, String propertyName) {
+		return new JavaPropertyPathElement(father, propertyName);
+	}
+
+	@Override
+	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, String functionName, List<DataBinding<?>> args) {
+		return new JavaMethodPathElement(father, functionName, args);
+	}
+
 }

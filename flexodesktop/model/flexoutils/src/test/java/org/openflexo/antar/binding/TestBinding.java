@@ -295,11 +295,19 @@ public class TestBinding extends TestCase {
 	}
 
 	public void test12() {
-		TestBindingContext.aString = "";
 		genericTest("anInt > 2 ? 'anInt > 2' : 'anInt<=2' ", String.class, "anInt > 2");
 	}
 
 	public void test13() {
 		genericTest("aString != null", Boolean.TYPE, true);
+	}
+
+	public void test14() {
+		genericTest("1", Integer.TYPE, 1);
+	}
+
+	public void test15() {
+		TestBindingContext.aString = "foo";
+		genericTest("aString.length", Integer.TYPE, 3);
 	}
 }

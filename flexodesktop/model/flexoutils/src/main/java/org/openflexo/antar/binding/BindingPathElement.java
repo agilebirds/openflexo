@@ -22,6 +22,8 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 
 /**
  * This interface is implemented by all classes modelizing an element of a formal binding path, whichever type it is.
@@ -62,7 +64,9 @@ public interface BindingPathElement extends Typed {
 	 * @param context
 	 *            : binding evaluation context
 	 * @return accessed value
+	 * @throws NullReferenceException
+	 * @throws TypeMismatchException
 	 */
-	public Object getBindingValue(Object target, BindingEvaluationContext context);
+	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException;
 
 }

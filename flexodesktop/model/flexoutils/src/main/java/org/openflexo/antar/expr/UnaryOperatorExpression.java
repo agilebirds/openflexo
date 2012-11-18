@@ -86,6 +86,12 @@ public class UnaryOperatorExpression extends Expression {
 	}
 
 	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		argument.visit(visitor);
+		visitor.visit(this);
+	}
+
+	@Override
 	public EvaluationType getEvaluationType() throws TypeMismatchException {
 		return getOperator().getEvaluationType(getArgument().getEvaluationType());
 	}

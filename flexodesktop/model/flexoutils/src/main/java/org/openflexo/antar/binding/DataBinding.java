@@ -20,8 +20,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -30,9 +29,11 @@ import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.xmlcode.StringConvertable;
@@ -150,6 +151,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 			} else {
 				this.expression = value;
 				unparsedBinding = value != null ? value.toString() : null;
+				analyseExpression();
 				notifyBindingChanged(oldValue, value);
 				return;
 			}
@@ -160,25 +162,133 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 				this.expression = value;
 				unparsedBinding = value != null ? expression.toString() : null;
 				logger.info("Binding takes now value " + value);
+				analyseExpression();
 				notifyBindingChanged(oldValue, value);
 				return;
 			}
 		}
 	}
 
+	public Type getDeclaredType() {
+		return getBindingDefinition().getType();
+	}
+
+	public void setDeclaredType(Type aType) {
+		getBindingDefinition().setType(aType);
+	}
+
+	public Type getAnalyzedType() {
+		if (getExpression() != null) {
+			if (getExpression() instanceof BindingValueAsExpression) {
+				return ((BindingValueAsExpression) getExpression()).getAccessedType();
+			} else {
+				try {
+					/*System.out.println("****** expression=" + getExpression());
+					System.out.println("****** eval type=" + getExpression().getEvaluationType());
+					if (getExpression() instanceof BinaryOperatorExpression) {
+						BinaryOperatorExpression bope = (BinaryOperatorExpression) getExpression();
+						System.out.println("**** left=" + bope.getLeftArgument() + " of " + bope.getLeftArgument().getEvaluationType());
+						System.out.println("**** right=" + bope.getRightArgument() + " of " + bope.getRightArgument().getEvaluationType());
+						BindingValueAsExpression left = (BindingValueAsExpression) bope.getLeftArgument();
+						BindingValueAsExpression right = (BindingValueAsExpression) bope.getRightArgument();
+						// left.isValid(this);
+						// right.isValid(this);
+						System.out.println("**** a gauche, " + left.getAccessedType());
+						System.out.println("**** a droite, " + right.getAccessedType());
+					}*/
+
+					return getExpression().getEvaluationType().getType();
+				} catch (TypeMismatchException e) {
+					return Object.class;
+				}
+			}
+		}
+		return Object.class;
+	}
+
+	public static class InvalidBindingValue extends VisitorException {
+		private BindingValueAsExpression bindingValue;
+
+		public InvalidBindingValue(BindingValueAsExpression e) {
+			bindingValue = e;
+		}
+
+		public BindingValueAsExpression getBindingValue() {
+			return bindingValue;
+		}
+	}
+
+	private String invalidBindingReason;
+
 	public boolean isValid() {
+
+		invalidBindingReason = "unknown";
+
 		if (getExpression() == null) {
+			invalidBindingReason = "null expression";
 			return false;
 		}
-		for (BindingValueAsExpression bv : bindingValueList) {
-			if (!bv.isValid())
+
+		if (getOwner() != null) {
+			try {
+				expression.visit(new ExpressionVisitor() {
+					@Override
+					public void visit(Expression e) throws InvalidBindingValue {
+						if (e instanceof BindingValueAsExpression) {
+							if (!((BindingValueAsExpression) e).isValid(DataBinding.this)) {
+								throw new InvalidBindingValue((BindingValueAsExpression) e);
+							}
+						}
+					}
+				});
+			} catch (InvalidBindingValue e) {
+				invalidBindingReason = "Invalid binding value: " + e.getBindingValue();
 				return false;
+			} catch (VisitorException e) {
+				invalidBindingReason = "Unexpected visitor exception: " + e.getMessage();
+				logger.warning("TransformException while transforming " + expression);
+				return false;
+			}
 		}
-		return true;
+
+		if (getAnalyzedType() == null) {
+			invalidBindingReason = "Invalid binding because accessed type is null";
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Invalid binding because accessed type is null");
+			}
+			return false;
+		}
+
+		if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) {
+			// Only BindingValue may be settable
+			if (!(getExpression() instanceof BindingValueAsExpression) || !((BindingValueAsExpression) getExpression()).isSettable()) {
+				invalidBindingReason = "Invalid binding because binding definition declared as settable and definition cannot satisfy it";
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
+				}
+				return false;
+			}
+		}
+
+		if (getBindingDefinition().getType() != null
+				&& TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAnalyzedType(), true)) {
+			// System.out.println("getBindingDefinition().getType()="+getBindingDefinition().getType());
+			// System.out.println("getAccessedType()="+getAccessedType());
+			invalidBindingReason = "valid binding";
+			return true;
+		}
+
+		invalidBindingReason = "Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
+				+ getAnalyzedType();
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
+					+ getAnalyzedType());
+		}
+		return false;
 	}
 
 	public String invalidBindingReason() {
-		return "to be implemented";
+		return invalidBindingReason;
 	}
 
 	public boolean isSet() {
@@ -205,23 +315,13 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		this.owner = owner;
 	}
 
-	private boolean isParsingAndAnalysing = false;
-
-	private List<BindingValueAsExpression> bindingValueList = new Vector<BindingValueAsExpression>();
-
 	private Expression parseExpression() {
 		if (getUnparsedBinding() == null) {
 			return expression = null;
 		}
 
-		if (isParsingAndAnalysing) {
-			return expression;
-		}
-
 		isParsingAndAnalysing = true;
-
 		if (getOwner() != null) {
-			bindingValueList.clear();
 			try {
 				expression = ExpressionParser.parse(getUnparsedBinding());
 			} catch (ParseException e1) {
@@ -229,19 +329,29 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 				e1.printStackTrace();
 				return expression = null;
 			}
+			analyseExpression();
+		}
+		isParsingAndAnalysing = false;
+
+		return expression;
+	}
+
+	private boolean isParsingAndAnalysing = false;
+
+	private Expression analyseExpression() {
+		isParsingAndAnalysing = true;
+		if (getOwner() != null) {
 			try {
-				expression.transform(new ExpressionTransformer() {
+				expression.visit(new ExpressionVisitor() {
 					@Override
-					public Expression performTransformation(Expression e) throws TransformException {
+					public void visit(Expression e) {
 						if (e instanceof BindingValueAsExpression) {
-							bindingValueList.add((BindingValueAsExpression) e);
 							((BindingValueAsExpression) e).performSemanticAnalysis(DataBinding.this);
 						}
-						return e;
 					}
 				});
-			} catch (TransformException e) {
-				logger.warning("TransformException while transforming " + expression);
+			} catch (VisitorException e) {
+				logger.warning("Unexpected " + e);
 			}
 		}
 

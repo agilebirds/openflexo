@@ -37,6 +37,8 @@ public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
 
+	public abstract void visit(ExpressionVisitor visitor) throws VisitorException;
+
 	public abstract Expression transform(ExpressionTransformer transformer) throws TransformException;
 
 	public final Expression evaluate() throws TypeMismatchException, NullReferenceException {

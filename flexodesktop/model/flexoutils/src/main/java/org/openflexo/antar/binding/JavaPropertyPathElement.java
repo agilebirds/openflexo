@@ -1,6 +1,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
@@ -16,11 +17,18 @@ import org.openflexo.xmlcode.KeyValueDecoder;
  */
 public class JavaPropertyPathElement extends SimplePathElement {
 
+	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
+
 	private KeyValueProperty keyValueProperty;
 
-	public JavaPropertyPathElement(BindingPathElement parent, String propertyName, Type type) {
-		super(parent, propertyName, type);
+	public JavaPropertyPathElement(BindingPathElement parent, String propertyName) {
+		super(parent, propertyName, Object.class);
 		keyValueProperty = KeyValueLibrary.getKeyValueProperty(parent.getType(), propertyName);
+		if (keyValueProperty != null) {
+			setType(keyValueProperty.getType());
+		} else {
+			logger.warning("cannot find property " + propertyName + " for " + parent);
+		}
 	}
 
 	public JavaPropertyPathElement(BindingPathElement parent, KeyValueProperty property) {

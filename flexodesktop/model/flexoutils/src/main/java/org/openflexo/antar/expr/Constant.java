@@ -80,6 +80,11 @@ public abstract class Constant<V> extends Expression {
 	}
 
 	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		visitor.visit(this);
+	}
+
+	@Override
 	public int getDepth() {
 		return 0;
 	}

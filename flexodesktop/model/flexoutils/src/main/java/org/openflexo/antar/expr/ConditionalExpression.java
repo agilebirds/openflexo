@@ -74,6 +74,14 @@ public class ConditionalExpression extends Expression {
 	}
 
 	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		condition.visit(visitor);
+		thenExpression.visit(visitor);
+		elseExpression.visit(visitor);
+		visitor.visit(this);
+	}
+
+	@Override
 	public EvaluationType getEvaluationType() throws TypeMismatchException {
 		EvaluationType thenEvaluationType = thenExpression.getEvaluationType();
 		EvaluationType elseEvaluationType = elseExpression.getEvaluationType();

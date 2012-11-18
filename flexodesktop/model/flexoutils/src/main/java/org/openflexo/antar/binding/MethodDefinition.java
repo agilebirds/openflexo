@@ -25,10 +25,9 @@ import java.util.Hashtable;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition extends Observable implements ComplexPathElement<Object> {
+public class MethodDefinition extends Observable {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
@@ -57,11 +56,6 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 
 	public String getMethodName() {
 		return method.getName();
-	}
-
-	@Override
-	public Type getType() {
-		return TypeUtils.makeInstantiatedType(getMethod().getGenericReturnType(), declaringType);
 	}
 
 	private String _signatureNFQ;
@@ -174,27 +168,10 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		return "MethodDefinition[" + getSimplifiedSignature() + "]";
 	}
 
-	@Override
-	public Class getDeclaringClass() {
-		return TypeUtils.getBaseClass(declaringType);
-	}
-
-	@Override
-	public String getSerializationRepresentation() {
-		return toString();
-	}
-
-	@Override
-	public boolean isBindingValid() {
-		return true;
-	}
-
-	@Override
 	public String getLabel() {
 		return getSimplifiedSignature();
 	}
 
-	@Override
 	public String getTooltipText(Type resultingType) {
 		String returned = "<html>";
 		String resultingTypeAsString;
@@ -210,22 +187,6 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		// "<p><i>"+(method.getDescription()!=null?method.getDescription():FlexoLocalization.localizedForKey("no_description"))+"</i></p>";
 		returned += "</html>";
 		return returned;
-	}
-
-	@Override
-	public boolean isSettable() {
-		return false;
-	}
-
-	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		// Not relevant
-		return null;
-	}
-
-	@Override
-	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		// Not relevant
 	}
 
 }

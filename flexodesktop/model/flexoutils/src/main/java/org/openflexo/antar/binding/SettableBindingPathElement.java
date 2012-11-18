@@ -20,6 +20,8 @@
 package org.openflexo.antar.binding;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 
 /**
  * Represents a BindingPathElement which has the ability to be set
@@ -46,6 +48,7 @@ public interface SettableBindingPathElement extends BindingPathElement {
 	 * @param context
 	 *            : binding evaluation context
 	 */
-	public void setBindingValue(Object value, Object target, BindingEvaluationContext context);
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
+			NullReferenceException;;
 
 }

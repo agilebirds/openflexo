@@ -27,6 +27,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 
 /**
  * Modelize a java call which is a call to a method and with some arguments
@@ -40,9 +42,10 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	private MethodDefinition method;
 
-	public JavaMethodPathElement(BindingPathElement parent, String methodName, Type type, List<DataBinding<?>> args) {
-		super(parent, methodName, type, args);
+	public JavaMethodPathElement(BindingPathElement parent, String methodName, List<DataBinding<?>> args) {
+		super(parent, methodName, Object.class, args);
 		method = retrieveMethod();
+		setType(method.getMethod().getGenericReturnType());
 	}
 
 	public JavaMethodPathElement(BindingPathElement parent, MethodDefinition method, List<DataBinding<?>> args) {
@@ -64,7 +67,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	private MethodDefinition retrieveMethod() {
 		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
-		Class<?> typeClass = TypeUtils.getBaseClass(getType());
+		Class<?> typeClass = TypeUtils.getBaseClass(getParent().getType());
 		Method[] allMethods = typeClass.getMethods();
 		for (Method method : allMethods) {
 			if (method.getName().equals(getMethodName()) && method.getGenericParameterTypes().length == getArguments().size()) {
@@ -75,9 +78,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			logger.warning("Please implement disambiguity here");
 			// Return the first one
 			// TODO: try to find the best one
-			return MethodDefinition.getMethodDefinition(getType(), possiblyMatchingMethods.get(0));
+			return MethodDefinition.getMethodDefinition(getParent().getType(), possiblyMatchingMethods.get(0));
 		} else if (possiblyMatchingMethods.size() == 1) {
-			return MethodDefinition.getMethodDefinition(getType(), possiblyMatchingMethods.get(0));
+			return MethodDefinition.getMethodDefinition(getParent().getType(), possiblyMatchingMethods.get(0));
 		} else {
 			return null;
 		}
@@ -94,7 +97,10 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	}
 
 	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+
+		System.out.println("evaluate " + method.getSignature() + " for " + target);
+
 		Object[] args = new Object[getArguments().size()];
 		int i = 0;
 
