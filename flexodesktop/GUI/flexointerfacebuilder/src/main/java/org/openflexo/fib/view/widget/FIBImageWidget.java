@@ -40,16 +40,13 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	public FIBImageWidget(FIBImage model, FIBController controller) {
 		super(model, controller);
+		labelWidget = new JLabel();
 		if (model.getData().isValid()) {
-			labelWidget = new JLabel(" ");
-		} else {
-			labelWidget = new JLabel();
+			labelWidget.setText(" ");
 		}
 		updateFont();
 		updateAlign();
 		updateImage();
-		// updatePreferredSize();
-
 	}
 
 	@Override
@@ -88,16 +85,9 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	protected void updateImage() {
 		if (getWidget().getData().isValid()) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (!isDeleted()) {
-						Image image = getValue();
-						updateImageDefaultSize(image);
-						labelWidget.setIcon(makeImageIcon(image));
-					}
-				}
-			});
+			Image image = getValue();
+			updateImageDefaultSize(image);
+			labelWidget.setIcon(makeImageIcon(image));
 		} else if (getWidget().getImageFile() != null) {
 			if (getWidget().getImageFile().exists()) {
 				Image image = ImageUtils.loadImageFromFile(getWidget().getImageFile());
@@ -129,6 +119,8 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 					return null;
 				}
 			}
+			// This is just looking for troubles because it makes a loop in layout
+			//
 			if (getJComponent().getWidth() == 0 || getJComponent().getHeight() == 0) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
