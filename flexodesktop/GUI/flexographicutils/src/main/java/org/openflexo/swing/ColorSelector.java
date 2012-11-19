@@ -145,6 +145,15 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	}
 
 	@Override
+	public Color getEditedObject() {
+		Color editedObject = super.getEditedObject();
+		if (editedObject == null) {
+			return Color.WHITE;
+		}
+		return editedObject;
+	}
+
+	@Override
 	public void setEditedObject(Color color) {
 		super.setEditedObject(color);
 		for (ChangeListener l : listenerList.getListeners(ChangeListener.class)) {

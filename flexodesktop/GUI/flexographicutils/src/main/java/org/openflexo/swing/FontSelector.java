@@ -33,6 +33,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.localization.FlexoLocalization;
@@ -75,6 +76,23 @@ public class FontSelector extends CustomPopup<Font> implements FontSelectionMode
 
 	public Font getRevertValue() {
 		return _revertValue;
+	}
+
+	@Override
+	public Font getEditedObject() {
+		Font editedObject = super.getEditedObject();
+		if (editedObject == null) {
+			return DEFAULT_FONT;
+		}
+		return editedObject;
+	}
+
+	@Override
+	public void setEditedObject(Font font) {
+		super.setEditedObject(font);
+		for (ChangeListener l : listenerList.getListeners(ChangeListener.class)) {
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
 
 	@Override
@@ -232,7 +250,7 @@ public class FontSelector extends CustomPopup<Font> implements FontSelectionMode
 		protected void update() {
 			// logger.info("Update front panel with "+JFontChooser.fontDescription(getEditedObject())+" font="+getEditedObject());
 			previewLabel.setFont(getEditedObject());
-			if (getEditedObject() != null) {
+			if (FontSelector.super.getEditedObject() != null) {
 				previewLabel.setText(JFontChooser.fontDescription(getEditedObject()));
 			} else {
 				previewLabel.setText("");
