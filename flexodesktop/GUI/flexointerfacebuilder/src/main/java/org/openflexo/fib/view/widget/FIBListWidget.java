@@ -34,7 +34,6 @@ import javax.swing.event.ListSelectionListener;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBList;
 
 public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object> implements FIBSelectable {
@@ -421,19 +420,27 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 			if (isSelected) {
 				if (isLastFocusedSelectable()) {
-					setForeground(getWidget().getTextSelectionColor());
-					setBackground(getWidget().getBackgroundSelectionColor());
+					if (getWidget().getTextSelectionColor() != null) {
+						setForeground(getWidget().getTextSelectionColor());
+					}
+					if (getWidget().getBackgroundSelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSelectionColor());
+					}
 				} else {
-					setForeground(getWidget().getTextNonSelectionColor());
-					setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					if (getWidget().getTextNonSelectionColor() != null) {
+						setForeground(getWidget().getTextNonSelectionColor());
+					}
+					if (getWidget().getBackgroundSecondarySelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					}
 				}
 			} else {
-				if (!isEnabled()) {
-					setForeground(FIBComponent.DISABLED_COLOR);
-				} else {
+				if (getWidget().getTextNonSelectionColor() != null) {
 					setForeground(getWidget().getTextNonSelectionColor());
 				}
-				setBackground(getWidget().getBackgroundNonSelectionColor());
+				if (getWidget().getBackgroundNonSelectionColor() != null) {
+					setBackground(getWidget().getBackgroundNonSelectionColor());
+				}
 			}
 
 			return label;

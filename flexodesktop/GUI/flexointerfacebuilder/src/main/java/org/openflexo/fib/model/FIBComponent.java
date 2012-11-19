@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.JLabel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
@@ -841,7 +840,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidFont();
 			} else {
-				return new JLabel().getFont(); // Use system default
+				return null; // Use system default
 			}
 		}
 
@@ -853,7 +852,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidForegroundColor();
 			} else {
-				return Color.BLACK; // Use default
+				return null; // Use default
 			}
 		}
 
@@ -865,7 +864,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidBackgroundColor();
 			} else {
-				return Color.WHITE; // Use system default
+				return null; // Use system default
 			}
 		}
 
@@ -884,18 +883,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public boolean getHasSpecificFont() {
-		return getFont() != null;
-	}
-
-	public void setHasSpecificFont(boolean aFlag) {
-		if (aFlag) {
-			setFont(retrieveValidFont());
-		} else {
-			setFont(null);
-		}
-	}
-
 	public Boolean getOpaque() {
 		return opaque;
 	}
@@ -905,30 +892,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		if (notification != null) {
 			this.opaque = opaque;
 			hasChanged(notification);
-		}
-	}
-
-	public boolean getHasSpecificBackgroundColor() {
-		return getBackgroundColor() != null;
-	}
-
-	public void setHasSpecificBackgroundColor(boolean aFlag) {
-		if (aFlag) {
-			setBackgroundColor(retrieveValidBackgroundColor());
-		} else {
-			setBackgroundColor(null);
-		}
-	}
-
-	public boolean getHasSpecificForegroundColor() {
-		return getForegroundColor() != null;
-	}
-
-	public void setHasSpecificForegroundColor(boolean aFlag) {
-		if (aFlag) {
-			setForegroundColor(retrieveValidForegroundColor());
-		} else {
-			setForegroundColor(null);
 		}
 	}
 

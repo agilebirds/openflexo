@@ -22,8 +22,8 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ListSelectionModel;
@@ -40,7 +40,7 @@ import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBTableAction.FIBRemoveAction;
 
-public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
+public class FIBTable extends FIBWidget implements FIBTableComponent /*implements DynamicAccess*/{
 
 	private static final Logger logger = Logger.getLogger(FIBTable.class.getPackage().getName());
 
@@ -108,8 +108,8 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 
 	private Class iteratorClass;
 
-	private Vector<FIBTableColumn> columns;
-	private Vector<FIBTableAction> actions;
+	private List<FIBTableColumn> columns;
+	private List<FIBTableAction> actions;
 
 	private BindingModel tableBindingModel;
 	private BindingModel actionBindingModel;
@@ -121,8 +121,8 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	private Color backgroundNonSelectionColor;
 
 	public FIBTable() {
-		columns = new Vector<FIBTableColumn>();
-		actions = new Vector<FIBTableAction>();
+		columns = new ArrayList<FIBTableColumn>();
+		actions = new ArrayList<FIBTableAction>();
 	}
 
 	@Override
@@ -139,11 +139,12 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		return null;
 	}
 
-	public Vector<FIBTableColumn> getColumns() {
+	@Override
+	public List<FIBTableColumn> getColumns() {
 		return columns;
 	}
 
-	public void setColumns(Vector<FIBTableColumn> columns) {
+	public void setColumns(List<FIBTableColumn> columns) {
 		this.columns = columns;
 	}
 
@@ -161,11 +162,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		notifyObservers(new FIBRemovingNotification<FIBTableColumn>(Parameters.columns, aColumn));
 	}
 
-	public Vector<FIBTableAction> getActions() {
+	public List<FIBTableAction> getActions() {
 		return actions;
 	}
 
-	public void setActions(Vector<FIBTableAction> actions) {
+	public void setActions(List<FIBTableAction> actions) {
 		this.actions = actions;
 	}
 
@@ -184,6 +185,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		notifyObservers(new FIBRemovingNotification<FIBTableAction>(Parameters.actions, anAction));
 	}
 
+	@Override
 	public BindingModel getTableBindingModel() {
 		if (tableBindingModel == null) {
 			createTableBindingModel();
@@ -509,7 +511,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 			return;
 		}
 		columns.remove(c);
-		columns.insertElementAt(c, 0);
+		columns.add(0, c);
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
 	}
@@ -520,7 +522,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		}
 		int index = columns.indexOf(c);
 		columns.remove(c);
-		columns.insertElementAt(c, index - 1);
+		columns.add(index - 1, c);
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
 	}
@@ -531,7 +533,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		}
 		int index = columns.indexOf(c);
 		columns.remove(c);
-		columns.insertElementAt(c, index + 1);
+		columns.add(index + 1, c);
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
 	}

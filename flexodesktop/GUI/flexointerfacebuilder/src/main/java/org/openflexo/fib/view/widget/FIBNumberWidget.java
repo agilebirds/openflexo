@@ -206,7 +206,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 				return false;
 			}
 			modelUpdating = true;
-			setValue(getEditedValue());
+			setValue(editedValue);
 			modelUpdating = false;
 			return true;
 		}

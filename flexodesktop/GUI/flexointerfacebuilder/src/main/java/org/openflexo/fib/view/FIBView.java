@@ -420,15 +420,11 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateBackgroundColor() {
-		if (getComponent().getHasSpecificBackgroundColor()) {
-			getJComponent().setBackground(getComponent().getBackgroundColor());
-		}
+		getJComponent().setBackground(getComponent().getBackgroundColor());
 	}
 
 	protected void updateForegroundColor() {
-		if (getComponent().getHasSpecificForegroundColor()) {
-			getJComponent().setForeground(getComponent().getForegroundColor());
-		}
+		getJComponent().setForeground(getComponent().getForegroundColor());
 	}
 
 	public static boolean equals(Object o1, Object o2) {

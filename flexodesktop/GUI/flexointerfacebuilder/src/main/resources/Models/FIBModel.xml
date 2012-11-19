@@ -219,11 +219,13 @@
     <property name="columns" xmlTag="columns" attribute="YES"/> 
   </entity>
   
-  <entity name="org.openflexo.fib.model.FIBColor" xmlTag="Color"> 
+  <entity name="org.openflexo.fib.model.FIBColor" xmlTag="Color">
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBFont" xmlTag="Font"> 
     <property name="sampleText" xmlTag="sampleText" attribute="YES"/> 
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBFile" xmlTag="File"> 
@@ -328,6 +330,10 @@
     <property name="backgroundSelectionColor" xmlTag="backgroundSelectionColor" attribute="YES"/> 
     <property name="backgroundSecondarySelectionColor" xmlTag="backgroundSecondarySelectionColor" attribute="YES"/> 
     <property name="backgroundNonSelectionColor" xmlTag="backgroundNonSelectionColor" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBTreeTable" xmlTag="TreeTable">
+    <property name="columns" type="vector" contains="org.openflexo.fib.model.FIBTableColumn"/>
   </entity>
      
   <entity name="org.openflexo.fib.model.FIBTableAction" abstract="yes"> 
