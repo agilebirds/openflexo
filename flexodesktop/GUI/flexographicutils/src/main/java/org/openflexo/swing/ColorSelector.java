@@ -26,8 +26,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,11 +52,9 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	private Color _revertValue;
 
 	protected ColorDetailsPanel _selectorPanel;
-	private final List<ChangeListener> listeners;
 
 	public ColorSelector() {
 		super(Color.WHITE);
-		listeners = new ArrayList<ChangeListener>();
 		setFocusable(true);
 	}
 
@@ -151,7 +147,7 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	@Override
 	public void setEditedObject(Color color) {
 		super.setEditedObject(color);
-		for (ChangeListener l : listeners) {
+		for (ChangeListener l : listenerList.getListeners(ChangeListener.class)) {
 			l.stateChanged(new ChangeEvent(this));
 		}
 	}
@@ -205,37 +201,38 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	}*/
 
 	protected class ColorPreviewPanel extends JPanel {
-		private JPanel insidePanel;
 
 		protected ColorPreviewPanel() {
 			super(new BorderLayout());
 			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
 			setPreferredSize(new Dimension(40, 19));
 			setMinimumSize(new Dimension(40, 19));
-			insidePanel = new JPanel(new BorderLayout());
-			add(insidePanel, BorderLayout.CENTER);
 			update();
 		}
 
 		protected void update() {
-			insidePanel.setBackground(getEditedObject());
+			setBackground(getEditedObject());
+			repaint();
 		}
-
 	}
 
 	@Override
 	public void addChangeListener(ChangeListener listener) {
-		listeners.add(listener);
+		listenerList.add(ChangeListener.class, listener);
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener listener) {
-		listeners.remove(listener);
+		listenerList.remove(ChangeListener.class, listener);
 	}
 
 	@Override
 	public Color getSelectedColor() {
-		return getEditedObject();
+		if (getEditedObject() != null) {
+			return getEditedObject();
+		} else {
+			return Color.WHITE;
+		}
 	}
 
 	@Override

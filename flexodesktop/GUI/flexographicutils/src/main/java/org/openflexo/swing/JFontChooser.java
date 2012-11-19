@@ -39,7 +39,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.swing.FontSelector.FontSelectionModel;
 
 public class JFontChooser extends JPanel {
 
