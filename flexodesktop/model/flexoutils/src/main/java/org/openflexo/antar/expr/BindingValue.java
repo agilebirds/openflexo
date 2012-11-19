@@ -25,21 +25,30 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SettableBindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.parser.ExpressionParser;
+import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
-public class BindingValueAsExpression extends Expression {
+/**
+ * Represents a binding path, as formed by an access to a binding variable and a path of BindingPathElement<br>
+ * A BindingValue may be settable is the last BindintPathElement is itself settable
+ * 
+ * @author sylvain
+ * 
+ */
+public class BindingValue extends Expression {
 
-	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
 
 	private final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
 
@@ -98,11 +107,29 @@ public class BindingValueAsExpression extends Expression {
 	private BindingVariable bindingVariable;
 	private List<BindingPathElement> bindingPath;
 
-	public BindingValueAsExpression(List<AbstractBindingPathElement> aBindingPath) {
+	private DataBinding<?> dataBinding;
+
+	private boolean isSemanticAnalysisPerformed = false;
+	private boolean isSemanticAnalysisSuccessfull = false;
+
+	public BindingValue(List<AbstractBindingPathElement> aBindingPath) {
 		super();
 		this.parsedBindingPath = aBindingPath;
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();
+	}
+
+	public BindingValue(String stringToParse) throws ParseException {
+		this(parse(stringToParse));
+	}
+
+	private static List<AbstractBindingPathElement> parse(String stringToParse) throws ParseException {
+		Expression e = ExpressionParser.parse(stringToParse);
+		if (e instanceof BindingValue) {
+			return ((BindingValue) e).getParsedBindingPath();
+		} else {
+			throw new ParseException("Not parseable as a BindingValue: " + stringToParse);
+		}
 	}
 
 	public DataBinding<?> getDataBinding() {
@@ -156,6 +183,10 @@ public class BindingValueAsExpression extends Expression {
 		return false;
 	}
 
+	public String getVariableName() {
+		return getBindingVariable().getVariableName();
+	}
+
 	public boolean isSimpleVariable() {
 		return getParsedBindingPath().size() == 1 && getParsedBindingPath().get(0) instanceof NormalBindingPathElement;
 	}
@@ -195,7 +226,7 @@ public class BindingValueAsExpression extends Expression {
 				newBindingPath.add(new MethodCallBindingPathElement(((MethodCallBindingPathElement) e).method, newArgs));
 			}
 		}
-		BindingValueAsExpression bv = new BindingValueAsExpression(newBindingPath);
+		BindingValue bv = new BindingValue(newBindingPath);
 		bv.setDataBinding(getDataBinding());
 		System.out.println("BindingValue created with data binding " + getDataBinding());
 		if (getDataBinding() == null) {
@@ -240,17 +271,17 @@ public class BindingValueAsExpression extends Expression {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof BindingValueAsExpression) {
-			BindingValueAsExpression e = (BindingValueAsExpression) obj;
+		if (obj instanceof BindingValue) {
+			BindingValue e = (BindingValue) obj;
 			return getParsedBindingPath().equals(e.getParsedBindingPath());
 		}
 		return super.equals(obj);
 	}
 
-	private DataBinding dataBinding;
-
-	private boolean isSemanticAnalysisPerformed = false;
-	private boolean isSemanticAnalysisSuccessfull = false;
+	@Override
+	public int hashCode() {
+		return (toString()).hashCode();
+	}
 
 	public boolean performSemanticAnalysis(DataBinding<?> dataBinding) {
 		if (isSemanticAnalysisPerformed) {
@@ -376,7 +407,7 @@ public class BindingValueAsExpression extends Expression {
 	}
 
 	/**
-	 * Build and return a list of objects (the current object path computed from supplied context)
+	 * Build and return a list of objects involved in the computation of this data binding with supplied binding evaluation context
 	 * 
 	 * @param context
 	 * @return
@@ -416,7 +447,8 @@ public class BindingValueAsExpression extends Expression {
 	}
 
 	/**
-	 * Build and return a list of target objects (the current object path computed from supplied context)
+	 * Build and return a list of target objects involved in the computation of this data binding with supplied binding evaluation context<br>
+	 * Those target objects are the combination of an object and the property name involved by this denoted data binding
 	 * 
 	 * @param context
 	 * @return

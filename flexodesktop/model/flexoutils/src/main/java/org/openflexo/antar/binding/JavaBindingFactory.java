@@ -5,7 +5,6 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -14,9 +13,6 @@ public class JavaBindingFactory implements BindingFactory {
 
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
-		if (parent instanceof FinalBindingPathElement) {
-			return Collections.emptyList();
-		}
 		if (parent.getType() != null) {
 			if (TypeUtils.getBaseClass(parent.getType()) == null) {
 				return null;
@@ -36,9 +32,6 @@ public class JavaBindingFactory implements BindingFactory {
 
 	@Override
 	public List<? extends FunctionPathElement> getAccessibleFunctionPathElements(BindingPathElement parent) {
-		if (parent instanceof FinalBindingPathElement) {
-			return Collections.emptyList();
-		}
 		if (parent.getType() != null) {
 			if (TypeUtils.getBaseClass(parent.getType()) == null) {
 				return null;

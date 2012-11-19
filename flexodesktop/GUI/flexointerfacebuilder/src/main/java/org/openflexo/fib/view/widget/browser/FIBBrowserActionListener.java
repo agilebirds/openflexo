@@ -27,9 +27,11 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowserAction;
@@ -103,12 +105,19 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 		}
 		if (browserAction.getIsAvailable() != null && browserAction.getIsAvailable().isValid()) {
 			this.selectedObject = selectedObject;
-			Object returned = browserAction.getIsAvailable().getBindingValue(this);
+			Boolean returned = null;
+			try {
+				returned = browserAction.getIsAvailable().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			if (returned == null) {
 				return false;
 			}
 			if (TypeUtils.isBoolean(returned.getClass())) {
-				return (Boolean) returned;
+				return returned;
 			}
 		}
 		return true;

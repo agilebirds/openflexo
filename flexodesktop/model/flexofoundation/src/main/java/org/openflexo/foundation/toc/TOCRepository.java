@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.logging.Level;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.foundation.DocType;

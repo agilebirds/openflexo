@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.expr.parser;
 
+@SuppressWarnings("serial")
 public class ParseException extends Exception {
 
 	/**

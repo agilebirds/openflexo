@@ -36,7 +36,9 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
 import org.openflexo.fib.model.FIBModelObject;
@@ -64,7 +66,14 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
 
-				Object accessedList = getWidget().getList().getBindingValue(getController());
+				Object accessedList = null;
+				try {
+					accessedList = getWidget().getList().getBindingValue(getController());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				if (accessedList instanceof List) {
 					list = (List) accessedList;
 				}
@@ -73,7 +82,14 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			else if (getWidget().getArray() != null && getWidget().getArray().isSet() && getDataObject() != null) {
 
-				Object accessedArray = getWidget().getArray().getBindingValue(getController());
+				Object accessedArray = null;
+				try {
+					accessedArray = getWidget().getArray().getBindingValue(getController());
+				} catch (TypeMismatchException e1) {
+					e1.printStackTrace();
+				} catch (NullReferenceException e1) {
+					e1.printStackTrace();
+				}
 				// System.out.println("accessedArray="+accessedArray);
 				try {
 					array = (Object[]) accessedArray;
@@ -85,7 +101,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}*/
 			}
 
-			else if (getWidget().getData() != null && getWidget().getData().getBinding() != null && getDataObject() != null) {
+			else if (getWidget().getData() != null && getWidget().getData().isValid() && getDataObject() != null) {
 				/*System.out.println("Binding: "+getWidget().getData().getBinding());
 				System.out.println("isBindingValid: "+getWidget().getData().getBinding().isBindingValid());
 				if (!getWidget().getData().getBinding().isBindingValid()) {
@@ -96,7 +112,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					AbstractBinding binding = AbstractBinding.abstractBindingConverter.convertFromString(getWidget().getData().getBinding().toString());
 					binding.isBindingValid();
 				}*/
-				Type type = getWidget().getData().getBinding().getAccessedType();
+				Type type = getWidget().getData().getAnalyzedType();
 				if (type instanceof Class && ((Class) type).isEnum()) {
 					array = ((Class) type).getEnumConstants();
 				}
@@ -129,20 +145,33 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
 
-				Object accessedList = getWidget().getList().getBindingValue(getController());
+				Object accessedList = null;
+				try {
+					accessedList = getWidget().getList().getBindingValue(getController());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				return accessedList != null && !accessedList.equals(list);
 
 			}
 
 			else if (getWidget().getArray() != null && getWidget().getArray().isSet() && getDataObject() != null) {
 
-				Object accessedArray = getWidget().getArray().getBindingValue(getController());
+				try {
+					Object accessedArray = getWidget().getArray().getBindingValue(getController());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				// TODO: you can do better
 				return true;
 			}
 
-			else if (getWidget().getData() != null && getWidget().getData().getBinding() != null && getDataObject() != null) {
-				Type type = getWidget().getData().getBinding().getAccessedType();
+			else if (getWidget().getData() != null && getWidget().getData().isValid() && getDataObject() != null) {
+				Type type = getWidget().getData().getAnalyzedType();
 				if (type instanceof Class && ((Class<?>) type).isEnum()) {
 					return false;
 				}
@@ -428,10 +457,10 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	@Override
-	public List<AbstractBinding> getDependencyBindings() {
-		List<AbstractBinding> returned = super.getDependencyBindings();
-		appendToDependingObjects(getWidget().getList(), returned);
-		appendToDependingObjects(getWidget().getArray(), returned);
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getWidget().getList());
+		returned.add(getWidget().getArray());
 		return returned;
 	}
 

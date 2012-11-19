@@ -32,7 +32,8 @@ import javax.swing.UIManager;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
@@ -44,8 +45,10 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 
 	private static final Logger logger = Logger.getLogger(FIBTable.class.getPackage().getName());
 
+	@Deprecated
 	private BindingDefinition SELECTED;
 
+	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
 			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
@@ -54,7 +57,22 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		iteratorClass, visibleRowCount, rowHeight, createNewRowOnClick, autoSelectFirstRow, boundToSelectionManager, selectionMode, selected, columns, actions, showFooter, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor
+		iteratorClass,
+		visibleRowCount,
+		rowHeight,
+		createNewRowOnClick,
+		autoSelectFirstRow,
+		boundToSelectionManager,
+		selectionMode,
+		selected,
+		columns,
+		actions,
+		showFooter,
+		textSelectionColor,
+		textNonSelectionColor,
+		backgroundSelectionColor,
+		backgroundSecondarySelectionColor,
+		backgroundNonSelectionColor
 	}
 
 	public enum SelectionMode {
@@ -80,7 +98,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		public abstract int getMode();
 	}
 
-	private DataBinding selected;
+	private DataBinding<Object> selected;
 
 	private int visibleRowCount = 5;
 	private int rowHeight = 20;
@@ -179,7 +197,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	private void createTableBindingModel() {
 		tableBindingModel = new BindingModel(getBindingModel());
 
-		tableBindingModel.addToBindingVariables(new BindingVariableImpl(this, "iterator", getIteratorClass()));
+		tableBindingModel.addToBindingVariables(new BindingVariable("iterator", getIteratorClass()));
 		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
 
 		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
@@ -195,7 +213,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	private void createActionBindingModel() {
 		actionBindingModel = new BindingModel(getBindingModel());
 
-		actionBindingModel.addToBindingVariables(new BindingVariableImpl(this, "selected", getIteratorClass()));
+		actionBindingModel.addToBindingVariables(new BindingVariable("selected", getIteratorClass()));
 		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
 
 		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
@@ -208,17 +226,19 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		createActionBindingModel();
 	}
 
-	public DataBinding getSelected() {
+	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) {
-		selected.setOwner(this);
-		selected.setBindingAttribute(Parameters.selected);
-		selected.setBindingDefinition(getSelectedBindingDefinition());
+	public void setSelected(DataBinding<Object> selected) {
+		if (selected != null) {
+			selected.setOwner(this);
+			selected.setDeclaredType(getIteratorClass());
+			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+		}
 		this.selected = selected;
 	}
 
@@ -235,7 +255,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 			column.finalizeTableDeserialization();
 		}
 		if (selected != null) {
-			selected.finalizeDeserialization();
+			selected.decode();
 		}
 	}
 
@@ -295,11 +315,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	@Override
-	public void notifyBindingChanged(DataBinding binding) {
+	public void notifiedBindingChanged(DataBinding<?> binding) {
 		logger.fine("notifyBindingChanged with " + binding);
 		if (binding == getData()) {
-			if (getData() != null && getData().getBinding() != null) {
-				Type accessedType = getData().getBinding().getAccessedType();
+			if (getData() != null) {
+				Type accessedType = getData().getAnalyzedType();
 				if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
 					Class newIteratorClass = TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
 					if (getIteratorClass() == null || !TypeUtils.isClassAncestorOf(newIteratorClass, getIteratorClass())) {

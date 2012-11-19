@@ -30,9 +30,9 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.fib.model.ComponentConstraints;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -52,7 +52,7 @@ public class FIBLibrary {
 
 	private Hashtable<String, FIBComponent> _fibDefinitions;
 
-	private DefaultBindingFactory bindingFactory = new DefaultBindingFactory();
+	private BindingFactory bindingFactory = new JavaBindingFactory();
 
 	private FIBLibrary() {
 		super();
@@ -61,11 +61,6 @@ public class FIBLibrary {
 
 	protected static FIBLibrary createInstance() {
 		_current = new FIBLibrary();
-
-		StringEncoder.getDefaultInstance()._addConverter(_current.bindingFactory);
-		StringEncoder.getDefaultInstance()._addConverter(_current.bindingFactory.getBindingValueFactory());
-		StringEncoder.getDefaultInstance()._addConverter(_current.bindingFactory.getBindingExpressionFactory());
-		StringEncoder.getDefaultInstance()._addConverter(_current.bindingFactory.getStaticBindingFactory());
 
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 		StringEncoder.getDefaultInstance()._addConverter(ComponentConstraints.CONVERTER);

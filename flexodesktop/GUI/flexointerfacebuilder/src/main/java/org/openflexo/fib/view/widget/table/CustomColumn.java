@@ -37,11 +37,11 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.model.FIBCustomColumn;
@@ -326,25 +326,25 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		_editedRowObject = anObject;
 
 		for (FIBCustomAssignment assign : getColumnModel().getAssignments()) {
-			DataBinding variableDB = assign.getVariable();
-			DataBinding valueDB = assign.getValue();
+			DataBinding<Object> variableDB = assign.getVariable();
+			DataBinding<Object> valueDB = assign.getValue();
 
 			// logger.info("Assignment");
 			// logger.info("variableDB="+variableDB+" valid="+variableDB.getBinding().isBindingValid());
 			// logger.info("valueDB="+valueDB+" valid="+valueDB.getBinding().isBindingValid());
-			if (valueDB.getBinding().isBindingValid()) {
+			if (valueDB.isValid()) {
 				Object value = null;
 				try {
-					value = valueDB.getBinding().getBindingValue(this);
+					value = valueDB.getBindingValue(this);
+					// logger.info("value="+value);
+					if (variableDB.isValid()) {
+						// System.out.println("Assignment "+assign+" set value with "+value);
+						variableDB.setBindingValue(value, this);
+					}
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
-				}
-				// logger.info("value="+value);
-				if (variableDB.getBinding().isBindingValid()) {
-					// System.out.println("Assignment "+assign+" set value with "+value);
-					variableDB.getBinding().setBindingValue(value, this);
 				}
 			}
 		}

@@ -29,7 +29,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 
 public abstract class FIBTableColumn extends FIBModelObject {
 
@@ -46,26 +47,32 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
 	}
 
+	@Deprecated
 	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
 			BindingDefinitionType.EXECUTE, false);
 
-	private DataBinding data;
-	private DataBinding format;
-	private DataBinding tooltip;
-	private DataBinding color;
-	private DataBinding bgColor;
+	private DataBinding<Object> data;
+	private DataBinding<String> format;
+	private DataBinding<String> tooltip;
+	private DataBinding<Color> color;
+	private DataBinding<Color> bgColor;
 	private String title;
 	private String tooltipText;
 	private int columnWidth = 100;
 	private boolean resizable = true;
 	private boolean displayTitle = true;
 	private Font font;
-	private DataBinding valueChangedAction;
+	private DataBinding<Void> valueChangedAction;
 
 	private final FIBFormatter formatter;
 
@@ -113,27 +120,29 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		return null;
 	}
 
-	public DataBinding getData() {
+	public DataBinding<Object> getData() {
 		if (data == null) {
-			data = new DataBinding(this, Parameters.data, DATA);
+			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
 		}
 		return data;
 	}
 
-	public void setData(DataBinding data) {
-		data.setOwner(this);
-		data.setBindingAttribute(Parameters.data);
-		data.setBindingDefinition(DATA);
+	public void setData(DataBinding<Object> data) {
+		if (data != null) {
+			data.setOwner(this);
+			data.setDeclaredType(Object.class);
+			data.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.data = data;
 	}
 
 	public void finalizeTableDeserialization() {
 		logger.fine("finalizeDeserialization() for FIBTableColumn " + title);
 		if (data != null) {
-			data.finalizeDeserialization();
+			data.decode();
 		}
 		if (tooltip != null) {
-			tooltip.finalizeDeserialization();
+			tooltip.decode();
 		}
 	}
 
@@ -146,8 +155,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public Type getDataClass() {
-		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null) {
-			return getData().getBinding().getAccessedType();
+		if (getData() != null) {
+			return getData().getAnalyzedType();
 		}
 		return getDefaultDataClass();
 	}
@@ -235,17 +244,19 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	public abstract ColumnType getColumnType();
 
-	public DataBinding getFormat() {
+	public DataBinding<String> getFormat() {
 		if (format == null) {
-			format = new DataBinding(formatter, Parameters.format, FORMAT);
+			format = new DataBinding<String>(formatter, String.class, BindingDefinitionType.GET);
 		}
 		return format;
 	}
 
-	public void setFormat(DataBinding format) {
-		format.setOwner(formatter);
-		format.setBindingAttribute(Parameters.format);
-		format.setBindingDefinition(FORMAT);
+	public void setFormat(DataBinding<String> format) {
+		if (format != null) {
+			format.setOwner(formatter);
+			format.setDeclaredType(String.class);
+			format.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.format = format;
 	}
 
@@ -266,7 +277,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 		private void createFormatterBindingModel() {
 			formatterBindingModel = new BindingModel();
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
+			formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
 				@Override
 				public Type getType() {
 					return getDataClass();
@@ -305,59 +316,67 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		}
 	}
 
-	public DataBinding getTooltip() {
+	public DataBinding<String> getTooltip() {
 		if (tooltip == null) {
-			tooltip = new DataBinding(this, Parameters.tooltip, TOOLTIP);
+			tooltip = new DataBinding<String>(this, String.class, BindingDefinitionType.GET);
 		}
 		return tooltip;
 	}
 
-	public void setTooltip(DataBinding tooltip) {
-		tooltip.setOwner(this);
-		tooltip.setBindingAttribute(Parameters.tooltip);
-		tooltip.setBindingDefinition(TOOLTIP);
+	public void setTooltip(DataBinding<String> tooltip) {
+		if (tooltip != null) {
+			tooltip.setOwner(this);
+			tooltip.setDeclaredType(String.class);
+			tooltip.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.tooltip = tooltip;
 	}
 
-	public DataBinding getColor() {
+	public DataBinding<Color> getColor() {
 		if (color == null) {
-			color = new DataBinding(this, Parameters.color, COLOR);
+			color = new DataBinding<Color>(this, Color.class, BindingDefinitionType.GET);
 		}
 		return color;
 	}
 
-	public void setColor(DataBinding color) {
-		color.setOwner(this);
-		color.setBindingAttribute(Parameters.color);
-		color.setBindingDefinition(COLOR);
+	public void setColor(DataBinding<Color> color) {
+		if (color != null) {
+			color.setOwner(this);
+			color.setDeclaredType(Color.class);
+			color.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.color = color;
 	}
 
-	public DataBinding getBgColor() {
+	public DataBinding<Color> getBgColor() {
 		if (bgColor == null) {
-			bgColor = new DataBinding(this, Parameters.bgColor, BG_COLOR);
+			bgColor = new DataBinding<Color>(this, Color.class, BindingDefinitionType.GET);
 		}
 		return bgColor;
 	}
 
-	public void setBgColor(DataBinding bgColor) {
-		bgColor.setOwner(this);
-		bgColor.setBindingAttribute(Parameters.bgColor);
-		bgColor.setBindingDefinition(BG_COLOR);
+	public void setBgColor(DataBinding<Color> bgColor) {
+		if (bgColor != null) {
+			bgColor.setOwner(this);
+			bgColor.setDeclaredType(Color.class);
+			bgColor.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.bgColor = bgColor;
 	}
 
-	public DataBinding getValueChangedAction() {
+	public DataBinding<Void> getValueChangedAction() {
 		if (valueChangedAction == null) {
-			valueChangedAction = new DataBinding(this, Parameters.valueChangedAction, VALUE_CHANGED_ACTION);
+			valueChangedAction = new DataBinding<Void>(this, Void.class, BindingDefinitionType.EXECUTE);
 		}
 		return valueChangedAction;
 	}
 
-	public void setValueChangedAction(DataBinding valueChangedAction) {
-		valueChangedAction.setOwner(this);
-		valueChangedAction.setBindingAttribute(Parameters.valueChangedAction);
-		valueChangedAction.setBindingDefinition(VALUE_CHANGED_ACTION);
+	public void setValueChangedAction(DataBinding<Void> valueChangedAction) {
+		if (valueChangedAction != null) {
+			valueChangedAction.setOwner(this);
+			valueChangedAction.setDeclaredType(Void.class);
+			valueChangedAction.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+		}
 		this.valueChangedAction = valueChangedAction;
 	}
 

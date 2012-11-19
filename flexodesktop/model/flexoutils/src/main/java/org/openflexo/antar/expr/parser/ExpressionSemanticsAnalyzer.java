@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
 import org.openflexo.antar.expr.ConditionalExpression;
@@ -112,13 +112,13 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 		return null;
 	}
 
-	private BindingValueAsExpression makeBinding(PBinding node) {
+	private BindingValue makeBinding(PBinding node) {
 		// System.out.println("Make binding with " + node);
 
 		// Apply the translation.
 		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer();
 		node.apply(bsa);
-		BindingValueAsExpression returned = new BindingValueAsExpression(bsa.getPath());
+		BindingValue returned = new BindingValue(bsa.getPath());
 		// System.out.println("Made binding as " + bsa.getPath());
 
 		registerExpressionNode(node, returned);

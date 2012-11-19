@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
@@ -36,7 +37,18 @@ public class FIBList extends FIBMultipleValues {
 	private static final Logger logger = Logger.getLogger(FIBList.class.getPackage().getName());
 
 	public static enum Parameters implements FIBModelAttribute {
-		visibleRowCount, rowHeight, createNewRowOnClick, boundToSelectionManager, selectionMode, selected, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor, layoutOrientation
+		visibleRowCount,
+		rowHeight,
+		createNewRowOnClick,
+		boundToSelectionManager,
+		selectionMode,
+		selected,
+		textSelectionColor,
+		textNonSelectionColor,
+		backgroundSelectionColor,
+		backgroundSecondarySelectionColor,
+		backgroundNonSelectionColor,
+		layoutOrientation
 	}
 
 	public static enum LayoutOrientation {
@@ -71,7 +83,7 @@ public class FIBList extends FIBMultipleValues {
 		return SELECTED;
 	}
 
-	private DataBinding selected;
+	private DataBinding<Object> selected;
 
 	private int visibleRowCount = 5;
 	private int rowHeight = 20;
@@ -104,17 +116,19 @@ public class FIBList extends FIBMultipleValues {
 		return new ParameterizedTypeImpl(FIBListDynamicModel.class, args);
 	}
 
-	public DataBinding getSelected() {
+	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) {
-		selected.setOwner(this);
-		selected.setBindingAttribute(Parameters.selected);
-		selected.setBindingDefinition(getSelectedBindingDefinition());
+	public void setSelected(DataBinding<Object> selected) {
+		if (selected != null) {
+			selected.setOwner(this);
+			selected.setDeclaredType(getIteratorClass());
+			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+		}
 		this.selected = selected;
 	}
 
@@ -122,7 +136,7 @@ public class FIBList extends FIBMultipleValues {
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
 		if (selected != null) {
-			selected.finalizeDeserialization();
+			selected.decode();
 		}
 	}
 

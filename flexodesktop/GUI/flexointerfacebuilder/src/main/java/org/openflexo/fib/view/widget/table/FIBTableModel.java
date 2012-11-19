@@ -39,6 +39,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
 import org.openflexo.fib.model.FIBCustomColumn;
@@ -572,7 +574,13 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 		if (_widget.getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
-			_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
+			try {
+				_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		_widget.updateFont();

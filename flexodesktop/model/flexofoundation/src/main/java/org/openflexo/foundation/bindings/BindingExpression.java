@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
@@ -885,8 +885,8 @@ public class BindingExpression extends AbstractBinding {
 				public Expression performTransformation(Expression e) throws TransformException {
 					if (e instanceof Constant) {
 						return new BindingValueConstant((Constant) e, bindable);
-					} else if (e instanceof BindingValueAsExpression) {
-						return new BindingValueVariable(((BindingValueAsExpression) e).toString(), bindable);
+					} else if (e instanceof BindingValue) {
+						return new BindingValueVariable(((BindingValue) e).toString(), bindable);
 					}
 					return e;
 				}

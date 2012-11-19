@@ -20,12 +20,14 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
@@ -75,12 +77,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		return CONVERTER;
 	}
 
-	public static interface BindingAttribute {
-		public String name();
-	}
-
 	private Bindable owner;
-	private BindingAttribute bindingAttribute;
 	private String unparsedBinding;
 	private BindingDefinition bindingDefinition;
 	private Expression expression;
@@ -91,19 +88,8 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		setBindingDefinition(new BindingDefinition("unnamed", type, bdType, true));
 	}
 
-	public DataBinding(Bindable owner, BindingAttribute attribute, Type type, BindingDefinitionType bdType) {
-		setOwner(owner);
-		setBindingAttribute(attribute);
-		setBindingDefinition(new BindingDefinition(attribute.name(), type, bdType, true));
-	}
-
 	public DataBinding(String unparsed, Bindable owner, Type type, BindingDefinitionType bdType) {
 		this(owner, type, bdType);
-		setUnparsedBinding(unparsed);
-	}
-
-	public DataBinding(String unparsed, Bindable owner, BindingAttribute attribute, Type type, BindingDefinitionType bdType) {
-		this(owner, attribute, type, bdType);
 		setUnparsedBinding(unparsed);
 	}
 
@@ -131,10 +117,14 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		}*/
 	}
 
-	public Expression getExpression() {
+	public void decode() {
 		if (expression == null && !isParsingAndAnalysing) {
 			parseExpression();
 		}
+	}
+
+	public Expression getExpression() {
+		decode();
 		return expression;
 	}
 
@@ -169,6 +159,10 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		}
 	}
 
+	public boolean isSettable() {
+		return getExpression() instanceof BindingValue && ((BindingValue) getExpression()).isSettable();
+	}
+
 	public Type getDeclaredType() {
 		return getBindingDefinition().getType();
 	}
@@ -177,10 +171,14 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		getBindingDefinition().setType(aType);
 	}
 
+	public void setBindingDefinitionType(BindingDefinitionType bdType) {
+		getBindingDefinition().setBindingDefinitionType(bdType);
+	}
+
 	public Type getAnalyzedType() {
 		if (getExpression() != null) {
-			if (getExpression() instanceof BindingValueAsExpression) {
-				return ((BindingValueAsExpression) getExpression()).getAccessedType();
+			if (getExpression() instanceof BindingValue) {
+				return ((BindingValue) getExpression()).getAccessedType();
 			} else {
 				try {
 					/*System.out.println("****** expression=" + getExpression());
@@ -207,13 +205,13 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 	}
 
 	public static class InvalidBindingValue extends VisitorException {
-		private BindingValueAsExpression bindingValue;
+		private BindingValue bindingValue;
 
-		public InvalidBindingValue(BindingValueAsExpression e) {
+		public InvalidBindingValue(BindingValue e) {
 			bindingValue = e;
 		}
 
-		public BindingValueAsExpression getBindingValue() {
+		public BindingValue getBindingValue() {
 			return bindingValue;
 		}
 	}
@@ -234,9 +232,9 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 				expression.visit(new ExpressionVisitor() {
 					@Override
 					public void visit(Expression e) throws InvalidBindingValue {
-						if (e instanceof BindingValueAsExpression) {
-							if (!((BindingValueAsExpression) e).isValid(DataBinding.this)) {
-								throw new InvalidBindingValue((BindingValueAsExpression) e);
+						if (e instanceof BindingValue) {
+							if (!((BindingValue) e).isValid(DataBinding.this)) {
+								throw new InvalidBindingValue((BindingValue) e);
 							}
 						}
 					}
@@ -261,7 +259,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 
 		if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) {
 			// Only BindingValue may be settable
-			if (!(getExpression() instanceof BindingValueAsExpression) || !((BindingValueAsExpression) getExpression()).isSettable()) {
+			if (!(getExpression() instanceof BindingValue) || !((BindingValue) getExpression()).isSettable()) {
 				invalidBindingReason = "Invalid binding because binding definition declared as settable and definition cannot satisfy it";
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
@@ -345,8 +343,8 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 				expression.visit(new ExpressionVisitor() {
 					@Override
 					public void visit(Expression e) {
-						if (e instanceof BindingValueAsExpression) {
-							((BindingValueAsExpression) e).performSemanticAnalysis(DataBinding.this);
+						if (e instanceof BindingValue) {
+							((BindingValue) e).performSemanticAnalysis(DataBinding.this);
 						}
 					}
 				});
@@ -356,24 +354,16 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		}
 
 		isParsingAndAnalysing = false;
+		notifyBindingDecoded();
 		return expression;
 	}
 
-	public BindingAttribute getBindingAttribute() {
-		return bindingAttribute;
-	}
-
-	public void setBindingAttribute(BindingAttribute bindingAttribute) {
-		this.bindingAttribute = bindingAttribute;
-	}
-
 	private void notifyBindingChanged(Expression oldValue, Expression newValue) {
-		// TODO
-		logger.warning("Please implement me");
-		/*if (bindingAttribute != null) {
-			owner.notifyChange(bindingAttribute, oldValue, value);
-		}
-		owner.notifyBindingChanged(this);*/
+		getOwner().notifiedBindingChanged(this);
+	}
+
+	private void notifyBindingDecoded() {
+		getOwner().notifiedBindingDecoded(this);
 	}
 
 	@Override
@@ -394,9 +384,9 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 				Expression resolvedExpression = expression.transform(new ExpressionTransformer() {
 					@Override
 					public Expression performTransformation(Expression e) throws TransformException {
-						if (e instanceof BindingValueAsExpression) {
-							((BindingValueAsExpression) e).setDataBinding(DataBinding.this);
-							Object o = ((BindingValueAsExpression) e).getBindingValue(context);
+						if (e instanceof BindingValue) {
+							((BindingValue) e).setDataBinding(DataBinding.this);
+							Object o = ((BindingValue) e).getBindingValue(context);
 							return Constant.makeConstant(o);
 						}
 						return e;
@@ -425,8 +415,74 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		return null;
 	}
 
-	public void setBindingValue(Object value, BindingEvaluationContext context) {
+	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		// TODO
+	}
+
+	public void execute(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+		getBindingValue(context);
+	}
+
+	/**
+	 * Build and return a list of objects involved in the computation of this data binding with supplied binding evaluation context
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public List<Object> getConcernedObjects(final BindingEvaluationContext context) {
+		if (!isValid()) {
+			return Collections.emptyList();
+		}
+		if (!isSettable()) {
+			return Collections.emptyList();
+		}
+
+		final List<Object> returned = new ArrayList<Object>();
+
+		try {
+			expression.visit(new ExpressionVisitor() {
+				@Override
+				public void visit(Expression e) {
+					if (e instanceof BindingValue) {
+						returned.addAll(((BindingValue) e).getConcernedObjects(context));
+					}
+				}
+			});
+		} catch (VisitorException e) {
+			logger.warning("Unexpected " + e);
+		}
+
+		return returned;
+	}
+
+	/**
+	 * Build and return a list of target objects involved in the computation of this data binding with supplied binding evaluation context<br>
+	 * Those target objects are the combination of an object and the property name involved by this denoted data binding
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public List<TargetObject> getTargetObjects(final BindingEvaluationContext context) {
+		if (!isValid()) {
+			return Collections.emptyList();
+		}
+
+		final ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
+
+		try {
+			expression.visit(new ExpressionVisitor() {
+				@Override
+				public void visit(Expression e) {
+					if (e instanceof BindingValue) {
+						returned.addAll(((BindingValue) e).getTargetObjects(context));
+					}
+				}
+			});
+		} catch (VisitorException e) {
+			logger.warning("Unexpected " + e);
+		}
+
+		return returned;
 	}
 
 }

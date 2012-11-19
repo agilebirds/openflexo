@@ -31,7 +31,7 @@ import org.openflexo.toolbox.ToolBox;
 
 public class KeyValueProperty extends Observable {
 
-	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(KeyValueProperty.class.getPackage().getName());
 
 	/** Stores property's name */
 	protected String name;

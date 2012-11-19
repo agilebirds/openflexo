@@ -32,6 +32,8 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -215,15 +217,15 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
-			Object isVisible = getComponent().getVisible().getBindingValue(getController());
-			/*
-			 * if (debug) {
-			 * System.out.println("getComponent().getVisible()="+getComponent
-			 * ().getVisible());
-			 * System.out.println("Eh bien isVisible="+isVisible); }
-			 */
-			if (isVisible instanceof Boolean) {
-				componentVisible = (Boolean) isVisible;
+			try {
+				Boolean isVisible = getComponent().getVisible().getBindingValue(getController());
+				if (isVisible != null) {
+					componentVisible = isVisible;
+				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
 			}
 		}
 		if (!componentVisible) {

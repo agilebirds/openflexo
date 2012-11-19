@@ -33,6 +33,7 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ProblemIssue;
@@ -167,6 +168,15 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return FIBLibrary.instance().getBindingFactory();
 	}
 
+	/**
+	 * Called when supplied data binding has been decoded (syntaxic and semantics analysis performed)
+	 * 
+	 * @param dataBinding
+	 */
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+	}
+
 	public void finalizeDeserialization() {
 	}
 
@@ -223,7 +233,13 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		notifyObservers(notification);
 	}
 
-	public void notifyBindingChanged(DataBinding binding) {
+	/**
+	 * Called when supplied data binding changed its value
+	 * 
+	 * @param dataBinding
+	 */
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> binding) {
 	}
 
 	public static boolean equals(Object o1, Object o2) {
@@ -406,7 +422,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 			super(clazz, ruleName);
 		}
 
-		public abstract DataBinding getBinding(C object);
+		public abstract DataBinding<?> getBinding(C object);
 
 		public abstract BindingDefinition getBindingDefinition(C object);
 
@@ -432,7 +448,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 			@Override
 			protected void fixAction() {
-				rule.getBinding(getObject()).setBinding(null);
+				rule.getBinding(getObject()).setExpression(null);
 			}
 
 		}

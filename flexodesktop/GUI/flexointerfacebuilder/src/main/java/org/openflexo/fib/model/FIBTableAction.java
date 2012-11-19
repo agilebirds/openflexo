@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 
 public abstract class FIBTableAction extends FIBModelObject {
 
@@ -40,10 +41,12 @@ public abstract class FIBTableAction extends FIBModelObject {
 		Add, Delete, Custom
 	}
 
-	private DataBinding method;
-	private DataBinding isAvailable;
+	private DataBinding<Object> method;
+	private DataBinding<Boolean> isAvailable;
 
+	@Deprecated
 	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, BindingDefinitionType.EXECUTE, false);
+	@Deprecated
 	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, BindingDefinitionType.GET, false);
 
 	public FIBTable getTable() {
@@ -62,31 +65,35 @@ public abstract class FIBTableAction extends FIBModelObject {
 		return null;
 	}
 
-	public DataBinding getMethod() {
+	public DataBinding<Object> getMethod() {
 		if (method == null) {
-			method = new DataBinding(this, Parameters.method, METHOD);
+			method = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
 		}
 		return method;
 	}
 
-	public void setMethod(DataBinding method) {
-		method.setOwner(this);
-		method.setBindingAttribute(Parameters.method);
-		method.setBindingDefinition(METHOD);
+	public void setMethod(DataBinding<Object> method) {
+		if (method != null) {
+			method.setOwner(this);
+			method.setDeclaredType(Object.class);
+			method.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+		}
 		this.method = method;
 	}
 
-	public DataBinding getIsAvailable() {
+	public DataBinding<Boolean> getIsAvailable() {
 		if (isAvailable == null) {
-			isAvailable = new DataBinding(this, Parameters.isAvailable, IS_AVAILABLE);
+			isAvailable = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
 		}
 		return isAvailable;
 	}
 
-	public void setIsAvailable(DataBinding isAvailable) {
-		isAvailable.setOwner(this);
-		isAvailable.setBindingAttribute(Parameters.isAvailable);
-		isAvailable.setBindingDefinition(IS_AVAILABLE);
+	public void setIsAvailable(DataBinding<Boolean> isAvailable) {
+		if (isAvailable != null) {
+			isAvailable.setOwner(this);
+			isAvailable.setDeclaredType(Boolean.class);
+			isAvailable.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.isAvailable = isAvailable;
 	}
 
@@ -103,7 +110,7 @@ public abstract class FIBTableAction extends FIBModelObject {
 		logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
 		super.finalizeDeserialization();
 		if (method != null) {
-			method.finalizeDeserialization();
+			method.decode();
 		}
 	}
 

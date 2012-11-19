@@ -36,8 +36,13 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -56,11 +61,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public static Color SECONDARY_SELECTION_COLOR = new Color(173, 215, 255);
 	public static Color DISABLED_COLOR = Color.GRAY;
 
+	@Deprecated
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	private BindingDefinition DATA;
 
 	private String definitionFile;
 
+	@Deprecated
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
 			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET, false);
@@ -69,7 +77,26 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		index, data, visible, dataClass, controllerClass, font, opaque, backgroundColor, foregroundColor, width, height, minWidth, minHeight, maxWidth, maxHeight, useScrollBar, horizontalScrollbarPolicy, verticalScrollbarPolicy, constraints, explicitDependancies
+		index,
+		data,
+		visible,
+		dataClass,
+		controllerClass,
+		font,
+		opaque,
+		backgroundColor,
+		foregroundColor,
+		width,
+		height,
+		minWidth,
+		minHeight,
+		maxWidth,
+		maxHeight,
+		useScrollBar,
+		horizontalScrollbarPolicy,
+		verticalScrollbarPolicy,
+		constraints,
+		explicitDependancies
 	}
 
 	public static enum VerticalScrollBarPolicy {
@@ -117,8 +144,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	private int index = -1;
-	private DataBinding data;
-	private DataBinding visible;
+	private DataBinding<?> data;
+	private DataBinding<Boolean> visible;
 
 	private Font font;
 	private boolean opaque = false;
@@ -468,7 +495,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	 * Default behavior is to generate a binding variable with the java type identified by data class
 	 */
 	protected void createDataBindingVariable() {
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+		_bindingModel.addToBindingVariables(new BindingVariable("data", dataClass != null ? dataClass : Object.class));
 	}
 
 	protected void createBindingModel() {
@@ -488,15 +515,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		createDataBindingVariable();
 
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
-			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));
+			_bindingModel.addToBindingVariables(new BindingVariable(getName(), getDynamicAccessType()));
 		}
 
 		Iterator<FIBComponent> it = subComponentIterator();
 		while (it.hasNext()) {
 			FIBComponent subComponent = it.next();
 			if (StringUtils.isNotEmpty(subComponent.getName()) && subComponent.getDynamicAccessType() != null) {
-				_bindingModel.addToBindingVariables(new BindingVariableImpl(this, subComponent.getName(), subComponent
-						.getDynamicAccessType()));
+				_bindingModel.addToBindingVariables(new BindingVariable(subComponent.getName(), subComponent.getDynamicAccessType()));
 			}
 		}
 
@@ -505,7 +531,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			myControllerClass = FIBController.class;
 		}
 
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "controller", myControllerClass));
+		_bindingModel.addToBindingVariables(new BindingVariable("controller", myControllerClass));
 
 		it = subComponentIterator();
 		while (it.hasNext()) {
@@ -536,44 +562,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		if (data != null) {
-			data.finalizeDeserialization();
+			data.decode();
 		}
 		if (visible != null) {
-			visible.finalizeDeserialization();
+			visible.decode();
 		}
 
 		deserializationPerformed = true;
-
-		/*if (conditional != null) {
-			Vector<Variable> variables;
-			try {
-				variables = Expression.extractVariables(conditional);
-				//System.out.println("Variables for "+conditional+"\n"+variables);
-
-				Iterator<FIBComponent> subComponents = getRootComponent().subComponentIterator();
-				while (subComponents.hasNext()) {
-					FIBComponent next = subComponents.next();
-					if (next != this) {
-						if (next instanceof FIBWidget && ((FIBWidget)next).getData() != null) {
-							String data = ((FIBWidget)next).getData().toString();
-							if (data != null) {
-								for (Variable v : variables) {
-									if (v.getName().startsWith(data) || data.startsWith(v.getName())) {
-										mayDepends.add(next);
-										next.mayAlters.add(this);
-										logger.info("Component "+this+" depends of "+next);
-									}
-								}
-							}
-						}
-					}
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			}	
-		}*/
 	}
 
 	public Vector<FIBComponent> getNamedComponents() {
@@ -713,33 +708,32 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public DataBinding getData() {
+	public DataBinding<?> getData() {
 		if (data == null) {
-			data = new DataBinding(this, Parameters.data, getDataBindingDefinition());
+			data = new DataBinding<Object>(this, getDataType(), BindingDefinitionType.GET);
 		}
 		return data;
 	}
 
-	public void setData(DataBinding data) {
+	public void setData(DataBinding<?> data) {
 		if (data != null) {
 			data.setOwner(this);
-			data.setBindingAttribute(Parameters.data);
-			data.setBindingDefinition(getDataBindingDefinition());
+			data.setDeclaredType(getDataType());
+			data.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.data = data;
 	}
 
-	public DataBinding getVisible() {
+	public DataBinding<Boolean> getVisible() {
 		if (visible == null) {
-			visible = new DataBinding(this, Parameters.visible, VISIBLE);
+			visible = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
 		}
 		return visible;
 	}
 
-	public void setVisible(DataBinding visible) {
+	public void setVisible(DataBinding<Boolean> visible) {
 		if (visible != null) {
 			visible.setOwner(this);
-			visible.setBindingAttribute(Parameters.visible);
 			visible.setBindingDefinition(VISIBLE);
 		}
 		this.visible = visible;
@@ -1361,6 +1355,69 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		@Override
 		public BindingDefinition getBindingDefinition(FIBComponent object) {
 			return VISIBLE;
+		}
+
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> binding) {
+		if (binding == null) {
+			return;
+		}
+
+		List<BindingValue> primitives;
+		try {
+			primitives = Expression.extractPrimitives(binding.getExpression());
+
+			FIBComponent rootComponent = getRootComponent();
+			Iterator<FIBComponent> subComponents = rootComponent.subComponentIterator();
+			while (subComponents.hasNext()) {
+				FIBComponent next = subComponents.next();
+				if (next != this) {
+					if (next instanceof FIBWidget && ((FIBWidget) next).getData() != null && ((FIBWidget) next).getData().isSet()) {
+						String data = ((FIBWidget) next).getData().toString();
+						if (data != null) {
+							for (BindingValue p : primitives) {
+								String primitiveValue = p.getVariableName();
+								if (primitiveValue != null && primitiveValue.startsWith(data)) {
+									// try {
+									declareDependantOf(next);
+									/*} catch (DependancyLoopException e) {
+										logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+												+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
+												+ primitiveValue + " component: " + component + " dependancy: " + next + " data: "
+												+ data + " message: " + e.getMessage());
+									}*/
+								}
+							}
+
+						}
+					}
+					if (next.getName() != null) {
+						for (BindingValue p : primitives) {
+							String primitiveValue = p.getVariableName();
+							if (primitiveValue != null && StringUtils.isNotEmpty(next.getName())
+									&& primitiveValue.startsWith(next.getName())) {
+								// try {
+								declareDependantOf(next);
+								/*} catch (DependancyLoopException e) {
+									logger.warning("DependancyLoopException raised while declaring dependancy (name lookup)"
+											+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
+											+ primitiveValue + " component: " + component + " dependancy: " + next + " message: "
+											+ e.getMessage());
+								}*/
+							}
+						}
+					}
+				}
+			}
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TypeMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}

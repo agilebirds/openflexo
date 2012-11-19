@@ -22,8 +22,8 @@ package org.openflexo.foundation.viewpoint.binding;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;

@@ -25,11 +25,14 @@ import javax.swing.Icon;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
 
 public class FIBButton extends FIBWidget {
 
+	@Deprecated
 	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
+	@Deprecated
 	public static BindingDefinition ACTION = new BindingDefinition("action", Void.class, BindingDefinitionType.EXECUTE, false);
 
 	public static enum ButtonType {
@@ -40,11 +43,11 @@ public class FIBButton extends FIBWidget {
 		action, buttonType, label, isDefault, buttonIcon;
 	}
 
-	private DataBinding action;
+	private DataBinding<Void> action;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
 	private Boolean isDefault;
-	private DataBinding buttonIcon;
+	private DataBinding<Icon> buttonIcon;
 
 	public FIBButton() {
 	}
@@ -64,17 +67,19 @@ public class FIBButton extends FIBWidget {
 		return String.class;
 	}
 
-	public DataBinding getAction() {
+	public DataBinding<Void> getAction() {
 		if (action == null) {
-			action = new DataBinding(this, Parameters.action, ACTION);
+			action = new DataBinding<Void>(this, Void.TYPE, BindingDefinitionType.EXECUTE);
 		}
 		return action;
 	}
 
-	public void setAction(DataBinding action) {
-		action.setOwner(this);
-		action.setBindingAttribute(Parameters.action);
-		action.setBindingDefinition(ACTION);
+	public void setAction(DataBinding<Void> action) {
+		if (action != null) {
+			action.setOwner(this);
+			action.setDeclaredType(Void.TYPE);
+			action.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+		}
 		this.action = action;
 	}
 
@@ -114,18 +119,18 @@ public class FIBButton extends FIBWidget {
 		}
 	}
 
-	public DataBinding getButtonIcon() {
+	public DataBinding<Icon> getButtonIcon() {
 		if (buttonIcon == null) {
-			buttonIcon = new DataBinding(this, Parameters.buttonIcon, BUTTON_ICON);
+			buttonIcon = new DataBinding<Icon>(this, Icon.class, BindingDefinitionType.GET);
 		}
 		return buttonIcon;
 	}
 
-	public void setButtonIcon(DataBinding buttonIcon) {
+	public void setButtonIcon(DataBinding<Icon> buttonIcon) {
 		if (buttonIcon != null) {
 			buttonIcon.setOwner(this);
-			buttonIcon.setBindingAttribute(Parameters.buttonIcon);
-			buttonIcon.setBindingDefinition(BUTTON_ICON);
+			buttonIcon.setDeclaredType(Icon.class);
+			buttonIcon.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.buttonIcon = buttonIcon;
 	}

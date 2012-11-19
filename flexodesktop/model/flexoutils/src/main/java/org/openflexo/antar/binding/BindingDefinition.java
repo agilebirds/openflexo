@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Please comment this class
+ * Represents the specification of a DataBinding
  * 
  * @author sguerin
  * 
@@ -37,11 +37,11 @@ public class BindingDefinition extends Observable {
 
 	static final Logger logger = Logger.getLogger(BindingDefinition.class.getPackage().getName());
 
-	private String _variableName;
+	private String variableName;
 
-	private Type _type;
+	private Type type;
 
-	private boolean _isMandatory;
+	private boolean isMandatory;
 
 	private BindingDefinitionType _bindingDefinitionType = BindingDefinitionType.GET;
 
@@ -51,9 +51,9 @@ public class BindingDefinition extends Observable {
 
 	public BindingDefinition(String variableName, Type type, BindingDefinitionType bindingType, boolean mandatory) {
 		super();
-		_variableName = variableName;
-		_type = type;
-		_isMandatory = mandatory;
+		this.variableName = variableName;
+		this.type = type;
+		isMandatory = mandatory;
 		_bindingDefinitionType = bindingType;
 	}
 
@@ -61,27 +61,27 @@ public class BindingDefinition extends Observable {
 	public boolean equals(Object object) {
 		if (object instanceof BindingDefinition) {
 			BindingDefinition bd = (BindingDefinition) object;
-			if (_variableName == null) {
-				if (bd._variableName != null) {
+			if (variableName == null) {
+				if (bd.variableName != null) {
 					return false;
 				}
 			} else {
-				if (!_variableName.equals(bd._variableName)) {
+				if (!variableName.equals(bd.variableName)) {
 					return false;
 				}
 			}
-			return _type == bd._type && _isMandatory == bd._isMandatory;
+			return type == bd.type && isMandatory == bd.isMandatory;
 		} else {
 			return super.equals(object);
 		}
 	}
 
 	public boolean getIsMandatory() {
-		return _isMandatory;
+		return isMandatory;
 	}
 
 	public void setIsMandatory(boolean mandatory) {
-		_isMandatory = mandatory;
+		isMandatory = mandatory;
 	}
 
 	public boolean getIsSettable() {
@@ -89,19 +89,19 @@ public class BindingDefinition extends Observable {
 	}
 
 	public Type getType() {
-		return _type;
+		return type;
 	}
 
 	public void setType(Type type) {
-		_type = type;
+		this.type = type;
 	}
 
 	public String getVariableName() {
-		return _variableName;
+		return variableName;
 	}
 
 	public void setVariableName(String variableName) {
-		_variableName = variableName;
+		this.variableName = variableName;
 	}
 
 	public static final Comparator<BindingDefinition> bindingDefinitionComparator = new BindingDefinitionComparator();
@@ -141,6 +141,10 @@ public class BindingDefinition extends Observable {
 		return _bindingDefinitionType;
 	}
 
+	public void setBindingDefinitionType(BindingDefinitionType bdType) {
+		_bindingDefinitionType = bdType;
+	}
+
 	public String getTypeStringRepresentation() {
 		if (getType() == null) {
 			return FlexoLocalization.localizedForKey("no_type");
@@ -151,8 +155,8 @@ public class BindingDefinition extends Observable {
 
 	@Override
 	public String toString() {
-		return "BindingDefinition[name=" + _variableName + ",type=" + _type + ",mandatory=" + _isMandatory + ",kind="
-				+ _bindingDefinitionType + "]";
+		return "BindingDefinition[name=" + variableName + ",type=" + type + ",mandatory=" + isMandatory + ",kind=" + _bindingDefinitionType
+				+ "]";
 	}
 
 	public void notifyBindingDefinitionTypeChanged() {

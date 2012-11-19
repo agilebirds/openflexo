@@ -38,7 +38,9 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -103,7 +105,14 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public Object getRootValue() {
-		return getWidget().getRoot().getBindingValue(getController());
+		try {
+			return getWidget().getRoot().getBindingValue(getController());
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	// private static final Vector EMPTY_VECTOR = new Vector();
@@ -149,11 +158,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// System.out.println("getComponent().getSelected().isValid()="+getComponent().getSelected().isValid());
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
-		if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-			Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
-			if (returned = notEquals(newSelectedObject, getSelectedObject())) {
-				setSelectedObject(newSelectedObject);
+		try {
+			if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
+				Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
+					setSelectedObject(newSelectedObject);
+				}
 			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 
 		// }
@@ -216,10 +231,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	@Override
-	public List<AbstractBinding> getDependencyBindings() {
-		List<AbstractBinding> returned = super.getDependencyBindings();
-		appendToDependingObjects(getWidget().getSelected(), returned);
-		appendToDependingObjects(getWidget().getRoot(), returned);
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getWidget().getSelected());
+		returned.add(getWidget().getRoot());
 		return returned;
 	}
 

@@ -3,7 +3,6 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.KeyValueCoder;
 import org.openflexo.xmlcode.KeyValueDecoder;

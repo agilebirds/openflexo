@@ -44,9 +44,11 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
@@ -286,7 +288,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 		if (_widget.getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
-			_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
+			try {
+				_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		_widget.updateFont();
@@ -364,7 +372,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		}
 
 		@Override
-		public List<AbstractBinding> getDependencyBindings() {
+		public List<DataBinding<?>> getDependencyBindings() {
 			return getBrowserElementType().getDependencyBindings(representedObject);
 		}
 

@@ -19,77 +19,38 @@
  */
 package org.openflexo.antar.expr;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
-public class Variable extends Expression {
+/**
+ * Represents a basic access to a variable<br>
+ * An instance of Variable is a specialized {@link BindingValue} with a BindingVariable and an empty BindingPath.
+ * 
+ * @author sylvain
+ * 
+ */
+public class Variable extends BindingValue {
 
-	private String name;
+	private static final Logger logger = Logger.getLogger(Variable.class.getPackage().getName());
 
-	public Variable(String name) {
-		super();
-		this.name = name;
+	public Variable(String variableName) {
+		super(makeSingleton(variableName));
 	}
 
-	@Override
-	public int getDepth() {
-		return 0;
+	private static List<AbstractBindingPathElement> makeSingleton(String aVariableName) {
+		List<AbstractBindingPathElement> returned = new ArrayList<BindingValue.AbstractBindingPathElement>();
+		returned.add(new NormalBindingPathElement(aVariableName));
+		return returned;
 	}
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/*@Override
-	public Expression evaluate(EvaluationContext context) {
-		if (context != null) {
-			return context.getVariableFactory().makeVariable(new Word(getName()));
-		}
-		return this;
-	}*/
-
-	@Override
-	public Expression transform(ExpressionTransformer transformer) throws TransformException {
-		return transformer.performTransformation(this);
+		return getVariableName();
 	}
 
 	@Override
-	public EvaluationType getEvaluationType() {
-		return EvaluationType.LITERAL;
-	}
-
-	@Override
-	protected Vector<Expression> getChilds() {
-		return null;
-	}
-
-	public boolean isValid() {
-		if (name.length() == 0) {
-			return false;
-		}
-
-		/*boolean startingPathItem = true;
-		for (int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
-			if (c == '.') {
-				startingPathItem = true;
-			} else {
-				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_' || c == ',') // See
-																																			// Java
-				// authorized
-				// characters
-				|| (c >= '0' && c <= '9' && !startingPathItem));
-				if (!isNormalChar) {
-					return false;
-				}
-				startingPathItem = false;
-			}
-		}*/
+	public boolean isSimpleVariable() {
 		return true;
-
 	}
 
 }

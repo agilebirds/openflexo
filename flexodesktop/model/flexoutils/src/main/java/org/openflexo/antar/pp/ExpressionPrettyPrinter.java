@@ -23,8 +23,8 @@ import java.io.PrintStream;
 
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
 import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
@@ -36,13 +36,11 @@ import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionGrammar;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.Variable;
 
 public abstract class ExpressionPrettyPrinter {
 
@@ -77,17 +75,11 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression == null) {
 			return "null";
 		}
-		if (expression instanceof BindingValueAsExpression) {
-			return makeStringRepresentation((BindingValueAsExpression) expression);
-		}
-		if (expression instanceof Variable) {
-			return makeStringRepresentation((Variable) expression);
+		if (expression instanceof BindingValue) {
+			return makeStringRepresentation((BindingValue) expression);
 		}
 		if (expression instanceof Constant) {
 			return makeStringRepresentation((Constant) expression);
-		}
-		if (expression instanceof Function) {
-			return makeStringRepresentation((Function) expression);
 		}
 		if (expression instanceof UnaryOperatorExpression) {
 			return makeStringRepresentation((UnaryOperatorExpression) expression);
@@ -100,10 +92,6 @@ public abstract class ExpressionPrettyPrinter {
 		}
 		// return "<unknown " + expression.getClass().getSimpleName() + ">";
 		return expression.toString();
-	}
-
-	protected String makeStringRepresentation(Variable variable) {
-		return variable.getName();
 	}
 
 	protected String makeStringRepresentation(Constant constant) {
@@ -127,7 +115,7 @@ public abstract class ExpressionPrettyPrinter {
 		return "???";
 	}
 
-	protected abstract String makeStringRepresentation(BindingValueAsExpression bv);
+	protected abstract String makeStringRepresentation(BindingValue bv);
 
 	protected abstract String makeStringRepresentation(AbstractBindingPathElement e);
 
@@ -146,8 +134,6 @@ public abstract class ExpressionPrettyPrinter {
 	protected abstract String makeStringRepresentation(DurationConstant constant);
 
 	protected abstract String makeStringRepresentation(EnumConstant constant);
-
-	protected abstract String makeStringRepresentation(Function function);
 
 	protected abstract String makeStringRepresentation(UnaryOperatorExpression expression);
 

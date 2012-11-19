@@ -22,13 +22,6 @@ package org.openflexo.antar.expr;
 import java.util.Date;
 import java.util.Vector;
 
-import org.openflexo.antar.expr.oldparser.BooleanValue;
-import org.openflexo.antar.expr.oldparser.DateValue;
-import org.openflexo.antar.expr.oldparser.DurationValue;
-import org.openflexo.antar.expr.oldparser.FloatValue;
-import org.openflexo.antar.expr.oldparser.IntValue;
-import org.openflexo.antar.expr.oldparser.StringValue;
-import org.openflexo.antar.expr.oldparser.Value;
 import org.openflexo.toolbox.Duration;
 
 public abstract class Constant<V> extends Expression {
@@ -96,8 +89,6 @@ public abstract class Constant<V> extends Expression {
 
 	public abstract V getValue();
 
-	public abstract Value getParsingValue();
-
 	public static abstract class BooleanConstant extends Constant<Boolean> {
 		public static BooleanConstant get(boolean value) {
 			if (value) {
@@ -121,10 +112,6 @@ public abstract class Constant<V> extends Expression {
 				return true;
 			}
 
-			@Override
-			public Value getParsingValue() {
-				return new BooleanValue(true);
-			}
 		};
 
 		public static final BooleanConstant FALSE = new BooleanConstant() {
@@ -133,10 +120,6 @@ public abstract class Constant<V> extends Expression {
 				return false;
 			}
 
-			@Override
-			public Value getParsingValue() {
-				return new BooleanValue(false);
-			}
 		};
 	}
 
@@ -162,10 +145,6 @@ public abstract class Constant<V> extends Expression {
 			this.value = value;
 		}
 
-		@Override
-		public Value getParsingValue() {
-			return new StringValue(value);
-		}
 	}
 
 	public static class EnumConstant extends Constant<Enum> {
@@ -187,11 +166,6 @@ public abstract class Constant<V> extends Expression {
 
 		public void setName(String value) {
 			this.name = value;
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new StringValue(name);
 		}
 
 		@Override
@@ -233,11 +207,6 @@ public abstract class Constant<V> extends Expression {
 			return getValue();
 		}
 
-		@Override
-		public Value getParsingValue() {
-			return new IntValue(value);
-		}
-
 	}
 
 	public static class FloatConstant extends ArithmeticConstant<Double> {
@@ -265,11 +234,6 @@ public abstract class Constant<V> extends Expression {
 		@Override
 		public double getArithmeticValue() {
 			return getValue();
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new FloatValue(value);
 		}
 
 	}
@@ -328,11 +292,6 @@ public abstract class Constant<V> extends Expression {
 
 		public void setDate(Date date) {
 			this.date = date;
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new DateValue(date);
 		}
 
 		@Override
@@ -411,11 +370,6 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Value getParsingValue() {
-			return new DurationValue(duration);
-		}
-
-		@Override
 		public Duration getValue() {
 			return getDuration();
 		}
@@ -454,11 +408,6 @@ public abstract class Constant<V> extends Expression {
 		@Override
 		public EvaluationType getEvaluationType() {
 			return EvaluationType.LITERAL;
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return null;
 		}
 
 		@Override

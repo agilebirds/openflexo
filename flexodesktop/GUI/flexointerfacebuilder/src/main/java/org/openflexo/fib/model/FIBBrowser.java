@@ -30,6 +30,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 
@@ -37,9 +38,12 @@ public class FIBBrowser extends FIBWidget {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowser.class.getPackage().getName());
 
+	@Deprecated
 	private BindingDefinition SELECTED;
+	@Deprecated
 	private BindingDefinition ROOT;
 
+	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
 			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
@@ -47,6 +51,7 @@ public class FIBBrowser extends FIBWidget {
 		return SELECTED;
 	}
 
+	@Deprecated
 	public BindingDefinition getRootBindingDefinition() {
 		if (ROOT == null) {
 			ROOT = new BindingDefinition("root", getIteratorClass(), BindingDefinitionType.GET, false);
@@ -55,7 +60,23 @@ public class FIBBrowser extends FIBWidget {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		root, iteratorClass, visibleRowCount, rowHeight, boundToSelectionManager, selectionMode, selected, elements, showFooter, rootVisible, showRootsHandle, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor, borderSelectionColor
+		root,
+		iteratorClass,
+		visibleRowCount,
+		rowHeight,
+		boundToSelectionManager,
+		selectionMode,
+		selected,
+		elements,
+		showFooter,
+		rootVisible,
+		showRootsHandle,
+		textSelectionColor,
+		textNonSelectionColor,
+		backgroundSelectionColor,
+		backgroundSecondarySelectionColor,
+		backgroundNonSelectionColor,
+		borderSelectionColor
 	}
 
 	public enum SelectionMode {
@@ -81,8 +102,8 @@ public class FIBBrowser extends FIBWidget {
 		public abstract int getMode();
 	}
 
-	private DataBinding root;
-	private DataBinding selected;
+	private DataBinding<Object> root;
+	private DataBinding<Object> selected;
 
 	private int visibleRowCount = 5;
 	private int rowHeight = 20;
@@ -117,31 +138,35 @@ public class FIBBrowser extends FIBWidget {
 		return "Browser";
 	}
 
-	public DataBinding getRoot() {
+	public DataBinding<Object> getRoot() {
 		if (root == null) {
-			root = new DataBinding(this, Parameters.root, getRootBindingDefinition());
+			root = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET);
 		}
 		return root;
 	}
 
-	public void setRoot(DataBinding root) {
-		root.setOwner(this);
-		root.setBindingAttribute(Parameters.root);
-		root.setBindingDefinition(getRootBindingDefinition());
+	public void setRoot(DataBinding<Object> root) {
+		if (root != null) {
+			root.setOwner(this);
+			root.setDeclaredType(getIteratorClass());
+			root.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.root = root;
 	}
 
-	public DataBinding getSelected() {
+	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) {
-		selected.setOwner(this);
-		selected.setBindingAttribute(Parameters.selected);
-		selected.setBindingDefinition(getSelectedBindingDefinition());
+	public void setSelected(DataBinding<Object> selected) {
+		if (selected != null) {
+			selected.setOwner(this);
+			selected.setDeclaredType(getIteratorClass());
+			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+		}
 		this.selected = selected;
 	}
 
@@ -154,7 +179,7 @@ public class FIBBrowser extends FIBWidget {
 			element.finalizeBrowserDeserialization();
 		}
 		if (selected != null) {
-			selected.finalizeDeserialization();
+			selected.decode();
 		}
 	}
 

@@ -19,9 +19,9 @@
  */
 package org.openflexo.antar.expr;
 
-import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
-import org.openflexo.antar.expr.BindingValueAsExpression.MethodCallBindingPathElement;
-import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.MethodCallBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
@@ -77,17 +77,6 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	}
 
 	@Override
-	protected String makeStringRepresentation(Function function) {
-		StringBuffer args = new StringBuffer();
-		boolean isFirst = true;
-		for (Expression e : function.getArgs()) {
-			args.append((isFirst ? "" : ",") + getStringRepresentation(e));
-			isFirst = false;
-		}
-		return function.getName() + "(" + args + ")";
-	}
-
-	@Override
 	protected String makeStringRepresentation(UnaryOperatorExpression expression) {
 		try {
 			return "(" + getSymbol(expression.getOperator()) + "(" + getStringRepresentation(expression.getArgument()) + ")" + ")";
@@ -128,7 +117,7 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	}
 
 	@Override
-	protected String makeStringRepresentation(BindingValueAsExpression bv) {
+	protected String makeStringRepresentation(BindingValue bv) {
 		StringBuffer sb = new StringBuffer();
 		boolean isFirst = true;
 		if (bv != null) {

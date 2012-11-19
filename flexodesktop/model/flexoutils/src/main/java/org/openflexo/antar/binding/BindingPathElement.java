@@ -21,7 +21,6 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 

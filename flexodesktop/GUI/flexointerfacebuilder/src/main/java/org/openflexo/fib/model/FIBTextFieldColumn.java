@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 
 public class FIBTextFieldColumn extends FIBTableColumn {
 
@@ -30,21 +31,24 @@ public class FIBTextFieldColumn extends FIBTableColumn {
 		isEditable
 	}
 
+	@Deprecated
 	public static BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class, BindingDefinitionType.GET, false);
 
-	private DataBinding isEditable;
+	private DataBinding<Boolean> isEditable;
 
-	public DataBinding getIsEditable() {
+	public DataBinding<Boolean> getIsEditable() {
 		if (isEditable == null) {
-			isEditable = new DataBinding(this, Parameters.isEditable, IS_EDITABLE);
+			isEditable = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
 		}
 		return isEditable;
 	}
 
-	public void setIsEditable(DataBinding isEditable) {
-		isEditable.setOwner(this);
-		isEditable.setBindingAttribute(Parameters.isEditable);
-		isEditable.setBindingDefinition(IS_EDITABLE);
+	public void setIsEditable(DataBinding<Boolean> isEditable) {
+		if (isEditable != null) {
+			isEditable.setOwner(this);
+			isEditable.setDeclaredType(Boolean.class);
+			isEditable.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.isEditable = isEditable;
 	}
 
@@ -52,7 +56,7 @@ public class FIBTextFieldColumn extends FIBTableColumn {
 	public void finalizeTableDeserialization() {
 		super.finalizeTableDeserialization();
 		if (isEditable != null) {
-			isEditable.finalizeDeserialization();
+			isEditable.decode();
 		}
 	}
 

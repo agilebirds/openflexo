@@ -19,8 +19,10 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -126,8 +128,8 @@ public abstract class Expression {
 			Expression resolvedExpression = transform(new ExpressionTransformer() {
 				@Override
 				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						BindingValueAsExpression bv = (BindingValueAsExpression) e;
+					if (e instanceof BindingValue) {
+						BindingValue bv = (BindingValue) e;
 						if (bv.isSimpleVariable() && variables.get(bv.toString()) != null) {
 							return Constant.makeConstant(variables.get(bv.toString()));
 						}
@@ -195,113 +197,28 @@ public abstract class Expression {
 		throw new UnresolvedExpressionException();
 	}
 
-	public static Vector<Variable> extractVariables(String anExpression) throws ParseException, TypeMismatchException {
-		final Hashtable<String, Variable> returnedHash = new Hashtable<String, Variable>();
-		try {
-			Expression e = ExpressionParser.parse(anExpression);
-			e.transform(new ExpressionTransformer() {
-				@Override
-				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						String variableName = ((BindingValueAsExpression) e).toString();
-						Variable returned = returnedHash.get(variableName);
-						if (returned == null) {
-							returned = new Variable(variableName);
-							returnedHash.put(variableName, returned);
-						}
-						return returned;
-					}
-					return e;
-				}
-			});
-		} catch (ParseException e1) {
-			throw e1;
-		} catch (TransformException e) {
-			e.printStackTrace();
-		}
+	public static List<BindingValue> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
 
-		/*DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
-		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value) {
-				Variable returned = returnedHash.get(value.getValue());
-				if (returned == null) {
-					returned = new Variable(value.getValue());
-					returnedHash.put(value.getValue(), returned);
-				}
-				return returned;
-			}
-		}, new ExpressionParser.DefaultFunctionFactory()));*/
-
-		Vector<Variable> returned = new Vector<Variable>();
-		for (String v : returnedHash.keySet()) {
-			returned.add(returnedHash.get(v));
-		}
-		return returned;
+		return extractPrimitives(ExpressionParser.parse(anExpression));
 	}
 
-	public static Vector<Expression> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
-		final Hashtable<String, Expression> returnedHash = new Hashtable<String, Expression>();
+	public static List<BindingValue> extractPrimitives(final Expression expression) throws ParseException, TypeMismatchException {
+
+		final List<BindingValue> returned = new ArrayList<BindingValue>();
 
 		try {
-			Expression e = ExpressionParser.parse(anExpression);
-			e.transform(new ExpressionTransformer() {
+			expression.visit(new ExpressionVisitor() {
 				@Override
-				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						String variableName = ((BindingValueAsExpression) e).toString();
-						Expression returned = returnedHash.get(variableName);
-						if (returned == null) {
-							returned = new Variable(variableName);
-							returnedHash.put(variableName, returned);
-						}
-						return returned;
+				public void visit(Expression e) {
+					if (e instanceof BindingValue) {
+						returned.add((BindingValue) e);
 					}
-					return e;
 				}
 			});
-		} catch (org.openflexo.antar.expr.parser.ParseException e1) {
-			e1.printStackTrace();
-		} catch (TransformException e) {
-			e.printStackTrace();
+		} catch (VisitorException e) {
+			logger.warning("Unexpected " + e);
 		}
 
-		/*DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
-		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value) {
-				Expression returned = returnedHash.get(value.getValue());
-				if (returned == null) {
-					returned = new Variable(value.getValue());
-					returnedHash.put(value.getValue(), returned);
-				}
-				return returned;
-			}
-		}, new FunctionFactory() {
-			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				StringBuffer key = new StringBuffer();
-				key.append(functionName + "(");
-				for (int i = 0; i < args.size(); i++) {
-					key.append((i > 0 ? "," : "") + "arg" + i);
-				}
-				key.append(")");
-				Expression returned = returnedHash.get(key);
-				if (returned == null) {
-					returned = new Function(functionName, args);
-					returnedHash.put(key.toString(), returned);
-				}
-				return returned;
-			}
-		}));
-		*/
-
-		Vector<Expression> returned = new Vector<Expression>();
-		for (String v : returnedHash.keySet()) {
-			returned.add(returnedHash.get(v));
-		}
 		return returned;
 	}
 
