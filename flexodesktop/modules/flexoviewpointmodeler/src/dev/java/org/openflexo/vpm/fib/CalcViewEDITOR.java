@@ -29,36 +29,35 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.vpm.CEDCst;
 
-public class CalcViewEDITOR {
+public class CalcViewEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
+		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
+		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+
+		ViewPoint calc1 = calcLibrary
+				.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+		calc1.loadWhenUnloaded();
+
+		ViewPoint calc2 = calcLibrary
+				.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
+		calc2.loadWhenUnloaded();
+
+		ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
+		calc3.loadWhenUnloaded();
+
+		return makeArray(calc1, calc2, calc3);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return CEDCst.CALC_VIEW_FIB;
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
-				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-
-				ViewPoint calc1 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-				calc1.loadWhenUnloaded();
-
-				ViewPoint calc2 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
-				calc2.loadWhenUnloaded();
-
-				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-				calc3.loadWhenUnloaded();
-
-				return makeArray(calc1, calc2, calc3);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return CEDCst.CALC_VIEW_FIB;
-			}
-		};
-		editor.launch();
+		main(CalcViewEDITOR.class);
 	}
 
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
