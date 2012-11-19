@@ -207,17 +207,14 @@
 			
     		  <Panel layout="twocols" border="titled" borderTitle="font_and_colors" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)">
     		    <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=right;index=0;expandHorizontally=true;expandVertically=false)">
-    		      <CheckBox data="data.hasSpecificFont" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		      <Label label="define_specific_font" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
-    		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" enable="data.hasSpecificFont" localize="true" />
-    		      <CheckBox data="data.hasSpecificBackgroundColor" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
     		      <Label label="background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-    		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificBackgroundColor"/>
-    		      <CheckBox data="data.hasSpecificForegroundColor" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-     		     <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-     		     <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificForegroundColor"/>
-    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
+    		      <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+     		      <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
     		      <Label label="opaque" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		    </Panel>
   		    </Panel>
   			    

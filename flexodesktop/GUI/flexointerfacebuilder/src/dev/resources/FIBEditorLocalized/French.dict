@@ -310,6 +310,7 @@ trigonometric_sinus=Sinus
 trigonometric_tangent=Tangente
 type_mismatch_on_operator_($0)_supplied_types_are_($1)_and_($2)_while_expected_types_are_($3)=Erreur de tyoe sur l'op\u00E9rateur ($0). Les types utilis\u00E9s sont ($1) et ($2) alors que le type attendu est ($3)
 unary_minus=unary minus
+undefined_value=undefined_value
 undo=D\u00E9faire
 undo_levels=Niveaux de undo
 unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. OpenFlexo continuera de fonctionner mais il est cependant recommand\u00E9 de le red\u00E9marrer.

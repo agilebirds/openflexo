@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" titleFont="Tahoma,0,11" darkLevel="0" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog$SubmitIssueReport">
-  <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="Tahoma,0,11" darkLevel="0" constraints="border(index=0;location=center)">
+<Panel layout="border"  darkLevel="0" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog$SubmitIssueReport">
+  <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel"  darkLevel="0" constraints="border(index=0;location=center)">
     <Label label="label" align="center" localize="true" clickAction="data.openIssueLink()" data="data.issueLinkHyperlink" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)">
       <LocalizedDictionary />
     </Label>

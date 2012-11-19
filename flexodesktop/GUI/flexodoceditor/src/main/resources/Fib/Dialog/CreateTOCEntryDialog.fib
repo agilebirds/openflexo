@@ -4,7 +4,7 @@
   <RadioButtonList columns="1" hGap="0" vGap="-2" format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.kindOfTocEntry" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.toc.action.AddTOCEntry$KindOfTocEntry" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
-  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,13" darkLevel="0" data="(data.kindOfTocEntry.name + &quot;_description&quot;)" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,11" name="KindOfEntryDescriptionPanel">
+  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,13" darkLevel="0" data="(data.kindOfTocEntry.name + &quot;_description&quot;)" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="KindOfEntryDescriptionPanel">
     <Label label="label" align="center" localize="true" data="data.kindOfTocEntry.descriptionKey" constraints="border(location=center)">
       <LocalizedDictionary />
     </Label>
@@ -23,7 +23,7 @@
     <LocalizedDictionary />
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 1)" name="PredefinedSectionPanel">
-    <Label label="label" align="center" localize="true" data="(data.predefinedSectionType.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11">
+    <Label label="label" align="center" localize="true" data="(data.predefinedSectionType.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)">
       <LocalizedDictionary />
     </Label>
     <Label label="title" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
@@ -41,7 +41,7 @@
     <LocalizedDictionary />
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 2)" name="ModelObjectSectionPanel">
-    <Label label="label" align="center" localize="true" data="(data.modelObjectType + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11">
+    <Label label="label" align="center" localize="true" data="(data.modelObjectType + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)">
       <LocalizedDictionary />
     </Label>
     <Label label="title" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
@@ -110,7 +110,7 @@
     <Custom constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;ViewFolder&quot;) &amp; (AccessType.selectedIndex = 0))" localize="true" manageDynamicModel="true" />
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 3)" name="ConditionalSectionPanel">
-    <Label label="please_define_your_condition_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
+    <Label label="please_define_your_condition_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" />
     <Label label="condition" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
@@ -120,7 +120,7 @@
     </Custom>
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 4)" name="IterationSectionPanel">
-    <Label label="please_define_your_iteration_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
+    <Label label="please_define_your_iteration_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" />
     <Label label="iterator_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
     <TextField columns="7" text="TextField" data="data.iteratorName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true" />
     <Label label="iteration" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">

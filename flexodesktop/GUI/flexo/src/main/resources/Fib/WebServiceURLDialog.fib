@@ -8,15 +8,15 @@
     <Label label="Flexo server instance" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=0;gridX=0;index=3;gridWidth=1;insetsTop=6;insetsBottom=3;weightY=0.0;weightX=0.0;fill=none)">
       <LocalizedDictionary />
     </Label>
-    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" data="data.clientParameter.wSURL" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=1;gridX=1;index=4;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=1.0;fill=horizontal)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)" localize="true" />
+    <TextField validateOnReturn="true" columns="30" passwd="false" text="TextField" data="data.clientParameter.wSURL" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=1;gridX=1;index=4;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=1.0;fill=horizontal)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)" localize="true" />
     <Label label="login" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=2;gridX=0;index=5;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)">
       <LocalizedDictionary />
     </Label>
-    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" data="data.clientParameter.wSLogin" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=2;gridX=1;index=6;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
+    <TextField validateOnReturn="true" columns="30" passwd="false" text="TextField" data="data.clientParameter.wSLogin" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=2;gridX=1;index=6;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
     <Label label="password" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=3;gridX=0;index=7;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
       <LocalizedDictionary />
     </Label>
-    <TextField validateOnReturn="true" columns="7" passwd="true" text="TextField" data="data.clientParameter.wSPassword" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=3;gridX=1;index=8;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
+    <TextField validateOnReturn="true" columns="30" passwd="true" text="TextField" data="data.clientParameter.wSPassword" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=3;gridX=1;index=8;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
     <Label label="web_service_remember_and_dont_ask_params_anymore" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=4;gridX=0;index=9;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)">
       <LocalizedDictionary />
     </Label>

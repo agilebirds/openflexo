@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" titleFont="Tahoma,0,11" darkLevel="0" data="data.issue.issuetype" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog" width="480" height="630">
-  <Panel layout="twocols" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5" titleFont="Tahoma,0,11" darkLevel="0" constraints="border(index=0;location=center)">
+<Panel layout="border"  darkLevel="0" data="data.issue.issuetype" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog" width="480" height="630">
+  <Panel layout="twocols" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5"  darkLevel="0" constraints="border(index=0;location=center)">
     <Label label="Title" localize="true" name="summary" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
@@ -48,7 +48,7 @@
       <LocalizedDictionary />
     </Label>
     <File mode="OpenMode" isDirectory="false" data="data.attachFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="attachFile" localize="true" />
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Tahoma,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="80" height="60">
+    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="80" height="60">
       <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Send" constraints="flow(index=0)" name="Send" localize="true" enable="(((!(data.issue.summary.trim.isEmpty)) &amp; (!(data.issue.description.trim.isEmpty))) &amp; (data.issue.issuetype != null))">
         <LocalizedDictionary />
       </Button>
