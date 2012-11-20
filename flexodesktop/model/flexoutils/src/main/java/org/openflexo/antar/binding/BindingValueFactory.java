@@ -243,7 +243,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 	@Override
 	public BindingValue convertFromString(String aValue) {
 
-		// boolean debug = (aValue.startsWith("BasicOntologyEditor_Concept_0.concept"));
+		// boolean debug = (aValue.startsWith("individual.positionName"));
 		if (debug) {
 			System.out.println("OK, decoding BindingValue " + aValue);
 			System.out.println("_bindable=" + _bindable);
