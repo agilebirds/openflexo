@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.EvaluationType;
 
+import com.google.common.primitives.Primitives;
+
 public class TypeUtils {
 
 	static final Logger logger = Logger.getLogger(TypeUtils.class.getPackage().getName());
@@ -146,6 +148,10 @@ public class TypeUtils {
 			return Character.class;
 		}
 		return aClass;
+	}
+
+	public static boolean isPrimitive(Type type) {
+		return type != null && Primitives.allPrimitiveTypes().contains(type);
 	}
 
 	public static boolean isDouble(Type type) {
