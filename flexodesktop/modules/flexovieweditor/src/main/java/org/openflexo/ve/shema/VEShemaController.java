@@ -95,7 +95,11 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
-		getDrawing().delete();
+		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
+		// getDrawing().delete();
+		if (getDrawing().getShema() != null) {
+			getDrawing().getShema().deleteObserver(getDrawing());
+		}
 	}
 
 	@Override
