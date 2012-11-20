@@ -11,6 +11,8 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
       <Label label="version" localize="true" name="ViewpointVersionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewpointVersion" data="data.viewPoint.version" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" columns="5" data="data.index" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

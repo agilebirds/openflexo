@@ -1492,8 +1492,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return getFlexoComponentLibraryResource().getResourceData();
 	}
 
+	@Deprecated
 	public ViewLibrary getShemaLibrary() {
 		return getShemaLibrary(true);
+	}
+
+	public ViewLibrary getViewLibrary() {
+		return getShemaLibrary();
 	}
 
 	public ViewLibrary getShemaLibrary(boolean createIfNotExist) {

@@ -53,6 +53,11 @@ public abstract class ViewLibraryObject extends AbstractViewObject {
 		setShemaLibrary(shemaLibrary);
 	}
 
+	public ViewLibrary getViewLibrary() {
+		return getShemaLibrary();
+	}
+
+	@Deprecated
 	public ViewLibrary getShemaLibrary() {
 		return _shemaLibrary;
 	}

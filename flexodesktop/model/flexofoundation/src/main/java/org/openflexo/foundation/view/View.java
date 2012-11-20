@@ -205,6 +205,21 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	@Override
+	public int getIndex() {
+		if (getShemaDefinition() != null) {
+			return getShemaDefinition().getIndex();
+		}
+		return -1;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().setIndex(index);
+		}
+	}
+
+	@Override
 	public String getDescription() {
 		if (isSerializing()) {
 			return null;
