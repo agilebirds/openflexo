@@ -40,6 +40,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -436,7 +437,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 	}
 
 	public void updateCheckboxVisibility() {
-		checkBox.setVisible(getWidget().getAllowsNull());
+		checkBox.setVisible(getWidget().getAllowsNull() && !TypeUtils.isPrimitive(getComponent().getDataType()));
 	}
 
 	public void updateColumns() {
