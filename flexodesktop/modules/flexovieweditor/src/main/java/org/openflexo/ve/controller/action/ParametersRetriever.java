@@ -359,6 +359,15 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							return parameter.getBindingFactory();
 						}
 					}, true));
+			if (StringUtils.isNotEmpty(((IndividualParameter) parameter).getRenderer())) {
+				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.renderer"),
+						new DataBinding('"' + ((IndividualParameter) parameter).getRenderer() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return parameter.getBindingFactory();
+							}
+						}, true));
+			}
 			individualSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {

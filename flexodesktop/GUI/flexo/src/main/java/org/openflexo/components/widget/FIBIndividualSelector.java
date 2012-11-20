@@ -42,6 +42,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Widget allowing to select an OntologyIndividual<br>
@@ -76,6 +77,8 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 	private OntologyBrowserModel model = null;
 
 	private BindingModel bindingModel;
+
+	private String defaultRenderer = null;
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
@@ -113,6 +116,23 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 		return OntologyIndividual.class;
 	}
 
+	public String getRenderer() {
+		if (getType() != null) {
+			if (renderers.get(getType()) != null) {
+				return renderers.get(getType()).toString();
+			}
+		}
+		return defaultRenderer;
+	}
+
+	@CustomComponentParameter(name = "renderer", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setRenderer(String renderer) {
+		defaultRenderer = renderer;
+		if (getType() != null) {
+			setRepresentationForIndividualOfClass("individual", renderer, getType());
+		}
+	}
+
 	public String renderObject(OntologyObject object) {
 		if (object instanceof OntologyIndividual) {
 			return renderedString((OntologyIndividual) object);
@@ -132,12 +152,33 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 	 * @param type
 	 */
 	public void setRepresentationForIndividualOfClass(String variableName, String expression, OntologyClass type) {
-		renderers.put(type, new DataBinding<String>(expression, this, String.class, BindingDefinitionType.GET));
-		OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null, type.getFlexoOntology());
-		bindingModel.addToBindingVariables(newPathElement);
+		if (renderers.get(type) == null || !renderers.get(type).toString().equals(expression)) {
+			if (renderers.get(type) != null) {
+				logger.info("Was " + renderers.get(type).toString() + " now " + expression);
+			}
+			OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null,
+					type.getFlexoOntology());
+			if (bindingModel.bindingVariableNamed(variableName) != null) {
+				logger.warning("Duplicated binding variable " + variableName);
+				bindingModel.removeFromBindingVariables(bindingModel.bindingVariableNamed(variableName));
+			}
+			bindingModel.addToBindingVariables(newPathElement);
+			DataBinding<String> db = new DataBinding<String>(expression, this, String.class, BindingDefinitionType.GET);
+			renderers.put(type, db);
+		}
 	}
 
 	protected DataBinding<String> getRenderer(OntologyIndividual individual) {
+
+		if (individual == null) {
+			return null;
+		}
+
+		// If default renderer was not already applied to default type, then do it now
+		if (StringUtils.isNotEmpty(defaultRenderer) && getType() != null && renderers.get(getType()) == null) {
+			setRepresentationForIndividualOfClass("individual", defaultRenderer, getType());
+		}
+
 		if (renderers == null) {
 			return null;
 		}
@@ -148,6 +189,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 			}
 		}
 		OntologyClass mostSpecializedClass = OntologyClass.getMostSpecializedClass(matchingClasses);
+
 		return renderers.get(mostSpecializedClass);
 	}
 
@@ -174,12 +216,13 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 
 		if (editedObject != null) {
 			try {
-				return binding.getBindingValue(new BindingEvaluationContext() {
+				String returned = binding.getBindingValue(new BindingEvaluationContext() {
 					@Override
 					public Object getValue(BindingVariable variable) {
 						return editedObject;
 					}
 				});
+				return returned;
 			} catch (Exception e) {
 				return editedObject.getName();
 			}
@@ -213,7 +256,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 	public void setContext(FlexoOntology context) {
 		this.context = context;
 		update();
-		setRepresentationForIndividualOfClass("individual", "individual.uriName", context.getThingConcept());
+		setRepresentationForIndividualOfClass("defaultIndividual", "defaultIndividual.uriName", context.getThingConcept());
 	}
 
 	public OntologyClass getType() {
@@ -224,7 +267,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 	public void setType(OntologyClass rootClass) {
 		this.type = rootClass;
 		update();
-		setRepresentationForIndividualOfClass("rootClass", "individual.uriName", rootClass);
+		// setRepresentationForIndividualOfClass("defaultType", "defaultType.uriName", rootClass);
 	}
 
 	public String getTypeURI() {
@@ -243,11 +286,6 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 				setType(typeClass);
 			}
 		}
-	}
-
-	@CustomComponentParameter(name = "renderer", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRenderer(String renderer) {
-		setRepresentationForIndividualOfClass("individual", renderer, getType());
 	}
 
 	public boolean getHierarchicalMode() {
