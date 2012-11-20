@@ -63,21 +63,19 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.antar.binding.BindingVariableImpl;
-import org.openflexo.antar.binding.FinalBindingPathElement;
-import org.openflexo.antar.binding.MethodCall;
-import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.FunctionPathElement;
+import org.openflexo.antar.binding.FunctionPathElement.FunctionArgument;
+import org.openflexo.antar.binding.JavaMethodPathElement;
 import org.openflexo.antar.binding.MethodDefinition;
-import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.utils.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.table.AbstractModel;
@@ -171,11 +169,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		return reply;
 	}
 
-	public BindingVariableImpl getSelectedBindingVariable() {
+	public BindingVariable getSelectedBindingVariable() {
 		if (listAtIndex(0) != null && listAtIndex(0).getSelectedValue() != null) {
-			return (BindingVariableImpl) ((BindingColumnElement) listAtIndex(0).getSelectedValue()).getElement();
+			return (BindingVariable) ((BindingColumnElement) listAtIndex(0).getSelectedValue()).getElement();
 		} else if (listAtIndex(0) != null && listAtIndex(0).getModel().getSize() == 1) {
-			return (BindingVariableImpl) listAtIndex(0).getModel().getElementAt(0).getElement();
+			return (BindingVariable) listAtIndex(0).getModel().getElementAt(0).getElement();
 		} else {
 			return null;
 		}
@@ -233,20 +231,20 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		return null;
 	}
 
-	protected class MethodCallBindingsModel extends AbstractModel<MethodCall, MethodCallArgument> {
+	protected class MethodCallBindingsModel extends AbstractModel<FunctionPathElement, FunctionArgument> {
 		public MethodCallBindingsModel() {
 			super(null);
-			addToColumns(new IconColumn<MethodCallArgument>("icon", 25) {
+			addToColumns(new IconColumn<FunctionArgument>("icon", 25) {
 				@Override
-				public Icon getIcon(MethodCallArgument entity) {
+				public Icon getIcon(FunctionArgument entity) {
 					return FIBIconLibrary.METHOD_ICON;
 				}
 			});
-			addToColumns(new StringColumn<MethodCallArgument>("name", 100) {
+			addToColumns(new StringColumn<FunctionArgument>("name", 100) {
 				@Override
-				public String getValue(MethodCallArgument arg) {
+				public String getValue(FunctionArgument arg) {
 					if (arg != null) {
-						return arg.getName();
+						return arg.getArgumentName();
 					}
 					/*
 					 * if (paramForValue(bindingValue) != null) return
@@ -255,54 +253,54 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					return "null";
 				}
 			});
-			addToColumns(new StringColumn<MethodCallArgument>("type", 100) {
+			addToColumns(new StringColumn<FunctionArgument>("type", 100) {
 				@Override
-				public String getValue(MethodCallArgument arg) {
+				public String getValue(FunctionArgument arg) {
 					if (arg != null) {
-						return TypeUtils.simpleRepresentation(arg.getType());
+						return TypeUtils.simpleRepresentation(arg.getArgumentType());
 					}
 					return "null";
 				}
 			});
-			addToColumns(new BindingValueColumn<MethodCallArgument>("value", 250, true) {
+			addToColumns(new BindingValueColumn<FunctionArgument>("value", 250, true) {
 
 				@Override
-				public AbstractBinding getValue(MethodCallArgument arg) {
-					return arg.getBinding();
+				public DataBinding getValue(FunctionArgument arg) {
+					return arg.getValue();
 				}
 
 				@Override
-				public void setValue(MethodCallArgument arg, AbstractBinding aValue) {
+				public void setValue(FunctionArgument arg, DataBinding aValue) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Sets value " + arg + " to be " + aValue);
 					}
 					if (arg != null) {
-						arg.setBinding(aValue);
+						arg.setValue(aValue);
 					}
 
 					BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
 				}
 
 				@Override
-				public Bindable getBindableFor(AbstractBinding value, MethodCallArgument rowObject) {
+				public Bindable getBindableFor(DataBinding value, FunctionArgument rowObject) {
 					return BindingSelectorPanel.this._bindingSelector.getBindable();
 				}
 
 				@Override
-				public BindingDefinition getBindingDefinitionFor(AbstractBinding value, MethodCallArgument rowObject) {
+				public BindingDefinition getBindingDefinitionFor(DataBinding value, FunctionArgument rowObject) {
 					if (rowObject != null) {
-						return rowObject.getBindingDefinition();
+						return rowObject.getValue().getBindingDefinition();
 					}
 					return null;
 				}
 
 				@Override
-				public boolean allowsCompoundBinding(AbstractBinding value) {
+				public boolean allowsCompoundBinding(DataBinding value) {
 					return true;
 				}
 
 				@Override
-				public boolean allowsNewEntryCreation(AbstractBinding value) {
+				public boolean allowsNewEntryCreation(DataBinding value) {
 					return false;
 				}
 			});
@@ -317,14 +315,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		 * )bindingValue.getBindingDefinition()).getParam(); } return null; }
 		 */
 
-		public MethodCall getMethodCall() {
+		public FunctionPathElement getFunctionPathElement() {
 			return getModel();
 		}
 
 		@Override
-		public MethodCallArgument elementAt(int row) {
+		public FunctionArgument elementAt(int row) {
 			if (row >= 0 && row < getRowCount()) {
-				return getMethodCall().getArgs().elementAt(row);
+				return getFunctionPathElement().getArguments().get(row);
 			} else {
 				return null;
 			}
@@ -332,8 +330,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public int getRowCount() {
-			if (getMethodCall() != null) {
-				return getMethodCall().getArgs().size();
+			if (getFunctionPathElement() != null) {
+				return getFunctionPathElement().getArguments().size();
 			}
 			return 0;
 		}
@@ -439,14 +437,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			_expressionButton = _controlPanel.addButton("expression", new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (BindingSelectorPanel.this._bindingSelector.getEditedObject() != null) {
-						BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode(new BindingExpression(
-								BindingSelectorPanel.this._bindingSelector.getBindingDefinition(),
-								BindingSelectorPanel.this._bindingSelector.getBindable(), BindingSelectorPanel.this._bindingSelector
-										.getEditedObject()));
-					} else {
-						BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode(null);
-					}
+					BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode();
 				}
 			});
 		}
@@ -587,16 +578,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	}
 
 	public boolean ensureBindingValueExists() {
-		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
-		if (bindingValue == null) {
-			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {
-				bindingValue = _bindingSelector.makeBinding();
-				_bindingSelector.setEditedObject(bindingValue);
-			} else {
-				return false;
-			}
+		if (_bindingSelector.getEditedObject() == null) {
+			return false;
 		}
-		return _bindingSelector.getEditedObject() != null;
+		if (_bindingSelector.getEditedObject().getExpression() == null) {
+			_bindingSelector.getEditedObject().setExpression(_bindingSelector.makeBinding());
+			_bindingSelector.fireEditedObjectChanged();
+		}
+		return true;
 	}
 
 	protected class FilteredJList extends JList {
@@ -662,7 +651,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					if (BindingSelectorPanel.this._bindingSelector.getEditedObject() != null
-							&& BindingSelectorPanel.this._bindingSelector.getEditedObject().isBindingValid()) {
+							&& BindingSelectorPanel.this._bindingSelector.getEditedObject().isValid()) {
 						BindingSelectorPanel.this._bindingSelector.apply();
 					}
 				} else if (e.getClickCount() == 1) {
@@ -702,15 +691,15 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (!ensureBindingValueExists()) {
 						return;
 					}
-					AbstractBinding bindingValue = BindingSelectorPanel.this._bindingSelector.getEditedObject();
-					if (bindingValue instanceof BindingValue) {
+					DataBinding dataBinding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
+					if (dataBinding.isBindingValue()) {
 						int i = _lists.indexOf(e.getSource());
 						if (i > -1 && i < _lists.size() && listAtIndex(i + 1) != null
 								&& listAtIndex(i + 1).getModel().getElementAt(0) != null
 								&& listAtIndex(i + 1).getModel().getElementAt(0).getElement() instanceof BindingPathElement) {
-							((BindingValue) bindingValue).setBindingPathElementAtIndex(listAtIndex(i + 1).getModel().getElementAt(0)
-									.getElement(), i);
-							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
+							((BindingValue) dataBinding.getExpression()).setBindingPathElementAtIndex(listAtIndex(i + 1).getModel()
+									.getElementAt(0).getElement(), i);
+							BindingSelectorPanel.this._bindingSelector.setEditedObject(dataBinding);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
 							listAtIndex(i + 1).requestFocus();
 						}
@@ -720,13 +709,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (!ensureBindingValueExists()) {
 						return;
 					}
-					AbstractBinding bindingValue = BindingSelectorPanel.this._bindingSelector.getEditedObject();
-					if (bindingValue instanceof BindingValue) {
+					DataBinding dataBinding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
+					if (dataBinding.isBindingValue()) {
 						int i = _lists.indexOf(e.getSource()) - 1;
-						if (((BindingValue) bindingValue).getBindingPath().size() > i && i > -1 && i < _lists.size()) {
-							((BindingValue) bindingValue).getBindingPath().removeElementAt(i);
-							((BindingValue) bindingValue).disconnect();
-							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
+						if (((BindingValue) dataBinding.getExpression()).getBindingPath().size() > i && i > -1 && i < _lists.size()) {
+							((BindingValue) dataBinding.getExpression()).removeBindingPathAt(i);
+							// ((BindingValue) dataBinding.getExpression()).disconnect();
+							BindingSelectorPanel.this._bindingSelector.setEditedObject(dataBinding);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
 							listAtIndex(i).requestFocus();
 						}
@@ -748,12 +737,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	int _selectedPathElementIndex = -1;
 
 	protected void resetMethodCallPanel() {
-		if (_bindingSelector.getEditedObject() == null || _bindingSelector.getEditedObject().isStaticValue()
-				|| _bindingSelector.getEditedObject() instanceof BindingValue
-				&& ((BindingValue) _bindingSelector.getEditedObject()).getBindingPath().size() == 0) {
+		if (_bindingSelector.getEditedObject() == null
+				|| _bindingSelector.getEditedObject().isConstant()
+				|| (_bindingSelector.getEditedObject().isBindingValue() && ((BindingValue) _bindingSelector.getEditedObject()
+						.getExpression()).getBindingPath().size() == 0)) {
 			_selectedPathElementIndex = -1;
-		} else if (_bindingSelector.getEditedObject() instanceof BindingValue) {
-			_selectedPathElementIndex = ((BindingValue) _bindingSelector.getEditedObject()).getBindingPath().size();
+		} else if (_bindingSelector.getEditedObject().isBindingValue()) {
+			_selectedPathElementIndex = ((BindingValue) _bindingSelector.getEditedObject().getExpression()).getBindingPath().size();
 		}
 		updateMethodCallPanel();
 	}
@@ -763,14 +753,15 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			logger.fine("updateMethodCallPanel with " + _bindingSelector.editionMode + " binding=" + _bindingSelector.getEditedObject()
 					+ " _selectedPathElementIndex=" + _selectedPathElementIndex);
 		}
-		if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING && _bindingSelector.getEditedObject() instanceof BindingValue) {
-			if (((BindingValue) _bindingSelector.getEditedObject()).isCompoundBinding() && _selectedPathElementIndex == -1) {
-				_selectedPathElementIndex = ((BindingValue) _bindingSelector.getEditedObject()).getBindingPathElementCount();
+		if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING && _bindingSelector.getEditedObject().isBindingValue()) {
+			if (((BindingValue) _bindingSelector.getEditedObject().getExpression()).isCompoundBinding() && _selectedPathElementIndex == -1) {
+				_selectedPathElementIndex = ((BindingValue) _bindingSelector.getEditedObject().getExpression())
+						.getBindingPathElementCount();
 			}
 			if (_selectedPathElementIndex >= _lists.size()) {
 				_selectedPathElementIndex = -1;
 			}
-			BindingValue bindingValue = (BindingValue) _bindingSelector.getEditedObject();
+			BindingValue bindingValue = (BindingValue) _bindingSelector.getEditedObject().getExpression();
 			if (bindingValue == null) {
 				_selectedPathElementIndex = -1;
 			} else if (_selectedPathElementIndex > bindingValue.getBindingPath().size()) {
@@ -783,10 +774,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					BindingColumnElement selectedValue = (BindingColumnElement) list.getSelectedValue();
 					if (selectedValue.getElement() instanceof MethodDefinition) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
-						if (currentElement instanceof MethodCall
-								&& ((MethodCall) currentElement).getMethod().equals(
+						if (currentElement instanceof FunctionPathElement
+								&& ((JavaMethodPathElement) currentElement).getMethod().equals(
 										((MethodDefinition) selectedValue.getElement()).getMethod())) {
-							getMethodCallBindingsModel().setModel((MethodCall) currentElement);
+							getMethodCallBindingsModel().setModel((FunctionPathElement) currentElement);
 							return;
 						}
 					}
@@ -869,20 +860,24 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	@Override
 	protected void update() {
-		AbstractBinding binding = _bindingSelector.getEditedObject();
+		DataBinding binding = _bindingSelector.getEditedObject();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update with " + binding);
 		}
 
-		if (binding == null || binding instanceof StaticBinding) {
+		System.out.println("Update dans BindingSelectorPanel avec binding of " + binding.getExpression().getClass());
+
+		if (binding == null || binding.isConstant()) {
 			clearColumns();
 			if (binding == null) {
 				setEditStaticValue(false);
 			}
-		} else if (binding instanceof BindingValue) {
-			BindingValue bindingValue = (BindingValue) binding;
+		} else if (binding.isBindingValue()) {
+			BindingValue bindingValue = (BindingValue) binding.getExpression();
 			listAtIndex(0).setModel(_bindingSelector.getRootListModel());
 			int lastUpdatedList = 0;
+
+			System.out.println("Hop, on doit se mettre a jour pour " + binding);
 
 			// logger.info("bindingValue.getBindingVariable()="+bindingValue.getBindingVariable());
 
@@ -902,7 +897,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				listAtIndex(0).addListSelectionListener(this);
 				lastUpdatedList = 1;
 				for (int i = 0; i < bindingValue.getBindingPath().size(); i++) {
-					BindingPathElement pathElement = bindingValue.getBindingPath().elementAt(i);
+					BindingPathElement pathElement = bindingValue.getBindingPath().get(i);
 					if (i + 2 == getVisibleColsCount()) {
 						final JList l = makeNewJList();
 						SwingUtilities.invokeLater(new Runnable() {
@@ -919,8 +914,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					 * logger.info("Dernier element: "+pathElement); }
 					 */
 
-					if (!(bindingValue.isConnected() && bindingValue.isLastBindingPathElement(pathElement, i))) {
-						Type resultingType = bindingValue.getBindingPath().getResultingTypeAtIndex(i);
+					if (!(bindingValue.isValid() && bindingValue.isLastBindingPathElement(pathElement, i))) {
+						Type resultingType = bindingValue.getBindingPath().get(i).getType();
 						listAtIndex(i + 2).setModel(_bindingSelector.getListModelFor(bindingValue.getBindingPath().get(i), resultingType));
 						lastUpdatedList = i + 2;
 					}
@@ -960,8 +955,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			cleanLists(lastUpdatedList);
 
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
-				bindingValueRepresentation.setText(_bindingSelector.renderedString(bindingValue));
-				bindingValueRepresentation.setForeground(bindingValue.isBindingValid() ? Color.BLACK : Color.RED);
+				bindingValueRepresentation.setText(_bindingSelector.renderedString(binding));
+				bindingValueRepresentation.setForeground(bindingValue.isValid() ? Color.BLACK : Color.RED);
 				updateMethodCallPanel();
 			}
 
@@ -974,35 +969,35 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		if (binding != null) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Binding " + binding + " isValid()=" + binding.isBindingValid());
+				logger.fine("Binding " + binding + " isValid()=" + binding.isValid());
 			} else if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Binding is null");
 			}
 		}
 
 		// Set connect button state
-		_connectButton.setEnabled(binding != null && binding.isBindingValid());
+		_connectButton.setEnabled(binding != null && binding.isValid());
 		/*if (!binding.isBindingValid()) {
 			logger.info("Binding NOT valid: " + binding);
 			binding.debugIsBindingValid();
 		}*/
-		if (binding != null && binding.isBindingValid()) {
+		if (binding != null && binding.isValid()) {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_connectButton.setSelected(true);
 			}
 		}
 		if (binding != null) {
-			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? Color.BLACK : Color.RED);
-			_bindingSelector.getTextField().setSelectedTextColor(binding.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setForeground(binding.isValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setSelectedTextColor(binding.isValid() ? Color.BLACK : Color.RED);
 		}
 
 		if (_bindingSelector.areStaticValuesAllowed() && staticBindingPanel != null) {
 			staticBindingPanel.updateStaticBindingPanel();
 		}
 
-		if (binding instanceof BindingValue) {
+		if (binding.isBindingValue()) {
 			setEditStaticValue(false);
-		} else if (binding instanceof StaticBinding) {
+		} else if (binding.isConstant()) {
 			setEditStaticValue(true);
 		}
 	}
@@ -1258,23 +1253,19 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 
 		public BindingColumnElement getElementFor(BindingPathElement element) {
-			if (element instanceof MethodCall) {
+			/*if (element instanceof MethodCall) {
 				element = ((MethodCall) element).getMethodDefinition();
-			}
+			}*/
 			for (int i = 0; i < getSize(); i++) {
 				if (getElementAt(i).getElement().equals(element)) {
 					return getElementAt(i);
 				}
 			}
-			/*logger.info("I cannot find " + element + " of "
-					+ (element != null ? element.getClass() : null));
+			logger.info("I cannot find " + element + " of " + (element != null ? element.getClass() : null));
 			for (int i = 0; i < getSize(); i++) {
-				logger.info("Looking with "
-						+ getElementAt(i).getElement()
-						+ " of "
-						+ (getElementAt(i).getElement() != null ? getElementAt(
-								i).getElement().getClass() : null));
-			}*/
+				logger.info("Looking with " + getElementAt(i).getElement() + " of "
+						+ (getElementAt(i).getElement() != null ? getElementAt(i).getElement().getClass() : null));
+			}
 
 			return null;
 		}
@@ -1365,23 +1356,23 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			// TypeUtils.getBaseClass(columnElement.getResultingType());
 			Type resultingType = columnElement.getResultingType();
 
-			if (columnElement.getElement() != null && columnElement.getElement() instanceof BindingVariableImpl) {
-				BindingVariableImpl bv = (BindingVariableImpl) columnElement.getElement();
+			if (columnElement.getElement() != null && columnElement.getElement() instanceof BindingVariable) {
+				BindingVariable bv = (BindingVariable) columnElement.getElement();
 				if (bv.getType() == null) {
 					return true;
 				}
 			} else if (columnElement.getElement() != null) {
-				AbstractBinding binding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
-				if (binding != null && binding instanceof BindingValue) {
-					BindingValue bindingValue = (BindingValue) binding;
-					if (bindingValue.isConnected()
+				DataBinding binding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
+				if (binding != null && binding.isBindingValue()) {
+					BindingValue bindingValue = (BindingValue) binding.getExpression();
+					if (bindingValue.isValid()
 							&& bindingValue.isLastBindingPathElement(columnElement.getElement(), getIndexOfList(this) - 1)) {
 						// setIcon(label, CONNECTED_ICON, list);
 					} else if (columnElement.getResultingType() != null) {
 						if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 							// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 							if (_bindingSelector.getBindable().getBindingFactory()
-									.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
+									.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
 							} else {
 								if (_bindingSelector.getBindingDefinition() != null
 										&& _bindingSelector.getBindingDefinition().getType() != null
@@ -1519,13 +1510,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				return;
 			}
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
-			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
+			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleSimplePathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
 
 			if (BindingSelectorPanel.this._bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				// _accessibleMethods.addAll(KeyValueLibrary.getAccessibleMethods(_type));
-				_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory()
-						.getAccessibleCompoundBindingPathElements(_element));
+				_accessibleProperties
+						.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleFunctionPathElements(_element));
 				// _accessibleProperties.addAll(_element.getAccessibleCompoundBindingPathElements());
 			}
 
@@ -1557,28 +1548,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public void update(Observable observable, Object dataModification) {
-			/*
-			 * if(((dataModification instanceof PropertyRegistered ||
-			 * dataModification instanceof PropertyUnregistered ||
-			 * dataModification instanceof PropertiesReordered) ||
-			 * (dataModification instanceof DMAttributeDataModification &&
-			 * dataModification.propertyName().equals("parentType")) ||
-			 * (dataModification instanceof DMAttributeDataModification &&
-			 * dataModification.propertyName().equals("isClassProperty"))
-			 * 
-			 * ) && observable.equals(_type.getBaseEntity())){ updateValues();
-			 * fireModelChanged(); } if ((dataModification instanceof
-			 * DMAttributeDataModification &&
-			 * (dataModification.propertyName().equals
-			 * ("returnType")||dataModification.propertyName().equals("type"))))
-			 * { updateValues(); fireModelChanged(); if
-			 * (BindingSelectorPanel.this._bindingSelector._selectorPanel!=null)
-			 * BindingSelectorPanel
-			 * .this._bindingSelector._selectorPanel.update(); } if
-			 * (dataModification instanceof ObjectDeleted)
-			 * observable.deleteObserver(this);
-			 */
-
 		}
 
 	}
@@ -1694,32 +1663,35 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				JLabel label = (JLabel) returned;
 				label.setToolTipText(null);
 				iconLabel.setVisible(false);
+
 				if (bce instanceof BindingColumnElement) {
 					BindingColumnElement columnElement = (BindingColumnElement) bce;
 					// Class resultingTypeBaseClass =
 					// TypeUtils.getBaseClass(columnElement.getResultingType());
 					Type resultingType = columnElement.getResultingType();
 					label.setText(columnElement.getLabel());
-					if (!(columnElement.getElement() instanceof FinalBindingPathElement)) {
-						returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
-					}
+					// if (!(columnElement.getElement() instanceof FinalBindingPathElement)) {
+					returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
+					// }
 					if (columnElement.getElement().getType() != null) {
 						returned.setToolTipText(columnElement.getTooltipText());
 					} else {
 						label.setForeground(Color.GRAY);
 					}
 
-					AbstractBinding binding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
-					if (binding != null && binding instanceof BindingValue) {
-						BindingValue bindingValue = (BindingValue) binding;
-						if (bindingValue.isConnected()
+					DataBinding binding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
+					if (binding != null && binding.isBindingValue()) {
+						BindingValue bindingValue = (BindingValue) binding.getExpression();
+						System.out.println("bindingValue=" + bindingValue + " valid=" + isValid());
+						if (bindingValue.isValid()
 								&& bindingValue.isLastBindingPathElement(columnElement.getElement(), _lists.indexOf(list) - 1)) {
+							System.out.println("connecte");
 							returned = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (_bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
+										.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (_bindingSelector.getBindingDefinition() != null
@@ -1738,100 +1710,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						}
 					}
 
-					// TODO: supprimer la dependance a KeyValueProperty:
-					// utiliser seulement l'interface BindingPathElement
-
-					/*
-					 * if (columnElement.getElement() != null &&
-					 * columnElement.getElement() instanceof BindingVariable) {
-					 * BindingVariable bv =
-					 * (BindingVariable)columnElement.getElement();
-					 * label.setText(columnElement.getLabel()); setIcon(label,
-					 * BindingSelector.ARROW_RIGHT_ICON, list); if (bv.getType()
-					 * != null) {
-					 * label.setToolTipText(columnElement.getTooltipText()); }
-					 * else { label.setForeground(Color.GRAY); } } else if
-					 * (columnElement.getElement() != null &&
-					 * columnElement.getElement() instanceof KeyValueProperty) {
-					 * KeyValueProperty property = (KeyValueProperty)
-					 * columnElement.getElement();
-					 * label.setText(columnElement.getLabel()); AbstractBinding
-					 * binding =
-					 * BindingSelectorPanel.this._bindingSelector.getEditedObject
-					 * (); if ((binding != null) && binding instanceof
-					 * BindingValue) { BindingValue bindingValue =
-					 * (BindingValue)binding; if (bindingValue.isConnected() &&
-					 * (bindingValue.isLastBindingPathElement(property,
-					 * _lists.indexOf(list) - 1))) { setIcon(label,
-					 * BindingSelector.CONNECTED_ICON, list); } else if
-					 * (columnElement.getResultingType() != null) { if
-					 * (TypeUtils.isResolved(columnElement.getResultingType())
-					 * && _bindingSelector.getBindable() != null) { if
-					 * (_bindingSelector.getBindable().getBindingFactory().
-					 * getAccessibleBindingPathElements
-					 * (columnElement.getElement()).size() > 0) { setIcon(label,
-					 * BindingSelector.ARROW_RIGHT_ICON, list); } else { if
-					 * ((_bindingSelector.getBindingDefinition() != null) &&
-					 * (_bindingSelector.getBindingDefinition().getType() !=
-					 * null) &&
-					 * (!TypeUtils.isTypeAssignableFrom(_bindingSelector
-					 * .getBindingDefinition
-					 * ().getType(),columnElement.getResultingType(),true))) {
-					 * label.setForeground(Color.GRAY); } if
-					 * ((_bindingSelector.getBindingDefinition() != null) &&
-					 * (_bindingSelector.getBindingDefinition().getIsSettable())
-					 * && !property.isSettable()) {
-					 * label.setForeground(Color.GRAY); } } } } } if (property
-					 * != null) {
-					 * label.setToolTipText(columnElement.getTooltipText()); }
-					 * 
-					 * } else if (columnElement.getElement() != null &&
-					 * columnElement.getElement() instanceof MethodDefinition) {
-					 * MethodDefinition method = (MethodDefinition)
-					 * columnElement.getElement();
-					 * 
-					 * String methodAsString = method.getSimplifiedSignature();
-					 * int idx = _lists.indexOf(list); if (idx > 0) { Type
-					 * context =((BindingColumnElement)_lists.elementAt(idx-1).
-					 * getSelectedValue()).getResultingType(); methodAsString =
-					 * method.getSimplifiedSignature();
-					 * //method.getSimplifiedSignatureInContext(context);
-					 * //methodAsString =
-					 * method.getSimplifiedSignatureInContext(context); }
-					 * 
-					 * label.setText(methodAsString); AbstractBinding binding =
-					 * BindingSelectorPanel
-					 * .this._bindingSelector.getEditedObject(); if ((binding !=
-					 * null) && binding instanceof BindingValue) { BindingValue
-					 * bindingValue = (BindingValue)binding; BindingPathElement
-					 * bpe =
-					 * bindingValue.getBindingPathElementAtIndex(_lists.indexOf
-					 * (list) - 1); if ((bindingValue.isConnected()) &&
-					 * (bindingValue.isLastBindingPathElement(bpe,
-					 * _lists.indexOf(list) - 1)) && ((bpe instanceof
-					 * MethodCall) &&
-					 * (((MethodCall)bpe).getMethod().equals(method
-					 * .getMethod())))) { setIcon(label,
-					 * BindingSelector.CONNECTED_ICON, list); } else if
-					 * (columnElement.getResultingType() != null &&
-					 * resultingType != null) { if
-					 * (_bindingSelector.getBindable(
-					 * ).getBindingFactory().getAccessibleBindingPathElements
-					 * (columnElement.getElement()).size() +
-					 * _bindingSelector.getBindable().getBindingFactory().
-					 * getAccessibleCompoundBindingPathElements
-					 * (columnElement.getElement()).size() > 0) { setIcon(label,
-					 * BindingSelector.ARROW_RIGHT_ICON, list); } else { if
-					 * ((_bindingSelector.getBindingDefinition() != null) &&
-					 * (_bindingSelector.getBindingDefinition().getType() !=
-					 * null) &&
-					 * (!TypeUtils.isTypeAssignableFrom(_bindingSelector
-					 * .getBindingDefinition
-					 * ().getType(),columnElement.getResultingType(),true))) {
-					 * label.setForeground(Color.GRAY); } } } } if
-					 * (method.getType() != null) {
-					 * label.setToolTipText(columnElement.getTooltipText()); } }
-					 */
 				} else {
 					// Happen because of prototype value !
 					// logger.warning("Unexpected type: "+bce+" of "+(bce!=null?bce.getClass():"null"));
@@ -1865,13 +1743,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return;
 		}
 
-		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
-		if (bindingValue == null) {
+		DataBinding dataBinding = _bindingSelector.getEditedObject();
+		if (dataBinding.getExpression() == null) {
 			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {
-				bindingValue = _bindingSelector.makeBinding();
+				dataBinding.setExpression(_bindingSelector.makeBinding());
 				// bindingValue.setBindingVariable(getSelectedBindingVariable());
 				// setEditedObject(bindingValue);
-				// fireEditedObjectChanged();
+				_bindingSelector.fireEditedObjectChanged();
 			} else {
 				return;
 			}
@@ -1888,34 +1766,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 		if (newSelectedIndex < 0) {
 			return;
-			// if (index == 0 && !(list.getSelectedValue() instanceof
-			// BindingVariable)) index = index+1;
-			/*
-			 * if (index == 0 && (list.getSelectedValue() instanceof
-			 * BindingVariable)) { if (list.getSelectedValue() !=
-			 * bindingValue.getBindingVariable()) {
-			 * bindingValue.setBindingVariable((BindingVariable)
-			 * list.getSelectedValue()); setEditedObject(bindingValue);
-			 * fireEditedObjectChanged(); } } else { DMObject selectedValue =
-			 * (DMObject)list.getSelectedValue(); if (selectedValue instanceof
-			 * DMProperty) { if (selectedValue !=
-			 * bindingValue.getBindingPathElementAtIndex(index - 1)) {
-			 * bindingValue.setBindingPathElementAtIndex((DMProperty)selectedValue,
-			 * index - 1); setEditedObject(bindingValue); fireEditedObjectChanged();
-			 * } } else if ((selectedValue instanceof DMMethod) &&
-			 * (_allowsCompoundBindings)) { BindingPathElement currentElement =
-			 * bindingValue.getBindingPathElementAtIndex(index - 1); if
-			 * (!(currentElement instanceof MethodCall) ||
-			 * (((MethodCall)currentElement).getMethod() != selectedValue)) {
-			 * DMMethod method = (DMMethod)selectedValue; MethodCall newMethodCall =
-			 * new MethodCall(bindingValue,method);
-			 * bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
-			 * setEditedObject(bindingValue); fireEditedObjectChanged(); } } }
-			 */
 		}
 
 		// This call will perform BV edition
-		_bindingSelector.valueSelected(index, list, bindingValue);
+		_bindingSelector.valueSelected(index, list, dataBinding);
 
 		list.removeListSelectionListener(this);
 		list.setSelectedIndex(newSelectedIndex);
@@ -1968,8 +1822,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			}
 
 			if (_bindingSelector.getTextField().hasFocus()) {
-				if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject() instanceof BindingValue) {
-					((BindingValue) _bindingSelector.getEditedObject()).disconnect();
+				if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isBindingValue()) {
+					// ((BindingValue) _bindingSelector.getEditedObject()).disconnect();
 				}
 				if (_bindingSelector._selectorPanel != null) {
 					filterWithCurrentInput(textValue);
@@ -2133,7 +1987,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			}
 		}
 
-		if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isBindingValid()) {
+		if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isValid()) {
 			_bindingSelector.apply();
 		}
 	}
@@ -2283,20 +2137,20 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	}
 
 	BindingValue makeBindingValueFromPanel() {
-		if (_bindingSelector.getEditedObject() == null || !(_bindingSelector.getEditedObject() instanceof BindingValue)) {
+		if (_bindingSelector.getEditedObject() == null || !(_bindingSelector.getEditedObject().isBindingValue())) {
 			return null;
 		}
 		int i = 1;
 		BindingColumnElement last = null;
 		while (listAtIndex(i) != null && listAtIndex(i).getSelectedValue() != null) {
 			last = (BindingColumnElement) listAtIndex(i).getSelectedValue();
-			((BindingValue) _bindingSelector.getEditedObject()).setBindingPathElementAtIndex(last.getElement(), i - 1);
+			((BindingValue) _bindingSelector.getEditedObject().getExpression()).setBindingPathElementAtIndex(last.getElement(), i - 1);
 			i++;
 		}
 		if (last != null) {
-			((BindingValue) _bindingSelector.getEditedObject()).removeBindingPathElementAfter(last.getElement());
+			((BindingValue) _bindingSelector.getEditedObject().getExpression()).removeBindingPathElementAfter(last.getElement());
 		}
-		return (BindingValue) _bindingSelector.getEditedObject();
+		return (BindingValue) _bindingSelector.getEditedObject().getExpression();
 	}
 
 }

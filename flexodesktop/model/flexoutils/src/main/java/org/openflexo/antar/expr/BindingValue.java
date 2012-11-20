@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
@@ -107,16 +108,20 @@ public class BindingValue extends Expression {
 	private BindingVariable bindingVariable;
 	private List<BindingPathElement> bindingPath;
 
+	private boolean needsParsing = false;
+
 	private DataBinding<?> dataBinding;
 
-	private boolean isSemanticAnalysisPerformed = false;
-	private boolean isSemanticAnalysisSuccessfull = false;
+	public BindingValue() {
+		this(new ArrayList<AbstractBindingPathElement>());
+	}
 
 	public BindingValue(List<AbstractBindingPathElement> aBindingPath) {
 		super();
 		this.parsedBindingPath = aBindingPath;
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();
+		needsParsing = true;
 	}
 
 	public BindingValue(String stringToParse) throws ParseException {
@@ -149,6 +154,72 @@ public class BindingValue extends Expression {
 		return bindingPath;
 	}
 
+	/**
+	 * @param element
+	 * @param i
+	 */
+	public Type addBindingPathElement(BindingPathElement element) {
+		int index = bindingPath.size();
+		setBindingPathElementAtIndex(element, index);
+		return element.getType();
+	}
+
+	/**
+	 * @param element
+	 * @param i
+	 */
+	public void setBindingPathElementAtIndex(BindingPathElement element, int i) {
+
+		logger.info("setBindingPathElementAtIndex " + element + " index=" + i);
+
+		if (i < bindingPath.size() && bindingPath.get(i) == element) {
+			return;
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Set property " + element + " at index " + i);
+		}
+		if (i < bindingPath.size()) {
+			bindingPath.set(i, element);
+			int size = bindingPath.size();
+			for (int j = i + 1; j < size; j++) {
+				bindingPath.remove(i + 1);
+			}
+		} else if (i == bindingPath.size()) {
+			bindingPath.add(element);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not set property at index " + i);
+			}
+		}
+		parsedBindingPath.clear();
+	}
+
+	public BindingPathElement getBindingPathElementAtIndex(int i) {
+		if (i < bindingPath.size()) {
+			return bindingPath.get(i);
+		}
+		return null;
+	}
+
+	public int getBindingPathElementCount() {
+		return bindingPath.size();
+	}
+
+	public void removeBindingPathElementAfter(BindingPathElement requestedLast) {
+		if (bindingPath != null && bindingPath.get(bindingPath.size() - 1) != null
+				&& bindingPath.get(bindingPath.size() - 1).equals(requestedLast)) {
+			return;
+		} else if (bindingPath != null && bindingPath.get(bindingPath.size() - 1) != null) {
+			parsedBindingPath.clear();
+			bindingPath.remove(bindingPath.size() - 1);
+			removeBindingPathElementAfter(requestedLast);
+		}
+	}
+
+	public void removeBindingPathAt(int index) {
+		bindingPath.remove(index);
+	}
+
 	public BindingPathElement getLastBindingPathElement() {
 		if (getBindingPath() != null && getBindingPath().size() > 0) {
 			return getBindingPath().get(getBindingPath().size() - 1);
@@ -156,14 +227,34 @@ public class BindingValue extends Expression {
 		return getBindingVariable();
 	}
 
+	public boolean isLastBindingPathElement(BindingPathElement element, int index) {
+
+		System.out.println("est ce que " + element + " est bien le dernier et a l'index " + index);
+
+		if (index == 0) {
+			return (element.equals(getBindingVariable()));
+		}
+
+		if (bindingPath.size() < 1) {
+			return false;
+		}
+
+		System.out.println("Reponse: " + (bindingPath.get(bindingPath.size() - 1).equals(element) && index == bindingPath.size()));
+
+		return bindingPath.get(bindingPath.size() - 1).equals(element) && index == bindingPath.size();
+	}
+
 	public BindingVariable getBindingVariable() {
 		return bindingVariable;
 	}
 
+	public void setBindingVariable(BindingVariable bindingVariable) {
+		this.bindingVariable = bindingVariable;
+		bindingPath.clear();
+		parsedBindingPath.clear();
+	}
+
 	public Type getAccessedType() {
-		System.out.println("Quel type accede pour " + this + " ?");
-		System.out.println("data binding = " + getDataBinding());
-		System.out.println("valid = " + isValid());
 		if (isValid() && getLastBindingPathElement() != null) {
 			return getLastBindingPathElement().getType();
 		}
@@ -189,6 +280,15 @@ public class BindingValue extends Expression {
 
 	public boolean isSimpleVariable() {
 		return getParsedBindingPath().size() == 1 && getParsedBindingPath().get(0) instanceof NormalBindingPathElement;
+	}
+
+	public boolean isCompoundBinding() {
+		for (BindingPathElement e : getBindingPath()) {
+			if (e instanceof FunctionPathElement) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/*@Override
@@ -266,7 +366,67 @@ public class BindingValue extends Expression {
 		if (dataBinding == null) {
 			return false;
 		}
-		return performSemanticAnalysis(dataBinding);
+
+		if (needsParsing) {
+			buildBindingPathFromParsedBindingPath(dataBinding);
+		}
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Is BindingValue " + this + " valid ?");
+		}
+
+		if (getBindingVariable() == null) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Invalid binding because _bindingVariable is null");
+			}
+			return false;
+		}
+		if (!_checkBindingPathValid(false)) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Invalid binding because binding path not valid");
+			}
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean _checkBindingPathValid(boolean debug) {
+		if (getBindingVariable() == null) {
+			if (debug) {
+				System.out.println("BindingVariable is null");
+			}
+			return false;
+		}
+		Type currentType = getBindingVariable().getType();
+		BindingPathElement currentElement = getBindingVariable();
+		if (currentType == null) {
+			if (debug) {
+				System.out.println("currentType is null");
+			}
+			return false;
+		}
+
+		for (int i = 0; i < bindingPath.size(); i++) {
+			BindingPathElement element = bindingPath.get(i);
+			if (!TypeUtils.isTypeAssignableFrom(currentElement.getType(), element.getParent().getType(), true)) {
+				if (debug) {
+					System.out.println("Mismatched: " + currentElement.getType() + " and " + element.getParent().getType());
+				}
+				return false;
+			}
+			currentElement = element;
+			currentType = currentElement.getType();
+		}
+
+		if (!TypeUtils.isResolved(currentType)) {
+			if (debug) {
+				System.out.println("Unresolved type: " + currentType);
+			}
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -283,12 +443,9 @@ public class BindingValue extends Expression {
 		return (toString()).hashCode();
 	}
 
-	public boolean performSemanticAnalysis(DataBinding<?> dataBinding) {
-		if (isSemanticAnalysisPerformed) {
-			return isSemanticAnalysisSuccessfull;
-		}
-		isSemanticAnalysisPerformed = true;
-		isSemanticAnalysisSuccessfull = false;
+	public boolean buildBindingPathFromParsedBindingPath(DataBinding<?> dataBinding) {
+
+		needsParsing = false;
 		setDataBinding(dataBinding);
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();
@@ -342,7 +499,6 @@ public class BindingValue extends Expression {
 			}
 		}
 
-		isSemanticAnalysisSuccessfull = true;
 		return true;
 	}
 

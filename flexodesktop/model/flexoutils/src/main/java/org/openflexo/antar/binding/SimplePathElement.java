@@ -20,6 +20,7 @@ public abstract class SimplePathElement implements BindingPathElement, SettableB
 		this.type = type;
 	}
 
+	@Override
 	public BindingPathElement getParent() {
 		return parent;
 	}
@@ -49,5 +50,19 @@ public abstract class SimplePathElement implements BindingPathElement, SettableB
 	@Override
 	public String getSerializationRepresentation() {
 		return getPropertyName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SimplePathElement) {
+			return getParent().equals(((SimplePathElement) obj).getParent())
+					&& getPropertyName().equals(((SimplePathElement) obj).getPropertyName());
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return getPropertyName().hashCode();
 	}
 }

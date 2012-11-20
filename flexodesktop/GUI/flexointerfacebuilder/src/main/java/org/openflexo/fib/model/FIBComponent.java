@@ -710,18 +710,27 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public DataBinding<?> getData() {
 		if (data == null) {
-			data = new DataBinding<Object>(this, getDataType(), BindingDefinitionType.GET);
+			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
 		}
 		return data;
 	}
 
 	public void setData(DataBinding<?> data) {
 		if (data != null) {
-			data.setOwner(this);
-			data.setDeclaredType(getDataType());
-			data.setBindingDefinitionType(BindingDefinitionType.GET);
+			this.data = new DataBinding<Object>(data.getUnparsedBinding(), this, data.getDeclaredType(), data.getBindingDefinitionType()) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
+		} else {
+			this.data = null;
 		}
-		this.data = data;
 	}
 
 	public DataBinding<Boolean> getVisible() {

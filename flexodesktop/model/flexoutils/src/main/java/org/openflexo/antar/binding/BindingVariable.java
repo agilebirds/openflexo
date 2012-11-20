@@ -66,6 +66,11 @@ public class BindingVariable implements BindingPathElement {
 	}
 
 	@Override
+	public boolean isSettable() {
+		return false;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BindingVariable) {
 			return getVariableName().equals(((BindingVariable) obj).getVariableName()) && getType() != null
@@ -75,8 +80,18 @@ public class BindingVariable implements BindingPathElement {
 	}
 
 	@Override
+	public int hashCode() {
+		return (toString()).hashCode();
+	}
+
+	@Override
 	public Object getBindingValue(Object owner, BindingEvaluationContext context) {
 		return context.getValue(this);
+	}
+
+	@Override
+	public BindingPathElement getParent() {
+		return null;
 	}
 
 }

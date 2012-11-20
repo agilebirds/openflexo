@@ -53,7 +53,7 @@ public interface BindingPathElement extends Typed {
 	 * 
 	 * @return
 	 */
-	// public boolean isSettable();
+	public boolean isSettable();
 
 	/**
 	 * Evaluate and return value for related path element, given a binding evaluation context
@@ -67,5 +67,7 @@ public interface BindingPathElement extends Typed {
 	 * @throws TypeMismatchException
 	 */
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException;
+
+	public BindingPathElement getParent();
 
 }

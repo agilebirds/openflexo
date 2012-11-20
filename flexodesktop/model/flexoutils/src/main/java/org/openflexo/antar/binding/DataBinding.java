@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +51,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  * @param <T>
  */
-public class DataBinding<T> implements StringConvertable<DataBinding> {
+public class DataBinding<T> extends Observable implements StringConvertable<DataBinding> {
 
 	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
 
@@ -82,14 +83,19 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 	private BindingDefinition bindingDefinition;
 	private Expression expression;
 
-	public DataBinding(Bindable owner, Type type, BindingDefinitionType bdType) {
+	private Type declaredType = null;
+	private BindingDefinitionType bdType = null;
+
+	public DataBinding(Bindable owner, Type declaredType, BindingDefinitionType bdType) {
 		super();
 		setOwner(owner);
-		setBindingDefinition(new BindingDefinition("unnamed", type, bdType, true));
+		this.declaredType = declaredType;
+		this.bdType = bdType;
+		// setBindingDefinition(new BindingDefinition("unnamed", declaredType, bdType, true));
 	}
 
-	public DataBinding(String unparsed, Bindable owner, Type type, BindingDefinitionType bdType) {
-		this(owner, type, bdType);
+	public DataBinding(String unparsed, Bindable owner, Type declaredType, BindingDefinitionType bdType) {
+		this(owner, declaredType, bdType);
 		setUnparsedBinding(unparsed);
 	}
 
@@ -107,14 +113,16 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 	}
 
 	public BindingDefinition getBindingDefinition() {
+		if (bindingDefinition == null) {
+			bindingDefinition = new BindingDefinition("unamed", declaredType, bdType, false);
+		}
 		return bindingDefinition;
 	}
 
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
-		/*if (bindingDefinition == null) {
-			System.out.println("Binding " + this + " has been set with NULL binding definition !!!");
-		}*/
+		declaredType = bindingDefinition.getType();
+		bdType = bindingDefinition.getBindingDefinitionType();
 	}
 
 	public void decode() {
@@ -134,6 +142,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 	}*/
 
 	public void setExpression(Expression value) {
+		logger.info("setExpression() with " + value);
 		Expression oldValue = this.expression;
 		if (oldValue == null) {
 			if (value == null) {
@@ -160,19 +169,29 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 	}
 
 	public boolean isSettable() {
-		return getExpression() instanceof BindingValue && ((BindingValue) getExpression()).isSettable();
+		return isBindingValue() && ((BindingValue) getExpression()).isSettable();
 	}
 
 	public Type getDeclaredType() {
-		return getBindingDefinition().getType();
+		return declaredType;
 	}
 
-	public void setDeclaredType(Type aType) {
-		getBindingDefinition().setType(aType);
+	public void setDeclaredType(Type aDeclaredType) {
+		declaredType = aDeclaredType;
+		if (bindingDefinition != null) {
+			bindingDefinition.setType(aDeclaredType);
+		}
 	}
 
-	public void setBindingDefinitionType(BindingDefinitionType bdType) {
-		getBindingDefinition().setBindingDefinitionType(bdType);
+	public BindingDefinitionType getBindingDefinitionType() {
+		return bdType;
+	}
+
+	public void setBindingDefinitionType(BindingDefinitionType aBDType) {
+		bdType = aBDType;
+		if (bindingDefinition != null) {
+			bindingDefinition.setBindingDefinitionType(aBDType);
+		}
 	}
 
 	public Type getAnalyzedType() {
@@ -297,6 +316,22 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		return unparsedBinding == null && getExpression() == null;
 	}
 
+	public boolean isExpression() {
+		return getExpression() != null && !(getExpression() instanceof Constant) && !(getExpression() instanceof BindingValue);
+	}
+
+	public boolean isBindingValue() {
+		return getExpression() != null && (getExpression() instanceof BindingValue);
+	}
+
+	public boolean isConstant() {
+		return getExpression() != null && (getExpression() instanceof Constant);
+	}
+
+	public boolean isCompoundBinding() {
+		return isBindingValue() && ((BindingValue) getExpression()).isCompoundBinding();
+	}
+
 	public String getUnparsedBinding() {
 		return unparsedBinding;
 	}
@@ -344,7 +379,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 					@Override
 					public void visit(Expression e) {
 						if (e instanceof BindingValue) {
-							((BindingValue) e).performSemanticAnalysis(DataBinding.this);
+							((BindingValue) e).buildBindingPathFromParsedBindingPath(DataBinding.this);
 						}
 					}
 				});
@@ -360,6 +395,7 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 
 	private void notifyBindingChanged(Expression oldValue, Expression newValue) {
 		getOwner().notifiedBindingChanged(this);
+		logger.info(">>>>>>>>>>>>> Le binding change de " + oldValue + " a " + newValue);
 	}
 
 	private void notifyBindingDecoded() {
@@ -485,4 +521,11 @@ public class DataBinding<T> implements StringConvertable<DataBinding> {
 		return returned;
 	}
 
+	@Override
+	public DataBinding<T> clone() {
+		DataBinding<T> returned = new DataBinding(getOwner(), getDeclaredType(), getBindingDefinitionType());
+		returned.setUnparsedBinding(toString());
+		returned.decode();
+		return returned;
+	}
 }

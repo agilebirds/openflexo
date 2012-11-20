@@ -80,4 +80,9 @@ public class JavaPropertyPathElement extends SimplePathElement {
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		KeyValueCoder.setObjectForKey(target, value, getPropertyName());
 	}
+
+	@Override
+	public String toString() {
+		return "JavaProperty " + getParent().getType() + "#" + getPropertyName();
+	}
 }

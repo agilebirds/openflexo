@@ -50,21 +50,16 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.antar.binding.BindingExpression;
-import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
-import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
-import org.openflexo.antar.binding.BindingExpressionFactory;
-import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.antar.binding.StaticBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
 import org.openflexo.antar.expr.ConditionalExpression;
@@ -87,7 +82,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	static final Logger logger = Logger.getLogger(BindingExpressionPanel.class.getPackage().getName());
 
-	BindingExpression _bindingExpression;
+	DataBinding<?> _bindingExpression;
 
 	protected static ImageIcon iconForOperator(Operator op) {
 		if (op == ArithmeticBinaryOperator.ADDITION) {
@@ -142,10 +137,8 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		return null;
 	}
 
-	public BindingExpressionPanel(BindingExpression bindingExpression) {
+	public BindingExpressionPanel(DataBinding bindingExpression) {
 		super();
-		converter = bindingExpression != null ? bindingExpression.getConverter() : null;
-		// converter = AbstractBinding.bindingExpressionConverter;
 		setLayout(new BorderLayout());
 		_bindingExpression = bindingExpression;
 		init();
@@ -156,7 +149,6 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			rootExpressionPanel.delete();
 		}
 		rootExpressionPanel = null;
-		converter = null;
 		_bindingExpression = null;
 	}
 
@@ -182,12 +174,10 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	protected JPanel evaluationPanel;
 
 	protected ExpressionPrettyPrinter pp = new DefaultExpressionPrettyPrinter();
-	protected BindingExpressionFactory converter;
 
 	private ExpressionInnerPanel focusReceiver = null;
 
-	public void setEditedExpression(BindingExpression bindingExpression) {
-		converter = bindingExpression != null ? bindingExpression.getConverter() : null;
+	public void setEditedExpression(DataBinding bindingExpression) {
 		_bindingExpression = bindingExpression;
 		if (bindingExpression != null) {
 			_setEditedExpression(bindingExpression.getExpression());
@@ -566,7 +556,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		repaint();
 	}
 
-	protected void fireEditedExpressionChanged(BindingExpression expression) {
+	protected void fireEditedExpressionChanged(DataBinding expression) {
 		// Override if required
 	}
 

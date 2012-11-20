@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.expr;
 
+import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
 import org.openflexo.antar.expr.BindingValue.MethodCallBindingPathElement;
 import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
@@ -118,15 +119,25 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(BindingValue bv) {
-		StringBuffer sb = new StringBuffer();
-		boolean isFirst = true;
-		if (bv != null) {
-			for (AbstractBindingPathElement e : bv.getParsedBindingPath()) {
-				sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
-				isFirst = false;
+		if (bv.isValid()) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(bv.getBindingVariable().getVariableName());
+			for (BindingPathElement e : bv.getBindingPath()) {
+				sb.append("." + e.getSerializationRepresentation());
 			}
+			return sb.toString();
+
+		} else {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			if (bv != null) {
+				for (AbstractBindingPathElement e : bv.getParsedBindingPath()) {
+					sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
+					isFirst = false;
+				}
+			}
+			return sb.toString();
 		}
-		return sb.toString();
 	}
 
 	@Override

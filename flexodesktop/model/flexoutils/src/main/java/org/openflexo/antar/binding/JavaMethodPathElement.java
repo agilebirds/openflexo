@@ -52,6 +52,10 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		this.method = method;
 	}
 
+	public MethodDefinition getMethod() {
+		return method;
+	}
+
 	public String getMethodName() {
 		return super.getFunctionName();
 	}
@@ -103,8 +107,8 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		Object[] args = new Object[getArguments().size()];
 		int i = 0;
 
-		for (DataBinding<?> a : getArguments()) {
-			args[i] = TypeUtils.castTo(a.getBindingValue(context), method.getMethod().getGenericParameterTypes()[i]);
+		for (FunctionArgument a : getArguments()) {
+			args[i] = TypeUtils.castTo(a.getValue().getBindingValue(context), method.getMethod().getGenericParameterTypes()[i]);
 			i++;
 		}
 		try {
