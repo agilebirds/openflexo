@@ -22,6 +22,8 @@ package org.openflexo.doceditor.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
+
 import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
@@ -30,6 +32,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
@@ -76,6 +79,11 @@ public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 			}
 
 		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return IconLibrary.IMPORT_ICON;
 	}
 
 }
