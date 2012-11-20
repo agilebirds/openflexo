@@ -41,6 +41,7 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ZipUtils;
 
 public class ExportDocumentationTemplates extends FlexoAction<ExportDocumentationTemplates, DGRepository, CGObject> {
@@ -163,11 +164,12 @@ public class ExportDocumentationTemplates extends FlexoAction<ExportDocumentatio
 	public void exportTOC(DGRepository repository, File repoDir, FlexoProgress progress) throws FlexoException {
 		progress.setSecondaryProgress(FlexoLocalization.localizedForKey("exporting_toc"));
 		ExportTOCAsTemplate export = ExportTOCAsTemplate.actionType.makeNewEmbeddedAction(repository.getTocRepository(), null, this);
-		export.setDestinationFile(new File(repoDir, repository.getTocRepository().getTitle() + ".toc.xml"));
+		String tocFileName = StringUtils.convertAccents(repository.getTocRepository().getTitle());
+		tocFileName = StringUtils.replaceNonMatchingPatterns(tocFileName, ZipUtils.VALID_ENTRY_NAME_REGEXP, "-");
+		export.setDestinationFile(new File(repoDir, tocFileName + ".toc.xml"));
 		export.doAction();
 		if (!export.hasActionExecutionSucceeded()) {
-			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_export_toc") + " "
-					+ repository.getTocRepository().getTitle());
+			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_export_toc") + " " + tocFileName);
 		}
 	}
 
