@@ -579,7 +579,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 
-		for (EditionPatternReference ref : getEditionPatternReferences()) {
+		for (EditionPatternReference ref : new ArrayList<EditionPatternReference>(getEditionPatternReferences())) {
+			if (ref.getEditionPatternInstance() != null) {
+				ref.getEditionPatternInstance().nullifyPatternActor(ref.getPatternRole());
+			}
 			ref.delete();
 		}
 		_editionPatternReferences.clear();

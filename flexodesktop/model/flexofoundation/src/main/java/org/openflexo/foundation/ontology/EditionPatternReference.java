@@ -102,33 +102,49 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 	}
 
+	/**
+	 * Delete the reference (not the instance !!!)
+	 */
 	@Override
 	public void delete() {
-		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+
+		// Why delete the edition pattern instance ????
+		// Just dereference myself
+		/*if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
-		}
+		}*/
+
 		super.delete();
+
+		actors.clear();
+		editionPattern = null;
+		patternRole = null;
+		_editionPatternInstance = null;
+
+		// deleteObservers();
 	}
 
 	private void update() {
 		actors.clear();
-		editionPattern = _editionPatternInstance.getPattern();
-		instanceId = _editionPatternInstance.getInstanceId();
-		for (String role : _editionPatternInstance.getActors().keySet()) {
-			// System.out.println("> role : "+role);
-			FlexoModelObject o = _editionPatternInstance.getActors().get(role);
-			if (o instanceof OntologyObject) {
-				actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
-			} else if (o instanceof ObjectPropertyStatement) {
-				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
-			} else if (o instanceof DataPropertyStatement) {
-				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
-			} else if (o instanceof SubClassStatement) {
-				actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
-			} /*else if (o instanceof ObjectRestrictionStatement) {
-				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
-				}*/else {
-				actors.put(role, new ModelObjectActorReference(o, role, this));
+		if (_editionPatternInstance != null) {
+			editionPattern = _editionPatternInstance.getPattern();
+			instanceId = _editionPatternInstance.getInstanceId();
+			for (String role : _editionPatternInstance.getActors().keySet()) {
+				// System.out.println("> role : "+role);
+				FlexoModelObject o = _editionPatternInstance.getActors().get(role);
+				if (o instanceof OntologyObject) {
+					actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
+				} else if (o instanceof ObjectPropertyStatement) {
+					actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
+				} else if (o instanceof DataPropertyStatement) {
+					actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
+				} else if (o instanceof SubClassStatement) {
+					actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
+				} /*else if (o instanceof ObjectRestrictionStatement) {
+					actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
+					}*/else {
+					actors.put(role, new ModelObjectActorReference(o, role, this));
+				}
 			}
 		}
 	}

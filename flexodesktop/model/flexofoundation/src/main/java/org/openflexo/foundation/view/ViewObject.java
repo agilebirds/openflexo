@@ -271,7 +271,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 
 	@Override
 	public void delete() {
-		if (this._graphicalRepresentation != null) {
+		if (this._graphicalRepresentation != null && this._graphicalRepresentation.getPropertyChangeSupport() != null) {
 			this._graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		super.delete();

@@ -336,8 +336,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			deleteObservers();
 			getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
 			// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
-			// Now we can really set the pcSupport to null here
-			pcSupport = null;
+			// TODO: Now we can really set the pcSupport to null here
+			// Until now, it still create big issues
+			// pcSupport = null;
 		}
 	}
 
