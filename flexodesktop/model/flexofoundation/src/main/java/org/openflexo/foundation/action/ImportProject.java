@@ -5,7 +5,10 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoPamelaResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 
 public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, FlexoModelObject> {
 
@@ -37,7 +40,9 @@ public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		FlexoProject project = getImportingProject();
-		project.getProjectData(true).addToImportedProjects(getProjectToImport());
+		FlexoPamelaResource<ProjectData> resource = (FlexoPamelaResource<ProjectData>) project.getProjectData(true).getFlexoResource();
+		FlexoProjectReference projectReference = resource.getModelFactory().newInstance(FlexoProjectReference.class).init(projectToImport);
+		project.getProjectData(true).addToImportedProjects(projectReference);
 	}
 
 	public FlexoProject getImportingProject() {
