@@ -104,6 +104,10 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		}
 	}
 
+	public ModelFactory getModelFactory() {
+		return modelFactory;
+	}
+
 	public Class<SRD> getResourceDataClass() {
 		return resourceDataClass;
 	}
