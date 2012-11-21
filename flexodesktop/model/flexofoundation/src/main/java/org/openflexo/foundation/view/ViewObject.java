@@ -287,6 +287,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	}
 
 	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
+		// logger.info("************************* setGraphicalRepresentation() dans " + this + " of " + getClass());
 		if (this._graphicalRepresentation != null) {
 			this._graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}

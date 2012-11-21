@@ -43,10 +43,14 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	private Hashtable<ViewShape, VEShapeGR> shapesGR;
 	private Hashtable<ViewConnector, VEConnectorGR> connectorsGR;
 
-	public VEShemaRepresentation(View aShema) {
+	private boolean screenshotOnly;
+
+	public VEShemaRepresentation(View aShema, boolean screenshotOnly) {
 		super(aShema);
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
 		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
+
+		this.screenshotOnly = screenshotOnly;
 
 		shapesGR = new Hashtable<ViewShape, VEShapeGR>();
 		connectorsGR = new Hashtable<ViewConnector, VEConnectorGR>();
@@ -185,7 +189,9 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			VEConnectorGR graphicalRepresentation = new VEConnectorGR(connector, this);
 			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) connector.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
-			connector.setGraphicalRepresentation(graphicalRepresentation);
+			if (!screenshotOnly) {
+				connector.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			return graphicalRepresentation;
 		}
 		VEConnectorGR graphicalRepresentation = new VEConnectorGR(connector, this);
@@ -194,11 +200,20 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	}
 
 	private VEShapeGR buildGraphicalRepresentation(ViewShape shape) {
+		/*if (shape.getGraphicalRepresentation() instanceof VEShapeGR) {
+			VEShapeGR returned = (VEShapeGR) shape.getGraphicalRepresentation();
+			if (!returned.isGRRegistered()) {
+				returned.registerShapeGR(shape, this);
+			}
+			return returned;
+		}*/
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
 			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
-			shape.setGraphicalRepresentation(graphicalRepresentation);
+			if (!screenshotOnly) {
+				shape.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			return graphicalRepresentation;
 		}
 		VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);

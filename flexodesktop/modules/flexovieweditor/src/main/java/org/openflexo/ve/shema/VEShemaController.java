@@ -49,8 +49,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	private VEShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public VEShemaController(VEController controller, View shema) {
-		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
+	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
+		super(new VEShemaRepresentation(shema, screenshotOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
