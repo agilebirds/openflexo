@@ -53,7 +53,6 @@ import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
@@ -101,7 +100,7 @@ public class VPMController extends FlexoController {
 
 	@Override
 	protected void initializePerspectives() {
-		resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
+		resourceCenter = getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();

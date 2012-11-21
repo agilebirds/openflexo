@@ -51,6 +51,8 @@ import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.OperationCancelledException;
@@ -61,7 +63,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
@@ -223,6 +224,11 @@ public class Flexo {
 			}
 
 			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
+			}
+
+			@Override
 			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
 				if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
 					return new BasicInteractiveProjectLoadingHandler(projectDirectory);
@@ -263,7 +269,6 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
-		FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		if (!isDev) {
 			registerShutdownHook();
 		}

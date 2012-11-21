@@ -1,9 +1,9 @@
 package org.openflexo.foundation.rm;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLogger;
 
 public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference {
@@ -18,8 +18,6 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 
 	private ReferenceStatus status = ReferenceStatus.UNRESOLVED;
 
-	private FlexoProject referredProject;
-
 	/**
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getStatus()
 	 */
@@ -29,46 +27,39 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	}
 
 	@Override
-	public FlexoProject getReferredProject() throws ProjectLoadingCancelledException {
-		if (referredProject == null) {
-			referredProject = (FlexoProject) performSuperGetter(REFERRED_PROJECT);
-			if (referredProject == null && getReferringProject() != null && getProjectURI() != null && getProjectRevision() != null) {
-				referredProject = getReferringProject().loadProject(this);
-				if (referredProject != null) {
-					status = ReferenceStatus.RESOLVED;
-					getPropertyChangeSupport().firePropertyChange(STATUS, ReferenceStatus.UNRESOLVED, status);
-				}
-			}
-		}
-		return referredProject;
+	public void setReferredProject(FlexoProject project) {
+		ReferenceStatus old = this.status;
+		performSuperSetter(REFERRED_PROJECT, project);
+		status = project != null ? ReferenceStatus.RESOLVED : ReferenceStatus.UNRESOLVED;
+		getPropertyChangeSupport().firePropertyChange(STATUS, old, status);
 	}
 
 	@Override
 	public String toString() {
-		return "FlexoProjectReference " + getProjectName() + " " + getProjectRevision() + " " + getProjectURI();
+		return "FlexoProjectReference " + getName() + " " + getRevision() + " " + getURI();
 	}
 
 	/**
-	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectName()
+	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getName()
 	 */
 	@Override
-	public String getProjectName() {
-		if (referredProject != null) {
-			return referredProject.getProjectName();
+	public String getName() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getProjectName();
 		} else {
-			return (String) performSuperGetter(PROJECT_NAME);
+			return (String) performSuperGetter(NAME);
 		}
 	}
 
 	/**
-	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectURI()
+	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getURI()
 	 */
 	@Override
-	public String getProjectURI() {
-		if (referredProject != null) {
-			return referredProject.getProjectURI();
+	public String getURI() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getProjectURI();
 		} else {
-			return (String) performSuperGetter(PROJECT_URI);
+			return (String) performSuperGetter(URI);
 		}
 	}
 
@@ -76,11 +67,11 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectVersion()
 	 */
 	@Override
-	public String getProjectVersion() {
-		if (referredProject != null) {
-			return referredProject.getVersion();
+	public String getVersion() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getVersion();
 		} else {
-			return (String) performSuperGetter(PROJECT_VERSION);
+			return (String) performSuperGetter(VERSION);
 		}
 	}
 
@@ -88,11 +79,20 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectRevision()
 	 */
 	@Override
-	public Long getProjectRevision() {
-		if (referredProject != null) {
-			return referredProject.getRevision();
+	public Long getRevision() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getRevision();
 		} else {
-			return (Long) performSuperGetter(PROJECT_REVISION);
+			return (Long) performSuperGetter(REVISION);
+		}
+	}
+
+	@Override
+	public File getFile() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getProjectDirectory();
+		} else {
+			return (File) performSuperGetter(FILE);
 		}
 	}
 

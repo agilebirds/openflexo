@@ -20,16 +20,15 @@
 package org.openflexo.foundation.ontology;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.toolbox.FileUtils;
@@ -48,7 +47,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	private static FlexoProject _project;
 
 	private static File _resourceCenterDirectory;
-	private static FlexoResourceCenter _resourceCenter;
+	private static FlexoResourceCenterService _resourceCenter;
 
 	public TestProjectOntologyManipulations(String name) {
 		super(name);
@@ -59,18 +58,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	 */
 	public void test0InstanciateNewResourceCenter() {
 		log("test0InstanciateNewResourceCenter()");
-
-		try {
-			File tempFile = File.createTempFile("LocalResourceCenter", "");
-			_resourceCenterDirectory = new File(tempFile.getParentFile(), tempFile.getName());
-			_resourceCenterDirectory.mkdirs();
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-
-		_resourceCenter = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(_resourceCenterDirectory);
-
+		_resourceCenter = getNewResourceCenter(TestProjectOntologyManipulations.class.getSimpleName());
 	}
 
 	/**
@@ -218,6 +206,9 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 		_project.getProjectOntology().describe();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		if (_resourceCenter != null && _resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) _resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+		}
 		_project = null;
 		_editor = null;
 		_resourceCenter = null;

@@ -22,7 +22,6 @@ package org.openflexo.vpm.controller;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.module.FlexoResourceCenterService;
 
 class CalcLibraryBrowser extends VPMBrowser {
 	protected CalcLibraryBrowser(VPMController controller) {
@@ -35,10 +34,6 @@ class CalcLibraryBrowser extends VPMBrowser {
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE);
-		/*		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
-				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
-				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.HIDE);
-				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.HIDE);*/
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.CALC_FOLDER, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.SHOW);
@@ -49,7 +44,7 @@ class CalcLibraryBrowser extends VPMBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		return FlexoResourceCenterService.getInstance().getFlexoResourceCenter().retrieveViewPointLibrary();
+		return _controller.getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter().retrieveViewPointLibrary();
 	}
 
 }

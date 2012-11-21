@@ -9,7 +9,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
@@ -25,6 +26,8 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 	private M main;
 
 	private File workingDir;
+
+	private FlexoResourceCenterService impl;
 
 	protected AbstractTestExternalBuilders(Class<M> mainClass) {
 		super();
@@ -50,9 +53,8 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 			}
 		}
 		main = mainClass.newInstance();
-		LocalResourceCenterImplementation impl = LocalResourceCenterImplementation
-				.instanciateNewLocalResourceCenterImplementation(new File(workingDir, "ResourceCenter"));
-		main.setResourceCenter(impl);
+		impl = DefaultResourceCenterService.getNewInstance(new File(workingDir, "ResourceCenter"));
+		main.setResourceCenterService(impl);
 	}
 
 	public List<String> getArgList() {

@@ -22,7 +22,6 @@ package org.openflexo.foundation.ontology;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.owl.OWLClass;
@@ -33,6 +32,7 @@ import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.toolbox.FileResource;

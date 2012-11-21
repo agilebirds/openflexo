@@ -63,7 +63,8 @@ import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -175,10 +176,9 @@ public abstract class FlexoTestCase extends TestCase {
 		return createProject(projectName, getNewResourceCenter(projectName));
 	}
 
-	protected LocalResourceCenterImplementation getNewResourceCenter(String name) {
+	protected FlexoResourceCenterService getNewResourceCenter(String name) {
 		try {
-			return LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(FileUtils.createTempDirectory(name,
-					"ResourceCenter"));
+			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
@@ -186,7 +186,7 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
-	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
+	protected FlexoEditor createProject(String projectName, FlexoResourceCenterService resourceCenterService) {
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File _projectDirectory = null;
 		try {
@@ -199,7 +199,7 @@ public abstract class FlexoTestCase extends TestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		String _projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenter);
+		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenterService);
 		logger.info("Project has been SUCCESSFULLY created");
 		try {
 			reply.getProject().setProjectName(_projectIdentifier/*projectName*/);
@@ -242,11 +242,12 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
-	protected FlexoEditor reloadProject(File prjDir, FlexoResourceCenter resourceCenter, FlexoProjectReferenceLoader projectReferenceLoader) {
+	protected FlexoEditor reloadProject(File prjDir, FlexoResourceCenterService resourceCenterService,
+			FlexoProjectReferenceLoader projectReferenceLoader) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
-					new DefaultProjectLoadingHandler(), projectReferenceLoader, resourceCenter));
+					new DefaultProjectLoadingHandler(), projectReferenceLoader, resourceCenterService));
 			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {

@@ -57,6 +57,7 @@ public class BasicTests extends TestCase {
 	public void setUp() throws Exception {
 		new File("/tmp").mkdirs();
 		factory = new ModelFactory();
+		factory.importClass(FlexoProcess.class);
 		deserializer = new XMLDeserializer(factory);
 		serializer = new XMLSerializer(factory.getStringEncoder());
 	}

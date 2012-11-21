@@ -1,11 +1,13 @@
 package org.openflexo.foundation.reuse;
 
 import java.io.File;
+import java.util.List;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -22,7 +24,7 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	private static final String SUB_PROCESS_NAME = "My Sub Process";
 	private static final String SUB_PROCESS_NODE_NAME = "A Sub Process Node";
-	private LocalResourceCenterImplementation resourceCenter;
+	private FlexoResourceCenterService resourceCenter;
 	private File rootProjectDirectory;
 	private File importedProjectDirectory;
 	private FlexoEditor rootEditor;
@@ -33,11 +35,11 @@ public class TestProjectReuse extends FlexoTestCase {
 	class ProjectReferenceLoader implements FlexoProjectReferenceLoader {
 
 		@Override
-		public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException {
-			if (importedProject != null) {
-				return importedProject;
+		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
+			if (importedProject == null) {
+				importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
 			}
-			return importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
+			references.get(0).setReferredProject(importedProject);
 		}
 
 	}
@@ -61,8 +63,8 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		if (resourceCenter != null) {
-			FileUtils.deleteDir(resourceCenter.getLocalDirectory());
+		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
 		}
 		if (rootProject != null) {
 			rootProject.close();

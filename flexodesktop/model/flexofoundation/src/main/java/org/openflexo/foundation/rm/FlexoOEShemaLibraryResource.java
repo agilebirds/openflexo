@@ -155,7 +155,8 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
 		}
-		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().retrieveViewPointLibrary());
+		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().getOpenFlexoResourceCenter()
+				.retrieveViewPointLibrary());
 		builder.shemaLibrary = _resourceData;
 		return builder;
 	}

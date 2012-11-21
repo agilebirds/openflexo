@@ -71,7 +71,6 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -1242,13 +1241,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		appendRoles(roleList, reply);
 		if (getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				try {
-					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-						appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), reply);
-					}
-				} catch (ProjectLoadingCancelledException e) {
-					e.printStackTrace();
+				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+					appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), reply);
 				}
+
 			}
 		}
 		appendRoles(getImportedRoleList(), reply);

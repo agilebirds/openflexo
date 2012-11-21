@@ -2,6 +2,7 @@ package org.openflexo.foundation.rm;
 
 import java.util.List;
 
+import org.openflexo.foundation.rm.FlexoProjectReference.ReferenceStatus;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
@@ -32,7 +33,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 	@Setter(FLEXO_RESOURCE)
 	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
 
-	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.PROJECT_URI, isMultiValued = false)
+	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.URI, isMultiValued = false)
 	public FlexoProjectReference getProjectReferenceWithURI(String uri);
 
 	public FlexoProject getImportedProjectWithURI(String uri);
@@ -56,8 +57,6 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	@Setter(value = IMPORTED_PROJECTS)
 	public void setImportedProjects(List<FlexoProjectReference> importedProjects);
-
-	public void addToImportedProjects(FlexoProject project) throws ProjectImportLoopException, ProjectLoadingCancelledException;
 
 	@Adder(IMPORTED_PROJECTS)
 	public void addToImportedProjects(FlexoProjectReference projectReference) throws ProjectImportLoopException,
@@ -95,44 +94,29 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		@Override
 		public FlexoProject getImportedProjectWithURI(String projectURI, boolean searchRecursively) {
 			for (FlexoProjectReference ref : getImportedProjects()) {
-				if (ref.getProjectURI().equals(projectURI)) {
-					try {
-						return ref.getReferredProject();
-					} catch (ProjectLoadingCancelledException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				if (ref.getURI().equals(projectURI)) {
+					return ref.getReferredProject();
+
 				}
 			}
 			if (searchRecursively) {
 				for (FlexoProjectReference ref : getImportedProjects()) {
 					FlexoProject projectWithURI = null;
-					try {
-						ProjectData projectData = ref.getReferredProject().getProjectData();
-						if (projectData != null) {
-							projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
-						}
-						if (projectWithURI != null) {
-							return projectWithURI;
-						}
-					} catch (ProjectLoadingCancelledException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					ProjectData projectData = ref.getReferredProject().getProjectData();
+					if (projectData != null) {
+						projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
 					}
+					if (projectWithURI != null) {
+						return projectWithURI;
+					}
+
 				}
 			}
 			return null;
 		}
 
 		@Override
-		public void addToImportedProjects(FlexoProject project) throws ProjectImportLoopException, ProjectLoadingCancelledException {
-			FlexoProjectReference projectReference = getModelFactory().newInstance(FlexoProjectReference.class).init(project);
-			addToImportedProjects(projectReference);
-		}
-
-		@Override
-		public void addToImportedProjects(FlexoProjectReference projectReference) throws ProjectImportLoopException,
-				ProjectLoadingCancelledException {
+		public void addToImportedProjects(FlexoProjectReference projectReference) throws ProjectImportLoopException {
 			if (!isDeserializing()) {
 				if (getImportedProjects().contains(projectReference)) {
 					return;
@@ -143,6 +127,15 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 				}
 			}
 			performSuperAdder(IMPORTED_PROJECTS, projectReference);
+			if (!isDeserializing() && projectReference.getStatus() == ReferenceStatus.RESOLVED) {
+				getProject().getFlexoRMResource().addToDependentResources(projectReference.getReferredProject().getFlexoRMResource());
+			}
+		}
+
+		@Override
+		public void removeFromImportedProjects(FlexoProjectReference projectReference) {
+			getProject().getFlexoRMResource().removeFromDependentResources(projectReference.getReferredProject().getFlexoRMResource());
+			performSuperRemover(IMPORTED_PROJECTS, projectReference);
 		}
 
 		@Override
@@ -162,13 +155,9 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		@Override
 		public void removeFromImportedProjects(FlexoProject project) {
 			for (FlexoProjectReference ref : getImportedProjects()) {
-				try {
-					if (ref.getReferredProject() == project) {
-						removeFromImportedProjects(ref);
-						break;
-					}
-				} catch (ProjectLoadingCancelledException e) {
-					e.printStackTrace();
+				if (ref.getReferredProject() == project) {
+					removeFromImportedProjects(ref);
+					break;
 				}
 			}
 		}

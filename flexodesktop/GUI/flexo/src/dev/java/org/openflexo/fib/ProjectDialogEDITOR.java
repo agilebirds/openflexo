@@ -24,17 +24,17 @@ import java.io.File;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.module.FlexoResourceCenterService;
 
 public class ProjectDialogEDITOR {
 
 	public static FlexoEditor loadProject(File prjDir) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
 		FlexoEditor editor = null;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
@@ -45,15 +45,10 @@ public class ProjectDialogEDITOR {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
 		if (editor == null) {
 			System.exit(-1);
 		}
 		return editor;
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
 	}
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {

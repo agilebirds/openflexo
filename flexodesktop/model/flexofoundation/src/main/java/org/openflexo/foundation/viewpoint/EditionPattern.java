@@ -646,27 +646,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		@Override
 		public EditionPattern convertFromString(String value) {
 			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
-			/*String viewPointURI;
-			String editionPattern;
-			StringTokenizer st = new StringTokenizer(value, "#");
-			if (st.hasMoreElements()) {
-				viewPointURI = st.nextToken();
-				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(viewPointURI);
-				if (calc == null) {
-					logger.warning("Could not find calc " + viewPointURI);
-				} else {
-					if (st.hasMoreElements()) {
-						editionPattern = st.nextToken();
-						EditionPattern returned = calc.getEditionPattern(editionPattern);
-						if (calc == null) {
-							logger.warning("@@@@@@@@@@@@@@@@ Could not find edition pattern " + editionPattern);
-						} else {
-							return returned;
-						}
-					}
-				}
-			}
-			return null;*/
 		}
 
 		@Override

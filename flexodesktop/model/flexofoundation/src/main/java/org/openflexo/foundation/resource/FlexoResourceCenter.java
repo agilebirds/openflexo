@@ -20,6 +20,7 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -28,8 +29,10 @@ import javax.annotation.Nullable;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.toolbox.IProgress;
 
+@ModelEntity
 public interface FlexoResourceCenter {
 
 	/**
@@ -40,7 +43,7 @@ public interface FlexoResourceCenter {
 	 * @return a list of all resources available in this resource center.
 	 */
 	public @Nonnull
-	List<FlexoResource> getAllResources(@Nullable IProgress progress);
+	List<FlexoResource<?>> getAllResources(@Nullable IProgress progress);
 
 	/**
 	 * Returns the resource identified by the given <code>uri</code> and the provided <code>version</code>.
@@ -50,13 +53,14 @@ public interface FlexoResourceCenter {
 	 * @param version
 	 *            the version of the resource
 	 * @param type
-	 *            the type of the resource to retrieve. The implementation is responsible to make the appropriate type verifications.
+	 *            the type of the resource data reference by the resource to retrieve. The implementation is responsible to make the
+	 *            appropriate type verifications.
 	 * @param progress
 	 *            a progress monitor that will be notified of the progress of this task. This parameter can be <code>null</code>
 	 * @return the resource with the given <code>uri</code> and the provided <code>version</code>, or null if it cannot be found.
 	 */
 	public @Nullable
-	<T extends FlexoResource> T retrieveResource(@Nonnull String uri, @Nonnull String version, @Nonnull Class<T> type,
+	<T extends ResourceData<T>> FlexoResource<T> retrieveResource(@Nonnull String uri, @Nonnull String version, @Nonnull Class<T> type,
 			@Nullable IProgress progress);
 
 	/**
@@ -65,14 +69,16 @@ public interface FlexoResourceCenter {
 	 * @param uri
 	 *            the URI of the resource
 	 * @param type
-	 *            the type of the resource to retrieve. The implementation is responsible to make the appropriate type verifications.
+	 *            the type of the resource data reference by the resource to retrieve. The implementation is responsible to make the
+	 *            appropriate type verifications.
 	 * @param progress
 	 *            a progress monitor that will be notified of the progress of this task. This parameter can be <code>null</code>
 	 * @return all available versions of the resource identified by the given <code>uri</code>. An empty list is returned if no match were
 	 *         found
 	 */
 	public @Nonnull
-	<T extends FlexoResource> List<T> retrieveResource(@Nonnull String uri, @Nonnull Class<T> type, @Nullable IProgress progress);
+	<T extends ResourceData<T>> List<FlexoResource<T>> retrieveResource(@Nonnull String uri, @Nonnull Class<T> type,
+			@Nullable IProgress progress);
 
 	/**
 	 * Publishes the resource in this resource center.
@@ -87,13 +93,13 @@ public interface FlexoResourceCenter {
 	 * @throws Exception
 	 *             in case the publication of this resource failed.
 	 */
-	public void publishResource(@Nonnull FlexoResource resource, @Nullable String newVersion, @Nullable IProgress progress)
+	public void publishResource(@Nonnull FlexoResource<?> resource, @Nullable String newVersion, @Nullable IProgress progress)
 			throws Exception;
 
 	/**
 	 * Refreshes this resource center. This can be particularly useful for caching implementations.
 	 */
-	public void update();
+	public void update() throws IOException;
 
 	@Deprecated
 	public OntologyLibrary retrieveBaseOntologyLibrary();

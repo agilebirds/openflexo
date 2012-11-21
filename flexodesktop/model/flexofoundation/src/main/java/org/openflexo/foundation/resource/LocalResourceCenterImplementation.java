@@ -17,10 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation;
+package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,8 +29,6 @@ import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.xsd.XSOntology;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -272,25 +271,22 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	@Override
-	public List<FlexoResource> getAllResources(IProgress progress) {
-		// TODO Auto-generated method stub
+	public List<FlexoResource<?>> getAllResources(IProgress progress) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public <T extends ResourceData<T>> List<FlexoResource<T>> retrieveResource(String uri, Class<T> type, IProgress progress) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
 		return null;
 	}
 
 	@Override
-	public <T extends FlexoResource> T retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T extends FlexoResource> List<T> retrieveResource(String uri, Class<T> type, IProgress progress) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void publishResource(FlexoResource resource, String newVersion, IProgress progress) throws Exception {
+	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
 		// TODO Auto-generated method stub
 
 	}

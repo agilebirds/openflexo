@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.module.ModuleLoader;
@@ -18,6 +19,8 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	private FlexoEditor applicationEditor;
 
 	private FlexoProjectReferenceLoader projectReferenceLoader;
+
+	private FlexoResourceCenterService resourceCenterService;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -34,8 +37,12 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		return projectLoader;
 	}
 
-	public FlexoProjectReferenceLoader getProjectReferenceLoader() {
+	public final FlexoProjectReferenceLoader getProjectReferenceLoader() {
 		return projectReferenceLoader;
+	}
+
+	public final FlexoResourceCenterService getResourceCenterService() {
+		return resourceCenterService;
 	}
 
 	public final FlexoEditor getApplicationEditor() {
@@ -51,5 +58,7 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	protected abstract FlexoEditor createApplicationEditor();
 
 	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
+
+	protected abstract FlexoResourceCenterService createResourceCenterService();
 
 }

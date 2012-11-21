@@ -1,6 +1,7 @@
 package org.openflexo.builders;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.openflexo.ApplicationContext;
@@ -12,6 +13,8 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
@@ -20,6 +23,7 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.toolbox.FileUtils;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -37,38 +41,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	private ApplicationContext applicationContext;
 
 	public FlexoExternalMainWithProject() {
-		applicationContext = new ApplicationContext() {
 
-			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
-				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
-				builderEditor.setFactory(new FlexoProgressFactory() {
-					@Override
-					public FlexoProgress makeFlexoProgress(String title, int steps) {
-						return new FlexoBuilderProgress(title, steps);
-					}
-				});
-				return builderEditor;
-			}
-
-			@Override
-			protected FlexoEditor createApplicationEditor() {
-				return new DefaultFlexoEditor(null);
-			}
-
-			@Override
-			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-				return null;
-			}
-
-			@Override
-			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Project reference loader is not implemented for external builders");
-				}
-				return null;
-			}
-		};
 	}
 
 	/**
@@ -107,6 +80,52 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		if (projectDirectory == null) {
 			throw new MissingArgumentException("Project directory");
 		}
+		if (getWorkingDir() == null || !getWorkingDir().exists() || !getWorkingDir().canWrite()) {
+			try {
+				workingDir = FileUtils.createTempDirectory(getClass().getSimpleName(), "");
+			} catch (IOException e) {
+				e.printStackTrace();
+				setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
+				return;
+			}
+		}
+		applicationContext = new ApplicationContext() {
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
+				builderEditor.setFactory(new FlexoProgressFactory() {
+					@Override
+					public FlexoProgress makeFlexoProgress(String title, int steps) {
+						return new FlexoBuilderProgress(title, steps);
+					}
+				});
+				return builderEditor;
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return DefaultResourceCenterService.getNewInstance(getWorkingDir());
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return new DefaultFlexoEditor(null);
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return null;
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Project reference loader is not implemented for external builders");
+				}
+				return null;
+			}
+		};
 		try {
 			editor = loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
@@ -196,7 +215,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
 		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, applicationContext,
-				getResourceCenter());
+				getResourceCenterService());
 	}
 
 }

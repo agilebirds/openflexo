@@ -56,13 +56,13 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	private final ViewPointFolder rootFolder;
 
-	public ViewPointLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary anOntologyLibrary) {
+	public ViewPointLibrary(FlexoResourceCenter resourceCenterService, OntologyLibrary anOntologyLibrary) {
 		super();
 
-		editionPatternConverter = new EditionPatternConverter(resourceCenter);
+		editionPatternConverter = new EditionPatternConverter(resourceCenterService);
 		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
 
-		this.resourceCenter = resourceCenter;
+		this.resourceCenter = resourceCenterService;
 		ontologyLibrary = anOntologyLibrary;
 		calcs = new Vector<ViewPoint>();
 		map = new Hashtable<String, ViewPoint>();

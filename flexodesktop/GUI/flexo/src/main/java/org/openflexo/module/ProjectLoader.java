@@ -46,7 +46,6 @@ import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
@@ -165,7 +164,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
 					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
-					getResourceCenter());
+					applicationContext.getResourceCenterService());
 			newEditor(editor);
 		} finally {
 			ProgressWindow.hideProgressWindow();
@@ -180,10 +179,6 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		loadProject(projectDirectory);
 	}
 
-	private FlexoResourceCenter getResourceCenter() {
-		return FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
-	}
-
 	public FlexoEditor newProject(File projectDirectory) {
 		if (!ProgressWindow.hasInstance()) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("building_new_project"), 10);
@@ -196,7 +191,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 			preInitialization(projectDirectory);
 			FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-					applicationContext.getProjectReferenceLoader(), getResourceCenter());
+					applicationContext.getProjectReferenceLoader(), applicationContext.getResourceCenterService());
 			newEditor(editor);
 			return editor;
 		} finally {
@@ -426,16 +421,9 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 					if (editor2 != editor) {
 						if (editor2.getProject().getProjectData() != null) {
 							for (FlexoProjectReference ref : editor2.getProject().getProjectData().getImportedProjects()) {
-								try {
-									if (ref.getReferredProject() == project) {
-										isRoot = false;
-										break;
-									}
-								} catch (ProjectLoadingCancelledException e) {
-									if (logger.isLoggable(Level.WARNING)) {
-										logger.log(Level.WARNING,
-												"Project loading cancelled but this should not have occured in this method", e);
-									}
+								if (ref.getReferredProject() == project) {
+									isRoot = false;
+									break;
 								}
 							}
 						}

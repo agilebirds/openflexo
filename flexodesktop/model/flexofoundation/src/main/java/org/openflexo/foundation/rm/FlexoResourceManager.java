@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -181,14 +181,15 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
+			FlexoResourceCenterService resourceCenterService) throws ProjectInitializerException, ProjectLoadingCancelledException {
 		// Here implement a default handler that attempts to retrieve properly
-		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), null, resourceCenter);
+		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), null,
+				resourceCenterService);
 	}
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter)
-			throws ProjectInitializerException, ProjectLoadingCancelledException {
+			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader,
+			FlexoResourceCenterService resourceCenterService) throws ProjectInitializerException, ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -211,7 +212,7 @@ public class FlexoResourceManager {
 			FlexoRMResource rmRes;
 			try {
 				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
-				project = rmRes.loadProject(progress, loadingHandler, projectReferenceLoader, resourceCenter);
+				project = rmRes.loadProject(progress, loadingHandler, resourceCenterService);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
 				throw new ProjectInitializerException(e1.getMessage(), aProjectDirectory);
@@ -223,6 +224,9 @@ public class FlexoResourceManager {
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;
 		project.setResourceManagerInstance(resourceManager);
+		if (project.getProjectData() != null && project.getProjectData().getImportedProjects().size() > 0) {
+			projectReferenceLoader.loadProjects(project.getProjectData().getImportedProjects());
+		}
 		checkExternalRepositories(project);
 		return returned;
 	}
@@ -245,13 +249,12 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenterService resourceCenter) {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
-		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, projectReferenceLoader,
-				resourceCenter);
+		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
 		FlexoProject project = returned.getProject();
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
@@ -262,7 +265,7 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoResourceCenter resourceCenter) {
+			FlexoResourceCenterService resourceCenter) {
 		return initializeNewProject(aProjectDirectory, null, editorFactory, null, resourceCenter);
 	}
 

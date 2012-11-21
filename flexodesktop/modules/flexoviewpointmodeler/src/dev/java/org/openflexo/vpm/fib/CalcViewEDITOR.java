@@ -23,17 +23,17 @@ import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.vpm.CEDCst;
 
 public class CalcViewEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 
@@ -60,7 +60,4 @@ public class CalcViewEDITOR extends FIBAbstractEditor {
 		main(CalcViewEDITOR.class);
 	}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
-	}
 }

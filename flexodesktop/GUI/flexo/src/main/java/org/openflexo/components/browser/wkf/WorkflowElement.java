@@ -20,7 +20,6 @@
 package org.openflexo.components.browser.wkf;
 
 import java.util.Enumeration;
-import java.util.logging.Level;
 
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
@@ -30,7 +29,6 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -59,15 +57,10 @@ public class WorkflowElement extends BrowserElement {
 		}
 		if (getFlexoWorkflow().getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getFlexoWorkflow().getProject().getProjectData().getImportedProjects()) {
-				try {
-					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-						addToChilds(ref.getReferredProject().getWorkflow().getRoleList());
-					}
-				} catch (ProjectLoadingCancelledException e) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("User cancelled loading of " + ref.getProjectURI());
-					}
+				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+					addToChilds(ref.getReferredProject().getWorkflow().getRoleList());
 				}
+
 			}
 		}
 		// We add top-level processes

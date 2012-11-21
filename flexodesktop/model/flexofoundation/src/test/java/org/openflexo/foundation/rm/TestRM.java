@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.ie.IEOperationComponent;
@@ -43,6 +42,8 @@ import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -103,7 +104,7 @@ public class TestRM extends FlexoTestCase {
 	private static IEBlocWidget _bloc2;
 	private static FlexoReusableComponentResource _partialComponentResource;
 
-	private static LocalResourceCenterImplementation resourceCenter;
+	private static FlexoResourceCenterService resourceCenter;
 
 	/**
 	 * Overrides setUp
@@ -566,7 +567,9 @@ public class TestRM extends FlexoTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		FileUtils.deleteDir(resourceCenter.getLocalDirectory());
+		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+		}
 		resetVariables();
 		_bsHook = null;
 		_editor = null;

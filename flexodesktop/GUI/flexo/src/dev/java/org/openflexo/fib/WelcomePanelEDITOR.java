@@ -26,6 +26,7 @@ import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
@@ -59,6 +60,11 @@ public class WelcomePanelEDITOR {
 					@Override
 					public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
 						return new DefaultProjectLoadingHandler();
+					}
+
+					@Override
+					protected FlexoResourceCenterService createResourceCenterService() {
+						return null;
 					}
 				});
 				return FIBAbstractEditor.makeArray(applicationData);

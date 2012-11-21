@@ -45,14 +45,14 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -289,11 +289,10 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	// test purposes
 	public static FlexoEditor loadProject(File prjDir) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
 		FlexoEditor editor = null;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
-			editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -305,11 +304,6 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 			System.exit(-1);
 		}
 		return editor;
-	}
-
-	// test purposes
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
 	}
 
 	// test purposes

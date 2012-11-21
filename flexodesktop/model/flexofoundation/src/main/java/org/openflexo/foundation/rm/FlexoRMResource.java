@@ -37,8 +37,7 @@ import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -156,7 +155,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 				}
 				try {
 					logger.warning("You should retrieve a ResourceCenter here !!!");
-					project = loadProject(null, getLoadingHandler(), projectReferenceLoader, null);
+					project = loadProject(null, getLoadingHandler(), null);
 				} catch (ProjectLoadingCancelledException e) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.log(Level.WARNING, "Project loading cancel exception.", e);
@@ -238,19 +237,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	private boolean isInitializingProject = false;
 
-	private FlexoResourceCenter resourceCenter;
-
-	private FlexoProjectReferenceLoader projectReferenceLoader;
+	private FlexoResourceCenterService resourceCenterService;
 
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
 	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler,
-			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter) throws RuntimeException,
-			ProjectLoadingCancelledException {
-		this.projectReferenceLoader = projectReferenceLoader;
-		this.resourceCenter = resourceCenter;
+			FlexoResourceCenterService resourceCenterService) throws RuntimeException, ProjectLoadingCancelledException {
+		this.resourceCenterService = resourceCenterService;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -272,8 +267,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 				performLoadWithPreviousVersion = false;
 				project = performLoadResourceData(progress, loadingHandler);
 				project.setXmlMappings(getXmlMappings());
-				project.setProjectReferenceLoader(projectReferenceLoader);
-				project.loadImportedProjects();
 				xmlMappings = null;
 			} catch (FlexoFileNotFoundException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
@@ -382,6 +375,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 					resource.delete();
 				}
 			}*/
+			// Project data contains information about imported projects, so let's load directly.
+			getProject().getProjectData();
 
 			if (requireDependenciesRebuild) {
 				getProject().rebuildDependencies();
@@ -609,11 +604,10 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	@Override
 	public FlexoProjectBuilder instanciateNewBuilder() {
 		FlexoProjectBuilder returned = new FlexoProjectBuilder();
-		returned.projectReferenceLoader = projectReferenceLoader;
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
-		returned.resourceCenter = resourceCenter;
+		returned.resourceCenterService = resourceCenterService;
 		return returned;
 	}
 
