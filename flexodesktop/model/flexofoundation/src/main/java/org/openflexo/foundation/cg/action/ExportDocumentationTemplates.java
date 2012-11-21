@@ -185,7 +185,7 @@ public class ExportDocumentationTemplates extends FlexoAction<ExportDocumentatio
 
 	public File getDocumentationGenerationDirectory() {
 		if (documentationGenerationDirectory == null) {
-			documentationGenerationDirectory = new File(FileUtils.getDocumentFolder(), getProject().getName() + "/Documents");
+			documentationGenerationDirectory = new File(FileUtils.getDocumentDirectory(), getProject().getName() + "/Documents");
 		}
 		return documentationGenerationDirectory;
 	}

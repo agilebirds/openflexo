@@ -274,7 +274,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 
 	public File getDocumentationGenerationDirectory() {
 		if (documentationGenerationDirectory == null) {
-			documentationGenerationDirectory = new File(FileUtils.getDocumentFolder(), getProject().getName() + "/Documents");
+			documentationGenerationDirectory = new File(FileUtils.getDocumentDirectory(), getProject().getName() + "/Documents");
 		}
 		return documentationGenerationDirectory;
 	}
