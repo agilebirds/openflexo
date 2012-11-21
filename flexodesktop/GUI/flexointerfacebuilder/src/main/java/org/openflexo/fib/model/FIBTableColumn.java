@@ -43,7 +43,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public static enum ColumnType {
-		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
+		CheckBox, Custom, DropDown, Icon, Label, Number, TextField, Button;
 	}
 
 	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);

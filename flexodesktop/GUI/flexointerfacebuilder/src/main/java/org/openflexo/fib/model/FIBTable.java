@@ -500,6 +500,14 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		return newColumn;
 	}
 
+	public FIBButtonColumn createButtonColumn() {
+		FIBButtonColumn newColumn = new FIBButtonColumn();
+		newColumn.setName("button");
+		newColumn.setTitle("button");
+		addToColumns(newColumn);
+		return newColumn;
+	}
+
 	public FIBTableColumn deleteColumn(FIBTableColumn columnToDelete) {
 		logger.info("Called deleteColumn() with " + columnToDelete);
 		removeFromColumns(columnToDelete);

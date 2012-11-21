@@ -34,10 +34,11 @@ import java.util.logging.Logger;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBButtonColumn;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDownColumn;
@@ -56,7 +57,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBTableModel extends DefaultTableModel {
+public class FIBTableModel extends AbstractTableModel {
 
 	private static final Logger logger = Logger.getLogger(FIBTableModel.class.getPackage().getName());
 
@@ -487,6 +488,8 @@ public class FIBTableModel extends DefaultTableModel {
 			return new NumberColumn((FIBNumberColumn) column, this, controller);
 		} else if (column instanceof FIBCustomColumn) {
 			return new CustomColumn((FIBCustomColumn) column, this, controller);
+		} else if (column instanceof FIBButtonColumn) {
+			return new ButtonColumn((FIBButtonColumn) column, this, controller);
 		}
 		return null;
 

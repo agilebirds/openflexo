@@ -53,6 +53,7 @@
             <AddAction method="data.createNumberColumn()" name="new_number_column" />
             <AddAction method="data.createIconColumn()" name="new_icon_column" />
             <AddAction method="data.createCustomColumn()" name="new_custom_column" />
+            <AddAction method="data.createButtonColumn()" name="new_button_column" />
             <RemoveAction method="data.deleteColumn(selected)" name="delete_column" />
             <CustomAction method="data.moveToTop(selected)" name="move_to_top" />
             <CustomAction method="data.moveUp(selected)" name="move_up" />
@@ -94,8 +95,16 @@
               <Assignment variable="component.bindable" value="ColumnsTable.selected" />
               <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.bgColorBindingDefinition" />
             </Custom>
-            <Label label="define_specific_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-			<Panel layout="flow" border="none" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=23;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)">
+            <Label label="action" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Panel name="buttonColumn" layout="border" dataClassName="org.openflexo.fib.model.FIBButtonColumn" data="ColumnsTable.selected" visible="ColumnsTable.selected.getClass().getSimpleName().equals(&quot;FIBButtonColumn&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" >
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="buttonColumn.data.action.binding" title="action" resizable="true" name="actionvalue" constraints="border(location=center)"  manageDynamicModel="true">
+                  <Assignment variable="component.bindable" value="buttonColumn.data" />
+                  <Assignment variable="component.bindingDefinition" value="buttonColumn.data.actionBindingDefinition" />
+                </Custom>
+            </Panel>
+            
+            <Label label="define_specific_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+			<Panel layout="flow" border="none" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=25;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)">
     		      <CheckBox data="ColumnsTable.selected.hasSpecificFont"  />
     		      <Font data="ColumnsTable.selected.font" enable="(ColumnsTable.selected != null) &amp; (ColumnsTable.selected.hasSpecificFont)" localize="true" />
  			</Panel>

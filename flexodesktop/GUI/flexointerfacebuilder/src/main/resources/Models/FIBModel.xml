@@ -239,10 +239,10 @@
   
   <entity name="org.openflexo.fib.model.FIBButton" xmlTag="Button"> 
     <property name="action" xmlTag="action" attribute="YES"/> 
+    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
     <property name="buttonType" xmlTag="buttonType" attribute="YES"/> 
     <property name="label" xmlTag="label" attribute="YES"/> 
     <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
-    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
@@ -388,6 +388,10 @@
    <property name="numberType" xmlTag="numberType" attribute="YES"/> 
    </entity>
   
+  <entity name="org.openflexo.fib.model.FIBButtonColumn" xmlTag="ButtonColumn"> 
+      <property name="action" xmlTag="action" attribute="YES"/> 
+  </entity>
+  
   <entity name="org.openflexo.fib.model.FIBCustomColumn" xmlTag="CustomColumn"> 
     <property name="componentClass" xmlTag="componentClassName" attribute="YES"/> 
     <property name="customRendering" xmlTag="customRendering" attribute="YES"/> 
@@ -399,7 +403,5 @@
     <property name="variable" xmlTag="variable" attribute="YES"/> 
     <property name="value" xmlTag="value" attribute="YES"/> 
   </entity>
-  
-  
-  
+    
  </model>
