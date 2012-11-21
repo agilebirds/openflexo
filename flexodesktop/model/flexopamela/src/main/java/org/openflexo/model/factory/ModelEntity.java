@@ -1,18 +1,13 @@
 package org.openflexo.model.factory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.ProxyFactory;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.Adder;
@@ -36,7 +31,7 @@ import org.openflexo.model.xml.DefaultStringEncoder.Converter;
  * 
  * @param <I>
  */
-public class ModelEntity<I> extends ProxyFactory {
+public class ModelEntity<I> {
 
 	/**
 	 * The model factory in which this entity is declared
@@ -100,29 +95,10 @@ public class ModelEntity<I> extends ProxyFactory {
 				this.superImplementedInterfaces.add((Class<? super I>) i);
 			}
 		}
-		setFilter(new MethodFilter() {
-			@Override
-			public boolean isHandled(Method method) {
-				// System.out.println("isHandled for "+method+" in "+method.getDeclaringClass());
-				/*
-				 * return method.getAnnotation(Getter.class) != null ||
-				 * method.getAnnotation(Setter.class) != null ||
-				 * method.getAnnotation(Adder.class) != null ||
-				 * method.getAnnotation(Remover.class) != null;
-				 */
-
-				return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
-						&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;
-			}
-		});
-		// methodHandler = new ProxyMethodHander(this);
 
 	}
 
 	protected void init() throws ModelDefinitionException {
-		setSuperclass(findValidSuperClass());
-		Class<?>[] interfaces = { implementedInterface };
-		setInterfaces(interfaces);
 		exploreEntity();
 	}
 
@@ -214,7 +190,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		}
 	}
 
-	private Class<?> findValidSuperClass() throws ModelDefinitionException {
+	public Class<?> getImplementingClass() throws ModelDefinitionException {
 		if (implementingClass != null) {
 			return implementingClass;
 		}
@@ -228,7 +204,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		} else {
 			if (getDirectSuperEntities() != null) {
 				for (ModelEntity<? super I> e : getDirectSuperEntities()) {
-					Class<?> klass = e.findValidSuperClass();
+					Class<?> klass = e.getImplementingClass();
 					if (klass != null) {
 						if (implementingClass == null) {
 							implementingClass = klass;
@@ -238,9 +214,6 @@ public class ModelEntity<I> extends ProxyFactory {
 									+ klass.getName());
 						}
 					}
-				}
-				if (implementingClass == null) {
-					implementingClass = modelFactory.getDefaultModelClass();
 				}
 			}
 		}
@@ -472,49 +445,6 @@ public class ModelEntity<I> extends ProxyFactory {
 		return isAbstract;
 	}
 
-	public I newInstance(Object... args) throws IllegalArgumentException, NoSuchMethodException, InstantiationException,
-			IllegalAccessException, InvocationTargetException, ModelDefinitionException {
-		if (isAbstract()) {
-			throw new InstantiationException("Interface " + implementedInterface.getName()
-					+ " is declared as an abstract entity, cannot instantiate it");
-		}
-		ProxyMethodHandler<I> handler = new ProxyMethodHandler<I>(this);
-		I returned = (I) create(new Class<?>[0], new Object[0], handler);
-		handler.setObject(returned);
-		if (args == null) {
-			args = new Object[0];
-		}
-		if (args.length > 0 || hasInitializers()) {
-			Class<?>[] types = new Class<?>[args.length];
-			for (int i = 0; i < args.length; i++) {
-				Object o = args[i];
-				if (getModelFactory().isProxyObject(o)) {
-					ModelEntity<?> modelEntity = getModelFactory().getModelEntity(o);
-					types[i] = modelEntity.getImplementedInterface();
-				} else {
-					types[i] = args[i].getClass();
-				}
-			}
-			ModelInitializer initializerForArgs = getInitializerForArgs(types);
-			if (initializerForArgs != null) {
-				initializerForArgs.getInitializingMethod().invoke(returned, args);
-			} else {
-				if (args.length > 0) {
-					StringBuilder sb = new StringBuilder();
-					for (Class<?> c : types) {
-						if (sb.length() > 0) {
-							sb.append(',');
-						}
-						sb.append(c.getName());
-
-					}
-					throw new NoSuchMethodException("Could not find any initializer with args " + sb.toString());
-				}
-			}
-		}
-		return returned;
-	}
-
 	public ModelFactory getModelFactory() {
 		return modelFactory;
 	}
@@ -649,7 +579,7 @@ public class ModelEntity<I> extends ProxyFactory {
 			boolean ok = parameterTypes.length == types.length;
 			if (ok) {
 				for (Class<?> c : parameterTypes) {
-					if (!c.isAssignableFrom(types[i])) {
+					if (types[i] != null && !c.isAssignableFrom(types[i])) {
 						ok = false;
 						break;
 					}

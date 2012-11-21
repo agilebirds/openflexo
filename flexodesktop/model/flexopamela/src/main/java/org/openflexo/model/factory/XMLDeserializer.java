@@ -3,7 +3,6 @@ package org.openflexo.model.factory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -124,21 +123,8 @@ public class XMLDeserializer {
 				throw new ModelExecutionException(e);
 			}
 		} else {
-			try {
-				returned = modelEntity.newInstance();
-			} catch (IllegalArgumentException e) {
-				throw new ModelExecutionException(e);
-			} catch (NoSuchMethodException e) {
-				throw new ModelExecutionException(e);
-			} catch (InstantiationException e) {
-				throw new ModelExecutionException(e);
-			} catch (IllegalAccessException e) {
-				throw new ModelExecutionException(e);
-			} catch (InvocationTargetException e) {
-				throw new ModelExecutionException(e);
-			} catch (ModelDefinitionException e) {
-				throw new ModelExecutionException(e);
-			}
+			returned = modelFactory.newInstance(modelEntity);
+
 		}
 
 		if (currentDeserializedReference != null) {

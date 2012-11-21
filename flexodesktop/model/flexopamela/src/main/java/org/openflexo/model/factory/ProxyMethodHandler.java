@@ -1160,19 +1160,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		beingCloned = true;
 		Object returned = null;
 		try {
-			try {
-				returned = getModelEntity().newInstance();
-			} catch (IllegalArgumentException e) {
-				throw new ModelExecutionException(e);
-			} catch (NoSuchMethodException e) {
-				throw new ModelExecutionException(e);
-			} catch (InstantiationException e) {
-				throw new ModelExecutionException(e);
-			} catch (IllegalAccessException e) {
-				throw new ModelExecutionException(e);
-			} catch (InvocationTargetException e) {
-				throw new ModelExecutionException(e);
-			}
+			returned = getModelFactory().newInstance(getModelEntity());
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(returned);
 			clonedObjectHandler.createdByCloning = true;
 			clonedObjectHandler.initialized = true;
