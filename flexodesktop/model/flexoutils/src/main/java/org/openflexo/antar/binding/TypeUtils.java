@@ -31,7 +31,11 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
+
 import org.openflexo.antar.expr.EvaluationType;
+
+import com.google.common.primitives.Primitives;
 
 public class TypeUtils {
 
@@ -157,6 +161,10 @@ public class TypeUtils {
 			return Character.class;
 		}
 		return aClass;
+	}
+
+	public static boolean isPrimitive(@Nullable Type type) {
+		return type != null && Primitives.allPrimitiveTypes().contains(type);
 	}
 
 	public static boolean isDouble(Type type) {
@@ -663,6 +671,20 @@ public class TypeUtils {
 		return null;
 	}
 
+	public static Type[] getSuperInterfaceTypes(Type type) {
+		if (type instanceof ParameterizedType) {
+			ParameterizedType myType = (ParameterizedType) type;
+			return ((Class<?>) myType.getRawType()).getGenericInterfaces();
+		} else if (type instanceof Class) {
+			return ((Class<?>) type).getGenericInterfaces();
+		}
+		if (type instanceof CustomType) {
+			return getSuperInterfaceTypes(((CustomType) type).getBaseClass());
+		}
+
+		return new Type[0];
+	}
+
 	public static Object castTo(Object object, Type desiredType) {
 		if (object == null) {
 			return null;
@@ -797,7 +819,7 @@ public class TypeUtils {
 	}
 
 	public static void main(String[] args) {
-		Class shouldSucceed = ShouldSucceed.class;
+		/*Class shouldSucceed = ShouldSucceed.class;
 		for (Method m : shouldSucceed.getMethods()) {
 			checkSucceed(m);
 		}
@@ -808,7 +830,10 @@ public class TypeUtils {
 		Class testSuperType = TestSuperType.class;
 		for (Method m : testSuperType.getMethods()) {
 			checkSuperType(m);
-		}
+		}*/
+		Class<Void> void1 = Void.TYPE;
+		System.err.println(isTypeAssignableFrom(Object.class, void1));
+		System.err.println(Object.class.isAssignableFrom(void1));
 	}
 
 }
