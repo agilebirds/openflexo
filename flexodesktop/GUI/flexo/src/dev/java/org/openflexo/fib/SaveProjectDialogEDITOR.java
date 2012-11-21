@@ -28,27 +28,26 @@ import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 
-public class SaveProjectDialogEDITOR {
+public class SaveProjectDialogEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		List<FlexoProject> projects = new ArrayList<FlexoProject>();
+		for (int i = 1; i < 6; i++) {
+			FlexoProject project = Mockito.mock(FlexoProject.class);
+			Mockito.when(project.getName()).thenReturn("test-project-" + i);
+			Mockito.when(project.getProjectDirectory()).thenReturn(new File(System.getProperty("user.home"), "test-project-" + i));
+			projects.add(project);
+		}
+		return FIBAbstractEditor.makeArray(new SaveProjectsDialog.ProjectList(projects));
+	}
+
+	@Override
+	public File getFIBFile() {
+		return SaveProjectsDialog.FIB_FILE;
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				List<FlexoProject> projects = new ArrayList<FlexoProject>();
-				for (int i = 1; i < 6; i++) {
-					FlexoProject project = Mockito.mock(FlexoProject.class);
-					Mockito.when(project.getName()).thenReturn("test-project-" + i);
-					Mockito.when(project.getProjectDirectory()).thenReturn(new File(System.getProperty("user.home"), "test-project-" + i));
-					projects.add(project);
-				}
-				return FIBAbstractEditor.makeArray(new SaveProjectsDialog.ProjectList(projects));
-			}
-
-			@Override
-			public File getFIBFile() {
-				return SaveProjectsDialog.FIB_FILE;
-			}
-		};
-		editor.launch();
+		main(SaveProjectDialogEDITOR.class);
 	}
 }

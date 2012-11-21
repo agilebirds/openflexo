@@ -22,41 +22,37 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.vpm.CEDCst;
 
-public class DeclareShapeInEditionPatternDialogEDITOR {
+public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+		ViewPoint calc1 = calcLibrary
+				.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+		calc1.loadWhenUnloaded();
+		ExampleDrawingShema shema = calc1.getShemas().firstElement();
+		ExampleDrawingShape shape = (ExampleDrawingShape) shema.getChilds().firstElement();
+		DeclareShapeInEditionPattern action = DeclareShapeInEditionPattern.actionType.makeNewAction(shape, null, null);
+		return makeArray(action);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-				calc1.loadWhenUnloaded();
-				ExampleDrawingShema shema = calc1.getShemas().firstElement();
-				ExampleDrawingShape shape = (ExampleDrawingShape) shema.getChilds().firstElement();
-				DeclareShapeInEditionPattern action = DeclareShapeInEditionPattern.actionType.makeNewAction(shape, null, null);
-				return makeArray(action);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+		main(DeclareShapeInEditionPatternDialogEDITOR.class);
 	}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
-	}
 }

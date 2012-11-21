@@ -22,33 +22,29 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.vpm.CEDCst;
 
-public class CreateViewPointDialogEDITOR {
+public class CreateViewPointDialogEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+		CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null, null);
+		return makeArray(action);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return CEDCst.CREATE_VIEW_POINT_DIALOG_FIB;
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null, null);
-				return makeArray(action);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return CEDCst.CREATE_VIEW_POINT_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+		main(CreateViewPointDialogEDITOR.class);
 	}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
-	}
 }
