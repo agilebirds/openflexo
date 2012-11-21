@@ -22,9 +22,12 @@ package org.openflexo.fge.view;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Vector;
@@ -302,9 +305,11 @@ public class FGEPaintManager {
 			paintRequestLogger.fine("Buffering whole DrawingView. Is it really necessary ?");
 		}
 		Component view = getDrawingView();
-		// GraphicsConfiguration config = view.getGraphicsConfiguration();
-		// VolatileImage image = config.createCompatibleVolatileImage(view.getWidth(), view.getHeight());
-		BufferedImage image = new BufferedImage(view.getWidth(), view.getHeight(), DEFAULT_IMAGE_TYPE);
+		GraphicsConfiguration gc = view.getGraphicsConfiguration();
+		if (gc == null) {
+			gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+		}
+		BufferedImage image = gc.createCompatibleImage(view.getWidth(), view.getHeight(), Transparency.TRANSLUCENT);
 		Graphics2D g = image.createGraphics();
 		getDrawingView().prepareForBuffering(g);
 		view.print(g);

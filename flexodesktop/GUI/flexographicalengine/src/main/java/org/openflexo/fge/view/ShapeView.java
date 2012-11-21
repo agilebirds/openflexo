@@ -23,7 +23,10 @@ import java.awt.AlphaComposite;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyAdapter;
@@ -561,10 +564,14 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			if (getLabelView() != null) {
 				bounds = bounds.union(getLabelView().getBounds());
 			}
-			screenshot = new BufferedImage(bounds.width, bounds.height, java.awt.image.BufferedImage.TYPE_INT_ARGB_PRE);// buffered image
-																														// reference passing
-																														// the label's ht
-																														// and width
+			GraphicsConfiguration gc = getGraphicsConfiguration();
+			if (gc == null) {
+				gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+			}
+			screenshot = gc.createCompatibleImage(bounds.width, bounds.height, Transparency.TRANSLUCENT);// buffered image
+			// reference passing
+			// the label's ht
+			// and width
 			Graphics2D graphics = screenshot.createGraphics();// creating the graphics for buffered image
 			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
 																								// context
