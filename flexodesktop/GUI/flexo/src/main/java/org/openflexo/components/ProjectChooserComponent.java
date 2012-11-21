@@ -195,4 +195,18 @@ public abstract class ProjectChooserComponent {
 		}
 		return null;
 	}
+
+	public void setSelectedFile(File selectedFile) {
+		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
+			fileChooser.setSelectedFile(selectedFile);
+		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+			if (selectedFile != null) {
+				fileDialog.setDirectory(selectedFile.getParentFile().getAbsolutePath());
+				fileDialog.setFile(selectedFile.getName());
+			} else {
+				fileDialog.setDirectory(null);
+				fileDialog.setFile(null);
+			}
+		}
+	}
 }
