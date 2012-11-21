@@ -188,7 +188,7 @@ public class FIBTableWidgetFooter extends JPanel {
 		validate();
 	}
 
-	protected void handleSelectionChanged() {
+	public void handleSelectionChanged() {
 		// System.out.println("handleSelectionChanged");
 		plusActionMenuNeedsRecomputed = true;
 		minusActionMenuNeedsRecomputed = true;

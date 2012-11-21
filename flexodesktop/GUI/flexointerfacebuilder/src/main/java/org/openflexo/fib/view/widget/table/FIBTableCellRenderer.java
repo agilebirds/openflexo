@@ -57,7 +57,7 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
+		row = table.convertRowIndexToModel(row);
 		if (returned instanceof JComponent) {
 			((JComponent) returned).setToolTipText(this.column.getTooltip(getTableModel().elementAt(row)));
 			((JComponent) returned).setFont(this.column.getColumnModel().retrieveValidFont());

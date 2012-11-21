@@ -186,8 +186,8 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 					table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 				}
 			});
-			setEditedRowObject(elementAt(row));
-			_selector = getEditSelector(elementAt(row), (T) value);
+			setEditedRowObject(elementAt(table.convertRowIndexToModel(row)));
+			_selector = getEditSelector(elementAt(table.convertRowIndexToModel(row)), (T) value);
 			_selector.getTextField().setBorder(null);
 			_selector.setBorder(null);
 			/*

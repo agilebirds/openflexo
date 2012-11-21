@@ -167,7 +167,7 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-			comboBox.setModel(getComboBoxModel(value, row, column));
+			comboBox.setModel(getComboBoxModel(value, table.convertRowIndexToModel(row), table.convertColumnIndexToModel(column)));
 			return returned;
 		}
 

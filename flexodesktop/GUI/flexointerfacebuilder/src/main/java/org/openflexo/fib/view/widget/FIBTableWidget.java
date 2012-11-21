@@ -204,6 +204,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		if (object != null) {
 			int index = getValue().indexOf(object);
 			if (index > -1) {
+				index = _table.convertRowIndexToView(index);
 				// if (!notify) _table.getSelectionModel().removeListSelectionListener(getTableModel());
 				getListSelectionModel().setSelectionInterval(index, index);
 				// if (!notify) _table.getSelectionModel().addListSelectionListener(getTableModel());
@@ -250,8 +251,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			getListSelectionModel().removeListSelectionListener(this);
 			getListSelectionModel().addSelectionInterval(event.getNewRow(), event.getNewRow());
 			getListSelectionModel().addListSelectionListener(this);
-			_table.setEditingColumn(event.getColumn());
-			_table.setEditingRow(event.getNewRow());
+			_table.setEditingColumn(_table.convertColumnIndexToView(event.getColumn()));
+			_table.setEditingRow(_table.convertRowIndexToView(event.getNewRow()));
 		}
 	}
 
@@ -342,6 +343,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				return super.getPreferredSize();
 			}
 		};
+		_table.setAutoCreateRowSorter(true);
 		_table.setFillsViewportHeight(true);
 		_table.setShowHorizontalLines(false);
 		_table.setShowVerticalLines(false);
@@ -375,7 +377,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		}
 
 		_table.setSelectionMode(_fibTable.getSelectionMode().getMode());
-		_table.getTableHeader().setReorderingAllowed(false);
+		// _table.getTableHeader().setReorderingAllowed(false);
 
 		_table.getSelectionModel().addListSelectionListener(this);
 
@@ -465,21 +467,23 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			leadIndex = i;
 			i++;
 		}
-
+		if (leadIndex > -1) {
+			leadIndex = _table.convertRowIndexToModel(leadIndex);
+		}
 		selectedObject = getTableModel().elementAt(leadIndex);
 
 		Vector<Object> oldSelection = selection;
 		selection = new Vector<Object>();
 		for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
 			if (getListSelectionModel().isSelectedIndex(i)) {
-				selection.add(getTableModel().elementAt(i));
+				selection.add(getTableModel().elementAt(_table.convertRowIndexToModel(i)));
 			}
 		}
 
 		getDynamicModel().selected = selectedObject;
 		getDynamicModel().selection = selection;
 		notifyDynamicModelChanged();
-
+		footer.handleSelectionChanged();
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
 			getComponent().getSelected().setBindingValue(selectedObject, getController());
@@ -517,17 +521,23 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	@Override
 	public void objectAddedToSelection(Object o) {
 		int index = getValue().indexOf(o);
-		ignoreNotifications = true;
-		getListSelectionModel().addSelectionInterval(index, index);
-		ignoreNotifications = false;
+		if (index > -1) {
+			ignoreNotifications = true;
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().addSelectionInterval(index, index);
+			ignoreNotifications = false;
+		}
 	}
 
 	@Override
 	public void objectRemovedFromSelection(Object o) {
 		int index = getValue().indexOf(o);
-		ignoreNotifications = true;
-		getListSelectionModel().removeSelectionInterval(index, index);
-		ignoreNotifications = false;
+		if (index > -1) {
+			ignoreNotifications = true;
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().removeSelectionInterval(index, index);
+			ignoreNotifications = false;
+		}
 	}
 
 	@Override
@@ -540,13 +550,19 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	@Override
 	public void addToSelection(Object o) {
 		int index = getValue().indexOf(o);
-		getListSelectionModel().addSelectionInterval(index, index);
+		if (index > -1) {
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().addSelectionInterval(index, index);
+		}
 	}
 
 	@Override
 	public void removeFromSelection(Object o) {
 		int index = getValue().indexOf(o);
-		getListSelectionModel().removeSelectionInterval(index, index);
+		if (index > -1) {
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().removeSelectionInterval(index, index);
+		}
 	}
 
 	@Override
