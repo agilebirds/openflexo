@@ -1,20 +1,35 @@
 package org.openflexo.module;
 
+import java.awt.Dialog;
+import java.awt.HeadlessException;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFileChooser;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Initializer;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Parameter;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.FlexoFrame;
@@ -22,7 +37,7 @@ import org.openflexo.view.controller.FlexoController;
 
 public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectReferenceLoader {
 
-	private static final FileResource FIB_FILE = new FileResource("Fib/FIBProjectLoaderDialog.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBProjectLoaderDialog.fib");
 
 	private ApplicationContext applicationContext;
 
@@ -34,64 +49,68 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		return applicationContext;
 	}
 
-	public class ProjectReferenceLoaderData implements HasPropertyChangeSupport {
+	@ModelEntity
+	public static interface ProjectReferenceFileAssociation extends AccessibleProxyObject {
+		public static final String REFERENCE = "reference";
+		public static final String SELECTED_FILE = "selectedFile";
+		public static final String MESSAGE = "message";
 
-		private final FlexoProjectReference reference;
+		@Initializer
+		public ProjectReferenceFileAssociation init(@Parameter(REFERENCE) FlexoProjectReference reference,
+				@Parameter(SELECTED_FILE) File selectedFile);
+
+		@Getter(REFERENCE)
+		public FlexoProjectReference getReference();
+
+		@Setter(REFERENCE)
+		public void setReference(FlexoProjectReference reference);
+
+		@Getter(SELECTED_FILE)
+		public File getSelectedFile();
+
+		@Setter(SELECTED_FILE)
+		public void setSelectedFile(File selectedFile);
+
+		@Getter(MESSAGE)
+		public String getMessage();
+
+		@Setter(MESSAGE)
+		public void setMessage(String message);
+	}
+
+	public static class ProjectReferenceLoaderData implements HasPropertyChangeSupport {
 
 		private ProjectChooserComponent projectChooserComponent;
 
-		private File selectedFile;
-
 		private PropertyChangeSupport propertyChangeSupport;
 
-		private String message;
+		private final List<ProjectReferenceFileAssociation> associations;
 
-		public ProjectReferenceLoaderData(FlexoProjectReference reference, File selectedFile) {
-			this.reference = reference;
-			this.selectedFile = selectedFile;
+		private final Dialog parent;
+
+		public ProjectReferenceLoaderData(Dialog parent, List<ProjectReferenceFileAssociation> associations) {
+			this.parent = parent;
+			this.associations = associations;
 			this.propertyChangeSupport = new PropertyChangeSupport(this);
 		}
 
-		public String getMessage() {
-			return message;
+		public List<ProjectReferenceFileAssociation> getAssociations() {
+			return associations;
 		}
 
-		public void setMessage(String message) {
-			String old = this.message;
-			this.message = message;
-			getPropertyChangeSupport().firePropertyChange("message", old, message);
-		}
-
-		public InteractiveFlexoProjectReferenceLoader getProjectReferenceLoader() {
-			return InteractiveFlexoProjectReferenceLoader.this;
-		}
-
-		public FlexoProjectReference getReference() {
-			return reference;
-		}
-
-		public File getSelectedFile() {
-			return selectedFile;
-		}
-
-		public void setSelectedFile(File selectedFile) {
-			File old = this.selectedFile;
-			this.selectedFile = selectedFile;
-			getPropertyChangeSupport().firePropertyChange("selectedFile", old, selectedFile);
-		}
-
-		public File showProjectChooser() {
-			getProjectChooserComponent().showOpenDialog();
-			return selectedFile = getProjectChooserComponent().getSelectedFile();
-		}
-
-		public boolean isValid() {
-			return selectedFile != null && selectedFile.exists();
+		public File showProjectChooserComponent(ProjectReferenceFileAssociation association) {
+			getProjectChooserComponent().setSelectedFile(association.getSelectedFile());
+			if (getProjectChooserComponent().showOpenDialog() == JFileChooser.APPROVE_OPTION) {
+				association.setSelectedFile(getProjectChooserComponent().getSelectedFile());
+				boolean isValid = isValid();
+				getPropertyChangeSupport().firePropertyChange("isValid", !isValid, isValid);
+			}
+			return getProjectChooserComponent().getSelectedFile();
 		}
 
 		public ProjectChooserComponent getProjectChooserComponent() {
 			if (projectChooserComponent == null) {
-				projectChooserComponent = new ProjectChooserComponent(null) {
+				projectChooserComponent = new ProjectChooserComponent(parent) {
 				};
 
 			}
@@ -107,6 +126,15 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		public String getDeletedProperty() {
 			return null;
 		}
+
+		public boolean isValid() {
+			for (ProjectReferenceFileAssociation a : associations) {
+				if (a.getSelectedFile() == null || !a.getSelectedFile().exists()) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 	/**
@@ -114,49 +142,95 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	 * since many imported projects could need to be loaded.
 	 */
 	@Override
-	public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException {
-		File selectedFile = GeneralPreferences.getLocationForResource(reference.getProjectURI());
-		boolean done = false;
-		FIBDialog<ProjectReferenceLoaderData> dialog = null;
-		while (!done) {
-			if (selectedFile == null || !selectedFile.exists()) {
-				if (dialog == null) {
-					dialog = FIBDialog.instanciateAndShowDialog(FIB_FILE, new ProjectReferenceLoaderData(reference, selectedFile),
-							FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				}
-				if (dialog.getStatus() == Status.VALIDATED) {
-					selectedFile = dialog.getData().getSelectedFile();
-				} else {
+	public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
+		try {
+			boolean done = false;
+			ModelFactory factory = new ModelFactory().importClass(ProjectReferenceFileAssociation.class);
+			List<ProjectReferenceFileAssociation> associations = new ArrayList<InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation>();
+			for (FlexoProjectReference ref : references) {
+				FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
+						.retrieveResource(ref.getURI(), ref.getVersion(), ref.getResourceDataClass(), null);
+				ProjectReferenceFileAssociation association = factory.newInstance(ProjectReferenceFileAssociation.class, ref,
+						retrievedResource instanceof FlexoFileResource<?> ? ((FlexoFileResource<?>) retrievedResource).getFile() : null);
+				associations.add(association);
+			}
+
+			FIBDialog<ProjectReferenceLoaderData> dialog = FIBDialog.instanciateDialog(FIB_FILE, null, FlexoFrame.getActiveFrame(), true,
+					FlexoLocalization.getMainLocalizer());
+			ProjectReferenceLoaderData data = new ProjectReferenceLoaderData(dialog, associations);
+			dialog.getController().setDataObject(data);
+			while (!done) {
+				done = dialog.getStatus() != Status.VALIDATED;
+				if (!done) {
 					done = true;
-				}
-			}
-			if (!done) {
-				FlexoEditor editor;
-				try {
-					editor = applicationContext.getProjectLoader().loadProject(selectedFile);
-					if (editor != null) {
-						FlexoProject project = editor.getProject();
-						if (project.getProjectURI().equals(reference.getProjectURI())) {
-							boolean versionEqual = project.getVersion() == null && reference.getProjectVersion() == null
-									|| project.getVersion() != null && project.getVersion().equals(reference.getProjectVersion());
-							boolean revisionEqual = reference.getProjectRevision() != null
-									&& project.getRevision() == reference.getProjectRevision();
-							if (versionEqual && revisionEqual) {
-								return editor.getProject();
+					for (ProjectReferenceFileAssociation a : data.getAssociations()) {
+						FlexoEditor editor;
+						FlexoProjectReference reference = a.getReference();
+						if (reference.getReferredProject() == null
+								|| !reference.getReferredProject().getProjectDirectory().equals(a.getSelectedFile())) {
+							try {
+								editor = applicationContext.getProjectLoader().loadProject(a.getSelectedFile());
+								if (editor != null) {
+									FlexoProject project = editor.getProject();
+									if (project.getProjectURI().equals(reference.getURI())) {
+										boolean versionEqual = project.getVersion() == null && reference.getVersion() == null
+												|| project.getVersion() != null && project.getVersion().equals(reference.getVersion());
+
+										if (versionEqual) {
+											reference.setReferredProject(project);
+										} else {
+											boolean ok = FlexoController.confirm(FlexoLocalization
+													.localizedForKey("project_version_do_not_match")
+													+ ". "
+													+ project.getVersion()
+													+ " "
+													+ FlexoLocalization.localizedForKey("was_found")
+													+ FlexoLocalization.localizedForKey("but")
+													+ " "
+													+ reference.getVersion()
+													+ " "
+													+ FlexoLocalization.localizedForKey("was_expected")
+													+ "\n"
+													+ FlexoLocalization.localizedForKey("would_you_like_to_update_to_version:")
+													+ " "
+													+ project.getVersion());
+											if (!ok) {
+												a.setSelectedFile(null);
+											}
+											done &= ok;
+										}
+									} else {
+										a.setMessage(FlexoLocalization.localizedForKey("project_uri_do_not_match") + ".\n"
+												+ FlexoLocalization.localizedForKey("uri") + " " + project.getProjectURI() + " "
+												+ FlexoLocalization.localizedForKey("was_found") + "\n"
+												+ FlexoLocalization.localizedForKey("but") + " " + reference + " "
+												+ FlexoLocalization.localizedForKey("was_expected"));
+										done = false;
+										break;
+									}
+								}
+							} catch (ProjectInitializerException e) {
+								a.setMessage(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+										+ a.getSelectedFile().getAbsolutePath());
+								a.setSelectedFile(null);
+								done = false;
+								break;
+							} catch (ProjectLoadingCancelledException e) {
+								done = false;
+								break;
 							}
-						} else {
-							done = FlexoController.confirm(FlexoLocalization.localizedForKey("project_uri_do_not_match") + ".\n"
-									+ FlexoLocalization.localizedForKey("uri") + " " + project.getProjectURI() + " "
-									+ FlexoLocalization.localizedForKey("was_found") + "\n" + FlexoLocalization.localizedForKey("but")
-									+ " " + reference + " " + FlexoLocalization.localizedForKey("was_expected") + "\n"
-									+ FlexoLocalization.localizedForKey("would_you_like_to_provide_another_project"));
 						}
+
 					}
-				} catch (ProjectInitializerException e) {
-					e.printStackTrace();
 				}
 			}
+			throw new ProjectLoadingCancelledException("project_loading_cancelled_by_user");
+		} catch (HeadlessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		throw new ProjectLoadingCancelledException("project_loading_cancelled_by_user");
 	}
 }
