@@ -962,19 +962,6 @@ public class FileUtils {
 		return fileContent;
 	}
 
-	public static File getDocumentFolder() {
-		File defaultFolder = new File(System.getProperty("user.home"), "Documents");
-		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String folder = WinRegistryAccess.getRegistryValue(
-					"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal",
-					WinRegistryAccess.REG_SZ_TOKEN);
-			if (folder != null) {
-				return new File(folder);
-			}
-		}
-		return defaultFolder;
-	}
-
 	public static File getApplicationDataDirectory() {
 		File dir = new File(System.getProperty("user.home"), ".openflexo");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
@@ -993,7 +980,7 @@ public class FileUtils {
 
 	private static final String MACOS_DOC_DIRECTORY_KEY = "docs";
 
-	public File getDocumentDirectory() {
+	public static File getDocumentDirectory() {
 		if (ToolBox.isMacOS()) {
 			try {
 				Class<?> fileManagerClass = Class.forName("com.apple.eio.FileManager");
