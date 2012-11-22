@@ -83,6 +83,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_DESERIALIZING;
 	private static Method TO_STRING;
 	private static Method GET_PROPERTY_CHANGE_SUPPORT;
+	private static Method GET_DELETED_PROPERTY;
 	private static Method CLONE_OBJECT;
 	private static Method CLONE_OBJECT_WITH_CONTEXT;
 	private static Method IS_CREATED_BY_CLONING;
@@ -112,6 +113,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			SET_MODIFIED = AccessibleProxyObject.class.getMethod("setModified", boolean.class);
 			PERFORM_SUPER_SET_MODIFIED = AccessibleProxyObject.class.getMethod("performSuperSetModified", boolean.class);
 			GET_PROPERTY_CHANGE_SUPPORT = HasPropertyChangeSupport.class.getMethod("getPropertyChangeSupport");
+			GET_DELETED_PROPERTY = HasPropertyChangeSupport.class.getMethod("getDeletedProperty");
 			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
@@ -259,6 +261,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return createdByCloning;
 		} else if (methodIsEquivalentTo(method, GET_PROPERTY_CHANGE_SUPPORT)) {
 			return getPropertyChangeSuppport();
+		} else if (methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
+			// TODO handle DELETED PROPERTY
+			return null;
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		} else if (methodIsEquivalentTo(method, TO_STRING)) {
