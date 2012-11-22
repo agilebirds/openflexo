@@ -42,7 +42,7 @@
         </RowSplit>
       </ColSplit>
     </RowSplit>
-    <Browser root="data.project.resourceCenter.retrieveViewPointLibrary" iteratorClassName="org.openflexo.foundation.viewpoint.ViewPoint" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.viewpoint" showFooter="false" rootVisible="true" showRootsHandle="true"localize="true" enable="data.useViewPoint" manageDynamicModel="true" name="CalcBrowser" constraints="split(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=browser;weightX=1.0;weightY=1.0)">
+    <Browser root="data.project.resourceCenter.openFlexoResourceCenter.retrieveViewPointLibrary" iteratorClassName="org.openflexo.foundation.viewpoint.ViewPoint" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.viewpoint" showFooter="false" rootVisible="true" showRootsHandle="true" localize="true" enable="data.useViewPoint" manageDynamicModel="true" name="CalcBrowser" constraints="split(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=browser;weightX=1.0;weightY=1.0)">
       <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary" label="&quot;Calc Library&quot;" icon="controller.iconForObject(ViewPointLibrary)" isEditable="false" filtered="false" defaultVisible="true" name="ViewPointLibrary">
         <Children data="ViewPointLibrary.rootFolder.children" name="folders" />
         <Children data="ViewPointLibrary.rootFolder.viewPoints" name="viewpoints" />
