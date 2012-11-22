@@ -1236,32 +1236,34 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public Vector<Role> getAllAssignableRoles() {
-		Vector<Role> reply = new Vector<Role>();
-		RoleList roleList = getRoleList();
-		appendRoles(roleList, reply);
-		if (getProject().getProjectData() != null) {
-			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-					appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), reply);
-				}
+		if (allAssignableRoles == null) {
+			allAssignableRoles = new Vector<Role>();
+			RoleList roleList = getRoleList();
+			appendRoles(roleList, allAssignableRoles);
+			if (getProject().getProjectData() != null) {
+				for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+						appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), allAssignableRoles);
+					}
 
+				}
 			}
+			appendRoles(getImportedRoleList(), allAssignableRoles);
 		}
-		appendRoles(getImportedRoleList(), reply);
-		return reply;
+		return allAssignableRoles;
 	}
 
 	public void appendRoles(RoleList roleList, Vector<Role> reply) {
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
-					allAssignableRoles.add(r);
+					reply.add(r);
 				}
 			}
 			if (getImportedRoleList() != null) {
 				for (Role r : getImportedRoleList().getRoles()) {
 					if (r.getIsAssignable()) {
-						allAssignableRoles.add(r);
+						reply.add(r);
 					}
 				}
 			}
