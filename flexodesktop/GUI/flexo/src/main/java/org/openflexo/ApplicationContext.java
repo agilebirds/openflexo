@@ -27,6 +27,7 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		projectLoader = new ProjectLoader(this);
 		moduleLoader = new ModuleLoader(this);
 		projectReferenceLoader = createProjectReferenceLoader();
+		resourceCenterService = createResourceCenterService();
 	}
 
 	public ModuleLoader getModuleLoader() {
