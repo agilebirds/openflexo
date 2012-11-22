@@ -161,6 +161,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				isDisposable &= !w.isVisible();
 			}
 			if (isDisposable) {
+				f.setVisible(false);
 				f.dispose();
 				defaultFrame = null;
 			} else {
