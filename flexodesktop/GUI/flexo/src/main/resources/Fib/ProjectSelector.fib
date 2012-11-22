@@ -5,7 +5,7 @@
   </Panel>
   <Browser root="data.projectLoader" iteratorClassName="java.lang.Object" visibleRowCount="10" rowHeight="20" boundToSelectionManager="false" selectionMode="SingleTreeSelection" selected="data.selectedObject" showFooter="false" rootVisible="false" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="51,153,255" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="0,0,0" localize="true" manageDynamicModel="true" doubleClickAction="data.apply()" enterPressedAction="data.apply()" name="projectBrowser" dataClassName="org.openflexo.components.widget.FIBProjectSelector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <BrowserElement dataClassName="org.openflexo.foundation.rm.FlexoProject" label="project.projectName" icon="controller.iconForObject(project)" tooltip="project.projectDirectory.absolutePath" isEditable="false" filtered="false" defaultVisible="true" name="project">
-      <Children data="project.projectData.importedProjects" cast="child.project" name="children" />
+      <Children data="project.projectData.importedProjects" cast="child.referredProject" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.module.ProjectLoader" isEditable="false" filtered="false" defaultVisible="true" name="projectLoader">
       <Children data="projectLoader.rootProjects" name="children" />
