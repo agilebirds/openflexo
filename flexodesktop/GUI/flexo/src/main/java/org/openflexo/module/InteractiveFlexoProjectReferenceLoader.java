@@ -1,6 +1,7 @@
 package org.openflexo.module;
 
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
@@ -160,8 +161,9 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			ProjectReferenceLoaderData data = new ProjectReferenceLoaderData(dialog, associations);
 			dialog.getController().setDataObject(data);
 			while (!done) {
-				done = dialog.getStatus() != Status.VALIDATED;
-				if (!done) {
+				dialog.setMinimumSize(new Dimension(800, 250));
+				dialog.showDialog();
+				if (dialog.getStatus() == Status.VALIDATED) {
 					done = true;
 					for (ProjectReferenceFileAssociation a : data.getAssociations()) {
 						FlexoEditor editor;
@@ -169,7 +171,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 						if (reference.getReferredProject() == null
 								|| !reference.getReferredProject().getProjectDirectory().equals(a.getSelectedFile())) {
 							try {
-								editor = applicationContext.getProjectLoader().loadProject(a.getSelectedFile());
+								editor = applicationContext.getProjectLoader().loadProject(a.getSelectedFile(), false);
 								if (editor != null) {
 									FlexoProject project = editor.getProject();
 									if (project.getProjectURI().equals(reference.getURI())) {
@@ -196,6 +198,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 													+ project.getVersion());
 											if (!ok) {
 												a.setSelectedFile(null);
+												applicationContext.getProjectLoader().closeProject(project);
 											}
 											done &= ok;
 										}
@@ -222,6 +225,11 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 						}
 
 					}
+					if (done) {
+						return;
+					}
+				} else {
+					throw new ProjectLoadingCancelledException("project_loading_cancelled_by_user");
 				}
 			}
 			throw new ProjectLoadingCancelledException("project_loading_cancelled_by_user");
