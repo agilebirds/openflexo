@@ -107,6 +107,7 @@ import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
@@ -151,6 +152,7 @@ import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -225,6 +227,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	private ModuleInspectorController mainInspectorController;
 
+	private PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
+
 	/**
 	 * Constructor
 	 */
@@ -236,8 +240,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		moduleViews = new ArrayList<ModuleView<?>>();
 		controllerModel = new ControllerModel(module.getApplicationContext(), module);
 		propertyChangeSupport = new PropertyChangeSupport(this);
-		getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.EDITOR_ADDED, this);
-		controllerModel.getPropertyChangeSupport().addPropertyChangeListener(this);
+		manager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_ADDED, this, getProjectLoader());
+		manager.new PropertyChangeListenerRegistration(this, controllerModel);
 		flexoFrame = createFrame();
 		controllerActionInitializer = createControllerActionInitializer();
 		registerShortcuts(controllerActionInitializer);
@@ -1112,6 +1116,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		Map<FlexoModelObject, ModuleView<?>> projectViews = perpsectiveViews.get(object.getProject());
 		if (projectViews == null) {
 			perpsectiveViews.put(object.getProject(), projectViews = new HashMap<FlexoModelObject, ModuleView<?>>());
+			manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this, object.getProject());
 		}
 		ModuleView<?> moduleView = projectViews.get(object);
 		if (moduleView == null) {
@@ -1503,6 +1508,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				getSelectionManager().deleteObserver(getDocInspectorController());
 			}
 		}
+		manager.delete();
 		GeneralPreferences.getPreferences().deleteObserver(this);
 		mainPane.dispose();
 		if (consistencyCheckWindow != null && !consistencyCheckWindow.isDisposed()) {
@@ -1787,6 +1793,17 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (evt.getPropertyName().equals(ProjectLoader.EDITOR_ADDED)) {
 				if (getModuleLoader().getActiveModule() == getModule()) {
 					setEditor((FlexoEditor) evt.getNewValue());
+				}
+			}
+		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
+			for (Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map : new ArrayList<Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>(
+					loadedViews.values())) {
+				Map<FlexoModelObject, ModuleView<?>> map2 = map.get(evt.getSource());
+				if (map2 != null) {
+					for (ModuleView<?> view : new ArrayList<ModuleView<?>>(map2.values())) {
+						view.deleteModuleView();
+					}
+					loadedViews.remove(evt.getSource());
 				}
 			}
 		}
