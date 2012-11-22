@@ -96,4 +96,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		}
 	}
 
+	@Override
+	public Class<FlexoProject> getResourceDataClass() {
+		return FlexoProject.class;
+	}
 }
