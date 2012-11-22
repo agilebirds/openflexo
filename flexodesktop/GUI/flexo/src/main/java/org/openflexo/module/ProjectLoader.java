@@ -149,19 +149,19 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			ProgressWindow.hideProgressWindow();
 		}
 		ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_project"), 14);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Opening " + projectDirectory.getAbsolutePath());
-		}
-		if (addToRecentProjects) {
-			preInitialization(projectDirectory);
-		}
-		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
-			if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
-				return e.getValue();
-			}
-		}
-		final FlexoEditor editor;
+		FlexoEditor editor = null;
 		try {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Opening " + projectDirectory.getAbsolutePath());
+			}
+			if (addToRecentProjects) {
+				preInitialization(projectDirectory);
+			}
+			for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+				if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
+					return e.getValue();
+				}
+			}
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
 					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
 					applicationContext.getResourceCenterService());
