@@ -33,11 +33,18 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
 public class ProjectDialogEDITOR {
 
+	public static FlexoResourceCenterService getResourceCenter() {
+		if (resourceCenter == null) {
+			resourceCenter = DefaultResourceCenterService.getNewInstance();
+		}
+		return resourceCenter;
+	}
+
 	public static FlexoEditor loadProject(File prjDir) {
-		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
+		resourceCenter = DefaultResourceCenterService.getNewInstance();
 		FlexoEditor editor = null;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, getResourceCenter());
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,6 +64,7 @@ public class ProjectDialogEDITOR {
 			return new FlexoTestEditor(project);
 		}
 	};
+	private static FlexoResourceCenterService resourceCenter;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
 		public FlexoTestEditor(FlexoProject project) {
