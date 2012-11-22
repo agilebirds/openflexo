@@ -1,4 +1,4 @@
-<inspector title = "generated_doc_repository">
+<inspector title = "generated_doc_repository" inspectedClassName="org.openflexo.foundation.cg.DGRepository">
 	<tab name="Basic" index="0">
 		<property name="format" label="format" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
 		<property name="docType" label="doc_type" widget="DROPDOWN" constraint="8">

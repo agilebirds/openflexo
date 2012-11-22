@@ -37,12 +37,10 @@ import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.antar.binding.KeyValueProperty;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
@@ -57,6 +55,8 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBDropDownColumn;
+import org.openflexo.fib.model.FIBFile;
+import org.openflexo.fib.model.FIBFile.FileMode;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
 import org.openflexo.fib.model.FIBIconColumn;
@@ -415,7 +415,34 @@ public class FIBConverter {
 							// System.out.println("Converted "+pm.conditional+" to "+hackDeLaMort);
 							Expression condition = parser.parse(hackDeLaMort);
 							// System.out.println("Expression="+condition);
-							conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
+							try {
+								conditional = condition.transform(new ExpressionTransformer() {
+									@Override
+									public Expression performTransformation(Expression e) throws TransformException {
+										if (e instanceof Variable) {
+											Variable value = (Variable) e;
+											if (tm.getPropertyNamed(value.getName()) != null)
+												return new Variable("data." + value.getName());
+											else {
+												Type accessedType = getAccessedType(value.getName(), dataClass);
+												// KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass,value.getValue());
+												// if (kvp != null) {
+												if (accessedType != null) {
+													return new Variable("data." + value.getName());
+												} else {
+													return new Variable('"' + value.getName() + '"');
+												}
+											}
+										}
+										return e;
+									}
+								});
+							} catch (TransformException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+							/*conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
 									new org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory() {
 										@Override
 										public Expression makeVariable(Word value) {
@@ -432,18 +459,18 @@ public class FIBConverter {
 												}
 											}
 										}
-									}, parser.getFunctionFactory()));
+									}, parser.getFunctionFactory()));*/
 							// System.out.println("conditional="+conditional);
 							// System.out.println("conditional="+conditional);
 							widget.setVisible(new DataBinding(conditional.toString()));
 							bindings.add(widget.getVisible());
-						} catch (ParseException e) {
+						} catch (org.openflexo.antar.expr.oldparser.ParseException e) {
 							error("Cound not parse: " + hackDeLaMort);
 							e.printStackTrace();
-						} catch (TypeMismatchException e) {
+						}/* catch (TypeMismatchException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+							}*/
 					}
 
 					// Handle display label
@@ -898,6 +925,18 @@ public class FIBConverter {
 			}
 			checkUnhandledParams(pm, unhandledParams);
 			return c;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.FILE)) {
+			FIBFile fileSelector = new FIBFile();
+			fileSelector.isDirectory = false;
+			fileSelector.mode = FileMode.SaveMode;
+			checkUnhandledParams(pm, unhandledParams);
+			return fileSelector;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.DIRECTORY)) {
+			FIBFile fileSelector = new FIBFile();
+			fileSelector.isDirectory = true;
+			fileSelector.mode = FileMode.SaveMode;
+			checkUnhandledParams(pm, unhandledParams);
+			return fileSelector;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.CUSTOM)) {
 			return makeCustom(pm, bindings, dataClass, unhandledParams);
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.WYSIWYG_ULTRA_LIGHT)) {

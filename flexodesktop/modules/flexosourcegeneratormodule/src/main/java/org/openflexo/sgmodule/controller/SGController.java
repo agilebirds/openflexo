@@ -176,7 +176,12 @@ public class SGController extends FlexoController implements SelectionManagingCo
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup("Generator");
+		}
+		if (useOldInspectorScheme()) {
+			_selectionManager.addObserver(getSharedInspectorController());
+		}
 	}
 
 	public void loadRelativeWindows() {

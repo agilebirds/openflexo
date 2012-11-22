@@ -182,6 +182,9 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup("Generator");
+		}
 		if (useOldInspectorScheme()) {
 			getDESelectionManager().addObserver(getSharedInspectorController());
 		}
