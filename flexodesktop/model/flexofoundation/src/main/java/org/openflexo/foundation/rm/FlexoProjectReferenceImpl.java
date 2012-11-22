@@ -28,6 +28,13 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 
 	@Override
 	public void setReferredProject(FlexoProject project) {
+		if (project != null) {
+			String knownURI = (String) performSuperGetter(URI);
+			if (knownURI != null && !knownURI.equals(project.getURI())) {
+				throw new RuntimeException("Expecting a project with URI " + knownURI + " but received a project with URI "
+						+ project.getURI());
+			}
+		}
 		ReferenceStatus old = this.status;
 		performSuperSetter(REFERRED_PROJECT, project);
 		status = project != null ? ReferenceStatus.RESOLVED : ReferenceStatus.UNRESOLVED;
