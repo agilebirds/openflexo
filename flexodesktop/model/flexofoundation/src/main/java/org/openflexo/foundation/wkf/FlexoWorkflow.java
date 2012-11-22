@@ -1243,9 +1243,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 			if (getProject().getProjectData() != null) {
 				for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
 					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-						appendRoles(ref.getReferredProject().getFlexoWorkflow().getRoleList(), allAssignableRoles);
+						allAssignableRoles.addAll(ref.getReferredProject().getFlexoWorkflow().getAllAssignableRoles());
 					}
-
 				}
 			}
 			appendRoles(getImportedRoleList(), allAssignableRoles);
