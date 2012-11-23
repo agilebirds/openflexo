@@ -83,8 +83,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AttributeSet;
@@ -1369,25 +1367,6 @@ public class MetaphaseEditorPanel extends JPanel {
 			editorKit.read(reader, htmlDocument, 0);
 			htmlDocument.addUndoableEditListener(undoHandler);
 			htmlTextPane.setDocument(htmlDocument);
-			htmlDocument.addDocumentListener(new DocumentListener() {
-
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					System.err.println(getDocument());
-				}
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-			});
 			resetUndoManager();
 		} catch (BadLocationException e) {
 			throw new MetaphaseEditorException(e.getMessage(), e);
