@@ -21,7 +21,6 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -255,7 +254,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		jComboBox.setFont(getFont());
+		if (getFont() != null) {
+			jComboBox.setFont(getFont());
+		}
 	}
 
 }

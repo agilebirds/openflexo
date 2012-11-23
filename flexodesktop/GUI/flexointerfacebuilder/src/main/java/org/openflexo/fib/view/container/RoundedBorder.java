@@ -64,8 +64,12 @@ public class RoundedBorder implements Border {
 		int RIGHT = right;
 
 		if (titled) {
-			g.setFont(textFont);
-			g.setColor(textColor);
+			if (textFont != null) {
+				g.setFont(textFont);
+			}
+			if (textColor != null) {
+				g.setColor(textColor);
+			}
 			g.drawString(title, LEFT + 5, TOP - 3);
 		}
 		g.drawImage(FIBIconLibrary.ROUND_PANEL_BORDER_TOP_LEFT.getImage(), LEFT, TOP, null);

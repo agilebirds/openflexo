@@ -155,8 +155,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		for (JRadioButton rb : radioButtonArray) {
-			rb.setFont(getFont());
+		if (getFont() != null) {
+			for (JRadioButton rb : radioButtonArray) {
+				rb.setFont(getFont());
+			}
 		}
 	}
 

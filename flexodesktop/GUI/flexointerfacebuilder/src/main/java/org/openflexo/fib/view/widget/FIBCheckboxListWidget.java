@@ -186,8 +186,10 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		for (JCheckBox cb : checkboxesArray) {
-			cb.setFont(getFont());
+		if (getFont() != null) {
+			for (JCheckBox cb : checkboxesArray) {
+				cb.setFont(getFont());
+			}
 		}
 		if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
 			for (JLabel l : labelsArray) {
