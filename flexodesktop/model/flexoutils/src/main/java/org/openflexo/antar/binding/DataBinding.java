@@ -150,7 +150,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			} else {
 				this.expression = value;
 				unparsedBinding = value != null ? value.toString() : null;
-				analyseExpression();
+				// analyseExpressionAfterParsing();
 				notifyBindingChanged(oldValue, value);
 				return;
 			}
@@ -161,7 +161,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				this.expression = value;
 				unparsedBinding = value != null ? expression.toString() : null;
 				logger.info("Binding takes now value " + value);
-				analyseExpression();
+				// analyseExpressionAfterParsing();
 				notifyBindingChanged(oldValue, value);
 				return;
 			}
@@ -197,7 +197,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	public Type getAnalyzedType() {
 		if (getExpression() != null) {
 			if (getExpression() instanceof BindingValue) {
-				return ((BindingValue) getExpression()).getAccessedType();
+				return ((BindingValue) getExpression()).getAccessedTypeNoValidityCheck();
 			} else {
 				try {
 					/*System.out.println("****** expression=" + getExpression());
@@ -259,7 +259,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					}
 				});
 			} catch (InvalidBindingValue e) {
-				invalidBindingReason = "Invalid binding value: " + e.getBindingValue();
+				invalidBindingReason = "Invalid binding value: " + e.getBindingValue() + " reason: "
+						+ e.getBindingValue().invalidBindingReason();
 				return false;
 			} catch (VisitorException e) {
 				invalidBindingReason = "Unexpected visitor exception: " + e.getMessage();
@@ -362,7 +363,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				e1.printStackTrace();
 				return expression = null;
 			}
-			analyseExpression();
+			analyseExpressionAfterParsing();
 		}
 		isParsingAndAnalysing = false;
 
@@ -371,7 +372,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	private boolean isParsingAndAnalysing = false;
 
-	private Expression analyseExpression() {
+	private Expression analyseExpressionAfterParsing() {
 		isParsingAndAnalysing = true;
 		if (getOwner() != null) {
 			try {

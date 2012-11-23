@@ -112,6 +112,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	private boolean textIsEditing = false;
 
+	private boolean isConnected = false;
+
 	protected KeyEventDispatcher tabDispatcher = new KeyEventDispatcher() {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
@@ -301,6 +303,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				}
 			}
 		}).start();*/
+
 	}
 
 	@Override
@@ -380,14 +383,19 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	}*/
 
 	@Override
-	public void setEditedObject(DataBinding object) {
-		setEditedObject(object, true);
-		if (object != null) {
-			if (object.getBindingDefinition() != null) {
-				setBindingDefinition(object.getBindingDefinition());
+	public void setEditedObject(DataBinding dataBinding) {
+		logger.info("set edited object " + dataBinding);
+		setEditedObject(dataBinding, true);
+		if (dataBinding != null && dataBinding.isValid()) {
+			isConnected = true;
+		}
+
+		if (dataBinding != null) {
+			if (dataBinding.getBindingDefinition() != null) {
+				setBindingDefinition(dataBinding.getBindingDefinition());
 			}
-			if (object.getOwner() != null) {
-				setBindable(object.getOwner());
+			if (dataBinding.getOwner() != null) {
+				setBindable(dataBinding.getOwner());
 			}
 		}
 		// SGU: I suppress this code that was the cause for huge problems
@@ -399,16 +407,16 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			}*/
 	}
 
-	public void setEditedObject(DataBinding object, boolean updateBindingSelectionMode) {
+	public void setEditedObject(DataBinding dataBinding, boolean updateBindingSelectionMode) {
 		// logger.info(">>>>>>>>>>>>>> setEditedObject() with "+object);
 		if (updateBindingSelectionMode) {
-			if (object != null) {
-				object = checkIfDisplayModeShouldChange(object, false);
+			if (dataBinding != null) {
+				dataBinding = checkIfDisplayModeShouldChange(dataBinding, false);
 			} else {
 				activateNormalBindingMode();
 			}
 		}
-		super.setEditedObject(object);
+		super.setEditedObject(dataBinding);
 
 		if (getEditedObject() != null && getEditedObject().isValid()) {
 			getTextField().setForeground(Color.BLACK);
@@ -474,6 +482,22 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		return returned;
 	}
 
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void connect() {
+		if (getEditedObject().isValid()) {
+			// logger.info("Is connected = TRUE");
+			isConnected = true;
+		}
+	}
+
+	public void disconnect() {
+		// logger.info("Is connected = FALSE");
+		isConnected = false;
+	}
+
 	boolean isKeyPathValid(String pathIgnoringLastPart) {
 		if (!(_selectorPanel instanceof BindingSelectorPanel)) {
 			return false;
@@ -494,6 +518,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void fireEditedObjectChanged() {
+		if (!getEditedObject().isValid()) {
+			disconnect();
+		}
 		updateCustomPanel(getEditedObject());
 		if (!getIsUpdatingModel()) {
 			_isProgrammaticalySet = true;
@@ -751,6 +778,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	@Override
 	public String renderedString(DataBinding editedObject) {
 		if (editedObject != null) {
+			// System.out.println("Try to render " + editedObject);
 			return editedObject.toString();
 		}
 		return "";
@@ -782,10 +810,10 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		if (_bindable instanceof HasPropertyChangeSupport) {
 			// System.out.println("registering " + bindable + " for " + this);
 			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
-					BindingModelChanged.BINDING_MODEL_CHANGED, this);
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
+						BindingModelChanged.BINDING_MODEL_CHANGED, this);
+			}
 		}
-	}
 	}
 
 	public void unregisterListenerForBindable() {
@@ -794,9 +822,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
 			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
 		}
-	}
 	}
 
 	@Override
@@ -1037,19 +1065,21 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		if (_selectorPanel != null) {
 			_selectorPanel.willApply();
 		}
-		DataBinding bindingValue = getEditedObject();
-		if (bindingValue != null) {
-			if (bindingValue.isValid()) {
+		DataBinding dataBinding = getEditedObject();
+		// System.out.println("Apply with " + dataBinding + " valid=" + dataBinding.isValid());
+		if (dataBinding != null) {
+			if (dataBinding.isValid()) {
 				/*if (bindingValue instanceof BindingValue) {
 					((BindingValue) bindingValue).connect();
 				}*/
+				connect();
 				getTextField().setForeground(Color.BLACK);
 				getTextField().setSelectedTextColor(Color.BLACK);
 			} else {
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
 			}
-			_revertBindingValue = bindingValue.clone();
+			_revertBindingValue = dataBinding.clone();
 		} else {
 			_revertBindingValue = null;
 		}
@@ -1122,7 +1152,10 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			if (selectedValue.getElement() instanceof SimplePathElement) {
 				// FIXED invalid type object comparison
 				if (selectedValue.getElement() != bindingValue.getBindingPathElementAtIndex(index - 1)) {
+					// System.out.println("bindingValue was " + bindingValue);
+					// System.out.println("select " + selectedValue.getElement());
 					bindingValue.setBindingPathElementAtIndex(selectedValue.getElement(), index - 1);
+					// System.out.println("bindingValue is now " + bindingValue);
 					getEditedObject().setExpression(bindingValue);
 					fireEditedObjectChanged();
 				}
@@ -1329,13 +1362,13 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			@Override
 			public void apply() {
 				super.apply();
-				System.out.println("Apply, getEditedObject()=" + getEditedObject());
+				// System.out.println("Apply, getEditedObject()=" + getEditedObject());
 			}
 
 			@Override
 			public void cancel() {
 				super.cancel();
-				System.out.println("Cancel, getEditedObject()=" + getEditedObject());
+				// System.out.println("Cancel, getEditedObject()=" + getEditedObject());
 			}
 		};
 		_selector.setBindable(testBindable);

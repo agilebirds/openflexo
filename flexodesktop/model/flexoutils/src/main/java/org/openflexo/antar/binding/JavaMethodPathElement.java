@@ -44,7 +44,11 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	public JavaMethodPathElement(BindingPathElement parent, String methodName, List<DataBinding<?>> args) {
 		super(parent, methodName, Object.class, args);
 		method = retrieveMethod();
-		setType(method.getMethod().getGenericReturnType());
+		if (method == null) {
+			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType());
+		} else {
+			setType(method.getMethod().getGenericReturnType());
+		}
 	}
 
 	public JavaMethodPathElement(BindingPathElement parent, MethodDefinition method, List<DataBinding<?>> args) {

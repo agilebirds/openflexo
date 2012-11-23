@@ -42,7 +42,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 /**
  * Represents a binding path, as formed by an access to a binding variable and a path of BindingPathElement<br>
- * A BindingValue may be settable is the last BindintPathElement is itself settable
+ * A BindingValue may be settable is the last BindingPathElement is itself settable
  * 
  * @author sylvain
  * 
@@ -106,7 +106,7 @@ public class BindingValue extends Expression {
 	private List<AbstractBindingPathElement> parsedBindingPath;
 
 	private BindingVariable bindingVariable;
-	private List<BindingPathElement> bindingPath;
+	private ArrayList<BindingPathElement> bindingPath;
 
 	private boolean needsParsing = false;
 
@@ -135,6 +135,10 @@ public class BindingValue extends Expression {
 		} else {
 			throw new ParseException("Not parseable as a BindingValue: " + stringToParse);
 		}
+	}
+
+	public boolean needsParsing() {
+		return needsParsing;
 	}
 
 	public DataBinding<?> getDataBinding() {
@@ -220,6 +224,12 @@ public class BindingValue extends Expression {
 		bindingPath.remove(index);
 	}
 
+	/**
+	 * Return the last binding path element, which is the binding variable itself if the binding path is empty, or the last binding path
+	 * element registered in the binding path
+	 * 
+	 * @return
+	 */
 	public BindingPathElement getLastBindingPathElement() {
 		if (getBindingPath() != null && getBindingPath().size() > 0) {
 			return getBindingPath().get(getBindingPath().size() - 1);
@@ -227,7 +237,22 @@ public class BindingValue extends Expression {
 		return getBindingVariable();
 	}
 
-	public boolean isLastBindingPathElement(BindingPathElement element, int index) {
+	/**
+	 * Return boolean indicating if supplied element is equals to the last binding path element
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public boolean isLastBindingPathElement(BindingPathElement element) {
+
+		if (bindingPath.size() == 0) {
+			return (element.equals(getBindingVariable()));
+		}
+
+		return bindingPath.get(bindingPath.size() - 1).equals(element);
+	}
+
+	/*public boolean isLastBindingPathElement(BindingPathElement element, int index) {
 
 		System.out.println("est ce que " + element + " est bien le dernier et a l'index " + index);
 
@@ -242,7 +267,7 @@ public class BindingValue extends Expression {
 		System.out.println("Reponse: " + (bindingPath.get(bindingPath.size() - 1).equals(element) && index == bindingPath.size()));
 
 		return bindingPath.get(bindingPath.size() - 1).equals(element) && index == bindingPath.size();
-	}
+	}*/
 
 	public BindingVariable getBindingVariable() {
 		return bindingVariable;
@@ -256,6 +281,13 @@ public class BindingValue extends Expression {
 
 	public Type getAccessedType() {
 		if (isValid() && getLastBindingPathElement() != null) {
+			return getLastBindingPathElement().getType();
+		}
+		return null;
+	}
+
+	public Type getAccessedTypeNoValidityCheck() {
+		if (getLastBindingPathElement() != null) {
 			return getLastBindingPathElement().getType();
 		}
 		return null;
@@ -328,10 +360,6 @@ public class BindingValue extends Expression {
 		}
 		BindingValue bv = new BindingValue(newBindingPath);
 		bv.setDataBinding(getDataBinding());
-		System.out.println("BindingValue created with data binding " + getDataBinding());
-		if (getDataBinding() == null) {
-			Thread.dumpStack();
-		}
 		return transformer.performTransformation(bv);
 	}
 
@@ -357,13 +385,19 @@ public class BindingValue extends Expression {
 		return false;
 	}
 
+	private String invalidBindingReason;
+
 	public boolean isValid() {
 		return isValid(getDataBinding());
 	}
 
 	public boolean isValid(DataBinding<?> dataBinding) {
+
+		invalidBindingReason = "unknown";
+
 		setDataBinding(dataBinding);
 		if (dataBinding == null) {
+			invalidBindingReason = "binding value has no referenced data binding";
 			return false;
 		}
 
@@ -376,43 +410,48 @@ public class BindingValue extends Expression {
 		}
 
 		if (getBindingVariable() == null) {
+			invalidBindingReason = "binding value has no binding variable";
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because _bindingVariable is null");
 			}
 			return false;
 		}
-		if (!_checkBindingPathValid(false)) {
+		if (!_checkBindingPathValid()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding path not valid");
 			}
 			return false;
 		}
 
+		/*if (!TypeUtils.isTypeAssignableFrom(dataBinding.getDeclaredType(), getLastBindingPathElement().getType())) {
+			invalidBindingReason = "wrong type: type " + dataBinding.getDeclaredType() + " is not assignable from "
+					+ getLastBindingPathElement().getType();
+			return false;
+		}*/
+
 		return true;
 	}
 
-	private boolean _checkBindingPathValid(boolean debug) {
+	public String invalidBindingReason() {
+		return invalidBindingReason;
+	}
+
+	private boolean _checkBindingPathValid() {
 		if (getBindingVariable() == null) {
-			if (debug) {
-				System.out.println("BindingVariable is null");
-			}
+			invalidBindingReason = "binding variable is null";
 			return false;
 		}
 		Type currentType = getBindingVariable().getType();
 		BindingPathElement currentElement = getBindingVariable();
 		if (currentType == null) {
-			if (debug) {
-				System.out.println("currentType is null");
-			}
+			invalidBindingReason = "currentType is null";
 			return false;
 		}
 
 		for (int i = 0; i < bindingPath.size(); i++) {
 			BindingPathElement element = bindingPath.get(i);
 			if (!TypeUtils.isTypeAssignableFrom(currentElement.getType(), element.getParent().getType(), true)) {
-				if (debug) {
-					System.out.println("Mismatched: " + currentElement.getType() + " and " + element.getParent().getType());
-				}
+				invalidBindingReason = "Mismatched: " + currentElement.getType() + " and " + element.getParent().getType();
 				return false;
 			}
 			currentElement = element;
@@ -420,9 +459,6 @@ public class BindingValue extends Expression {
 		}
 
 		if (!TypeUtils.isResolved(currentType)) {
-			if (debug) {
-				System.out.println("Unresolved type: " + currentType);
-			}
 			return false;
 		}
 
@@ -465,7 +501,7 @@ public class BindingValue extends Expression {
 						if (newPathElement != null) {
 							bindingPath.add(newPathElement);
 							current = newPathElement;
-							System.out.println("> SIMPLE " + pathElement);
+							// System.out.println("> SIMPLE " + pathElement);
 						} else {
 							return false;
 						}
@@ -486,7 +522,7 @@ public class BindingValue extends Expression {
 						if (newPathElement != null) {
 							bindingPath.add(newPathElement);
 							current = newPathElement;
-							System.out.println("> FUNCTION " + pathElement);
+							// System.out.println("> FUNCTION " + pathElement);
 						} else {
 							return false;
 						}

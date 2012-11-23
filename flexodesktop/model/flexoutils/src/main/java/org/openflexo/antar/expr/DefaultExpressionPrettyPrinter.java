@@ -119,7 +119,7 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(BindingValue bv) {
-		if (bv.isValid()) {
+		if (!bv.needsParsing()) {
 			StringBuffer sb = new StringBuffer();
 			sb.append(bv.getBindingVariable().getVariableName());
 			for (BindingPathElement e : bv.getBindingPath()) {

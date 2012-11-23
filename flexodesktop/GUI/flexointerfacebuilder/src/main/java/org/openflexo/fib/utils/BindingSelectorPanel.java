@@ -716,6 +716,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						if (((BindingValue) dataBinding.getExpression()).getBindingPath().size() > i && i > -1 && i < _lists.size()) {
 							((BindingValue) dataBinding.getExpression()).removeBindingPathAt(i);
 							// ((BindingValue) dataBinding.getExpression()).disconnect();
+							// BindingSelectorPanel.this._bindingSelector.disconnect();
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(dataBinding);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
 							listAtIndex(i).requestFocus();
@@ -866,7 +867,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			logger.fine("update with " + binding);
 		}
 
-		System.out.println("Update dans BindingSelectorPanel avec binding of " + binding.getExpression().getClass());
+		System.out.println("Update in BindingSelectorPanel with binding of " + binding.getExpression().getClass());
 
 		if (binding == null || binding.isConstant()) {
 			clearColumns();
@@ -877,8 +878,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			BindingValue bindingValue = (BindingValue) binding.getExpression();
 			listAtIndex(0).setModel(_bindingSelector.getRootListModel());
 			int lastUpdatedList = 0;
-
-			System.out.println("Hop, on doit se mettre a jour pour " + binding);
 
 			// logger.info("bindingValue.getBindingVariable()="+bindingValue.getBindingVariable());
 
@@ -915,7 +914,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					 * logger.info("Dernier element: "+pathElement); }
 					 */
 
-					if (!(bindingValue.isValid() && bindingValue.isLastBindingPathElement(pathElement, i))) {
+					if (!(bindingValue.isValid() && bindingValue.isLastBindingPathElement(pathElement/*, i*/) && _bindingSelector
+							.isConnected())) {
 						Type resultingType = bindingValue.getBindingPath().get(i).getType();
 						listAtIndex(i + 2).setModel(_bindingSelector.getListModelFor(bindingValue.getBindingPath().get(i), resultingType));
 						lastUpdatedList = i + 2;
@@ -1367,7 +1367,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				if (binding != null && binding.isBindingValue()) {
 					BindingValue bindingValue = (BindingValue) binding.getExpression();
 					if (bindingValue.isValid()
-							&& bindingValue.isLastBindingPathElement(columnElement.getElement(), getIndexOfList(this) - 1)) {
+							&& bindingValue.isLastBindingPathElement(columnElement.getElement()/*, getIndexOfList(this) - 1*/)
+							&& BindingSelectorPanel.this._bindingSelector.isConnected()) {
 						// setIcon(label, CONNECTED_ICON, list);
 					} else if (columnElement.getResultingType() != null) {
 						if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
@@ -1683,10 +1684,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					DataBinding binding = BindingSelectorPanel.this._bindingSelector.getEditedObject();
 					if (binding != null && binding.isBindingValue()) {
 						BindingValue bindingValue = (BindingValue) binding.getExpression();
-						System.out.println("bindingValue=" + bindingValue + " valid=" + isValid());
+						// System.out.println("bindingValue=" + bindingValue + " valid=" + isValid());
 						if (bindingValue.isValid()
-								&& bindingValue.isLastBindingPathElement(columnElement.getElement(), _lists.indexOf(list) - 1)) {
-							System.out.println("connecte");
+								&& bindingValue.isLastBindingPathElement(columnElement.getElement()/*, _lists.indexOf(list) - 1*/)
+								&& BindingSelectorPanel.this._bindingSelector.isConnected()) {
+							// System.out.println("connecte");
 							returned = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
@@ -2145,6 +2147,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		BindingColumnElement last = null;
 		while (listAtIndex(i) != null && listAtIndex(i).getSelectedValue() != null) {
 			last = (BindingColumnElement) listAtIndex(i).getSelectedValue();
+			System.out.println("Ici je selectionne " + last.getElement());
 			((BindingValue) _bindingSelector.getEditedObject().getExpression()).setBindingPathElementAtIndex(last.getElement(), i - 1);
 			i++;
 		}
