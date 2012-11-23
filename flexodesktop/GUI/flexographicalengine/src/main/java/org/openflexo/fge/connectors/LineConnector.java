@@ -576,4 +576,13 @@ public class LineConnector extends Connector {
 		return cp2RelativeToEndObject;
 	}
 
+	@Override
+	public LineConnector clone() {
+		LineConnector returned = new LineConnector(null);
+		returned.setLineConnectorType(getLineConnectorType());
+		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
+		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());
+		return returned;
+	}
+
 }

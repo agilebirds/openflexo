@@ -58,7 +58,8 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		new AddTOCEntryInitializer(this);
 		new MoveTOCEntryInitializer(this);
 		new AddDocTypeInitializer(this);
-		new ImportTOCTemplateInitializer(this);
+		// Desactivate ImportTOCTemplate
+		// new ImportTOCTemplateInitializer(this);
 		new RemoveTOCRepositoryInitializer(this);
 		new RemoveTOCEntryInitializer(this);
 		new RemoveDocTypeInitializer(this);

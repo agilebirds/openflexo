@@ -316,7 +316,20 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 			model.setShowDataProperties(getSelectDataProperties());
 			model.setShowAnnotationProperties(getSelectAnnotationProperties());
 			model.setShowOWLAndRDFConcepts(getShowOWLAndRDFConcepts());
-			model.recomputeStructure();
+			/*System.out.println("Recomputing...");
+			System.out.println("context=" + getContext());
+			System.out.println("getStrictMode()=" + getStrictMode());
+			System.out.println("getHierarchicalMode()=" + getHierarchicalMode());
+			System.out.println("getDisplayPropertiesInClasses()=" + getDisplayPropertiesInClasses());
+			System.out.println("getRootClass()=" + getRootClass());
+			System.out.println("getDomain()=" + getDomain());
+			System.out.println("getRange()=" + getRange());
+			System.out.println("getDataType()=" + getDataType());
+			System.out.println("getSelectObjectProperties()=" + getSelectObjectProperties());
+			System.out.println("getSelectDataProperties()=" + getSelectDataProperties());
+			System.out.println("getSelectAnnotationProperties()=" + getSelectAnnotationProperties());
+			System.out.println("getShowOWLAndRDFConcepts()=" + getShowOWLAndRDFConcepts());
+			model.recomputeStructure();*/
 		}
 		return model;
 	}
@@ -369,7 +382,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 				// "http://www.w3.org/2002/07/owl");
-						"http://www.openflexo.org/test/TestProperties.owl");
+						"http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl");
+				// "http://www.openflexo.org/test/TestProperties.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
 				o.loadWhenUnloaded();
 
@@ -381,6 +395,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				selector.setSelectObjectProperties(true);
 				selector.setSelectDataProperties(true);
 				selector.setStrictMode(true);
+				selector.setDomainClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#RootClassForOutputModel1");
+				// selector.setRangeClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmSubMode");
 				return makeArray(selector);
 			}
 
@@ -396,5 +412,4 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		};
 		editor.launch();
 	}*/
-
 }

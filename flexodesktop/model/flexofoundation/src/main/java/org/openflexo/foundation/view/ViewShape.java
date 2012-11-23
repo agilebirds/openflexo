@@ -95,6 +95,7 @@ public class ViewShape extends ViewElement {
 		super.refreshGraphicalRepresentation();
 		getGraphicalRepresentation().updateConstraints();
 		getGraphicalRepresentation().notifyShapeNeedsToBeRedrawn();
+		getGraphicalRepresentation().notifyObjectHasMoved();
 	}
 
 	@Override

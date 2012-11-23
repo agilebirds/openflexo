@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.DGRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="History" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="HistoryTab">
+      <Label label="manage_history" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="ManageHistoryLabel" localize="true" />
+      <CheckBox selected="false" index="1" data="data.manageHistory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="ManageHistory" localize="true" />
+      <Label label="releases" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" visible="(data.manageHistory = true)" name="ReleasesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.cg.version.CGRelease" visibleRowCount="10" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Releases" index="3" data="data.releases" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)" visible="(data.manageHistory = true)">
+        <LabelColumn data="iterator.versionIdentifier" title="version" columnWidth="100" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.date" title="date" columnWidth="200" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.userId" title="user" columnWidth="100" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="format" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="FormatLabel" localize="true" />
+      <TextField index="3" data="data.format.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Format" readOnly="true" localize="true" />
+      <Label label="doc_type" index="16" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="DocTypeLabel" localize="true" />
+      <DropDown index="17" data="data.docType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="DocType" format="object.name" localize="true" list="data.docType.availableValues" iteratorClassName="org.openflexo.foundation.DocType" autoSelectFirstRow="false" />
+      <Label label="name" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="19" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Name" readOnly="true" localize="true" />
+      <Label label="source_directory" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="DirectoryLabel" localize="true" />
+      <File mode="SaveMode" isDirectory="true" index="21" data="data.directory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Directory" localize="true" />
+      <Label label="table_of_content" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" name="TocRepositoryLabel" localize="true" />
+      <DropDown showReset="true" index="23" data="data.tocRepository" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="TocRepository" format="object.title" localize="true" list="data.project.tOCData.repositories" iteratorClassName="org.openflexo.foundation.toc.TOCRepository" autoSelectFirstRow="false" />
+      <Label label="templates_repository" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" name="PreferredTemplateRepositoryLabel" localize="true" />
+      <DropDown showReset="true" index="25" data="data.preferredTemplateRepository" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="PreferredTemplateRepository" format="object.name" localize="true" list="data.generatedCode.templates.customDocRepositoriesVector" iteratorClassName="org.openflexo.foundation.cg.templates.CustomCGTemplateRepository" autoSelectFirstRow="false" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="History" lang="English">History</Localized>
+    <Localized key="History" lang="French">History</Localized>
+    <Localized key="History" lang="Dutch">History</Localized>
+    <Localized key="manage_history" lang="English">manage_history</Localized>
+    <Localized key="manage_history" lang="French">manage_history</Localized>
+    <Localized key="manage_history" lang="Dutch">manage_history</Localized>
+    <Localized key="releases" lang="English">releases</Localized>
+    <Localized key="releases" lang="French">releases</Localized>
+    <Localized key="releases" lang="Dutch">releases</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="French">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="format" lang="English">format</Localized>
+    <Localized key="format" lang="French">format</Localized>
+    <Localized key="format" lang="Dutch">format</Localized>
+    <Localized key="doc_type" lang="English">doc_type</Localized>
+    <Localized key="doc_type" lang="French">doc_type</Localized>
+    <Localized key="doc_type" lang="Dutch">doc_type</Localized>
+    <Localized key="name" lang="English">name</Localized>
+    <Localized key="name" lang="French">name</Localized>
+    <Localized key="name" lang="Dutch">name</Localized>
+    <Localized key="source_directory" lang="English">source_directory</Localized>
+    <Localized key="source_directory" lang="French">source_directory</Localized>
+    <Localized key="source_directory" lang="Dutch">source_directory</Localized>
+    <Localized key="table_of_content" lang="English">table_of_content</Localized>
+    <Localized key="table_of_content" lang="French">table_of_content</Localized>
+    <Localized key="table_of_content" lang="Dutch">table_of_content</Localized>
+    <Localized key="templates_repository" lang="English">templates_repository</Localized>
+    <Localized key="templates_repository" lang="French">templates_repository</Localized>
+    <Localized key="templates_repository" lang="Dutch">templates_repository</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="generated_doc_repository" />
+</Panel>

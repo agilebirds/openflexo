@@ -1,4 +1,4 @@
-<inspector title = "Generated doc">
+<inspector title = "Generated doc" inspectedClassName="org.openflexo.foundation.cg.GeneratedDoc">
 	<tab name="Basic" index="0">
 		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0">
 		<param name="displayLabel" value="false"/>

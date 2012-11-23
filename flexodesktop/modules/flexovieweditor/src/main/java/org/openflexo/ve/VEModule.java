@@ -109,7 +109,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new VEShemaController(getOEController(), target);
+		screenshotController = new VEShemaController(getOEController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();

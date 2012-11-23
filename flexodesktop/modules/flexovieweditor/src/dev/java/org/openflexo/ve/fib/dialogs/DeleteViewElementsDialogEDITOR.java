@@ -23,47 +23,45 @@ import java.io.File;
 import java.util.Vector;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewElement;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DeleteViewElements;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
-
 public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				View shema = project.getShemaLibrary().getShemaNamed("BasicOrganization").getShema();
-				ViewShape a = shema.getShapeNamed("A");
-				ViewShape b = a.getShapeNamed("B");
-				ViewShape c = a.getShapeNamed("C");
-				ViewShape x = b.getShapeNamed("X");
-				ViewShape worker1 = b.getShapeNamed("Worker");
-				ViewShape worker2 = b.getShapeNamed("Worker2");
-				ViewShape y = c.getShapeNamed("Y");
-				ViewShape z = a.getShapeNamed("Z");
-				Vector<ViewElement> selection = new Vector<ViewElement>();
-				selection.add(b);
-				selection.add(x);
-				selection.add(c);
-				DeleteViewElements action = DeleteViewElements.actionType.makeNewAction(null, selection,null);
-				return makeArray(action);
-			}
-			public File getFIBFile() {
-				return VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		View shema = project.getShemaLibrary().getShemaNamed("BasicOrganization").getShema();
+		ViewShape a = shema.getShapeNamed("A");
+		ViewShape b = a.getShapeNamed("B");
+		ViewShape c = a.getShapeNamed("C");
+		ViewShape x = b.getShapeNamed("X");
+		ViewShape worker1 = b.getShapeNamed("Worker");
+		ViewShape worker2 = b.getShapeNamed("Worker2");
+		ViewShape y = c.getShapeNamed("Y");
+		ViewShape z = a.getShapeNamed("Z");
+		Vector<ViewElement> selection = new Vector<ViewElement>();
+		selection.add(b);
+		selection.add(x);
+		selection.add(c);
+		DeleteViewElements action = DeleteViewElements.actionType.makeNewAction(null, selection, null);
+		return makeArray(action);
 	}
+
+	@Override
+	public File getFIBFile() {
+		return VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
+	}
+
+	public static void main(String[] args) {
+		main(DeleteViewElementsDialogEDITOR.class);
+	}
+
 }

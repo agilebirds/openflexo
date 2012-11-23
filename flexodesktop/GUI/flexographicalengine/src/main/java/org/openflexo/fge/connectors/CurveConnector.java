@@ -523,4 +523,15 @@ public class CurveConnector extends Connector {
 		}
 		return 0;
 	}
+
+	@Override
+	public CurveConnector clone() {
+		CurveConnector returned = new CurveConnector(null);
+		returned._setCpPosition(_getCpPosition());
+		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
+		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());
+		returned.setAreBoundsAdjustable(getAreBoundsAdjustable());
+		return returned;
+	}
+
 }

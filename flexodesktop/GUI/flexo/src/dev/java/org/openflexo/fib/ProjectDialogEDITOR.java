@@ -21,6 +21,7 @@ package org.openflexo.fib;
 
 import java.io.File;
 
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
@@ -31,7 +32,7 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-public class ProjectDialogEDITOR {
+public abstract class ProjectDialogEDITOR extends FIBAbstractEditor {
 
 	public static FlexoResourceCenterService getResourceCenter() {
 		if (resourceCenter == null) {

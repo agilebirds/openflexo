@@ -70,7 +70,7 @@ import org.openflexo.xmlcode.XMLCoder;
 //	getPalette().setEditorController(editorController);
 public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
-	public static <T extends FIBAbstractEditor> void main(final Class<T> editor) {
+	/*public static <T extends FIBAbstractEditor> void main(final Class<T> editor) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -87,7 +87,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 				}
 			}
 		});
-	}
+	}*/
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
 
@@ -478,6 +478,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		System.exit(0);
 	}
 
+	@Deprecated
 	public void launch() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -492,8 +493,13 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			return;
 		}
 		logger.info(">>>>>>>>>>> Loading FIB...");
-		loadFIB();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				loadFIB();
+				frame.setVisible(true);
+			}
+		});
 	}
 
 	public static Object[] makeArray(Object... o) {
@@ -509,5 +515,24 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public boolean showExitMenuItem() {
 		return true;
+	}
+
+	public static <T extends FIBAbstractEditor> void main(final Class<T> klass) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					T abstractEditor = klass.newInstance();
+					abstractEditor.loadFIB();
+					abstractEditor.getFrame().setVisible(true);
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

@@ -117,7 +117,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public void addNewShape(MyShape aShape, MyDrawingElement father) {
 		father.addToChilds(aShape);
-		aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
+		// aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
 		// getDrawing().addDrawable(aShape,
 		// contextualMenuInvoker.getDrawable());
 	}

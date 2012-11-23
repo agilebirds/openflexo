@@ -496,8 +496,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	private void computeHierarchicalStructure() {
 
-		System.out.println("computeHierarchicalStructure()");
-
 		logger.fine("computeHierarchicalStructure()");
 
 		if (roots != null) {

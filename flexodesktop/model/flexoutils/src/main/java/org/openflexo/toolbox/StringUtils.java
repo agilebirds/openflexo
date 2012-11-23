@@ -28,6 +28,8 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
@@ -163,6 +165,38 @@ public class StringUtils {
 			default:
 				sb.append(c);
 			}
+		}
+		return sb.toString();
+	}
+
+	public static String replaceNonMatchingPatterns(String string, String regexp, String replacement) {
+		return replaceNonMatchingPatterns(string, regexp, replacement, false);
+	}
+
+	public static String replaceNonMatchingPatterns(String string, String regexp, String replacement, boolean replaceEachCharacter) {
+		if (string == null || string.length() == 0) {
+			return string;
+		}
+		StringBuilder sb = new StringBuilder();
+		Matcher m = Pattern.compile(regexp).matcher(string);
+		int last = 0;
+		while (m.find()) {
+			if (replaceEachCharacter) {
+				for (int i = last; i < m.start(); i++) {
+					sb.append(replacement);
+				}
+			} else if (last != m.start()) {
+				sb.append(replacement);
+			}
+			sb.append(m.group());
+			last = m.end();
+		}
+		if (replaceEachCharacter) {
+			for (int i = last; i < string.length(); i++) {
+				sb.append(replacement);
+			}
+		} else if (last != string.length()) {
+			sb.append(replacement);
 		}
 		return sb.toString();
 	}

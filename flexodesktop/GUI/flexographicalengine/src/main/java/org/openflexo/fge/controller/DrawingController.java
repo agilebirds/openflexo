@@ -47,6 +47,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -722,6 +723,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (toolbox != null) {
 			toolbox.delete();
 		}
+		focusedObjects.clear();
+		selectedObjects.clear();
+		focusedControlArea = null;
 		toolbox = null;
 		palettes = null;
 		storedSelection = null;
@@ -797,24 +801,44 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void notifyHasMoved(MoveInfo currentMove) {
 	}
 
-	public void upKeyPressed() {
+	/**
+	 * Process 'UP' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean upKeyPressed() {
 		// System.out.println("Up");
-		keyDrivenMove(0, -1);
+		return keyDrivenMove(0, -1);
 	}
 
-	public void downKeyPressed() {
+	/**
+	 * Process 'DOWN' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean downKeyPressed() {
 		// System.out.println("Down");
-		keyDrivenMove(0, 1);
+		return keyDrivenMove(0, 1);
 	}
 
-	public void leftKeyPressed() {
+	/**
+	 * Process 'LEFT' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean leftKeyPressed() {
 		// System.out.println("Left");
-		keyDrivenMove(-1, 0);
+		return keyDrivenMove(-1, 0);
 	}
 
-	public void rightKeyPressed() {
+	/**
+	 * Process 'RIGHT' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean rightKeyPressed() {
 		// System.out.println("Right");
-		keyDrivenMove(1, 0);
+		return keyDrivenMove(1, 0);
 	}
 
 	private MoveInfo keyDrivenMovingSession;
@@ -823,9 +847,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private synchronized boolean keyDrivenMove(int deltaX, int deltaY) {
 		if (keyDrivenMovingSessionTimer == null && getFirstSelectedShape() != null) {
 			// System.out.println("BEGIN to move with keyboard");
-			startKeyDrivenMovingSession();
-			doMoveInSession(deltaX, deltaY);
-			return true;
+			if (startKeyDrivenMovingSession()) {
+				doMoveInSession(deltaX, deltaY);
+				return true;
+			}
+			return false;
 		} else if (keyDrivenMovingSessionTimer != null) {
 			doMoveInSession(deltaX, deltaY);
 			return true;
@@ -841,15 +867,19 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		keyDrivenMovingSession.moveTo(newLocation);
 	}
 
-	private synchronized void startKeyDrivenMovingSession() {
-		keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
-		keyDrivenMovingSessionTimer.start();
+	private synchronized boolean startKeyDrivenMovingSession() {
 
-		ShapeGraphicalRepresentation<?> movedObject = getFirstSelectedShape();
+		if (getFirstSelectedShape().getLocationConstraints() == LocationConstraints.FREELY_MOVABLE) {
 
-		keyDrivenMovingSession = new MoveInfo(movedObject, this);
-
-		notifyWillMove(keyDrivenMovingSession);
+			keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
+			keyDrivenMovingSessionTimer.start();
+			ShapeGraphicalRepresentation<?> movedObject = getFirstSelectedShape();
+			keyDrivenMovingSession = new MoveInfo(movedObject, this);
+			notifyWillMove(keyDrivenMovingSession);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private synchronized void stopKeyDrivenMovingSession() {

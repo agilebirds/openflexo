@@ -46,7 +46,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.ToolBox;
 
 public class InspectorEditor {
 
@@ -66,7 +65,7 @@ public class InspectorEditor {
 		}
 
 		try {
-			ToolBox.setPlatform();
+			// ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block

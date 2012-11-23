@@ -5,412 +5,463 @@
     <description>Allows to define an organization unit inside an other organization unit.</description>
     <DropScheme id="3" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DropOrganizationalUnitInOrganizationalUnit" label="DropOrganizationalUnitInOrganizationalUnit" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <ContextShapePatternRole id="4" exampleLabel="Organization Unit" patternRole="shape">
-        <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-135.75199999999995" y="16.421052631578974" width="535.752" height="111.57894736842103" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="Organization Unit" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="267.0" absoluteTextY="-12.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-135.75199999999995" y="16.421052631578974" width="535.752" height="111.57894736842103" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="Organization Unit" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="267.0" absoluteTextY="-12.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
           <ForegroundStyle id="6" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
           <ColorBackgroundStyle id="7" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="8" top="5" bottom="5" left="5" right="5" />
-          <RectangleShape id="9" isRounded="true" arcSize="20.0" />
-          <ShadowStyle id="10" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="11" font="Lucida Sans,1,13" color="0,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          <SelectedForegroundStyle id="8" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="9" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="10" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="11" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="12" top="5" bottom="5" left="5" right="5" />
+          <RectangleShape id="13" isRounded="true" arcSize="20.0" />
+          <ShadowStyle id="14" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="15" font="Lucida Sans,1,13" color="0,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         </ShapeGraphicalRepresentation>
-        <GRSpec id="12" featureName="label" value="organizationUnit.organizationUnitName" readOnly="false" />
+        <GRSpec id="16" featureName="label" value="organizationUnit.organizationUnitName" readOnly="false" />
       </ContextShapePatternRole>
       <description>Create a new organization unit inside parent organization unit</description>
-      <TextFieldParameter id="13" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextFieldParameter id="17" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter organization unit name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="14" base="parameters.organizationUnitName" name="organizationUnitURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+      <URIParameter id="18" base="parameters.organizationUnitName" name="organizationUnitURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <TextAreaParameter id="15" name="organizationUnitDescription" label="organization_unit_description" defaultValue="&quot;Please describe here the organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextAreaParameter id="19" name="organizationUnitDescription" label="organization_unit_description" defaultValue="&quot;Please describe here the organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter a short description of the organization unit</description>
       </TextAreaParameter>
-      <TextFieldParameter id="16" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <URIParameter id="17" base="parameters.missionName" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <TextAreaParameter id="18" name="missionDescription" label="missionDescription" defaultValue="&quot;Please describe here the mission of organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <AddIndividual id="19" individualName="parameters.missionURI" assignation="mission">
-        <DataPropertyAssertion id="20" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
-        <DataPropertyAssertion id="21" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
+      <TextFieldParameter id="20" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="21" base="parameters.missionName" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextAreaParameter id="22" name="missionDescription" label="missionDescription" defaultValue="&quot;Please describe here the mission of organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="23" individualName="parameters.missionURI" assignation="mission">
+        <DataPropertyAssertion id="24" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
+        <DataPropertyAssertion id="25" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
       </AddIndividual>
-      <AddIndividual id="22" individualName="parameters.organizationUnitURI" assignation="organizationUnit">
-        <DataPropertyAssertion id="23" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitName" value="parameters.organizationUnitName" />
-        <DataPropertyAssertion id="24" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitDescription" value="parameters.organizationUnitDescription" />
-        <ObjectPropertyAssertion id="25" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasParentOrgUnit" object="target.organizationUnit" />
+      <AddIndividual id="26" individualName="parameters.organizationUnitURI" assignation="organizationUnit">
+        <DataPropertyAssertion id="27" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitName" value="parameters.organizationUnitName" />
+        <DataPropertyAssertion id="28" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitDescription" value="parameters.organizationUnitDescription" />
+        <ObjectPropertyAssertion id="29" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasParentOrgUnit" object="target.organizationUnit" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="26" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
-      <AddObjectPropertyStatement id="27" object="organizationUnit" assignation="hasSubOrgUnit" subject="target.organizationUnit" />
-      <AddShape id="28" container="target.shape" assignation="shape" />
-      <AddShape id="29" assignation="missionContainer" />
-      <AddShape id="30" assignation="missionName" />
-      <AddShape id="31" assignation="missionDescription" />
+      <AddObjectPropertyStatement id="30" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
+      <AddObjectPropertyStatement id="31" object="organizationUnit" assignation="hasSubOrgUnit" subject="target.organizationUnit" />
+      <AddShape id="32" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="33" extendParentBoundsToHostThisShape="false" assignation="missionContainer" />
+      <AddShape id="34" extendParentBoundsToHostThisShape="false" assignation="missionName" />
+      <AddShape id="35" extendParentBoundsToHostThisShape="false" assignation="missionDescription" />
     </DropScheme>
-    <DropScheme id="32" target="top" name="DropOrganizationalUnitInTopLevel" label="DropOrganizationalUnitInTopOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="36" target="top" name="DropOrganizationalUnitInTopLevel" label="DropOrganizationalUnitInTopOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <description>Create a new organization unit at top level</description>
-      <TextFieldParameter id="33" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization Unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <URIParameter id="34" base="parameters.organizationUnitName" name="organizationUnitURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <TextAreaParameter id="35" name="organizationUnitDescription" label="organization_unit_description" defaultValue="&quot;Please describe here the organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <TextFieldParameter id="36" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <URIParameter id="37" base="parameters.missionName" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <TextAreaParameter id="38" name="missionDescription" label="missionDescription" defaultValue="&quot;Please describe here the mission of organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <AddIndividual id="39" individualName="parameters.missionURI" assignation="mission">
-        <DataPropertyAssertion id="40" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
-        <DataPropertyAssertion id="41" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
+      <TextFieldParameter id="37" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization Unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="38" base="parameters.organizationUnitName" name="organizationUnitURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextAreaParameter id="39" name="organizationUnitDescription" label="organization_unit_description" defaultValue="&quot;Please describe here the organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="40" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="41" base="parameters.missionName" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextAreaParameter id="42" name="missionDescription" label="missionDescription" defaultValue="&quot;Please describe here the mission of organizational unit&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="43" individualName="parameters.missionURI" assignation="mission">
+        <DataPropertyAssertion id="44" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
+        <DataPropertyAssertion id="45" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
       </AddIndividual>
-      <AddIndividual id="42" individualName="parameters.organizationUnitURI" assignation="organizationUnit">
-        <DataPropertyAssertion id="43" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitName" value="parameters.organizationUnitName" />
-        <DataPropertyAssertion id="44" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitDescription" value="parameters.organizationUnitDescription" />
+      <AddIndividual id="46" individualName="parameters.organizationUnitURI" assignation="organizationUnit">
+        <DataPropertyAssertion id="47" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitName" value="parameters.organizationUnitName" />
+        <DataPropertyAssertion id="48" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#organizationUnitDescription" value="parameters.organizationUnitDescription" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="45" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
-      <AddShape id="46" container="topLevel" assignation="shape" />
-      <AddShape id="47" container="topLevel" assignation="missionContainer" />
-      <AddShape id="48" container="topLevel" assignation="missionName" />
-      <AddShape id="49" container="topLevel" assignation="missionDescription" />
+      <AddObjectPropertyStatement id="49" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
+      <AddShape id="50" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="51" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionContainer" />
+      <AddShape id="52" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionName" />
+      <AddShape id="53" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionDescription" />
     </DropScheme>
-    <DropScheme id="50" target="top" name="DrawOrganizationalUnitInOrganizationalUnit" label="DrawOrganizationalUnitInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="54" target="top" name="DrawOrganizationalUnitInOrganizationalUnit" label="DrawOrganizationalUnitInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <description>Draw an existing Organization Unit. These can be done only at top level.</description>
-      <IndividualParameter id="51" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" name="organizationalUnit" label="Organizational unit" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <DeclarePatternRole id="52" object="parameters.organizationalUnit" assignation="organizationUnit" />
-      <DeclarePatternRole id="53" object="organizationUnit.hasOrgUnitMission" conditional="(organizationUnit.hasOrgUnitMission != null)" assignation="mission" />
-      <AddIndividual id="54" individualName="(organizationUnit.uriName + &quot;Mission&quot;)" conditional="(organizationUnit.hasOrgUnitMission = null)" assignation="mission">
-        <DataPropertyAssertion id="55" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
-        <DataPropertyAssertion id="56" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;&lt;Describe the mission here&gt;&quot;" />
+      <IndividualParameter id="55" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" name="organizationalUnit" label="Organizational unit" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <DeclarePatternRole id="56" object="parameters.organizationalUnit" assignation="organizationUnit" />
+      <DeclarePatternRole id="57" object="organizationUnit.hasOrgUnitMission" conditional="(organizationUnit.hasOrgUnitMission != null)" assignation="mission" />
+      <AddIndividual id="58" individualName="(organizationUnit.uriName + &quot;Mission&quot;)" conditional="(organizationUnit.hasOrgUnitMission = null)" assignation="mission">
+        <DataPropertyAssertion id="59" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
+        <DataPropertyAssertion id="60" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;&lt;Describe the mission here&gt;&quot;" />
       </AddIndividual>
-      <AddShape id="57" container="topLevel" assignation="shape" />
-      <AddShape id="58" container="topLevel" assignation="missionContainer" />
-      <AddShape id="59" container="topLevel" assignation="missionName" />
-      <AddShape id="60" container="topLevel" assignation="missionDescription" />
+      <AddShape id="61" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="62" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionContainer" />
+      <AddShape id="63" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionName" />
+      <AddShape id="64" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="missionDescription" />
     </DropScheme>
-    <NavigationScheme id="61" targetObject="process" conditional="(process != null)" name="OpenRelatedProcess" label="OpenRelatedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
-    <NavigationScheme id="62" targetObject="activity" conditional="(activity != null)" name="OpenRelatedActivity" label="OpenRelatedActivity" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
-    <CreationScheme id="63" name="CreateDiagramFromOrganizationUnit" label="CreateDiagramFromOrganizationUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <IndividualParameter id="64" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" name="organizationalUnit" label="organizationalUnit" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <DeclarePatternRole id="65" object="parameters.organizationalUnit" assignation="organizationUnit" />
-      <DeclarePatternRole id="66" object="organizationUnit.hasOrgUnitMission" conditional="(organizationUnit.hasOrgUnitMission != null)" assignation="mission" />
-      <AddIndividual id="67" individualName="(organizationUnit.uriName + &quot;Mission&quot;)" conditional="(organizationUnit.hasOrgUnitMission = null)" assignation="mission">
-        <DataPropertyAssertion id="68" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
-        <DataPropertyAssertion id="69" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;&lt;Describe the mission here&gt;&quot;" />
+    <NavigationScheme id="65" targetObject="process" conditional="(process != null)" name="OpenRelatedProcess" label="OpenRelatedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+    <NavigationScheme id="66" targetObject="activity" conditional="(activity != null)" name="OpenRelatedActivity" label="OpenRelatedActivity" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+    <CreationScheme id="67" name="CreateDiagramFromOrganizationUnit" label="CreateDiagramFromOrganizationUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <IndividualParameter id="68" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" name="organizationalUnit" label="organizationalUnit" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <DeclarePatternRole id="69" object="parameters.organizationalUnit" assignation="organizationUnit" />
+      <DeclarePatternRole id="70" object="organizationUnit.hasOrgUnitMission" conditional="(organizationUnit.hasOrgUnitMission != null)" assignation="mission" />
+      <AddIndividual id="71" individualName="(organizationUnit.uriName + &quot;Mission&quot;)" conditional="(organizationUnit.hasOrgUnitMission = null)" assignation="mission">
+        <DataPropertyAssertion id="72" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
+        <DataPropertyAssertion id="73" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;&lt;Describe the mission here&gt;&quot;" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="70" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
-      <AddShape id="71" container="topLevel" assignation="shape" />
-      <AddShape id="72" assignation="missionContainer" />
-      <AddShape id="73" assignation="missionName" />
-      <AddShape id="74" assignation="missionDescription" />
-      <GraphicalAction id="75" subject="shape" value="10.01" feature="x" />
-      <GraphicalAction id="76" subject="shape" value="25.01" feature="y" />
-      <GraphicalAction id="77" subject="shape" value="500.01" feature="width" />
-      <GraphicalAction id="78" subject="shape" value="400.01" feature="height" />
+      <AddObjectPropertyStatement id="74" object="mission" assignation="hasOrgUnitMission" subject="organizationUnit" />
+      <AddShape id="75" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="76" extendParentBoundsToHostThisShape="false" assignation="missionContainer" />
+      <AddShape id="77" extendParentBoundsToHostThisShape="false" assignation="missionName" />
+      <AddShape id="78" extendParentBoundsToHostThisShape="false" assignation="missionDescription" />
+      <GraphicalAction id="79" subject="shape" value="10.01" feature="x" />
+      <GraphicalAction id="80" subject="shape" value="25.01" feature="y" />
+      <GraphicalAction id="81" subject="shape" value="500.01" feature="width" />
+      <GraphicalAction id="82" subject="shape" value="400.01" feature="height" />
     </CreationScheme>
-    <ContainedIndividualPatternRole id="79" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" patternRole="organizationUnit" />
-    <ContainedObjectPropertyStatementPatternRole id="80" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasSubOrgUnit" patternRole="hasSubOrgUnit" />
+    <ContainedIndividualPatternRole id="83" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit" patternRole="organizationUnit" />
+    <ContainedObjectPropertyStatementPatternRole id="84" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasSubOrgUnit" patternRole="hasSubOrgUnit" />
     <ContainedShapePatternRole idref="4" />
-    <ContainedIndividualPatternRole id="81" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnitMission" patternRole="mission" />
-    <ContainedShapePatternRole id="82" exampleLabel="" patternRole="missionContainer">
-      <ShapeGraphicalRepresentation id="83" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="57.0" y="6.038834951456309" width="396.18257261410787" height="80.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="84" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="85" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
-        <Border id="86" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="87" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="88" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="89" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="85" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnitMission" patternRole="mission" />
+    <ContainedShapePatternRole id="86" exampleLabel="" patternRole="missionContainer">
+      <ShapeGraphicalRepresentation id="87" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="57.0" y="6.038834951456309" width="396.18257261410787" height="80.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="88" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="89" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="90" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="91" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="92" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="93" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <Border id="94" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="95" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="96" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="97" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <ParentShapePatternRole idref="4" />
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="90" exampleLabel="Mission" patternRole="missionName">
-      <ShapeGraphicalRepresentation id="91" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="5.0" y="5.0" width="386.18257261410787" height="25.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="5" widthConstraints="(parent.width - 10)" heightConstraints="25" identifier="object_0_0_0" layer="3" hasText="true" text="Mission" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="92" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="93" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="94" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="95" isRounded="true" arcSize="10.0" />
-        <ShadowStyle id="96" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="97" font="Lucida Sans,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="98" exampleLabel="Mission" patternRole="missionName">
+      <ShapeGraphicalRepresentation id="99" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="5.0" y="5.0" width="386.18257261410787" height="25.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="5" widthConstraints="(parent.width - 10)" heightConstraints="25" identifier="object_0_0_0" layer="3" hasText="true" text="Mission" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="100" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="101" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="102" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="103" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="104" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="105" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="106" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="107" isRounded="true" arcSize="10.0" />
+        <ShadowStyle id="108" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="109" font="Lucida Sans,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="82" />
-      <GRSpec id="98" featureName="label" value="mission.missionName" readOnly="false" />
+      <ParentShapePatternRole idref="86" />
+      <GRSpec id="110" featureName="label" value="mission.missionName" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="99" exampleLabel="&lt;Describe the mission here&gt;" patternRole="missionDescription">
-      <ShapeGraphicalRepresentation id="100" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="5.0" y="35.0" width="386.18257261410787" height="40.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="35" widthConstraints="(parent.width - 10)" heightConstraints="(parent.height - 40)" identifier="object_0_0_1" layer="3" hasText="true" text="&lt;Describe the mission here&gt;" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="101" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="102" color="204,204,204" useTransparency="true" transparencyLevel="0.35" />
-        <Border id="103" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="104" isRounded="true" arcSize="10.0" />
-        <ShadowStyle id="105" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="106" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="111" exampleLabel="&lt;Describe the mission here&gt;" patternRole="missionDescription">
+      <ShapeGraphicalRepresentation id="112" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="5.0" y="35.0" width="386.18257261410787" height="40.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="35" widthConstraints="(parent.width - 10)" heightConstraints="(parent.height - 40)" identifier="object_0_0_1" layer="3" hasText="true" text="&lt;Describe the mission here&gt;" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="113" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="114" color="204,204,204" useTransparency="true" transparencyLevel="0.35" />
+        <SelectedForegroundStyle id="115" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="116" color="204,204,204" useTransparency="true" transparencyLevel="0.35" />
+        <FocusedForegroundStyle id="117" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="118" color="204,204,204" useTransparency="true" transparencyLevel="0.35" />
+        <Border id="119" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="120" isRounded="true" arcSize="10.0" />
+        <ShadowStyle id="121" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="122" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="82" />
-      <GRSpec id="107" featureName="label" value="mission.missionDescription" readOnly="false" />
+      <ParentShapePatternRole idref="86" />
+      <GRSpec id="123" featureName="label" value="mission.missionDescription" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedFlexoModelObjectPatternRole id="108" flexoModelObjectType="Process" patternRole="process" />
-    <ContainedFlexoModelObjectPatternRole id="109" flexoModelObjectType="Activity" patternRole="activity" />
-    <ContainedObjectPropertyStatementPatternRole id="110" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasOrgUnitMission" patternRole="hasOrgUnitMission" />
-    <PrimaryConceptIndividualPatternRole idref="79" />
+    <ContainedFlexoModelObjectPatternRole id="124" flexoModelObjectType="Process" patternRole="process" />
+    <ContainedFlexoModelObjectPatternRole id="125" flexoModelObjectType="Activity" patternRole="activity" />
+    <ContainedObjectPropertyStatementPatternRole id="126" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasOrgUnitMission" patternRole="hasOrgUnitMission" />
+    <PrimaryConceptIndividualPatternRole idref="83" />
     <PrimaryRepresentationShapePatternRole idref="4" />
-    <Inspector id="111" inspectorTitle="Organization Unit">
-      <TextField id="112" label="uri" name="uri" readOnly="false" data="organizationUnit.uriName" />
-      <TextField id="113" label="organization_unit" name="name" readOnly="false" data="organizationUnit.organizationUnitName" />
-      <TextArea id="114" label="description_of_unit" name="description_of_unit" readOnly="false" data="organizationUnit.organizationUnitDescription" />
-      <TextField id="115" label="mission" name="mission" readOnly="false" data="mission.missionName" />
-      <TextField id="116" label="mission_uri" name="mission_uri" readOnly="false" data="mission.uriName" />
-      <TextArea id="117" label="description_of_mission" name="description_of_mission" readOnly="false" data="mission.missionDescription" />
-      <FlexoObject id="118" flexoObjectType="Process" label="process" name="process" readOnly="false" data="process" />
-      <FlexoObject id="119" flexoObjectType="Activity" label="activity" name="activity" readOnly="false" data="activity" />
+    <Inspector id="127" inspectorTitle="Organization Unit">
+      <TextField id="128" label="uri" name="uri" readOnly="false" data="organizationUnit.uriName" />
+      <TextField id="129" label="organization_unit" name="name" readOnly="false" data="organizationUnit.organizationUnitName" />
+      <TextArea id="130" label="description_of_unit" name="description_of_unit" readOnly="false" data="organizationUnit.organizationUnitDescription" />
+      <TextField id="131" label="mission" name="mission" readOnly="false" data="mission.missionName" />
+      <TextField id="132" label="mission_uri" name="mission_uri" readOnly="false" data="mission.uriName" />
+      <TextArea id="133" label="description_of_mission" name="description_of_mission" readOnly="false" data="mission.missionDescription" />
+      <FlexoObject id="134" flexoObjectType="Process" label="process" name="process" readOnly="false" data="process" />
+      <FlexoObject id="135" flexoObjectType="Activity" label="activity" name="activity" readOnly="false" data="activity" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="120" name="OrganizationalUnitObjective">
+  <EditionPattern id="136" name="OrganizationalUnitObjective">
     <description>Allows to define an objective for an organization unit</description>
-    <DropScheme id="121" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DropObjectiveInOrganizationalUnit" label="DropObjectiveInOrganizationalUnit" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="137" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DropObjectiveInOrganizationalUnit" label="DropObjectiveInOrganizationalUnit" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <ContextShapePatternRole idref="4" />
-      <TextFieldParameter id="122" name="objectiveName" label="objective" defaultValue="&quot;Objective&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextFieldParameter id="138" name="objectiveName" label="objective" defaultValue="&quot;Objective&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter short name for objective</description>
       </TextFieldParameter>
-      <URIParameter id="123" base="parameters.objectiveName" name="objectiveURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+      <URIParameter id="139" base="parameters.objectiveName" name="objectiveURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <TextAreaParameter id="124" name="objectiveDescription" label="objective_description" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextAreaParameter id="140" name="objectiveDescription" label="objective_description" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter a short description for the organization unit objective</description>
       </TextAreaParameter>
-      <AddIndividual id="125" individualName="parameters.objectiveURI" assignation="objective">
-        <DataPropertyAssertion id="126" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#objectiveName" value="parameters.objectiveName" />
-        <DataPropertyAssertion id="127" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#objectiveDescription" value="parameters.objectiveDescription" />
+      <AddIndividual id="141" individualName="parameters.objectiveURI" assignation="objective">
+        <DataPropertyAssertion id="142" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#objectiveName" value="parameters.objectiveName" />
+        <DataPropertyAssertion id="143" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#objectiveDescription" value="parameters.objectiveDescription" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="128" object="objective" assignation="hasObjective" subject="target.organizationUnit" />
-      <AddShape id="129" container="target.shape" assignation="shape" />
+      <AddObjectPropertyStatement id="144" object="objective" assignation="hasObjective" subject="target.organizationUnit" />
+      <AddShape id="145" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
     </DropScheme>
-    <NavigationScheme id="130" targetObject="macroProcess" conditional="(macroProcess != null)" name="OpenRelatedMacroProcess" label="OpenRelatedMacroProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
-    <NavigationScheme id="131" targetObject="process" conditional="(process != null)" name="OpenRelatedProcess" label="OpenRelatedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
-    <ContainedIndividualPatternRole id="132" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Objective" patternRole="objective" />
-    <ContainedObjectPropertyStatementPatternRole id="133" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasObjective" patternRole="hasObjective" />
-    <ContainedShapePatternRole id="134" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="135" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="135.0" y="35.0" width="183.4260355029586" height="40.3013698630137" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="136" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="137" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="138" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="139" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="140" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="141" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <NavigationScheme id="146" targetObject="macroProcess" conditional="(macroProcess != null)" name="OpenRelatedMacroProcess" label="OpenRelatedMacroProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+    <NavigationScheme id="147" targetObject="process" conditional="(process != null)" name="OpenRelatedProcess" label="OpenRelatedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+    <ContainedIndividualPatternRole id="148" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Objective" patternRole="objective" />
+    <ContainedObjectPropertyStatementPatternRole id="149" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasObjective" patternRole="hasObjective" />
+    <ContainedShapePatternRole id="150" exampleLabel="label" patternRole="shape">
+      <ShapeGraphicalRepresentation id="151" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="135.0" y="35.0" width="183.4260355029586" height="40.3013698630137" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="152" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="153" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="154" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="155" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="156" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="157" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="158" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="159" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="160" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="161" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <GRSpec id="142" featureName="label" value="objective.objectiveName" readOnly="false" />
+      <GRSpec id="162" featureName="label" value="objective.objectiveName" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedFlexoModelObjectPatternRole id="143" flexoModelObjectType="ProcessFolder" patternRole="macroProcess" />
-    <ContainedFlexoModelObjectPatternRole id="144" flexoModelObjectType="Process" patternRole="process" />
-    <PrimaryConceptIndividualPatternRole idref="132" />
-    <PrimaryRepresentationShapePatternRole idref="134" />
-    <Inspector id="145" inspectorTitle="Objective">
-      <TextField id="146" label="uri" name="uri" readOnly="false" data="objective.uriName" />
-      <TextField id="147" label="objective" name="name" readOnly="false" data="objective.objectiveName" />
-      <TextArea id="148" label="description" name="description" readOnly="false" data="objective.objectiveDescription" />
-      <FlexoObject id="149" flexoObjectType="ProcessFolder" label="macroProcess" name="macroProcess" readOnly="false" data="macroProcess" />
-      <FlexoObject id="150" flexoObjectType="Process" label="process" name="process" readOnly="false" data="process" />
+    <ContainedFlexoModelObjectPatternRole id="163" flexoModelObjectType="ProcessFolder" patternRole="macroProcess" />
+    <ContainedFlexoModelObjectPatternRole id="164" flexoModelObjectType="Process" patternRole="process" />
+    <PrimaryConceptIndividualPatternRole idref="148" />
+    <PrimaryRepresentationShapePatternRole idref="150" />
+    <Inspector id="165" inspectorTitle="Objective">
+      <TextField id="166" label="uri" name="uri" readOnly="false" data="objective.uriName" />
+      <TextField id="167" label="objective" name="name" readOnly="false" data="objective.objectiveName" />
+      <TextArea id="168" label="description" name="description" readOnly="false" data="objective.objectiveDescription" />
+      <FlexoObject id="169" flexoObjectType="ProcessFolder" label="macroProcess" name="macroProcess" readOnly="false" data="macroProcess" />
+      <FlexoObject id="170" flexoObjectType="Process" label="process" name="process" readOnly="false" data="process" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="151" name="OrganizationalUnitPosition">
+  <EditionPattern id="171" name="OrganizationalUnitPosition">
     <description>Allows to add a position for an organization unit</description>
-    <DropScheme id="152" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DropPositionInOrganizationalUnit" label="DropPositionInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="172" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DropPositionInOrganizationalUnit" label="DropPositionInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <ContextShapePatternRole idref="4" />
       <description>Create a position in organizational unit</description>
-      <TextFieldParameter id="153" name="positionName" label="position" defaultValue="&quot;Position&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextFieldParameter id="173" name="positionName" label="position" defaultValue="&quot;Position&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter short name for position</description>
       </TextFieldParameter>
-      <URIParameter id="154" base="parameters.positionName" name="positionURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+      <URIParameter id="174" base="parameters.positionName" name="positionURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <TextFieldParameter id="155" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <URIParameter id="156" base="(parameters.positionName + parameters.missionName)" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <TextAreaParameter id="157" name="missionDescription" label="missionDescription" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <AddIndividual id="158" individualName="parameters.missionURI" assignation="mission">
-        <DataPropertyAssertion id="159" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
-        <DataPropertyAssertion id="160" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
+      <TextFieldParameter id="175" name="missionName" label="missionName" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="176" base="(parameters.positionName + parameters.missionName)" name="missionURI" label="missionURI" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextAreaParameter id="177" name="missionDescription" label="missionDescription" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="178" individualName="parameters.missionURI" assignation="mission">
+        <DataPropertyAssertion id="179" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="parameters.missionName" />
+        <DataPropertyAssertion id="180" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="parameters.missionDescription" />
       </AddIndividual>
-      <AddIndividual id="161" individualName="parameters.positionURI" assignation="position">
-        <DataPropertyAssertion id="162" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#positionName" value="parameters.positionName" />
-        <ObjectPropertyAssertion id="163" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasPositionMission" object="mission" />
+      <AddIndividual id="181" individualName="parameters.positionURI" assignation="position">
+        <DataPropertyAssertion id="182" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#positionName" value="parameters.positionName" />
+        <ObjectPropertyAssertion id="183" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasPositionMission" object="mission" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="164" object="position" assignation="containsPosition" subject="target.organizationUnit" />
-      <AddShape id="165" container="target.shape" assignation="shape" />
-      <AddShape id="166" assignation="icon" />
-      <AddShape id="167" assignation="missionShape" />
-      <AddShape id="168" assignation="label" />
-      <AddShape id="169" assignation="missionLabel" />
+      <AddObjectPropertyStatement id="184" object="position" assignation="containsPosition" subject="target.organizationUnit" />
+      <AddShape id="185" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="186" extendParentBoundsToHostThisShape="false" assignation="icon" />
+      <AddShape id="187" extendParentBoundsToHostThisShape="false" assignation="missionShape" />
+      <AddShape id="188" extendParentBoundsToHostThisShape="false" assignation="label" />
+      <AddShape id="189" extendParentBoundsToHostThisShape="false" assignation="missionLabel" />
     </DropScheme>
-    <DropScheme id="170" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DrawPositionInOrganizationalUnit" label="DrawPositionInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="190" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" name="DrawPositionInOrganizationalUnit" label="DrawPositionInOrganizationalUnit" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <ContextShapePatternRole idref="4" />
       <description>Choose an existing position of organizational unit and represent it</description>
-      <IndividualParameter id="171" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" name="positionToRepresent" label="positionToRepresent" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <DeclarePatternRole id="172" object="parameters.positionToRepresent" assignation="position" />
-      <DeclarePatternRole id="173" object="position.hasPositionMission" conditional="(position.hasPositionMission != null)" assignation="mission" />
-      <AddIndividual id="174" individualName="(position.uriName + &quot;Mission&quot;)" conditional="(position.hasPositionMission = null)" assignation="mission">
-        <DataPropertyAssertion id="175" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
-        <DataPropertyAssertion id="176" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;Please define position mission&quot;" />
+      <IndividualParameter id="191" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" name="positionToRepresent" label="positionToRepresent" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <DeclarePatternRole id="192" object="parameters.positionToRepresent" assignation="position" />
+      <DeclarePatternRole id="193" object="position.hasPositionMission" conditional="(position.hasPositionMission != null)" assignation="mission" />
+      <AddIndividual id="194" individualName="(position.uriName + &quot;Mission&quot;)" conditional="(position.hasPositionMission = null)" assignation="mission">
+        <DataPropertyAssertion id="195" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionName" value="&quot;Mission&quot;" />
+        <DataPropertyAssertion id="196" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#missionDescription" value="&quot;Please define position mission&quot;" />
       </AddIndividual>
-      <AddShape id="177" container="target.shape" assignation="shape" />
-      <AddShape id="178" assignation="icon" />
-      <AddShape id="179" assignation="missionShape" />
-      <AddShape id="180" assignation="label" />
-      <AddShape id="181" assignation="missionLabel" />
+      <AddShape id="197" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddShape id="198" extendParentBoundsToHostThisShape="false" assignation="icon" />
+      <AddShape id="199" extendParentBoundsToHostThisShape="false" assignation="missionShape" />
+      <AddShape id="200" extendParentBoundsToHostThisShape="false" assignation="label" />
+      <AddShape id="201" extendParentBoundsToHostThisShape="false" assignation="missionLabel" />
     </DropScheme>
-    <ContainedIndividualPatternRole id="182" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" patternRole="position" />
-    <ContainedObjectPropertyStatementPatternRole id="183" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#containsPosition" patternRole="containsPosition" />
-    <ContainedShapePatternRole id="184" exampleLabel="" patternRole="shape">
-      <ShapeGraphicalRepresentation id="185" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="30.032913250076547" y="6.062029242357113" width="297.9275908498315" height="100.655737704918" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="186" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="187" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="188" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="189" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="190" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="191" font="Dialog,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="202" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" patternRole="position" />
+    <ContainedObjectPropertyStatementPatternRole id="203" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#containsPosition" patternRole="containsPosition" />
+    <ContainedShapePatternRole id="204" exampleLabel="" patternRole="shape">
+      <ShapeGraphicalRepresentation id="205" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="30.032913250076547" y="6.062029242357113" width="297.9275908498315" height="100.655737704918" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="206" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="207" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="208" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="209" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="210" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="211" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="212" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="213" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="214" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="215" font="Dialog,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="192" exampleLabel="&lt;describe mission here&gt;" patternRole="missionShape">
-      <ShapeGraphicalRepresentation id="193" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="50.0" y="50.0" width="237.92759084983152" height="40.655737704917996" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="true" allowToLeaveBounds="true" xConstraints="50" yConstraints="50" widthConstraints="(parent.width - 60)" heightConstraints="(parent.height - 60)" identifier="object_0_0" layer="3" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="194" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="195" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
-        <Border id="196" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="197" isRounded="true" arcSize="10.0" />
-        <ShadowStyle id="198" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="199" font="Lucida Sans,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="216" exampleLabel="&lt;describe mission here&gt;" patternRole="missionShape">
+      <ShapeGraphicalRepresentation id="217" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="50.0" y="50.0" width="237.92759084983152" height="40.655737704917996" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="50" yConstraints="50" widthConstraints="(parent.width - 60)" heightConstraints="(parent.height - 60)" identifier="object_0_0" layer="3" hasText="true" text="&lt;describe mission here&gt;" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="218" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="219" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="220" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="221" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="222" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="223" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <Border id="224" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="225" isRounded="true" arcSize="10.0" />
+        <ShadowStyle id="226" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="227" font="Lucida Sans,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="184" />
-      <GRSpec id="200" featureName="label" value="mission.missionDescription" readOnly="false" />
+      <ParentShapePatternRole idref="204" />
+      <GRSpec id="228" featureName="label" value="mission.missionDescription" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedIndividualPatternRole id="201" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#PositionMission" patternRole="mission" />
-    <ContainedShapePatternRole id="202" exampleLabel="" patternRole="icon">
-      <ShapeGraphicalRepresentation id="203" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="28.0" width="34.87804878048781" height="31.086956521739133" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="28" identifier="object_0_1" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="123.87804878048783" absoluteTextY="-7.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="204" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="205" imageFile="People.gif" scaleX="0.2906504065040651" scaleY="0.2590579710144928" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="206" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="207" isRounded="false" arcSize="30.0" />
-        <ShadowStyle id="208" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="209" font="Lucida Sans Demibold,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="229" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#PositionMission" patternRole="mission" />
+    <ContainedShapePatternRole id="230" exampleLabel="" patternRole="icon">
+      <ShapeGraphicalRepresentation id="231" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="28.0" width="34.87804878048781" height="31.086956521739133" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" xConstraints="10" yConstraints="28" identifier="object_0_1" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="123.87804878048783" absoluteTextY="-7.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="232" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="233" imageFile="People.gif" scaleX="0.2906504065040651" scaleY="0.2590579710144928" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="234" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedImageBackgroundStyle id="235" imageFile="People.gif" scaleX="0.2906504065040651" scaleY="0.2590579710144928" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="236" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedImageBackgroundStyle id="237" imageFile="People.gif" scaleX="0.2906504065040651" scaleY="0.2590579710144928" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="238" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="239" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="240" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="241" font="Lucida Sans Demibold,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="184" />
+      <ParentShapePatternRole idref="204" />
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="210" exampleLabel="label" patternRole="label">
-      <ShapeGraphicalRepresentation id="211" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="30.0" y="7.0" width="237.92759084983152" height="15.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" xConstraints="30" yConstraints="7" widthConstraints="(parent.width - 60)" heightConstraints="15" identifier="object_0_2" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="212" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <NoneBackgroundStyle id="213" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="214" top="5" bottom="5" left="5" right="20" />
-        <RectangleShape idref="207" />
-        <ShadowStyle id="215" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="216" font="Lucida Sans Demibold,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="242" exampleLabel="label" patternRole="label">
+      <ShapeGraphicalRepresentation id="243" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="30.0" y="7.0" width="237.92759084983152" height="15.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="30" yConstraints="7" widthConstraints="(parent.width - 60)" heightConstraints="15" identifier="object_0_2" layer="3" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="244" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="245" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="246" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedNoneBackgroundStyle id="247" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="248" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedNoneBackgroundStyle id="249" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="250" top="5" bottom="5" left="5" right="20" />
+        <RectangleShape idref="239" />
+        <ShadowStyle id="251" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="252" font="Lucida Sans Demibold,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="184" />
-      <GRSpec id="217" featureName="label" value="position.positionName" readOnly="false" />
+      <ParentShapePatternRole idref="204" />
+      <GRSpec id="253" featureName="label" value="position.positionName" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="218" exampleLabel="Mission" patternRole="missionLabel">
-      <ShapeGraphicalRepresentation id="219" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="50.0" y="27.0" width="237.92759084983152" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" xConstraints="50" yConstraints="27" widthConstraints="(parent.width - 60)" heightConstraints="20" identifier="object_0_3" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="220" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="221" color="255,153,153" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="222" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="223" isRounded="true" arcSize="10.0" />
-        <ShadowStyle id="224" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="225" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="254" exampleLabel="Mission" patternRole="missionLabel">
+      <ShapeGraphicalRepresentation id="255" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="50.0" y="27.0" width="237.92759084983152" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="50" yConstraints="27" widthConstraints="(parent.width - 60)" heightConstraints="20" identifier="object_0_3" layer="3" hasText="true" text="Mission" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="256" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="257" color="255,153,153" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="258" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="259" color="255,153,153" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="260" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="261" color="255,153,153" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="262" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="263" isRounded="true" arcSize="10.0" />
+        <ShadowStyle id="264" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="265" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="184" />
-      <GRSpec id="226" featureName="label" value="mission.missionName" readOnly="false" />
+      <ParentShapePatternRole idref="204" />
+      <GRSpec id="266" featureName="label" value="mission.missionName" readOnly="false" />
     </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="182" />
-    <PrimaryRepresentationShapePatternRole idref="184" />
-    <Inspector id="227" inspectorTitle="Position">
-      <TextField id="228" label="uri" name="uri" readOnly="false" data="position.uriName" />
-      <TextField id="229" label="position" name="position" readOnly="false" data="position.positionName" />
-      <TextField id="230" label="missionURI" name="missionURI" readOnly="false" data="mission.uriName" />
-      <TextField id="231" label="mission" name="mission" readOnly="false" data="mission.missionName" />
-      <TextArea id="232" label="mission_description" name="mission_description" readOnly="false" data="mission.missionDescription" />
-      <Individual id="233" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" label="position" name="ontologicalPosition" readOnly="false" data="position" />
+    <PrimaryConceptIndividualPatternRole idref="202" />
+    <PrimaryRepresentationShapePatternRole idref="204" />
+    <Inspector id="267" inspectorTitle="Position">
+      <TextField id="268" label="uri" name="uri" readOnly="false" data="position.uriName" />
+      <TextField id="269" label="position" name="position" readOnly="false" data="position.positionName" />
+      <TextField id="270" label="missionURI" name="missionURI" readOnly="false" data="mission.uriName" />
+      <TextField id="271" label="mission" name="mission" readOnly="false" data="mission.missionName" />
+      <TextArea id="272" label="mission_description" name="mission_description" readOnly="false" data="mission.missionDescription" />
+      <Individual id="273" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" renderer="individual.positionName" label="position" name="ontologicalPosition" readOnly="false" data="position" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="234" name="PositionTask">
+  <EditionPattern id="274" name="PositionTask">
     <description>Allows to define a position task</description>
-    <DropScheme id="235" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnitPosition" name="DropTaskForPosition" label="DropTaskForPosition" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <ContextShapePatternRole idref="184" />
-      <TextFieldParameter id="236" name="taskName" label="task" defaultValue="&quot;Task&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+    <DropScheme id="275" target="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnitPosition" name="DropTaskForPosition" label="DropTaskForPosition" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <ContextShapePatternRole idref="204" />
+      <TextFieldParameter id="276" name="taskName" label="task" defaultValue="&quot;Task&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter short name for task</description>
       </TextFieldParameter>
-      <URIParameter id="237" base="parameters.taskName" name="taskURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+      <URIParameter id="277" base="parameters.taskName" name="taskURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <TextAreaParameter id="238" name="taskDescription" label="task_description" usePaletteLabelAsDefaultValue="false" isRequired="false">
+      <TextAreaParameter id="278" name="taskDescription" label="task_description" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter a short description for the position task</description>
       </TextAreaParameter>
-      <AddIndividual id="239" individualName="parameters.taskURI" assignation="task">
-        <DataPropertyAssertion id="240" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#taskName" value="parameters.taskName" />
-        <DataPropertyAssertion id="241" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#taskDescription" value="parameters.taskDescription" />
+      <AddIndividual id="279" individualName="parameters.taskURI" assignation="task">
+        <DataPropertyAssertion id="280" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#taskName" value="parameters.taskName" />
+        <DataPropertyAssertion id="281" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#taskDescription" value="parameters.taskDescription" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="242" object="task" assignation="hasTask" subject="target.position" />
-      <AddShape id="243" container="target.shape.parent" assignation="shape" />
-      <AddConnector id="244" fromShape="target.icon" toShape="shape" assignation="hasTaskConnector" />
+      <AddObjectPropertyStatement id="282" object="task" assignation="hasTask" subject="target.position" />
+      <AddShape id="283" container="target.shape.parent" extendParentBoundsToHostThisShape="false" assignation="shape" />
+      <AddConnector id="284" fromShape="target.icon" toShape="shape" assignation="hasTaskConnector" />
     </DropScheme>
-    <ContainedIndividualPatternRole id="245" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Task" patternRole="task" />
-    <ContainedObjectPropertyStatementPatternRole id="246" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasTask" patternRole="hasTask" />
-    <ContainedConnectorPatternRole id="247" exampleLabel="" patternRole="hasTaskConnector">
-      <ConnectorGraphicalRepresentation id="248" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="3.0" absoluteTextY="7.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="249" noStroke="false" color="153,153,153" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="250" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="78.0" y="25.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="251" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="252" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="253" top="5" bottom="5" left="5" right="5" />
-          <CircleShape id="254" />
-          <ShadowStyle id="255" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="256" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="257" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="179.0" y="53.0" width="214.92890995260663" height="29.34426229508197" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" text="Task" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="258" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="259" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="260" top="5" bottom="5" left="5" right="5" />
-          <RectangleShape id="261" isRounded="true" arcSize="15.0" />
-          <ShadowStyle id="262" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="263" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </EndShapeGraphicalRepresentation>
-        <RectPolylinConnector id="264" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
-        <TextStyle id="265" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="285" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Task" patternRole="task" />
+    <ContainedObjectPropertyStatementPatternRole id="286" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasTask" patternRole="hasTask" />
+    <ContainedConnectorPatternRole id="287" exampleLabel="" patternRole="hasTaskConnector">
+      <ConnectorGraphicalRepresentation id="288" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="3.0" absoluteTextY="7.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="289" noStroke="false" color="153,153,153" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="290" noStroke="false" color="153,153,153" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="291" noStroke="false" color="153,153,153" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <RectPolylinConnector id="292" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="293" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="250" />
-      <ArtifactToShapeGraphicalRepresentation id="266" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="268.0" y="62.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="267" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="268" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="269" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="254" />
-        <ShadowStyle id="270" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="271" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ArtifactFromShapeGraphicalRepresentation id="294" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="78.0" y="25.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="295" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="296" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="297" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="298" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="299" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="300" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="301" top="5" bottom="5" left="5" right="5" />
+        <CircleShape id="302" />
+        <ShadowStyle id="303" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="304" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="305" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="268.0" y="62.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="306" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="307" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="308" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="309" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="310" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="311" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="312" top="20" bottom="20" left="20" right="20" />
+        <CircleShape idref="302" />
+        <ShadowStyle id="313" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="314" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ArtifactToShapeGraphicalRepresentation>
-      <ToShapePatternRole id="272" exampleLabel="Task" patternRole="shape">
-        <ShapeGraphicalRepresentation idref="257" />
-        <GRSpec id="273" featureName="label" value="task.taskName" readOnly="false" />
+      <ToShapePatternRole id="315" exampleLabel="Task" patternRole="shape">
+        <ShapeGraphicalRepresentation id="316" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="179.0" y="53.0" width="214.92890995260663" height="29.34426229508197" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="317" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="318" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="319" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="320" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="321" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="322" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="323" top="5" bottom="5" left="5" right="5" />
+          <RectangleShape id="324" isRounded="true" arcSize="15.0" />
+          <ShadowStyle id="325" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="326" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <GRSpec id="327" featureName="label" value="task.taskName" readOnly="false" />
       </ToShapePatternRole>
     </ContainedConnectorPatternRole>
-    <ContainedShapePatternRole idref="272" />
-    <PrimaryConceptIndividualPatternRole idref="245" />
-    <PrimaryRepresentationConnectorPatternRole idref="247" />
-    <Inspector id="274" inspectorTitle="Position task">
-      <TextField id="275" label="uri" name="textfield" readOnly="false" data="task.uriName" />
-      <TextField id="276" label="position" name="textfield" readOnly="true" data="hasTask.subject.uriName" />
-      <TextField id="277" label="task" name="textfield" readOnly="false" data="task.taskName" />
-      <TextArea id="278" label="description" name="textarea" readOnly="false" data="task.taskDescription" />
+    <ContainedShapePatternRole idref="315" />
+    <PrimaryConceptIndividualPatternRole idref="285" />
+    <PrimaryRepresentationConnectorPatternRole idref="287" />
+    <Inspector id="328" inspectorTitle="Position task">
+      <TextField id="329" label="uri" name="textfield" readOnly="false" data="task.uriName" />
+      <TextField id="330" label="position" name="textfield" readOnly="true" data="hasTask.subject.uriName" />
+      <TextField id="331" label="task" name="textfield" readOnly="false" data="task.taskName" />
+      <TextArea id="332" label="description" name="textarea" readOnly="false" data="task.taskDescription" />
     </Inspector>
   </EditionPattern>
-  <LocalizedDictionary id="279">
-    <Localized id="280" key="position" lang="en">Position</Localized>
-    <Localized id="281" key="Position" lang="en">Position</Localized>
-    <Localized id="282" key="objective" lang="en">Objective</Localized>
-    <Localized id="283" key="Objective" lang="en">Objective</Localized>
-    <Localized id="284" key="mission" lang="en">Mission</Localized>
-    <Localized id="285" key="Mission" lang="en">Mission</Localized>
-    <Localized id="286" key="task" lang="en">Task</Localized>
-    <Localized id="287" key="Task" lang="en">Task</Localized>
-    <Localized id="288" key="organization_unit_name" lang="en">Organization unit name</Localized>
-    <Localized id="289" key="organization_unit_description" lang="en">Organization unit description</Localized>
-    <Localized id="290" key="mission" lang="en">Mission</Localized>
-    <Localized id="291" key="mission_description" lang="en">Mission description</Localized>
-    <Localized id="292" key="objective_description" lang="en">Objective description</Localized>
-    <Localized id="293" key="position_description" lang="en">Objective description</Localized>
-    <Localized id="294" key="task_description" lang="en">Task description</Localized>
-    <Localized id="295" key="RootOrganizationalUnit" lang="en">Top-level organization unit</Localized>
-    <Localized id="296" key="OrganizationalUnit" lang="en">Organization unit</Localized>
-    <Localized id="297" key="DropRootOrganizationalUnitAtTopLevel" lang="en">Create new top-level organization unit</Localized>
-    <Localized id="298" key="DrawRootOrganizationalUnitAtTopLevel" lang="en">Draw existing top-level organization unit</Localized>
-    <Localized id="299" key="create_root_organization_unit" lang="en">Create root organization unit</Localized>
-    <Localized id="300" key="choose_and_draw_root_organization_unit" lang="en">Choose and draw root organization unit</Localized>
-    <Localized id="301" key="uri" lang="English">URI</Localized>
-    <Localized id="302" key="concept_scheme" lang="English">concept_scheme</Localized>
+  <LocalizedDictionary id="333">
+    <Localized id="334" key="position" lang="en">Position</Localized>
+    <Localized id="335" key="Position" lang="en">Position</Localized>
+    <Localized id="336" key="objective" lang="en">Objective</Localized>
+    <Localized id="337" key="Objective" lang="en">Objective</Localized>
+    <Localized id="338" key="mission" lang="en">Mission</Localized>
+    <Localized id="339" key="Mission" lang="en">Mission</Localized>
+    <Localized id="340" key="task" lang="en">Task</Localized>
+    <Localized id="341" key="Task" lang="en">Task</Localized>
+    <Localized id="342" key="organization_unit_name" lang="en">Organization unit name</Localized>
+    <Localized id="343" key="organization_unit_description" lang="en">Organization unit description</Localized>
+    <Localized id="344" key="mission" lang="en">Mission</Localized>
+    <Localized id="345" key="mission_description" lang="en">Mission description</Localized>
+    <Localized id="346" key="objective_description" lang="en">Objective description</Localized>
+    <Localized id="347" key="position_description" lang="en">Objective description</Localized>
+    <Localized id="348" key="task_description" lang="en">Task description</Localized>
+    <Localized id="349" key="RootOrganizationalUnit" lang="en">Top-level organization unit</Localized>
+    <Localized id="350" key="OrganizationalUnit" lang="en">Organization unit</Localized>
+    <Localized id="351" key="DropRootOrganizationalUnitAtTopLevel" lang="en">Create new top-level organization unit</Localized>
+    <Localized id="352" key="DrawRootOrganizationalUnitAtTopLevel" lang="en">Draw existing top-level organization unit</Localized>
+    <Localized id="353" key="create_root_organization_unit" lang="en">Create root organization unit</Localized>
+    <Localized id="354" key="choose_and_draw_root_organization_unit" lang="en">Choose and draw root organization unit</Localized>
+    <Localized id="355" key="uri" lang="English">URI</Localized>
+    <Localized id="356" key="concept_scheme" lang="English">concept_scheme</Localized>
   </LocalizedDictionary>
 </ViewPoint>
-

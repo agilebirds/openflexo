@@ -1,4 +1,4 @@
-<inspector title = "generated_doc_repository" inheritsfrom ="DGRepository.inspector">
+<inspector title = "generated_doc_repository" inheritsfrom ="DGRepository.inspector" inspectedClassName="org.openflexo.foundation.cg.DGRepository">
 	<tab name="DOCX" index="3">
 		<property name="postProductName" label="docx_name" widget="TEXT_FIELD" constraint="1">
 			<param name="columns" value="10"/>

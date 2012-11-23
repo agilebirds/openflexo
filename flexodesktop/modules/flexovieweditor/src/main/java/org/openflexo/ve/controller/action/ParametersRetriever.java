@@ -361,6 +361,15 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							return parameter.getBindingFactory();
 						}
 					}, true));
+			if (StringUtils.isNotEmpty(((IndividualParameter) parameter).getRenderer())) {
+				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.renderer"),
+						new DataBinding('"' + ((IndividualParameter) parameter).getRenderer() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return parameter.getBindingFactory();
+							}
+						}, true));
+			}
 			individualSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {
@@ -431,6 +440,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			} else {
 				domainClass = propertyParameter.getDomain();
 			}
+			// System.out.println("domain class = " + domainClass + " uri=" + domainClass.getURI());
 			if (domainClass != null) {
 				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
 						new DataBinding('"' + domainClass.getURI() + '"') {
@@ -448,6 +458,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				} else {
 					rangeClass = ((ObjectPropertyParameter) propertyParameter).getRange();
 				}
+				// System.out.println("range class = " + rangeClass + " uri=" + rangeClass.getURI());
 				if (rangeClass != null) {
 					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.rangeClassURI"),
 							new DataBinding('"' + rangeClass.getURI() + '"') {

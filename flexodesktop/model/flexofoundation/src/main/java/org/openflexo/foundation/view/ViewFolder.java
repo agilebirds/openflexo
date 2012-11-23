@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -572,6 +573,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			return;
 		}
 		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		Collections.sort(getFatherFolder().getSubFolders(), FlexoIndexManager.INDEX_COMPARATOR);
 		if (getIndex() != index) {
 			setChanged();
 			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
@@ -597,6 +599,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		if (!isDeserializing() && !isCreatedByCloning() && getFatherFolder() != null) {
 			getFatherFolder().setChanged();
 			getFatherFolder().notifyObservers(new ChildrenOrderChanged());
+			if (getFatherFolder() == getViewLibrary().getRootFolder()) {
+				getViewLibrary().setChanged();
+				getViewLibrary().notifyObservers(new ChildrenOrderChanged());
+			}
 		}
 	}
 
