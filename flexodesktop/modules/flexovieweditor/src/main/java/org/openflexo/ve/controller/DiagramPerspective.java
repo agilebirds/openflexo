@@ -27,7 +27,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
@@ -66,7 +65,7 @@ public class DiagramPerspective extends FlexoPerspective {
 
 	private final FIBInspectorPanel inspectorPanel;
 
-	private final JScrollPane inspectorPanelScrollPane;
+	private final JComponent inspectorPanelScrollPane;
 
 	private JComponent bottomRightDummy;
 
@@ -109,7 +108,7 @@ public class DiagramPerspective extends FlexoPerspective {
 
 		// Initialized inspector panel
 		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
-		inspectorPanelScrollPane = new JScrollPane(inspectorPanel);
+		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
 		setTopLeftView(_browserView);
 		setBottomLeftView(shemaBrowserView);
 	}
