@@ -22,6 +22,7 @@ package org.openflexo.dgmodule.controller.action;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.action.CompareFilesInitializer;
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dgmodule.controller.DGController;
@@ -76,6 +77,7 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		new DGSetPropertyInitializer(this).init();
 		new OpenFileInExplorerInitializer(this).init();
 		new CompareTemplatesInNewWindowInitializer(this).init();
+		new CompareFilesInitializer(this).init();
 		new GenerateProcessScreenshotInitializer(this).init();
 		new GenerateActivityScreenshotInitializer(this).init();
 		new GenerateComponentScreenshotInitializer(this).init();

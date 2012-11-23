@@ -22,6 +22,7 @@ package org.openflexo.cgmodule.controller.action;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.action.CompareFilesInitializer;
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.controller.GeneratorSelectionManager;
@@ -84,6 +85,7 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		new CGSetPropertyInitializer(this).init();
 		new OpenFileInExplorerInitializer(this).init();
 		new CompareTemplatesInNewWindowInitializer(this).init();
+		new CompareFilesInitializer(this).init();
 		// Validate project
 		new ValidateProjectInitializer(this).init();
 
