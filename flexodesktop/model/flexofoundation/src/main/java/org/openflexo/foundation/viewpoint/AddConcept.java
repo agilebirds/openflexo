@@ -38,6 +38,10 @@ public abstract class AddConcept extends AssignableAction {
 
 	public abstract void setOntologyClass(OntologyClass ontologyClass);
 
+	public abstract ModelSlot<?> getModelSlot();
+
+	public abstract void setModelSlot(ModelSlot<?> modelSlot);
+
 	/*public OntologyObject getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();

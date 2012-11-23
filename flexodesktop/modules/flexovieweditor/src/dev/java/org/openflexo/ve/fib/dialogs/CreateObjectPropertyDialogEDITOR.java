@@ -31,22 +31,22 @@ import org.openflexo.ve.VECst;
 
 public class CreateObjectPropertyDialogEDITOR extends FIBAbstractEditor {
 
-	@Override
-	public Object[] getData() {
+			@Override
+			public Object[] getData() {
 		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 
-		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		OWLOntology ontology = (OWLOntology) ontologyLibrary
-				.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
-		ontology.loadWhenUnloaded();
-		CreateObjectProperty action = CreateObjectProperty.actionType.makeNewAction(ontology, null, null);
-		return makeArray(action);
-	}
+				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
+				OWLOntology ontology = (OWLOntology) ontologyLibrary
+						.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
+				ontology.loadWhenUnloaded();
+				CreateObjectProperty action = CreateObjectProperty.actionType.makeNewAction(ontology, null, null);
+				return makeArray(action);
+			}
 
-	@Override
-	public File getFIBFile() {
-		return VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB;
-	}
+			@Override
+			public File getFIBFile() {
+				return VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB;
+			}
 
 	public static void main(String[] args) {
 		main(CreateObjectPropertyDialogEDITOR.class);

@@ -23,11 +23,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -90,6 +93,8 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
+	private List<ModelSlot<?>> modelSlots;
+
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
 		String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
@@ -139,14 +144,7 @@ public class ViewPoint extends ViewPointObject {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				IOUtils.closeQuietly(inputStream);
 			}
 			return null;
 		} else {
@@ -783,6 +781,37 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+
+	// ==========================================================================
+	// ============================== Model Slots ===============================
+	// ==========================================================================
+
+	public void setModelSlots(List<ModelSlot<?>> modelSlots) {
+		this.modelSlots = modelSlots;
+	}
+
+	public List<ModelSlot<?>> getModelSlots() {
+		return modelSlots;
+	}
+
+	public void addToModelSlots(ModelSlot<?> modelSlot) {
+		modelSlots.add(modelSlot);
+	}
+
+	public void removeFromModelSlots(ModelSlot<?> modelSlot) {
+		modelSlots.remove(modelSlot);
+	}
+
+	public List<ModelSlot<?>> getRequiredModelSlots() {
+		List<ModelSlot<?>> requiredModelSlots = new ArrayList<ModelSlot<?>>();
+		for (ModelSlot<?> modelSlot : getModelSlots()) {
+			if (modelSlot.getIsRequired()) {
+				requiredModelSlots.add(modelSlot);
+			}
+		}
+		return modelSlots;
+	}
+
 
 	@Override
 	public String getLanguageRepresentation() {

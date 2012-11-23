@@ -16,6 +16,7 @@
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
 		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
+		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.viewpoint.ModelSlot"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"
@@ -422,6 +423,7 @@
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
+		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" xmlTag="CloneIndividual">
@@ -432,6 +434,7 @@
 		<property name="className" xmlTag="newClassName"
 			attribute="YES" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
+		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddStatement"

@@ -45,3 +45,4 @@
   <FlexoStorageResource id="SYL_WORKFLOW.TestBrowser" className="org.openflexo.foundation.rm.FlexoWorkflowResource" file="Workflow/TestBrowser.wkf" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,14:18:38 25/10/2012 497" userID="SYL" />
   <FlexoStorageResource id="SYL_WS_LIBRARY.TestBrowser" className="org.openflexo.foundation.rm.FlexoWSLibraryResource" file="WebService/TestBrowser.ws" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,14:18:38 25/10/2012 467" userID="SYL" />
 </Project>
+

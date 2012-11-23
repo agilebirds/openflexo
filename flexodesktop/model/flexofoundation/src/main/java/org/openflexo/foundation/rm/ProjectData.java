@@ -97,8 +97,8 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 				if (ref.getURI().equals(projectURI)) {
 					return ref.getReferredProject();
 
+					}
 				}
-			}
 			if (searchRecursively) {
 				for (FlexoProjectReference ref : getImportedProjects()) {
 					FlexoProject projectWithURI = null;
@@ -106,12 +106,12 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 					if (projectData != null) {
 						projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
 					}
-					if (projectWithURI != null) {
-						return projectWithURI;
-					}
+						if (projectWithURI != null) {
+							return projectWithURI;
+						}
 
+					}
 				}
-			}
 			return null;
 		}
 
@@ -120,7 +120,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 			if (!isDeserializing()) {
 				if (getImportedProjects().contains(projectReference)) {
 					return;
-				}
+		}
 				String reason = canImportProject(projectReference.getReferredProject());
 				if (reason != null) {
 					throw new ProjectImportLoopException(reason);
@@ -156,11 +156,11 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		public void removeFromImportedProjects(FlexoProject project) {
 			for (FlexoProjectReference ref : getImportedProjects()) {
 				if (ref.getReferredProject() == project) {
-					removeFromImportedProjects(ref);
-					break;
+						removeFromImportedProjects(ref);
+						break;
+					}
 				}
 			}
-		}
 
 		@Override
 		public void setModified(boolean modified) {

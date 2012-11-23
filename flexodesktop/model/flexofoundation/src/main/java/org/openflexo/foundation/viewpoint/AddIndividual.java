@@ -45,6 +45,7 @@ public class AddIndividual extends AddConcept {
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
 	private String ontologyClassURI = null;
+	private ModelSlot<?> modelSlot = null;
 
 	public AddIndividual(ViewPointBuilder builder) {
 		super(builder);
@@ -291,6 +292,16 @@ public class AddIndividual extends AddConcept {
 			return object.getIndividualNameBindingDefinition();
 		}
 
+	}
+
+	@Override
+	public ModelSlot<?> getModelSlot() {
+		return modelSlot;
+	}
+
+	@Override
+	public void setModelSlot(ModelSlot<?> modelSlot) {
+		this.modelSlot = modelSlot;
 	}
 
 }

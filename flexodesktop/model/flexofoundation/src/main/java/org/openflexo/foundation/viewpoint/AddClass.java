@@ -41,6 +41,7 @@ public class AddClass extends AddConcept {
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	private String ontologyClassURI = null;
+	private ModelSlot<?> modelSlot = null;
 
 	public AddClass(ViewPointBuilder builder) {
 		super(builder);
@@ -215,6 +216,16 @@ public class AddClass extends AddConcept {
 			return object.getClassNameBindingDefinition();
 		}
 
+	}
+
+	@Override
+	public ModelSlot<?> getModelSlot() {
+		return modelSlot;
+	}
+
+	@Override
+	public void setModelSlot(ModelSlot<?> modelSlot) {
+		this.modelSlot = modelSlot;
 	}
 
 }

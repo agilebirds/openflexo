@@ -159,8 +159,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				if (lastHistoryLocationForPerspective != null) {
 					newEditedObject = lastHistoryLocationForPerspective.getObject();
 				} else {
-					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
-				}
+				newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
+			}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
@@ -199,10 +199,10 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public FlexoEditor getCurrentEditor() {
 		if (requiresProject()) {
-			return currentEditor;
+		return currentEditor;
 		} else {
 			return context.getApplicationEditor();
-		}
+	}
 	}
 
 	public boolean requiresProject() {
@@ -313,7 +313,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		if (currentLocation != null) {
 			setCurrentProject(currentLocation.getObject().getProject());
-		}
+	}
 	}
 
 	public Stack<HistoryLocation> getNextHistory() {
@@ -494,6 +494,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (gsonLayout == null) {
 			GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(new MultiSplitLayoutTypeAdapterFactory());
 			gsonLayout = builder.create();
+
 		}
 		return gsonLayout;
 	}
@@ -523,5 +524,4 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
-
 }

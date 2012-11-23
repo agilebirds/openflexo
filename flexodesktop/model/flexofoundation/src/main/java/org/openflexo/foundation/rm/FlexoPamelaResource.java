@@ -101,7 +101,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		this.modelFactory = new ModelFactory();
 		for (Converter<?> c : project.getStringEncoder().getConverters()) {
 			modelFactory.addConverter(new ConverterAdapter(c));
-		}
+	}
 	}
 
 	public ModelFactory getModelFactory() {
@@ -179,8 +179,8 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 	protected SRD performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
 		if (!isLoadable()) {
-			return null;
-		}
+		return null;
+	}
 		XMLDeserializer deserializer = new XMLDeserializer(modelFactory);
 		FileInputStream fis = new FileInputStream(getFile());
 		try {

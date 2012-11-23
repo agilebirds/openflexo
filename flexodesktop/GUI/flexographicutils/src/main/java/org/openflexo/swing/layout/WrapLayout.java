@@ -157,12 +157,12 @@ public class WrapLayout extends FlowLayout {
 
 	/*
 	 * A new row has been completed. Use the dimensions of this row to update the preferred size for the container.
+	 *
+	 *  @param dim update the width and height when appropriate
 	 * 
-	 * @param dim update the width and height when appropriate
+	 *  @param rowWidth the width of the row to add
 	 * 
-	 * @param rowWidth the width of the row to add
-	 * 
-	 * @param rowHeight the height of the row to add
+	 *  @param rowHeight the height of the row to add
 	 */
 	private void addRow(Dimension dim, int rowWidth, int rowHeight) {
 		dim.width = Math.max(dim.width, rowWidth);
