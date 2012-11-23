@@ -47,6 +47,10 @@ public class BindingModel {
 		}
 	}
 
+	public void clear() {
+		_bindingVariables.clear();
+	}
+
 	public int getBindingVariablesCount() {
 		return _bindingVariables.size();
 	}

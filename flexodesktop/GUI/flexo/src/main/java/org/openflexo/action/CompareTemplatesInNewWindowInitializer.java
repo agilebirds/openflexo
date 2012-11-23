@@ -23,6 +23,7 @@ import java.util.EventObject;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.action.CompareTemplatesInNewWindow;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -32,7 +33,7 @@ import org.openflexo.view.popups.FileDiffEditorPopup;
  * @author gpolet
  * 
  */
-public class CompareTemplatesInNewWindowInitializer extends ActionInitializer {
+public class CompareTemplatesInNewWindowInitializer extends ActionInitializer<CompareTemplatesInNewWindow, CGTemplate, CGTemplate> {
 
 	/**
 	 * @param actionType
@@ -61,7 +62,7 @@ public class CompareTemplatesInNewWindowInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<? super CompareTemplatesInNewWindow> getDefaultFinalizer() {
+	protected FlexoActionFinalizer<CompareTemplatesInNewWindow> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CompareTemplatesInNewWindow>() {
 
 			@Override

@@ -103,20 +103,24 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_UP) {
-					getController().upKeyPressed();
-					event.consume();
+					if (getController().upKeyPressed()) {
+						event.consume();
+					}
 					return;
 				} else if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-					getController().downKeyPressed();
-					event.consume();
+					if (getController().downKeyPressed()) {
+						event.consume();
+					}
 					return;
 				} else if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-					getController().rightKeyPressed();
-					event.consume();
+					if (getController().rightKeyPressed()) {
+						event.consume();
+					}
 					return;
 				} else if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-					getController().leftKeyPressed();
-					event.consume();
+					if (getController().leftKeyPressed()) {
+						event.consume();
+					}
 					return;
 				}
 			}

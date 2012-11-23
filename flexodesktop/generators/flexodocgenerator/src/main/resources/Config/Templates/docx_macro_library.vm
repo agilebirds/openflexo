@@ -8,7 +8,6 @@
 #end
 
 #macro(render $_object $_level $templateName $_entry)
-<!--Entering macro render : $_object $_level $templateName $_entry -->
     #set($_template = $generator.getTemplatePath($templateName.trim()))
     #if($_template)
         #if(!$objectStack)
@@ -28,7 +27,6 @@
         #set($object = $objectStack.pop())
         #set($level = $levelStack.pop())
     #end
-<!-- Exiting macro render -->
 #end
 
 #macro(renderButtonTable $cd)
@@ -920,47 +918,57 @@ name of the template corresponding to the specific toc_entry.
 *#
 
 #macro(addAdditionalRels $rels)
-<!--Entering macro addAdditionalRels -->
     #set($additionalRels = ${generator.getNewHolder()})
     #getAdditionalRels($additionalRels)
     #set($additionalRels = ${additionalRels.get()})
     #if(!${additionalRels.contains($rels)})
         #void($additionalRels.add($rels))
     #end
-<!-- Exiting macro addAdditionalRels -->
 #end
 
 #macro(renderAdditionalRels)
-<!--Entering macro renderAdditionalRels -->
     #set($additionalRels = ${generator.getNewHolder()})
     #getAdditionalRels($additionalRels)
     #set($additionalRels = ${additionalRels.get()})
     #foreach($rel in $additionalRels)
         $rel
     #end
-<!-- Exiting macro renderAdditionalRels -->
 #end
 
 #macro(addDataBinding $dataBinding)
-<!--Entering macro addDataBinding -->
     #set($dataBindings = ${generator.getNewHolder()})
     #getDataBindings($dataBindings)
     #set($dataBindings = ${dataBindings.get()})
     #if(!${dataBindings.contains($dataBinding)})
         #void($dataBindings.add($dataBinding))
     #end
-<!-- Exiting macro addDataBinding -->
 #end
 
 #macro(renderDataBindings)
-<!--Entering macro renderDataBindings -->
     #set($dataBindings = ${generator.getNewHolder()})
     #getDataBindings($dataBindings)
     #set($dataBindings = ${dataBindings.get()})
     #foreach($binding in $dataBindings)
         $binding
     #end
-<!-- Exiting macro renderDataBindings -->
+#end
+
+#macro(addEPIValue $epiValue)
+    #set($epiValues = ${generator.getNewHolder()})
+    #getEPIValues($epiValues)
+    #set($epiValues = ${epiValues.get()})
+    #if(!${epiValues.contains($epiValue)})
+        #void($epiValues.add($epiValue))
+    #end
+#end
+
+#macro(renderEPIValues)
+    #set($epiValues = ${generator.getNewHolder()})
+    #getEPIValues($epiValues)
+    #set($epiValues = ${epiValues.get()})
+    #foreach($epiValue in $epiValues)
+        @single $epiValue @end
+    #end
 #end
 
 #macro(renderBullets $bulletWRList $bulletSectionID)
@@ -1124,7 +1132,7 @@ name of the template corresponding to the specific toc_entry.
             #if(${_object.getName()})
                 #set($flexoName = "flexoName${_object.getUserIdentifier()}${_object.getFlexoID()}")
                 #set($flexoName = "#escape($flexoName)")
-                <w:dataBinding w:xpath="/flexoNames/${flexoName}[1]"/>
+                <w:dataBinding w:xpath="/OpenFlexo/flexoNames/${flexoName}[1]"/>
                 #addDataBinding("<$flexoName>#escape(${_object.getName()})</$flexoName>")
             #end
             <w:text />
@@ -2137,8 +2145,8 @@ name of the template corresponding to the specific toc_entry.
 #set($_ot="") ## opening tags
 #set($_ct="") ## closing tags
 #if($_enclosingTag=="w:tr")
-    #set($_ot="<w:tr><w:tc><w:p><w:r><w:t>")
-    #set($_ct="</w:t></w:r></w:p></w:tc></w:tr>")
+    #set($_ot="<w:tr>${n}<w:tc>${n}<w:p>${n}<w:r>${n}<w:t>")
+    #set($_ct="</w:t>${n}</w:r>${n}</w:p>${n}</w:tc>${n}</w:tr>")
 #elseif($_enclosingTag=="w:r")
     #set($_ot="<w:r><w:t>")
     #set($_ct="</w:t></w:r>")
@@ -2151,16 +2159,21 @@ name of the template corresponding to the specific toc_entry.
 #end
    <w:sdt>
         <w:sdtPr>
+            #set($_epiTag = ${projectGenerator.getEPITag($_epi, $_bindingPath)})
             <w:alias w:val="#escape($_alias)"/>
-            <w:tag w:val="#escape(${projectGenerator.getEPITag($_epi, $_bindingPath)})" />
+            <w:tag w:val="#escape($_epiTag)" />
             <w:lock w:val="sdtLocked" />
             <w:text w:multiLine="$multiline"/>
             #if(!$_hasText)
                 <w:showingPlcHdr/>
             #end
+            #set($_epiName = "EPIV_$generator.makeValidXMLName($_epiTag)")
+            <w:dataBinding w:xpath="/OpenFlexo/EditionPatternInstanceValues/${_epiName}[1]"/>
+            #addEPIValue("<${_epiName}>#escape($_text)</${_epiName}>")
         </w:sdtPr>
         <w:sdtContent>
-            $_ot $_style
+            $_ot 
+                $_style
             #if($_hasText)
                 #escape($_text)
             #else
@@ -2191,5 +2204,6 @@ name of the template corresponding to the specific toc_entry.
 #macro(getOrderedNumberingIds $holder)#_getGlobalVariable("orderedNumberingId" $generator.getNewVector() $holder)#end
 
 #macro(getDataBindings $holder)#_getGlobalVariable("dataBindings" $generator.getNewVector() $holder)#end
+#macro(getEPIValues $holder)#_getGlobalVariable("EPIValues" $generator.getNewVector() $holder)#end
 
 #macro(getDateFormat $holder)#_getGlobalVariable("dateFormat" $generator.getDateFormat("dd/MM/yyyy") $holder)#end

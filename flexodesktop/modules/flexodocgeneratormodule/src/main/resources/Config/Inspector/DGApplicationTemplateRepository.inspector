@@ -1,4 +1,4 @@
-<inspector title = "dg_application_templates">
+<inspector title = "dg_application_templates" inspectedClassName="org.openflexo.foundation.cg.templates.ApplicationDGTemplateRepository">
 	<tab name="Basic" index="0">
 		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0"/>
 	</tab>

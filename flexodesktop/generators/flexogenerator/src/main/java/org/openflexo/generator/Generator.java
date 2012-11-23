@@ -37,6 +37,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
@@ -93,6 +95,11 @@ import org.openflexo.velocity.PostVelocityParser;
 
 public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
 		DataFlexoObserver {
+
+	private static final String VALID_XML_REGEXP = "[A-Z_a-z\\u00C0\\u00D6\\u00D8-\\u00F6"
+			+ "\\u00F8-\\u02ff\\u0370-\\u037d\\u037f-\\u1fff\\u200c\\u200d\\u2070-\\u218f"
+			+ "\\u2c00-\\u2fef\\u3001-\\udfff\\uf900-\\ufdcf\\ufdf0-\\ufffd\\-\\.0-9" + "\\u00b7\\u0300-\\u036f\\u203f-\\u2040]*";
+	private static final Pattern VALID_XML_PATTERN = Pattern.compile(VALID_XML_REGEXP);
 
 	private static final List<Class<?>> TOOL_CLASSES = Arrays.asList(AlternatorTool.class, ComparisonDateTool.class, ConversionTool.class,
 			DateTool.class, DisplayTool.class, EscapeTool.class, RenderTool.class, SortTool.class);
@@ -717,6 +724,30 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return removeAllWhiteCharacters(text, " ");
 	}
 
+	public static String makeValidXMLName(String name) {
+		if (name == null) {
+			return name;
+		}
+		Matcher m = VALID_XML_PATTERN.matcher(name);
+		StringBuilder sb = new StringBuilder(name.length());
+		int lastMatch = 0;
+		while (m.find()) {
+			if (m.start() > lastMatch) {
+				for (int i = lastMatch; i < m.start(); i++) {
+					sb.append('_');
+				}
+			}
+			sb.append(m.group());
+			lastMatch = m.end();
+		}
+		if (lastMatch < name.length()) {
+			for (int i = lastMatch; i < name.length(); i++) {
+				sb.append('_');
+			}
+		}
+		return sb.toString();
+	}
+
 	public static String escapeStringForXML(String string) {
 		String escapedString = StringEscapeUtils.escapeXml(string);
 		return escapedString != null ? StringUtils.replaceBreakLinesBy(escapedString, " ") : "";
@@ -802,4 +833,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
+	public static void main(String[] args) {
+		String s = "²&é\"'(§è!çà)-_°0987654321³azertyuiop$^µùmlkjhgfdcsq<wxcvbn,;:=/*-+";
+		String xmlName = makeValidXMLName(s);
+		System.err.println(s);
+		System.err.println(xmlName);
+		System.err.println(s.length() + " " + xmlName.length());
+	}
 }

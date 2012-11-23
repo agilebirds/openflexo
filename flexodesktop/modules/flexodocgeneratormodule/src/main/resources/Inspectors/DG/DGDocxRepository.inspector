@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.DGRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="DOCX" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DocxTab">
+      <Label label="docx_name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="PostProductNameLabel" localize="true" />
+      <TextField index="3" data="data.postProductName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="PostProductName" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="docx_install_directory" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="PostBuildDirectoryLabel" localize="true" />
+      <File mode="SaveMode" isDirectory="true" index="5" data="data.postBuildDirectory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="PostBuildDirectory" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="DOCX" lang="English">DOCX</Localized>
+    <Localized key="DOCX" lang="French">DOCX</Localized>
+    <Localized key="DOCX" lang="Dutch">DOCX</Localized>
+    <Localized key="docx_name" lang="English">docx_name</Localized>
+    <Localized key="docx_name" lang="French">docx_name</Localized>
+    <Localized key="docx_name" lang="Dutch">docx_name</Localized>
+    <Localized key="docx_install_directory" lang="English">docx_install_directory</Localized>
+    <Localized key="docx_install_directory" lang="French">docx_install_directory</Localized>
+    <Localized key="docx_install_directory" lang="Dutch">docx_install_directory</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="generated_doc_repository" />
+</Panel>

@@ -215,7 +215,7 @@ public class DiagramPerspective extends FlexoPerspective {
 	public VEShemaController getControllerForShema(View shema) {
 		VEShemaController returned = _controllers.get(shema);
 		if (returned == null) {
-			returned = new VEShemaController(_controller, shema);
+			returned = new VEShemaController(_controller, shema, false);
 			_controllers.put(shema, returned);
 		}
 		return returned;

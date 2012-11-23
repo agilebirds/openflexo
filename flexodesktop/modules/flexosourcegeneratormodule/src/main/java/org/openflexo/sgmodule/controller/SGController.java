@@ -154,6 +154,20 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		return new SGMainPane(this);
 	}
 
+	/**
+	 * Init inspectors
+	 */
+	@Override
+	public void initInspectors() {
+		super.initInspectors();
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup("Generator");
+		}
+		if (useOldInspectorScheme()) {
+			getSelectionManager().addObserver(getSharedInspectorController());
+		}
+	}
+
 	public void initProgressWindow(String msg, int steps) {
 		ProgressWindow.showProgressWindow(msg, steps);
 	}

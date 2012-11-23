@@ -157,4 +157,10 @@ public class CurvedPolylinConnector extends Connector {
 		return p2;
 	}
 
+	@Override
+	public CurvedPolylinConnector clone() {
+		CurvedPolylinConnector returned = new CurvedPolylinConnector(null);
+		return returned;
+	}
+
 }

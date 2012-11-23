@@ -46,6 +46,9 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicScrollPaneUI;
+import javax.swing.plaf.basic.BasicTextPaneUI;
+import javax.swing.plaf.basic.BasicViewportUI;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -101,10 +104,15 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public class TextComponent extends JTextPane {
 
 		public TextComponent() {
+			setUI(new BasicTextPaneUI());
 			setOpaque(false);
 			setEditable(false);
 			setAutoscrolls(false);
 			setFocusable(true);
+		}
+
+		@Override
+		public void updateUI() {
 		}
 
 		protected void updateCursor() {
@@ -161,6 +169,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	private boolean initialized = false;
 
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
+		setUI(new BasicScrollPaneUI());
+		getViewport().setUI(new BasicViewportUI());
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
@@ -168,14 +178,15 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		this.textComponent = new TextComponent();
 		this.textComponentListener = new LabelDocumentListener();
 		textComponent.addMouseListener(new InOutMouseListener());
+		getViewport().setBorder(null);
+		getViewport().setOpaque(false);
 		setViewportView(textComponent);
 		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
-		getViewport().setBorder(null);
 		setBorder(null);
+		setViewportBorder(null);
 		setOpaque(false);
-		getViewport().setOpaque(false);
 		graphicalRepresentation.setLabelMetricsProvider(this);
 		textComponent.setLocation(0, 0);
 		updateFont();
@@ -184,6 +195,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
+	}
+
+	@Override
+	public void updateUI() {
 	}
 
 	public void registerTextListener() {
@@ -205,6 +220,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			public void setViewPosition(Point p) {
 				// We don't want to scroll so we prevent the view port
 				// from moving.
+			}
+
+			@Override
+			public void updateUI() {
 			}
 		};
 	}

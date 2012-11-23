@@ -61,6 +61,7 @@ import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.Cloner;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -381,6 +382,16 @@ public class FIBInspector extends FIBPanel {
 							}
 						}, true));
 			}
+			if (StringUtils.isNotEmpty(individualEntry.getRenderer())) {
+				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.renderer"),
+						new DataBinding('"' + individualEntry.getRenderer() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return entry.getBindingFactory();
+							}
+						}, true));
+			}
+
 			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return individualSelector;
 		} else if (entry instanceof ClassInspectorEntry) {

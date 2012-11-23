@@ -7,7 +7,7 @@
     <BrowserElement dataClassName="org.openflexo.components.widget.OntologyBrowserModel" isEditable="false" filtered="false" defaultVisible="true" name="model">
       <Children data="model.roots" name="children" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.ontology.AbstractOntologyObject" label="element.name" icon="controller.iconForObject(element)" tooltip="element.hTMLDescription" isEditable="false" filtered="false" defaultVisible="true" dynamicFont="data.model.getFont(element,data.fIBBrowser.retrieveValidFont)" name="element">
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.AbstractOntologyObject" label="data.renderObject(element)" icon="controller.iconForObject(element)" tooltip="element.hTMLDescription" isEditable="false" filtered="false" defaultVisible="true" dynamicFont="data.model.getFont(element,data.fIBBrowser.retrieveValidFont)" name="element">
       <Children data="data.model.getChildren(element)" name="children" />
     </BrowserElement>
   </Browser>

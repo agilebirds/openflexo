@@ -1,4 +1,4 @@
-<inspector title = "custom_template_set">
+<inspector title = "custom_template_set" inspectedClassName="org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet">
 	<tab name="Basic" index="0">
 		<property name="targetType.localizedName" label="target" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
 	</tab>

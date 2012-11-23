@@ -25,8 +25,10 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.menu.DEMenuBar;
 import org.openflexo.doceditor.view.DEMainPane;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DGRepository;
@@ -140,6 +142,24 @@ public class DEController extends FlexoController implements FlexoObserver {
 
 	public void disposeProgressWindow() {
 		ProgressWindow.hideProgressWindow();
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void initInspectors() {
+		super.initInspectors();
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup("Generator");
+		}
+		if (useOldInspectorScheme()) {
+			getSelectionManager().addObserver(getSharedInspectorController());
+		}
 	}
 
 	/**

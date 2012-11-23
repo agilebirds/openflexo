@@ -21,6 +21,7 @@ package org.openflexo.dgmodule.controller.action;
 
 import java.util.logging.Logger;
 
+import org.openflexo.action.CompareFilesInitializer;
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
@@ -136,6 +137,7 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		new ShowFileVersionInitializer(ShowFileVersion.showLastGenerated, this);
 		new ShowFileVersionInitializer(ShowFileVersion.showLastAccepted, this);
 		new ShowFileVersionInitializer(ShowFileVersion.showHistoryVersion, this);
+		new CompareFilesInitializer(this);
 
 		// Templates management
 		new AddCustomTemplateRepositoryInitializer(this);

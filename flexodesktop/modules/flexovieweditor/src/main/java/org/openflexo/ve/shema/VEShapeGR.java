@@ -55,12 +55,24 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
 	public VEShapeGR(VEShemaBuilder builder) {
-		this(null, null);
+		super(ShapeType.RECTANGLE, null, null);
 	}
 
 	public VEShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
+		registerShapeGR(aShape, aDrawing);
+	}
+
+	public boolean isGRRegistered = false;
+
+	public boolean isGRRegistered() {
+		return isGRRegistered;
+	}
+
+	public void registerShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
+		setDrawable(aShape);
+		setDrawing(aDrawing);
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
@@ -76,9 +88,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		if (aShape != null) {
 			aShape.update();
 		}
-
-		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
-
+		isGRRegistered = true;
 	}
 
 	private void registerMouseClickControls() {

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -39,6 +40,9 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class ZipUtils {
 
+	public static final String VALID_ENTRY_NAME_REGEXP = "\\p{ASCII}+";
+	public static final Pattern VALID_ENTRY_NAME_PATTERN = Pattern.compile(VALID_ENTRY_NAME_REGEXP);
+
 	private static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
 		try {
 			byte[] buffer = new byte[4096];
@@ -47,8 +51,8 @@ public class ZipUtils {
 				out.write(buffer, 0, len);
 			}
 		} finally {
-			in.close();
-			out.close();
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(out);
 		}
 	}
 
@@ -95,6 +99,10 @@ public class ZipUtils {
 			FileOutputStream fos = null;
 			try {
 				zipStream = zipFile.getInputStream(entry);
+				if (zipStream == null) {
+					System.err.println("Could not find input stream for entry: " + entry.getName());
+					continue;
+				}
 				fos = new FileOutputStream(outputFile);
 				copyInputStream(zipStream, new BufferedOutputStream(fos));
 			} catch (IOException e) {

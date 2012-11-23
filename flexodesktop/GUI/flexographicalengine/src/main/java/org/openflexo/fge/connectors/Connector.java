@@ -161,7 +161,10 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public static enum ConnectorType {
 		LINE,
 		// RECT_LINE,
-		RECT_POLYLIN, CURVE, CURVED_POLYLIN, CUSTOM;
+		RECT_POLYLIN,
+		CURVE,
+		CURVED_POLYLIN,
+		CUSTOM;
 
 		public ImageIcon getIcon() {
 			if (this == RECT_POLYLIN) {
@@ -352,17 +355,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public abstract FGERectangle getConnectorUsedBounds();
 
 	@Override
-	public Connector clone() {
-		try {
-			Connector returned = (Connector) super.clone();
-			returned.graphicalRepresentation = null;
-			return returned;
-		} catch (CloneNotSupportedException e) {
-			// cannot happen since we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
+	public abstract Connector clone();
 
 	/**
 	 * Return start point, relative to start object

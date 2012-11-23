@@ -247,7 +247,9 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 				}
 
 				try {
-					getResourceData().receiveRMNotification(notification);
+					if (getResourceData() != null) { // May happen in case of deleting
+						getResourceData().receiveRMNotification(notification);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new FlexoException();

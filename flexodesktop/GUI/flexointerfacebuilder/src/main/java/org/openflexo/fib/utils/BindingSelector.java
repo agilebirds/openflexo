@@ -797,8 +797,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
 			// System.out.println("registering " + bindable + " for " + this);
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
-					BindingModelChanged.BINDING_MODEL_CHANGED, this);
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
+						BindingModelChanged.BINDING_MODEL_CHANGED, this);
+			}
 		}
 	}
 
@@ -807,7 +809,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			((Observable) _bindable).deleteObserver(this);
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
 		}
 	}
 

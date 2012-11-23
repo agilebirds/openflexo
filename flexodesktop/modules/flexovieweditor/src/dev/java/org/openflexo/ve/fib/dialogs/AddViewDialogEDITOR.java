@@ -22,33 +22,29 @@ package org.openflexo.ve.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
-
 public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				AddView action = AddView.actionType.makeNewAction(project.getShemaLibrary(), null,editor);
-				return makeArray(action);
-			}
-			public File getFIBFile() {
-				return VECst.ADD_VIEW_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		AddView action = AddView.actionType.makeNewAction(project.getShemaLibrary(), null, editor);
+		return makeArray(action);
 	}
-	
+
+	@Override
+	public File getFIBFile() {
+		return VECst.ADD_VIEW_DIALOG_FIB;
+	}
+
+	public static void main(String[] args) {
+		main(AddViewDialogEDITOR.class);
+	}
 
 }

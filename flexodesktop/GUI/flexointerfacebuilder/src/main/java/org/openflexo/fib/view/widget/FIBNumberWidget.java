@@ -78,6 +78,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		Number inc = model.getIncrement();
 
 		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
 		checkBox = new JCheckBox();
 		checkBox.setToolTipText(FlexoLocalization.localizedForKey("undefined_value", checkBox));
 		checkBox.addActionListener(new ActionListener() {

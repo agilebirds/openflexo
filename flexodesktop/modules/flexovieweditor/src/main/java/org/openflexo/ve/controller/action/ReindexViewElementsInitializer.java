@@ -52,6 +52,9 @@ public class ReindexViewElementsInitializer extends ActionInitializer<ReindexVie
 		return new FlexoActionInitializer<ReindexViewElements>() {
 			@Override
 			public boolean run(EventObject e, ReindexViewElements action) {
+				if (action.skipDialog) {
+					return true;
+				}
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
