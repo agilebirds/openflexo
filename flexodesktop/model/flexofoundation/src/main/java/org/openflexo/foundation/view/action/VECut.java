@@ -44,12 +44,12 @@ public class VECut extends FlexoUndoableAction<VECut, ViewObject, ViewObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 

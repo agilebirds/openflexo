@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SuroundWithRepetition> getDefaultInitializer() {
 		return new FlexoActionInitializer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action) {
+			public boolean run(EventObject e, SuroundWithRepetition action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
 					if (!v.contains(action.getFocusedObject())) {
@@ -124,7 +124,7 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SuroundWithRepetition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action) {
+			public boolean run(EventObject e, SuroundWithRepetition action) {
 				((IEController) getController()).getSelectionManager().setSelectedObject(action.getNewRepetition().getOperatedSequence());
 				return true;
 			}

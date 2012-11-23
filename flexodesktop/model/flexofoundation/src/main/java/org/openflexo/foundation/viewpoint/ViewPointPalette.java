@@ -41,7 +41,6 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
-import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
@@ -318,7 +317,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	public ViewPointPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
 		ViewPointPaletteElement newElement = new ViewPointPaletteElement(null);
 		newElement.setName(name);
-		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation) graphicalRepresentation);
+		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation<?>) graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
 	}
@@ -346,8 +345,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
 		try {
-			cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance(
-					getProject()) : null;
+			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();
@@ -419,6 +417,11 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	@Override
 	public BindingModel getBindingModel() {
 		return getViewPoint().getBindingModel();
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

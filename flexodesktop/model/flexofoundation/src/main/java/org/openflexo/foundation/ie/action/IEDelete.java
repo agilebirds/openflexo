@@ -55,12 +55,12 @@ public class IEDelete extends FlexoUndoableAction<IEDelete, IEObject, IEObject> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return (object != null && !(object instanceof IESequenceWidget) && !(object instanceof IETDWidget)
 					&& !(object instanceof IETRWidget) || globalSelection != null && globalSelection.size() > 0
 					&& !(globalSelection.get(0) instanceof IESequenceWidget) && !(globalSelection.get(0) instanceof IETRWidget)

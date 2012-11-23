@@ -33,12 +33,12 @@ public class HideRole extends FlexoGUIAction<HideRole, Role, Role> {
 			FlexoActionType.defaultGroup) {
 
 		@Override
-		protected boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
+		public boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(Role object, Vector<Role> globalSelection) {
+		public boolean isVisibleForSelection(Role object, Vector<Role> globalSelection) {
 			return true;
 		}
 

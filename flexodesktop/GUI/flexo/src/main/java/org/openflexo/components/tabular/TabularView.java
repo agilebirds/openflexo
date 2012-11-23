@@ -54,7 +54,6 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Tabular view representing an AbstractModel
@@ -87,8 +86,8 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 							}
 						}
 						FlexoModelObject selectMe = _model.elementAt(row);
-						if (((FlexoController) _controller).moduleViewForObject(selectMe) != null) {
-							((FlexoController) _controller).setCurrentEditedObjectAsModuleView(selectMe);
+						if (_controller.moduleViewForObject(selectMe) != null) {
+							_controller.setCurrentEditedObjectAsModuleView(selectMe);
 						}
 					}
 				} else if (e.getClickCount() == 1) {
@@ -151,7 +150,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	protected static final Logger logger = Logger.getLogger(TabularView.class.getPackage().getName());
 
-	protected SelectionManagingController _controller;
+	protected FlexoController _controller;
 
 	protected JTable _table;
 
@@ -200,12 +199,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	};
 
-	public TabularView(SelectionManagingController controller, AbstractModel model, int visibleRowCount) {
+	public TabularView(FlexoController controller, AbstractModel model, int visibleRowCount) {
 		this(controller, model);
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularView(SelectionManagingController controller, AbstractModel model) {
+	public TabularView(FlexoController controller, AbstractModel model) {
 		super();
 		_model = model;
 		_controller = controller;
@@ -390,7 +389,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	private void updateSlaveTabularViews() {
-		Vector currentSelection = getSelectedObjects();
+		Vector<FlexoModelObject> currentSelection = getSelectedObjects();
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("udpateSlaveTabularViews");
@@ -399,7 +398,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			logger.fine("Current selection: " + currentSelection);
 		}
 		if (currentSelection.size() == 1) {
-			setModelInSlaveTabularViews((FlexoModelObject) currentSelection.firstElement());
+			setModelInSlaveTabularViews(currentSelection.firstElement());
 		} else {
 			setModelInSlaveTabularViews(null);
 		}
@@ -429,7 +428,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		_selectedObjectsNeedsRecomputing = true;
 	}
 
-	public Vector getSelectedObjects() {
+	public Vector<FlexoModelObject> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < _model.getRowCount(); i++) {
@@ -442,7 +441,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		return _selectedObjects;
 	}
 
-	public boolean isSelected(Vector objectList) {
+	public boolean isSelected(Vector<FlexoModelObject> objectList) {
 		return getSelectedObjects().containsAll(objectList);
 	}
 

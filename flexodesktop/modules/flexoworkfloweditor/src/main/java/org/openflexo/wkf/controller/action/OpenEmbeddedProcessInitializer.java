@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -48,7 +48,7 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenEmbeddedProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
+			public boolean run(EventObject e, OpenEmbeddedProcess action) {
 				if (action.getProcessToOpen() != null && action.getProcessToOpen().isImported()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_edit/inspect_an_imported_process"));
 					return false;
@@ -66,7 +66,7 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenEmbeddedProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
+			public boolean run(EventObject e, OpenEmbeddedProcess action) {
 				if (action.getFocusedObject() instanceof SubProcessNode && action.getFocusedObject().getSubProcess() != null) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getFocusedObject().getSubProcess());
 				}

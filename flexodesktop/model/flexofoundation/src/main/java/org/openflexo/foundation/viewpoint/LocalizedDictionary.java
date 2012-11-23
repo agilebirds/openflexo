@@ -336,4 +336,9 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		return FlexoLocalization.getMainLocalizer();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

@@ -45,12 +45,12 @@ public class DisconnectCGRepository extends AbstractGCAction<DisconnectCGReposit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
 			return repository != null && repository.isEnabled();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
 			return repository != null && repository.isEnabled();
 		}
 

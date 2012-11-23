@@ -508,11 +508,7 @@ public class DocxVelocityXmlFromHtml {
 			}
 
 			if (imageHeight == null) {
-				if (imageWidth != null) {
-					imageHeight = new Double(imageWidth / imageRatio).intValue();
-				} else {
-					imageHeight = imageIcon.getIconHeight();
-				}
+				imageHeight = new Double(imageWidth / imageRatio).intValue();
 			}
 
 			if (imageWidth > 514) {

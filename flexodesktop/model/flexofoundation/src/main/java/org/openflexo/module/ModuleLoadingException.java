@@ -29,6 +29,7 @@ public class ModuleLoadingException extends FlexoException {
 	public ModuleLoadingException(IModule module, Exception cause) {
 		super(cause);
 		this.module = module;
+		_localizationKey = "could_not_load_module";
 	}
 
 	public ModuleLoadingException(IModule module) {

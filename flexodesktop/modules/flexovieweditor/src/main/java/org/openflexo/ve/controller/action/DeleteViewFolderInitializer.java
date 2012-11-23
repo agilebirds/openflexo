@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class DeleteViewFolderInitializer extends ActionInitializer<DeleteViewFol
 	protected FlexoActionInitializer<DeleteViewFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewFolder action) {
+			public boolean run(EventObject e, DeleteViewFolder action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("really_delete_this_view_folder_and_all_its_contents_?"));
 			}
 		};
@@ -62,7 +62,7 @@ public class DeleteViewFolderInitializer extends ActionInitializer<DeleteViewFol
 	protected FlexoActionFinalizer<DeleteViewFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewFolder action) {
+			public boolean run(EventObject e, DeleteViewFolder action) {
 				return true;
 			}
 		};

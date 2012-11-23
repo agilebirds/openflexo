@@ -27,7 +27,7 @@ import org.openflexo.foundation.dm.DMEntity;
 public class TypeHierarchyPanel extends TabularBrowserView {
 
 	public TypeHierarchyPanel(DMEntity entity, DMController controller) {
-		super(null, makeTabularBrowserModel(entity), controller.getEditor());
+		super(controller, makeTabularBrowserModel(entity));
 		focusOn(entity);
 	}
 

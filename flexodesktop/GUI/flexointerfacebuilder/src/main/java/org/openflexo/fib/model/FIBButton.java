@@ -33,7 +33,7 @@ public class FIBButton extends FIBWidget {
 	@Deprecated
 	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
 	@Deprecated
-	public static BindingDefinition ACTION = new BindingDefinition("action", Void.class, BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, BindingDefinitionType.EXECUTE, false);
 
 	public static enum ButtonType {
 		Trigger, Toggle
@@ -43,7 +43,7 @@ public class FIBButton extends FIBWidget {
 		action, buttonType, label, isDefault, buttonIcon;
 	}
 
-	private DataBinding<Void> action;
+	private DataBinding<Object> action;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
 	private Boolean isDefault;
@@ -67,14 +67,14 @@ public class FIBButton extends FIBWidget {
 		return String.class;
 	}
 
-	public DataBinding<Void> getAction() {
+	public DataBinding<Object> getAction() {
 		if (action == null) {
-			action = new DataBinding<Void>(this, Void.TYPE, BindingDefinitionType.EXECUTE);
+			action = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
 		}
 		return action;
 	}
 
-	public void setAction(DataBinding<Void> action) {
+	public void setAction(DataBinding<Object> action) {
 		if (action != null) {
 			action.setOwner(this);
 			action.setDeclaredType(Void.TYPE);

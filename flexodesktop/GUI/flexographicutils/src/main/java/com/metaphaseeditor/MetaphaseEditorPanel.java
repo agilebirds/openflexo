@@ -236,8 +236,10 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private enum ParagraphFormat {
 		PARAGRAPH_FORMAT("Format", null), NORMAL("Normal", Tag.P), HEADING1("Heading 1", Tag.H1), HEADING2("Heading 2", Tag.H2), HEADING3(
-				"Heading 3", Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
-				"Formatted", Tag.PRE), ADDRESS("Address", Tag.ADDRESS);
+
+		"Heading 3", Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
+				"Formatted",
+				Tag.PRE), ADDRESS("Address", Tag.ADDRESS);
 
 		private String text;
 		private Tag tag;
@@ -262,10 +264,16 @@ public class MetaphaseEditorPanel extends JPanel {
 	}
 
 	private enum FontItem {
-		FONT("Font", null), ARIAL("Arial", "Arial"), COMIC_SANS_MS("Comic Sans MS", "Comic Sans MS"), COURIER_NEW("Courier New",
-				"Courier New"), GEORGIA("Georgia", "Georgia"), LUCINDA_SANS_UNICODE("Lucinda Sans Unicode", "Lucinda Sans Unicode"), TAHOMA(
-				"Tahoma", "Tahoma"), TIMES_NEW_ROMAN("Times New Roman", "Times New Roman"), TREBUCHET_MS("Trebuchet MS", "Trebuchet MS"), VERDANA(
-				"Verdana", "Verdana");
+		FONT("Font", null),
+		ARIAL("Arial", "Arial"),
+		COMIC_SANS_MS("Comic Sans MS", "Comic Sans MS"),
+		COURIER_NEW("Courier New", "Courier New"),
+		GEORGIA("Georgia", "Georgia"),
+		LUCINDA_SANS_UNICODE("Lucinda Sans Unicode", "Lucinda Sans Unicode"),
+		TAHOMA("Tahoma", "Tahoma"),
+		TIMES_NEW_ROMAN("Times New Roman", "Times New Roman"),
+		TREBUCHET_MS("Trebuchet MS", "Trebuchet MS"),
+		VERDANA("Verdana", "Verdana");
 
 		private String text;
 		private String fontName;
@@ -290,9 +298,22 @@ public class MetaphaseEditorPanel extends JPanel {
 	}
 
 	private enum FontSize {
-		FONT_SIZE("Size", -1), SIZE8("8", 8), SIZE9("9", 9), SIZE10("10", 10), SIZE11("11", 11), SIZE12("12", 12), SIZE14("14", 14), SIZE18(
-				"18", 18), SIZE20("20", 20), SIZE22("22", 22), SIZE24("24", 24), SIZE26("26", 26), SIZE28("28", 28), SIZE36("36", 36), SIZE48(
-				"48", 48), SIZE72("72", 72);
+		FONT_SIZE("Size", -1),
+		SIZE8("8", 8),
+		SIZE9("9", 9),
+		SIZE10("10", 10),
+		SIZE11("11", 11),
+		SIZE12("12", 12),
+		SIZE14("14", 14),
+		SIZE18("18", 18),
+		SIZE20("20", 20),
+		SIZE22("22", 22),
+		SIZE24("24", 24),
+		SIZE26("26", 26),
+		SIZE28("28", 28),
+		SIZE36("36", 36),
+		SIZE48("48", 48),
+		SIZE72("72", 72);
 
 		private String text;
 		private int size;

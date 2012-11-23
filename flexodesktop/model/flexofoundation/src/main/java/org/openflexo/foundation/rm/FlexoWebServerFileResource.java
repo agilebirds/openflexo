@@ -109,7 +109,7 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException, FlexoException {
 
 	}

@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,8 +35,6 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionRedoInitializer;
 import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.RedoException;
-import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
 import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
@@ -89,7 +87,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreatePreCondition> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, final CreatePreCondition action) {
+			public boolean run(EventObject e, final CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = new CreatePreConditionExecutionContext(action);
 				action.setExecutionContext(executionContext);
 
@@ -239,11 +237,8 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 										executionContext.createBeginNodeAction.doAction();
 										if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
 											if (executionContext.createPg != null) {
-												try {
-													executionContext.createPg.undoAction();
-												} catch (UndoException e1) {
-													e1.printStackTrace();
-												}
+												executionContext.createPg.undoAction();
+
 											}
 											return false;
 										}
@@ -269,7 +264,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreatePreCondition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				if (!action.isEmbedded()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager()
 							.setSelectedObject(action.getNewPreCondition());
@@ -283,7 +278,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionUndoFinalizer<CreatePreCondition> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) throws UndoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createBeginNodeAction != null) {
 					executionContext.createBeginNodeAction.undoAction();
@@ -303,7 +298,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionRedoInitializer<CreatePreCondition> getDefaultRedoInitializer() {
 		return new FlexoActionRedoInitializer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) throws RedoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createPg != null) {
 					executionContext.createPg.redoAction();

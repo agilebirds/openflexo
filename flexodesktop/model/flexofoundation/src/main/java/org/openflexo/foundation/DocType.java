@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
@@ -37,7 +36,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class DocType extends TargetType implements ChoiceList, Serializable, StringRepresentable {
+public class DocType extends TargetType implements ChoiceList, StringRepresentable {
 
 	public static enum DefaultDocType {
 		Business, Technical, UserManual, Objectives;

@@ -46,7 +46,7 @@ public class WSETabularView extends TabularView {
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
 		if (object instanceof WSObject) {
-			return (WSObject) ((WSObject) object).getParent();
+			return ((WSObject) object).getParent();
 		} else if (object instanceof DMRepository) {
 			WSRepository wsr = ((DMRepository) object).getProject().getFlexoWSLibrary()
 					.getWSRepositoryNamed(((DMRepository) object).getName());
@@ -54,7 +54,7 @@ public class WSETabularView extends TabularView {
 				return wsr.getWSService();
 			}
 		} else if (object instanceof DMObject) {
-			return (DMObject) ((DMObject) object).getParent();
+			return ((DMObject) object).getParent();
 		} else if (object instanceof ServiceInterface) {
 			WSPortType wsp = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
 					.getWSPortTypeNamed(((ServiceInterface) object).getName());

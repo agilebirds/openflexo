@@ -346,8 +346,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 		String modelObjectReference = null;
 		for (Entry<String, FlexoModelObject> e : treeMap.entrySet()) {
 			if (e.getValue().getXMLResourceData() != null) {
-				modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(object.getProject(), e.getValue())
-						.getStringRepresentation();
+				modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(e.getValue()).getStringRepresentation();
 				break;
 			}
 		}

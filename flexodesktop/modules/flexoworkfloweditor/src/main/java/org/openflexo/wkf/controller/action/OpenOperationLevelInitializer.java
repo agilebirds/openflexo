@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class OpenOperationLevelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenOperationLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenOperationLevel>() {
 			@Override
-			public boolean run(ActionEvent e, OpenOperationLevel action) {
+			public boolean run(EventObject e, OpenOperationLevel action) {
 				OperationPetriGraph petriGraph = action.getFocusedObject().getOperationPetriGraph();
 				if (petriGraph != null && petriGraph.getIsVisible()) {
 					if (getController().getCurrentModuleView() instanceof ProcessView) {

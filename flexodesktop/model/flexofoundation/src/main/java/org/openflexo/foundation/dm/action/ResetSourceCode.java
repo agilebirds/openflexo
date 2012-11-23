@@ -48,12 +48,12 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode, DMObject, DMOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return object != null;
 		}
 

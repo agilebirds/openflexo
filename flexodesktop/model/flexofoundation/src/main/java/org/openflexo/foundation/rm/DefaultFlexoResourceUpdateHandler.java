@@ -68,10 +68,9 @@ public class DefaultFlexoResourceUpdateHandler extends FlexoResourceUpdateHandle
 			CustomCGTemplateRepository rep = fileResource.getProject().getGeneratedCode().getTemplates()
 					.getCustomCGTemplateRepository((CustomTemplatesResource) fileResource);
 			if (rep == null) {
-				fileResource.getProject().getGeneratedDoc().getTemplates()
+				rep = fileResource.getProject().getGeneratedDoc().getTemplates()
 						.getCustomCGTemplateRepository((CustomTemplatesResource) fileResource);
 			}
-			rep.update();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("NOT IMPLEMENTED: handlesResourceUpdate() for " + fileResource + ".");

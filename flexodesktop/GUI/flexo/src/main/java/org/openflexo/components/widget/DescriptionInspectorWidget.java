@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -311,7 +312,7 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 	public FlexoModelObject getObject() {
 		KVCObject o = (KVCObject) super.getModel();
 		if (getPropertyModel().name.indexOf('.') > -1) {
-			String[] s = getPropertyModel().name.split(".");
+			String[] s = getPropertyModel().name.split(Pattern.quote("."));
 			for (int i = 0; i < s.length - 1; i++) {
 				String string = s[i];
 				Object returned = o.objectForKey(string);

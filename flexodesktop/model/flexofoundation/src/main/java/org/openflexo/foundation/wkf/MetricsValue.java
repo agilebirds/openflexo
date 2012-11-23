@@ -187,7 +187,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 			metricsDefinitionReference = null;
 		}
 		if (object != null) {
-			metricsDefinitionReference = new FlexoModelObjectReference<MetricsDefinition>(getProject(), object);
+			metricsDefinitionReference = new FlexoModelObjectReference<MetricsDefinition>(object);
 			metricsDefinitionReference.setOwner(this);
 		} else {
 			metricsDefinitionReference = null;

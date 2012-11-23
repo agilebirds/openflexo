@@ -19,7 +19,8 @@
  */
 package org.openflexo.components.tabularbrowser;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserConfiguration;
@@ -31,7 +32,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * 
@@ -43,11 +43,9 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 
 	private static final Logger logger = Logger.getLogger(TabularBrowserModel.class.getPackage().getName());
 
-	private Vector _columns;
+	private List<AbstractColumn<?, ?>> _columns;
 
 	private int _rowHeight = -1;
-
-	private FlexoProject _project;
 
 	public TabularBrowserModel(BrowserConfiguration configuration, String browsableColumnName, int browsableColumnWidth) {
 		this(configuration, true, browsableColumnName, browsableColumnWidth);
@@ -55,8 +53,7 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 
 	public TabularBrowserModel(BrowserConfiguration configuration, boolean initNow, String browsableColumnName, int browsableColumnWidth) {
 		super(configuration, null, initNow);
-		_project = configuration.getProject();
-		_columns = new Vector();
+		_columns = new ArrayList<AbstractColumn<?, ?>>();
 		addToColumns(_browsableColumn = new TreeColumn(browsableColumnName, browsableColumnWidth));
 	}
 
@@ -66,7 +63,8 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 		return _browsableColumn;
 	}
 
-	protected class TreeColumn extends AbstractColumn implements EditableColumn {
+	protected class TreeColumn extends AbstractColumn<FlexoModelObject, TreeTableModel> implements
+			EditableColumn<FlexoModelObject, TreeTableModel> {
 		public TreeColumn(String title, int defaultWidth) {
 			this(title, defaultWidth, true);
 		}
@@ -80,17 +78,17 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 		}
 
 		@Override
-		public Class getValueClass() {
+		public Class<TreeTableModel> getValueClass() {
 			return TreeTableModel.class;
 		}
 
 		@Override
-		public Object getValueFor(FlexoModelObject object) {
-			return object;
+		public TreeTableModel getValueFor(FlexoModelObject object) {
+			return TabularBrowserModel.this;
 		}
 
 		@Override
-		public void setValueFor(FlexoModelObject object, Object value) {
+		public void setValueFor(FlexoModelObject object, TreeTableModel value) {
 			// We dont care !
 		}
 
@@ -121,21 +119,20 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 		_rowHeight = aRowHeight;
 	}
 
-	public void addToColumns(AbstractColumn aColumn) {
+	public void addToColumns(AbstractColumn<?, ?> aColumn) {
 		_columns.add(aColumn);
 	}
 
-	public void insertColumnAtIndex(AbstractColumn aColumn, int index) {
-		_columns.insertElementAt(aColumn, index);
+	public void insertColumnAtIndex(AbstractColumn<?, ?> aColumn, int index) {
+		_columns.add(index, aColumn);
 	}
 
-	public void removeFromColumns(AbstractColumn aColumn) {
+	public void removeFromColumns(AbstractColumn<?, ?> aColumn) {
 		_columns.remove(aColumn);
 	}
 
-	public AbstractColumn columnAt(int index) {
-		AbstractColumn returned = (AbstractColumn) _columns.elementAt(index);
-		return returned;
+	public AbstractColumn<?, ?> columnAt(int index) {
+		return _columns.get(index);
 	}
 
 	public int getTotalPreferredWidth() {
@@ -153,7 +150,7 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 
 	@Override
 	public String getColumnName(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<?, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getLocalizedTitle();
 		}
@@ -161,7 +158,7 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 	}
 
 	public int getDefaultColumnSize(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<?, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getDefaultWidth();
 		}
@@ -169,7 +166,7 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 	}
 
 	public boolean getColumnResizable(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<?, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getResizable();
 		}
@@ -208,9 +205,8 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 	}
 
 	@Override
-	public Class getColumnClass(int col) {
-		AbstractColumn column = columnAt(col);
-		return column.getValueClass();
+	public Class<?> getColumnClass(int col) {
+		return columnAt(col).getValueClass();
 	}
 
 	@Override
@@ -239,13 +235,6 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// TODO Auto-generated method stub
 	}
-
-	/* @Override
-	 public BrowserElement makeNewElement(FlexoModelObject object) 
-	 {
-	 	logger.info("makeNewElement with "+object);
-	 	return super.makeNewElement(object);
-	 }*/
 
 	@Override
 	public void update() {

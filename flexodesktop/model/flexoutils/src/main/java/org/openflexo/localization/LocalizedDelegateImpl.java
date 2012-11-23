@@ -22,6 +22,7 @@ package org.openflexo.localization;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.Collator;
@@ -35,6 +36,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -97,16 +99,23 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	private void saveDictionary(Language language, Properties dict) {
 		File dictFile = getDictionaryFileForLanguage(language);
 		try {
-			if (!dictFile.exists()) {
-				dictFile.createNewFile();
+			final FileOutputStream fos = new FileOutputStream(dictFile);
+			try {
+				if (!dictFile.exists()) {
+					dictFile.createNewFile();
+				}
+				dict.store(new JavaPropertiesOutputStream(fos), language.getName());
+				logger.info("Saved " + dictFile.getAbsolutePath());
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
+					// e.printStackTrace();
+				}
+			} finally {
+				IOUtils.closeQuietly(fos);
 			}
-			dict.store(new FileOutputStream(dictFile), language.getName());
-			logger.info("Saved " + dictFile.getAbsolutePath());
-		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
-				// e.printStackTrace();
-			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 

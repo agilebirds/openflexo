@@ -35,7 +35,7 @@ import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.SharedProject;
 
-public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 extends FPSObject> extends FlexoAction<A, T1, FPSObject> {
+public abstract class CVSAction<A extends FlexoAction<A, T1, FPSObject>, T1 extends FPSObject> extends FlexoAction<A, T1, FPSObject> {
 
 	private static final Logger logger = Logger.getLogger(CVSAction.class.getPackage().getName());
 

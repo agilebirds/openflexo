@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -57,7 +57,7 @@ public class ApproveVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ApproveVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<ApproveVersion>() {
 			@Override
-			public boolean run(ActionEvent e, final ApproveVersion action) {
+			public boolean run(EventObject e, final ApproveVersion action) {
 
 				Vector<DocItemVersion> availableVersions = action.getVersionsThatCanBeApproved();
 
@@ -112,7 +112,7 @@ public class ApproveVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ApproveVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ApproveVersion>() {
 			@Override
-			public boolean run(ActionEvent e, ApproveVersion action) {
+			public boolean run(EventObject e, ApproveVersion action) {
 				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getDocItem()) {
 					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()
 							.getCurrentModuleView();

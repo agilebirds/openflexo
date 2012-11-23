@@ -42,8 +42,6 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 
 	private static final Logger logger = Logger.getLogger(MouseSelectionManager.class.getPackage().getName());
 
-	protected FocusableView _focusedPanel;
-
 	private PastingGraphicalContext _pastingGraphicalContext;
 
 	// ==========================================================================

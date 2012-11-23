@@ -31,7 +31,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.openflexo.ColorCst;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.Language;
@@ -58,8 +57,6 @@ public class SubmitNewVersionPopup extends FlexoDialog {
 		String title = FlexoLocalization.localizedForKey("submit_documentation_for") + " " + docItem.getIdentifier();
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());
-
-		setBackground(ColorCst.GUI_BACK_COLOR);
 
 		_view = new SubmitNewVersionView(docItem, language, editor);
 		_view.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

@@ -60,6 +60,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		@Override
 		public synchronized Object apply(Object arg0) {
 			child = arg0;
+			try {
 			Object result = null;
 			try {
 				result = children.getCast().getBindingValue(this);
@@ -68,8 +69,10 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
 			}
+				return result;
+			} finally {
 			child = null;
-			return result;
+		}
 		}
 
 		@Override
@@ -362,7 +365,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				e.printStackTrace();
 			}
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
-			if (children.getCast().isSet()) {
+			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
 			}
 			return list;

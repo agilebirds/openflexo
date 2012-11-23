@@ -36,7 +36,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class FlexoCSS extends FlexoObject implements StringConvertable, ChoiceList {
+public abstract class FlexoCSS extends FlexoObject implements StringConvertable<FlexoCSS>, ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(FlexoCSS.class.getPackage().getName());
 
@@ -309,7 +309,7 @@ public abstract class FlexoCSS extends FlexoObject implements StringConvertable,
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<FlexoCSS> getConverter() {
 		return flexoCSSConverter;
 	}
 

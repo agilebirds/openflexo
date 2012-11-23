@@ -35,7 +35,6 @@ import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.Value;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
-import org.openflexo.foundation.ie.cl.MonitoringComponentDefinition;
 import org.openflexo.foundation.ie.cl.MonitoringScreenDefinition;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
@@ -142,7 +141,7 @@ public class IEBrowserElementFactory implements BrowserElementFactory {
 			return new ComponentFolderElement((FlexoComponentFolder) object, browser, parent);
 		} else if (object instanceof ReusableComponentDefinition) {
 			return new ReusableComponentDefinitionElement((ReusableComponentDefinition) object, browser, parent);
-		} else if (object instanceof MonitoringComponentDefinition) {
+		} else if (object instanceof MonitoringScreenDefinition) {
 			return new MonitoringScreenDefinitionElement((MonitoringScreenDefinition) object, browser, parent);
 		} else if (object instanceof IEReusableWidget) {
 			return new IEReusableWidgetElement((IEReusableWidget) object, browser, parent);

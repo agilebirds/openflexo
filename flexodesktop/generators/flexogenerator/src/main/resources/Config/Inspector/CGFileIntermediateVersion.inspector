@@ -1,4 +1,4 @@
-<inspector title = "file_intermediate_version">
+<inspector title = "file_intermediate_version" inspectedClassName="org.openflexo.foundation.cg.version.CGFileIntermediateVersion">
 	<tab name="Basic" index="0">
 		<property name="versionId.versionAsString" label="version" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
 		<property name="dateAsString" label="date" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>

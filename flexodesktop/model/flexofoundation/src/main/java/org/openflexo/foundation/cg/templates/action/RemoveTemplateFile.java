@@ -45,12 +45,12 @@ public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTempla
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
 			return object != null && object.isCustomTemplate();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
 			return object != null && object.isCustomTemplate();
 		}
 

@@ -120,22 +120,26 @@ public class ResourceLocator {
 
 	private static Vector<File> getDirectoriesSearchOrder() {
 		if (directoriesSearchOrder == null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Initializing directories search order");
-			}
-			directoriesSearchOrder = new Vector<File>();
-			if (preferredResourcePath != null) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Adding directory " + preferredResourcePath.getAbsolutePath());
+			synchronized (ResourceLocator.class) {
+				if (directoriesSearchOrder == null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Initializing directories search order");
+					}
+					directoriesSearchOrder = new Vector<File>();
+					if (preferredResourcePath != null) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Adding directory " + preferredResourcePath.getAbsolutePath());
+						}
+						directoriesSearchOrder.add(preferredResourcePath);
+					}
+					File workingDirectory = new File(System.getProperty("user.dir"));
+					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
+					if (flexoDesktopDirectory != null) {
+						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
+					}
+					directoriesSearchOrder.add(workingDirectory);
 				}
-				directoriesSearchOrder.add(preferredResourcePath);
 			}
-			File workingDirectory = new File(System.getProperty("user.dir"));
-			File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
-			if (flexoDesktopDirectory != null) {
-				findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
-			}
-			directoriesSearchOrder.add(workingDirectory);
 		}
 		return directoriesSearchOrder;
 	}

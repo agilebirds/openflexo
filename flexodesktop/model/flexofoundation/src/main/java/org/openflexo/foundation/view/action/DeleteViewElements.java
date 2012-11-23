@@ -54,12 +54,12 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewElement object, Vector<ViewElement> globalSelection) {
+		public boolean isVisibleForSelection(ViewElement object, Vector<ViewElement> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewElement focusedObject, Vector<ViewElement> globalSelection) {
+		public boolean isEnabledForSelection(ViewElement focusedObject, Vector<ViewElement> globalSelection) {
 			Vector<ViewElement> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
 			return objectsToDelete.size() > 0;
 		}

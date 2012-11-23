@@ -30,6 +30,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,17 +68,15 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularPanel(AbstractModel model) {
+	public TabularPanel(@Nonnull AbstractModel model) {
 		super();
 		_model = model;
 
-		if (model != null) {
-			model.addTableModelListener(this);
-			if (model.getModel() != null) {
-				model.getModel().addObserver(this);
-			}
-			model.fireTableDataChanged();
+		model.addTableModelListener(this);
+		if (model.getModel() != null) {
+			model.getModel().addObserver(this);
 		}
+		model.fireTableDataChanged();
 
 		_table = new FlexoJTable(model);
 		// _table.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));

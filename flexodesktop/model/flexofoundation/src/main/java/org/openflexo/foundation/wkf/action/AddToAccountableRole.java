@@ -32,12 +32,12 @@ public class AddToAccountableRole extends AddToXRole<AddToAccountableRole> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
 			return object != null && object.getAvailableAccountableRoles().size() > 0;
 		}
 

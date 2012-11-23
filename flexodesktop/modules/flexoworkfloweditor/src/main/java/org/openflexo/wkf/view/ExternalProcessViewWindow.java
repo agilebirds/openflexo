@@ -57,10 +57,10 @@ public class ExternalProcessViewWindow extends FlexoRelativeWindow {
 	// ==========================================================================
 
 	public ExternalProcessViewWindow(WKFController controller, FlexoProcess process) {
-		super(controller.getMainFrame());
+		super(controller.getFlexoFrame());
 		getContentPane().setLayout(new BorderLayout());
 
-		_processEditorController = new ProcessEditorController(process, controller.getEditor(), null);
+		_processEditorController = new ProcessEditorController(process, controller, null);
 
 		JPanel mainView;
 		JPanel topPanel = new JPanel(new BorderLayout());

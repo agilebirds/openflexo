@@ -33,27 +33,28 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.widget.IETRWidget;
 
-public class IECopy extends FlexoAction {
+public class IECopy extends FlexoAction<IECopy, IEObject, IEObject> {
 
 	private static final Logger logger = Logger.getLogger(IECopy.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("copy", FlexoActionType.editGroup) {
+	public static FlexoActionType<IECopy, IEObject, IEObject> actionType = new FlexoActionType<IECopy, IEObject, IEObject>("copy",
+			FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public IECopy makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 			return new IECopy(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return globalSelection != null && globalSelection.size() == 1
 					&& !(globalSelection.firstElement() instanceof ComponentDefinition)
 					&& !(globalSelection.firstElement() instanceof IEWOComponent)
@@ -68,7 +69,8 @@ public class IECopy extends FlexoAction {
 		FlexoModelObject.addActionForClass(actionType, IEObject.class);
 	}
 
-	IECopy(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	IECopy(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

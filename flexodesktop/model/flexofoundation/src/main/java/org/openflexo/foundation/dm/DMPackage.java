@@ -29,8 +29,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
@@ -327,19 +325,9 @@ public class DMPackage extends DMObject {
 		super.update(observable, dataModification);
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMRepository getParent() {
 		return repository;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override

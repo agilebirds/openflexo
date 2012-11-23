@@ -54,12 +54,12 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplates object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplates object, Vector<CGTemplateObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplates object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplates object, Vector<CGTemplateObject> globalSelection) {
 			return object != null;
 		}
 

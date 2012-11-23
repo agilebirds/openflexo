@@ -21,8 +21,6 @@ package org.openflexo;
 
 import java.awt.Color;
 
-import org.openflexo.toolbox.ToolBox;
-
 public class ColorCst {
 
 	public static final Color HYPERLINK_COLOR = Color.BLUE;
@@ -34,7 +32,6 @@ public class ColorCst {
 	public static final Color SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR = Color.WHITE;
 	public static final Color UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR = Color.BLACK;
 	public static final Color UNSELECTED_DISABLED_CELL_TABULAR_VIEW_FOREGROUND_COLOR = Color.LIGHT_GRAY;
-	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 	public static final Color LIGHT_BLUE = new Color(181, 213, 255);
 
 	public ColorCst() {

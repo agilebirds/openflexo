@@ -211,7 +211,7 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 			expr = new Variable((String) ((StaticBinding) value).getValue());
 		} else {
 			try {
-				expr = new DefaultExpressionParser().parse(value.toString());
+				expr = new DefaultExpressionParser().parse(value.toString(), null);
 			} catch (Exception e) {
 				System.out.println("Could not parse expression... " + value.toString());
 				e.printStackTrace();

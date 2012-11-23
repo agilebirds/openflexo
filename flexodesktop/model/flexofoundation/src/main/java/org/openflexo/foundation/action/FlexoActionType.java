@@ -20,22 +20,20 @@
 package org.openflexo.foundation.action;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
-
-import org.openflexo.foundation.DefaultFlexoEditor;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
 
-public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
-		AbstractAction {
+public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(FlexoActionType.class.getPackage().getName());
 
@@ -65,7 +63,6 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 	private String _actionName;
 	// private Icon _smallIcon;
 	// private Icon _smallDisabledIcon;
-	private KeyStroke _keyStroke;
 	private ActionGroup _actionGroup;
 	private ActionMenu _actionMenu;
 	private int _actionCategory;
@@ -74,6 +71,26 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 
 	protected FlexoActionType(String actionName) {
 		this(actionName, null, defaultGroup, NORMAL_ACTION_TYPE);
+	}
+
+	public Type getFocusedObjectType() {
+		Map<TypeVariable<?>, Type> typeArguments = TypeUtils.getTypeArguments(getClass(), FlexoActionType.class);
+		for (Entry<TypeVariable<?>, Type> e : typeArguments.entrySet()) {
+			if (e.getKey().getName().equals("T1") && e.getKey().getGenericDeclaration() == FlexoActionType.class) {
+				return e.getValue();
+			}
+		}
+		return FlexoModelObject.class;
+	}
+
+	public Type getGlobalSelectionType() {
+		Map<TypeVariable<?>, Type> typeArguments = TypeUtils.getTypeArguments(getClass(), FlexoActionType.class);
+		for (Entry<TypeVariable<?>, Type> e : typeArguments.entrySet()) {
+			if (e.getKey().getName().equals("T2") && e.getKey().getGenericDeclaration() == FlexoActionType.class) {
+				return e.getValue();
+			}
+		}
+		return FlexoModelObject.class;
 	}
 
 	/*protected FlexoActionType (String actionName, Icon icon)
@@ -231,7 +248,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 	 * @param object
 	 * @return
 	 */
-	protected abstract boolean isVisibleForSelection(T1 object, Vector<T2> globalSelection);
+	public abstract boolean isVisibleForSelection(T1 object, Vector<T2> globalSelection);
 
 	/**
 	 * Indicates if this action (eventually disabled) is enabled
@@ -239,7 +256,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 	 * @param object
 	 * @return
 	 */
-	protected abstract boolean isEnabledForSelection(T1 object, Vector<T2> globalSelection);
+	public abstract boolean isEnabledForSelection(T1 object, Vector<T2> globalSelection);
 
 	/**
 	 * Indicates if this action is enabled (assert that action is visible)
@@ -256,15 +273,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 		if (object != null && object.getActionList().indexOf(this) == -1) {
 			return false;
 		}
-		if (editor.isActionEnabled(this)) {
-			if (isEnabledForSelection(object, globalSelection)) {
-				if (getEnableConditionForEditor(editor) != null) {
-					return getEnableConditionForEditor(editor).isEnabled(this, object, globalSelection, editor);
-				} else {
-					return true;
-				}
-			}
-		}
+
 		return false;
 	}
 
@@ -274,178 +283,11 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 					+ FlexoLocalization.localizedForKey("is_not_active_for") + " "
 					+ FlexoLocalization.localizedForKey(object.getClassNameKey());
 		}
-		if (!editor.isActionEnabled(this)) {
-			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "
-					+ FlexoLocalization.localizedForKey("is_not_active_for") + " " + FlexoLocalization.localizedForKey("this_module");
-		}
 		if (!isEnabledForSelection(object, globalSelection)) {
 			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "
 					+ FlexoLocalization.localizedForKey("is_not_active_for_this_selection");
 		}
-		if (getEnableConditionForEditor(editor) != null
-				&& !getEnableConditionForEditor(editor).isEnabled(this, object, globalSelection, editor)) {
-			// TODO: Add getDisableReason() also on FlexoActionEnableCondition
-			return FlexoLocalization.localizedForKey("conditions_to_enable_action_are_not_met");
-		}
 		return null;
-	}
-
-	/**
-	 * Indicates if this action (eventually disabled) is visible
-	 * 
-	 * @param object
-	 * @return
-	 */
-	public boolean isVisible(T1 object, Vector<T2> globalSelection, FlexoEditor editor) {
-		if (editor == null) {
-			logger.warning("FlexoAction invoked with null editor ");
-			return true;
-		}
-		if (editor.isActionVisible(this)) {
-			try {
-				if (isVisibleForSelection(object, globalSelection)) {
-					if (getVisibleConditionForEditor(editor) != null) {
-						return getVisibleConditionForEditor(editor).isVisible(this, object, globalSelection, editor);
-					} else {
-						return true;
-					}
-				}
-			} catch (ClassCastException e) {
-				// May happen if wrong types
-			}
-		}
-		return false;
-	}
-
-	protected boolean matchesInstanceOf(Class aClass, T1 object, Vector<T2> globalSelection) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("matchesInstanceOf-object=" + object);
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("matchesInstanceOf-globalSelection= " + globalSelection.size() + " " + globalSelection);
-		}
-		return object != null && aClass.isAssignableFrom(object.getClass()) || globalSelection != null && globalSelection.size() > 0
-				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass());
-	}
-
-	protected boolean matchesUniqueInstanceOf(Class aClass, T1 object, Vector<T2> globalSelection) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("matchesUniqueInstanceOf-object=" + object);
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("matchesUniqueInstanceOf-globalSelection= " + globalSelection.size() + " " + globalSelection);
-		}
-		return object != null
-				&& aClass.isAssignableFrom(object.getClass())
-				&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
-						&& globalSelection.firstElement() == object) || globalSelection != null && globalSelection.size() == 1
-				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass())
-				&& (object == null || object == globalSelection.firstElement());
-	}
-
-	protected FlexoModelObject getUniqueInstanceOf(Class aClass, T1 object, Vector<T2> globalSelection) {
-		if (object != null
-				&& aClass.isAssignableFrom(object.getClass())
-				&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
-						&& globalSelection.firstElement() == object)) {
-			return object;
-		} else if (globalSelection != null && globalSelection.size() == 1
-				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass())
-				&& (object == null || object == globalSelection.firstElement())) {
-			return globalSelection.firstElement();
-		}
-		return null;
-	}
-
-	/* public Icon getSmallIcon() 
-	 {
-	     return _smallIcon;
-	 }
-
-	 public void setSmallIcon(Icon smallIcon) 
-	 {
-	     _smallIcon = smallIcon;
-	 }
-	 
-	public Icon getSmallDisabledIcon() 
-	{
-		return _smallDisabledIcon;
-	}
-
-	public void setSmallDisabledIcon(Icon smallDisabledIcon) 
-	{
-		_smallDisabledIcon = smallDisabledIcon;
-	}*/
-
-	public KeyStroke getKeyStroke() {
-		return _keyStroke;
-	}
-
-	public void setKeyStroke(KeyStroke keyStroke) {
-		_keyStroke = keyStroke;
-	}
-
-	public FlexoActionFinalizer<? super A> getFinalizerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getFinalizerFor(this);
-	}
-
-	public FlexoActionInitializer<? super A> getInitializerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getInitializerFor(this);
-	}
-
-	public FlexoActionUndoFinalizer<? super A> getUndoFinalizerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getUndoFinalizerFor(this);
-	}
-
-	public FlexoActionUndoInitializer<? super A> getUndoInitializerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getUndoInitializerFor(this);
-	}
-
-	public FlexoActionRedoFinalizer<? super A> getRedoFinalizerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getRedoFinalizerFor(this);
-	}
-
-	public FlexoActionRedoInitializer<? super A> getRedoInitializerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getRedoInitializerFor(this);
-	}
-
-	public FlexoActionEnableCondition getEnableConditionForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getEnableConditionFor(this);
-	}
-
-	public FlexoActionVisibleCondition getVisibleConditionForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getVisibleConditionFor(this);
-	}
-
-	public FlexoExceptionHandler<? super A> getExceptionHandlerForEditor(FlexoEditor editor) {
-		if (editor == null) {
-			return null;
-		}
-		return editor.getExceptionHandlerFor(this);
 	}
 
 	public ActionGroup getActionGroup() {
@@ -462,47 +304,6 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 
 	public void setActionMenu(ActionMenu actionMenu) {
 		_actionMenu = actionMenu;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		A action;
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("event source " + event.getSource());
-		}
-		if (event.getSource() instanceof FlexoActionSource) {
-			try {
-				FlexoActionSource<T1, T2> source = (FlexoActionSource<T1, T2>) event.getSource();
-				if (isEnabled(source.getFocusedObject(), source.getGlobalSelection(), source.getEditor())) {
-					action = makeNewAction(source.getFocusedObject(), source.getGlobalSelection(), source.getEditor());
-					action.setInvoker(event.getSource());
-				} else {
-					logger.info("Action not enabled for this selection " + source.getFocusedObject() + " " + source.getGlobalSelection()
-							+ " actionType=" + this);
-					logger.info("Reason: " + getDisabledReason(source.getFocusedObject(), source.getGlobalSelection(), source.getEditor()));
-					return;
-				}
-			} catch (ClassCastException exception) {
-				logger.warning("ClassCastException raised while trying to build FlexoAction " + this + " Exception: "
-						+ exception.getMessage());
-				return;
-			}
-		} else {
-			logger.warning("Executing action " + getUnlocalizedName() + " from a source not implementing FlexoActionSource interface: "
-					+ event.getSource());
-			DefaultFlexoEditor editor = new DefaultFlexoEditor();
-			if (isEnabled(null, null, editor)) {
-				action = makeNewAction(null, null, editor);
-			} else {
-				logger.info("Action not enabled for null selection");
-				return;
-			}
-		}
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Trying to execute action " + action.getActionType().getUnlocalizedName() + " with " + action.getFocusedObject()
-					+ " and " + action.getGlobalSelection());
-		}
-		action.actionPerformed(event);
 	}
 
 	public int getActionCategory() {

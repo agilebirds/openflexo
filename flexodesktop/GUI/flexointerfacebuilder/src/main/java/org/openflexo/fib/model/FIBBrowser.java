@@ -21,17 +21,19 @@ package org.openflexo.fib.model;
 
 import java.awt.Color;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.UIManager;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 
 public class FIBBrowser extends FIBWidget {
@@ -46,7 +48,7 @@ public class FIBBrowser extends FIBWidget {
 	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", Object.class, BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
@@ -105,8 +107,8 @@ public class FIBBrowser extends FIBWidget {
 	private DataBinding<Object> root;
 	private DataBinding<Object> selected;
 
-	private int visibleRowCount = 5;
-	private int rowHeight = 20;
+	private Integer visibleRowCount;
+	private Integer rowHeight;
 	private boolean boundToSelectionManager = false;
 
 	private SelectionMode selectionMode = SelectionMode.DiscontiguousTreeSelection;
@@ -115,12 +117,12 @@ public class FIBBrowser extends FIBWidget {
 	private boolean rootVisible = true;
 	private boolean showRootsHandle = true;
 
-	private Color textSelectionColor = UIManager.getColor("Tree.selectionForeground");
-	private Color textNonSelectionColor = UIManager.getColor("Tree.textForeground");
-	private Color backgroundSelectionColor = UIManager.getColor("Tree.selectionBackground");
-	private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
-	private Color backgroundNonSelectionColor = UIManager.getColor("Tree.textBackground");
-	private Color borderSelectionColor = UIManager.getColor("Tree.selectionBorderColor");
+	private Color textSelectionColor;
+	private Color textNonSelectionColor;
+	private Color backgroundSelectionColor;
+	private Color backgroundSecondarySelectionColor;
+	private Color backgroundNonSelectionColor;
+	private Color borderSelectionColor;
 
 	private Class iteratorClass;
 
@@ -233,11 +235,11 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}*/
 
-	public int getVisibleRowCount() {
+	public Integer getVisibleRowCount() {
 		return visibleRowCount;
 	}
 
-	public void setVisibleRowCount(int visibleRowCount) {
+	public void setVisibleRowCount(Integer visibleRowCount) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
 		if (notification != null) {
 			this.visibleRowCount = visibleRowCount;
@@ -245,11 +247,11 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}
 
-	public int getRowHeight() {
+	public Integer getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight) {
+	public void setRowHeight(Integer rowHeight) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
 		if (notification != null) {
 			this.rowHeight = rowHeight;
@@ -371,15 +373,47 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}
 
-	public FIBBrowserElement elementForClass(Class aClass) {
-		Class c = aClass;
-		while (c != null) {
-			FIBBrowserElement returned = elementsForClasses.get(c);
-			if (returned != null) {
-				return returned;
-			} else {
-				c = c.getSuperclass();
+	public FIBBrowserElement elementForClass(Class<?> aClass) {
+		FIBBrowserElement returned = elementsForClasses.get(aClass);
+		if (returned != null) {
+			return returned;
+		} else {
+			Class<?> superclass = aClass.getSuperclass();
+			if (superclass != null) {
+				returned = elementsForClasses.get(aClass);
+				if (returned != null) {
+					return returned;
+				} else {
+					for (Class<?> superInterface : aClass.getInterfaces()) {
+						returned = elementsForClasses.get(superInterface);
+						if (returned != null) {
+							return returned;
+						}
+					}
+					returned = elementForClass(superclass);
+					if (returned != null) {
+						elementsForClasses.put(aClass, returned);
+						return returned;
+					} else {
+						for (Class<?> superInterface : aClass.getInterfaces()) {
+							returned = elementForClass(superInterface);
+							if (returned != null) {
+								elementsForClasses.put(aClass, returned);
+								return returned;
+							}
+						}
+					}
+				}
 			}
+		}
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : elementsForClasses.keySet()) {
+			if (cl.isAssignableFrom(aClass)) {
+				matchingClasses.add(cl);
+			}
+		}
+		if (matchingClasses.size() > 0) {
+			return elementsForClasses.get(TypeUtils.getMostSpecializedClass(matchingClasses));
 		}
 		return null;
 	}

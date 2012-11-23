@@ -63,7 +63,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 				setValue(null);
 			}
 		});
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+		if (!ToolBox.isMacOSLaf()) {
 			dropdownPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
 					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}
@@ -83,11 +83,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initJComboBox()");
 		}
-		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
 		if (jComboBox != null && jComboBox.getParent() != null) {
-			dimTemp = jComboBox.getSize();
 			locTemp = jComboBox.getLocation();
 			parentTemp = jComboBox.getParent();
 			parentTemp.remove(jComboBox);
@@ -225,6 +223,11 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		@Override
 		public Object getSelectedItem() {
 			return selectedItem;
+		}
+
+		@Override
+		public int hashCode() {
+			return selectedItem == null ? 0 : selectedItem.hashCode();
 		}
 
 		@Override

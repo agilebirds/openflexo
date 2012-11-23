@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class ImportInModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ImportInModel action) {
+			public boolean run(EventObject e, ImportInModel action) {
 				FlexoController.showError(FlexoLocalization.localizedForKey("sorry_not_implemented_yet"));
 				action.getProjectGenerator().startHandleLogs();
 				return true;
@@ -64,7 +64,7 @@ public class ImportInModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ImportInModel action) {
+			public boolean run(EventObject e, ImportInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

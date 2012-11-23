@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5"  darkLevel="0" data="data" dataClassName="org.openflexo.components.SaveProjectsDialog$ProjectList">
+  <Panel layout="border" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="border(index=0;location=center)">
+    <Panel layout="border" border="line" borderColor="204,204,204" borderTitle="Panel"  darkLevel="0" constraints="border(index=0;location=center)" opaque="true" backgroundColor="255,255,255" width="320" height="320" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_NEVER" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
+      <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderBottom="0" borderRight="80"  darkLevel="0" constraints="border(index=0;location=center)">
+        <CheckboxList columns="1" hGap="0" vGap="2" format="(((object.name + &quot; (&quot;) + object.projectDirectory) + &quot;)&quot;)" localize="true" name="CheckboxList" data="data.selected" constraints="flow(index=0;location=center)" staticList="" list="data.projects" showIcon="true" iteratorClassName="org.openflexo.foundation.rm.FlexoProject" autoSelectFirstRow="true">
+          <Dependancy componentName="SelectAll" />
+          <Dependancy componentName="DeselectAll" />
+        </CheckboxList>
+      </Panel>
+    </Panel>
+    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="RIGHT" borderTitle="Panel"  darkLevel="0" constraints="border(index=0;location=south)">
+      <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="flow(index=0;location=center)">
+        <Button action="data.selectAll()" buttonType="Trigger" label="select_all" constraints="grid(x=0;y=0)" name="SelectAll" localize="true" manageDynamicModel="true" />
+        <Button action="data.deselectAll()" buttonType="Trigger" label="deselect_all" constraints="grid(x=1;y=0)" name="DeselectAll" localize="true" manageDynamicModel="true" default = "true"/>
+        <Button action="controller.chooseYesAndDispose()" buttonType="Trigger" label="Ok" constraints="grid(x=0;y=1)" localize="true" />
+        <Button action="controller.chooseNoAndDispose()" buttonType="Trigger" label="Cancel" constraints="grid(x=1;y=1)" localize="true" />
+      </Panel>
+    </Panel>
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

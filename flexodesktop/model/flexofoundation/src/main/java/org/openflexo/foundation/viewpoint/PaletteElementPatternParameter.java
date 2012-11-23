@@ -108,4 +108,9 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 		return getViewPoint().getBindingModel();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

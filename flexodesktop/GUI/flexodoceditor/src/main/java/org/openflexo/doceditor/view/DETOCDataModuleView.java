@@ -38,8 +38,8 @@ import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -70,8 +70,8 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 		if (addTOCRepositoryButton != null) {
 			panel.remove(addTOCRepositoryButton);
 		}
-		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()),
-				BorderLayout.CENTER);
+
+		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller), BorderLayout.CENTER);
 		panel.validate();
 		panel.repaint();
 	}
@@ -89,7 +89,7 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.TOC_PERSPECTIVE;
 	}
 

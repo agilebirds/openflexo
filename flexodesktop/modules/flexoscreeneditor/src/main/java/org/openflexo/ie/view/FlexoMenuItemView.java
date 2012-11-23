@@ -42,9 +42,9 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.JTextFieldRegExp;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMenu> {
 
@@ -176,7 +176,7 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 	}
 
 	@Override
-	public FlexoPerspective<FlexoItemMenu> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.MENU_EDITOR_PERSPECTIVE;
 	}
 

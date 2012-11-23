@@ -44,12 +44,12 @@ public class WKFPaste extends FlexoUndoableAction<WKFPaste, FlexoModelObject, Fl
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 

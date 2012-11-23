@@ -863,7 +863,7 @@ public class RectPolylinConnector extends Connector {
 	 *            : relative to start object
 	 */
 	public void setFixedStartLocation(FGEPoint aPoint) {
-		if (!isStartingLocationFixed) {
+		if (!isStartingLocationFixed && aPoint != null) {
 			isStartingLocationFixed = true;
 		}
 		if (getStartObject() != null) {
@@ -910,7 +910,7 @@ public class RectPolylinConnector extends Connector {
 	 *            , relative to end object
 	 */
 	public void setFixedEndLocation(FGEPoint aPoint) {
-		if (!isEndingLocationFixed) {
+		if (!isEndingLocationFixed && aPoint != null) {
 			isEndingLocationFixed = true;
 		}
 		if (getEndObject() != null) {
@@ -2524,13 +2524,18 @@ public class RectPolylinConnector extends Connector {
 		returned.setIsRounded(getIsRounded());
 		returned.setArcSize(getArcSize());
 		returned.setIsStartingLocationFixed(getIsStartingLocationFixed());
+		if (getIsStartingLocationFixed()) {
+			returned.setFixedStartLocation(getFixedStartLocation());
+		}
 		returned.setIsEndingLocationFixed(getIsEndingLocationFixed());
+		if (getIsEndingLocationFixed()) {
+			returned.setFixedEndLocation(getFixedEndLocation());
+		}
 		returned.setIsStartingLocationDraggable(getIsStartingLocationDraggable());
 		returned.setIsEndingLocationDraggable(getIsEndingLocationDraggable());
 		returned.setCrossedControlPoint(getCrossedControlPoint());
-		returned.setFixedStartLocation(getFixedStartLocation());
-		returned.setFixedEndLocation(getFixedEndLocation());
 		returned._setPolylin(_getPolylin());
 		return returned;
 	}
+
 }

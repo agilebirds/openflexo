@@ -59,6 +59,7 @@ public class CursorSetterHTMLTable extends MouseMotionAdapter {
 		if (isNearBorder(e.getPoint())) {
 			if (!mouseListenerAdded) {
 				previousCursor = Cursor.getDefaultCursor();
+				_layedoutComponent.setCursor(HORIZONTAL);
 				frame.setCursor(HORIZONTAL);
 				// int c = (e.getPoint().x < OFFSET ? ((IEWidgetView) _layedoutComponent).getCol() - 1 : ((IEWidgetView) _layedoutComponent)
 				// .getCol());
@@ -69,6 +70,7 @@ public class CursorSetterHTMLTable extends MouseMotionAdapter {
 			}
 		} else {
 			if (mouseListenerAdded) {
+				_layedoutComponent.setCursor(previousCursor);
 				frame.setCursor(previousCursor);
 				if (ColumnResizerHTMLTable.inst != null) {
 					_layedoutComponent.removeMouseMotionListener(ColumnResizerHTMLTable.inst);

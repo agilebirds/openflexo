@@ -20,8 +20,8 @@
 package org.openflexo.action;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -32,6 +32,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -49,7 +50,7 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ImportImageInitializer extends ActionInitializer {
+public class ImportImageInitializer extends ActionInitializer<ImportImage, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -61,7 +62,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportImage> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportImage>() {
 			@Override
-			public boolean run(ActionEvent e, ImportImage action) {
+			public boolean run(EventObject e, ImportImage action) {
 				if (action.getFileToImport() != null) {
 					return true;
 				}
@@ -100,7 +101,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<? super ImportImage> getDefaultExceptionHandler() {
+	protected FlexoExceptionHandler<ImportImage> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ImportImage>() {
 			@Override
 			public boolean handleException(FlexoException exception, ImportImage action) {
@@ -157,7 +158,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportImage> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportImage>() {
 			@Override
-			public boolean run(ActionEvent e, ImportImage action) {
+			public boolean run(EventObject e, ImportImage action) {
 				return true;
 			}
 		};

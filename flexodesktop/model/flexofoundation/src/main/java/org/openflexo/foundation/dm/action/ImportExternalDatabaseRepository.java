@@ -23,13 +23,15 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.ExternalDatabaseRepository;
 import org.openflexo.foundation.dm.PersistantDataRepositoryFolder;
 
-public class ImportExternalDatabaseRepository extends CreateDMRepository {
+public class ImportExternalDatabaseRepository extends CreateDMRepository<ImportExternalDatabaseRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportExternalDatabaseRepository.class.getPackage().getName());
 
@@ -45,12 +47,12 @@ public class ImportExternalDatabaseRepository extends CreateDMRepository {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
@@ -63,6 +65,12 @@ public class ImportExternalDatabaseRepository extends CreateDMRepository {
 
 	ImportExternalDatabaseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		_newRepository = ExternalDatabaseRepository
+				.createNewExternalDatabaseRepository(getProject().getDataModel(), getNewRepositoryName());
 	}
 
 	@Override

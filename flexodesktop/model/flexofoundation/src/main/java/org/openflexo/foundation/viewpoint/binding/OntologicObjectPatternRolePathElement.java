@@ -10,11 +10,7 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.IsAStatement;
-import org.openflexo.foundation.ontology.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -22,14 +18,18 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
-import org.openflexo.foundation.ontology.OntologyStatement;
-import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.foundation.ontology.SubClassOfClass;
-import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
+import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
+import org.openflexo.foundation.ontology.owl.IsAStatement;
+import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.owl.OWLStatement;
+import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
+import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
+import org.openflexo.foundation.ontology.owl.SubClassStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
@@ -122,7 +122,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	boolean propertiesFound = false;
 
-	private void searchProperties(OntologyObject<?> ontologicType) {
+	private void searchProperties(OntologyObject ontologicType) {
 
 		if (ontologicType != null) {
 			// System.out.println("Properties = "
@@ -142,9 +142,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					if (array[i].getName().equals(array[j].getName())) {
 						// Detected name based shadowing between array[i] and array[j]
 						// System.out.println("Detected name based shadowing between " + array[i] + " and " + array[j]);
-						if (array[i].getOntology().getAllImportedOntologies().contains(array[j].getOntology())) {
+						if (array[i].getFlexoOntology().getAllImportedOntologies().contains(array[j].getFlexoOntology())) {
 							// array[i] appears to be the most specialized, don't do anything
-						} else if (array[j].getOntology().getAllImportedOntologies().contains(array[i].getOntology())) {
+						} else if (array[j].getFlexoOntology().getAllImportedOntologies().contains(array[i].getFlexoOntology())) {
 							// array[j] appears to be the most specialized, we need to swap
 							i1.add(i);
 							i2.add(j);
@@ -290,7 +290,6 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			}
 			return null;
 		}
-
 	}
 
 	public static class OntologicDataPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement<OntologyDataProperty> {
@@ -340,7 +339,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	}
 
-	public static class OntologicStatementPatternRolePathElement<T extends OntologyStatement> extends PatternRolePathElement<T> {
+	public static class OntologicStatementPatternRolePathElement<T extends OWLStatement> extends PatternRolePathElement<T> {
 		private SimpleBindingPathElementImpl displayableRepresentation;
 		private OntologyObjectPathElement subject;
 		protected List<BindingPathElement> allProperties;
@@ -348,12 +347,12 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		public OntologicStatementPatternRolePathElement(StatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 			allProperties = new Vector<BindingPathElement>();
-			displayableRepresentation = new SimpleBindingPathElementImpl<String>("displayableRepresentation", OntologyStatement.class,
+			displayableRepresentation = new SimpleBindingPathElementImpl<String>("displayableRepresentation", OWLStatement.class,
 					String.class, false, "string_representation_of_ontologic_statement_(read_only)") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyStatement) {
-						return ((OntologyStatement) target).getDisplayableDescription();
+					if (target instanceof OWLStatement) {
+						return ((OWLStatement) target).getDisplayableDescription();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -374,8 +373,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 						.getViewpointOntology()) {
 					@Override
 					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
-						if (target instanceof OntologyStatement) {
-							return (OntologyIndividual) ((OntologyStatement) target).getSubject();
+						if (target instanceof OWLStatement) {
+							return (OntologyIndividual) ((OWLStatement) target).getSubject();
 						}
 						logger.warning("Unexpected " + target);
 						return null;
@@ -405,8 +404,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 						.getViewpointOntology()) {
 					@Override
 					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
-						if (target instanceof OntologyStatement) {
-							return (OntologyIndividual) ((OntologyStatement) target).getSubject();
+						if (target instanceof OWLStatement) {
+							return (OntologyIndividual) ((OWLStatement) target).getSubject();
 						}
 						logger.warning("Unexpected " + target);
 						return null;
@@ -432,8 +431,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				subject = new OntologyObjectPathElement("subject", this, aPatternRole.getViewpointOntology()) {
 					@Override
 					public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
-						if (target instanceof OntologyStatement) {
-							return ((OntologyStatement) target).getSubject();
+						if (target instanceof OWLStatement) {
+							return ((OWLStatement) target).getSubject();
 						}
 						logger.warning("Unexpected " + target);
 						return null;
@@ -506,8 +505,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				}
 			};
 			OntologyClass objectType = null;
-			if (aPatternRole.getObjectProperty() != null && aPatternRole.getObjectProperty().getRange() instanceof OntologyClass) {
-				objectType = (OntologyClass) aPatternRole.getObjectProperty().getRange();
+			if (aPatternRole.getObjectProperty() instanceof OntologyObjectProperty
+					&& ((OntologyObjectProperty) aPatternRole.getObjectProperty()).getRange() instanceof OntologyClass) {
+				objectType = (OntologyClass) ((OntologyObjectProperty) aPatternRole.getObjectProperty()).getRange();
 			}
 			object = new OntologyIndividualPathElement("object", objectType, this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
@@ -528,10 +528,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				@Override
 				public Type getType() {
 					if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
-							&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getRange() instanceof OntologyClass) {
+							&& ((OntologyObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty())
+									.getRange() instanceof OntologyClass) {
 						return IndividualOfClass
-								.getIndividualOfClass((OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole())
-										.getObjectProperty().getRange());
+								.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole())
+										.getObjectProperty()).getRange());
 					}
 					return super.getType();
 				}
@@ -607,12 +608,12 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		public RestrictionStatementPatternRolePathElement(RestrictionStatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 
-			displayableRestriction = new SimpleBindingPathElementImpl<String>("displayableRestriction", OntologyStatement.class,
-					String.class, false, "string_representation_of_restriction_(read_only)") {
+			displayableRestriction = new SimpleBindingPathElementImpl<String>("displayableRestriction", OWLStatement.class, String.class,
+					false, "string_representation_of_restriction_(read_only)") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyStatement) {
-						return ((OntologyStatement) target).getDisplayableDescription();
+					if (target instanceof OWLStatement) {
+						return ((OWLStatement) target).getDisplayableDescription();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;

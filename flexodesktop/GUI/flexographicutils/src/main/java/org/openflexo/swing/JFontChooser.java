@@ -35,13 +35,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.swing.FontSelector.FontSelectionModel;
 
-public class JFontChooser extends JPanel {
+public class JFontChooser extends JPanel implements ChangeListener {
 
 	private JPanel mainPanel;
 	private JPanel previewPanel;
@@ -66,7 +67,7 @@ public class JFontChooser extends JPanel {
 		super(new BorderLayout());
 
 		_fsm = fsm;
-
+		_fsm.addChangeListener(this);
 		fontNameList = new JList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {
 			@Override
 			public Dimension getPreferredScrollableViewportSize() {
@@ -149,7 +150,7 @@ public class JFontChooser extends JPanel {
 		if (aFont == null) {
 			return "null";
 		}
-		return aFont.getFontName() + ", " + localizedFontStyle(aFont) + ", " + aFont.getSize() + "pt";
+		return aFont.getFamily() + ", " + localizedFontStyle(aFont) + ", " + aFont.getSize() + "pt";
 	}
 
 	public static String localizedFontStyle(Font aFont) {
@@ -192,7 +193,7 @@ public class JFontChooser extends JPanel {
 	}
 
 	private void updateWithFont(Font aFont) {
-		fontNameList.setSelectedValue(aFont.getFontName(), true);
+		fontNameList.setSelectedValue(aFont.getFamily(), true);
 		fontStyleList.setSelectedValue(fontStyle(aFont), true);
 		fontSizeList.setSelectedValue("" + aFont.getSize(), true);
 		previewLabel.setFont(aFont);
@@ -215,6 +216,11 @@ public class JFontChooser extends JPanel {
 		Font newFont = new Font(_fsm.getSelectedFont().getFontName(), _fsm.getSelectedFont().getStyle(), fontSize);
 		_fsm.setSelectedFont(newFont);
 		updateWithFont(newFont);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		updateWithFont(_fsm.getSelectedFont());
 	}
 
 }

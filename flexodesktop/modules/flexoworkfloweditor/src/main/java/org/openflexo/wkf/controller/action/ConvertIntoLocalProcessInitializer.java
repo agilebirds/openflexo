@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class ConvertIntoLocalProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ConvertIntoLocalProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<ConvertIntoLocalProcess>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalProcess action) {
+			public boolean run(EventObject e, ConvertIntoLocalProcess action) {
 				return true;
 			}
 		};
@@ -62,7 +62,7 @@ public class ConvertIntoLocalProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ConvertIntoLocalProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ConvertIntoLocalProcess>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalProcess action) {
+			public boolean run(EventObject e, ConvertIntoLocalProcess action) {
 				return true;
 			}
 		};

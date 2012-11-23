@@ -19,18 +19,17 @@
  */
 package org.openflexo.selection;
 
-import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * 
  * Default implementation of ContextualMenuManager, without any SelectionManager
  * 
  * @author sguerin
- * @version $Id: DefaultContextualMenuManager.java,v 1.2 2011/09/12 11:47:25 gpolet Exp $
  */
 public class DefaultContextualMenuManager extends ContextualMenuManager {
 
-	public DefaultContextualMenuManager() {
-		super(null, new DefaultFlexoEditor());
+	public DefaultContextualMenuManager(FlexoController controller) {
+		super(null, controller);
 	}
 }

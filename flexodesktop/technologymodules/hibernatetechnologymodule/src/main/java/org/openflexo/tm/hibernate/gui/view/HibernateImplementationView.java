@@ -24,9 +24,9 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.tm.hibernate.gui.controller.HibernateImplementationController;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Represents the main panel content when a HibernateImplementation is selected
@@ -37,10 +37,10 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class HibernateImplementationView extends FIBModuleView<HibernateImplementation> {
 	public static String HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH = "/Hibernate/Fib/ImplementationView.fib";
 
-	private FlexoPerspective<? super HibernateImplementation> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
 	public HibernateImplementationView(HibernateImplementation hibernateImplementation, SGController controller,
-			FlexoPerspective<? super HibernateImplementation> perspective) {
+			FlexoPerspective perspective) {
 		super(hibernateImplementation, controller, HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}
@@ -51,7 +51,7 @@ public class HibernateImplementationView extends FIBModuleView<HibernateImplemen
 	}
 
 	@Override
-	public FlexoPerspective<? super HibernateImplementation> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 
@@ -59,7 +59,7 @@ public class HibernateImplementationView extends FIBModuleView<HibernateImplemen
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FlexoFIBController<HibernateImplementation> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		return new HibernateImplementationController(fibComponent, controller);
 	}
 }

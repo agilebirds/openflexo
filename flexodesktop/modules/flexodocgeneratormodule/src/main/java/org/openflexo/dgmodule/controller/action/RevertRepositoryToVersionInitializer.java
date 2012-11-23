@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RevertRepositoryToVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RevertRepositoryToVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertRepositoryToVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertRepositoryToVersion action) {
+			public boolean run(EventObject e, RevertRepositoryToVersion action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RevertRepositoryToVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RevertRepositoryToVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertRepositoryToVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertRepositoryToVersion action) {
+			public boolean run(EventObject e, RevertRepositoryToVersion action) {
 				return true;
 			}
 		};

@@ -19,12 +19,12 @@
  */
 package org.openflexo.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -69,7 +69,7 @@ public class UploadPrjInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UploadPrjAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<UploadPrjAction>() {
 			@Override
-			public boolean run(ActionEvent e, UploadPrjAction action) {
+			public boolean run(EventObject e, UploadPrjAction action) {
 				boolean isFirst = true;
 				PPMWebServiceClient client = null;
 				CLProjectDescriptor[] targetProjects = null;
@@ -210,7 +210,7 @@ public class UploadPrjInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UploadPrjAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UploadPrjAction>() {
 			@Override
-			public boolean run(ActionEvent e, UploadPrjAction action) {
+			public boolean run(EventObject e, UploadPrjAction action) {
 				if (action.getUploadReport() != null && action.getUploadReport().trim().length() > 0) {
 					FlexoController.notify(action.getUploadReport());
 				}

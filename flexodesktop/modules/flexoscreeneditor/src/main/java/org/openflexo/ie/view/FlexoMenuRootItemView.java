@@ -43,7 +43,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.components.widget.ImageFileSelector;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ie.action.ImportImage;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -174,13 +174,9 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView {
 
 				@Override
 				public void importImage(ActionEvent e) {
-					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null,
-							FlexoMenuRootItemView.this.controller.getEditor());
-					try {
-						importImage.doAction(e);
-					} catch (FlexoException e1) {
-						e1.printStackTrace();
-					}
+					FlexoEditor editor = FlexoMenuRootItemView.this.controller.getEditor();
+					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null, editor);
+					editor.performAction(importImage, e);
 				}
 
 			}, logo, true) {

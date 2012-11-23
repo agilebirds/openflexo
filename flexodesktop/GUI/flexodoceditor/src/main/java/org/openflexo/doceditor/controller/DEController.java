@@ -21,14 +21,12 @@ package org.openflexo.doceditor.controller;
 
 import java.util.logging.Logger;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.menu.DEMenuBar;
-import org.openflexo.doceditor.view.DEFrame;
 import org.openflexo.doceditor.view.DEMainPane;
-import org.openflexo.doceditor.view.listener.DEKeyEventListener;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -38,6 +36,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -46,8 +45,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -55,7 +52,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author gpolet
  */
-public class DEController extends FlexoController implements FlexoObserver, SelectionManagingController {
+public class DEController extends FlexoController implements FlexoObserver {
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
@@ -71,53 +68,39 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		return false;
 	}
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	protected DEMenuBar _generatorMenuBar;
-
-	protected DEFrame _generatorFrame;
-
-	protected DEKeyEventListener _generatorKeyEventListener;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	/**
 	 * Default constructor
 	 * 
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-
-		_generatorMenuBar = (DEMenuBar) createAndRegisterNewMenuBar();
-		_generatorKeyEventListener = new DEKeyEventListener(this);
-		_generatorFrame = new DEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _generatorKeyEventListener, _generatorMenuBar);
-		init(_generatorFrame, _generatorKeyEventListener, _generatorMenuBar);
-		if (_selectionManager == null) {
-			_selectionManager = createSelectionManager();
-		}
-		TOC_PERSPECTIVE = new TOCPerspective(this);
-		addToPerspectives(TOC_PERSPECTIVE);
+	public DEController(FlexoModule module) {
+		super(module);
 	}
 
+	@Override
+	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		TOC_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
+	}
+
+	@Override
+	protected void initializePerspectives() {
+		addToPerspectives(TOC_PERSPECTIVE = new TOCPerspective(this));
+	}
+
+	@Override
 	protected DESelectionManager createSelectionManager() {
 		return new DESelectionManager(this);
 	}
 
 	protected DEClipboard createClipboard(DESelectionManager selectionManager) {
-		return new DEClipboard(selectionManager, getEditorMenuBar().getEditMenu(this).copyItem,
-				getEditorMenuBar().getEditMenu(this).pasteItem, getEditorMenuBar().getEditMenu(this).cutItem);
+		return new DEClipboard(selectionManager, getMenuBar().getEditMenu(this).copyItem, getMenuBar().getEditMenu(this).pasteItem,
+				getMenuBar().getEditMenu(this).cutItem);
 	}
 
 	protected DEContextualMenuManager createContextualMenuManager(DESelectionManager selectionManager) {
-		return new DEContextualMenuManager(selectionManager, getEditor(), this);
+		return new DEContextualMenuManager(selectionManager, this);
 	}
 
 	/**
@@ -130,21 +113,9 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		return new DEMenuBar(this);
 	}
 
-	public DEMenuBar getEditorMenuBar() {
-		return _generatorMenuBar;
-	}
-
-	/*
-	 * public ModuleView getCurrentModuleView() { return null; }
-	 */
-
-	public DEKeyEventListener getGeneratorKeyEventListener() {
-		return _generatorKeyEventListener;
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new DEMainPane(this, getEmptyPanel(), getFlexoFrame());
+		return new DEMainPane(this);
 	}
 
 	@Override
@@ -152,8 +123,9 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		return new DEControllerActionInitializer(this);
 	}
 
-	public DEKeyEventListener getKeyEventListener() {
-		return _generatorKeyEventListener;
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getTOCData();
 	}
 
 	public void initProgressWindow(String msg, int steps) {
@@ -182,24 +154,12 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		if (useOldInspectorScheme()) {
-			getDESelectionManager().addObserver(getSharedInspectorController());
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup("Generator");
 		}
-	}
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
-	protected DESelectionManager _selectionManager;
-
-	@Override
-	public DESelectionManager getSelectionManager() {
-		return getDESelectionManager();
-	}
-
-	public DESelectionManager getDESelectionManager() {
-		return _selectionManager;
+		if (useOldInspectorScheme()) {
+			getSelectionManager().addObserver(getSharedInspectorController());
+		}
 	}
 
 	/**

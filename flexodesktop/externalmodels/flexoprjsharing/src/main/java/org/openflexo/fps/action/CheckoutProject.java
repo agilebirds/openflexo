@@ -63,12 +63,12 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 

@@ -230,11 +230,11 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultConstantFactory constantFactory = new DefaultConstantFactory();
 
 			@Override
-			public Expression makeConstant(Value value) {
+			public Expression makeConstant(Value value, org.openflexo.antar.binding.Bindable bindable) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Make constant from " + value + " of " + value.getClass().getSimpleName());
 				}
-				return new BindingValueConstant(constantFactory.makeConstant(value), _bindable);
+				return new BindingValueConstant(constantFactory.makeConstant(value, bindable), _bindable);
 			}
 		}
 
@@ -242,11 +242,11 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultVariableFactory variableFactory = new DefaultVariableFactory();
 
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, org.openflexo.antar.binding.Bindable bindable) {
 				if (value.getValue().startsWith(DMType.DKV_PREFIX)) {
 					return new BindingValueConstant(new Constant.EnumConstant(value.getValue()), _bindable);
 				}
-				return new BindingValueVariable(variableFactory.makeVariable(value), _bindable);
+				return new BindingValueVariable(variableFactory.makeVariable(value, bindable), _bindable);
 			}
 		}
 
@@ -254,8 +254,8 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				return new BindingValueFunction(functionFactory.makeFunction(functionName, args), _bindable);
+			public Expression makeFunction(String functionName, List<Expression> args, org.openflexo.antar.binding.Bindable bindable) {
+				return new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable), _bindable);
 			}
 		}*/
 
@@ -384,8 +384,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return constant.evaluate();
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return constant.evaluate(bindable);
 		}*/
 
 		@Override
@@ -489,8 +489,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return variable.evaluate();
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return variable.evaluate(bindable);
 		}*/
 
 		@Override
@@ -664,8 +664,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return function.evaluate();
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return function.evaluate(bindable);
 		}*/
 
 		@Override

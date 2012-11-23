@@ -25,8 +25,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -143,18 +141,13 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public WSFolder getParent() {
 		return getWSLibrary().getExternalWSFolder();
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
-		Vector a = new Vector();
+	public Vector<WSObject> getOrderedChildren() {
+		Vector<WSObject> a = new Vector<WSObject>();
 		a.add(getWSPortTypeFolder());
 		a.add(getWSRepositoryFolder());
 		return a;

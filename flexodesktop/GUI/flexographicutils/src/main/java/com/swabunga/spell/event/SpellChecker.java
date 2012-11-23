@@ -46,19 +46,19 @@ public class SpellChecker {
 	/** Flag indicating that the Spell Check completed due to user cancellation */
 	public static final int SPELLCHECK_CANCEL = -2;
 
-	private Vector eventListeners = new Vector();
-	private Vector dictionaries = new Vector();
+	private Vector<SpellCheckListener> eventListeners = new Vector<SpellCheckListener>();
+	private Vector<SpellDictionary> dictionaries = new Vector<SpellDictionary>();
 	private SpellDictionary userdictionary;
 
 	private Configuration config = Configuration.getConfiguration();
 
 	/** This variable holds all of the words that are to be always ignored */
-	private Vector ignoredWords = new Vector();
-	private Hashtable autoReplaceWords = new Hashtable();
+	private Vector<String> ignoredWords = new Vector<String>();
+	private Hashtable<String, String> autoReplaceWords = new Hashtable<String, String>();
 
 	// added caching - bd
 	// For cached operation a separate user dictionary is required
-	private Map cache;
+	private Map<String, ArrayList<Word>> cache;
 	private int threshold = 0;
 	private int cacheSize = 0;
 
@@ -147,7 +147,7 @@ public class SpellChecker {
 	 */
 	protected void fireSpellCheckEvent(SpellCheckEvent event) {
 		for (int i = eventListeners.size() - 1; i >= 0; i--) {
-			((SpellCheckListener) eventListeners.elementAt(i)).spellingError(event);
+			eventListeners.elementAt(i).spellingError(event);
 		}
 	}
 
@@ -155,8 +155,8 @@ public class SpellChecker {
 	 * This method clears the words that are currently being remembered as Ignore All words and Replace All words.
 	 */
 	public void reset() {
-		ignoredWords = new Vector();
-		autoReplaceWords = new Hashtable();
+		ignoredWords = new Vector<String>();
+		autoReplaceWords = new Hashtable<String, String>();
 	}
 
 	/**
@@ -323,8 +323,8 @@ public class SpellChecker {
 		if (userdictionary.isCorrect(word)) {
 			return true;
 		}
-		for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
-			SpellDictionary dictionary = (SpellDictionary) e.nextElement();
+		for (Enumeration<SpellDictionary> e = dictionaries.elements(); e.hasMoreElements();) {
+			SpellDictionary dictionary = e.nextElement();
 			if (dictionary.isCorrect(word)) {
 				return true;
 			}
@@ -332,23 +332,23 @@ public class SpellChecker {
 		return false;
 	}
 
-	public List getSuggestions(String word, int threshold) {
+	public List<Word> getSuggestions(String word, int threshold) {
 		if (this.threshold != threshold && cache != null) {
 			this.threshold = threshold;
 			cache.clear();
 		}
 
-		ArrayList suggestions = null;
+		ArrayList<Word> suggestions = null;
 
 		if (cache != null) {
-			suggestions = (ArrayList) cache.get(word);
+			suggestions = cache.get(word);
 		}
 
 		if (suggestions == null) {
-			suggestions = new ArrayList(50);
+			suggestions = new ArrayList<Word>(50);
 
-			for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
-				SpellDictionary dictionary = (SpellDictionary) e.nextElement();
+			for (Enumeration<SpellDictionary> e = dictionaries.elements(); e.hasMoreElements();) {
+				SpellDictionary dictionary = e.nextElement();
 
 				if (dictionary != userdictionary) {
 					VectorUtility.addAll(suggestions, dictionary.getSuggestions(word, threshold), false);
@@ -384,7 +384,7 @@ public class SpellChecker {
 		if (size == 0) {
 			cache = null;
 		} else {
-			cache = new HashMap((size + 2) / 3 * 4);
+			cache = new HashMap<String, ArrayList<Word>>((size + 2) / 3 * 4);
 		}
 	}
 
@@ -421,12 +421,12 @@ public class SpellChecker {
 						errors++;
 						// Is this word being automagically replaced
 						if (autoReplaceWords.containsKey(word)) {
-							tokenizer.replaceWord((String) autoReplaceWords.get(word));
+							tokenizer.replaceWord(autoReplaceWords.get(word));
 						} else {
 							// JMH Need to somehow capitalise the suggestions if
 							// ignoreSentenceCapitalisation is not set to true
 							// Fire the event.
-							List suggestions = getSuggestions(word, config.getInteger(Configuration.SPELL_THRESHOLD));
+							List<Word> suggestions = getSuggestions(word, config.getInteger(Configuration.SPELL_THRESHOLD));
 							if (capitalizeSuggestions(word, tokenizer)) {
 								suggestions = makeSuggestionsCapitalized(suggestions);
 							}
@@ -447,7 +447,7 @@ public class SpellChecker {
 					errors++;
 					StringBuffer buf = new StringBuffer(word);
 					buf.setCharAt(0, Character.toUpperCase(word.charAt(0)));
-					Vector suggestion = new Vector();
+					Vector<Word> suggestion = new Vector<Word>();
 					suggestion.addElement(new Word(buf.toString(), 0));
 					SpellCheckEvent event = new BasicSpellCheckEvent(word, suggestion, tokenizer);
 					terminated = fireAndHandleEvent(tokenizer, event);
@@ -463,10 +463,10 @@ public class SpellChecker {
 		}
 	}
 
-	private List makeSuggestionsCapitalized(List suggestions) {
-		Iterator iterator = suggestions.iterator();
+	private List<Word> makeSuggestionsCapitalized(List<Word> suggestions) {
+		Iterator<Word> iterator = suggestions.iterator();
 		while (iterator.hasNext()) {
-			Word word = (Word) iterator.next();
+			Word word = iterator.next();
 			String suggestion = word.getWord();
 			StringBuffer stringBuffer = new StringBuffer(suggestion);
 			stringBuffer.setCharAt(0, Character.toUpperCase(suggestion.charAt(0)));

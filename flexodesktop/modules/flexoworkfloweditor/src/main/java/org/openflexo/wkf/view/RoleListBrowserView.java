@@ -55,7 +55,7 @@ public class RoleListBrowserView extends BrowserView {
 	// ==========================================================================
 
 	public RoleListBrowserView(RoleListBrowser roleListBrowser, WKFController controller) {
-		super(roleListBrowser, controller.getKeyEventListener(), controller.getEditor());
+		super(roleListBrowser, controller);
 		JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
 		for (int i = 0; i < RoleViewMode.values().length; i++) {
 			RoleViewMode viewMode = RoleViewMode.values()[i];

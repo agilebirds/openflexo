@@ -23,14 +23,11 @@ import javax.swing.JMenu;
 
 import org.openflexo.dataimporter.DataImporterLoader.KnownDataImporter;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
 import org.openflexo.foundation.dm.action.CreateProjectRepository;
 import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
 import org.openflexo.foundation.dm.action.ImportJARFileRepository;
 import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.menu.FileMenu;
@@ -53,7 +50,6 @@ public class DMFileMenu extends FileMenu {
 	public void addSpecificItems() {
 		JMenu newMenu = new JMenu();
 		newMenu.setText(FlexoLocalization.localizedForKey("new", newMenu));
-		newMenu.add(new FlexoMenuItem(CreateDMRepository.actionType, getController()));
 		newMenu.addSeparator();
 		newMenu.add(new FlexoMenuItem(CreateProjectRepository.actionType, getController()));
 		newMenu.add(new FlexoMenuItem(CreateProjectDatabaseRepository.actionType, getController()));
@@ -67,8 +63,6 @@ public class DMFileMenu extends FileMenu {
 				importMenu.add(new FlexoMenuItem(ImportRationalRoseRepository.actionType, getController()));
 			}
 			// importMenu.add(new FlexoMenuItem(ImportDenaliFoundationRepository.actionType, getController()));
-			importMenu.add(new FlexoMenuItem(ImportThesaurusRepository.actionType, getController()));
-			importMenu.add(new FlexoMenuItem(ImportThesaurusDatabaseRepository.actionType, getController()));
 		}
 		add(newMenu);
 		add(importMenu);

@@ -19,10 +19,8 @@
  */
 package org.openflexo.wkf.controller;
 
-import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -32,21 +30,21 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.WKFCst;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
+public class SwimmingLanePerspective extends FlexoPerspective {
 
 	private final WKFController _controller;
 
 	private final Hashtable<FlexoProcess, SwimmingLaneEditorController> _controllerForProcess;
 
 	private final Hashtable<SwimmingLaneEditorController, JSplitPane> _splitPaneForProcess;
+
+	private JPanel topRightDummy;
 
 	/**
 	 * @param controller
@@ -58,6 +56,18 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 		_controller = controller;
 		_controllerForProcess = new Hashtable<FlexoProcess, SwimmingLaneEditorController>();
 		_splitPaneForProcess = new Hashtable<SwimmingLaneEditorController, JSplitPane>();
+		topRightDummy = new JPanel();
+		setTopLeftView(_controller.getWkfBrowserView());
+		setBottomLeftView(_controller.getProcessBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
+	}
+
+	@Override
+	public JComponent getTopRightView() {
+		if (getCurrentProcessView() != null) {
+			return getCurrentProcessView().getController().getPaletteView();
+		}
+		return topRightDummy;
 	}
 
 	public SwimmingLaneEditorController getControllerForProcess(FlexoProcess process) {
@@ -77,7 +87,7 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -87,7 +97,7 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -95,16 +105,14 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
+		} else if (_controller.getProject() != null) {
+			return _controller.getProject().getRootFlexoProcess();
+		} else {
+			return null;
 		}
-		return _controller.getProject().getRootFlexoProcess();
 	}
 
 	@Override
@@ -113,31 +121,12 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 	}
 
 	@Override
-	public SwimmingLaneView createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return getControllerForProcess(process).getDrawingView();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getWorkflowProcessBrowserViews();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		if (getCurrentProcessView() == null) {
-			return new JPanel();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		if (process instanceof FlexoProcess) {
+			return getControllerForProcess((FlexoProcess) process).getDrawingView();
+		} else {
+			return null;
 		}
-		return getSplitPaneWithWKFPalettesAndDocInspectorPanel();
 	}
 
 	public SwimmingLaneView getCurrentProcessView() {
@@ -145,34 +134,6 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 			return (SwimmingLaneView) _controller.getCurrentModuleView();
 		}
 		return null;
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getSplitPaneWithWKFPalettesAndDocInspectorPanel() {
-		JSplitPane splitPaneWithWKFPalettesAndDocInspectorPanel = _splitPaneForProcess.get(getCurrentProcessView().getController());
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentProcessView()
-					.getController().getPaletteView(), _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-			_splitPaneForProcess.put(getCurrentProcessView().getController(), splitPaneWithWKFPalettesAndDocInspectorPanel);
-		}
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		PropertyChangeListener[] listeners = splitPaneWithWKFPalettesAndDocInspectorPanel.getPropertyChangeListeners();
-		for (PropertyChangeListener listener : listeners) {
-			if (listener instanceof FlexoSplitPaneLocationSaver) {
-				splitPaneWithWKFPalettesAndDocInspectorPanel.removePropertyChangeListener(listener);
-			}
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithWKFPalettesAndDocInspectorPanel, "WKFPaletteAndDocInspectorPanel");
-		return splitPaneWithWKFPalettesAndDocInspectorPanel;
 	}
 
 	@Override
@@ -183,17 +144,13 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 		return null;
 	}
 
-	// SGU: dynamic handling now
-	// private SwimmingLaneView currentProcessView = null;
-
 	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		// currentProcessView = (SwimmingLaneView) moduleView;
 		if (moduleView instanceof SwimmingLaneView) {
 			FlexoProcess process = ((SwimmingLaneView) moduleView).getRepresentedObject();
-			process.addObserver(_controller.getMainFrame());
-			_controller.getProcessBrowser().setCurrentProcess(process);
-			_controller.getExternalProcessBrowser().setCurrentProcess(process);
+			_controller.getProcessBrowser().setRootObject(process);
+			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
 		}

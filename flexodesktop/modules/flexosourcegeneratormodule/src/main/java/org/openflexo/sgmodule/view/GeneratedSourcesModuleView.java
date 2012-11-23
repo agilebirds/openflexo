@@ -31,7 +31,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
@@ -40,8 +39,8 @@ import org.openflexo.foundation.sg.CreateSourceRepository;
 import org.openflexo.foundation.sg.implmodel.CreateImplementationModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -70,8 +69,8 @@ public class GeneratedSourcesModuleView extends JPanel implements ModuleView<Gen
 			panel.removeAll();
 		}
 		if (_gc.getGeneratedRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(CreateSourceRepository.actionType, this, _controller.getEditor()));
-			panel.add(component = new FlexoActionButton(CreateImplementationModel.actionType, this, _controller.getEditor()));
+			panel.add(component = new FlexoActionButton(CreateSourceRepository.actionType, this, _controller));
+			panel.add(component = new FlexoActionButton(CreateImplementationModel.actionType, this, _controller));
 		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER));
 		}
@@ -101,7 +100,7 @@ public class GeneratedSourcesModuleView extends JPanel implements ModuleView<Gen
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATION_PERSPECTIVE;
 	}
 

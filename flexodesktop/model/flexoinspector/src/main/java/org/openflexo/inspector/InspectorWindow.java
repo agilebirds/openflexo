@@ -46,7 +46,6 @@ public class InspectorWindow extends JDialog implements InspectingWidget {
 		_controller = controller;
 		// setIconImage(INSPECT_ICON.getImage());
 		getContentPane().setLayout(new BorderLayout());
-		setBackground(InspectorCst.BACK_COLOR);
 		setSize(InspectorCst.INSPECTOR_WINDOW_WIDTH, InspectorCst.INSPECTOR_WINDOW_HEIGHT);
 		setLocation(752, 405);
 		_content = new InspectorTabbedPanel(controller);

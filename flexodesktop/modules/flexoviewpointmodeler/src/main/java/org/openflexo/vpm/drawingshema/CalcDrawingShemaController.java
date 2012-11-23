@@ -108,7 +108,6 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
 			}
-			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 		getDrawing().delete();
@@ -149,10 +148,10 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteView());
+				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteViewInScrollPane());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
-					.getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
+					getCommonPalette().getPaletteViewInScrollPane());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {

@@ -168,11 +168,11 @@ public class ModelProperty<I> {
 				type = getterMethod.getReturnType();
 				break;
 			case LIST:
-				type = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0];
+				type = TypeUtils.getBaseClass(((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0]);
 				break;
 			case MAP:
-				keyType = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0];
-				type = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[1];
+				keyType = TypeUtils.getBaseClass(((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0]);
+				type = TypeUtils.getBaseClass(((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[1]);
 				break;
 			default:
 				break;

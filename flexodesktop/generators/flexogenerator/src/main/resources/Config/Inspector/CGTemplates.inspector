@@ -1,4 +1,4 @@
-<inspector title = "templates">
+<inspector title = "templates" inspectedClassName="org.openflexo.foundation.cg.templates.CGTemplates">
 	<tab name="Basic" index="0">
 		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0"/>
 	</tab>

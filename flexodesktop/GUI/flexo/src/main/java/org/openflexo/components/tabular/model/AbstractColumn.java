@@ -162,7 +162,7 @@ public abstract class AbstractColumn<D extends FlexoModelObject, T> {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			if (!isSelected || ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (!isSelected || ToolBox.isMacOSLaf()) {
 				setComponentBackground(returned, hasFocus, isSelected, row, column);
 			}
 			// returned.setFont(AdvancedPrefs.getBrowserFont().getTheFont());

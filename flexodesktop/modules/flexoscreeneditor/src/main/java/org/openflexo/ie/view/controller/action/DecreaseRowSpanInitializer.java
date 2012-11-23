@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -52,7 +52,7 @@ public class DecreaseRowSpanInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DecreaseRowSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<DecreaseRowSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseRowSpan action) {
+			public boolean run(EventObject e, DecreaseRowSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
@@ -71,7 +71,7 @@ public class DecreaseRowSpanInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DecreaseRowSpan> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DecreaseRowSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseRowSpan action) {
+			public boolean run(EventObject e, DecreaseRowSpan action) {
 				return true;
 			}
 		};

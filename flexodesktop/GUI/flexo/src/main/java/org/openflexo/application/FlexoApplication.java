@@ -23,8 +23,6 @@ import java.awt.AWTEvent;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -36,7 +34,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.ColorCst;
+import org.openflexo.Flexo;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
@@ -48,16 +46,16 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.module.FlexoModule;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -89,13 +87,11 @@ public class FlexoApplication {
 
 	private static byte[] mem = new byte[1024 * 1024];
 
-	public static boolean DEMO = false;
-
-	public static void flushPendingEvents(boolean blockUserEvents) {
-		eventProcessor.flushPendingEvents(blockUserEvents);
+	public static void installEventQueue() {
+		eventProcessor = new EventProcessor();
 	}
 
-	public static void initialize() {
+	public static void initialize(ModuleLoader moduleLoader) {
 		if (isInitialized) {
 			return;
 		}
@@ -104,11 +100,9 @@ public class FlexoApplication {
 		// First init localization with default location
 		FlexoLocalization.initWith(new FlexoMainLocalizer());
 
-		boolean isMacOS = ToolBox.getPLATFORM().equals(ToolBox.MACOS);
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
-		eventProcessor = new EventProcessor();
 		try {
-			if (isMacOS) {
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				application = Class.forName("com.apple.eawt.Application").newInstance();
 				Method enablePrefMenu = application.getClass().getMethod("setEnabledPreferencesMenu", new Class[] { boolean.class });
 				enablePrefMenu.invoke(application, new Object[] { new Boolean(true) });
@@ -118,7 +112,7 @@ public class FlexoApplication {
 				// ((com.apple.eawt.Application)application).setDockIconImage(ModuleLoader.getUserType().getIconImage().getImage());
 				Method setDockIconImage = application.getClass().getMethod("setDockIconImage", new Class[] { Image.class });
 				setDockIconImage.invoke(application, new Object[] { IconLibrary.OPENFLEXO_NOTEXT_128.getImage() });
-				applicationAdapter = new FlexoApplicationAdapter();
+				applicationAdapter = new FlexoApplicationAdapter(moduleLoader);
 
 				Method addApplicationListener = application.getClass().getMethod("addApplicationListener",
 						new Class[] { Class.forName("com.apple.eawt.ApplicationListener") });
@@ -146,7 +140,6 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		InspectorCst.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
 		FlexoModelObject.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));
@@ -157,9 +150,9 @@ public class FlexoApplication {
 	public static class EventProcessor extends java.awt.EventQueue {
 		private EventPreprocessor _preprocessor = null;
 
-		private static boolean isReportingBug = false;
+		private boolean isReportingBug = false;
 
-		private static Vector<String> exceptions = new Vector<String>();
+		private Vector<String> exceptions = new Vector<String>();
 
 		public EventPreprocessor getPreprocessor() {
 			return _preprocessor;
@@ -173,7 +166,7 @@ public class FlexoApplication {
 			Toolkit.getDefaultToolkit().getSystemEventQueue().push(this);
 		}
 
-		private static synchronized boolean testAndSetIsReportingBug() {
+		private synchronized boolean testAndSetIsReportingBug() {
 			if (isReportingBug) {
 				return true;
 			} else {
@@ -182,23 +175,8 @@ public class FlexoApplication {
 			}
 		}
 
-		private static synchronized void resetIsReportingBug() {
+		private synchronized void resetIsReportingBug() {
 			isReportingBug = false;
-		}
-
-		public void flushPendingEvents(boolean blockUserEvents) {
-			while (peekEvent() != null) {
-				try {
-					AWTEvent event = getNextEvent();
-					if (blockUserEvents && (event instanceof InputEvent || event instanceof ActionEvent)) {
-						continue;
-					}
-					dispatchEvent(event);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return;
-				}
-			}
 		}
 
 		@Override
@@ -269,8 +247,9 @@ public class FlexoApplication {
 						if (!testAndSetIsReportingBug()) {
 							try {
 								if (FlexoController.confirm(message)) {
-									JIRAIssueReportDialog.newBugReport((Exception) exception,
-											FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+									FlexoFrame frame = FlexoFrame.getActiveFrame(false);
+									JIRAIssueReportDialog.newBugReport((Exception) exception, frame != null ? frame.getModule() : null,
+											frame != null ? frame.getController().getProject() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();
@@ -335,7 +314,7 @@ public class FlexoApplication {
 		 * Determines if exception can be ignored.
 		 */
 		private boolean isIgnorable(Throwable exception) {
-			if (DEMO) {
+			if (Flexo.isDemoMode()) {
 				return true;
 			}
 			StringWriter sw = new StringWriter();

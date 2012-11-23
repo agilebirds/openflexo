@@ -12,10 +12,9 @@ import org.openflexo.AdvancedPrefs;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.XMLDeserializer;
 import org.openflexo.model.xml.InvalidXMLDataException;
-import org.openflexo.model.xml.XMLDeserializer;
 import org.openflexo.module.UserType;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 
 public class FlexoServerInstanceManager {
@@ -54,7 +53,7 @@ public class FlexoServerInstanceManager {
 	}
 
 	public File getFlexoServerInstanceFile() {
-		return new File(FlexoPreferences.getApplicationDataDirectory(), "flexoserverinstances.xml");
+		return new File(FileUtils.getApplicationDataDirectory(), "flexoserverinstances.xml");
 	}
 
 	public static FlexoServerAddressBook getDefaultAddressBook() {

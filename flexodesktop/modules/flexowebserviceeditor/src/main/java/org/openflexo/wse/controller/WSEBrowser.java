@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Define what to put in the browser for this module
@@ -80,13 +79,6 @@ public class WSEBrowser extends ProjectBrowser {
 		// Hide DMProperties of Entities in Browser
 		setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
 
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		// Defines here what is the represented root objet (ex workflow for WKF, FlexoComponentLibrary for IE, DataModelEditor for DME,
-		// etc...)
-		return getProject().getFlexoWSLibrary();
 	}
 
 }

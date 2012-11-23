@@ -72,11 +72,11 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 	public FIBFileWidget(FIBFile model, FIBController controller) {
 		super(model, controller);
 
-		mode = model.mode != null ? model.mode : FIBFile.FileMode.OpenMode;
-		filter = model.filter;
-		title = model.title;
-		isDirectory = model.isDirectory;
-		defaultDirectory = model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir"));
+		mode = model.getMode() != null ? model.getMode() : FIBFile.FileMode.OpenMode;
+		filter = model.getFilter();
+		title = model.getTitle();
+		isDirectory = model.isDirectory();
+		defaultDirectory = model.getDefaultDirectory() != null ? model.getDefaultDirectory() : new File(System.getProperty("user.dir"));
 
 		fileChooserPanel = new JPanel(new BorderLayout());
 		fileChooserPanel.setOpaque(false);
@@ -84,7 +84,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		chooseButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "choose", chooseButton));
 		addActionListenerToChooseButton();
 		currentDirectoryLabel = new JTextField("");
-		currentDirectoryLabel.setColumns(model.columns != null ? model.columns : DEFAULT_COLUMNS);
+		currentDirectoryLabel.setColumns(model.getColumns() != null ? model.getColumns() : DEFAULT_COLUMNS);
 		currentDirectoryLabel.setMinimumSize(MINIMUM_SIZE);
 		currentDirectoryLabel.setPreferredSize(MINIMUM_SIZE);
 		currentDirectoryLabel.setEditable(false);
@@ -93,7 +93,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		fileChooserPanel.add(currentDirectoryLabel, BorderLayout.CENTER);
 		fileChooserPanel.add(chooseButton, BorderLayout.EAST);
 		fileChooserPanel.addFocusListener(this);
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+		if (!ToolBox.isMacOSLaf()) {
 			fileChooserPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
 					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}

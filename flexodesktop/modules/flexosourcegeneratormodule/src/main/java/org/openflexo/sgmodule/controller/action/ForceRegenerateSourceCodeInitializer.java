@@ -19,9 +19,9 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -60,7 +60,7 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+			public boolean run(EventObject e, ForceRegenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -77,7 +77,7 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+			public boolean run(EventObject e, ForceRegenerateSourceCode action) {
 				((SGController) getController()).getBrowser().resetHoldStructure();
 				((SGController) getController()).getBrowser().update();
 				if (SGPreferences.getAutomaticallyDismissUnchangedFiles()) {

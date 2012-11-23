@@ -25,7 +25,6 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.view.FlexoPerspective;
 
 public class SubmitNewVersionView extends AbstractDocItemView {
 
@@ -82,44 +81,6 @@ public class SubmitNewVersionView extends AbstractDocItemView {
 			actionPanel.remove(approveButton);
 			actionPanel.remove(refuseButton);
 		}
-	}
-
-	/**
-	 * Overrides willShow
-	 * 
-	 * @see org.openflexo.view.ModuleView#willShow()
-	 */
-	@Override
-	public void willShow() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Overrides willHide
-	 * 
-	 * @see org.openflexo.view.ModuleView#willHide()
-	 */
-	@Override
-	public void willHide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
-	 * you
-	 * 
-	 * @return
-	 */
-	@Override
-	public boolean isAutoscrolled() {
-		return false;
-	}
-
-	@Override
-	public FlexoPerspective getPerspective() {
-		return null;
 	}
 
 }

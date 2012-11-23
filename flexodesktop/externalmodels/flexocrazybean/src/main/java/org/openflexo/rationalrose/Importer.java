@@ -416,7 +416,6 @@ public class Importer implements DataImporter {
 
 	private DMMethod createDMMethod(DMEntity entity, String newMethodName, FlexoEditor editor) {
 		CreateDMMethod createMethod = CreateDMMethod.actionType.makeNewAction(entity, null, editor);
-		createMethod.__setLogActionTime(false);
 		createMethod.setNewMethodName(newMethodName);
 		createMethod.doAction();
 		return createMethod.getNewMethod();
@@ -438,7 +437,6 @@ public class Importer implements DataImporter {
 			return;
 		}
 		AddFlexoProperty add = AddFlexoProperty.actionType.makeNewAction(prop, null, flexoAction != null ? flexoAction.getEditor() : null);
-		add.__setLogActionTime(false);// Prevents from leaking
 		add.setName(name);
 		add.setValue(value);
 		add.setInsertSorted(true);

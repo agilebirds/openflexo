@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -49,7 +48,7 @@ public class RoleListBrowser extends ProjectBrowser {
 	// ==========================================================================
 
 	public RoleListBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
+		super(controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 	}
 
@@ -73,11 +72,6 @@ public class RoleListBrowser extends ProjectBrowser {
 	@Override
 	public boolean showRootNode() {
 		return false;
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return getProject().getWorkflow();
 	}
 
 }

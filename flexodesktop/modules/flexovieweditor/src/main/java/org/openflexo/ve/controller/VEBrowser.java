@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Browser in OntologyEditor module
@@ -47,9 +46,7 @@ public abstract class VEBrowser extends ProjectBrowser {
 	// ================================================
 
 	public VEBrowser(VEController controller) {
-		super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
-		_controller = controller;
-		update();
+		super(controller);
 	}
 
 	@Override
@@ -57,10 +54,10 @@ public abstract class VEBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
-		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		/*		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);*/
 
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.SHOW);
@@ -82,13 +79,6 @@ public abstract class VEBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		// Defines here what is the represented root objet (ex workflow for WKF, FlexoComponentLibrary for IE, DataModelEditor for DME,
-		// etc...)
-		return getProject();
 	}
 
 }

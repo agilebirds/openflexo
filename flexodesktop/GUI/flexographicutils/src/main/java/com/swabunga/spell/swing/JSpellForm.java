@@ -198,9 +198,9 @@ public class JSpellForm extends JPanel implements ActionListener, ListSelectionL
 	public void setSpellEvent(SpellCheckEvent event) {
 		spellEvent = event;
 		DefaultListModel m = new DefaultListModel();
-		java.util.List suggestions = event.getSuggestions();
-		for (int i = 0; i < suggestions.size(); i++) {
-			m.addElement(suggestions.get(i));
+		java.util.List<com.swabunga.spell.event.Word> suggestions = event.getSuggestions();
+		for (com.swabunga.spell.event.Word suggestion : suggestions) {
+			m.addElement(suggestion);
 		}
 		suggestList.setModel(m);
 		wrongWordLabel.setText(event.getInvalidWord());

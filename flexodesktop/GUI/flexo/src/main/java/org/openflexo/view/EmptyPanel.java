@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements ModuleView<O> {
 
@@ -69,7 +70,6 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 	 */
 	@Override
 	public void willShow() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -80,8 +80,7 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 	 */
 	@Override
 	public void willHide() {
-		// TODO Auto-generated method stub
-
+		deleteModuleView();
 	}
 
 	/**

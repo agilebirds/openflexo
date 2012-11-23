@@ -26,7 +26,6 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +40,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectableView;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.utils.DrawUtils;
-import org.openflexo.view.controller.SelectionManagingController;
 
 public abstract class PalettePanel extends JPanel implements SelectionListener {
 
@@ -68,7 +66,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	}
 
 	public PalettePanel delete() {
-		((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
+		_palette.getController().getSelectionManager().removeFromSelectionListeners(this);
 		return this;
 	}
 
@@ -105,13 +103,10 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	public void editPalette() {
 		logger.info("EditPalette");
 		isEdited = true;
-		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-			PaletteElement next = (PaletteElement) en.nextElement();
+		for (PaletteElement next : _paletteElements) {
 			next.edit();
 		}
-		if (_palette.getController() instanceof SelectionManagingController) {
-			((SelectionManagingController) _palette.getController()).getSelectionManager().addToSelectionListeners(this);
-		}
+		_palette.getController().getSelectionManager().addToSelectionListeners(this);
 		setTitle();
 		revalidate();
 		repaint();
@@ -120,14 +115,11 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	public void closePaletteEdition() {
 		logger.info("ClosePaletteEdition");
 		isEdited = false;
-		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-			PaletteElement next = (PaletteElement) en.nextElement();
+		for (PaletteElement next : _paletteElements) {
 			next.closeEdition();
 		}
-		if (_palette.getController() instanceof SelectionManagingController) {
-			((SelectionManagingController) _palette.getController()).getSelectionManager().resetSelection();
-			((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
-		}
+		_palette.getController().getSelectionManager().resetSelection();
+		_palette.getController().getSelectionManager().removeFromSelectionListeners(this);
 
 		setTitle();
 		revalidate();
@@ -136,8 +128,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 
 	public void savePalette() {
 		logger.info("SavePalette");
-		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-			PaletteElement next = (PaletteElement) en.nextElement();
+		for (PaletteElement next : _paletteElements) {
 			if (next.isEdited()) {
 				next.save();
 			}
@@ -185,8 +176,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	}
 
 	protected SelectableView selectableViewForObject(FlexoModelObject object) {
-		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-			PaletteElement next = (PaletteElement) en.nextElement();
+		for (PaletteElement next : _paletteElements) {
 			if (next.getObject() == object) {
 				return next.getView();
 			}
@@ -231,8 +221,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	 */
 	@Override
 	public void fireResetSelection() {
-		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-			PaletteElement next = (PaletteElement) en.nextElement();
+		for (PaletteElement next : _paletteElements) {
 			if (next.getView() != null) {
 				next.getView().setIsSelected(false);
 			}

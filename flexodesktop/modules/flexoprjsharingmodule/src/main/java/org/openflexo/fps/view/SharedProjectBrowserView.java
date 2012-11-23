@@ -31,21 +31,8 @@ import org.openflexo.fps.controller.FPSController;
  */
 public class SharedProjectBrowserView extends BrowserView {
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected FPSController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public SharedProjectBrowserView(FPSController controller) {
-		super(controller.getSharedProjectBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getSharedProjectBrowser(), controller);
 	}
 
 	@Override
@@ -55,7 +42,7 @@ public class SharedProjectBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		// Try to display object in view
-		_controller.selectAndFocusObject(object);
+		getController().selectAndFocusObject(object);
 	}
 
 }

@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
-import java.util.Enumeration;
 import java.util.Vector;
 
 /*
@@ -195,10 +194,9 @@ public class Parser {
 	}
 
 	private static Operator matchOperator(String anInput) {
-		for (Enumeration en = Operator.getKnownOperators().elements(); en.hasMoreElements();) {
-			Operator next = (Operator) en.nextElement();
-			if (anInput.toUpperCase().equals(next.getSymbol()) || anInput.toUpperCase().equals(next.getAlternativeSymbol())) {
-				return next;
+		for (Operator operator : Operator.getKnownOperators()) {
+			if (anInput.toUpperCase().equals(operator.getSymbol()) || anInput.toUpperCase().equals(operator.getAlternativeSymbol())) {
+				return operator;
 			}
 		}
 		return null;

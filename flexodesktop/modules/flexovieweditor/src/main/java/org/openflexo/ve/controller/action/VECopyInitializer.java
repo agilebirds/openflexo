@@ -19,8 +19,8 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class VECopyInitializer extends ActionInitializer<VECopy, ViewObject, Vie
 	protected FlexoActionInitializer<VECopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<VECopy>() {
 			@Override
-			public boolean run(ActionEvent e, VECopy action) {
+			public boolean run(EventObject e, VECopy action) {
 				logger.info("Copy in VE");
 				return getModule().isActive();
 			}
@@ -63,7 +63,7 @@ public class VECopyInitializer extends ActionInitializer<VECopy, ViewObject, Vie
 	protected FlexoActionFinalizer<VECopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<VECopy>() {
 			@Override
-			public boolean run(ActionEvent e, VECopy action) {
+			public boolean run(EventObject e, VECopy action) {
 				getControllerActionInitializer().getVESelectionManager().performSelectionCopy();
 				return true;
 			}

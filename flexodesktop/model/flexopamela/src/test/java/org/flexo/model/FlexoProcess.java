@@ -13,6 +13,7 @@ import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
+import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.IntegrityConstraint;
 import org.openflexo.model.annotations.IntegrityConstraints;
 import org.openflexo.model.annotations.ModelEntity;
@@ -31,6 +32,10 @@ public interface FlexoProcess extends WKFObject {
 
 	public static final String FOO = "foo";
 	public static final String NODES = "nodes";
+
+	@Override
+	@Initializer
+	public FlexoModelObject init(String flexoId);
 
 	@Getter(value = FOO, defaultValue = "4")
 	@XMLAttribute(xmlTag = FOO)

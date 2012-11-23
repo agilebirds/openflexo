@@ -21,7 +21,6 @@ package org.openflexo.foundation.bindings;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -119,8 +118,20 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 			}
 			return _owner == bd._owner && _type == bd._type && _isMandatory == bd._isMandatory;
 		} else {
-			return super.equals(object);
+			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		if (getVariableName() != null) {
+			hash += getVariableName().hashCode();
+		}
+		if (getType() != null) {
+			hash += getType().hashCode();
+		}
+		return hash;
 	}
 
 	public boolean getIsMandatory() {
@@ -321,8 +332,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		if (depth == 1) {
 			return returned;
 		}
-		for (Enumeration en = currentType.getBaseEntity().getAccessibleProperties().elements(); en.hasMoreElements();) {
-			DMProperty nextProperty = (DMProperty) en.nextElement();
+		for (DMProperty nextProperty : currentType.getBaseEntity().getAccessibleProperties()) {
 			BindingValue newCurrent = current.clone();
 			newCurrent.addBindingPathElement(nextProperty);
 			returned.addAll(searchMatchingBindingValue(bindable, newCurrent, nextProperty.getType(), depth - 1));

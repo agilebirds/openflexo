@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -53,7 +53,7 @@ public class CreateDocItemInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDocItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDocItem>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDocItem action) {
+			public boolean run(EventObject e, CreateDocItem action) {
 				DocItemFolder docItemFolder = action.getDocItemFolder();
 				ParameterDefinition[] parameters = new ParameterDefinition[2];
 				parameters[0] = new TextFieldParameter("newItemIdentifier", "identifier", docItemFolder.getNextDefautItemName());
@@ -81,7 +81,7 @@ public class CreateDocItemInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDocItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDocItem>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDocItem action) {
+			public boolean run(EventObject e, CreateDocItem action) {
 				DocItem newDocItem = action.getNewDocItem();
 				getControllerActionInitializer().getDREController().getDREBrowser().focusOn(newDocItem);
 				return true;

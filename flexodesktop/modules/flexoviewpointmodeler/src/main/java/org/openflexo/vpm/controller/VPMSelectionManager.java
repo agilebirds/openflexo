@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.vpm.view.menu.VPMMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to this module
@@ -35,10 +35,10 @@ public class VPMSelectionManager extends SelectionManager {
 
 	public VPMSelectionManager(VPMController controller) {
 		super(controller);
-		VPMMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new VPMClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new VPMContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new VPMContextualMenuManager(this, controller);
 	}
 
 	public VPMController getCEDController() {

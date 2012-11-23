@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -54,7 +54,7 @@ public class IESelectAllInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IESelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<IESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, IESelectAll action) {
+			public boolean run(EventObject e, IESelectAll action) {
 				return true;
 			}
 		};
@@ -77,7 +77,7 @@ public class IESelectAllInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<IESelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, IESelectAll action) {
+			public boolean run(EventObject e, IESelectAll action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionSelectAll();
 				return true;
 			}

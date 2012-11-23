@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>externalmodels</artifactId>
-		<version>1.4.5-SNAPSHOT</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexowarbuilder</artifactId>
 	<name>ExternalModel :: FlexoWarBuilder</name>
@@ -20,6 +20,12 @@
 		</plugins>
 	</build>
 	<dependencies>
+	    <!-- Anakia tasks needs JDom -->
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexofoundation</artifactId>

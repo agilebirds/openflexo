@@ -37,7 +37,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
@@ -759,13 +758,8 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getRepository();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	public static class EOModelFileFilter extends FileFilter {

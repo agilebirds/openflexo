@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -74,7 +74,7 @@ public abstract class AddMetricsInitializer<A extends AddMetricsValue<A, T>, T e
 	protected FlexoActionInitializer<A> getDefaultInitializer() {
 		return new FlexoActionInitializer<A>() {
 			@Override
-			public boolean run(ActionEvent e, A action) {
+			public boolean run(EventObject e, A action) {
 				ParameterDefinition[] params;
 				TextFieldParameter metricsName = new TextFieldParameter("name", "name", null);
 				EnumDropDownParameter<MetricsType> type = new EnumDropDownParameter<MetricsType>("type", "type", MetricsType.TEXT,

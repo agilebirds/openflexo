@@ -54,10 +54,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
@@ -193,13 +190,9 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			getProjectLoader().getRMWindow(getController().getProject()).show();
+			getController().getRMWindow(getController().getProject()).show();
 		}
 
-	}
-
-	private ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
 	}
 
 	// ==========================================================================
@@ -221,7 +214,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JIRAIssueReportDialog.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject());
 		}
 
 	}
@@ -355,6 +348,10 @@ public class ToolsMenu extends FlexoMenu {
 		return repairProjectWindow;
 	}
 
+	protected AutoSaveService getAutoSaveService() {
+		return getController().getProjectLoader().getAutoSaveService(getController().getProject());
+	}
+
 	public class TimeTraveler extends FlexoMenuItem {
 
 		public TimeTraveler() {
@@ -373,8 +370,9 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getAutoSaveService().isTimeTravelingAvailable()) {
-				getAutoSaveService().showTimeTravelerDialog();
+			AutoSaveService autoSaveService = getAutoSaveService();
+			if (autoSaveService != null) {
+				autoSaveService.showTimeTravelerDialog();
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
@@ -386,11 +384,4 @@ public class ToolsMenu extends FlexoMenu {
 		}
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
-	}
 }

@@ -48,12 +48,12 @@ public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return object instanceof ComponentDefinition || object instanceof IEWOComponent;
 		}
 

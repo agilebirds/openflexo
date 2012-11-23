@@ -127,11 +127,6 @@ public class FlexoDialog extends JDialog {
 		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
 	}
 
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
-
 	public static final DialogFactory DIALOG_FACTORY = new DialogFactory() {
 
 		@Override

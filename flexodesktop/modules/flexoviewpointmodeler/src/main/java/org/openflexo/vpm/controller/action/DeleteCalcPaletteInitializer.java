@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -58,7 +58,7 @@ public class DeleteCalcPaletteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteViewPointPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewPointPalette action) {
+			public boolean run(EventObject e, DeleteViewPointPalette action) {
 				getController().unregisterResource(action.getFocusedObject());
 				return true;
 			}

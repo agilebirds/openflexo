@@ -16,13 +16,14 @@ import org.openflexo.doceditor.view.DERepositoryModuleView;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.doceditor.view.TOCDataView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This perspective is used to represent all table of contents defined in the scope of current project<br>
@@ -31,7 +32,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sylvain
  * 
  */
-public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
+public class TOCPerspective extends FlexoPerspective {
 
 	protected static final Logger logger = Logger.getLogger(TOCPerspective.class.getPackage().getName());
 
@@ -46,24 +47,10 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 	public TOCPerspective(DEController deController) {
 		super("table_of_contents");
 		this.deController = deController;
-		tocBrowser = new FIBTOCBrowser(deController.getProject().getTOCData(), deController);
+		tocBrowser = new FIBTOCBrowser(deController);
 		infoLabel = new JLabel("Table of contents perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public FIBTOCBrowser getLeftView() {
-		return tocBrowser;
+		setTopLeftView(tocBrowser);
 	}
 
 	/**
@@ -93,13 +80,14 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		System.out.println("Proposed object in TOCPerspective: " + proposedObject);
 		if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
-		} else if (this.deController.getProject().getTOCData().getRepositories().size() > 0) {
+		} else if (this.deController.getProject() != null && this.deController.getProject().getTOCData().getRepositories().size() > 0) {
 			return this.deController.getProject().getTOCData().getRepositories().firstElement();
-		} else {
+		} else if (this.deController.getProject() != null) {
 			return this.deController.getProject().getTOCData();
+		} else {
+			return null;
 		}
 	}
 
@@ -123,9 +111,8 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 		return null;
 	}
 
-	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
-		super.notifyModuleViewDisplayed(moduleView);
+	public void setProject(FlexoProject project) {
+		tocBrowser.setDataObject(project != null ? project.getTOCData() : null);
 	}
 
 }

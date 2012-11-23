@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;
@@ -55,8 +54,8 @@ import org.openflexo.swing.JConsole;
 import org.openflexo.swing.JConsoleOutputStream;
 import org.openflexo.toolbox.LogListener;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * 
@@ -275,7 +274,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

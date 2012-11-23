@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -53,7 +53,7 @@ public class IESetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				return action.getFocusedObject() != null;
 			}
 		};
@@ -63,7 +63,7 @@ public class IESetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				/*if ((action.getKey().equals("listType")||action.getKey().equals("fetchObjects")) && action.getFocusedObject() instanceof RepetitionOperator) {
 					RepetitionOperator rep = (RepetitionOperator)action.getFocusedObject();
 					rep.getBindingItemDefinition();// Refresh the definition if needed

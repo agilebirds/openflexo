@@ -29,7 +29,7 @@ import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class Duration extends KVCObject implements StringConvertable, Cloneable, Comparable<Duration> {
+public class Duration extends KVCObject implements StringConvertable<Duration>, Cloneable, Comparable<Duration> {
 
 	public static final DurationStringConverter converter = new DurationStringConverter();
 
@@ -295,7 +295,12 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 		if (obj instanceof Duration && obj != null) {
 			return getSerializationRepresentation().equals(((Duration) obj).getSerializationRepresentation());
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getSerializationRepresentation().hashCode();
 	}
 
 	@Override

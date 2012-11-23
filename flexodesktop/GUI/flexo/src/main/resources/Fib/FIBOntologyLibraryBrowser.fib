@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" titleFont="LucidaGrande,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.OntologyLibrary" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="LucidaGrande,0,11">
-  <Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" font="LucidaGrande,0,11" name="OntologyLibraryBrowser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)">
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.OntologyLibrary" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)" rightClickAction="controller.rightClick(OntologyLibraryBrowser.selected,event)" name="OntologyLibraryBrowser" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <BrowserElement dataClassName="org.openflexo.foundation.ontology.OntologyLibrary" label="&quot;Ontology Library&quot;" icon="controller.iconForObject(ontologyLibrary)" isEditable="false" filtered="false" defaultVisible="true" name="ontologyLibrary">
       <Children data="ontologyLibrary.rootFolder.children" name="folders" />
       <Children data="ontologyLibrary.rootFolder.ontologies" name="ontologies" />
@@ -9,8 +9,7 @@
       <Children data="ontologyFolder.children" name="subFolders" />
       <Children data="ontologyFolder.ontologies" name="ontologies" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.ontology.FlexoOntology" label="ontology.name" icon="controller.iconForObject(ontology)" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.FlexoOntology" label="ontology.name" icon="controller.ontologyIcon" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
   </Browser>
   <LocalizedDictionary />
 </Panel>
-

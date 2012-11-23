@@ -49,12 +49,12 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof WKFObject && !((WKFObject) object).getProcess().isImported();
 		}
 

@@ -22,18 +22,36 @@ package org.openflexo.cgmodule.controller.browser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
+
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.components.browser.BrowserConfiguration;
+import org.openflexo.components.browser.BrowserElement;
+import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.components.browser.ConfigurableProjectBrowser;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGFolder;
+import org.openflexo.foundation.cg.CGPathElement;
+import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GeneratedOutput;
+import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.cg.templates.CGTemplateRepository;
+import org.openflexo.foundation.cg.templates.CGTemplateSet;
+import org.openflexo.foundation.cg.templates.CGTemplates;
+import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
+import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
+import org.openflexo.foundation.rm.cg.GenerationStatus;
+import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 
 /**
  * Browser for Code Generator module
@@ -41,26 +59,84 @@ import org.openflexo.foundation.cg.GeneratedOutput;
  * @author sguerin
  * 
  */
-public class GeneratorBrowser extends ConfigurableProjectBrowser implements FlexoObserver {
+public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(GeneratorBrowser.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
 	private GeneratorController _controller;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	class GeneratorBrowserConfigurationElementFactory implements BrowserElementFactory {
+
+		GeneratorBrowserConfigurationElementFactory() {
+			super();
+		}
+
+		@Override
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			if (object instanceof GeneratedOutput) {
+				return new GeneratedCodeElement((GeneratedOutput) object, browser, parent);
+			} else if (object instanceof GenerationRepository) {
+				return new GeneratedCodeRepositoryElement((GenerationRepository) object, browser, parent);
+			} else if (object instanceof CGSymbolicDirectory) {
+				return new GeneratedCodeSymbDirElement((CGSymbolicDirectory) object, browser, parent);
+			} else if (object instanceof CGFolder) {
+				return new GeneratedCodeFolderElement((CGFolder) object, browser, parent);
+			} else if (object instanceof CGFile) {
+				return new GeneratedCodeFileElement((CGFile) object, browser, parent);
+			} else if (object instanceof CGFileReleaseVersion) {
+				return new FileReleaseVersionElement((CGFileReleaseVersion) object, browser, parent);
+			} else if (object instanceof CGFileIntermediateVersion) {
+				return new FileIntermediateVersionElement((CGFileIntermediateVersion) object, browser, parent);
+			} else if (object instanceof CGTemplates) {
+				return new CGTemplatesElement((CGTemplates) object, browser, parent);
+			} else if (object instanceof CGTemplateRepository) {
+				return new CGTemplateRepositoryElement((CGTemplateRepository) object, browser, parent);
+			} else if (object instanceof CGTemplateSet) {
+				return new CGTemplateSetElement((CGTemplateSet) object, browser, parent);
+			} else if (object instanceof CGTemplate) {
+				return new CGTemplateFileElement((CGTemplate) object, browser, parent);
+			}
+			return null;
+		}
+	}
+
+	protected abstract class CGFileFilter extends CustomBrowserFilter {
+		public CGFileFilter(String name, Icon icon, GenerationStatus... status) {
+			super(name, icon);
+		}
+
+		@Override
+		public boolean accept(FlexoModelObject object) {
+			if (object instanceof CGFile) {
+				return acceptFile((CGFile) object);
+			}
+			if (object instanceof CGPathElement) {
+				return acceptCGPathElement((CGPathElement) object);
+			}
+			return true;
+		}
+
+		public boolean acceptCGPathElement(CGPathElement pathElement) {
+			for (CGFile file : pathElement.getFiles()) {
+				if (acceptFile(file)) {
+					return true;
+				}
+			}
+			for (CGPathElement folder : pathElement.getSubFolders()) {
+				if (acceptCGPathElement(folder)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public abstract boolean acceptFile(CGFile file);
+
+	}
 
 	public GeneratorBrowser(GeneratorController controller) {
-		super(makeDefaultBrowserConfiguration(controller.getProject().getGeneratedCode()), controller.getSelectionManager());
-		_controller = controller;
-		update();
+		super(controller);
+		setBrowserElementFactory(new GeneratorBrowserConfigurationElementFactory());
 	}
 
 	@Override
@@ -70,24 +146,84 @@ public class GeneratorBrowser extends ConfigurableProjectBrowser implements Flex
 		}
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedOutput generatedCode) {
-		BrowserConfiguration returned = new GeneratorBrowserConfiguration(generatedCode);
-		return returned;
-	}
-
-	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file) {
-		BrowserConfiguration returned = new GeneratorBrowserConfiguration(file != null ? file.getGeneratedCode() : null) {
+	@Override
+	public void configure() {
+		// Custom filters
+		setAllFilesAndDirectoryFilter(new CustomBrowserFilter("all_files_and_directories", null) {
 			@Override
-			public CGFile getDefaultRootObject() {
-				return file;
+			public boolean accept(FlexoModelObject object) {
+				return true;
 			}
+		});
+		addToCustomFilters(getAllFilesAndDirectoryFilter());
 
+		setUpToDateFilesFilter(new CGFileFilter("up_to_date_files", FilesIconLibrary.SMALL_UNKNOWN_FILE_ICON) {
 			@Override
-			public void configure(ProjectBrowser browser) {
-				browser.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus() == GenerationStatus.UpToDate;
 			}
-		};
-		return returned;
+		});
+		addToCustomFilters(getUpToDateFilesFilter());
+
+		setNeedsGenerationFilter(new CGFileFilter("needs_generation", GeneratorIconLibrary.GENERATE_CODE_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.needsMemoryGeneration();
+			}
+		});
+		addToCustomFilters(getNeedsGenerationFilter());
+
+		setGenerationErrorFilter(new CGFileFilter("generation_errors", IconLibrary.UNFIXABLE_ERROR_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus() == GenerationStatus.GenerationError;
+			}
+		});
+		addToCustomFilters(getGenerationErrorFilter());
+
+		setGenerationModifiedFilter(new CGFileFilter("generation_modified", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus().isGenerationModified()
+						|| file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged;
+			}
+		});
+		addToCustomFilters(getGenerationModifiedFilter());
+
+		setDiskModifiedFilter(new CGFileFilter("disk_modified", UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus().isDiskModified();
+			}
+		});
+		addToCustomFilters(getDiskModifiedFilter());
+
+		setUnresolvedConflictsFilter(new CGFileFilter("unresolved_conflicts", UtilsIconLibrary.CONFLICT_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus() == GenerationStatus.ConflictingUnMerged;
+			}
+		});
+		addToCustomFilters(getUnresolvedConflictsFilter());
+
+		setNeedsReinjectingFilter(new CGFileFilter("needs_model_reinjection", GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.needsModelReinjection();
+			}
+		});
+		addToCustomFilters(getNeedsReinjectingFilter());
+
+		setOtherFilesFilter(new CGFileFilter("other_files", IconLibrary.UNFIXABLE_WARNING_ICON) {
+			@Override
+			public boolean acceptFile(CGFile file) {
+				return file.getGenerationStatus().isAbnormal();
+			}
+		});
+		addToCustomFilters(getOtherFilesFilter());
+
+		// Element type filters
+		setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 	}
 
 	private CustomBrowserFilter allFilesAndDirectoryFilter;
@@ -174,6 +310,11 @@ public class GeneratorBrowser extends ConfigurableProjectBrowser implements Flex
 
 	public GeneratorController getController() {
 		return _controller;
+	}
+
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		return null;
 	}
 
 }

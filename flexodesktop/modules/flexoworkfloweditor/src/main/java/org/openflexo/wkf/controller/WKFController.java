@@ -27,19 +27,19 @@ package org.openflexo.wkf.controller;
  */
 
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.JSplitPane;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -62,15 +62,11 @@ import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
@@ -81,12 +77,10 @@ import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 import org.openflexo.wkf.view.ProcessBrowserView;
 import org.openflexo.wkf.view.ProcessBrowserWindow;
 import org.openflexo.wkf.view.RoleListBrowserView;
-import org.openflexo.wkf.view.WKFFrame;
 import org.openflexo.wkf.view.WKFMainPane;
 import org.openflexo.wkf.view.WorkflowBrowserView;
 import org.openflexo.wkf.view.WorkflowBrowserWindow;
 import org.openflexo.wkf.view.doc.WKFDocumentationView;
-import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
 /**
@@ -94,8 +88,7 @@ import org.openflexo.wkf.view.menu.WKFMenuBar;
  * 
  * @author benoit, sylvain
  */
-public class WKFController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController,
-		PrintManagingController {
+public class WKFController extends FlexoController implements PrintManagingController, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -109,47 +102,31 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return false;
 	}
 
-	// ======================================================
-	// ================== Static variables ==================
-	// ======================================================
-
-	public static boolean isDropSuccessFull = false;
-
-	// ======================================================
-	// ================= Instance variables =================
-	// ======================================================
-
 	// Relative windows
 	private WorkflowBrowserWindow _workflowBrowserWindow;
 
 	private ProcessBrowserWindow _processBrowserWindow;
 
-	protected WKFMenuBar _wkfMenuBar;
-
-	protected WKFFrame _wkfFrame;
-
-	protected WKFKeyEventListener _wkfKeyEventListener;
-
-	private WKFSelectionManager _selectionManager;
-
 	// Browsers
-	private final ProcessBrowser _processBrowser;
-	private final WorkflowBrowser _workflowBrowser;
-	private final RoleListBrowser _roleListBrowser;
+	private ProcessBrowser _processBrowser;
+	private WorkflowBrowser _workflowBrowser;
+	private RoleListBrowser _roleListBrowser;
 
 	// External browser
-	private final ProcessBrowser _externalProcessBrowser;
+	private ProcessBrowser _externalProcessBrowser;
 
 	// public final OldProcessPerspective OLD_PROCESS_EDITOR_PERSPECTIVE;
-	public final ProcessPerspective PROCESS_EDITOR_PERSPECTIVE;
-	public final SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
-	public final RolePerspective ROLE_EDITOR_PERSPECTIVE;
-	public final DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
+	public ProcessPerspective PROCESS_EDITOR_PERSPECTIVE;
+	public SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
+	public RolePerspective ROLE_EDITOR_PERSPECTIVE;
+	public DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
-		public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process);
+		public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+			if (process instanceof FlexoProcess) {
+				ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, (FlexoProcess) process);
+			}
 			return null;
 			// return new WKFInvaders(process,(WKFController)controller);
 		}
@@ -157,41 +134,28 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	protected BufferedImage capturedDraggedNodeImage;
 
-	// ======================================================
-	// ========= Define PROCESS_EDITOR perspective ==========
-	// ======================================================
-
-	private final JSplitPane _workflowProcessBrowserViews;
-	private final WorkflowBrowserView _wkfBrowserView;
-	private final ProcessBrowserView _processBrowserView;
+	private WorkflowBrowserView wkfBrowserView;
+	private ProcessBrowserView processBrowserView;
 	private RoleListBrowserView roleListBrowserView;
-
-	// ==========================================================================
-	// ============================= Constructor ===============================
-	// ==========================================================================
 
 	/**
 	 * Default constructor
 	 */
-	public WKFController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-		_wkfMenuBar = (WKFMenuBar) createAndRegisterNewMenuBar();
-		_wkfKeyEventListener = new WKFKeyEventListener(this);
-		_wkfFrame = new WKFFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _wkfKeyEventListener, _wkfMenuBar);
-		init(_wkfFrame, _wkfKeyEventListener, _wkfMenuBar);
+	public WKFController(FlexoModule module) {
+		super(module);
+		initWithWKFPreferences();
+		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+	}
 
-		_selectionManager = new WKFSelectionManager(this);
-
+	@Override
+	protected void initializePerspectives() {
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);
 		_workflowBrowser = new WorkflowBrowser(this);
 		_roleListBrowser = new RoleListBrowser(this);
 
-		_wkfBrowserView = new WorkflowBrowserView(this);
-		_processBrowserView = new ProcessBrowserView(_processBrowser, this);
-		_workflowProcessBrowserViews = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _wkfBrowserView, _processBrowserView);
-		_workflowProcessBrowserViews.setBorder(BorderFactory.createEmptyBorder());
-		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersSplitPane", 1.0);
+		wkfBrowserView = new WorkflowBrowserView(this);
+		processBrowserView = new ProcessBrowserView(_processBrowser, this);
 		setRoleListBrowserView(new RoleListBrowserView(_roleListBrowser, this));
 
 		addToPerspectives(PROCESS_EDITOR_PERSPECTIVE = new ProcessPerspective(this));
@@ -201,7 +165,26 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
-		initWorkflowGraphicalPropertiesFromPrefs(getProject());
+	}
+
+	public WorkflowBrowserView getWkfBrowserView() {
+		return wkfBrowserView;
+	}
+
+	public ProcessBrowserView getProcessBrowserView() {
+		return processBrowserView;
+	}
+
+	@Override
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
+		_roleListBrowser.setRootObject(to != null && to.getProject() != null ? to.getProject().getWorkflow().getRoleList() : null);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getFlexoWorkflow().getRootProcess();
 	}
 
 	private void initWorkflowGraphicalPropertiesFromPrefs(FlexoProject project) {
@@ -223,6 +206,11 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {
 		return new WKFControllerActionInitializer(this);
+	}
+
+	@Override
+	protected SelectionManager createSelectionManager() {
+		return new WKFSelectionManager(this);
 	}
 
 	/**
@@ -248,7 +236,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	protected FlexoControlGraphController getControlGraphController() {
 		if (_cgController == null) {
 			_cgController = new FlexoControlGraphController(this);
-			getWKFSelectionManager().addObserver(_cgController);
+			getSelectionManager().addObserver(_cgController);
 		}
 		return _cgController;
 	}
@@ -260,71 +248,23 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	public void initInspectors() {
 		super.initInspectors();
 		if (useOldInspectorScheme()) {
-			getWKFSelectionManager().addObserver(getSharedInspectorController());
-			getWKFSelectionManager().addObserver(getDocInspectorController());
 			notifyShowLeanTabHasChanged();
 			showBPEGraphicsInspectors();
 		}
 	}
 
-	@Override
-	public void dispose() {
-		if (getWKFSelectionManager() != null) {
-			getWKFSelectionManager().deleteObserver(getSharedInspectorController());
-			getWKFSelectionManager().deleteObserver(getDocInspectorController());
-			_selectionManager = null;
-		}
-		WKFPreferences.reset(this);
-		super.dispose();
-	}
-
 	public void loadRelativeWindows() {
-		// Relative windows
-
-		_workflowBrowserWindow = new WorkflowBrowserWindow(_wkfFrame);
+		_workflowBrowserWindow = new WorkflowBrowserWindow(getFlexoFrame());
 		_workflowBrowserWindow.setVisible(false);
-		_processBrowserWindow = new ProcessBrowserWindow(_wkfFrame);
-		// _processBrowserWindow.setVisible(true);
-
-		/*
-		 * if (getDocInspectorPanel() != null) { JSplitPane splitPane = new
-		 * JSplitPane(JSplitPane.VERTICAL_SPLIT,palette,getDocInspectorPanel()); splitPane.setResizeWeight(0);
-		 * splitPane.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION); getMainPane().setRightView(splitPane); } else {
-		 * getMainPane().setRightView(palette); }
-		 */
-
-	}
-
-	// ==========================================================================
-	// ============================= Class methods
-	// ==============================
-	// ==========================================================================
-
-	// ==========================================================================
-	// ============================= Instance methods
-	// ===========================
-	// ==========================================================================
-
-	// ==========================================================================
-	// ============================= Accessors
-	// ==================================
-	// ==========================================================================
-
-	public FlexoWorkflow getFlexoWorkflow() {
-		return getProject().getFlexoWorkflow();
+		_processBrowserWindow = new ProcessBrowserWindow(getFlexoFrame());
 	}
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return getProject().getWKFValidationModel();
-	}
-
-	public WKFFrame getMainFrame() {
-		return _wkfFrame;
-	}
-
-	public WKFMenuBar getEditorMenuBar() {
-		return _wkfMenuBar;
+		if (getProject() != null) {
+			return getProject().getWKFValidationModel();
+		}
+		return null;
 	}
 
 	public WorkflowBrowserWindow getWorkflowBrowserWindow() {
@@ -335,40 +275,14 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return _processBrowserWindow;
 	}
 
-	public void showProcessBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().showProcessBrowser();
-		}
-	}
-
-	public void hideProcessBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().hideProcessBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new WKFMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new WKFMainPane(this);
 	}
 
 	@Override
 	public WKFMainPane getMainPane() {
 		return (WKFMainPane) super.getMainPane();
-	}
-
-	// ==========================================================================
-	// ========================== Selection management
-	// ==========================
-	// ==========================================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getWKFSelectionManager();
-	}
-
-	public WKFSelectionManager getWKFSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**
@@ -398,15 +312,14 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
 		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
-			return null;
+			return;
 		}
-
-		return super.setCurrentEditedObjectAsModuleView(object, perspective);
+		super.setCurrentEditedObjectAsModuleView(object, perspective);
 	}
 
 	public void setCurrentImportedProcess(FlexoProcess subProcess) {
@@ -422,7 +335,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	public WKFDocumentationView getCurrentWKFDocumentationView() {
-		ModuleView currentView = getCurrentModuleView();
+		ModuleView<?> currentView = getCurrentModuleView();
 		if (currentView instanceof WKFDocumentationView) {
 			return (WKFDocumentationView) getCurrentModuleView();
 		} else {
@@ -450,10 +363,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return _workflowBrowser;
 	}
 
-	public WKFKeyEventListener getKeyEventListener() {
-		return _wkfKeyEventListener;
-	}
-
 	/**
 	 * @param b
 	 */
@@ -473,7 +382,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
-		for (ModuleView<?> moduleView : getLoadedViews().values()) {
+		for (ModuleView<?> moduleView : getAllLoadedViews()) {
 			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
 				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
 				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
@@ -625,27 +534,27 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	private void showBPEGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("BPE", true);
-		getWKFSelectionManager().removeInspectionContext("SWL");
-		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
+		getSelectionManager().setInspectionContext("BPE", true);
+		getSelectionManager().removeInspectionContext("SWL");
+		getSelectionManager().removeInspectionContext("ROLE_EDITOR");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
 	private void showRoleEditorGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("ROLE_EDITOR", true);
-		getWKFSelectionManager().removeInspectionContext("BPE");
-		getWKFSelectionManager().removeInspectionContext("SWL");
+		getSelectionManager().setInspectionContext("ROLE_EDITOR", true);
+		getSelectionManager().removeInspectionContext("BPE");
+		getSelectionManager().removeInspectionContext("SWL");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
 	private void showSWLGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("SWL", true);
-		getWKFSelectionManager().removeInspectionContext("BPE");
-		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
+		getSelectionManager().setInspectionContext("SWL", true);
+		getSelectionManager().removeInspectionContext("BPE");
+		getSelectionManager().removeInspectionContext("ROLE_EDITOR");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
@@ -673,7 +582,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public void notifyShowLeanTabHasChanged() {
 		if (WKFPreferences.getShowLeanTabs()) {
-			getWKFSelectionManager().setInspectionContext("METRICS", true);
+			getSelectionManager().setInspectionContext("METRICS", true);
 			/*
 			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
 			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
@@ -694,7 +603,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
 			 */
 		} else {
-			getWKFSelectionManager().removeInspectionContext("METRICS");
+			getSelectionManager().removeInspectionContext("METRICS");
 			/*
 			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
 			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
@@ -727,7 +636,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	public void notifyEdgeRepresentationChanged() {
-		for (ModuleView<?> view : getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).values()) {
+		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
 			if (view instanceof ProcessView) {
 				((ProcessView) view).refreshConnectors();
 			}
@@ -736,23 +645,17 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public FGEPoint getLastClickedPoint() {
 		if (getCurrentModuleView() instanceof DrawingView) {
-			return ((DrawingView) getCurrentModuleView()).getController().getLastClickedPoint();
+			return ((DrawingView<?>) getCurrentModuleView()).getController().getLastClickedPoint();
 		}
 		return null;
 	}
 
 	public void notifyShowGrid(boolean showGrid) {
-		Enumeration<ModuleView> en = getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).elements();
-		while (en.hasMoreElements()) {
-			ModuleView view = en.nextElement();
+		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
 			if (view instanceof ProcessView) {
 				((ProcessView) view).getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
 			}
 		}
-	}
-
-	public JSplitPane getWorkflowProcessBrowserViews() {
-		return _workflowProcessBrowserViews;
 	}
 
 	public RoleListBrowserView getRoleListBrowserView() {
@@ -763,4 +666,105 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		this.roleListBrowserView = _roleListBrowserView;
 	}
 
+	private void initWithWKFPreferences() {
+		/*for (GraphicalProperties prop : GraphicalProperties.values()) {
+			if (_controller.getFlexoWorkflow().hasGraphicalPropertyForKey(prop.getSerializationName())) {
+				switch (prop) {
+				case ACTION_FONT:
+					setActionNodeFont(_controller.getProject().getFlexoWorkflow().getActionFont());
+					break;
+				case ACTIVITY_FONT:
+					setActivityNodeFont(_controller.getProject().getFlexoWorkflow().getActivityFont());
+					break;
+				case COMPONENT_FONT:
+					setComponentFont(_controller.getProject().getFlexoWorkflow().getComponentFont());
+					break;
+				case CONNECTOR_REPRESENTATION:
+					try {
+						setConnectorRepresentation((EdgeRepresentation) _controller.getProject().getFlexoWorkflow()
+								.getConnectorRepresentation());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					break;
+				case EVENT_FONT:
+					setEventNodeFont(_controller.getProject().getFlexoWorkflow().getEventFont());
+					break;
+				case ARTEFACT_FONT:
+					setArtefactFont(_controller.getProject().getFlexoWorkflow().getArtefactFont());
+					break;
+				case EDGE_FONT:
+					setEdgeFont(_controller.getProject().getFlexoWorkflow().getEdgeFont());
+					break;
+				case OPERATION_FONT:
+					setOperationNodeFont(_controller.getProject().getFlexoWorkflow().getOperationFont());
+					break;
+				case ROLE_FONT:
+					setRoleFont(_controller.getProject().getFlexoWorkflow().getRoleFont());
+					break;
+				case SHOW_MESSAGES:
+					setShowMessagesInWKF(_controller.getProject().getFlexoWorkflow().getShowMessages());
+					break;
+				case SHOW_SHADOWS:
+					setShowShadows(_controller.getProject().getFlexoWorkflow().getShowShadows());
+					break;
+				case SHOW_WO_NAME:
+					setShowWONameInWKF(_controller.getProject().getFlexoWorkflow().getShowWOName());
+					break;
+				case USE_TRANSPARENCY:
+					setUseTransparency(_controller.getProject().getFlexoWorkflow().getUseTransparency());
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		_controller.notifyShowLeanTabHasChanged();
+		_controller.notifyShowMessages(getShowMessagesInWKF());*/
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == WKFPreferences.getPreferences()) {
+			String propertyName = evt.getPropertyName();
+			if (propertyName.equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
+				notifyShowWOName(WKFPreferences.getShowWONameInWKF());
+			} else if (propertyName.equals(WKFPreferences.SHOW_MESSAGES_NAME_KEY)) {
+				notifyShowMessages(WKFPreferences.getShowMessagesInWKF());
+			} else if (propertyName.equals(WKFPreferences.SHOW_GRID)) {
+				notifyShowGrid(WKFPreferences.getShowGrid());
+			} else if (propertyName.equals(WKFPreferences.SHOW_SHADOWS)) {
+				notifyShowShadowChanged();
+			} else if (propertyName.equals(WKFPreferences.SHOW_LEAN_TAB)) {
+				notifyShowLeanTabHasChanged();
+			} else if (propertyName.equals(WKFPreferences.USE_SIMPLE_EVENT_PALETTE)) {
+				notifyUseSimpleEventPaletteHasChanged();
+			} else if (propertyName.equals(WKFPreferences.USE_TRANSPARENCY)) {
+				notifyUseTransparencyChanged();
+			} else if (propertyName.equals(WKFPreferences.ACTIVITY_NODE_FONT_KEY)) {
+				notifyActivityFontChanged();
+			} else if (propertyName.equals(WKFPreferences.OPERATION_NODE_FONT_KEY)) {
+				notifyOperationFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ACTION_NODE_FONT_KEY)) {
+				notifyActionFontChanged();
+			} else if (propertyName.equals(WKFPreferences.EVENT_NODE_FONT_KEY)) {
+				notifyEventFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ROLE_FONT_KEY)) {
+				notifyRoleFontChanged();
+			} else if (propertyName.equals(WKFPreferences.EDGE_FONT_KEY)) {
+				notifyEdgeFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ARTEFACT_FONT_KEY)) {
+				notifyArtefactFontChanged();
+			} else if (propertyName.equals(WKFPreferences.COMPONENT_FONT_KEY)) {
+				notifyComponentFontChanged();
+			} else if (propertyName.equals(WKFPreferences.CONNECTOR_REPRESENTATION)) {
+				notifyEdgeRepresentationChanged();
+			} else if (propertyName.equals(WKFPreferences.CONNECTOR_ADJUSTABILITY)) {
+				notifyEdgeRepresentationChanged();
+			}
+		} else {
+			super.propertyChange(evt);
+		}
+
+	}
 }

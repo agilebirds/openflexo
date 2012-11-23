@@ -34,7 +34,7 @@ import org.openflexo.toolbox.ToolBox;
  */
 public class FlexoLoggingFormatter extends Formatter {
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss,SSS");
+	private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss,SSS");
 
 	public static boolean logDate = true;
 

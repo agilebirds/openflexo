@@ -22,7 +22,8 @@ package org.openflexo.components.browser.view;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -30,7 +31,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.Autoscroll;
 import java.awt.dnd.DnDConstants;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -42,8 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -54,7 +57,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
@@ -76,6 +78,7 @@ import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.selection.DefaultContextualMenuManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.FlexoAutoScroll;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Abstract view related to a ProjectBrowser
@@ -87,6 +90,46 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	static final Logger logger = Logger.getLogger(BrowserView.class.getPackage().getName());
 
 	protected static final Point noOffset = new Point(0, 0);
+
+	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
+		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
+			super(icon);
+			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			addMouseListener(this);
+			addActionListener(this);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			setBorder(BorderFactory.createEtchedBorder());
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setFilters();
+			getBrowser().update();
+		}
+
+		public abstract void setFilters();
+	}
 
 	// ==========================================================================
 	// ============================= Variables
@@ -111,11 +154,11 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	private DefaultContextualMenuManager defaultContextualMenuManager;
 
-	protected FlexoEditor _editor;
-
 	protected static BufferedImage capturedDraggedNodeImage;
 
 	private SelectionPolicy _selectionPolicy;
+
+	private final FlexoController controller;
 
 	public static enum SelectionPolicy {
 		/**
@@ -133,23 +176,23 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		ForceSelection
 	}
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private JPanel northPanel;
 
-	public BrowserView(ProjectBrowser browser, KeyListener kl, FlexoEditor editor) {
-		this(browser, kl, editor, SelectionPolicy.ParticipateToSelection);
+	public BrowserView(ProjectBrowser browser, FlexoController controller) {
+		this(browser, controller, SelectionPolicy.ParticipateToSelection);
 	}
 
-	public BrowserView(ProjectBrowser browser, KeyListener kl, FlexoEditor editor, SelectionPolicy selectionPolicy) {
+	public BrowserView(ProjectBrowser browser, FlexoController controller, SelectionPolicy selectionPolicy) {
 		super();
-		_editor = editor;
 		_browser = browser;
+		this.controller = controller;
 		_selectionPolicy = selectionPolicy;
 		_browser.setLeadingView(this);
 		setLayout(new BorderLayout());
 		setBackground(Color.WHITE);
+		northPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		add(northPanel, BorderLayout.NORTH);
+
 		treeView = createTreeView(browser);
 
 		ds = new TreeDragSource(treeView, DnDConstants.ACTION_COPY_OR_MOVE);
@@ -221,9 +264,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		treeScrollPane.setAutoscrolls(true);
 		treeScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		treeScrollPane.getVerticalScrollBar().setBlockIncrement(50);
-		JLabel noSelection = new JLabel();
-		noSelection.setText(FlexoLocalization.localizedForKey("no_selection", noSelection));
-
 		controlPanel = new BrowserFooter(this);
 
 		add(treeScrollPane, BorderLayout.CENTER);
@@ -231,16 +271,15 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			add(controlPanel, BorderLayout.SOUTH);
 		}
 		browser.addBrowserListener(this);
-
-		if (kl != null) {
-			treeView.addKeyListener(kl);
-		}
-
-		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-		// setPreferredSize(new Dimension(FlexoCst.PREFERRED_BROWSER_VIEW_WIDTH, FlexoCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-		setBorder(BorderFactory.createEmptyBorder());
-
 		validate();
+	}
+
+	protected void addHeaderComponent(Component component) {
+		northPanel.add(component);
+	}
+
+	public FlexoController getController() {
+		return controller;
 	}
 
 	protected ContextualMenuManager getContextualMenuManager() {
@@ -251,7 +290,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			return _browser.getSelectionManager().getContextualMenuManager();
 		}
 		if (defaultContextualMenuManager == null) {
-			defaultContextualMenuManager = new DefaultContextualMenuManager();
+			defaultContextualMenuManager = new DefaultContextualMenuManager(getController());
 		}
 		return defaultContextualMenuManager;
 	}
@@ -399,7 +438,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			return;
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject() + " paths=" + paths);
+			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject());
 		}
 		superviseExpansion = true;
 		expansionSupervisedElements = new Vector<BrowserElement>();
@@ -428,7 +467,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				return;
 			}
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject() + " paths=" + paths);
+				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject());
 			}
 			treeView.removeTreeSelectionListener(this);
 			treeView.removeSelectionPaths(paths);
@@ -605,8 +644,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	public void notifyExpansions(ExpansionNotificationEvent event) {
 		_browser.deleteBrowserListener(this);
 		treeView.removeTreeExpansionListener(this);
-		for (Enumeration<TreePath> e = event.pathsToExpand().elements(); e.hasMoreElements();) {
-			TreePath path = e.nextElement();
+		for (TreePath path : event.pathsToExpand()) {
 			if (treeView.isCollapsed(path)) {
 				treeView.expandPath(path);
 				if (logger.isLoggable(Level.FINE)) {
@@ -614,8 +652,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				}
 			}
 		}
-		for (Enumeration<TreePath> e = event.pathsToCollabse().elements(); e.hasMoreElements();) {
-			TreePath path = e.nextElement();
+		for (TreePath path : event.pathsToCollapse()) {
 			if (treeView.isExpanded(path)) {
 				treeView.collapsePath(path);
 				if (logger.isLoggable(Level.FINE)) {
@@ -652,9 +689,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		public FlexoJTree(ProjectBrowser browser) {
 			super(browser);
 			setRootVisible(browser.showRootNode());
-			if (!isRootVisible()) {
-				setShowsRootHandles(true);
-			}
+			setShowsRootHandles(browser.isRootCollapsable());
 			setAutoscrolls(true);
 			ToolTipManager.sharedInstance().registerComponent(this);
 			setRowHeight(_browser.getRowHeight());
@@ -846,16 +881,12 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				pt.x -= offset.x;
 				pt.y -= offset.y;
 			}
-			if (rect2D != null && rect2D.getLocation().equals(pt)) {
+			if (rect2D.getLocation().equals(pt)) {
 				return;
 			}
 			paintImmediately(rect2D.getBounds());
 			rect2D.setRect((int) pt.getX(), (int) pt.getY(), capturedDraggedNodeImage.getWidth(), capturedDraggedNodeImage.getHeight());
 			getGraphics().drawImage(capturedDraggedNodeImage, (int) pt.getX(), (int) pt.getY(), this);
-		}
-
-		public FlexoEditor getEditor() {
-			return _editor;
 		}
 
 		public final void clearDraggedNode() {
@@ -874,7 +905,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public FlexoEditor getEditor() {
-		return _editor;
+		if (getController() != null) {
+			return getController().getEditor();
+		}
+		return null;
 	}
 
 	@Override

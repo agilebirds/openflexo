@@ -19,14 +19,8 @@
  */
 package org.openflexo.foundation.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
@@ -41,19 +35,20 @@ import org.openflexo.xmlcode.KeyValueDecoder;
 /**
  * Abstract representation of an action on Flexo model (model edition primitive)
  * 
+ * T2 is arbitrary and should be removed in the long run. There is absolutely no guarantee on the actual type of T2. No assertions can be
+ * made. T1 can be kept if we ensure that only actions of the type FlexoAction<A extends FlexoAction<A, T1>, T1 extends FlexoModelObject>
+ * are actually returned for a given object of type T1.
+ * 
  * @author sguerin
  */
-public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
-		AbstractAction implements KeyValueCoding {
+public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> implements
+		KeyValueCoding {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
 
 	private FlexoActionType<A, T1, T2> _actionType;
 	private T1 _focusedObject;
 	private Vector<T2> _globalSelection;
-	// private FlexoActionInitializer<? super A> _initializer;
-	// private FlexoActionFinalizer<? super A> _finalizer;
-	// private FlexoExceptionHandler<? super A> _exceptionHandler;
 	private Object _context;
 	private Object _invoker;
 	private FlexoProgress _flexoProgress;
@@ -77,56 +72,27 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	}
 
 	public enum ExecutionStatus {
-		NEVER_EXECUTED, EXECUTING_INITIALIZER, EXECUTING_CORE, EXECUTING_FINALIZER, HAS_SUCCESSFULLY_EXECUTED, FAILED_EXECUTION, EXECUTING_UNDO_INITIALIZER, EXECUTING_UNDO_CORE, EXECUTING_UNDO_FINALIZER, HAS_SUCCESSFULLY_UNDONE, FAILED_UNDO_EXECUTION, EXECUTING_REDO_INITIALIZER, EXECUTING_REDO_CORE, EXECUTING_REDO_FINALIZER, HAS_SUCCESSFULLY_REDONE, FAILED_REDO_EXECUTION;
-
-		public boolean isExecuting() {
-			return this == EXECUTING_INITIALIZER || this == EXECUTING_CORE || this == EXECUTING_FINALIZER;
-		}
-
-		public boolean isExecutingUndo() {
-			return this == EXECUTING_UNDO_INITIALIZER || this == EXECUTING_UNDO_CORE || this == EXECUTING_UNDO_FINALIZER;
-		}
-
-		public boolean isExecutingRedo() {
-			return this == EXECUTING_REDO_INITIALIZER || this == EXECUTING_REDO_CORE || this == EXECUTING_REDO_FINALIZER;
-		}
+		NEVER_EXECUTED,
+		EXECUTING_CORE,
+		HAS_SUCCESSFULLY_EXECUTED,
+		FAILED_EXECUTION,
+		EXECUTING_UNDO_CORE,
+		HAS_SUCCESSFULLY_UNDONE,
+		FAILED_UNDO_EXECUTION,
+		EXECUTING_REDO_CORE,
+		HAS_SUCCESSFULLY_REDONE,
+		FAILED_REDO_EXECUTION;
 
 		public boolean hasActionExecutionSucceeded() {
-			if (this == NEVER_EXECUTED) {
-				return false;
-			} else if (isExecuting()) {
-				return false;
-			} else if (this == FAILED_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
 		}
 
 		public boolean hasActionUndoExecutionSucceeded() {
-			if (!hasActionExecutionSucceeded()) {
-				return false;
-			} else if (isExecutingUndo()) {
-				return false;
-			} else if (this == FAILED_UNDO_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == HAS_SUCCESSFULLY_UNDONE;
 		}
 
 		public boolean hasActionRedoExecutionSucceeded() {
-			if (!hasActionExecutionSucceeded()) {
-				return false;
-			} else if (!hasActionUndoExecutionSucceeded()) {
-				return false;
-			} else if (isExecutingRedo()) {
-				return false;
-			} else if (this == FAILED_REDO_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == HAS_SUCCESSFULLY_REDONE;
 		}
 
 	}
@@ -141,14 +107,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	protected ExecutionStatus executionStatus = ExecutionStatus.NEVER_EXECUTED;
 	private FlexoException thrownException = null;
 
-	private final Vector<FlexoAction<?, ?, ?>> _embbededActionsExecutedDuringInitializer;
-	private final Vector<FlexoAction<?, ?, ?>> _embbededActionsExecutedDuringFinalizer;
-	private final Vector<FlexoAction<?, ?, ?>> _embbededActionsExecutedDuringCore;
-
-	private boolean _logActionTime = true;
-
-	private ActionEvent originalActionEvent;
-
 	public FlexoAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super();
 		_editor = editor;
@@ -161,20 +119,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 			}
 		} else {
 			_globalSelection = null;
-		}
-		_embbededActionsExecutedDuringInitializer = new Vector<FlexoAction<?, ?, ?>>();
-		_embbededActionsExecutedDuringFinalizer = new Vector<FlexoAction<?, ?, ?>>();
-		_embbededActionsExecutedDuringCore = new Vector<FlexoAction<?, ?, ?>>();
-		setEnabled(actionType.isEnabled(focusedObject, globalSelection, editor));
-		update(editor);
-	}
-
-	public void update(FlexoEditor editor) {
-		if (getLocalizedName() != null) {
-			putValue(Action.NAME, getLocalizedName());
-		}
-		if (getEnabledIcon(editor) != null) {
-			putValue(Action.SMALL_ICON, getEnabledIcon(editor));
 		}
 	}
 
@@ -194,41 +138,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 			return getActionType().getLocalizedDescription();
 		}
 		return null;
-	}
-
-	public Icon getEnabledIcon(FlexoEditor editor) {
-		if (getActionType() != null && editor != null) {
-			return editor.getEnabledIconFor(getActionType());
-		}
-		return null;
-	}
-
-	public Icon getDisabledIcon(FlexoEditor editor) {
-		if (getActionType() != null && editor != null) {
-			return editor.getDisabledIconFor(getActionType());
-		}
-		return null;
-	}
-
-	@Override
-	public final void actionPerformed(ActionEvent e) {
-		try {
-			// In this case, we need to perform this verification so that disabled action aren't executed.
-			if (getActionType().isEnabled(getFocusedObject(), getGlobalSelection(), _editor)) {
-				try {
-					logger.warning("Action type " + getActionType().getLocalizedName() + " " + getFocusedObject() + " "
-							+ getGlobalSelection());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-			doAction(e);
-		} catch (FlexoException exception) {
-			// Warns about the exception
-			logger.warning("Exception raised: " + exception.getClass().getName() + " : " + exception.getMessage()
-					+ ". See console for details.");
-			exception.printStackTrace();
-		}
 	}
 
 	/**
@@ -259,17 +168,16 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	}
 
 	public A doAction() {
-		try {
-			return doAction(null);
-		} catch (FlexoException exception) {
-			thrownException = exception;
-			hideFlexoProgress();
-			// Warns about the exception
-			logger.warning("Exception raised: " + exception.getClass().getName() + " : " + exception.getMessage()
-					+ ". See console for details.");
-			exception.printStackTrace();
-			return (A) this;
+		if (_editor != null) {
+			_editor.performAction((A) this, null);
+		} else {
+			try {
+				doActionInContext();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
 		}
+		return (A) this;
 	}
 
 	public ExecutionStatus getExecutionStatus() {
@@ -288,98 +196,17 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		return false;
 	}
 
-	private void notifyEmbeddedExecution(FlexoAction<?, ?, ?> embeddedAction) {
-		if (getExecutionStatus() == ExecutionStatus.EXECUTING_CORE) {
-			_embbededActionsExecutedDuringCore.add(embeddedAction);
-		} else if (getExecutionStatus() == ExecutionStatus.EXECUTING_INITIALIZER) {
-			_embbededActionsExecutedDuringInitializer.add(embeddedAction);
-		} else if (getExecutionStatus() == ExecutionStatus.EXECUTING_FINALIZER) {
-			_embbededActionsExecutedDuringFinalizer.add(embeddedAction);
-		} else {
-			logger.warning("FlexoAction " + embeddedAction + " exectuted outside scope of owner action execution owner=" + this);
-		}
-	}
-
-	public A doAction(ActionEvent e) throws FlexoException {
-		setOriginalActionEvent(e);
-		if (getEditor() != null) {
-			getEditor().executeAction(this);
-		} else {
-			execute();
+	public A doActionInContext() throws FlexoException {
+		try {
+			executionStatus = ExecutionStatus.EXECUTING_CORE;
+			doAction(getContext());
+			executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
+		} catch (FlexoException e) {
+			executionStatus = ExecutionStatus.FAILED_EXECUTION;
+			thrownException = e;
+			throw e;
 		}
 		return (A) this;
-	}
-
-	private void setOriginalActionEvent(ActionEvent e) {
-		this.originalActionEvent = e;
-	}
-
-	public void execute() throws FlexoException {
-		long start = 0, end = 0;
-		if (_logActionTime) {
-			start = System.currentTimeMillis();
-		}
-		// First notify owner action
-		if (getOwnerAction() != null) {
-			getOwnerAction().notifyEmbeddedExecution(this);
-		}
-
-		boolean confirmDoAction = true;
-		if (getInitializer() != null) {
-			executionStatus = ExecutionStatus.EXECUTING_INITIALIZER;
-			confirmDoAction = getInitializer().run(originalActionEvent, (A) this);
-		}
-
-		String actionName = getLocalizedName();
-		if (confirmDoAction) {
-			if (getEditor() != null) {
-				getEditor().actionWillBePerformed(this);
-			}
-			try {
-				if (getEditor() != null && getEditor().getProject() != null) {
-					getEditor().getProject().clearRecentlyCreatedObjects();
-				}
-				executionStatus = ExecutionStatus.EXECUTING_CORE;
-				doAction(getContext());
-				if (getEditor() != null && getEditor().getProject() != null) {
-					getEditor().getProject().notifyRecentlyCreatedObjects();
-				}
-				executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
-				if (getEditor() != null) {
-					getEditor().actionHasBeenPerformed(this, true); // Action succeeded
-				}
-			} catch (FlexoException exception) {
-				executionStatus = ExecutionStatus.FAILED_EXECUTION;
-				thrownException = exception;
-				if (getEditor() != null) {
-					getEditor().actionHasBeenPerformed(this, false); // Action failed
-				}
-				hideFlexoProgress();
-				if (getExceptionHandler() != null) {
-					if (getExceptionHandler().handleException(exception, (A) this)) {
-						// The exception has been handled, we may still have to execute finalizer, if any
-						executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
-					} else {
-						throw exception;
-					}
-				} else {
-					throw exception;
-				}
-			}
-
-			if (getFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED) {
-				executionStatus = ExecutionStatus.EXECUTING_FINALIZER;
-				executionStatus = getFinalizer().run(originalActionEvent, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED
-						: ExecutionStatus.FAILED_EXECUTION;
-			}
-		}
-		hideFlexoProgress();
-		if (_logActionTime) {
-			end = System.currentTimeMillis();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Action " + actionName + " took " + (end - start) + "ms to complete");
-			}
-		}
 	}
 
 	public void hideFlexoProgress() {
@@ -390,18 +217,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	}
 
 	protected abstract void doAction(Object context) throws FlexoException;
-
-	public FlexoActionFinalizer<? super A> getFinalizer() {
-		return getActionType().getFinalizerForEditor(getEditor());
-	}
-
-	public FlexoActionInitializer<? super A> getInitializer() {
-		return getActionType().getInitializerForEditor(getEditor());
-	}
-
-	public FlexoExceptionHandler<? super A> getExceptionHandler() {
-		return getActionType().getExceptionHandlerForEditor(getEditor());
-	}
 
 	public Object getContext() {
 		return _context;
@@ -495,18 +310,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		return getOwnerAction() != null;
 	}
 
-	public Vector<FlexoAction<?, ?, ?>> getEmbbededActionsExecutedDuringCore() {
-		return _embbededActionsExecutedDuringCore;
-	}
-
-	public Vector<FlexoAction<?, ?, ?>> getEmbbededActionsExecutedDuringFinalizer() {
-		return _embbededActionsExecutedDuringFinalizer;
-	}
-
-	public Vector<FlexoAction<?, ?, ?>> getEmbbededActionsExecutedDuringInitializer() {
-		return _embbededActionsExecutedDuringInitializer;
-	}
-
 	public String toSimpleString() {
 		return getClass().getSimpleName() + "@" + Integer.toHexString(hashCode());
 	}
@@ -515,19 +318,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	public String toString() {
 		boolean isFirst = true;
 		StringBuffer returned = new StringBuffer();
-		returned.append(getClass().getSimpleName() + "@" + Integer.toHexString(hashCode()) + "[");
-		for (FlexoAction<?, ?, ?> a : _embbededActionsExecutedDuringInitializer) {
-			returned.append((isFirst ? "" : ",") + "#" + a.toSimpleString());
-			isFirst = false;
-		}
-		for (FlexoAction<?, ?, ?> a : _embbededActionsExecutedDuringCore) {
-			returned.append((isFirst ? "" : ",") + a.toSimpleString());
-			isFirst = false;
-		}
-		for (FlexoAction<?, ?, ?> a : _embbededActionsExecutedDuringFinalizer) {
-			returned.append((isFirst ? "" : ",") + "@" + a.toSimpleString());
-			isFirst = false;
-		}
 		if (getExecutionContext() != null) {
 			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
 				FlexoModelObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
@@ -595,10 +385,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	 *            TODO
 	 */
 	protected void replacedVectorPropertyValue(String propertyKey, int index, Object newValue, Object oldValue, Object originalValue) {
-	}
-
-	public void __setLogActionTime(boolean log) {
-		this._logActionTime = log;
 	}
 
 	// ==============================================================
@@ -716,7 +502,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	// Retrieving type
 
 	@Override
-	public Class getTypeForKey(String key) {
+	public Class<?> getTypeForKey(String key) {
 		return KeyValueDecoder.getTypeForKey(this, key);
 	}
 

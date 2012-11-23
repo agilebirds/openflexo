@@ -34,23 +34,9 @@ import org.openflexo.fps.controller.FPSController;
  */
 public class CVSRepositoryBrowserView extends BrowserView {
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected FPSController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public CVSRepositoryBrowserView(FPSController controller) {
-		super(controller.getCVSRepositoriesBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getCVSRepositoriesBrowser(), controller);
 		setMinimumSize(new Dimension(FPSCst.MINIMUM_BROWSER_VIEW_WIDTH, FPSCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-		setPreferredSize(new Dimension(FPSCst.PREFERRED_BROWSER_VIEW_WIDTH, FPSCst.PREFERRED_BROWSER_VIEW_HEIGHT));
 	}
 
 	@Override
@@ -60,7 +46,7 @@ public class CVSRepositoryBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		// Try to display object in view
-		_controller.selectAndFocusObject(object);
+		getController().selectAndFocusObject(object);
 	}
 
 }

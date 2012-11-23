@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.action.SubmitDocumentationAction;
@@ -60,7 +60,7 @@ public class SubmitVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SubmitVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<SubmitVersion>() {
 			@Override
-			public boolean run(ActionEvent e, SubmitVersion action) {
+			public boolean run(EventObject e, SubmitVersion action) {
 				if (action.getContext() != null && action.getContext() instanceof SubmitDocumentationAction) {
 					// In this case, action is a consequency of a SubmitDocumentationAction
 					// launched from anywhere, no need to perform initializer here
@@ -132,7 +132,7 @@ public class SubmitVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SubmitVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SubmitVersion>() {
 			@Override
-			public boolean run(ActionEvent e, SubmitVersion action) {
+			public boolean run(EventObject e, SubmitVersion action) {
 				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getDocItem()) {
 					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()
 							.getCurrentModuleView();

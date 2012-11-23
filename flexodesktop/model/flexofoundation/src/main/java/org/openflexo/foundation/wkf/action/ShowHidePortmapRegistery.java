@@ -48,13 +48,13 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object instanceof SubProcessNode && ((SubProcessNode) object).getPortMapRegistery() != null
 					|| object instanceof PortMapRegistery;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

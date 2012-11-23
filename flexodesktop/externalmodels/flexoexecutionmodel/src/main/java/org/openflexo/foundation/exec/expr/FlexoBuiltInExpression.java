@@ -32,7 +32,7 @@ public abstract class FlexoBuiltInExpression extends Expression implements JavaP
 
 	// We won't try to resolve those expression here
 	/*@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		return this;
 	}*/
 

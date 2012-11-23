@@ -253,7 +253,8 @@ public class FCH {
 		FlexoFrame frame = module.getFlexoFrame();
 		FlexoMainPane mainPane = module.getFlexoController().getMainPane();
 		if (mainPane != null) {
-			setHelpItem(mainPane.getControlPanel(), controlPanelItem);
+			// TODO: restore help on main pane top bar
+			// setHelpItem(mainPane.getControlPanel(), controlPanelItem);
 		}
 	}
 

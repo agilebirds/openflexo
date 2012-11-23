@@ -36,9 +36,7 @@ import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.IEFocusListener;
-import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.widget.IEWidgetView;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 
 /**
  * Abstract parent class for all classes representing views in IE Module that must preempt the focus At this level are implemented the fact
@@ -96,7 +94,7 @@ import org.openflexo.view.listener.FlexoKeyEventListener;
  * 
  * @author sguerin
  */
-public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource<FlexoModelObject, FlexoModelObject> {
+public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource {
 
 	protected static final Logger logger = Logger.getLogger(IEPanel.class.getPackage().getName());
 
@@ -113,7 +111,6 @@ public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoAct
 		setOpaque(true);
 		_rootView = null;
 		addFocusListener(IEFocusListener.instance());
-		addKeyListener(getKeyEventListener());
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -132,10 +129,6 @@ public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoAct
 
 	public IEController getIEController() {
 		return _ieController;
-	}
-
-	protected FlexoKeyEventListener getKeyEventListener() {
-		return getIEController().getKeyEventListener();
 	}
 
 	@Override

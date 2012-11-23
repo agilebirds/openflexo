@@ -50,12 +50,12 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
 			return object != null;
 		}
 

@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RevertToHistoryVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertToHistoryVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToHistoryVersion action) {
+			public boolean run(EventObject e, RevertToHistoryVersion action) {
 				if (action.getVersionId() == null) {
 					CGFileVersionParameter versionParameter = new CGFileVersionParameter("version", "version", action.getCGFile(), null);
 					CheckboxParameter doItNowParameter = new CheckboxParameter("doItNow", "do_it_immediately", false);
@@ -80,7 +80,7 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RevertToHistoryVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertToHistoryVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToHistoryVersion action) {
+			public boolean run(EventObject e, RevertToHistoryVersion action) {
 				getControllerActionInitializer().getGeneratorController().switchToPerspective(
 						getControllerActionInitializer().getGeneratorController().CODE_GENERATOR_PERSPECTIVE);
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getCGFile());

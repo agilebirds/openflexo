@@ -47,12 +47,12 @@ public class ShowHidePortmap extends FlexoUndoableAction<ShowHidePortmap, FlexoP
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 

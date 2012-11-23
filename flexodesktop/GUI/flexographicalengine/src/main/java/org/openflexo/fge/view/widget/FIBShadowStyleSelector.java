@@ -57,7 +57,6 @@ import org.openflexo.toolbox.FileResource;
  */
 public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements FIBCustomComponent<ShadowStyle, FIBShadowStyleSelector> {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBShadowStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
@@ -137,7 +136,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	public class ShadowStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ShadowStyleDetailsPanel(ShadowStyle shadowStyle) {
@@ -171,7 +170,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			fibView = null;
 		}
 
-		public class CustomFIBController extends FIBController<ShadowStyle> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

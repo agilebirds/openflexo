@@ -26,18 +26,17 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 
-
 public class ShadowStylePanelEDITOR {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
+			@Override
+			public Object[] getData() {
 				ShadowStyle ss = ShadowStyle.makeDefault();
 				return FIBAbstractEditor.makeArray(ss);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return FIBShadowStyleSelector.FIB_FILE;
 			}

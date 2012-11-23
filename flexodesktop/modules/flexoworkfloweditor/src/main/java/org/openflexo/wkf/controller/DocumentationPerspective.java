@@ -20,18 +20,17 @@
 package org.openflexo.wkf.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.view.doc.WKFDocumentationView;
 
-public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
+public class DocumentationPerspective extends FlexoPerspective {
 
 	/**
 	 * 
@@ -46,12 +45,15 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 	public DocumentationPerspective(WKFController controller, String name) {
 		super(name);
 		_controller = controller;
+		setTopLeftView(_controller.getWkfBrowserView());
+		setBottomLeftView(_controller.getProcessBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -61,16 +63,11 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
 		return WKFIconLibrary.WKF_DOCP_SELECTED_ICON;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	@Override
@@ -87,28 +84,12 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 	}
 
 	@Override
-	public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return new WKFDocumentationView(process, (WKFController) controller);
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getWorkflowProcessBrowserViews();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		if (process instanceof FlexoProcess) {
+			return new WKFDocumentationView((FlexoProcess) process, (WKFController) controller);
+		} else {
+			return null;
+		}
 	}
 
 }

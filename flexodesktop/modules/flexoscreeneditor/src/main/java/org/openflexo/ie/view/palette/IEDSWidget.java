@@ -77,7 +77,8 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 		_label.setName(widget.getName());
 	}
 
-	public void delete(FlexoProject project) {
+	@Override
+	public void delete() {
 		if (paletteWidget.canDeleteWidget()) {
 			paletteWidget.deleteWidget();
 		} else if (logger.isLoggable(Level.WARNING)) {

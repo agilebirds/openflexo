@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class IECutInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IECut> getDefaultInitializer() {
 		return new FlexoActionInitializer<IECut>() {
 			@Override
-			public boolean run(ActionEvent e, IECut action) {
+			public boolean run(EventObject e, IECut action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
@@ -63,7 +63,7 @@ public class IECutInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<IECut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IECut>() {
 			@Override
-			public boolean run(ActionEvent e, IECut action) {
+			public boolean run(EventObject e, IECut action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionCut();
 				return true;
 			}

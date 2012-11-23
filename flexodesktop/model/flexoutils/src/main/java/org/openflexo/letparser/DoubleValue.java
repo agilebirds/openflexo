@@ -39,7 +39,7 @@ public class DoubleValue extends Value {
 
 	@Override
 	public String getStringValue() {
-		return "" + _value;
+		return String.valueOf(_value);
 	}
 
 	@Override
@@ -55,4 +55,8 @@ public class DoubleValue extends Value {
 		return super.equals(obj);
 	}
 
+	@Override
+	public int hashCode() {
+		return Double.valueOf(_value).hashCode();
+	}
 }

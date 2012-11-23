@@ -26,11 +26,12 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.dre.controller.DRESelectionManager;
 import org.openflexo.dre.view.model.DocItemFolderTableModel;
 import org.openflexo.dre.view.model.DocItemTableModel;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.selection.SelectionManager;
 
 /**
  * Please comment this class
@@ -105,8 +106,8 @@ public class DocFolderView extends DREView<DocItemFolder> {
 	}
 
 	public DocItemFolder getSelectedDocItemFolder() {
-		DRESelectionManager sm = getDREController().getDRESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getDREController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DocItemFolder) {
 			return (DocItemFolder) selection.firstElement();
 		}
@@ -114,8 +115,8 @@ public class DocFolderView extends DREView<DocItemFolder> {
 	}
 
 	public DocItem getSelectedDocItem() {
-		DRESelectionManager sm = getDREController().getDRESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getDREController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DocItem) {
 			return (DocItem) selection.firstElement();
 		}

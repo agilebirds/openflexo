@@ -257,25 +257,23 @@ class StaticBindingPanel extends JPanel {
 					}
 				}
 			});
-			if (typeCB != null) {
-				isUpdatingPanel = true;
-				if (currentType == EvaluationType.BOOLEAN) {
-					typeCB.setSelectedItem(BOOLEAN);
-				} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
-					typeCB.setSelectedItem(INTEGER);
-				} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-					typeCB.setSelectedItem(FLOAT);
-				} else if (currentType == EvaluationType.STRING) {
-					typeCB.setSelectedItem(STRING);
-				} else if (currentType == EvaluationType.DATE) {
-					typeCB.setSelectedItem(DATE);
-				} else if (currentType == EvaluationType.DURATION) {
-					typeCB.setSelectedItem(DURATION);
-				} else if (currentType == EvaluationType.ENUM) {
-					typeCB.setSelectedItem(DKV);
-				}
-				isUpdatingPanel = false;
+			isUpdatingPanel = true;
+			if (currentType == EvaluationType.BOOLEAN) {
+				typeCB.setSelectedItem(BOOLEAN);
+			} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
+				typeCB.setSelectedItem(INTEGER);
+			} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
+				typeCB.setSelectedItem(FLOAT);
+			} else if (currentType == EvaluationType.STRING) {
+				typeCB.setSelectedItem(STRING);
+			} else if (currentType == EvaluationType.DATE) {
+				typeCB.setSelectedItem(DATE);
+			} else if (currentType == EvaluationType.DURATION) {
+				typeCB.setSelectedItem(DURATION);
+			} else if (currentType == EvaluationType.ENUM) {
+				typeCB.setSelectedItem(DKV);
 			}
+			isUpdatingPanel = false;
 
 			if (_bindingSelectorPanel._bindingSelector.getEditedObject().getExpression() == ObjectSymbolicConstant.NULL) {
 				isUpdatingPanel = true;

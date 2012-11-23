@@ -21,13 +21,13 @@ public interface FlexoServerAddressBook {
 	@XMLElement
 	public List<FlexoServerInstance> getInstances();
 
-	@Setter(value = INSTANCES)
+	@Setter(INSTANCES)
 	public void setInstances(List<FlexoServerInstance> instances);
 
-	@Adder(value = INSTANCES)
+	@Adder(INSTANCES)
 	public void addToInstances(FlexoServerInstance instance);
 
-	@Remover(value = INSTANCES)
+	@Remover(INSTANCES)
 	public void removeFromInstances(FlexoServerInstance instance);
 
 	@Finder(attribute = FlexoServerInstance.ID, collection = INSTANCES)

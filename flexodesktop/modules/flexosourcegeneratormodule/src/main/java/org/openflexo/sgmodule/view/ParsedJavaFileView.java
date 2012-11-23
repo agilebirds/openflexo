@@ -121,9 +121,8 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 	public class JavaParserBrowserView extends BrowserView {
 
 		public JavaParserBrowserView(JavaParserBrowser browser) {
-			super(browser, _controller.getKeyEventListener(), _controller.getEditor());
+			super(browser, _controller);
 			setMinimumSize(new Dimension(SGCst.MINIMUM_BROWSER_VIEW_WIDTH, SGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-			setPreferredSize(new Dimension(SGCst.PREFERRED_BROWSER_VIEW_WIDTH, SGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
 			validate();
 		}
 

@@ -92,12 +92,12 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
 			return object != null
 					&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
 							&& globalSelection.firstElement() == object);

@@ -42,6 +42,8 @@ import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -59,7 +61,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestRM extends FlexoTestCase {
 
@@ -103,6 +104,8 @@ public class TestRM extends FlexoTestCase {
 	private static IEBlocWidget _bloc2;
 	private static FlexoReusableComponentResource _partialComponentResource;
 
+	private static FlexoResourceCenterService resourceCenter;
+
 	/**
 	 * Overrides setUp
 	 * 
@@ -118,7 +121,6 @@ public class TestRM extends FlexoTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RM, "");
@@ -130,7 +132,8 @@ public class TestRM extends FlexoTestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
+		resourceCenter = getNewResourceCenter(_projectIdentifier);
+		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenter);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 		_bsHook = new DebugBackwardSynchronizationHook();
@@ -138,9 +141,11 @@ public class TestRM extends FlexoTestCase {
 	}
 
 	/**
-	 * Check that resources ans dependancies were correctely built
+	 * Check that resources and dependencies were correctly built
+	 * 
+	 * @throws SaveResourceException
 	 */
-	public void test1CheckResources() {
+	public void test1CheckResources() throws SaveResourceException {
 		log("test1CheckResources");
 		assertNotNull(_rmResource = _project.getFlexoRMResource());
 		assertNotNull(_wkfResource = _project.getFlexoWorkflowResource());
@@ -151,7 +156,7 @@ public class TestRM extends FlexoTestCase {
 		assertNotNull(_rootProcessResource = _project.getFlexoProcessResource(_projectIdentifier));
 		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
-
+		_project.save(); // We add this line now because the methods above automatically creates resources.
 		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
@@ -165,11 +170,11 @@ public class TestRM extends FlexoTestCase {
 		assertDepends(_rootProcessResource, _dmResource);
 		assertNotDepends(_rootProcessResource, _clResource);
 
-		logger.info("Resources are WELL created and DEPENDANCIES checked");
+		logger.info("Resources are WELL created and DEPENDENCIES checked");
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<?> resource : _project) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
+				assertNotModified((FlexoStorageResource<?>) resource);
 			}
 		}
 
@@ -454,7 +459,7 @@ public class TestRM extends FlexoTestCase {
 
 		// We simulate here a 'touch' on the partial component
 		try {
-			_partialComponentResource.loadResourceData();
+			_partialComponentResource.getResourceData();
 			// To simulate a touch on a data, we must trigger a setChanged(), otherwise the lastKnownMemoryUpdate will not be updated!
 			_partialComponentResource.getResourceData().setChanged();
 			_partialComponentResource.saveResourceData();
@@ -562,11 +567,15 @@ public class TestRM extends FlexoTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+		}
 		resetVariables();
 		_bsHook = null;
 		_editor = null;
 		_projectDirectory = null;
 		_projectIdentifier = null;
+		resourceCenter = null;
 	}
 
 	private void resetVariables() {

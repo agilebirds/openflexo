@@ -32,7 +32,7 @@ public class FIBTextFieldColumn extends FIBTableColumn {
 	}
 
 	@Deprecated
-	public static BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class, BindingDefinitionType.GET, false);
+	public static final BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class, BindingDefinitionType.GET, false);
 
 	private DataBinding<Boolean> isEditable;
 

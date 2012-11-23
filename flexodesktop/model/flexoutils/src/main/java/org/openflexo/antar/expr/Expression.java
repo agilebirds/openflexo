@@ -145,7 +145,7 @@ public abstract class Expression {
 
 		/*return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Object valueObject = variables.get(value.getValue());
 				if (valueObject == null) {
 					return ObjectSymbolicConstant.NULL;
@@ -165,13 +165,13 @@ public abstract class Expression {
 				} else if (valueObject instanceof Double) {
 					return new Constant.FloatConstant((Double) valueObject);
 				} else if (valueObject instanceof Boolean) {
-					return ((Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE);
+					return (Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE;
 				}
 				// TODO Handle others
 				// return new Variable(value.getValue());
 				return new Constant.StringConstant(value.getValue());
 			}
-		}, new ExpressionParser.DefaultFunctionFactory()));*/
+		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
 
 	}
 
@@ -188,12 +188,6 @@ public abstract class Expression {
 			return false;
 		}
 		logger.warning("Unresolved expression: " + evaluation);
-		/*try {
-			logger.warning("variables="+variables);
-			logger.warning("extractVariables="+extractVariables(evaluation.toString()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}*/
 		throw new UnresolvedExpressionException();
 	}
 

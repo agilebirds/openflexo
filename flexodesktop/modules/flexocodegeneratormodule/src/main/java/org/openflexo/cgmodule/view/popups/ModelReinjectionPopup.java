@@ -61,7 +61,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 	public ModelReinjectionPopup(String title, String label, Vector<CGJavaFile> javaFiles, FlexoProject project,
 			GeneratorController controller) throws FJPParseException {
 		super(title, label, FlexoLocalization.localizedForKey("model_reinjection_description"), "update_model",
-				new ModelReinjectionBrowserConfiguration(javaFiles, project), project, controller.getFlexoFrame(), controller.getEditor());
+				new ModelReinjectionBrowserConfiguration(javaFiles, project), project, controller.getFlexoFrame());
 		Hashtable<FJPJavaClass, Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass, Vector<String>>();
 		Hashtable<FJPJavaClass, Vector<String>> ignoredMethods = new Hashtable<FJPJavaClass, Vector<String>>();
 		for (CGJavaFile javaFile : javaFiles) {

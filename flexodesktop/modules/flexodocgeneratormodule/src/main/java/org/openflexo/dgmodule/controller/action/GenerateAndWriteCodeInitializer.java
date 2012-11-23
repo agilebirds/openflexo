@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -55,7 +55,7 @@ public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateAndWrite> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateAndWrite>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateAndWrite action) {
+			public boolean run(EventObject e, GenerateAndWrite action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -71,7 +71,7 @@ public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateAndWrite> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateAndWrite>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateAndWrite action) {
+			public boolean run(EventObject e, GenerateAndWrite action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),

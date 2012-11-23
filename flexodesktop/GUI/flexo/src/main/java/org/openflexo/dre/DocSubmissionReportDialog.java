@@ -47,7 +47,7 @@ import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocSubmissionReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Dialog allowing to show and select doc submission items
@@ -80,7 +80,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 	 *            : a vector of FlexoStorageResource
 	 */
 	public DocSubmissionReportDialog(DocSubmissionReport report) {
-		super(FlexoController.getActiveFrame(), true);
+		super(FlexoFrame.getActiveFrame(), true);
 		returned = CANCEL;
 		setTitle(FlexoLocalization.localizedForKey("import_doc_submission_report"));
 		getContentPane().setLayout(new BorderLayout());

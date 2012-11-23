@@ -453,14 +453,4 @@ public class DiffSource {
 		return maxCols;
 	}
 
-	public static void main(String[] args) throws IOException, InterruptedException {
-		DiffSource left = new DiffSource(
-				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n");
-		DiffSource right = new DiffSource(
-				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n");
-		DiffSource orig = new DiffSource(
-				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n}\\n");
-
-	}
-
 }

@@ -49,12 +49,12 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, ViewPoint,
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

@@ -21,13 +21,15 @@ package org.openflexo.cgmodule.view;
 
 import java.awt.Dimension;
 
-import org.openflexo.cgmodule.controller.browser.GeneratorBrowser;
-import org.openflexo.components.browser.ConfigurableProjectBrowser;
+import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Widget allowing to select a AbstractCGFileVersion for a given CGFile
@@ -87,7 +89,6 @@ public class CGVersionSelector extends AbstractBrowserSelector<AbstractCGFileVer
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}
@@ -98,9 +99,15 @@ public class CGVersionSelector extends AbstractBrowserSelector<AbstractCGFileVer
 		}
 	}
 
-	protected class CGVersionBrowser extends ConfigurableProjectBrowser {
+	protected class CGVersionBrowser extends ProjectBrowser {
 		protected CGVersionBrowser() {
-			super(GeneratorBrowser.makeBrowserConfigurationForFileHistory(file));
+			super((FlexoController) null);
+			setRootObject(file);
+		}
+
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 		}
 
 	}

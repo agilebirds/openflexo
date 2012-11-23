@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RefreshHistoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshHistory action) {
+			public boolean run(EventObject e, RefreshHistory action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RefreshHistoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshHistory action) {
+			public boolean run(EventObject e, RefreshHistory action) {
 				return true;
 			}
 		};

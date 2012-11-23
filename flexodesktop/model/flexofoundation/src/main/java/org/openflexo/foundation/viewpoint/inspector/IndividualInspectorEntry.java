@@ -44,6 +44,8 @@ public class IndividualInspectorEntry extends InspectorEntry {
 
 	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
+	private String renderer;
+
 	public IndividualInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
 	}
@@ -130,4 +132,21 @@ public class IndividualInspectorEntry extends InspectorEntry {
 		return null;
 	}
 
+	/**
+	 * Return renderer for this individual, under the form eg individual.name
+	 * 
+	 * @return
+	 */
+	public String getRenderer() {
+		return renderer;
+	}
+
+	/**
+	 * Sets renderer for this individual, under the form eg individual.name
+	 * 
+	 * @param renderer
+	 */
+	public void setRenderer(String renderer) {
+		this.renderer = renderer;
+	}
 }

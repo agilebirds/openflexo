@@ -27,21 +27,15 @@ package org.openflexo.vpm.view.menu;
  */
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
-import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
@@ -53,26 +47,12 @@ public class VPMFileMenu extends FileMenu {
 
 	private static final Logger logger = Logger.getLogger(VPMFileMenu.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Instance Variables
-	// =========================
-	// ==========================================================================
-
-	protected VPMController _cedController;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public VPMFileMenu(VPMController controller) {
 		super(controller, false);
-		_cedController = controller;
-		// Put your actions here
 	}
 
 	public VPMController getCEDController() {
-		return _cedController;
+		return (VPMController) getController();
 	}
 
 	@Override
@@ -83,39 +63,10 @@ public class VPMFileMenu extends FileMenu {
 
 	@Override
 	public void quit() {
-		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(),
-				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getStatus() == Status.VALIDATED) {
-			getCEDController().saveModified();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Exiting FLEXO Application... DONE");
-			}
-			System.exit(0);
-		} else if (dialog.getStatus() == Status.ABORTED) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Exiting FLEXO Application... DONE");
-			}
-			System.exit(0);
+		if (getCEDController().reviewModifiedResources()) {
+			super.quit();
 		}
-	}
 
-	public void closeModule() {
-		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(),
-				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getStatus() == Status.VALIDATED) {
-			getCEDController().saveModified();
-		}
-	}
-
-	public void askAndSave() {
-		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), FlexoFrame.getActiveFrame(),
-				true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getStatus() == Status.VALIDATED) {
-			getCEDController().saveModified();
-		}
 	}
 
 	public class SaveModifiedItem extends FlexoMenuItem {
@@ -132,7 +83,7 @@ public class VPMFileMenu extends FileMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			askAndSave();
+			getCEDController().reviewModifiedResources();
 		}
 	}
 

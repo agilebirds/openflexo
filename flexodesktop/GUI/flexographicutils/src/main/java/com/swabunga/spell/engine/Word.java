@@ -28,7 +28,7 @@ import java.util.Comparator;
  * This class is now immutable.
  * </p>
  */
-public class Word implements Comparator {
+public class Word implements Comparator<Word> {
 	private String word;
 	private int score;
 
@@ -55,14 +55,19 @@ public class Word implements Comparator {
 	 * 
 	 */
 	@Override
-	public int compare(Object o1, Object o2) {
-		if (((Word) o1).getCost() < ((Word) o2).getCost()) {
+	public int compare(Word o1, Word o2) {
+		if (o1.getCost() < o2.getCost()) {
 			return -1;
 		}
-		if (((Word) o1).getCost() == ((Word) o2).getCost()) {
+		if (o1.getCost() == o2.getCost()) {
 			return 0;
 		}
 		return 1;
+	}
+
+	@Override
+	public int hashCode() {
+		return word.hashCode();
 	}
 
 	@Override

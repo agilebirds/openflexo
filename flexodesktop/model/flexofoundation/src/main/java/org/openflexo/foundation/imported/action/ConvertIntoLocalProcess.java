@@ -37,13 +37,13 @@ public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess
 			"convert_into_local_process") {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
 			return isVisibleForSelection(object, globalSelection)
 					&& object.getWorkflow().getLocalFlexoProcessWithName(object.getName()) == null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
 			return object != null && object.isImported() && object.isTopLevelProcess() && object.isDeletedOnServer()
 					&& object.getProcessNode() != null;
 		}

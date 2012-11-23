@@ -32,7 +32,6 @@ import org.openflexo.dm.model.DMReadOnlyEntityTableModel;
 import org.openflexo.dm.model.DMReadOnlyMethodTableModel;
 import org.openflexo.dm.model.DMReadOnlyPropertyTableModel;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
@@ -42,6 +41,7 @@ import org.openflexo.foundation.dm.action.CreateDMEntity;
 import org.openflexo.foundation.dm.action.CreateDMMethod;
 import org.openflexo.foundation.dm.action.CreateDMProperty;
 import org.openflexo.foundation.dm.action.DMDelete;
+import org.openflexo.selection.SelectionManager;
 
 /**
  * Please comment this class
@@ -64,7 +64,7 @@ public class DMPackageView extends DMView<DMPackage> {
 		super(aPackage, controller, "package_($localizedName)");
 		addAction(new TabularViewAction(CreateDMEntity.actionType, controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -75,7 +75,7 @@ public class DMPackageView extends DMView<DMPackage> {
 		});
 		addAction(new TabularViewAction(CreateDMProperty.actionType, controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -86,7 +86,7 @@ public class DMPackageView extends DMView<DMPackage> {
 		});
 		addAction(new TabularViewAction(CreateDMMethod.actionType, controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -97,7 +97,7 @@ public class DMPackageView extends DMView<DMPackage> {
 		});
 		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -140,8 +140,8 @@ public class DMPackageView extends DMView<DMPackage> {
 	}
 
 	public DMEntity getSelectedDMEntity() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}
@@ -155,8 +155,8 @@ public class DMPackageView extends DMView<DMPackage> {
 	}
 
 	public DMProperty getSelectedDMProperty() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
@@ -164,8 +164,8 @@ public class DMPackageView extends DMView<DMPackage> {
 	}
 
 	public DMMethod getSelectedDMMethod() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMMethod) {
 			return (DMMethod) selection.firstElement();
 		}

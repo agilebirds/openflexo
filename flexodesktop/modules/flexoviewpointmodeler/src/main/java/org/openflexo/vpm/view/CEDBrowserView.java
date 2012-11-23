@@ -37,21 +37,8 @@ public class CEDBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(CEDBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected VPMController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public CEDBrowserView(VPMBrowser browser, VPMController controller, SelectionPolicy selectionPolicy) {
-		super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
-		_controller = controller;
+		super(browser, controller, selectionPolicy);
 	}
 
 	@Override
@@ -60,9 +47,9 @@ public class CEDBrowserView extends BrowserView {
 
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
-		if (_controller.getCurrentPerspective().hasModuleViewForObject(object)) {
+		if (getController().getCurrentPerspective().hasModuleViewForObject(object)) {
 			// Try to display object in view
-			_controller.selectAndFocusObject(object);
+			getController().selectAndFocusObject(object);
 		}
 	}
 

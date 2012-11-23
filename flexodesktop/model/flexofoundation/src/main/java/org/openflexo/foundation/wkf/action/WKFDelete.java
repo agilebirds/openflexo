@@ -51,17 +51,16 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return !(object instanceof FlexoPetriGraph);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			if (globalSelection == null || object == null && globalSelection.size() == 0) {
 				return false;
 			}
-			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (WKFObject next : globalSelection) {
 				if (next instanceof FlexoProcess) {
 					FlexoProcess p = (FlexoProcess) next;
 					if (p.isRootProcess()) {
@@ -141,16 +140,16 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 	 * 
 	 * @return All the objects to be deleted.
 	 */
-	public Vector getObjectsToDelete() {
+	public Vector<WKFObject> getObjectsToDelete() {
 		if (_objectsToDelete == null) {
 			_objectsToDelete = new Vector<WKFObject>();
 			if (!getGlobalSelection().contains(getFocusedObject())) {
 				boolean includesIt = true;
-				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
-					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
+				for (FlexoModelObject next : getGlobalSelection()) {
 					if (next instanceof WKFObject) {
 						if (((WKFObject) next).getAllEmbeddedDeleted().contains(getFocusedObject())) {
 							includesIt = false;
+							break;
 						}
 					}
 				}
@@ -171,11 +170,11 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 				if (object instanceof FlexoPetriGraph) {
 					includesIt = false;
 				}
-				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
-					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
+				for (FlexoModelObject next : getGlobalSelection()) {
 					if (next instanceof WKFObject && next != object) {
 						if (((WKFObject) next).getAllEmbeddedDeleted().contains(object)) {
 							includesIt = false;
+							break;
 						}
 					}
 				}

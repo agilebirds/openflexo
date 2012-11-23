@@ -25,11 +25,12 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEDMEntityTableModel;
 import org.openflexo.wse.model.WSEDMPackageTableModel;
 
@@ -107,8 +108,8 @@ public class WSEDMRepositoryView extends WSEView<DMRepository> {
 	}
 
 	public DMPackage getSelectedDMPackage() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMPackage) {
 			return (DMPackage) selection.firstElement();
 		}
@@ -119,8 +120,8 @@ public class WSEDMRepositoryView extends WSEView<DMRepository> {
 	}
 
 	public DMEntity getSelectedDMEntity() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}

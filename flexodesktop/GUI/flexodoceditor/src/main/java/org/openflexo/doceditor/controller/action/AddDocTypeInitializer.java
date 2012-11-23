@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -53,7 +53,7 @@ public class AddDocTypeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddDocType> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddDocType>() {
 			@Override
-			public boolean run(ActionEvent e, AddDocType action) {
+			public boolean run(EventObject e, AddDocType action) {
 				if (action.getNewName() != null) {
 					return true;
 				}
@@ -76,7 +76,7 @@ public class AddDocTypeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddDocType> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddDocType>() {
 			@Override
-			public boolean run(ActionEvent e, AddDocType action) {
+			public boolean run(EventObject e, AddDocType action) {
 				return true;
 			}
 		};

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.imported;
 
+@Deprecated
 public enum DeltaStatus {
 	NEW, DELETED, UPDATED, UNCHANGED;
 }

@@ -312,19 +312,11 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					_childs.add(newElement);
 					elementHasBeenAdded = true;
 				} else if (_browser.requiresDeepBrowsing(newElement)) {
-					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
-					for (Enumeration<BrowserElement> e = newElement.children(); e.hasMoreElements();) {
-						BrowserElement newElement2 = e.nextElement();
-						childrenToRemove.add(newElement2);
-						newElement2._parent = this;
-						_childs.add(newElement2);
-					}
-					for (BrowserElement element : childrenToRemove) {
-						newElement.removeFromChilds(element);
+					for (BrowserElement newElement2 : newElement._childs) {
+						addToChilds(newElement2.getObject());
 					}
 				}
-				// DVA April 06: if deepBrowsing is on, do not delete element and children...
-				if (!elementHasBeenAdded && !_browser.requiresDeepBrowsing(newElement)) {
+				if (!elementHasBeenAdded) {
 					newElement.recursiveDeleteChilds();
 					newElement.delete();
 				}
@@ -408,7 +400,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		if (isDeleted) {
 			return;
 		}
-		_browser.reload(this);
+		_browser.nodeChanged(this);
 		repaintRequested = false;
 	}
 

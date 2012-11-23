@@ -52,12 +52,12 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 	}
 
 	@Override
-	protected FIBController<?> makeFIBController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
+	protected FIBController makeFIBController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
 		// logger.info("************** Make DescriptionWidgetFIBController");
 		return new DescriptionWidgetFIBController(fibComponent);
 	}
 
-	public class DescriptionWidgetFIBController extends FIBController<FlexoModelObject> {
+	public class DescriptionWidgetFIBController extends FIBController {
 
 		private DocType currentDocType;
 

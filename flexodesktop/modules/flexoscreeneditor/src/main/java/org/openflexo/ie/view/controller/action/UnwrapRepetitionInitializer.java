@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class UnwrapRepetitionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UnwrapRepetition> getDefaultInitializer() {
 		return new FlexoActionInitializer<UnwrapRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapRepetition action) {
+			public boolean run(EventObject e, UnwrapRepetition action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class UnwrapRepetitionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UnwrapRepetition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UnwrapRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapRepetition action) {
+			public boolean run(EventObject e, UnwrapRepetition action) {
 				return true;
 			}
 		};

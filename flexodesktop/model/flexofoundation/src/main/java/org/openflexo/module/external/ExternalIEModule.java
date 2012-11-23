@@ -21,7 +21,6 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
@@ -33,8 +32,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 public interface ExternalIEModule extends ExternalModule {
 
 	public ExternalIEController getIEExternalController();
-
-	public void showScreenInterface(ComponentInstance component);
 
 	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
 

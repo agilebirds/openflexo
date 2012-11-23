@@ -37,7 +37,7 @@ public final class DMPreferences extends ModulePreferences {
 
 	private static final Logger logger = Logger.getLogger(DMPreferences.class.getPackage().getName());
 
-	private static final Class DM_PREFERENCES = DMPreferences.class;
+	private static final Class<DMPreferences> DM_PREFERENCES = DMPreferences.class;
 
 	// Be carefull: this is the same value as the one in Code Generator Module
 	// !!!

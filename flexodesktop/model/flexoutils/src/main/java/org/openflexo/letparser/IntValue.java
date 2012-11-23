@@ -34,7 +34,7 @@ public class IntValue extends Value {
 
 	@Override
 	public String getStringValue() {
-		return "" + _value;
+		return String.valueOf(_value);
 	}
 
 	@Override
@@ -52,7 +52,12 @@ public class IntValue extends Value {
 		if (obj instanceof IntValue) {
 			return getIntValue() == ((IntValue) obj).getIntValue();
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return _value;
 	}
 
 }

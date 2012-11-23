@@ -7,11 +7,11 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
-import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.PropertyStatement;
+import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
+import org.openflexo.foundation.ontology.owl.OWLIndividual;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.PropertyStatement;
 
 public class DataPropertyStatementPathElement extends StatementPathElement<Object> {
 	private static final Logger logger = Logger.getLogger(DataPropertyStatementPathElement.class.getPackage().getName());
@@ -269,8 +269,8 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target instanceof OntologyObject<?>) {
-			OntologyObject<?> object = (OntologyObject<?>) target;
+		if (target instanceof OWLObject<?>) {
+			OWLObject<?> object = (OWLObject<?>) target;
 			if (ontologyProperty != null && (ontologyProperty.isAnnotationProperty() || ontologyProperty.getDataType() != null)) {
 				return object.getPropertyValue(ontologyProperty);
 			} else {
@@ -285,9 +285,9 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		logger.warning("Attempt to process setBindingValue with " + value);
-		if (target instanceof OntologyIndividual) {
+		if (target instanceof OWLIndividual) {
 			Object oldValue = null;
-			OntologyIndividual individual = (OntologyIndividual) target;
+			OWLIndividual individual = (OWLIndividual) target;
 			logger.info("individual=" + individual);
 			logger.info("ontologyProperty=" + ontologyProperty);
 			logger.info("individual.getPropertyStatement(ontologyProperty)=" + individual.getPropertyStatement(ontologyProperty));

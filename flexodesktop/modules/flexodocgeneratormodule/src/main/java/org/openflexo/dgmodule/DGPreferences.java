@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.doceditor.DEPreferences;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.module.Module;
@@ -58,15 +57,8 @@ public class DGPreferences extends DEPreferences {
 
 	protected static final String pdfLatexTimeout = "pdfLatexTimeout";
 
-	private static DGController _controller;
-
-	public static void init(DGController c) {
-		_controller = c;
+	public static void init() {
 		preferences(DG_PREFERENCES);
-	}
-
-	public static void reset() {
-		_controller = null;
 	}
 
 	public DGPreferences() {
@@ -88,7 +80,6 @@ public class DGPreferences extends DEPreferences {
 	public static void setGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice choice) {
 		if (choice != null) {
 			preferences(DG_PREFERENCES).setProperty(choiceWhenGeneratedResourceModifiedKey, choice.getIdentifier());
-			_controller.getCGGeneratedResourceModifiedHook().setDefaultGeneratedResourceModifiedChoice(choice);
 		}
 	}
 

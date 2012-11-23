@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class UnwrapConditionalInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UnwrapConditional> getDefaultInitializer() {
 		return new FlexoActionInitializer<UnwrapConditional>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapConditional action) {
+			public boolean run(EventObject e, UnwrapConditional action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class UnwrapConditionalInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UnwrapConditional> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UnwrapConditional>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapConditional action) {
+			public boolean run(EventObject e, UnwrapConditional action) {
 				return true;
 			}
 		};

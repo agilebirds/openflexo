@@ -134,7 +134,7 @@ public abstract class AbstractButtonedWidget extends IEWidget implements ButtonC
 	@Override
 	public void removeButton(IEWidget button) {
 		if (button instanceof IEHyperlinkWidget) {
-			removeButton(button);
+			removeButton((IEHyperlinkWidget) button);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not remove object of " + button.getClass().getName());

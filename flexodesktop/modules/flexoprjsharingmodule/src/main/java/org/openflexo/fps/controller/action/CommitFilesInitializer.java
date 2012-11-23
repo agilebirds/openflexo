@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class CommitFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CommitFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<CommitFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CommitFiles action) {
+			public boolean run(EventObject e, CommitFiles action) {
 				if (action.getCommitMessage() == null) {
 					TextAreaParameter commitMessage = new TextAreaParameter("commitMessage", "commit_message", action.getCommitMessage(),
 							40, 15);
@@ -75,7 +75,7 @@ public class CommitFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CommitFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CommitFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CommitFiles action) {
+			public boolean run(EventObject e, CommitFiles action) {
 				return true;
 			}
 		};

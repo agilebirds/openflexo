@@ -19,6 +19,10 @@ public class AllFilesPerspective extends FPSPerspective {
 	public AllFilesPerspective(FPSController fpsController) {
 		super(fpsController, "all_files");
 		this.fpsController = fpsController;
+
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
 	}
 
 	@Override

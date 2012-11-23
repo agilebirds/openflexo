@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer
 	protected FlexoActionInitializer<DismissUnchangedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
+			public boolean run(EventObject e, DismissUnchangedGeneratedFiles action) {
 				action.getProjectGenerator().startHandleLogs();
 				return true;
 			}
@@ -59,7 +59,7 @@ public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer
 	protected FlexoActionFinalizer<DismissUnchangedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
+			public boolean run(EventObject e, DismissUnchangedGeneratedFiles action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

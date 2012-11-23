@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,7 +54,7 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer<ExportTOCA
 	protected FlexoActionInitializer<ExportTOCAsTemplate> getDefaultInitializer() {
 		return new FlexoActionInitializer<ExportTOCAsTemplate>() {
 			@Override
-			public boolean run(ActionEvent e, ExportTOCAsTemplate action) {
+			public boolean run(EventObject e, ExportTOCAsTemplate action) {
 				if (action.getDestinationFile() != null) {
 					return true;
 				}

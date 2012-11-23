@@ -55,7 +55,7 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 		super(FlexoLocalization.localizedForKey("update_classes"), FlexoLocalization
 				.localizedForKey("please_select_properties_and_methods_to_update"), FlexoLocalization
 				.localizedForKey("update_classes_description"), new UpdateClassesPopupBrowserConfiguration(entities, project, progress),
-				project, controller.getFlexoFrame(), controller.getEditor());
+				project, controller.getFlexoFrame());
 		choicePanel.setSelectedObjects(getDMSet().getSelectedObjects());
 		for (LoadableDMEntity next : entities) {
 			if (next.getType() != null && next.getJavaType() != null) { // next.getType() is null when the class cannot be loaded (A

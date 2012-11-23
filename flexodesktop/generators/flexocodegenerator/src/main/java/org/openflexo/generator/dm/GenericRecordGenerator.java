@@ -60,7 +60,7 @@ public class GenericRecordGenerator extends JavaClassGenerator {
 		imports = new Vector<String>();
 		context.put("entity", getObject());
 		if (getEOEntity().getPrimaryKeyAttributes().size() > 0) {
-			context.put("primaryKeyAttributeName", getEOEntity().getPrimaryKeyAttributes().elementAt(0).getName());
+			context.put("primaryKeyAttributeName", getEOEntity().getPrimaryKeyAttributes().get(0).getName());
 		} else {
 			context.put("primaryKeyAttributeName", "<undefined>");
 		}

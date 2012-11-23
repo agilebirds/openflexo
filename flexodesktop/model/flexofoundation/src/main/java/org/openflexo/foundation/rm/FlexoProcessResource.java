@@ -2085,7 +2085,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			@Override
 			public Element filter(Object obj) {
 				Element el = super.filter(obj);
-				if (obj != null && el.getName().equals(elname)) {
+				if (el != null && el.getName().equals(elname)) {
 					return el;
 				} else {
 					return null;

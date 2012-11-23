@@ -62,6 +62,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private boolean beingCloned = false;
 	private boolean modified = false;
 	private PropertyChangeSupport propertyChangeSupport;
+	private boolean initializing;
 
 	private static Method PERFORM_SUPER_GETTER;
 	private static Method PERFORM_SUPER_SETTER;
@@ -82,6 +83,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_DESERIALIZING;
 	private static Method TO_STRING;
 	private static Method GET_PROPERTY_CHANGE_SUPPORT;
+	private static Method GET_DELETED_PROPERTY;
 	private static Method CLONE_OBJECT;
 	private static Method CLONE_OBJECT_WITH_CONTEXT;
 	private static Method IS_CREATED_BY_CLONING;
@@ -111,16 +113,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			SET_MODIFIED = AccessibleProxyObject.class.getMethod("setModified", boolean.class);
 			PERFORM_SUPER_SET_MODIFIED = AccessibleProxyObject.class.getMethod("performSuperSetModified", boolean.class);
 			GET_PROPERTY_CHANGE_SUPPORT = HasPropertyChangeSupport.class.getMethod("getPropertyChangeSupport");
+			GET_DELETED_PROPERTY = HasPropertyChangeSupport.class.getMethod("getDeletedProperty");
 			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
 			IS_CREATED_BY_CLONING = CloneableProxyObject.class.getMethod("isCreatedByCloning");
 			IS_BEING_CLONED = CloneableProxyObject.class.getMethod("isBeingCloned");
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -149,18 +150,12 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	@Override
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
-
-		/*
-		 * boolean debug = false; if (method.getName().indexOf("setFlexoID") > -1 && args[0].equals("0000")) { debug = true;
-		 * System.out.println("Got it"); System.out.println("method="+method); System.out.println("proceed="+proceed);
-		 * System.out.println("args[0]="+args[0]); System.exit(-1); }
-		 */
 		Initializer initializer = method.getAnnotation(Initializer.class);
 		if (initializer != null) {
 			internallyInvokeInitializer(getModelEntity().getInitializers(method), args);
 			return self;
 		}
-		if (!initialized) {
+		if (!initialized && !initializing) {
 			throw new UnitializedEntityException(getModelEntity());
 		}
 		Getter getter = method.getAnnotation(Getter.class);
@@ -266,6 +261,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return createdByCloning;
 		} else if (methodIsEquivalentTo(method, GET_PROPERTY_CHANGE_SUPPORT)) {
 			return getPropertyChangeSuppport();
+		} else if (methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
+			// TODO handle DELETED PROPERTY
+			return null;
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		} else if (methodIsEquivalentTo(method, TO_STRING)) {
@@ -290,13 +288,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeInitializer(org.openflexo.model.factory.ModelInitializer in, Object[] args)
 			throws ModelDefinitionException {
-		initialized = true;
-		List<String> parameters = in.getParameters();
-		for (int i = 0; i < parameters.size(); i++) {
-			String parameter = parameters.get(i);
-			if (parameter != null) {
-				internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i]);
+		initializing = true;
+		try {
+			List<String> parameters = in.getParameters();
+			for (int i = 0; i < parameters.size(); i++) {
+				String parameter = parameters.get(i);
+				if (parameter != null) {
+					internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i]);
+				}
 			}
+		} finally {
+			initialized = true;
+			initializing = false;
 		}
 	}
 
@@ -491,6 +494,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property) throws ModelDefinitionException {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		if (property.getReturnedValue() != null) {
 			// Simple implementation of ReturnedValue. This can be drastically improved
 			String returnedValue = property.getReturnedValue().value();
@@ -531,6 +537,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private List<?> invokeGetterForListCardinality(ModelProperty<? super I> property) {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		List<?> returned = (List<?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
@@ -552,6 +561,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private Map<?, ?> invokeGetterForMapCardinality(ModelProperty<? super I> property) {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		Map<?, ?> returned = (Map<?, ?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
@@ -572,6 +584,14 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
+	void invokeSetterForDeserialization(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getSetterMethod() != null) {
+			invokeSetter(property, value);
+		} else {
+			internallyInvokeSetter(property, value);
+		}
+	}
+
 	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
 		switch (property.getCardinality()) {
 		case SINGLE:
@@ -589,11 +609,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		Object oldValue = invokeGetter(property);
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {
-
 			// First handle inverse property for oldValue
 			if (property.getInverseProperty() != null) {
 				switch (property.getInverseProperty().getCardinality()) {
@@ -698,13 +720,27 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Setter for LIST: not implemented yet");
+		throw new UnsupportedOperationException("Setter for LIST: not implemented yet");
 	}
 
 	private void invokeSetterForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Setter for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Setter for MAP: not implemented yet");
+	}
+
+	void invokeAdderForDeserialization(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getAdderMethod() != null) {
+			invokeAdder(property, value);
+		} else {
+			internallyInvokeAdder(property, value);
+		}
 	}
 
 	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
@@ -724,6 +760,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeAdderForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getAdder() == null && !isDeserializing() && !initializing && !createdByCloning) {
+			throw new ModelExecutionException("Adder is not defined for property " + property);
+		}
 		List list = (List) invokeGetter(property);
 
 		if (!list.contains(value)) {
@@ -752,8 +791,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeAdderForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getAdder() == null && !isDeserializing() && !initializing && !createdByCloning) {
+			throw new ModelExecutionException("Adder is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Adder for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Adder for MAP: not implemented yet");
 	}
 
 	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
@@ -774,6 +816,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeRemoverForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getRemover() == null) {
+			throw new ModelExecutionException("Remover is not defined for property " + property);
+		}
 		List<?> list = (List<?>) invokeGetter(property);
 
 		if (list.contains(value)) {
@@ -802,8 +847,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeRemoverForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getRemover() == null) {
+			throw new ModelExecutionException("Remover is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Remover for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Remover for MAP: not implemented yet");
 	}
 
 	private Object internallyInvokeFinder(@Nonnull Finder finder, Object[] args) throws ModelDefinitionException {
@@ -1117,19 +1165,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		beingCloned = true;
 		Object returned = null;
 		try {
-			try {
-				returned = getModelEntity().newInstance();
-			} catch (IllegalArgumentException e) {
-				throw new ModelExecutionException(e);
-			} catch (NoSuchMethodException e) {
-				throw new ModelExecutionException(e);
-			} catch (InstantiationException e) {
-				throw new ModelExecutionException(e);
-			} catch (IllegalAccessException e) {
-				throw new ModelExecutionException(e);
-			} catch (InvocationTargetException e) {
-				throw new ModelExecutionException(e);
-			}
+			returned = getModelFactory().newInstance(getModelEntity());
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(returned);
 			clonedObjectHandler.createdByCloning = true;
 			clonedObjectHandler.initialized = true;
@@ -1208,106 +1244,107 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		// System.out.println("Finalizing clone for "+getObject()+" clone is "+clonedObject);
 
 		ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(clonedObject);
+		clonedObjectHandler.createdByCloning = true;
+		try {
+			Iterator<ModelProperty<? super I>> properties = getModelEntity().getProperties();
 
-		Iterator<ModelProperty<? super I>> properties = getModelEntity().getProperties();
-
-		while (properties.hasNext()) {
-			ModelProperty p = properties.next();
-			// TODO: cross-check that we should invoke continue
-			// In the case of the deletedProperty, it is only normal that there are no setters.
-			// We should either prevent this by validating that all properties (that are not deleted properties)
-			// have a setter or allow properties to live without a setter.
-			if (p.getSetter() == null) {
-				continue;
-			}
-			switch (p.getCardinality()) {
-			case SINGLE:
-				Object singleValue = invokeGetter(p);
-				switch (p.getCloningStrategy()) {
-				case CLONE:
-					if (getModelFactory().getStringEncoder().isConvertable(p.getType())) {
-						Object clonedValue = null;
-						try {
-							String clonedValueAsString = getModelFactory().getStringEncoder().toString(singleValue);
-							clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(), clonedValueAsString);
-						} catch (InvalidDataException e) {
-							throw new ModelExecutionException(e);
-						}
-						clonedObjectHandler.invokeSetter(p, clonedValue);
-					} else if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
-						Object clonedValue = clonedObjects.get(singleValue);
-						if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
-							clonedValue = null;
-						}
-						clonedObjectHandler.invokeSetter(p, clonedValue);
-					}
-					break;
-				case REFERENCE:
-					Object referenceValue = singleValue != null ? clonedObjects.get(singleValue) : null;
-					if (referenceValue == null) {
-						referenceValue = singleValue;
-					}
-					clonedObjectHandler.invokeSetter(p, referenceValue);
-					break;
-				case FACTORY:
-					if (p.getStrategyTypeFactory().equals("deriveName()")) {
-						// TODO: just to test
-						// TODO: implement this properly!
-						// System.out.println("TODO: implement this (FACTORY whine cloning)");
-						// Object factoredValue = ((FlexoModelObject)getObject()).deriveName();
-						// clonedObjectHandler.invokeSetter(p,factoredValue);
-					}
-					break;
-				case IGNORE:
-					break;
-				}
-				break;
-			case LIST:
-				List<?> values = (List<?>) invokeGetter(p);
-				List<?> valuesToClone = new ArrayList<Object>(values);
-				for (Object value : valuesToClone) {
+			while (properties.hasNext()) {
+				ModelProperty p = properties.next();
+				// TODO: cross-check that we should invoke continue
+				// In the case of the deletedProperty, it is only normal that there are no setters.
+				// We should either prevent this by validating that all properties (that are not deleted properties)
+				// have a setter or allow properties to live without a setter.
+				switch (p.getCardinality()) {
+				case SINGLE:
+					Object singleValue = invokeGetter(p);
 					switch (p.getCloningStrategy()) {
 					case CLONE:
 						if (getModelFactory().getStringEncoder().isConvertable(p.getType())) {
 							Object clonedValue = null;
 							try {
-								String clonedValueAsString = getModelFactory().getStringEncoder().toString(value);
+								String clonedValueAsString = getModelFactory().getStringEncoder().toString(singleValue);
 								clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(), clonedValueAsString);
 							} catch (InvalidDataException e) {
 								throw new ModelExecutionException(e);
 							}
-							List<?> l = (List<?>) clonedObjectHandler.invokeGetter(p);
-							clonedObjectHandler.invokeAdder(p, clonedValue);
-						} else if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
-							Object clonedValue = clonedObjects.get(value);
-							if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
+							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
+						} else if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+							Object clonedValue = clonedObjects.get(singleValue);
+							if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 								clonedValue = null;
 							}
-							if (clonedValue != null) {
-								clonedObjectHandler.invokeAdder(p, clonedValue);
-							}
+							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
 						}
 						break;
 					case REFERENCE:
-						Object referenceValue = value != null ? clonedObjects.get(value) : null;
+						Object referenceValue = singleValue != null ? clonedObjects.get(singleValue) : null;
 						if (referenceValue == null) {
-							referenceValue = value;
+							referenceValue = singleValue;
 						}
-						clonedObjectHandler.invokeAdder(p, referenceValue);
+						clonedObjectHandler.internallyInvokeSetter(p, referenceValue);
 						break;
 					case FACTORY:
-						// TODO Not implemented
+						if (p.getStrategyTypeFactory().equals("deriveName()")) {
+							// TODO: just to test
+							// TODO: implement this properly!
+							// System.out.println("TODO: implement this (FACTORY whine cloning)");
+							// Object factoredValue = ((FlexoModelObject)getObject()).deriveName();
+							// clonedObjectHandler.internallyInvokeSetter(p,factoredValue);
+						}
 						break;
 					case IGNORE:
 						break;
 					}
+					break;
+				case LIST:
+					List<?> values = (List<?>) invokeGetter(p);
+					List<?> valuesToClone = new ArrayList<Object>(values);
+					for (Object value : valuesToClone) {
+						switch (p.getCloningStrategy()) {
+						case CLONE:
+							if (getModelFactory().getStringEncoder().isConvertable(p.getType())) {
+								Object clonedValue = null;
+								try {
+									String clonedValueAsString = getModelFactory().getStringEncoder().toString(value);
+									clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(), clonedValueAsString);
+								} catch (InvalidDataException e) {
+									throw new ModelExecutionException(e);
+								}
+								List<?> l = (List<?>) clonedObjectHandler.invokeGetter(p);
+								clonedObjectHandler.invokeAdder(p, clonedValue);
+							} else if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+								Object clonedValue = clonedObjects.get(value);
+								if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
+									clonedValue = null;
+								}
+								if (clonedValue != null) {
+									clonedObjectHandler.internallyInvokeAdder(p, clonedValue);
+								}
+							}
+							break;
+						case REFERENCE:
+							Object referenceValue = value != null ? clonedObjects.get(value) : null;
+							if (referenceValue == null) {
+								referenceValue = value;
+							}
+							clonedObjectHandler.internallyInvokeAdder(p, referenceValue);
+							break;
+						case FACTORY:
+							// TODO Not implemented
+							break;
+						case IGNORE:
+							break;
+						}
 
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
-			}
 
+			}
+		} finally {
+			clonedObjectHandler.createdByCloning = false;
 		}
 
 		return clonedObject;

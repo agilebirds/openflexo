@@ -26,8 +26,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,17 +47,14 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public class ColorSelector extends CustomPopup<Color> implements ColorSelectionModel {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(ColorSelector.class.getPackage().getName());
 
 	private Color _revertValue;
 
 	protected ColorDetailsPanel _selectorPanel;
-	private final List<ChangeListener> listeners;
 
 	public ColorSelector() {
 		super(Color.WHITE);
-		listeners = new ArrayList<ChangeListener>();
 		setFocusable(true);
 	}
 
@@ -82,12 +77,12 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 
 	@Override
 	protected ColorDetailsPanel createCustomPanel(Color editedObject) {
-		_selectorPanel = makeCustomPanel(editedObject);
+		_selectorPanel = makeCustomPanel();
 		return _selectorPanel;
 	}
 
-	protected ColorDetailsPanel makeCustomPanel(Color editedObject) {
-		return new ColorDetailsPanel(editedObject);
+	protected ColorDetailsPanel makeCustomPanel() {
+		return new ColorDetailsPanel();
 	}
 
 	@Override
@@ -108,12 +103,9 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 		private JButton _cancelButton;
 		private JPanel _controlPanel;
 
-		protected ColorDetailsPanel(Color editedColor) {
+		protected ColorDetailsPanel() {
 			super();
 
-			if (editedColor == null) {
-				editedColor = Color.WHITE;
-			}
 			colorChooser = new JColorChooser(ColorSelector.this);
 
 			setLayout(new BorderLayout());
@@ -153,9 +145,18 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	}
 
 	@Override
+	public Color getEditedObject() {
+		Color editedObject = super.getEditedObject();
+		if (editedObject == null) {
+			return Color.WHITE;
+		}
+		return editedObject;
+	}
+
+	@Override
 	public void setEditedObject(Color color) {
 		super.setEditedObject(color);
-		for (ChangeListener l : listeners) {
+		for (ChangeListener l : listenerList.getListeners(ChangeListener.class)) {
 			l.stateChanged(new ChangeEvent(this));
 		}
 	}
@@ -209,37 +210,38 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 	}*/
 
 	protected class ColorPreviewPanel extends JPanel {
-		private JPanel insidePanel;
 
 		protected ColorPreviewPanel() {
 			super(new BorderLayout());
 			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
 			setPreferredSize(new Dimension(40, 19));
 			setMinimumSize(new Dimension(40, 19));
-			insidePanel = new JPanel(new BorderLayout());
-			add(insidePanel, BorderLayout.CENTER);
 			update();
 		}
 
 		protected void update() {
-			insidePanel.setBackground(getEditedObject());
+			setBackground(getEditedObject());
+			repaint();
 		}
-
 	}
 
 	@Override
 	public void addChangeListener(ChangeListener listener) {
-		listeners.add(listener);
+		listenerList.add(ChangeListener.class, listener);
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener listener) {
-		listeners.remove(listener);
+		listenerList.remove(ChangeListener.class, listener);
 	}
 
 	@Override
 	public Color getSelectedColor() {
-		return getEditedObject();
+		if (getEditedObject() != null) {
+			return getEditedObject();
+		} else {
+			return Color.WHITE;
+		}
 	}
 
 	@Override

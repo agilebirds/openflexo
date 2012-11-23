@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -57,7 +57,7 @@ public class DMPasteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMPaste>() {
 			@Override
-			public boolean run(ActionEvent e, DMPaste action) {
+			public boolean run(EventObject e, DMPaste action) {
 				return true;
 			}
 		};
@@ -67,8 +67,8 @@ public class DMPasteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMPaste>() {
 			@Override
-			public boolean run(ActionEvent e, DMPaste action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionPaste();
+			public boolean run(EventObject e, DMPaste action) {
+				getControllerActionInitializer().getSelectionManager().performSelectionPaste();
 				return true;
 			}
 		};
@@ -85,7 +85,7 @@ public class DMPasteInitializer extends ActionInitializer {
 			@Override
 			public boolean isEnabled(FlexoActionType<DMPaste, DMObject, DMObject> actionType, DMObject object,
 					Vector<DMObject> globalSelection, FlexoEditor editor) {
-				return getControllerActionInitializer().getDMSelectionManager().hasCopiedData();
+				return getControllerActionInitializer().getSelectionManager().hasCopiedData();
 			}
 
 		};

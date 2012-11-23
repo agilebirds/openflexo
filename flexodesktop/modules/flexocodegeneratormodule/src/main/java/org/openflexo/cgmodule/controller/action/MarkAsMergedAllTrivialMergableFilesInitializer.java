@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.cgmodule.view.popups.SelectFilesPopup;
@@ -50,7 +50,7 @@ public class MarkAsMergedAllTrivialMergableFilesInitializer extends ActionInitia
 	protected FlexoActionInitializer<MarkAsMergedAllTrivialMergableFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMergedAllTrivialMergableFiles>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMergedAllTrivialMergableFiles action) {
+			public boolean run(EventObject e, MarkAsMergedAllTrivialMergableFiles action) {
 				if (action.getTrivialMergableFiles().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_found_as_trivially_mergable"));
 					return false;
@@ -60,11 +60,15 @@ public class MarkAsMergedAllTrivialMergableFilesInitializer extends ActionInitia
 							FlexoLocalization.localizedForKey("mark_as_merged_all_trivially_mergable_files_description"), "mark_as_merged",
 							action.getTrivialMergableFiles(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setTrivialMergableFiles(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setTrivialMergableFiles(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation
@@ -79,7 +83,7 @@ public class MarkAsMergedAllTrivialMergableFilesInitializer extends ActionInitia
 	protected FlexoActionFinalizer<MarkAsMergedAllTrivialMergableFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsMergedAllTrivialMergableFiles>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMergedAllTrivialMergableFiles action) {
+			public boolean run(EventObject e, MarkAsMergedAllTrivialMergableFiles action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

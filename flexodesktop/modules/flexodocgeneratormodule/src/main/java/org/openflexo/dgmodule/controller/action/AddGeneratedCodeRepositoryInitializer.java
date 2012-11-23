@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -67,7 +67,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, final AddGeneratedCodeRepository action) {
+			public boolean run(EventObject e, final AddGeneratedCodeRepository action) {
 				if (action.getNewGeneratedCodeRepositoryName() == null || action.getNewGeneratedCodeRepositoryDirectory() == null) {
 					Vector<Format> values = new Vector<Format>();
 					values.add(Format.HTML);
@@ -170,7 +170,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddGeneratedCodeRepository action) {
+			public boolean run(EventObject e, AddGeneratedCodeRepository action) {
 				if (action.getNewGeneratedCodeRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewGeneratedCodeRepository());
 				}

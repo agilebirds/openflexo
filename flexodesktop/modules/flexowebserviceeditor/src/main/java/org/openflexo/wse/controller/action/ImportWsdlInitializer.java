@@ -19,7 +19,7 @@
  */
 package org.openflexo.wse.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -49,7 +49,7 @@ public class ImportWsdlInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportWsdl> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportWsdl>() {
 			@Override
-			public boolean run(ActionEvent e, ImportWsdl action) {
+			public boolean run(EventObject e, ImportWsdl action) {
 				JFileChooser chooser = new JFileChooser("Please select an .wsdl file");
 				int returnVal = chooser.showOpenDialog(null);
 				if (returnVal != JFileChooser.APPROVE_OPTION) {
@@ -69,7 +69,7 @@ public class ImportWsdlInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportWsdl> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportWsdl>() {
 			@Override
-			public boolean run(ActionEvent e, ImportWsdl action) {
+			public boolean run(EventObject e, ImportWsdl action) {
 				logger.info("finalize WS");
 				return true;
 			}

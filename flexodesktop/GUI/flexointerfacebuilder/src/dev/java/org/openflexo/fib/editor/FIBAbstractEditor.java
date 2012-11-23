@@ -70,6 +70,25 @@ import org.openflexo.xmlcode.XMLCoder;
 //	getPalette().setEditorController(editorController);
 public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
+	/*public static <T extends FIBAbstractEditor> void main(final Class<T> editor) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				T instance;
+				try {
+					instance = editor.newInstance();
+					instance.launch();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}*/
+
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
 
 	// Instanciate a new localizer in directory src/dev/resources/FIBEditorLocalizer
@@ -122,7 +141,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	public FIBAbstractEditor() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
@@ -462,6 +480,18 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	@Deprecated
 	public void launch() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Launch was not called from EDT. Doing so now, but consider using using FIBSbstractEditor.main(Class)");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					launch();
+				}
+			});
+			return;
+		}
 		logger.info(">>>>>>>>>>> Loading FIB...");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

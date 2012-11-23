@@ -47,12 +47,12 @@ public class WKFMove extends FlexoUndoableAction<WKFMove, WKFObject, WKFObject> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return globalSelection != null && globalSelection.size() > 0;
 		}
 

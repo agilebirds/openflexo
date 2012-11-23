@@ -38,4 +38,19 @@ public class FIBTextArea extends FIBTextWidget {
 		return String.class;
 	}
 
+	/**
+	 * @return the rows
+	 */
+	public Integer getRows() {
+		return rows;
+	}
+
+	/**
+	 * @param rows
+	 *            the rows to set
+	 */
+	public void setRows(Integer rows) {
+		this.rows = rows;
+	}
+
 }

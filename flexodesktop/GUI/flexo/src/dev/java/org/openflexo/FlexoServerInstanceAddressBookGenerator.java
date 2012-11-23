@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.xml.XMLSerializer;
+import org.openflexo.model.factory.XMLSerializer;
 import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 public class FlexoServerInstanceAddressBookGenerator {

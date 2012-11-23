@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -58,7 +58,7 @@ public class CreateERDiagramInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateERDiagram> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateERDiagram>() {
 			@Override
-			public boolean run(ActionEvent e, final CreateERDiagram action) {
+			public boolean run(EventObject e, final CreateERDiagram action) {
 				TextFieldParameter nameParam = new TextFieldParameter("diagramName", "diagram_name", action.getDiagramName());
 				DMRepositoryParameter repositoryParam = new DMRepositoryParameter("repository", "repository", action.getRepository());
 				MultipleObjectParameter<DMEntity> entitiesParam = new MultipleObjectParameter<DMEntity>("entities",
@@ -99,7 +99,7 @@ public class CreateERDiagramInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateERDiagram> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateERDiagram>() {
 			@Override
-			public boolean run(ActionEvent e, CreateERDiagram action) {
+			public boolean run(EventObject e, CreateERDiagram action) {
 				((DMController) getController()).switchToPerspective(((DMController) getController()).DIAGRAM_PERSPECTIVE);
 				((DMController) getController()).setCurrentEditedObject(action.getNewDiagram());
 				return true;

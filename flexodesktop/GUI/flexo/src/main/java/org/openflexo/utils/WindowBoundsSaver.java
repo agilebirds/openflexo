@@ -1,5 +1,7 @@
 package org.openflexo.utils;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
@@ -21,6 +23,17 @@ public class WindowBoundsSaver implements ComponentListener {
 		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(id);
 		if (bounds == null) {
 			bounds = defaultBounds;
+		} else {
+			boolean ok = false;
+			for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+				if (device.getDefaultConfiguration().getBounds().contains(bounds.getLocation())) {
+					ok = true;
+					break;
+				}
+			}
+			if (!ok) {
+				bounds.setLocation(defaultBounds.getLocation());
+			}
 		}
 		window.setBounds(bounds);
 		window.addComponentListener(this);

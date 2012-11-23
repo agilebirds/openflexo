@@ -19,8 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
-import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -28,12 +27,13 @@ import javax.swing.Icon;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.action.RefreshTemplates;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class RefreshTemplatesInitializer extends ActionInitializer {
+public class RefreshTemplatesInitializer extends ActionInitializer<RefreshTemplates, CGTemplateObject, CGTemplateObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -50,7 +50,7 @@ public class RefreshTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action) {
+			public boolean run(EventObject e, RefreshTemplates action) {
 				return true;
 			}
 		};
@@ -60,11 +60,10 @@ public class RefreshTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshTemplates> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action) {
+			public boolean run(EventObject e, RefreshTemplates action) {
 				// Chaque refresh doit faire un clear du cache des TemplateLocator de tous les project generator
-				for (Enumeration<ProjectDocGenerator> en = getControllerActionInitializer().getDGController().getProjectGenerators(); en
-						.hasMoreElements();) {
-					en.nextElement().getTemplateLocator().notifyTemplateModified();
+				for (ProjectDocGenerator pg : getControllerActionInitializer().getDGController().getProjectGenerators()) {
+					pg.getTemplateLocator().notifyTemplateModified();
 				}
 				return true;
 			}

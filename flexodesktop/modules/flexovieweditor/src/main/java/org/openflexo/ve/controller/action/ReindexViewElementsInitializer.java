@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.controller.FIBController.Status;
@@ -51,7 +51,7 @@ public class ReindexViewElementsInitializer extends ActionInitializer<ReindexVie
 	protected FlexoActionInitializer<ReindexViewElements> getDefaultInitializer() {
 		return new FlexoActionInitializer<ReindexViewElements>() {
 			@Override
-			public boolean run(ActionEvent e, ReindexViewElements action) {
+			public boolean run(EventObject e, ReindexViewElements action) {
 				if (action.skipDialog) {
 					return true;
 				}
@@ -66,7 +66,7 @@ public class ReindexViewElementsInitializer extends ActionInitializer<ReindexVie
 	protected FlexoActionFinalizer<ReindexViewElements> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ReindexViewElements>() {
 			@Override
-			public boolean run(ActionEvent e, ReindexViewElements action) {
+			public boolean run(EventObject e, ReindexViewElements action) {
 				return true;
 			}
 		};

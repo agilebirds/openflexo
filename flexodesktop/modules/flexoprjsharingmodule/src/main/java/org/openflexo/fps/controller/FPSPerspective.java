@@ -6,11 +6,11 @@ package org.openflexo.fps.controller;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.view.CVSFileModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public abstract class FPSPerspective extends FlexoPerspective<CVSFile> {
+public abstract class FPSPerspective extends FlexoPerspective {
 	/**
 	 * 
 	 */
@@ -34,8 +34,12 @@ public abstract class FPSPerspective extends FlexoPerspective<CVSFile> {
 	}
 
 	@Override
-	public ModuleView<CVSFile> createModuleViewForObject(CVSFile file, FlexoController controller) {
-		return new CVSFileModuleView(file, (FPSController) controller);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject file, FlexoController controller) {
+		if (file instanceof CVSFile) {
+			return new CVSFileModuleView((CVSFile) file, (FPSController) controller);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

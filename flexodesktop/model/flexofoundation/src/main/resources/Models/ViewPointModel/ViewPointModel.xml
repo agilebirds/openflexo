@@ -72,6 +72,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" xmlTag="Individual">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
+		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" xmlTag="Class">
@@ -300,6 +301,7 @@
 		name="org.openflexo.foundation.viewpoint.IndividualParameter" xmlTag="IndividualParameter">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
+		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity

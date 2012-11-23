@@ -755,7 +755,7 @@ public class KeyValueDecoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.lang.Object})
 	 */
-	public static Class getTypeForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
+	public static Class<?> getTypeForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
 
 		return getKeyValuePropertyFromName(object, propertyName).getType();
 

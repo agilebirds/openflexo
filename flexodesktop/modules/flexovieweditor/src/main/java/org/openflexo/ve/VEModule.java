@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
@@ -37,10 +37,11 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalOEModule;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.shema.VEShemaController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Ontology Editor module
@@ -57,27 +58,20 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new VEController(projectEditor, this));
-		getOEController().loadRelativeWindows();
-		VEPreferences.init(getOEController());
+	public VEModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		VEPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-
-		// Put here a code to display default view
-		// getOEController().setCurrentEditedObjectAsModuleView(projectEditor.getProject());
-
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
 	@Override
-	public boolean close() {
-		// TODO Auto-generated method stub
-		return super.close();
+	protected FlexoController createControllerForModule() {
+		return new VEController(this);
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.VE_MODULE;
 	}
 
 	@Override
@@ -87,11 +81,6 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 	public VEController getOEController() {
 		return (VEController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getOEController().getProject().getShemaLibrary();
 	}
 
 	@Override
@@ -120,7 +109,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new VEShemaController(getOEController(), target);
+		screenshotController = new VEShemaController(getOEController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();

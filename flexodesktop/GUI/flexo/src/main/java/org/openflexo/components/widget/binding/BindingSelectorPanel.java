@@ -120,12 +120,12 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.MouseOverButton;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel implements ListSelectionListener {
@@ -421,7 +421,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				}
 				Frame owner = null;
 				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-					owner = FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : null;/*(Frame) SwingUtilities.getAncestorOfClass(Frame.class, _createsButton);*/
+					owner = FlexoFrame.getActiveFrame();
 				} else {
 					owner = (Frame) SwingUtilities.getAncestorOfClass(Frame.class, _createsButton);
 				}
@@ -1574,7 +1574,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		// Set connect button state
 		_connectButton.setEnabled(binding != null && binding.isBindingValid());
 		if (binding != null && binding.isBindingValid()) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (ToolBox.isMacOSLaf()) {
 				_connectButton.setSelected(true);
 			}
 		}

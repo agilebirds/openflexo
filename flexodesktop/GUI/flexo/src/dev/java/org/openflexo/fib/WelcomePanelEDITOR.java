@@ -21,9 +21,17 @@ package org.openflexo.fib;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class WelcomePanelEDITOR {
 
@@ -32,7 +40,33 @@ public class WelcomePanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				ApplicationData applicationData = new ApplicationData();
+				ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
+
+					@Override
+					public FlexoEditor makeFlexoEditor(FlexoProject project) {
+						return new InteractiveFlexoEditor(this, project);
+					}
+
+					@Override
+					public FlexoEditor createApplicationEditor() {
+						return new InteractiveFlexoEditor(this, null);
+					}
+
+					@Override
+					protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+						return null;
+					}
+
+					@Override
+					public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+						return new DefaultProjectLoadingHandler();
+					}
+
+					@Override
+					protected FlexoResourceCenterService createResourceCenterService() {
+						return null;
+					}
+				});
 				return FIBAbstractEditor.makeArray(applicationData);
 			}
 

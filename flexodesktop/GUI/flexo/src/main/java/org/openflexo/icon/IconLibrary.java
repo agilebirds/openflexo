@@ -81,8 +81,6 @@ public class IconLibrary {
 	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.png");
 	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.png");
 	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
-	// public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
-	// public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
 	public static final ImageIcon NETWORK_ICON = new ImageIconResource("Icons/Actions/Network.png");
 	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
 	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
@@ -96,9 +94,9 @@ public class IconLibrary {
 	public static final Icon NAVIGATION_CLOSE_LEFT = new ImageIconResource("Icons/GUI/PerspectiveLeft.gif");
 	public static final Icon NAVIGATION_CLOSE_RIGHT = new ImageIconResource("Icons/GUI/PerspectiveRight.gif");
 
-	public static final ImageIcon DEFAULT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_A.gif");
+	public static final ImageIcon DEFAULT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_A.png");
 	public static final ImageIcon DEFAULT_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_S.gif");
-	public static final ImageIcon LIST_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.gif");
+	public static final ImageIcon LIST_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.png");
 	public static final ImageIcon LIST_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	public static final ImageIcon BROWSER_PLUS_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserPlus.gif");
@@ -120,16 +118,12 @@ public class IconLibrary {
 	public static final Icon TOGGLE_ARROW_RIGHT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRight.png");
 	public static final Icon TOGGLE_ARROW_RIGHT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRightSelected.png");
 
-	public static final Icon NAVIGATION_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01.gif");
-	public static final Icon NAVIGATION_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03.gif");
-	public static final Icon NAVIGATION_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02.gif");
-	public static final Icon NAVIGATION_DISABLED_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01_NA.gif");
-	public static final Icon NAVIGATION_DISABLED_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03_NA.gif");
-	public static final Icon NAVIGATION_DISABLED_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02_NA.gif");
+	public static final Icon NAVIGATION_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01.png");
+	public static final Icon NAVIGATION_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03.png");
+	public static final Icon NAVIGATION_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02.png");
 
 	public static final Icon COLLAPSE_ALL_ICON = new ImageIconResource("Icons/GUI/Actions/CollapseAll.png");
 	public static final Icon AUTO_LAYOUT_ICON = new ImageIconResource("Icons/GUI/Actions/AutoLayout.png");
-	public static final Icon CLOSE_ICON = new ImageIconResource("Icons/GUI/Actions/Close.png");
 
 	// Markers
 	public static final IconMarker POSITIVE_MARKER = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Plus.png"), 0, 0);
@@ -160,7 +154,7 @@ public class IconLibrary {
 	public static final ImageIcon CLOSE_EDITION_DISABLED_ICON = new ImageIconResource("Icons/Actions/Palette/CloseEditionDisabled.gif");
 
 	// Model icons
-	public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
+	// public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
 
 	public static ImageIcon getIconForValidationIssue(ValidationIssue issue) {
 		if (issue instanceof ValidationWarning) {
@@ -201,7 +195,7 @@ public class IconLibrary {
 		} else if (resourceType == ResourceType.PROCESS) {
 			return WKFIconLibrary.PROCESS_ICON;
 		} else if (resourceType == ResourceType.RM) {
-			return IconLibrary.PROJECT_ICON;
+			return OPENFLEXO_NOTEXT_16;
 		} else if (resourceType == ResourceType.SCREENSHOT) {
 			return FilesIconLibrary.SMALL_IMAGE_ICON;
 		} else if (resourceType == ResourceType.WORKFLOW) {

@@ -26,12 +26,18 @@ public interface AbstractNode extends WKFObject {
 	public static final String OTHER_ANNOTATIONS = "otherAnnotations";
 
 	// Like an empty constructor. We don't want to force to use the one-arg init method
+	@Override
 	@Initializer
 	public AbstractNode init();
 
 	// Conveninent method to automatically create an abstract node with a name
+	@Override
 	@Initializer
 	public AbstractNode init(@Parameter(FlexoModelObject.NAME) String name);
+
+	// Conveninent method to automatically create an abstract node with a name & a flexoID
+	@Initializer
+	public AbstractNode init(@Parameter(FlexoModelObject.FLEXO_ID) String flexoID, @Parameter(FlexoModelObject.NAME) String name);
 
 	@Override
 	public void delete();

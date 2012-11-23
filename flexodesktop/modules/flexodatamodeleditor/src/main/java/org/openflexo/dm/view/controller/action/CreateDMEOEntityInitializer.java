@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,7 +55,7 @@ public class CreateDMEOEntityInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMEOEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOEntity>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOEntity action) {
+			public boolean run(EventObject e, CreateDMEOEntity action) {
 				return true;
 			}
 		};
@@ -65,7 +65,7 @@ public class CreateDMEOEntityInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMEOEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEOEntity>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOEntity action) {
+			public boolean run(EventObject e, CreateDMEOEntity action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOEntity in DMEORepositoryView");

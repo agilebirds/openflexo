@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -646,27 +646,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		@Override
 		public EditionPattern convertFromString(String value) {
 			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
-			/*String viewPointURI;
-			String editionPattern;
-			StringTokenizer st = new StringTokenizer(value, "#");
-			if (st.hasMoreElements()) {
-				viewPointURI = st.nextToken();
-				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(viewPointURI);
-				if (calc == null) {
-					logger.warning("Could not find calc " + viewPointURI);
-				} else {
-					if (st.hasMoreElements()) {
-						editionPattern = st.nextToken();
-						EditionPattern returned = calc.getEditionPattern(editionPattern);
-						if (calc == null) {
-							logger.warning("@@@@@@@@@@@@@@@@ Could not find edition pattern " + editionPattern);
-						} else {
-							return returned;
-						}
-					}
-				}
-			}
-			return null;*/
 		}
 
 		@Override
@@ -915,6 +894,21 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 			return isAssignableFrom(editionPattern.getParentEditionPattern());
 		}
 		return false;
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuffer sb = new StringBuffer();
+		sb.append("EditionPattern " + getName());
+		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (PatternRole pr : getPatternRoles()) {
+			sb.append(pr.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		return sb.toString();
 	}
 
 	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {

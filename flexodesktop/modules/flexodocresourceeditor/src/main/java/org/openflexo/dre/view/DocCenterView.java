@@ -31,15 +31,14 @@ import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DocCenterView extends JPanel implements SelectionSynchronizedModuleView<DocItemFolder> {
 
@@ -99,7 +98,7 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.DRE_PERSPECTIVE;
 	}
 
@@ -179,10 +178,9 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 		}
 
 		public DRETabularBrowserView(DREController controller, TabularBrowserModel model) {
-			super(controller, model, controller.getEditor());
+			super(controller, model);
 			setSynchronizeWithSelectionManager(true);
 		}
-
 	}
 
 	/**

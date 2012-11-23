@@ -20,7 +20,6 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -43,18 +42,17 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -65,8 +63,10 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
+public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
+
+	private Object dataObject;
 
 	public class FIBBrowserActionAdapter extends FIBBrowserAction {
 
@@ -103,32 +103,32 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 
 	}
 
-	private O dataObject;
 	private FlexoController controller;
 	private FIBView fibView;
-	private FlexoFIBController<O> fibController;
+	private FlexoFIBController fibController;
 	private FIBComponent fibComponent;
 
 	private PropertyChangeSupport pcSupport;
 
-	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
 		this(representedObject, controller, fibFile, false, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
 		this(representedObject, controller, fibResourcePath, false, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
+	public FlexoFIBView(Object representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
 			FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
 	}
 
-	protected FlexoFIBView(O dataObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar, FlexoProgress progress) {
+	protected FlexoFIBView(Object dataObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
+			FlexoProgress progress) {
 		super(new BorderLayout());
 		this.dataObject = dataObject;
 		this.controller = controller;
@@ -183,7 +183,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 	 * @param controller
 	 * @return the newly created FlexoFIBController
 	 */
-	protected FlexoFIBController<O> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		FIBController returned = FIBController.instanciateController(fibComponent, FlexoLocalization.getMainLocalizer());
 		if (returned instanceof FlexoFIBController) {
 			((FlexoFIBController) returned).setFlexoController(controller);
@@ -191,7 +191,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		} else if (fibComponent.getControllerClass() != null) {
 			logger.warning("Controller for component " + fibComponent + " is not an instanceof FlexoFIBController");
 		}
-		return fibController = new FlexoFIBController<O>(fibComponent, controller);
+		return fibController = new FlexoFIBController(fibComponent, controller);
 	}
 
 	public FlexoController getFlexoController() {
@@ -214,12 +214,22 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		logger.info("propertyChange in FlexoFIBView: " + evt);
 	}
 
-	public O getDataObject() {
+	public Object getDataObject() {
 		return dataObject;
 	}
 
-	public void setDataObject(O object) {
+	public void setDataObject(Object object) {
+		if (this.dataObject instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this.dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
+		} else if (this.dataObject instanceof FlexoObservable) {
+			((FlexoObservable) this.dataObject).deleteObserver(this);
+		}
 		dataObject = object;
+		if (dataObject instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().addPropertyChangeListener(this);
+		} else if (dataObject instanceof FlexoObservable) {
+			((FlexoObservable) dataObject).addObserver(this);
+		}
 		fibController.setDataObject(object, true);
 	}
 
@@ -231,7 +241,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		return fibView;
 	}
 
-	public FlexoFIBController<O> getFIBController() {
+	public FlexoFIBController getFIBController() {
 		return fibController;
 	}
 
@@ -279,7 +289,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 
 	// test purposes
 	public static FlexoEditor loadProject(File prjDir) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
 		FlexoEditor editor = null;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
@@ -290,16 +300,10 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
 		if (editor == null) {
 			System.exit(-1);
 		}
 		return editor;
-	}
-
-	// test purposes
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
 	}
 
 	// test purposes
@@ -316,25 +320,6 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 			super(project);
 		}
 
-		@Override
-		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-				FlexoActionType<A, T1, T2> actionType) {
-			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
-
-				@Override
-				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
-							FlexoTestEditor.this);
-					if (!reply) {
-						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
-								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
-					}
-					return reply;
-				}
-
-			};
-			return init;
-		}
 	}
 
 }

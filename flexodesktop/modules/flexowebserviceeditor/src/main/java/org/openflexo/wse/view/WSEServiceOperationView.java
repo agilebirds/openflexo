@@ -25,14 +25,15 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.MessageDefinition;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEMessageEntryTableModel;
 import org.openflexo.wse.model.WSEMessageTableModel;
 
@@ -83,8 +84,8 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 	}
 
 	public MessageEntry getSelectedMessageEntry() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
@@ -93,8 +94,8 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 	}
 
 	public AbstractMessageDefinition getSelectedMessageDefinition() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof AbstractMessageDefinition) {
 			return (MessageDefinition) selection.firstElement();
 		}

@@ -38,12 +38,12 @@ public class AddEdgeMetricsValue extends AddMetricsValue<AddEdgeMetricsValue, Fl
 			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 

@@ -363,7 +363,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		while (it.hasNext()) {
 			FIBComponent c = it.next();
 			// logger.info("###### Component " + getWidget() + ", has been updated, now update " + c);
-			FIBView v = getController().viewForComponent(c);
+			FIBView<?, ?> v = getController().viewForComponent(c);
 			if (v != null) {
 				v.update(callers);
 			} else {

@@ -19,8 +19,8 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -51,7 +51,7 @@ public class DeleteDocItemFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteDocItemFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteDocItemFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteDocItemFolder action) {
+			public boolean run(EventObject e, DeleteDocItemFolder action) {
 				if (action.getFocusedObject() instanceof DocItemFolder) {
 					Vector<DocItemFolder> v = new Vector<DocItemFolder>();
 					v.add((DocItemFolder) action.getFocusedObject());
@@ -79,7 +79,7 @@ public class DeleteDocItemFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteDocItemFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteDocItemFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteDocItemFolder action) {
+			public boolean run(EventObject e, DeleteDocItemFolder action) {
 				return true;
 			}
 		};

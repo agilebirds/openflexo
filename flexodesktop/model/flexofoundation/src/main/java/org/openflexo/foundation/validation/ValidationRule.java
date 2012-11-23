@@ -50,8 +50,6 @@ public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends V
 		super();
 		_ruleName = ruleName;
 		_ruleDescription = ruleName + "_description";
-		getLocalizedName();
-		getLocalizedDescription();
 		_objectType = objectType;
 	}
 

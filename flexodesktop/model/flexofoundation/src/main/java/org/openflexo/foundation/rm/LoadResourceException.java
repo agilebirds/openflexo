@@ -29,9 +29,9 @@ import org.openflexo.foundation.FlexoException;
  */
 public abstract class LoadResourceException extends FlexoException {
 
-	protected FlexoFileResource _fileResource;
+	protected FlexoFileResource<?> _fileResource;
 
-	public LoadResourceException(FlexoFileResource fileResource, String message) {
+	public LoadResourceException(FlexoFileResource<?> fileResource, String message) {
 		super(message);
 		_fileResource = fileResource;
 	}
@@ -42,7 +42,7 @@ public abstract class LoadResourceException extends FlexoException {
 		return "LoadResourceException: resource " + _fileResource.getResourceIdentifier() + (msg != null ? "\n" + msg : "");
 	}
 
-	public FlexoFileResource getFileResource() {
+	public FlexoFileResource<?> getFileResource() {
 		return _fileResource;
 	}
 

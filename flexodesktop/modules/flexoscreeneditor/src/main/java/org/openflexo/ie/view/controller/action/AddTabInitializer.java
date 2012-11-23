@@ -19,13 +19,12 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.ie.IERegExp;
@@ -36,6 +35,7 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IETabWidget;
+import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.IEPanel;
@@ -47,7 +47,7 @@ import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class AddTabInitializer extends ActionInitializer {
+public class AddTabInitializer extends ActionInitializer<AddTab, IEWidget, IEWidget> {
 
 	AddTabInitializer(IEControllerActionInitializer actionInitializer) {
 		super(AddTab.actionType, actionInitializer);
@@ -62,7 +62,7 @@ public class AddTabInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddTab> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddTab>() {
 			@Override
-			public boolean run(ActionEvent e, AddTab action) {
+			public boolean run(EventObject e, AddTab action) {
 				IESequenceTab tabContainer = null;
 				if (action.getFocusedObject() instanceof IESequenceTab) {
 					tabContainer = (IESequenceTab) action.getFocusedObject();
@@ -133,17 +133,6 @@ public class AddTabInitializer extends ActionInitializer {
 					executeAction = true;
 				}
 				return executeAction;
-			}
-		};
-	}
-
-	@Override
-	protected FlexoActionFinalizer<AddTab> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<AddTab>() {
-			@Override
-			public boolean run(ActionEvent e, AddTab action) {
-				getControllerActionInitializer().getIEController().getModule().retain(action.getTabDef().getWOComponent());
-				return true;
 			}
 		};
 	}

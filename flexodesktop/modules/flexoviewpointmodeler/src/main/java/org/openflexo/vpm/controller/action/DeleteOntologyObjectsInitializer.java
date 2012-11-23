@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
+import org.openflexo.foundation.ontology.owl.action.DeleteOntologyObjects;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
@@ -53,7 +53,7 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteOntologyObjects>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+			public boolean run(EventObject e, DeleteOntologyObjects action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -65,7 +65,7 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+			public boolean run(EventObject e, DeleteOntologyObjects action) {
 				if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();

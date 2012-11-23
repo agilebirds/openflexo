@@ -70,12 +70,12 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return !(object instanceof IETabWidget);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return !(object instanceof IEReusableWidget);
 		}
 

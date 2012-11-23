@@ -22,6 +22,8 @@ package org.openflexo.toolbox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author gpolet
@@ -33,9 +35,15 @@ public class WinRegistryAccess {
 
 	public static final String REG_SZ_TOKEN = "REG_SZ";
 
+	public static final String REG_EXPAND_SZ_TOKEN = "REG_EXPAND_SZ";
+
 	public static final String REG_BINARY = "REG_BINARY";
 
 	public static final String REG_DWORD_TOKEN = "REG_DWORD";
+
+	private static final String ENVIRONMENT_VARIABLE_REGEXP = "%([^%=]+)%";
+
+	private static final Pattern ENVIRONMENT_VARIABLE_PATTERN = Pattern.compile(ENVIRONMENT_VARIABLE_REGEXP);
 
 	/**
 	 * Returns the value for an attribute of the registry in Windows. If you want to now the processor speed of the machine, you will pass
@@ -117,6 +125,27 @@ public class WinRegistryAccess {
 		String res1 = getRegistryValue(key, currentVersionAtt, null);
 		String res2 = getRegistryValue(key + "\\" + res1, javaHomeAtt, null);
 		return res2;
+	}
+
+	public static String substituteEnvironmentVariable(String string) {
+		if (string == null || string.length() == 0) {
+			return string;
+		}
+		if (string.indexOf('%') == -1) {
+			return string;
+		}
+		StringBuffer sb = new StringBuffer();
+		Matcher m = ENVIRONMENT_VARIABLE_PATTERN.matcher(string);
+		while (m.find()) {
+			String replacement = System.getenv(m.group(1));
+			if (replacement == null) {
+				replacement = m.group();
+			}
+			replacement = Matcher.quoteReplacement(replacement);
+			m.appendReplacement(sb, replacement);
+		}
+		m.appendTail(sb);
+		return sb.toString();
 	}
 
 	public static void main(String s[]) {

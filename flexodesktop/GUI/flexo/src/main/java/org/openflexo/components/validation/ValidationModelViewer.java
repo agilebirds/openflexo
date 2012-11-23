@@ -125,7 +125,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 				}
 				int selectedRow = _validationModelList.getSelectedIndex();
 				if (selectedRow >= 0 && _validationModel != null && selectedRow < _validationModel.getSize()) {
-					ValidationRuleSet ruleSet = (ValidationRuleSet) _validationModel.getElementAt(selectedRow);
+					ValidationRuleSet ruleSet = _validationModel.getElementAt(selectedRow);
 					setCurrentRuleSet(ruleSet);
 				} else {
 					setCurrentRuleSet(null);
@@ -313,10 +313,11 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 				public void run() {
 					if (_validationModel.getSize() > 0) {
 						_validationModelList.setSelectedIndex(0);
-						if (((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().size() > 0) {
-							disableButton.setText(((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().firstElement()
-									.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton) : FlexoLocalization
-									.localizedForKey("enableRule", disableButton));
+						if (_validationModel.getElementAt(0).getRules().size() > 0) {
+							disableButton
+									.setText(_validationModel.getElementAt(0).getRules().firstElement().getIsEnabled() ? FlexoLocalization
+											.localizedForKey("disableRule", disableButton) : FlexoLocalization.localizedForKey(
+											"enableRule", disableButton));
 						}
 					}
 					_consistencyCheckDialog.toFront();

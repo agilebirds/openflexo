@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -33,6 +33,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
@@ -42,7 +43,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class GenerateSourceCodeInitializer extends ActionInitializer {
+public class GenerateSourceCodeInitializer extends ActionInitializer<GenerateSourceCode, CGObject, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -56,10 +57,15 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
+	}
+
+	@Override
 	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -71,15 +77,10 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public DGController getController() {
-		return (DGController) super.getController();
-	}
-
-	@Override
 	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {

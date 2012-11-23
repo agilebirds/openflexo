@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMType;
@@ -171,7 +170,6 @@ public class ComponentBindingDefinition extends BindingDefinition {
 			} catch (InvalidNameException e) {
 				setChanged();
 				notifyObserversAsReentrantModification(new DataModification("variableName", null, _property.getName()));
-				new FlexoException(e.getMessage(), e);
 			} catch (DuplicatePropertyNameException e) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(e.getMessage());

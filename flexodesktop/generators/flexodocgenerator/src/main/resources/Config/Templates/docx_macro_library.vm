@@ -8,7 +8,6 @@
 #end
 
 #macro(render $_object $_level $templateName $_entry)
-<!--Entering macro render : $_object $_level $templateName $_entry -->
     #set($_template = $generator.getTemplatePath($templateName.trim()))
     #if($_template)
         #if(!$objectStack)
@@ -28,7 +27,6 @@
         #set($object = $objectStack.pop())
         #set($level = $levelStack.pop())
     #end
-<!-- Exiting macro render -->
 #end
 
 #macro(renderButtonTable $cd)
@@ -765,8 +763,6 @@ if there is an associated screen make a hyperlink to the screen.
             </w:r>
         </w:p>
     #end
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
     #set($templateName = ${_entry.getDefaultTemplateName()})
     #if(${_entry.isIteration()})
     	${generator.log("Rendering iteration")}
@@ -2149,8 +2145,8 @@ name of the template corresponding to the specific toc_entry.
 #set($_ot="") ## opening tags
 #set($_ct="") ## closing tags
 #if($_enclosingTag=="w:tr")
-    #set($_ot="<w:tr><w:tc><w:p><w:r><w:t>")
-    #set($_ct="</w:t></w:r></w:p></w:tc></w:tr>")
+    #set($_ot="<w:tr>${n}<w:tc>${n}<w:p>${n}<w:r>${n}<w:t>")
+    #set($_ct="</w:t>${n}</w:r>${n}</w:p>${n}</w:tc>${n}</w:tr>")
 #elseif($_enclosingTag=="w:r")
     #set($_ot="<w:r><w:t>")
     #set($_ct="</w:t></w:r>")
@@ -2176,7 +2172,8 @@ name of the template corresponding to the specific toc_entry.
             #addEPIValue("<${_epiName}>#escape($_text)</${_epiName}>")
         </w:sdtPr>
         <w:sdtContent>
-            $_ot $_style
+            $_ot 
+                $_style
             #if($_hasText)
                 #escape($_text)
             #else

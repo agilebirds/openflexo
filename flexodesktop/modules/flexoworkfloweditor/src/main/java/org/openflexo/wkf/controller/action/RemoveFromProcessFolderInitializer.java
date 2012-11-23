@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -47,7 +47,7 @@ public class RemoveFromProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveFromProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveFromProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveFromProcessFolder action) {
+			public boolean run(EventObject e, RemoveFromProcessFolder action) {
 				return true;
 			}
 		};
@@ -57,7 +57,7 @@ public class RemoveFromProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveFromProcessFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveFromProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveFromProcessFolder action) {
+			public boolean run(EventObject e, RemoveFromProcessFolder action) {
 				return true;
 			}
 		};

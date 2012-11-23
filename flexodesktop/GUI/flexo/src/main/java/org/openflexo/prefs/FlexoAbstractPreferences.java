@@ -19,9 +19,9 @@
  */
 package org.openflexo.prefs;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -32,6 +32,7 @@ import org.apache.axis.encoding.Base64;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.FlexoProperties;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -39,28 +40,45 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @author sguerin
  */
-public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject {
+public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
 
 	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
-	protected FlexoAbstractPreferences() {
-		super();
-		_preferences = new FlexoProperties();
+	private PropertyChangeSupport propertyChangeSupport;
+
+	/**
+	 * Object where are stored the preferences
+	 */
+	private FlexoProperties _preferences;
+
+	private FlexoAbstractPreferences(FlexoProperties properties) {
+		this._preferences = properties;
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
 	}
 
-	protected FlexoAbstractPreferences(Properties properties) {
-		super();
-		_preferences = new FlexoProperties(properties);
+	protected FlexoProperties getPreferencesProperties() {
+		return _preferences;
+	}
+
+	protected FlexoAbstractPreferences(FlexoAbstractPreferences delegate) {
+		this(delegate._preferences);
 	}
 
 	protected FlexoAbstractPreferences(File preferencesFile) {
-		super();
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Constructor of FlexoAbstractPreferences with " + preferencesFile.getAbsolutePath());
-		}
-		_preferences = loadFromFile(preferencesFile);
+		this(loadFromFile(preferencesFile));
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	protected void reloadFromFile(File preferencesFile) {
@@ -74,8 +92,8 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		}
 	}
 
-	private static Properties loadFromFile(File preferencesFile) {
-		Properties returned = new FlexoProperties();
+	private static FlexoProperties loadFromFile(File preferencesFile) {
+		FlexoProperties returned = new FlexoProperties();
 		try {
 			File parentDir = preferencesFile.getParentFile();
 			if (logger.isLoggable(Level.FINE)) {
@@ -112,10 +130,12 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		}
 		setChanged();
 		notifyObservers(modif);
+		propertyChangeSupport.firePropertyChange(key, oldValue, value);
 		if (!key.equals(notificationKey)) {
 			modif = new PreferencesHaveChanged(notificationKey, oldValue, value);
 			setChanged();
 			notifyObservers(modif);
+			propertyChangeSupport.firePropertyChange(notificationKey, oldValue, value);
 		}
 	}
 
@@ -154,30 +174,6 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			}
 		}
 		setProperty(key, value);
-	}
-
-	public abstract File getPreferencesFile();
-
-	protected void saveToFile(boolean warning) {
-		try {
-			File preferenceFile = getPreferencesFile();
-			if (!preferenceFile.exists()) {
-				preferenceFile.createNewFile();
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.finer("properties:" + _preferences);
-			}
-			_preferences.store(new FileOutputStream(preferenceFile), "Flexo Preferences");
-		} catch (Exception e) {
-			if (warning) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Unable to save preferences");
-				}
-			}
-		}
 	}
 
 	// INSPECTABLE OBJECT
@@ -318,10 +314,5 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			return false;
 		}
 	}
-
-	/**
-	 * Object where are stored the preferences
-	 */
-	private Properties _preferences;
 
 }

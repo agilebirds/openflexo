@@ -53,12 +53,12 @@ public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

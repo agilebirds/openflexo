@@ -31,7 +31,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ScenarioRecorder;
 
 /**
- * This class is intented to modelize preferences of Flexo application<br>
+ * This class is intended to model preferences of OpenFlexo application<br>
  * To be accessed through all the application, all methods are statically defined.
  * 
  * @author sguerin

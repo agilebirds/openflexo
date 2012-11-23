@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +35,7 @@ import org.openflexo.localization.FlexoLocalization;
  * 
  * @author sylvain
  */
-public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> implements Serializable {
+public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> {
 
 	private static final Logger logger = Logger.getLogger(FlexoOEShemaLibraryResource.class.getPackage().getName());
 
@@ -156,7 +155,8 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
 		}
-		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().retrieveViewPointLibrary());
+		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().getOpenFlexoResourceCenter()
+				.retrieveViewPointLibrary());
 		builder.shemaLibrary = _resourceData;
 		return builder;
 	}

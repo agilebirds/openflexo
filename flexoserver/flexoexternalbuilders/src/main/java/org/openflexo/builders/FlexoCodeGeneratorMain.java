@@ -43,8 +43,6 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 
 	public static final String WAR_NAME_ARGUMENT_PREFIX = "-WarName=";
 
-	public static final String WORKING_DIR = "-WorkingDir=";
-
 	public static final String NO_WAR = "-nowar";
 
 	public static final String LOGIN_ARGUMENT_PREFIX = "-login=";
@@ -58,7 +56,6 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 	private String password = null;
 	private String outputPath = null;
 	private String warName = null;
-	private String workingDir = null;
 	private boolean nowar = false;
 
 	@Override
@@ -105,14 +102,6 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 					if (password.endsWith("\"")) {
 						password = password.substring(0, password.length() - 1);
 					}
-				} else if (args[i].startsWith(WORKING_DIR)) {
-					workingDir = args[i].substring(WORKING_DIR.length());
-					if (workingDir.startsWith("\"")) {
-						workingDir = workingDir.substring(1);
-					}
-					if (workingDir.endsWith("\"")) {
-						workingDir = workingDir.substring(0, workingDir.length() - 1);
-					}
 				} else if (args[i].equals(NO_WAR)) {
 					nowar = true;
 				}
@@ -141,17 +130,12 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 
 	@Override
 	protected void doRun() {
-		File output = null;
-		if (workingDir != null) {
-			output = new File(workingDir);
-			output.mkdirs();
-			if (!output.exists() || !output.canWrite()) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Output path: " + output.getAbsolutePath()
-							+ " either does not exist or does not have write permissions.");
-				}
-				output = null;
+		File output = getWorkingDir();
+		if (!output.exists() || !output.canWrite()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Output path: " + output.getAbsolutePath() + " either does not exist or does not have write permissions.");
 			}
+			output = null;
 		}
 		if (output == null) {
 			try {

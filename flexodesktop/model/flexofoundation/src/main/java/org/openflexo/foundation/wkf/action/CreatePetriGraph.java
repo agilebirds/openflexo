@@ -55,12 +55,12 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph, Fath
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
 			return false; // Action is never visible but always active.
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
 			return object.getContainedPetriGraph() == null;
 		}
 

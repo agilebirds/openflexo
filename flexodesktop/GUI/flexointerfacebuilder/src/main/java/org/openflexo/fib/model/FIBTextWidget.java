@@ -15,9 +15,9 @@ public abstract class FIBTextWidget extends FIBWidget {
 		editable;
 	}
 
-	public boolean validateOnReturn = false;
-	public String text = null;
-	public Integer columns = null;
+	private boolean validateOnReturn = false;
+	private String text = null;
+	private Integer columns = null;
 	private DataBinding<Boolean> editable;
 
 	public DataBinding<Boolean> getEditable() {
@@ -40,4 +40,50 @@ public abstract class FIBTextWidget extends FIBWidget {
 	public Type getDefaultDataClass() {
 		return String.class;
 	}
+
+	/**
+	 * @return the columns
+	 */
+	public Integer getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns
+	 *            the columns to set
+	 */
+	public void setColumns(Integer columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * @param text
+	 *            the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * @return the validateOnReturn
+	 */
+	public boolean isValidateOnReturn() {
+		return validateOnReturn;
+	}
+
+	/**
+	 * @param validateOnReturn
+	 *            the validateOnReturn to set
+	 */
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		this.validateOnReturn = validateOnReturn;
+	}
+
 }

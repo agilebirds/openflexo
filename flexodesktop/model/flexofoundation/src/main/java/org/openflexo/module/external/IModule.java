@@ -25,9 +25,4 @@ package org.openflexo.module.external;
  */
 public interface IModule {
 
-	public abstract boolean isLoaded();
-
-	@Override
-	public String toString();
-
 }

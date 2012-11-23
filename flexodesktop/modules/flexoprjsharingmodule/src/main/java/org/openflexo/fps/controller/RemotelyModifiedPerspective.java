@@ -19,6 +19,10 @@ public class RemotelyModifiedPerspective extends FPSPerspective {
 	public RemotelyModifiedPerspective(FPSController fpsController) {
 		super(fpsController, "remotely_modified_files");
 		this.fpsController = fpsController;
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
+
 	}
 
 	@Override

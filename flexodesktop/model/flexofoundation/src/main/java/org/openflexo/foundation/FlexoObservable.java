@@ -71,7 +71,7 @@ public abstract class FlexoObservable extends FlexoObject implements HasProperty
 
 	private static final Logger logger = Logger.getLogger(FlexoObservable.class.getPackage().getName());
 
-	protected static final String DELETED_PROPERTY = "deleted";
+	public static final String DELETED_PROPERTY = "deleted";
 
 	private boolean changed = false;
 

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -47,7 +47,7 @@ public class AddConnectorInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddConnector> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddConnector>() {
 			@Override
-			public boolean run(ActionEvent e, AddConnector action) {
+			public boolean run(EventObject e, AddConnector action) {
 				if (action.getAutomaticallyCreateConnector()) {
 					return true;
 				}

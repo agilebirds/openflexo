@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -47,7 +47,7 @@ public class AddToProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddToProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddToProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddToProcessFolder action) {
+			public boolean run(EventObject e, AddToProcessFolder action) {
 				return true;
 			}
 		};
@@ -57,7 +57,7 @@ public class AddToProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddToProcessFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddToProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddToProcessFolder action) {
+			public boolean run(EventObject e, AddToProcessFolder action) {
 				return true;
 			}
 		};

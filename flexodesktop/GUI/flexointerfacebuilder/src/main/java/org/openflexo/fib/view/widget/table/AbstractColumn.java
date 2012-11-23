@@ -35,6 +35,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBTableColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
@@ -83,10 +84,6 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		title = null;
 	}
 
-	public FIBTableWidget getTableWidget() {
-		return getTableModel().getTableWidget();
-	}
-
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof FIBAttributeNotification && o == columnModel) {
@@ -97,7 +94,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.font
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.resizable
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.title) {
-				((FIBTableWidget) controller.viewForComponent(columnModel.getTable())).updateTable();
+				((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getTable())).updateTable();
 			}
 		}
 	}
@@ -108,7 +105,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	public String getLocalized(String key) {
 		if (getController() != null) {
-			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getTableWidget().getTable()), key);
+			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent((FIBComponent) getColumnModel().getTable()),
+					key);
 		} else {
 			logger.warning("Controller not defined");
 			return key;

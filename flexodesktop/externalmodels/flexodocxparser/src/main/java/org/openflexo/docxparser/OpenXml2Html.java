@@ -32,21 +32,28 @@ import java.util.logging.Logger;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackagePartName;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.PackagingURIHelper;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.jaxen.JaxenException;
-import org.jaxen.dom4j.Dom4jXPath;
+import org.dom4j.XPath;
 import org.openflexo.docxparser.dto.ParsedHtml;
 import org.openflexo.docxparser.dto.ParsedHtmlResource;
 import org.openflexo.toolbox.HTMLUtils;
 
+import com.google.common.collect.ImmutableMap;
+
 public class OpenXml2Html {
+
 	private static final Logger logger = Logger.getLogger(OpenXml2Html.class.getPackage().toString());
+
+	private static final String DRAWING_ML_NS_PREFIX = "a";
+	private static final Map<String, String> NAMESPACE_URIS = ImmutableMap.of(DRAWING_ML_NS_PREFIX,
+			"http://schemas.openxmlformats.org/drawingml/2006/main");
 
 	private Set<String> availableCssClasses;
 	private String resourcesDirectory;
@@ -227,7 +234,7 @@ public class OpenXml2Html {
 		parsedHtml.append("<table ");
 		Element captionElement = (Element) element.selectSingleNode("w:tblPr/w:tblCaption");
 		if (captionElement != null && captionElement.attributeValue("val") != null) {
-			parsedHtml.append("title=\"").append(StringEscapeUtils.escapeHtml(captionElement.attributeValue("val").toString()))
+			parsedHtml.append("title=\"").append(StringEscapeUtils.escapeHtml4(captionElement.attributeValue("val").toString()))
 					.append("\" ");
 		}
 		parsedHtml.append(">");
@@ -309,10 +316,10 @@ public class OpenXml2Html {
 
 			parsedHtml.append("<a href=\"" + href + "\"");
 			if (target != null) {
-				parsedHtml.append(" target=\"" + StringEscapeUtils.escapeHtml(target) + "\"");
+				parsedHtml.append(" target=\"" + StringEscapeUtils.escapeHtml4(target) + "\"");
 			}
 			if (title != null) {
-				parsedHtml.append(" title=\"" + StringEscapeUtils.escapeHtml(title) + "\"");
+				parsedHtml.append(" title=\"" + StringEscapeUtils.escapeHtml4(title) + "\"");
 			}
 
 			parsedHtml.append(">");
@@ -370,9 +377,8 @@ public class OpenXml2Html {
 		ParsedHtml parsedHtml = new ParsedHtml();
 
 		try {
-			Dom4jXPath xpath = new Dom4jXPath("descendant::a:blip");
-			xpath.addNamespace(DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getPrefix(), DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getURI());
-
+			XPath xpath = DocumentHelper.createXPath("descendant::" + DRAWING_ML_NS_PREFIX + ":blip");
+			xpath.setNamespaceURIs(NAMESPACE_URIS);
 			Element ablipElement = (Element) xpath.selectSingleNode(element);
 			if (ablipElement == null) {
 				logger.warning("Cannot handle drawing tag: a:blip element not found");
@@ -435,9 +441,6 @@ public class OpenXml2Html {
 		} catch (IOException e) {
 			logger.log(Level.WARNING, "Cannot handle drawing tag: IOException catched", e);
 			return new ParsedHtml();
-		} catch (JaxenException e) {
-			logger.log(Level.WARNING, "Cannot handle drawing tag: JaxenException catched", e);
-			return new ParsedHtml();
 		}
 	}
 
@@ -458,7 +461,7 @@ public class OpenXml2Html {
 
 		ParsedHtml parsedHtml = new ParsedHtml();
 
-		parsedHtml.append(StringEscapeUtils.escapeHtml(element.getText()));
+		parsedHtml.append(StringEscapeUtils.escapeHtml4(element.getText()));
 
 		return parsedHtml;
 	}

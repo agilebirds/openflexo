@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RevertToSavedGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RevertToSavedGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertToSavedGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action) {
+			public boolean run(EventObject e, RevertToSavedGeneratedFile action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RevertToSavedGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RevertToSavedGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertToSavedGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action) {
+			public boolean run(EventObject e, RevertToSavedGeneratedFile action) {
 				getControllerActionInitializer().getSGController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}

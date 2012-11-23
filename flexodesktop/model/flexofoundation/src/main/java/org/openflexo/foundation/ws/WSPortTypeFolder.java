@@ -19,13 +19,11 @@
  */
 package org.openflexo.foundation.ws;
 
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
@@ -42,7 +40,7 @@ public class WSPortTypeFolder extends WSObject {
 		parentService = group;
 	}
 
-	public Vector getWSPortTypes() {
+	public Vector<WSPortType> getWSPortTypes() {
 		return parentService.getWSPortTypes();
 	}
 
@@ -86,22 +84,15 @@ public class WSPortTypeFolder extends WSObject {
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public WSObject getParent() {
 		return parentService;
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
-		Vector a = new Vector();
-		Enumeration en = getWSPortTypes().elements();
-		while (en.hasMoreElements()) {
-			WSPortType element = (WSPortType) en.nextElement();
-			a.add(element.getFlexoProcess());
+	public Vector<FlexoModelObject> getOrderedChildren() {
+		Vector<FlexoModelObject> a = new Vector<FlexoModelObject>();
+		for (WSPortType port : getWSPortTypes()) {
+			a.add(port.getFlexoProcess());
 		}
 		return a;
 	}

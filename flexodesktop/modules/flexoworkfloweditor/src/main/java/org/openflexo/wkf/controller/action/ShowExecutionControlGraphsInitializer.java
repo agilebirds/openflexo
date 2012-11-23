@@ -19,45 +19,27 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
-
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoActionVisibleCondition;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.ShowExecutionControlGraphs;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
+public class ShowExecutionControlGraphsInitializer extends ActionInitializer<ShowExecutionControlGraphs, WKFObject, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ShowExecutionControlGraphsInitializer.class.getPackage().getName());
 
 	ShowExecutionControlGraphsInitializer(WKFControllerActionInitializer actionInitializer) {
 		super(ShowExecutionControlGraphs.actionType, actionInitializer);
-	}
-
-	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() {
-		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
-	}
-
-	@Override
-	protected void initActionType(FlexoActionType actionType, FlexoActionInitializer initializer, FlexoActionFinalizer finalizer,
-			FlexoExceptionHandler exceptionHandler, FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon, Icon disabledIcon) {
-		super.initActionType(actionType, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut,
-				enabledIcon, disabledIcon);
 		if (isControlGraphComputationAvailable()) {
 			Method initMethod;
 			try {
@@ -71,10 +53,15 @@ public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
 	}
 
 	@Override
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
 	protected FlexoActionInitializer<ShowExecutionControlGraphs> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowExecutionControlGraphs>() {
 			@Override
-			public boolean run(ActionEvent e, ShowExecutionControlGraphs action) {
+			public boolean run(EventObject e, ShowExecutionControlGraphs action) {
 				// try{
 				// if(action.getFocusedObject() instanceof AbstractActivityNode &&
 				// ((AbstractActivityNode)action.getFocusedObject()).isBeginNode()){
@@ -92,7 +79,7 @@ public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowExecutionControlGraphs> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowExecutionControlGraphs>() {
 			@Override
-			public boolean run(ActionEvent e, ShowExecutionControlGraphs action) {
+			public boolean run(EventObject e, ShowExecutionControlGraphs action) {
 				/*
 				 * if (action.getFocusedObject() instanceof OperationNode) { OperationNode operationNode = action.getFocusedObject(); if
 				 * (operationNode.getComponentInstance().getComponentDefinition() != null) { if (Module.IE_MODULE.isAvailable()) {

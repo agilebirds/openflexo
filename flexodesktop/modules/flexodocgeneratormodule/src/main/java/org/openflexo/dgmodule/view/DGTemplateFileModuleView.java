@@ -75,8 +75,8 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileFormat.TextFileFormat;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -181,13 +181,13 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			controlPanel = new JPanel(new FlowLayout());
 			if (_CGTemplate.isCustomTemplate()) {
 				final FlexoActionButton editAction = new FlexoActionButton(EditCustomTemplateFile.actionType, "edit",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton saveAction = new FlexoActionButton(SaveCustomTemplateFile.actionType, "save",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton cancelAction = new FlexoActionButton(CancelEditionOfCustomTemplateFile.actionType, "cancel",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
@@ -199,7 +199,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 				controlPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 			} else {
 				FlexoActionButton redefineAction = new FlexoActionButton(RedefineCustomTemplateFile.actionType,
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				actionButtons.add(redefineAction);
 				controlPanel.add(redefineAction);
 			}
@@ -265,7 +265,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.DOCUMENTATION_GENERATOR_PERSPECTIVE;
 	}
 

@@ -60,8 +60,10 @@ import org.openflexo.fib.editor.notifications.SelectedObjectChange;
 import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBAttributeNotification;
+import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBNumber;
@@ -72,6 +74,8 @@ import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
+import org.openflexo.fib.view.widget.FIBColorWidget;
+import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -131,6 +135,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	private void recursivelyAddListenersTo(Component c) {
+		/*for (MouseListener ml : c.getMouseListeners()) {
+			c.removeMouseListener(ml);
+		}*/
 		c.addMouseListener(this);
 		c.addFocusListener(this);
 		// Listen to drag'n'drop events
@@ -159,9 +166,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	private boolean isComponentRootComponentForAnyFIBView(Component c) {
-		Enumeration<FIBView> en = getController().getViews();
+		Enumeration<FIBView<?, ?>> en = getController().getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.getResultingJComponent() == c) {
 				return true;
 			}
@@ -309,6 +316,11 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {
 		// System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
 
+		if (view == null) {
+			logger.warning("Received ModelNotifications for null view !!!");
+			return;
+		}
+
 		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
 			if (dataModification instanceof FIBAddingNotification) {
 				if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBComponent) {
@@ -376,6 +388,19 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 				} else if (n.getAttribute() == FIBNumber.Parameters.columns) {
 					((FIBNumberWidget<?>) view).updateColumns();
 				}
+			}
+		}
+
+		if (o instanceof FIBFont) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBFont.Parameters.allowsNull) {
+				((FIBFontWidget) view).updateCheckboxVisibility();
+			}
+		}
+		if (o instanceof FIBColor) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBColor.Parameters.allowsNull) {
+				((FIBColorWidget) view).updateCheckboxVisibility();
 			}
 		}
 

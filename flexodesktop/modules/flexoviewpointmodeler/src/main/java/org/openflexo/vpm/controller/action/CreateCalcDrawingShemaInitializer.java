@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -59,7 +59,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateExampleDrawing> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDrawing action) {
 
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -72,7 +72,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateExampleDrawing> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDrawing action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}

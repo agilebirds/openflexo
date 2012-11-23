@@ -63,7 +63,7 @@ public abstract class Constant<V> extends Expression {
 	}
 
 	/*@Override
-	public Expression evaluate(EvaluationContext context) {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) {
 		return this;
 	}*/
 
@@ -264,7 +264,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return new FloatConstant(getValue());
 		}*/
 
@@ -340,7 +340,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return new DateConstant(computeDateForNow());
 		}*/
 
@@ -401,7 +401,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		/*@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return this;
 		}*/
 

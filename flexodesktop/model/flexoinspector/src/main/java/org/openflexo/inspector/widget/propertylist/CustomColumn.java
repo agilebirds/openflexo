@@ -257,7 +257,7 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(_propertyListColumn.getStringRepresentation(value));
-					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+					if (ToolBox.isMacOSLaf()) {
 						((JLabel) returned).setForeground(getColorFor(value));
 					}
 				}

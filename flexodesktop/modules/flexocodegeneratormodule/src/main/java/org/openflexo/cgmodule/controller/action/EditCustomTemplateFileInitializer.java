@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -27,7 +27,6 @@ import javax.swing.Icon;
 import org.openflexo.cgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.action.EditCustomTemplateFile;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
@@ -50,14 +49,14 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+			public boolean run(EventObject e, EditCustomTemplateFile action) {
 				CGTemplateFileModuleView editor;
 				if (action.getInvoker() != null && action.getInvoker() instanceof CGTemplateFileModuleView
 						&& ((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					editor = (CGTemplateFileModuleView) action.getInvoker();
 				} else {
 					editor = (CGTemplateFileModuleView) getControllerActionInitializer().getGeneratorController().moduleViewForObject(
-							(CGTemplate) action.getFocusedObject());
+							action.getFocusedObject());
 				}
 				if (editor != null) {
 					action.setTemplateFileContentEditor(editor);
@@ -72,7 +71,7 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+			public boolean run(EventObject e, EditCustomTemplateFile action) {
 				if (action.getInvoker() == null || !(action.getInvoker() instanceof CGTemplateFileModuleView)
 						|| !((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					getControllerActionInitializer().getGeneratorController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());

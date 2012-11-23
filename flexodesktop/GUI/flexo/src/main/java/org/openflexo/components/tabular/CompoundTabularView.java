@@ -21,8 +21,8 @@ package org.openflexo.components.tabular;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +40,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * A compound tabular view represents a logical group of tabular views with a specified layout (for example on a JSplitPane), with
@@ -53,7 +53,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 
 	static final Logger logger = Logger.getLogger(CompoundTabularView.class.getPackage().getName());
 
-	private SelectionManagingController _controller;
+	private FlexoController _controller;
 
 	private O _object;
 
@@ -73,7 +73,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 
 	private JLabel titleLabel;
 
-	public CompoundTabularView(O object, SelectionManagingController controller, String t) {
+	public CompoundTabularView(O object, FlexoController controller, String t) {
 		super();
 		_controller = controller;
 		_object = object;
@@ -85,7 +85,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 		_slaveTabularViews = new Vector<TabularView>();
 	}
 
-	public SelectionManagingController getController() {
+	public FlexoController getController() {
 		return _controller;
 	}
 
@@ -170,7 +170,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	 * 
 	 * @return a Vector of TabularView instances
 	 */
-	public Vector getSlaveTabularViews() {
+	public Vector<TabularView> getSlaveTabularViews() {
 		return _slaveTabularViews;
 	}
 
@@ -193,12 +193,10 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 		// addToSelection() received
 		// logger.info ("addToSelection() "+object+" in "+this);
 		// _focusedObject = object;
-		for (Enumeration en = _masterTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _masterTabularViews) {
 			next.fireObjectSelected(object);
 		}
-		for (Enumeration en = _slaveTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _slaveTabularViews) {
 			next.fireObjectSelected(object);
 		}
 		updateControls();
@@ -212,12 +210,10 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
 		// removeFromSelection() received
-		for (Enumeration en = _masterTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _masterTabularViews) {
 			next.fireObjectDeselected(object);
 		}
-		for (Enumeration en = _slaveTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _slaveTabularViews) {
 			next.fireObjectDeselected(object);
 		}
 		updateControls();
@@ -230,12 +226,10 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	public void fireResetSelection() {
 		// resetSelection() received
 		// _focusedObject = null;
-		for (Enumeration en = _masterTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _masterTabularViews) {
 			next.fireResetSelection();
 		}
-		for (Enumeration en = _slaveTabularViews.elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _slaveTabularViews) {
 			next.fireResetSelection();
 		}
 		updateControls();
@@ -256,18 +250,14 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	}
 
 	public void updateControls() {
-		for (Enumeration en = _controls.keys(); en.hasMoreElements();) {
-			JButton button = (JButton) en.nextElement();
-			Object obj = _controls.get(button);
-			if (obj instanceof TabularViewAction) {
-				TabularViewAction action = (TabularViewAction) obj;
-				FlexoActionType actionType = action.getActionType();
-				try {
-					button.setEnabled(actionType.isEnabled(action.getFocusedObject(), action.getGlobalSelection(), getController()
-							.getEditor()));
-				} catch (NullPointerException e) {
-					button.setEnabled(false);
-				}
+		for (Map.Entry<JButton, TabularViewAction> e : _controls.entrySet()) {
+			JButton button = e.getKey();
+			TabularViewAction action = e.getValue();
+			FlexoActionType actionType = action.getActionType();
+			try {
+				button.setEnabled(actionType.isEnabled(action.getFocusedObject(), action.getGlobalSelection(), getController().getEditor()));
+			} catch (NullPointerException e1) {
+				button.setEnabled(false);
 			}
 		}
 	}
@@ -279,14 +269,12 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 		if (anObject == null) {
 			return false;
 		}
-		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _masterTabularViews) {
 			if (next.getModel().indexOf(anObject) > -1) {
 				return true;
 			}
 		}
-		for (Enumeration en = getSlaveTabularViews().elements(); en.hasMoreElements();) {
-			TabularView next = (TabularView) en.nextElement();
+		for (TabularView next : _slaveTabularViews) {
 			if (next.getModel().indexOf(anObject) > -1) {
 				return true;
 			}
@@ -301,11 +289,10 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	 * 
 	 * @return
 	 */
-	public Vector getViewSelection() {
+	public Vector<FlexoModelObject> getViewSelection() {
 		// logger.info("View selection, current selection is "+getSelectionManager().getObjectSelection());
-		Vector returned = new Vector(getSelectionManager().getSelection());
-		for (Enumeration en = getSelectionManager().getSelection().elements(); en.hasMoreElements();) {
-			FlexoModelObject next = (FlexoModelObject) en.nextElement();
+		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>(getSelectionManager().getSelection());
+		for (FlexoModelObject next : getSelectionManager().getSelection()) {
 			if (!represents(next)) {
 				// logger.info("exclude "+next+" from view selection");
 				returned.remove(next);

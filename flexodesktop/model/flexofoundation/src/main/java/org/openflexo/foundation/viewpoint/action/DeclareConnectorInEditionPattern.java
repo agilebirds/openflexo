@@ -81,12 +81,12 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
 			return connector != null && connector.getViewPoint().getEditionPatterns().size() > 0;
 		}
 
@@ -190,7 +190,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 					for (PropertyEntry e : propertyEntries) {
 						if (e.selectEntry) {
 							if (e.property instanceof OntologyObjectProperty) {
-								OntologyObject range = e.property.getRange();
+								OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
 								if (range instanceof OntologyClass) {
 									IndividualPatternRole newPatternRole = new IndividualPatternRole(builder);
 									newPatternRole.setPatternRoleName(e.property.getName());
@@ -245,7 +245,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 									break;
 								}
 							} else if (e.property instanceof OntologyObjectProperty) {
-								OntologyObject range = e.property.getRange();
+								OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
 								if (range instanceof OntologyClass) {
 									newParameter = new IndividualParameter(builder);
 									newParameter.setName(e.property.getName());
@@ -282,7 +282,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 					for (PropertyEntry e : propertyEntries) {
 						if (e.selectEntry) {
 							if (e.property instanceof OntologyObjectProperty) {
-								OntologyObject range = e.property.getRange();
+								OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
 								if (range instanceof OntologyClass) {
 									ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(builder);
 									propertyAssertion.setOntologyProperty(e.property);
@@ -320,7 +320,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 					for (PropertyEntry e : propertyEntries) {
 						if (e.selectEntry) {
 							if (e.property instanceof OntologyObjectProperty) {
-								OntologyObject range = e.property.getRange();
+								OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
 								if (range instanceof OntologyClass) {
 									InspectorEntry newInspectorEntry = null;
 									newInspectorEntry = new TextFieldInspectorEntry(builder);
@@ -523,8 +523,8 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 			if (property instanceof OntologyDataProperty && ((OntologyDataProperty) property).getDataType() != null) {
 				return ((OntologyDataProperty) property).getDataType().name();
 			}
-			if (property.getRange() != null) {
-				return property.getRange().getName();
+			if (property instanceof OntologyObjectProperty && ((OntologyObjectProperty) property).getRange() != null) {
+				return ((OntologyObjectProperty) property).getRange().getName();
 			}
 			return "";
 		}

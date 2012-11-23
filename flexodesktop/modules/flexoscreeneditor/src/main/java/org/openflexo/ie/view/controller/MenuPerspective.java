@@ -20,7 +20,6 @@
 package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -29,11 +28,11 @@ import org.openflexo.ie.view.FlexoMenuItemView;
 import org.openflexo.ie.view.FlexoMenuRootItemView;
 import org.openflexo.ie.view.MenuEditorBrowserView;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
+class MenuPerspective extends FlexoPerspective {
 
 	private final IEController _controller;
 	private MenuEditorBrowserView _menuEditorBrowserView;
@@ -48,12 +47,14 @@ class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 		_controller = controller;
 		_menuEditorBrowserView = new MenuEditorBrowserView(controller);
 		_menuEditorBrowserView.setName(FlexoLocalization.localizedForKey("Menu", _menuEditorBrowserView));
+		setTopLeftView(_menuEditorBrowserView);
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -63,7 +64,7 @@ class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -84,17 +85,17 @@ class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 	}
 
 	@Override
-	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoItemMenu menu, FlexoController controller) {
-		if (menu.isRootMenu()) {
-			return new FlexoMenuRootItemView(menu, (IEController) controller);
+	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof FlexoItemMenu) {
+			FlexoItemMenu menu = (FlexoItemMenu) object;
+			if (menu.isRootMenu()) {
+				return new FlexoMenuRootItemView(menu, (IEController) controller);
+			} else {
+				return new FlexoMenuItemView(menu, (IEController) controller);
+			}
 		} else {
-			return new FlexoMenuItemView(menu, (IEController) controller);
+			return null;
 		}
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	@Override
@@ -102,23 +103,4 @@ class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 		_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
 	}
 
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _menuEditorBrowserView;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
-	}
 }

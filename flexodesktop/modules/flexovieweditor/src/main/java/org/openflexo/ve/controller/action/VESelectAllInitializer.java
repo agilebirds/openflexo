@@ -19,8 +19,8 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
@@ -52,7 +52,7 @@ public class VESelectAllInitializer extends ActionInitializer<VESelectAll, ViewO
 	protected FlexoActionInitializer<VESelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<VESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, VESelectAll action) {
+			public boolean run(EventObject e, VESelectAll action) {
 				return true;
 			}
 		};
@@ -62,7 +62,7 @@ public class VESelectAllInitializer extends ActionInitializer<VESelectAll, ViewO
 	protected FlexoActionFinalizer<VESelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<VESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, VESelectAll action) {
+			public boolean run(EventObject e, VESelectAll action) {
 				System.out.println("Select all with " + action.getFocusedObject());
 				ViewObject container = action.getFocusedObject();
 				if (action.getFocusedObject() instanceof ViewConnector) {

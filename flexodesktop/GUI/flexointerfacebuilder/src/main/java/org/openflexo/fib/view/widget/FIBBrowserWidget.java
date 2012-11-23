@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.MouseListener;
 import java.util.Collection;
 import java.util.List;
@@ -90,14 +89,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			_browserModel = new FIBBrowserModel(_fibBrowser, this, getController());
 		}
 		return _browserModel;
-	}
-
-	public void setVisibleRowCount(int rows) {
-		int height = _fibBrowser.getRowHeight() * _fibBrowser.getVisibleRowCount();
-		int width = _dynamicComponent.getPreferredSize().width; // DEFAULT_WIDTH;
-		// _dynamicComponent.setMinimumSize(new Dimension(width, height));
-		_dynamicComponent.setPreferredSize(new Dimension(width, height));
-		_dynamicComponent.revalidate();
 	}
 
 	public JTree getJTree() {
@@ -317,7 +308,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		_tree.setAutoscrolls(true);
 		ToolTipManager.sharedInstance().registerComponent(_tree);
 
-		if (_fibBrowser.getRowHeight() > 0) {
+		if (_fibBrowser.getRowHeight() != null) {
 			_tree.setRowHeight(_fibBrowser.getRowHeight());
 		}
 
@@ -343,8 +334,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		if (_fibBrowser.getShowFooter()) {
 			_dynamicComponent.add(getBrowserModel().getFooter(), BorderLayout.SOUTH);
 		}
+		if (_fibBrowser.getVisibleRowCount() != null) {
+			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
+		}
 
-		setVisibleRowCount(_fibBrowser.getVisibleRowCount());
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
 	}

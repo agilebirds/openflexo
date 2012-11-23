@@ -74,12 +74,12 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
 			return object != null && object.getProcess() != null;
 		}
 

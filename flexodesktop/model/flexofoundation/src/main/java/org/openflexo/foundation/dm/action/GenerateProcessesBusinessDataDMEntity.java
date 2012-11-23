@@ -43,12 +43,12 @@ public class GenerateProcessesBusinessDataDMEntity extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 	};

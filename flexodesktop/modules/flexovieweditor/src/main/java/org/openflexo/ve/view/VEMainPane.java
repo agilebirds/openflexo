@@ -19,36 +19,18 @@
  */
 package org.openflexo.ve.view;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for ViewEditor module
  * 
  * @author sylvain
  */
-public class VEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class VEMainPane extends FlexoMainPane {
 
-	public VEMainPane(ModuleView moduleView, VEFrame mainFrame, VEController controller) {
-		super(moduleView, mainFrame, controller, true, true);
-		// setLeftView(new OEBrowserView(controller));
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-		return null;
+	public VEMainPane(VEController controller) {
+		super(controller);
 	}
 
 }

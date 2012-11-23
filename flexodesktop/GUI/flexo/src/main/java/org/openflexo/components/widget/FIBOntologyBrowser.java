@@ -87,12 +87,12 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 
 	private boolean isSearching = false;
 	private String filteredName;
-	private List<OntologyObject<?>> matchingValues;
-	private OntologyObject<?> selectedValue;
+	private List<OntologyObject> matchingValues;
+	private OntologyObject selectedValue;
 
 	public FIBOntologyBrowser(FlexoOntology ontology) {
 		super(FIB_FILE, null, FlexoLocalization.getMainLocalizer());
-		matchingValues = new ArrayList<OntologyObject<?>>();
+		matchingValues = new ArrayList<OntologyObject>();
 		setOntology(ontology);
 		setEditedObject(this);
 	}
@@ -310,7 +310,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		this.filteredName = filteredName;
 	}
 
-	public List<OntologyObject<?>> getMatchingValues() {
+	public List<OntologyObject> getMatchingValues() {
 		return matchingValues;
 	}
 

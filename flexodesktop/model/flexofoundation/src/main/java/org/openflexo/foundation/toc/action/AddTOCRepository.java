@@ -42,12 +42,12 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 			"add_toc", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
@@ -112,7 +112,7 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 				if (!addDocType.hasActionExecutionSucceeded()) {
 					throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_doc_type"));
 				}
-				docType = addDocType.getNewDocType();
+				this.docType = addDocType.getNewDocType();
 			}
 		}
 		getData().addToRepositories(newRepository);

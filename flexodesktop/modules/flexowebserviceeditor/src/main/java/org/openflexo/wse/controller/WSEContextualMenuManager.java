@@ -22,7 +22,6 @@ package org.openflexo.wse.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.action.AddServiceInterface;
@@ -38,11 +37,8 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class WSEContextualMenuManager extends ContextualMenuManager {
 
-	private WSEController _controller;
-
-	public WSEContextualMenuManager(WSESelectionManager selectionManager, FlexoEditor editor, WSEController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public WSEContextualMenuManager(WSESelectionManager selectionManager, WSEController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override

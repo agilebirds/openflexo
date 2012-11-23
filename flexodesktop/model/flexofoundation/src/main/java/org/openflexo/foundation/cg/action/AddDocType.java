@@ -40,12 +40,12 @@ public class AddDocType extends FlexoAction<AddDocType, FlexoModelObject, FlexoM
 			"add_doc_type", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 

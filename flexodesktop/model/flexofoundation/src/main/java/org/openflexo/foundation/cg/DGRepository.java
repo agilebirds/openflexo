@@ -477,7 +477,7 @@ public class DGRepository extends GenerationRepository {
 			tocRepositoryRef = null;
 		}
 		if (tocRepository != null) {
-			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(getProject(), tocRepository);
+			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(tocRepository);
 		} else {
 			tocRepositoryRef = null;
 		}

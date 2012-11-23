@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +61,7 @@ public class ImportDMEOModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportDMEOModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportDMEOModel>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDMEOModel action) {
+			public boolean run(EventObject e, ImportDMEOModel action) {
 				File newEOModelFile = OpenEOModelComponent.getEOModelDirectory();
 				if (newEOModelFile != null) {
 					if (logger.isLoggable(Level.INFO)) {
@@ -79,7 +79,7 @@ public class ImportDMEOModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportDMEOModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportDMEOModel>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDMEOModel action) {
+			public boolean run(EventObject e, ImportDMEOModel action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for ImportDMEOModel in DMEORepository");

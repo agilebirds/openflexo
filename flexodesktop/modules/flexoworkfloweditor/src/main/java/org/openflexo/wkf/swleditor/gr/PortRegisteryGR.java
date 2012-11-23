@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import static org.openflexo.wkf.swleditor.gr.ContainerGR.logger;
+import static org.openflexo.wkf.swleditor.gr.ContainerGR.*;
 
 import java.awt.Color;
 import java.awt.Component;

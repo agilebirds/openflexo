@@ -58,6 +58,11 @@ public class BindingDefinition extends Observable {
 	}
 
 	@Override
+	public int hashCode() {
+		return (variableName == null ? 0 : variableName.hashCode()) + (type == null ? 0 : type.hashCode());
+	}
+
+	@Override
 	public boolean equals(Object object) {
 		if (object instanceof BindingDefinition) {
 			BindingDefinition bd = (BindingDefinition) object;

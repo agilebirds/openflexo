@@ -363,7 +363,9 @@ public class WORepository extends DMRepository {
 			sessionProperty.setGetterCode("public Session getSession() {" + StringUtils.LINE_SEPARATOR + "\t return (Session)session();"
 					+ StringUtils.LINE_SEPARATOR + "}");
 		} catch (ParserNotInstalledException e) {
-			e.printStackTrace();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info(e.getMessage());
+			}
 		} catch (DuplicateMethodSignatureException e) {
 			e.printStackTrace();
 		}
@@ -375,7 +377,9 @@ public class WORepository extends DMRepository {
 			applicationProperty.setGetterCode("public Application getApplication() {" + StringUtils.LINE_SEPARATOR
 					+ "\t return (Application)application();" + StringUtils.LINE_SEPARATOR + "}");
 		} catch (ParserNotInstalledException e) {
-			e.printStackTrace();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info(e.getMessage());
+			}
 		} catch (DuplicateMethodSignatureException e) {
 			e.printStackTrace();
 		}

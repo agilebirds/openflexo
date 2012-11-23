@@ -102,28 +102,35 @@ public class KeyValueLibrary {
 		Vector<KeyValueProperty> returned = accessibleKeyValueProperties.get(declaringType);
 		if (returned == null) {
 			returned = new Vector<KeyValueProperty>();
-			Type current = declaringType;
-			while (current != null) {
-				Vector<KeyValueProperty> declaredProperties = getDeclaredProperties(current);
-				for (KeyValueProperty p : declaredProperties) {
-					boolean isAlreadyContained = false;
-					for (KeyValueProperty p2 : returned) {
-						if (p.getName().equals(p2.getName())) {
-							isAlreadyContained = true;
-							break;
-						}
-					}
-					if (!isAlreadyContained) {
-						returned.add(p);
-					}
-				}
-				// returned.addAll(getDeclaredProperties(current));
-				current = TypeUtils.getSuperType(current);
-				// current = current.getSuperclass();
-			}
+			appendAccessibleProperties(declaringType, returned);
 			accessibleKeyValueProperties.put(declaringType, returned);
 		}
 		return returned;
+	}
+
+	public static void appendAccessibleProperties(Type declaringType, Vector<KeyValueProperty> returned) {
+		Type current = declaringType;
+		while (current != null) {
+			Vector<KeyValueProperty> declaredProperties = getDeclaredProperties(current);
+			for (KeyValueProperty p : declaredProperties) {
+				boolean isAlreadyContained = false;
+				for (KeyValueProperty p2 : returned) {
+					if (p.getName().equals(p2.getName())) {
+						isAlreadyContained = true;
+						break;
+					}
+				}
+				if (!isAlreadyContained) {
+					returned.add(p);
+				}
+			}
+			System.err.println("");
+			for (Type t : TypeUtils.getSuperInterfaceTypes(current)) {
+				appendAccessibleProperties(t, returned);
+			}
+			// returned.addAll(getDeclaredProperties(current));
+			current = TypeUtils.getSuperType(current);
+		}
 	}
 
 	public static Vector<MethodDefinition> getAccessibleMethods(Type declaringType) {
@@ -186,7 +193,7 @@ public class KeyValueLibrary {
 			Vector<String> excludedSignatures) {
 		Vector<KeyValueProperty> returned = new Vector<KeyValueProperty>();
 
-		Class theClass = TypeUtils.getBaseClass(declaringTypeType);
+		Class<?> theClass = TypeUtils.getBaseClass(declaringTypeType);
 		if (theClass == null) {
 			logger.warning("Cannot search properties for type: " + declaringTypeType);
 			return null;

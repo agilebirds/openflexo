@@ -51,12 +51,12 @@ public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return object instanceof AbstractCGFile;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(object, globalSelection);
 			if (!(repository instanceof SourceRepository)) {
 				return false;

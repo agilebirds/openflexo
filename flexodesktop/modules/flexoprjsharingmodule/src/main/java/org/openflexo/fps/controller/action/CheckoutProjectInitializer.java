@@ -19,8 +19,8 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -56,7 +56,7 @@ public class CheckoutProjectInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CheckoutProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<CheckoutProject>() {
 			@Override
-			public boolean run(ActionEvent e, final CheckoutProject action) {
+			public boolean run(EventObject e, final CheckoutProject action) {
 				final DirectoryParameter directoryParameter = new DirectoryParameter("localDirectory", "local_directory",
 						action.getLocalDirectory() != null ? action.getLocalDirectory() : lastCheckoutDirectory);
 				final TextFieldParameter localNameParameter = new TextFieldParameter("localName", "local_name", action.getLocalName());
@@ -99,7 +99,7 @@ public class CheckoutProjectInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CheckoutProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CheckoutProject>() {
 			@Override
-			public boolean run(ActionEvent e, CheckoutProject action) {
+			public boolean run(EventObject e, CheckoutProject action) {
 				getControllerActionInitializer().getFPSController().setSharedProject(action.getCheckoutedProject());
 				FPSPreferences.addToLastOpenedProjects(action.getCheckoutedProject().getModuleDirectory());
 				FlexoPreferences.savePreferences(true);

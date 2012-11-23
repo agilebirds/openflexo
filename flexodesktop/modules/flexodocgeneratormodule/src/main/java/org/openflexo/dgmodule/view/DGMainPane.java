@@ -20,56 +20,18 @@
 package org.openflexo.dgmodule.view;
 
 import org.openflexo.dgmodule.controller.DGController;
-import org.openflexo.doceditor.view.DEMainPane;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.ModuleView;
+import org.openflexo.view.FlexoMainPane;
 
 /**
  * @author gpolet
  * 
  */
-public class DGMainPane extends DEMainPane {
-
-	// private DGBrowserView dgBrowserView;
-
+public class DGMainPane extends FlexoMainPane {
 	/**
-	 * @param moduleView
-	 * @param mainFrame
 	 * @param controller
 	 */
-	public DGMainPane(DGController controller, ModuleView moduleView, FlexoFrame mainFrame) {
-		super(controller, moduleView, mainFrame);
-		// dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
-		// setLeftView(dgBrowserView);
-		/*if (deBrowserView.getParent() != null) {
-			deBrowserView.getParent().remove(deBrowserView);
-		}
-		deBrowserView.getBrowser().delete();
-		deBrowserView = null;*/
+	public DGMainPane(DGController controller) {
+		super(controller);
 	}
-
-	/**
-	 * Overrides getParentObject
-	 * 
-	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-	 */
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof CGFile) {
-			return ((CGFile) object).getRepository();
-		}
-		return super.getParentObject(object);
-	}
-
-	@Override
-	public DGController getController() {
-		return (DGController) _controller;
-	}
-
-	/*public DGBrowserView getDgBrowserView() {
-		return dgBrowserView;
-	}*/
 
 }

@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class UpdateFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UpdateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateFiles action) {
+			public boolean run(EventObject e, UpdateFiles action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class UpdateFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UpdateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateFiles action) {
+			public boolean run(EventObject e, UpdateFiles action) {
 				return true;
 			}
 		};

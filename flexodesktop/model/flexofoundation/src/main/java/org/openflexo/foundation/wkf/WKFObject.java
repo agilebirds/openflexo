@@ -26,7 +26,6 @@ package org.openflexo.foundation.wkf;
  * Created by benoit on Mar 3, 2004
  */
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -63,7 +62,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable, Serializable {
+public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable {
 
 	private static final Logger logger = Logger.getLogger(WKFObject.class.getPackage().getName());
 
@@ -147,8 +146,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			queue.add(object);
 		}
 		if (object.getAllEmbeddedWKFObjects() != null) {
-			Enumeration en = object.getAllEmbeddedWKFObjects().elements();
-			Object candidate = null;
+			Enumeration<? extends WKFObject> en = object.getAllEmbeddedWKFObjects().elements();
+			WKFObject candidate = null;
 			while (en.hasMoreElements()) {
 				candidate = en.nextElement();
 				if (candidate == null) {
@@ -159,8 +158,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 					continue;
 				}
 				if (!queue.contains(candidate)) {
-					queue.add((WKFObject) candidate);
-					processToAdditionOfEmbedded((WKFObject) candidate, queue);
+					queue.add(candidate);
+					processToAdditionOfEmbedded(candidate, queue);
 				}
 			}
 		}

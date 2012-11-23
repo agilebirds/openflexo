@@ -105,23 +105,23 @@ import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Represent the controller of an instanciation of a FIBComponent in a particular Window Toolkit context (eg Swing)
+ * Represent the controller of an instantiation of a FIBComponent in a particular Window Toolkit context (eg Swing)
  * 
  * @author sylvain
  * 
  * @param <T>
  */
-public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
+public class FIBController extends Observable implements BindingEvaluationContext, Observer {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
-	private T dataObject;
+	private Object dataObject;
 	private final FIBComponent rootComponent;
 	private final Hashtable<FIBComponent, FIBView<?, ?>> views;
 	private FIBSelectable selectionLeader;
 	private FIBSelectable lastFocusedSelectable;
 
-	private FIBWidgetView focusedWidget;
+	private FIBWidgetView<?, ?, ?> focusedWidget;
 
 	private LocalizedDelegate parentLocalizer = null;
 
@@ -226,11 +226,11 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		return viewForComponent(getRootComponent());
 	}
 
-	public T getDataObject() {
+	public Object getDataObject() {
 		return dataObject;
 	}
 
-	public void setDataObject(T anObject) {
+	public void setDataObject(Object anObject) {
 		setDataObject(anObject, false);
 	}
 
@@ -238,7 +238,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		setDataObject(null, true);
 	}
 
-	public void setDataObject(T anObject, boolean forceUpdate) {
+	public void setDataObject(Object anObject, boolean forceUpdate) {
 		if (forceUpdate || anObject != dataObject) {
 			if (dataObject instanceof Observable) {
 				((Observable) dataObject).deleteObserver(this);
@@ -255,8 +255,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
-				Constructor c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
-				returned = (FIBController) c.newInstance(fibComponent);
+				Constructor<? extends FIBController> c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
+				returned = c.newInstance(fibComponent);
 			} catch (SecurityException e) {
 				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (NoSuchMethodException e) {
@@ -290,7 +290,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			FIBContainerView<? extends FIBContainer, JComponent> container) {
 		container.getJComponent().addMouseListener(editorLauncher);
 		for (FIBComponent c : container.getComponent().getSubComponents()) {
-			FIBView<FIBComponent, JComponent> subView = container.getController().viewForComponent(c);
+			FIBView<?, ?> subView = container.getController().viewForComponent(c);
 			if (subView instanceof FIBContainerView) {
 				recursivelyAddEditorLauncher(editorLauncher, (FIBContainerView) subView);
 			}
@@ -318,7 +318,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 			return returned;
 		}
-		returned.updateGraphicalProperties();
+		if (returned != null) {
+			returned.updateGraphicalProperties();
+		}
 		return returned;
 	}
 
@@ -547,13 +549,13 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 			if (newFocusedWidget != null) {
 				newFocusedWidget.getJComponent().repaint();
-			}
-			if (newFocusedWidget.isSelectableComponent()) {
-				lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
-				if (lastFocusedSelectable.synchronizedWithSelection()) {
-					selectionLeader = newFocusedWidget.getSelectableComponent();
-					logger.info("Selection LEADER is now " + selectionLeader);
-					fireSelectionChanged((FIBSelectable) newFocusedWidget);
+				if (newFocusedWidget.isSelectableComponent()) {
+					lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
+					if (lastFocusedSelectable.synchronizedWithSelection()) {
+						selectionLeader = newFocusedWidget.getSelectableComponent();
+						logger.info("Selection LEADER is now " + selectionLeader);
+						fireSelectionChanged((FIBSelectable) newFocusedWidget);
+					}
 				}
 			}
 		}

@@ -19,16 +19,17 @@
  */
 package org.openflexo.dre;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalDREModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * DocResourceEditor module
@@ -38,16 +39,22 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 public class DREModule extends FlexoModule implements ExternalDREModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DRE };
 
-	public DREModule() throws Exception {
-		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
-		setFlexoController(new DREController(this));
-		getDREController().loadRelativeWindows();
-		DREPreferences.init(getDREController());
+	public DREModule(ApplicationContext applicationContext) {
+		super(applicationContext);
+		DREPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-
 		// Put here a code to display default view
 		getDREController().setCurrentEditedObjectAsModuleView(DocResourceManager.instance().getDocResourceCenter().getRootFolder());
+	}
 
+	@Override
+	public Module getModule() {
+		return Module.DRE_MODULE;
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new DREController(this);
 	}
 
 	@Override
@@ -57,17 +64,6 @@ public class DREModule extends FlexoModule implements ExternalDREModule {
 
 	public DREController getDREController() {
 		return (DREController) getFlexoController();
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

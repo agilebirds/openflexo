@@ -101,7 +101,7 @@ public class VEClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects) {
 		return getSelectionManager().getSelectionSize() > 0;
 	}
 

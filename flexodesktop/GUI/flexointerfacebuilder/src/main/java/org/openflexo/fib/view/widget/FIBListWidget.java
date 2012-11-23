@@ -36,7 +36,6 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBList;
 
 public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object> implements FIBSelectable {
@@ -52,10 +51,13 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		_list = new JList(listData);
 		_list.setCellRenderer(getListCellRenderer());
 		_list.setSelectionMode(model.getSelectionMode().getMode());
-
-		_list.setVisibleRowCount(model.getVisibleRowCount());
+		if (model.getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(model.getVisibleRowCount());
+		}
 		// _list.setPrototypeCellValue("0123456789012345");
-		_list.setFixedCellHeight(model.getRowHeight());
+		if (model.getRowHeight() != null) {
+			_list.setFixedCellHeight(model.getRowHeight());
+		}
 
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
 
@@ -151,8 +153,16 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		oldListModel = aListModel;
 		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
-		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
-		_list.setFixedCellHeight(getWidget().getRowHeight());
+		if (getWidget().getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(getWidget().getVisibleRowCount());
+		} else {
+			_list.setVisibleRowCount(-1);
+		}
+		if (getWidget().getRowHeight() != null) {
+			_list.setFixedCellHeight(getWidget().getRowHeight());
+		} else {
+			_list.setFixedCellHeight(-1);
+		}
 		_list.setModel(aListModel);
 		_list.revalidate();
 		_list.repaint();
@@ -424,19 +434,27 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 			if (isSelected) {
 				if (isLastFocusedSelectable()) {
-					setForeground(getWidget().getTextSelectionColor());
-					setBackground(getWidget().getBackgroundSelectionColor());
+					if (getWidget().getTextSelectionColor() != null) {
+						setForeground(getWidget().getTextSelectionColor());
+					}
+					if (getWidget().getBackgroundSelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSelectionColor());
+					}
 				} else {
-					setForeground(getWidget().getTextNonSelectionColor());
-					setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					if (getWidget().getTextNonSelectionColor() != null) {
+						setForeground(getWidget().getTextNonSelectionColor());
+					}
+					if (getWidget().getBackgroundSecondarySelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					}
 				}
 			} else {
-				if (!isEnabled()) {
-					setForeground(FIBComponent.DISABLED_COLOR);
-				} else {
+				if (getWidget().getTextNonSelectionColor() != null) {
 					setForeground(getWidget().getTextNonSelectionColor());
 				}
-				setBackground(getWidget().getBackgroundNonSelectionColor());
+				if (getWidget().getBackgroundNonSelectionColor() != null) {
+					setBackground(getWidget().getBackgroundNonSelectionColor());
+				}
 			}
 
 			return label;

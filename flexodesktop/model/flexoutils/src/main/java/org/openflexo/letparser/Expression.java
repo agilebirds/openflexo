@@ -121,7 +121,7 @@ public class Expression extends Token {
 
 			Vector<IndexedOperator> allOperators = new Vector<IndexedOperator>();
 			for (int i = 0; i < unparsedList.size(); i++) {
-				if (i % 2 == 1) {
+				if (i % 2 != 0) {
 					// Impair: must be an operator
 					if (!(unparsedList.elementAt(i) instanceof Operator)) {
 						throw new ParseException("Syntax error near " + unparsedList.elementAt(i));

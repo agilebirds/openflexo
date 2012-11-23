@@ -2,14 +2,14 @@
 <Project id="SYL_391" name="TestBrowser" projectURI="http://www.agilebirds.com/projects/2011/6/TestBrowser_1307526451337" cssSheet="Contento" lastUniqueID="995" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy,11:46:58 08/06/2011" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="391" dontGenerate="false" useSpecificDescriptions="false">
   <resourcesCount>44</resourcesCount>
   No description
-  <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestBrowser" userID="SYL" version="2.4" file="TestBrowser.wolib">
+  <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestBrowser" userID="SYL" file="TestBrowser.wolib" version="2.4">
     <DependantResources id="SYL_COMPONENT_LIBRARY.TestBrowser_DR" />
     <SynchronizedResources id="SYL_COMPONENT_LIBRARY.TestBrowser_SR">
       <RMResource idref="SYL_RM.TestBrowser" />
       <OperationComponent idref="SYL_OPERATION_COMPONENT.TestComponent" />
     </SynchronizedResources>
   </ComponentLibrary>
-  <DataModel id="SYL_DATA_MODEL.TestBrowser" userID="SYL" file="DataModel/TestBrowser.dm" version="2.9">
+  <DataModel id="SYL_DATA_MODEL.TestBrowser" userID="SYL" version="2.9" file="DataModel/TestBrowser.dm">
     <DependantResources id="SYL_DATA_MODEL.TestBrowser_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
@@ -215,7 +215,7 @@
       <RMResource idref="SYL_RM.TestBrowser" />
     </SynchronizedResources>
   </JAR>
-  <NavigationMenu id="SYL_NAVIGATION_MENU.TestBrowser" userID="SYL" version="2.2" file="TestBrowser.menu">
+  <NavigationMenu id="SYL_NAVIGATION_MENU.TestBrowser" userID="SYL" file="TestBrowser.menu" version="2.2">
     <DependantResources id="SYL_NAVIGATION_MENU.TestBrowser_DR" />
     <SynchronizedResources id="SYL_NAVIGATION_MENU.TestBrowser_SR">
       <RMResource idref="SYL_RM.TestBrowser" />
@@ -408,4 +408,3 @@
   </FlexoWSLibrary>
   <DocType>BusinessTechnical,UserManual,Objectives,BusinessTechnical,</DocType>
 </Project>
-

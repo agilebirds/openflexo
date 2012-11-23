@@ -21,7 +21,6 @@ package org.openflexo.ie;
 
 import java.io.File;
 
-import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
@@ -34,21 +33,16 @@ import org.openflexo.toolbox.FileResource;
  */
 public final class IEPreferences extends ModulePreferences {
 
-	private static final Class IE_PREFERENCES = IEPreferences.class;
+	private static final Class<IEPreferences> IE_PREFERENCES = IEPreferences.class;
 
-	protected static final String SHOW_BINDINGVALUE_KEY = "showBindingValueInIE";
+	public static final String SHOW_BINDINGVALUE_KEY = "showBindingValueInIE";
 
-	private static IEController _controller;
-
-	public static void init(IEController controller) {
-		_controller = controller;
-		preferences(IE_PREFERENCES);
+	public static void init() {
+		getPreferences();
 	}
 
-	public static void reset(IEController controller) {
-		if (_controller == controller) {
-			_controller = null;
-		}
+	public static IEPreferences getPreferences() {
+		return preferences(IE_PREFERENCES);
 	}
 
 	public IEPreferences() {
@@ -61,7 +55,7 @@ public final class IEPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getDisplayBindingValue() {
-		Boolean value = preferences(IE_PREFERENCES).getBooleanProperty(SHOW_BINDINGVALUE_KEY);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_BINDINGVALUE_KEY);
 		if (value == null) {
 			return Boolean.FALSE;
 		}
@@ -72,8 +66,7 @@ public final class IEPreferences extends ModulePreferences {
 		if (displayBindingValue.booleanValue() == getDisplayBindingValue().booleanValue()) {
 			return;
 		}
-		preferences(IE_PREFERENCES).setBooleanProperty(SHOW_BINDINGVALUE_KEY, displayBindingValue);
-		_controller.notifyDisplayPrefHasChanged();
+		getPreferences().setBooleanProperty(SHOW_BINDINGVALUE_KEY, displayBindingValue);
 	}
 
 }

@@ -15,8 +15,9 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.viewPoint.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
       <Label label="version" localize="true" name="ViewpointVersionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewpointVersion" data="data.viewPoint.version" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
-     <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=true)">
- 
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" columns="5" data="data.index" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
+      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
         <Tab index="0" title="Drawing" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="BasicTab">
       <Label label="width" localize="true" name="WidthLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
       <Number numberType="DoubleType" columns="10" data="GRTab.data.width" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationwidth" localize="true" />

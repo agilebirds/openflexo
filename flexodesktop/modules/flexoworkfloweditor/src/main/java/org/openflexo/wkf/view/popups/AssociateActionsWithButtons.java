@@ -30,9 +30,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +51,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.foundation.ie.widget.IEButtonWidget;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
@@ -61,12 +61,12 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.FlexoBoolean;
 import org.openflexo.toolbox.WRLocator;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * To refactored!
@@ -86,21 +86,21 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 	private OperationAssociatedWithComponentSuccessfully exception;
 
-	protected Hashtable<IEHyperlinkWidget, JCheckBox> checkBoxes;
+	protected Map<IEHyperlinkWidget, JCheckBox> checkBoxes;
 
 	/**
 	 * Key: JComboBox Value: AbstractWidgetInterface
 	 */
-	protected Hashtable<JComboBox, IEHyperlinkWidget> comboBoxes;
+	protected Map<JComboBox, IEHyperlinkWidget> comboBoxes;
 
 	/**
 	 * Key: AbstractWidgetInterface Value: ActionNode
 	 */
-	protected Hashtable<IEHyperlinkWidget, ActionNode> associations;
+	protected Map<IEHyperlinkWidget, ActionNode> associations;
 
-	protected Vector<IEHyperlinkWidget> buttons;
+	protected List<IEHyperlinkWidget> buttons;
 
-	protected Vector<ActionNode> actions;
+	protected List<ActionNode> actions;
 
 	protected FlexoBoolean[] insertActionNode;
 
@@ -114,21 +114,21 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 	public static final ActionNode dummyNew = new ActionNode((FlexoProcess) null);
 
-	public AssociateActionsWithButtons(Vector<IEHyperlinkWidget> buttons, Vector<ActionNode> actions, OperationNode node,
+	public AssociateActionsWithButtons(List<IEHyperlinkWidget> buttons, Vector<ActionNode> actions, OperationNode node,
 			OperationAssociatedWithComponentSuccessfully exception)// Watch
 	// out buttons are also Hyperlink
 	{
-		super(FlexoModule.getActiveModule().getFlexoFrame());
+		super(FlexoFrame.getActiveFrame());
 		this.buttons = buttons;
 		this.actions = actions;
 		this.exception = exception;
 		currentOperation = node;
-		this.actions.insertElementAt(dummyNew, 0);
+		this.actions.add(0, dummyNew);
 		insertActionNode = new FlexoBoolean[buttons.size()];
 		associations = new Hashtable<IEHyperlinkWidget, ActionNode>();
-		Iterator i = buttons.iterator();
+		Iterator<IEHyperlinkWidget> i = buttons.iterator();
 		while (i.hasNext()) {
-			IEHyperlinkWidget element = (IEHyperlinkWidget) i.next();
+			IEHyperlinkWidget element = i.next();
 			associations.put(element, dummyNew);
 		}
 		initUI();
@@ -158,6 +158,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 		checkBoxes = new Hashtable<IEHyperlinkWidget, JCheckBox>();
 		comboBoxes = new Hashtable<JComboBox, IEHyperlinkWidget>();
 		mainPane = new JPanel(new VerticalLayout(4, 4, 4));
+		mainPane.setOpaque(false);
 		JPanel selectAllPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		selectAllPanel.setOpaque(false);
 		JCheckBox selectAll = new JCheckBox(FlexoLocalization.localizedForKey("select_all"));
@@ -169,18 +170,14 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				if (e.getSource() instanceof JCheckBox) {
 					JCheckBox c = (JCheckBox) e.getSource();
 					if (c.isSelected()) {
-						Enumeration<JCheckBox> en = checkBoxes.elements();
-						while (en.hasMoreElements()) {
-							JCheckBox box = en.nextElement();
+						for (JCheckBox box : checkBoxes.values()) {
 							if (!box.isSelected()) {
 								box.setSelected(true);
 							}
 						}
 						c.setText(FlexoLocalization.localizedForKey("all"));
 					} else {
-						Enumeration<JCheckBox> en = checkBoxes.elements();
-						while (en.hasMoreElements()) {
-							JCheckBox box = en.nextElement();
+						for (JCheckBox box : checkBoxes.values()) {
 							if (box.isSelected()) {
 								box.setSelected(false);
 							}
@@ -192,22 +189,16 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 		});
 		selectAllPanel.add(selectAll);
 		mainPane.add(selectAllPanel);
-		Iterator i = buttons.iterator();
 		int j = 0;
-		while (i.hasNext()) {
-			IEHyperlinkWidget widget = (IEHyperlinkWidget) i.next();
+		for (IEHyperlinkWidget widget : buttons) {
 			insertActionNode[j] = new FlexoBoolean(widget.getIsMandatoryFlexoAction());
 			ButtonPanel panel = new ButtonPanel(widget, insertActionNode[j]);
 			mainPane.add(panel);
 			j++;
 		}
-		Enumeration en = comboBoxes.keys();
-		while (en.hasMoreElements()) {
-			JComboBox combo = (JComboBox) en.nextElement();
+		for (JComboBox combo : comboBoxes.keySet()) {
 			if (combo.getSelectedItem() != dummyNew) {
-				Enumeration en1 = comboBoxes.keys();
-				while (en1.hasMoreElements()) {
-					JComboBox combo1 = (JComboBox) en1.nextElement();
+				for (JComboBox combo1 : comboBoxes.keySet()) {
 					if (combo1 != combo) {
 						combo1.removeItem(combo.getSelectedItem());
 					}
@@ -215,10 +206,11 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			}
 		}
 		boolean select = true;
-		Enumeration<JCheckBox> en1 = checkBoxes.elements();
-		while (select && en1.hasMoreElements()) {
-			JCheckBox box = en1.nextElement();
+		for (JCheckBox box : checkBoxes.values()) {
 			select &= box.isSelected();
+			if (!select) {
+				break;
+			}
 		}
 		if (select) {
 			selectAll.doClick();
@@ -280,11 +272,8 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 		panel.add(b);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		// Buttons panel
-		panel.setBackground(ColorCst.GUI_BACK_COLOR);
-		panel.setOpaque(true);
+		panel.setOpaque(false);
 
-		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
-		mainPane.setBackground(ColorCst.GUI_BACK_COLOR);
 		mainPane.add(panel);
 		getContentPane().setVisible(true);
 		getContentPane().add(mainPane);
@@ -299,10 +288,8 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 		if (name != null) {
 			box.setName(name);
 		}
-		Enumeration en = actions.elements();
-		while (en.hasMoreElements()) {
-			Object element = en.nextElement();
-			box.addItem(element);
+		for (ActionNode action : actions) {
+			box.addItem(action);
 		}
 		box.setSelectedItem(dummyNew);
 		box.setRenderer(new ActionNodeListCellRendrer());
@@ -316,9 +303,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				ActionNode newNode = (ActionNode) cb.getSelectedItem();
 				if (old != dummyNew) {
 					// Re-add the old value to other combo's
-					Enumeration en = comboBoxes.keys();
-					while (en.hasMoreElements()) {
-						JComboBox combo = (JComboBox) en.nextElement();
+					for (JComboBox combo : comboBoxes.keySet()) {
 						if (combo != cb) {
 							combo.addItem(old);
 						}
@@ -327,9 +312,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 				if (newNode != dummyNew) {
 					// Remove value from all other combo's
-					Enumeration en = comboBoxes.keys();
-					while (en.hasMoreElements()) {
-						JComboBox combo = (JComboBox) en.nextElement();
+					for (JComboBox combo : comboBoxes.keySet()) {
 						if (combo != cb) {
 							combo.removeItem(newNode);
 						}
@@ -391,7 +374,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 	}
 
-	public Hashtable getAssociations() {
+	public Map<IEHyperlinkWidget, ActionNode> getAssociations() {
 		return associations;
 	}
 
@@ -420,8 +403,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			((GridLayout) getLayout()).setHgap(4);
 			((GridLayout) getLayout()).setVgap(4);
 			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			setOpaque(true);
-			setBackground(ColorCst.GUI_BACK_COLOR);
+			setOpaque(false);
 			String s = null;
 			String tooltip = null;
 			File icon = null;
@@ -462,7 +444,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				}
 
 			});
-			box.setBackground(ColorCst.GUI_BACK_COLOR);
+			box.setOpaque(false);
 			panel.add(box);
 			checkBoxes.put(button, box);
 			JLabel label = new JLabel();
@@ -471,13 +453,12 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				label.setToolTipText(tooltip);
 			}
 			panel.add(label);
-			panel.setOpaque(true);
-			panel.setBackground(ColorCst.GUI_BACK_COLOR);
+			panel.setOpaque(false);
 			add(panel);
 			// The icon (if there is one)
 			JPanel middlePanel = new JPanel();
 			middlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 1, 1));
-			middlePanel.setBackground(ColorCst.GUI_BACK_COLOR);
+			middlePanel.setOpaque(false);
 			JLabel iconLabel = new JLabel();
 			if (icon != null && icon.exists()) {
 				ImageIcon ii = new ImageIcon(icon.getAbsolutePath());
@@ -485,7 +466,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 					ii = ImageUtils.getThumbnail(ii, 35);
 				}
 				iconLabel.setIcon(ii);
-				iconLabel.setBackground(ColorCst.GUI_BACK_COLOR);
+				iconLabel.setOpaque(false);
 			} else {
 				iconLabel = new JLabel();
 				iconLabel.setForeground(Color.BLUE);
@@ -503,7 +484,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 					iconLabel.setVerticalTextPosition(SwingConstants.CENTER);
 					iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				} else {
-					iconLabel.setBackground(ColorCst.GUI_BACK_COLOR);
+					iconLabel.setOpaque(false);
 				}
 			}
 			middlePanel.add(iconLabel);
@@ -511,9 +492,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			// The dropdown
 			JComboBox combo = getComboBox(s);
 			comboBoxes.put(combo, button);
-			Enumeration en = actions.elements();
-			while (en.hasMoreElements()) {
-				ActionNode action = (ActionNode) en.nextElement();
+			for (ActionNode action : actions) {
 				if (action.getAssociatedButtonWidget() == button) {
 					combo.setSelectedItem(action);
 					box.setSelected(false);
@@ -522,8 +501,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				}
 			}
 			panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
-			panel.setOpaque(true);
-			panel.setBackground(ColorCst.GUI_BACK_COLOR);
+			panel.setOpaque(false);
 			panel.add(combo);
 			add(panel);
 		}
@@ -533,11 +511,11 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 		return currentOperation;
 	}
 
-	public Vector getActions() {
+	public List<ActionNode> getActions() {
 		return actions;
 	}
 
-	public Vector getButtons() {
+	public List<IEHyperlinkWidget> getButtons() {
 		return buttons;
 	}
 

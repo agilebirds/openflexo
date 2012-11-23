@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteExampleDrawingElements> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteExampleDrawingElements>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteExampleDrawingElements action) {
+			public boolean run(EventObject e, DeleteExampleDrawingElements action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
 			}
 		};
@@ -62,7 +62,7 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteExampleDrawingElements> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteExampleDrawingElements>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteExampleDrawingElements action) {
+			public boolean run(EventObject e, DeleteExampleDrawingElements action) {
 				if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();
@@ -79,14 +79,7 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(DeleteExampleDrawingElements.actionType,
-				KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

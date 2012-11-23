@@ -34,7 +34,7 @@ import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.shema.VEShemaView;
-import org.openflexo.ve.view.menu.OEMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * This is the selection manager responsible for selection in ViewEditor module
@@ -47,10 +47,10 @@ public class VESelectionManager extends SelectionManager {
 
 	public VESelectionManager(VEController controller) {
 		super(controller);
-		OEMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new VEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new VEContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new VEContextualMenuManager(this, controller);
 	}
 
 	public VEController getVEController() {

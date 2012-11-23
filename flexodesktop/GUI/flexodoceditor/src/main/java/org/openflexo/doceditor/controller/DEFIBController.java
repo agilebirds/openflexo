@@ -1,7 +1,6 @@
 package org.openflexo.doceditor.controller;
 
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
@@ -11,7 +10,7 @@ import org.openflexo.view.controller.FlexoFIBController;
  * 
  * @author sylvain
  */
-public class DEFIBController extends FlexoFIBController<FlexoModelObject> {
+public class DEFIBController extends FlexoFIBController {
 
 	public DEFIBController(FIBComponent component) {
 		super(component);

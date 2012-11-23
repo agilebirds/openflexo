@@ -34,7 +34,7 @@ public class InvalidEOModelFileException extends LoadResourceException {
 
 	public InvalidEOModelFileException(FlexoEOModelResource fileResource) {
 		super(fileResource, null);
-		_eoModelFile = fileResource.getResourceFile();
+		_eoModelFile = fileResource != null ? fileResource.getResourceFile() : null;
 	}
 
 	@Override

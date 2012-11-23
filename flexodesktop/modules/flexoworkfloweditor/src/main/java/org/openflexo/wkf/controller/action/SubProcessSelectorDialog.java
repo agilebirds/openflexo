@@ -111,7 +111,7 @@ public class SubProcessSelectorDialog {
 
 			@Override
 			public void newValueWasSet(ParameterDefinition<String> param, String oldValue, String newValue) {
-				if (newValue == EXISTING_PROCESS) {
+				if (EXISTING_PROCESS.equals(newValue)) {
 					if (nodeNameParameter.getValue() == null || nodeNameParameter.getValue().trim().length() == 0
 							|| nodeNameParameter.getValue().equals(newProcessNameTextField.getValue())) {
 						if (processSelector.getValue() != null && processSelector.getValue().getProcess() != null) {
@@ -120,7 +120,7 @@ public class SubProcessSelectorDialog {
 							nodeNameParameter.setValue("");
 						}
 					}
-				} else if (newValue == NEW_PROCESS) {
+				} else if (NEW_PROCESS.equals(newValue)) {
 					if (nodeNameParameter.getValue() == null || nodeNameParameter.getValue().trim().length() == 0
 							|| processSelector.getValue() != null
 							&& nodeNameParameter.getValue().equals(processSelector.getValue().getName())) {
@@ -134,9 +134,11 @@ public class SubProcessSelectorDialog {
 
 			@Override
 			public void newValueWasSet(ParameterDefinition<FlexoProcess> param, FlexoProcess oldValue, FlexoProcess newValue) {
-				if (nodeNameParameter.getValue() == null || nodeNameParameter.getValue().trim().length() == 0 || oldValue != null
-						&& nodeNameParameter.getValue().equals(oldValue.getName()) || oldValue.getProcess() != null
-						&& nodeNameParameter.getValue().equals(oldValue.getProcess().getName())) {
+				if (nodeNameParameter.getValue() == null
+						|| nodeNameParameter.getValue().trim().length() == 0
+						|| oldValue != null
+						&& (nodeNameParameter.getValue().equals(oldValue.getName()) || oldValue.getProcess() != null
+								&& nodeNameParameter.getValue().equals(oldValue.getProcess().getName()))) {
 					if (newValue != null && newValue.getProcess() != null) {
 						nodeNameParameter.setValue(newValue.getProcess().getName());
 					} else {

@@ -19,8 +19,6 @@
  */
 package org.openflexo.fps.action;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +26,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSConstants;
 import org.openflexo.fps.CVSExplorable;
@@ -38,7 +35,6 @@ import org.openflexo.fps.CVSModule;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.localization.FlexoLocalization;
 
 public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSExplorerListener {
@@ -57,12 +53,12 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
 			return object instanceof CVSRepositoryList || object instanceof CVSRepository || object instanceof CVSModule;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -84,10 +80,11 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 	private int explorersToWait = 0;
 	private Vector<CVSExplorable> explorersToNotify = new Vector<CVSExplorable>();
 	private Vector<CVSExplorable> explorableFailed = new Vector<CVSExplorable>();
-	private HashMap<FlexoException, CVSExplorer> repositoryInformationRequired = new HashMap<FlexoException, CVSExplorer>();
+
+	private volatile FlexoException exception;
 
 	@Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+	protected void doAction(Object context) throws FlexoException {
 		logger.info("CVSRefresh");
 
 		explorers = new Vector<CVSExplorer>();
@@ -110,7 +107,7 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 		}
 	}
 
-	private void waitResponses() {
+	private void waitResponses() throws FlexoException {
 		setProgress(FlexoLocalization.localizedForKey("waiting_for_responses"));
 		resetSecondaryProgress(explorersToWait);
 
@@ -123,13 +120,8 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 				e.printStackTrace();
 			}
 			synchronized (this) {
-				while (repositoryInformationRequired.size() > 0) {
-					Iterator<FlexoException> i = repositoryInformationRequired.keySet().iterator();
-					while (i.hasNext()) {
-						FlexoException e = i.next();
-						i.remove();
-						handleException(repositoryInformationRequired.get(e), e);
-					}
+				if (exception != null) {
+					throw exception;
 				}
 				while (explorersToNotify.size() > 0) {
 					CVSExplorable explorable = explorersToNotify.firstElement();
@@ -143,33 +135,16 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 
 	@Override
 	public synchronized void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) {
-		if (exception instanceof FlexoAuthentificationException || exception instanceof FlexoUnknownHostException) {
-			if (getExceptionHandler() != null) {
-				repositoryInformationRequired.put((FlexoException) exception, explorer);
-				return;
-			}
-		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Failed to explorer " + explorable);
+		}
+		if (exception instanceof FlexoException) {
+			this.exception = (FlexoException) exception;
 		}
 		explorersToWait--;
 		explorersToNotify.add(explorable);
 		lastReception = System.currentTimeMillis();
 		explorableFailed.add(explorable);
-	}
-
-	/**
-	 * @param explorer
-	 * @param exception
-	 */
-	private void handleException(CVSExplorer explorer, FlexoException exception) {
-
-		if (getExceptionHandler().handleException(exception, this)) {
-			// Means that a new password was supplied
-			// So we try again
-			explorer.explore();
-			return;
-		}
 	}
 
 	@Override

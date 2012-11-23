@@ -9,11 +9,11 @@ import javax.swing.JFrame;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoFIBController;
 
@@ -67,7 +67,7 @@ public class FIBOntologyEditorEDITOR {
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();
@@ -75,7 +75,7 @@ public class FIBOntologyEditorEDITOR {
 
 	public static void main2(String[] args) {
 		JFrame frame = new JFrame();
-		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");

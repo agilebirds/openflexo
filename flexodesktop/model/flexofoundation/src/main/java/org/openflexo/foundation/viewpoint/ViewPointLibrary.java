@@ -28,9 +28,9 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -56,13 +56,13 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	private final ViewPointFolder rootFolder;
 
-	public ViewPointLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary anOntologyLibrary) {
+	public ViewPointLibrary(FlexoResourceCenter resourceCenterService, OntologyLibrary anOntologyLibrary) {
 		super();
 
-		editionPatternConverter = new EditionPatternConverter(resourceCenter);
+		editionPatternConverter = new EditionPatternConverter(resourceCenterService);
 		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
 
-		this.resourceCenter = resourceCenter;
+		this.resourceCenter = resourceCenterService;
 		ontologyLibrary = anOntologyLibrary;
 		calcs = new Vector<ViewPoint>();
 		map = new Hashtable<String, ViewPoint>();

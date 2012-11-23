@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,7 +55,7 @@ public class ExportDocumentationTemplatesInitializer extends ActionInitializer<E
 	protected FlexoActionInitializer<ExportDocumentationTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<ExportDocumentationTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, ExportDocumentationTemplates action) {
+			public boolean run(EventObject e, ExportDocumentationTemplates action) {
 				FlexoFileChooser chooser = new FlexoFileChooser(FlexoFrame.getActiveFrame());
 				chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 				chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_zip"));

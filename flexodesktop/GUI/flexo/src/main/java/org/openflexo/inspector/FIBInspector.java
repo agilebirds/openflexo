@@ -61,6 +61,7 @@ import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.Cloner;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -327,12 +328,12 @@ public class FIBInspector extends FIBPanel {
 	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab, int index) {
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
-			tf.validateOnReturn = true; // Avoid to many ontologies manipulations
+			tf.setValidateOnReturn(true); // Avoid to many ontologies manipulations
 			newTab.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return tf;
 		} else if (entry instanceof TextAreaInspectorEntry) {
 			FIBTextArea ta = new FIBTextArea();
-			ta.validateOnReturn = true; // Avoid to many ontologies manipulations
+			ta.setValidateOnReturn(true); // Avoid to many ontologies manipulations
 			ta.setUseScrollBar(true);
 			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -381,6 +382,16 @@ public class FIBInspector extends FIBPanel {
 							}
 						}, true));
 			}
+			if (StringUtils.isNotEmpty(individualEntry.getRenderer())) {
+				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.renderer"),
+						new DataBinding('"' + individualEntry.getRenderer() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return entry.getBindingFactory();
+							}
+						}, true));
+			}
+
 			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return individualSelector;
 		} else if (entry instanceof ClassInspectorEntry) {

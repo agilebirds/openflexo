@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -42,7 +41,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  */
 @Deprecated
-public abstract class CodeType extends TargetType implements StringConvertable, ChoiceList, Serializable {
+public abstract class CodeType extends TargetType implements StringConvertable<CodeType>, ChoiceList {
 
 	public CodeType(FlexoProject project) {
 		super(project);
@@ -247,7 +246,7 @@ public abstract class CodeType extends TargetType implements StringConvertable, 
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<CodeType> getConverter() {
 		return codeTypeConverter;
 	}
 

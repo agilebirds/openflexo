@@ -38,7 +38,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.ColorCst;
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParameterDefinition.ValueListener;
@@ -50,8 +49,8 @@ import org.openflexo.inspector.widget.LabelWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.AskParametersController;
-import org.openflexo.view.controller.FlexoController;
 
 /**
  * Dialog allowing to automatically ask and edit parameters
@@ -87,8 +86,8 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		if (owner != null) {
 			return new AskParametersDialog(owner, project, windowTitle, title, parameters);
 		}
-		if (FlexoController.getActiveFrame() != null) {
-			return new AskParametersDialog(FlexoController.getActiveFrame(), project, windowTitle, title, parameters);
+		if (FlexoFrame.getActiveFrame() != null) {
+			return new AskParametersDialog(FlexoFrame.getActiveFrame(), project, windowTitle, title, parameters);
 		} else if (ProgressWindow.hasInstance()) {
 			return new AskParametersDialog(ProgressWindow.instance().initOwner, project, windowTitle, title, parameters);
 		}
@@ -213,7 +212,6 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-		controlPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 		controlPanel.setOpaque(true);
 		JButton cancelButton = new JButton();
 		cancelButton.setOpaque(false);
@@ -255,7 +253,6 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(scrollpane, BorderLayout.CENTER);
 		getContentPane().add(controlPanel, BorderLayout.SOUTH);
-		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
 		// setSize(new Dimension (400,200+parameters.length*30));
 		getRootPane().setDefaultButton(_validateButton);
 		validate();

@@ -31,7 +31,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InvalidArgumentException;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
@@ -51,7 +50,7 @@ import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CreateNewWebService extends FlexoAction<CreateNewWebService, WSObject, WSObject> {
+public class CreateNewWebService extends AbstractCreateNewWebService<CreateNewWebService> {
 
 	private static final Logger logger = Logger.getLogger(CreateNewWebService.class.getPackage().getName());
 
@@ -70,12 +69,12 @@ public class CreateNewWebService extends FlexoAction<CreateNewWebService, WSObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WSObject object, Vector<WSObject> globalSelection) {
+		public boolean isVisibleForSelection(WSObject object, Vector<WSObject> globalSelection) {
 			return KnownDataImporter.WSDL_IMPORTER.isAvailable();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WSObject object, Vector<WSObject> globalSelection) {
+		public boolean isEnabledForSelection(WSObject object, Vector<WSObject> globalSelection) {
 			return true;
 		}
 
@@ -103,26 +102,32 @@ public class CreateNewWebService extends FlexoAction<CreateNewWebService, WSObje
 	private FlexoProject _project;
 	private ServiceInterface _serviceInterface;
 
+	@Override
 	public String getNewWebServiceName() {
 		return _newWebServiceName;
 	}
 
+	@Override
 	public void setNewWebServiceName(String name) {
 		_newWebServiceName = name;
 	}
 
+	@Override
 	public File getWsdlFile() {
 		return _wsdlFile;
 	}
 
+	@Override
 	public void setWsdlFile(File file) {
 		_wsdlFile = file;
 	}
 
+	@Override
 	public FlexoProject getProject() {
 		return _project;
 	}
 
+	@Override
 	public void setProject(FlexoProject project) {
 		_project = project;
 	}
@@ -130,22 +135,27 @@ public class CreateNewWebService extends FlexoAction<CreateNewWebService, WSObje
 	/*
 	 * For export, either we specify a
 	 */
+	@Override
 	public PortRegistery getPortRegistry() {
 		return _portRegistry;
 	}
 
+	@Override
 	public void setPortRegistry(PortRegistery a) {
 		_portRegistry = a;
 	}
 
+	@Override
 	public ServiceInterface getServiceInterface() {
 		return _serviceInterface;
 	}
 
+	@Override
 	public void setServiceInterface(ServiceInterface a) {
 		_serviceInterface = a;
 	}
 
+	@Override
 	public FlexoProcess getFlexoProcess() {
 		if (getServiceInterface() != null) {
 			return getServiceInterface().getProcess();
@@ -162,16 +172,19 @@ public class CreateNewWebService extends FlexoAction<CreateNewWebService, WSObje
 
 	private String _webServiceType;
 
+	@Override
 	public String getWebServiceType() {
 		return _webServiceType;
 	}
 
+	@Override
 	public void setWebServiceType(String type) {
 		_webServiceType = type;
 	}
 
 	private WSService _newWebService = null;
 
+	@Override
 	public WSService getNewWebService() {
 		return _newWebService;
 	}

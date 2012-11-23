@@ -13,7 +13,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateEnumContainerController extends HibernateFibController<HibernateEnumContainer> {
+public class HibernateEnumContainerController extends HibernateFibController {
 
 	public HibernateEnumContainerController(FIBComponent component, FlexoController controller) {
 		super(component, controller);
@@ -27,10 +27,10 @@ public class HibernateEnumContainerController extends HibernateFibController<Hib
 	public HibernateEnum performCreateEnum() {
 
 		try {
-			HibernateEnum hibernateEnum = new HibernateEnum(getDataObject().getImplementationModel());
-			hibernateEnum.setName("Enum" + (getDataObject().getHibernateEnums().size() + 1));
+			HibernateEnum hibernateEnum = new HibernateEnum(((HibernateEnumContainer) getDataObject()).getImplementationModel());
+			hibernateEnum.setName("Enum" + (((HibernateEnumContainer) getDataObject()).getHibernateEnums().size() + 1));
 
-			getDataObject().addToHibernateEnums(hibernateEnum);
+			((HibernateEnumContainer) getDataObject()).addToHibernateEnums(hibernateEnum);
 
 			return hibernateEnum;
 		} catch (Exception e) {

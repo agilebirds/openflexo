@@ -32,28 +32,28 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
-public class SubmitVersion extends FlexoAction {
+public class SubmitVersion extends FlexoAction<SubmitVersion, DocItem, DocItem> {
 
 	private static final Logger logger = Logger.getLogger(SubmitVersion.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("submit_version", FlexoActionType.defaultGroup,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<SubmitVersion, DocItem, DocItem> actionType = new FlexoActionType<SubmitVersion, DocItem, DocItem>(
+			"submit_version", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public SubmitVersion makeNewAction(DocItem focusedObject, Vector<DocItem> globalSelection, FlexoEditor editor) {
 			return new SubmitVersion(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DocItem object, Vector<DocItem> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DocItem object, Vector<DocItem> globalSelection) {
 			return object != null && object instanceof DocItem;
 		}
 
@@ -69,7 +69,7 @@ public class SubmitVersion extends FlexoAction {
 	private DocItemAction _newAction;
 	private String _note;
 
-	SubmitVersion(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	SubmitVersion(DocItem focusedObject, Vector<DocItem> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -99,7 +99,7 @@ public class SubmitVersion extends FlexoAction {
 	public DocItem getDocItem() {
 		if (_docItem == null) {
 			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
-				_docItem = (DocItem) getFocusedObject();
+				_docItem = getFocusedObject();
 			}
 		}
 		return _docItem;

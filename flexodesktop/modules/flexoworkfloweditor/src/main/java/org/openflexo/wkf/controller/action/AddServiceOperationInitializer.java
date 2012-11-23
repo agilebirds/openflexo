@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -61,7 +61,7 @@ public class AddServiceOperationInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddServiceOperation> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddServiceOperation>() {
 			@Override
-			public boolean run(ActionEvent e, AddServiceOperation action) {
+			public boolean run(EventObject e, AddServiceOperation action) {
 				final ParameterDefinition[] parameters = new ParameterDefinition[3];
 
 				parameters[0] = new TextFieldParameter("serviceOperationName", "service_operation_name", "Operation");
@@ -89,7 +89,7 @@ public class AddServiceOperationInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddServiceOperation> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddServiceOperation>() {
 			@Override
-			public boolean run(ActionEvent e, AddServiceOperation action) {
+			public boolean run(EventObject e, AddServiceOperation action) {
 				ServiceOperation newOperation = action.getNewServiceOperation();
 				if (e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();

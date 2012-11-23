@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" dataClassName="org.openflexo.fib.utils.LoadedClassesInfo" controllerClassName="org.openflexo.fib.utils.ClassSelector$ClassSelectorDetailsPanel$CustomFIBController" font="LucidaGrande,0,11" width="400" height="400">
-  <Table iteratorClassName="org.openflexo.fib.utils.LoadedClassesInfo$ClassInfo" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="data.selectedClassInfo" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.matchingClasses" constraints="twocols(location=center;index=1;expandVertically=true;expandHorizontally=true)" font="LucidaGrande,0,11" name="PotentialMatches" localize="true" manageDynamicModel="true">
+<Panel layout="twocols" dataClassName="org.openflexo.fib.utils.LoadedClassesInfo" controllerClassName="org.openflexo.fib.utils.ClassSelector$ClassSelectorDetailsPanel$CustomFIBController" width="400" height="400">
+  <Table iteratorClassName="org.openflexo.fib.utils.LoadedClassesInfo$ClassInfo" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="data.selectedClassInfo" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.matchingClasses" constraints="twocols(location=center;index=1;expandVertically=true;expandHorizontally=true)" name="PotentialMatches" localize="true" manageDynamicModel="true">
     <IconColumn data="iterator.icon" title="" columnWidth="20" resizable="false" displayTitle="true" name="icon" />
     <LabelColumn data="iterator.className" title="class" columnWidth="100" resizable="true" displayTitle="true" name="label" />
     <LabelColumn data="iterator.fullQualifiedName" title="location" columnWidth="200" resizable="true" displayTitle="true" name="label" />
     <LocalizedDictionary />
   </Table>
-  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="8" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedClassInfo" showFooter="true" rootVisible="false" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(location=center;index=2;expandVertically=true;expandHorizontally=true)" font="LucidaGrande,0,11" name="ClassesBrowser" localize="true" manageDynamicModel="true">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="8" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedClassInfo" showFooter="true" rootVisible="false" showRootsHandle="true"constraints="twocols(location=center;index=2;expandVertically=true;expandHorizontally=true)" name="ClassesBrowser" localize="true" manageDynamicModel="true">
     <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$PackageInfo" label="package.packageName" visible="(!(package.isFiltered))" isEditable="false" filtered="true" defaultVisible="true" name="package" icon="package.icon">
       <Children data="package.classes" name="children" />
     </BrowserElement>
@@ -19,18 +19,18 @@
     <Dependancy componentName="FilteredPackageName" />
   </Browser>
   <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)">
-    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" font="LucidaGrande,0,12" localize="true" enable="(data.selectedClassInfo != null)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true" enable="(data.selectedClassInfo != null)">
       <LocalizedDictionary />
     </Button>
-    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" font="LucidaGrande,0,12" localize="true">
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true">
       <LocalizedDictionary />
     </Button>
-    <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" font="LucidaGrande,0,12" localize="true">
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" localize="true">
       <LocalizedDictionary />
     </Button>
   </Panel>
   <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=center;index=0;expandVertically=false;expandHorizontally=true)">
-    <Label label="package" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" font="LucidaGrande,0,12">
+    <Label label="package" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
       <LocalizedDictionary />
     </Label>
     <TextField columns="6" passwd="false" text="TextField" localize="true" name="FilteredPackageName" data="data.filteredPackageName" constraints="gridbag(insetsLeft=2;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=1.0)" />

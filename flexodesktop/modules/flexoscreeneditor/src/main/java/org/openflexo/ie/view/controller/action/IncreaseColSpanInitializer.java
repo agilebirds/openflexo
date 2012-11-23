@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -51,7 +51,7 @@ public class IncreaseColSpanInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IncreaseColSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<IncreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, IncreaseColSpan action) {
+			public boolean run(EventObject e, IncreaseColSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();

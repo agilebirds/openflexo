@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.ch.FCH;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -33,38 +34,50 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 public class FlexoActionButton extends JButton {
 	private final ButtonAction action;
 	private final FlexoActionSource actionSource;
-	private final FlexoEditor _editor;
+	private final FlexoController controller;
 
-	public FlexoActionButton(FlexoActionType actionType, FlexoActionSource source, FlexoEditor editor) {
-		this(actionType, null, source, editor);
+	public FlexoActionButton(FlexoActionType<?, ?, ?> actionType, FlexoActionSource source, FlexoController controller) {
+		this(actionType, null, source, controller);
 	}
 
-	public FlexoActionButton(FlexoActionType actionType, String unlocalizedActionName, FlexoActionSource source, FlexoEditor editor) {
+	public FlexoActionButton(FlexoActionType<?, ?, ?> actionType, String unlocalizedActionName, FlexoActionSource source,
+			FlexoController controller) {
 		super();
-		_editor = editor;
 		actionSource = source;
+		this.controller = controller;
 		action = new ButtonAction(actionType, unlocalizedActionName);
 		setText(action.getLocalizedName(this));
 		setToolTipText(action.getLocalizedName(this));
-		if (editor.getEnabledIconFor(actionType) != null) {
-			setIcon(editor.getEnabledIconFor(actionType));
-		}
-		if (editor.getDisabledIconFor(actionType) != null) {
-			setDisabledIcon(editor.getDisabledIconFor(actionType));
+		if (getEditor() != null) {
+			if (getEditor().getEnabledIconFor(actionType) != null) {
+				setIcon(getEditor().getEnabledIconFor(actionType));
+			}
+			if (getEditor().getDisabledIconFor(actionType) != null) {
+				setDisabledIcon(getEditor().getDisabledIconFor(actionType));
+			}
 		}
 		addActionListener(action);
 		FCH.setHelpItem(this, action.getActionType().getUnlocalizedName());
+	}
+
+	private FlexoEditor getEditor() {
+		if (controller != null) {
+			return controller.getEditor();
+		} else {
+			return null;
+		}
 	}
 
 	public void update() {
 		setEnabled(action.isEnabled());
 	}
 
-	protected Vector getGlobalSelection() {
+	protected Vector<? extends FlexoModelObject> getGlobalSelection() {
 		return actionSource.getGlobalSelection();
 	}
 
@@ -72,39 +85,47 @@ public class FlexoActionButton extends JButton {
 		return actionSource.getFocusedObject();
 	}
 
-	public class ButtonAction implements ActionListener {
+	public class ButtonAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> implements
+			ActionListener {
 
-		private final FlexoActionType _actionType;
+		private final FlexoActionType<A, T1, T2> actionType;
 		private String _unlocalizedName = null;
 
-		public ButtonAction(FlexoActionType actionType) {
+		public ButtonAction(FlexoActionType<A, T1, T2> actionType) {
 			super();
-			_actionType = actionType;
+			this.actionType = actionType;
 		}
 
-		public ButtonAction(FlexoActionType actionType, String actionName) {
+		public ButtonAction(FlexoActionType<A, T1, T2> actionType, String actionName) {
 			this(actionType);
 			_unlocalizedName = actionName;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
-			action.setInvoker(actionSource);
-			action.actionPerformed(event);
+			Vector<? extends FlexoModelObject> globalSelection = getGlobalSelection();
+			if (TypeUtils.isAssignableTo(getFocusedObject(), actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) globalSelection, event);
+			}
 		}
 
 		public boolean isEnabled() {
-			return _actionType.isEnabled(getFocusedObject(), getGlobalSelection(), _editor);
+			Vector<? extends FlexoModelObject> globalSelection = getGlobalSelection();
+			if (TypeUtils.isAssignableTo(getFocusedObject(), actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				return getEditor().isActionEnabled(actionType, (T1) getFocusedObject(), (Vector<T2>) globalSelection);
+			}
+			return false;
 		}
 
-		public FlexoActionType getActionType() {
-			return _actionType;
+		public FlexoActionType<A, T1, T2> getActionType() {
+			return actionType;
 		}
 
 		public String getLocalizedName(Component component) {
 			if (_unlocalizedName == null) {
-				return _actionType.getLocalizedName(component);
+				return actionType.getLocalizedName(component);
 
 			} else {
 				return FlexoLocalization.localizedForKey(_unlocalizedName, component);

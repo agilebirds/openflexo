@@ -49,8 +49,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	private VEShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public VEShemaController(VEController controller, View shema) {
-		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
+	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
+		super(new VEShemaRepresentation(shema, screenshotOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -95,7 +95,11 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
-		getDrawing().delete();
+		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
+		// getDrawing().delete();
+		if (getDrawing().getShema() != null) {
+			getDrawing().getShema().deleteObserver(getDrawing());
+		}
 	}
 
 	@Override
@@ -133,10 +137,10 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteView());
+				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteViewInScrollPane());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
-					.getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
+					getCommonPalette().getPaletteViewInScrollPane());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {

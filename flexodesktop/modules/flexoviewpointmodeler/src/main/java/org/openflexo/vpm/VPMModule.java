@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
@@ -36,8 +37,9 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalCEDModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.palette.CalcPaletteController;
@@ -57,11 +59,9 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	public VPMModule() throws Exception {
-		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
-		setFlexoController(new VPMController(this));
-		getCEDController().loadRelativeWindows();
-		CEDPreferences.init(getCEDController());
+	public VPMModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		CEDPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
@@ -69,6 +69,16 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 		// Retain here all necessary resources
 		// retain(<the_required_resource_data>);
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new VPMController(this);
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.VPM_MODULE;
 	}
 
 	@Override
@@ -81,15 +91,12 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getCEDController().getCalcLibrary();
-	}
-
-	@Override
-	public void moduleWillClose() {
-		getCEDController().getEditorMenuBar().getFileMenu(getCEDController()).closeModule();
-		super.moduleWillClose();
-		CEDPreferences.reset();
+	public boolean close() {
+		if (getCEDController().reviewModifiedResources()) {
+			return super.close();
+		} else {
+			return false;
+		}
 	}
 
 	@Override

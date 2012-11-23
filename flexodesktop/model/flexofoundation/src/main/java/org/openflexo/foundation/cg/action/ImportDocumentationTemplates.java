@@ -62,12 +62,12 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 			"import_documentation_templates") {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object != null;
 		}
 
@@ -274,7 +274,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 
 	public File getDocumentationGenerationDirectory() {
 		if (documentationGenerationDirectory == null) {
-			documentationGenerationDirectory = new File(FileUtils.getDocumentFolder(), getProject().getName() + "/Documents");
+			documentationGenerationDirectory = new File(FileUtils.getDocumentDirectory(), getProject().getName() + "/Documents");
 		}
 		return documentationGenerationDirectory;
 	}

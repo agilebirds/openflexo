@@ -49,12 +49,12 @@ public class MoveFlexoProcess extends FlexoUndoableAction<MoveFlexoProcess, Flex
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return object != null && !object.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

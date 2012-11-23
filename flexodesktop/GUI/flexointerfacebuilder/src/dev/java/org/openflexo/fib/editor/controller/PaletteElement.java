@@ -33,6 +33,7 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
+import java.awt.event.MouseListener;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,6 +114,9 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 	}
 
 	private void recursivelyAddDGR(JComponent c) {
+		for (MouseListener ml : c.getMouseListeners()) {
+			c.removeMouseListener(ml);
+		}
 		DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(c, dragAction, dgListener);
 		dgr.put(c, newDGR);
 

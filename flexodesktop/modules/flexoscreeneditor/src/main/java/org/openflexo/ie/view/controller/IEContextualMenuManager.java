@@ -22,7 +22,6 @@ package org.openflexo.ie.view.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.ie.view.DropZoneTopComponent;
 import org.openflexo.ie.view.IEWOComponentView;
@@ -32,11 +31,12 @@ import org.openflexo.ie.view.widget.DropTableZone;
 import org.openflexo.ie.view.widget.IETDWidgetView;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.selection.ContextualMenuManager;
+import org.openflexo.view.controller.FlexoController;
 
 public class IEContextualMenuManager extends ContextualMenuManager {
 
-	public IEContextualMenuManager(IESelectionManager selectionManager, FlexoEditor editor) {
-		super(selectionManager, editor);
+	public IEContextualMenuManager(IESelectionManager selectionManager, FlexoController controler) {
+		super(selectionManager, controler);
 	}
 
 	@Override

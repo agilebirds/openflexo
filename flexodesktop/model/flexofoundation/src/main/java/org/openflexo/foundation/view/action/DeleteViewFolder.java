@@ -47,12 +47,12 @@ public class DeleteViewFolder extends FlexoAction<DeleteViewFolder, ViewFolder, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewFolder view, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewFolder view, Vector<ViewLibraryObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewFolder view, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewFolder view, Vector<ViewLibraryObject> globalSelection) {
 			return true;
 		}
 

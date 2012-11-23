@@ -53,12 +53,12 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return object instanceof DKVModel.DomainList || object instanceof DKVModel;
 		}
 

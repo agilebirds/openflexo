@@ -27,11 +27,11 @@ import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.icon.DGIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> {
+public class DocGeneratorPerspective extends FlexoPerspective {
 
 	private DGBrowser browser;
 	private DGBrowserView dgBrowserView;
@@ -47,28 +47,13 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 		super("doc_generation");
 		this.dgController = dgController;
 		browser = new DGBrowser(dgController);
-		dgBrowserView = new DGBrowserView(dgController, browser);
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public DGBrowserView getLeftView() {
-		return dgBrowserView;
+		setTopLeftView(dgBrowserView = new DGBrowserView(dgController, browser));
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -78,7 +63,7 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

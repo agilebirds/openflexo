@@ -19,14 +19,15 @@
  */
 package org.openflexo.wse;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalWSEModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -37,28 +38,20 @@ import org.openflexo.wse.controller.WSEController;
 public class WSEModule extends FlexoModule implements ExternalWSEModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WSE };
 
-	public WSEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new WSEController(projectEditor, this));
-		getWSEController().loadRelativeWindows();
-		WSEPreferences.init(getWSEController());
+	public WSEModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		WSEPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-
-		// Put here a code to display default view
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
 	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		WSEPreferences.reset();
+	public Module getModule() {
+		return Module.WSE_MODULE;
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new WSEController(this);
 	}
 
 	@Override
@@ -68,16 +61,6 @@ public class WSEModule extends FlexoModule implements ExternalWSEModule {
 
 	public WSEController getWSEController() {
 		return (WSEController) getFlexoController();
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getProject();
 	}
 
 }

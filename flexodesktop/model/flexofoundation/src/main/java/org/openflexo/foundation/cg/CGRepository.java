@@ -368,7 +368,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		readerRepository.addToRepositoriedUsingAsReader(this);
 		readerRepository.addObserver(this);
 		if (readerRepositoryReference == null) {
-			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(getProject(), readerRepository));
+			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(readerRepository));
 		}
 	}
 

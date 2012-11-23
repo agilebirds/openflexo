@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -50,13 +50,13 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DuplicateComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<DuplicateComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateComponentAction action) {
+			public boolean run(EventObject e, DuplicateComponentAction action) {
 				IEWOComponent c;
 				if (action.getFocusedObject() instanceof ComponentDefinition) {
 					c = ((ComponentDefinition) action.getFocusedObject()).getWOComponent();
-				} else if (action.getFocusedObject() instanceof IEWOComponent) {
+				} /*else if (action.getFocusedObject() instanceof IEWOComponent) {
 					c = (IEWOComponent) action.getFocusedObject();
-				} else {
+					}*/else {
 					return false;
 				}
 				String componentName = null;
@@ -79,7 +79,7 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DuplicateComponentAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DuplicateComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateComponentAction action) {
+			public boolean run(EventObject e, DuplicateComponentAction action) {
 				if (action.getComponentDefinition() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getComponentDefinition().getDummyComponentInstance());
 				}

@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.components.widget.FIBOntologyEditor;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This class represent the module view for an ontology.<br>
@@ -37,11 +37,11 @@ import org.openflexo.view.SelectionSynchronizedModuleView;
  * 
  */
 @SuppressWarnings("serial")
-public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<FlexoOntology> {
+public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<OWLOntology> {
 
-	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, VEController controller, FlexoPerspective<? super FlexoOntology> perspective) {
+	public OntologyView(OWLOntology ontology, VEController controller, FlexoPerspective perspective) {
 		super(ontology, controller);
 		declaredPerspective = perspective;
 	}
@@ -52,7 +52,7 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	}
 
 	@Override
-	public FlexoPerspective<? super FlexoOntology> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 
@@ -78,8 +78,8 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	}
 
 	@Override
-	public FlexoOntology getRepresentedObject() {
-		return getOntology();
+	public OWLOntology getRepresentedObject() {
+		return (OWLOntology) getOntology();
 	}
 
 }

@@ -66,13 +66,13 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	private ArtefactPalette artefactPalette;
 
 	public SwimmingLaneEditorController(WKFController controller, FlexoProcess process) {
-		this(process, controller.getEditor(), controller.getSelectionManager(), null);
+		this(process, controller, controller.getSelectionManager(), null);
 		_controller = controller;
 	}
 
-	public SwimmingLaneEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm,
+	public SwimmingLaneEditorController(FlexoProcess process, WKFController controller, SelectionManager sm,
 			SwimmingLaneRepresentationObjectVisibilityDelegate delegate) {
-		super(new SwimmingLaneRepresentation(process, editor, delegate), sm);
+		super(new SwimmingLaneRepresentation(process, controller, delegate), sm);
 		_activityPalette = new ActivityPalette();
 		_operationPalette = new OperationPalette();
 		_actionPalette = new ActionPalette();

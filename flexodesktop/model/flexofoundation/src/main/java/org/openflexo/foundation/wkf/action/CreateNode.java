@@ -80,7 +80,7 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 			if (focusedObject instanceof SelfExecutableNode) {
 				return false;
 			}
@@ -97,7 +97,7 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(focusedObject, globalSelection);
 		}
 

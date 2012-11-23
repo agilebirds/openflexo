@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.Serializable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -32,7 +31,7 @@ import org.openflexo.toolbox.EmptyVector;
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class ReusableComponentInstance extends PartialComponentInstance implements DeletableObject, Serializable {
+public class ReusableComponentInstance extends PartialComponentInstance implements DeletableObject {
 
 	private static final Logger logger = Logger.getLogger(ReusableComponentInstance.class.getPackage().getName());
 

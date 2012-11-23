@@ -26,11 +26,16 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
+
 import org.openflexo.antar.expr.EvaluationType;
+
+import com.google.common.primitives.Primitives;
 
 public class TypeUtils {
 
@@ -56,6 +61,16 @@ public class TypeUtils {
 			} else {
 				logger.warning("Not handled: " + aType.getClass().getName());
 				return null;
+			}
+		}
+		if (aType instanceof WildcardType) {
+			// System.out.println("WildcardType: " + aType);
+			Type[] upperBounds = ((WildcardType) aType).getUpperBounds();
+			Type[] lowerBounds = ((WildcardType) aType).getLowerBounds();
+			// System.out.println("upper=" + upperBounds + " size=" + upperBounds.length);
+			// System.out.println("lower=" + upperBounds + " size=" + lowerBounds.length);
+			if (upperBounds.length == 1 && lowerBounds.length == 0) {
+				return getBaseClass(upperBounds[0]);
 			}
 		}
 		logger.warning("Not handled: " + aType.getClass().getName());
@@ -148,6 +163,9 @@ public class TypeUtils {
 		return aClass;
 	}
 
+	public static boolean isPrimitive(@Nullable Type type) {
+		return type != null && Primitives.allPrimitiveTypes().contains(type);
+	}
 	public static boolean isDouble(Type type) {
 		if (type == null) {
 			return false;
@@ -236,6 +254,19 @@ public class TypeUtils {
 			return EvaluationType.STRING;
 		}
 		return EvaluationType.LITERAL;
+	}
+
+	public static boolean isAssignableTo(Object object, Type type) {
+		return isTypeAssignableFrom(type, object != null ? object.getClass() : null);
+	}
+
+	public static boolean isAssignableTo(Collection<? extends Object> objects, Type type) {
+		for (Object object : objects) {
+			if (!isAssignableTo(object, type)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static boolean isTypeAssignableFrom(Type aType, Type anOtherType) {
@@ -639,6 +670,20 @@ public class TypeUtils {
 		return null;
 	}
 
+	public static Type[] getSuperInterfaceTypes(Type type) {
+		if (type instanceof ParameterizedType) {
+			ParameterizedType myType = (ParameterizedType) type;
+			return ((Class<?>) myType.getRawType()).getGenericInterfaces();
+		} else if (type instanceof Class) {
+			return ((Class<?>) type).getGenericInterfaces();
+		}
+		if (type instanceof CustomType) {
+			return getSuperInterfaceTypes(((CustomType) type).getBaseClass());
+		}
+
+		return new Type[0];
+	}
+
 	public static Object castTo(Object object, Type desiredType) {
 		if (object == null) {
 			return null;
@@ -671,6 +716,37 @@ public class TypeUtils {
 			}
 		}
 		return object;
+	}
+
+	public static Class<?> getMostSpecializedClass(Collection<Class<?>> someClasses) {
+
+		if (someClasses.size() == 0) {
+			return null;
+		}
+		if (someClasses.size() == 1) {
+			return someClasses.iterator().next();
+		}
+		Class<?>[] array = someClasses.toArray(new Class[someClasses.size()]);
+
+		for (int i = 0; i < someClasses.size(); i++) {
+			for (int j = i + 1; j < someClasses.size(); j++) {
+				Class<?> c1 = array[i];
+				Class<?> c2 = array[j];
+				if (c1.isAssignableFrom(c2)) {
+					someClasses.remove(c1);
+					return getMostSpecializedClass(someClasses);
+				}
+				if (c2.isAssignableFrom(c1)) {
+					someClasses.remove(c2);
+					return getMostSpecializedClass(someClasses);
+				}
+			}
+		}
+
+		// No parent were found, take first item
+		logger.warning("Undefined specializing criteria between " + someClasses);
+		return someClasses.iterator().next();
+
 	}
 
 	// TESTS
@@ -742,7 +818,7 @@ public class TypeUtils {
 	}
 
 	public static void main(String[] args) {
-		Class shouldSucceed = ShouldSucceed.class;
+		/*Class shouldSucceed = ShouldSucceed.class;
 		for (Method m : shouldSucceed.getMethods()) {
 			checkSucceed(m);
 		}
@@ -753,7 +829,10 @@ public class TypeUtils {
 		Class testSuperType = TestSuperType.class;
 		for (Method m : testSuperType.getMethods()) {
 			checkSuperType(m);
-		}
+		}*/
+		Class<Void> void1 = Void.TYPE;
+		System.err.println(isTypeAssignableFrom(Object.class, void1));
+		System.err.println(Object.class.isAssignableFrom(void1));
 	}
 
 }

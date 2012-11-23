@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.FlexoFrame;
 
@@ -45,11 +44,11 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 		logger.info("Build OpenProjectComponent");
 	}
 
-	public static File getProjectDirectory() throws ProjectLoadingCancelledException {
+	public static File getProjectDirectory() {
 		return getProjectDirectory(FlexoFrame.getActiveFrame());
 	}
 
-	public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException {
+	public static File getProjectDirectory(Frame owner) {
 		OpenProjectComponent chooser = new OpenProjectComponent(owner);
 		File returned = null;
 		int returnVal = -1;
@@ -72,7 +71,7 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No project supplied");
 			}
-			throw new ProjectLoadingCancelledException();
+			return null;
 		}
 		return returned;
 	}

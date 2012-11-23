@@ -32,8 +32,8 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
+import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -201,6 +201,21 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
 		if (getShemaDefinition() != null) {
 			getShemaDefinition().setTitle(title);
+		}
+	}
+
+	@Override
+	public int getIndex() {
+		if (getShemaDefinition() != null) {
+			return getShemaDefinition().getIndex();
+		}
+		return -1;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().setIndex(index);
 		}
 	}
 

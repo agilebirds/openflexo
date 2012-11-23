@@ -38,8 +38,10 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -47,6 +49,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -205,7 +208,7 @@ public class ViewPoint extends ViewPointObject {
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
-			String ontologyURI = FlexoOntology.findOntologyURI(owlFile);
+			String ontologyURI = OWLOntology.findOntologyURI(owlFile);
 			if (StringUtils.isEmpty(ontologyURI)) {
 				ontologyURI = viewPointURI;
 			}
@@ -537,7 +540,7 @@ public class ViewPoint extends ViewPointObject {
 		return viewpointOntology;
 	}
 
-	public void setViewpointOntology(ImportedOntology viewpointOntology) {
+	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
 		this.viewpointOntology = viewpointOntology;
 	}
 
@@ -780,5 +783,29 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuffer sb = new StringBuffer();
+		System.out.println("loaded: " + getViewpointOntology().isLoaded());
+		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
+			if (o != getOntologyLibrary().getOWLOntology()) {
+				String modelName = JavaUtils.getVariableName(o.getName());
+				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+		}
+		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
+		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		// TODO iterate on slots here
+		sb.append("ModelSlot defaultModelSlot implements toto;");
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (EditionPattern ep : getEditionPatterns()) {
+			sb.append(ep.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		return sb.toString();
+	}
 
 }

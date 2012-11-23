@@ -22,32 +22,29 @@ package org.openflexo.ve.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.view.OntologyView;
-import org.openflexo.view.EmptyPanel;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
+public class OntologyPerspective extends FlexoPerspective {
 
 	private final VEController _controller;
 
 	private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
 
 	private final JLabel infoLabel;
-
-	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
 	 * @param controller
@@ -57,16 +54,16 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	public OntologyPerspective(VEController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getProject().getProjectOntologyLibrary(), controller);
-
+		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(null, controller);
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
+		setTopLeftView(ontologyLibraryBrowser);
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -76,7 +73,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -84,11 +81,11 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	}
 
 	@Override
-	public FlexoOntology getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof FlexoOntology) {
-			return (FlexoOntology) proposedObject;
+			return proposedObject;
 		}
-		return _controller.getProject().getProjectOntology();
+		return (FlexoModelObject) _controller.getProject().getProjectOntology();
 	}
 
 	@Override
@@ -97,22 +94,12 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	}
 
 	@Override
-	public ModuleView<? extends OntologyObject> createModuleViewForObject(OntologyObject object, FlexoController controller) {
-		if (object instanceof FlexoOntology) {
-			((FlexoOntology) object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology) object, (VEController) controller, this);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof OWLOntology) {
+			((OWLOntology) object).loadWhenUnloaded();
+			return new OntologyView((OWLOntology) object, (VEController) controller, this);
 		}
-		return new EmptyPanel<OntologyObject>(controller, this, object);
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return ontologyLibraryBrowser;
+		return null;
 	}
 
 	@Override
@@ -120,29 +107,23 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 		return infoLabel;
 	}
 
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return EMPTY_RIGHT_VIEW;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
+	}
+
+	public void setProject(FlexoProject project) {
+		if (project != null) {
+			ontologyLibraryBrowser.setDataObject(project.getProjectOntologyLibrary());
+		} else {
+			ontologyLibraryBrowser.setDataObject(null);
+		}
+
 	}
 
 }

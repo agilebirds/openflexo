@@ -37,12 +37,12 @@ public class ProjectExcelExportAction extends FlexoGUIAction<ProjectExcelExportA
 			"project_excel_export", FlexoActionType.docGroup) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 

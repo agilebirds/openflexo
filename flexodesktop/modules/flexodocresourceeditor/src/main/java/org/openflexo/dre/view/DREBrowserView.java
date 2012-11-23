@@ -38,21 +38,8 @@ public class DREBrowserView extends BrowserView {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected DREController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public DREBrowserView(DREController controller) {
-		super(controller.getDREBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getDREBrowser(), controller);
 		AskParametersPanel languageSelector = new AskParametersPanel(null, controller.getDREBrowser().getAvailableLanguages());
 		add(languageSelector, BorderLayout.NORTH);
 	}
@@ -60,13 +47,13 @@ public class DREBrowserView extends BrowserView {
 	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 		// Try to display object in view
-		_controller.selectAndFocusObject(object);
+		getController().selectAndFocusObject(object);
 	}
 
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		// Try to display object in view
-		_controller.selectAndFocusObject(object);
+		getController().selectAndFocusObject(object);
 	}
 
 }

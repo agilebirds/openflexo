@@ -26,8 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
@@ -711,7 +709,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMMethod.this.setChanged();
-						DMMethod.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("code", null, getCode()));
+						DMMethod.this
+								.notifyObserversAsReentrantModification(new DMAttributeDataModification("code", null, super.getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
 						setParseErrorWarning("<html><font color=\"red\">"
@@ -1151,13 +1150,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMEntity getParent() {
 		return getEntity();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
 	}
 
 	@Override
@@ -1384,13 +1378,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMMethod getParent() {
 			return getMethod();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**

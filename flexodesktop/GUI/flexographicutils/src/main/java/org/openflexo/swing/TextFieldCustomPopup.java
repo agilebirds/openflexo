@@ -39,7 +39,6 @@ import javax.swing.border.EmptyBorder;
  */
 public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 
-	JPanel _frontComponent;
 	JTextField _textField;
 	JLabel _label;
 	private int requestedColNumber = -1;

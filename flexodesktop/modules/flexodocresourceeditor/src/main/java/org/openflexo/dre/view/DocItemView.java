@@ -21,12 +21,12 @@ package org.openflexo.dre.view;
 
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class DocItemView extends AbstractDocItemView {
+public class DocItemView extends AbstractDocItemView implements ModuleView<DocItem> {
 
 	public DocItemView(DocItem docItem, DREController controller) {
 		super(docItem, controller, controller.getEditor());
@@ -42,7 +42,7 @@ public class DocItemView extends AbstractDocItemView {
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 
@@ -86,6 +86,11 @@ public class DocItemView extends AbstractDocItemView {
 	@Override
 	public boolean isAutoscrolled() {
 		return false;
+	}
+
+	@Override
+	public DocItem getRepresentedObject() {
+		return _docItem;
 	}
 
 }

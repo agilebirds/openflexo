@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -306,9 +305,11 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	 */
 
 	public void setEntityClassName(String newEntityClassName) throws DuplicateClassNameException, InvalidNameException {
-		/*
-		 * if (entityClassName == null) { entityClassName = newEntityClassName; updateTypeObject(null,newEntityClassName); return; }
-		 */
+		/* if (entityClassName == null) {
+		     entityClassName = newEntityClassName;
+		     updateTypeObject(null,newEntityClassName);
+		     return;
+		 }*/
 		if (!isDeserializing() && (newEntityClassName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newEntityClassName).matches())) {
 			logger.warning("Invalid name: " + newEntityClassName);
 			throw new InvalidNameException();
@@ -905,7 +906,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (entity == this) {
 			return true;
 		}
-		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive)) */) {
+		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive))*/) {
 			return true;
 		}
 		if (entity.getParentBaseEntity() != null) {
@@ -935,10 +936,9 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (entity == this) {
 			return DMType.makeResolvedDMType(entity);
 		}
-		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive)) */) {
+		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive))*/) {
 			return DMType.makeResolvedDMType(getDMModel().getDMEntity(Object.class));
 		}
-		;
 		if (entity.getParentBaseEntity() != null) {
 			if (isAncestorOf(entity.getParentBaseEntity())) {
 				return entity.getParentType();
@@ -1279,19 +1279,9 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getPackage();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override
@@ -1598,13 +1588,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMEntity getParent() {
 			return getEntity();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**

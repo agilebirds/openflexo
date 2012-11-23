@@ -352,7 +352,9 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		if (initOwner != null) {
 			initOwner.repaint();
 		}
-		_instance = null;
+		if (_instance == this) {
+			_instance = null;
+		}
 	}
 
 	public static ProgressWindow instance() {

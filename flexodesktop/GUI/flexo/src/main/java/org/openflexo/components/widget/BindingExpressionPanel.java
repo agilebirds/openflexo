@@ -270,8 +270,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			try {
 				EvaluationType evaluationType = _bindingExpression.getEvaluationType();
 
-				if (_bindingExpression != null && _bindingExpression.getBindingDefinition() != null
-						&& _bindingExpression.getBindingDefinition().getType() != null) {
+				if (_bindingExpression.getBindingDefinition() != null && _bindingExpression.getBindingDefinition().getType() != null) {
 					EvaluationType wantedEvaluationType = DMType.kindOf(_bindingExpression.getBindingDefinition().getType());
 					if (wantedEvaluationType == EvaluationType.LITERAL || evaluationType == wantedEvaluationType
 							|| wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT
@@ -359,7 +358,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					logger.warning("Could not access to BindingExpressionConverter : project=" + getProject());
 					return;
 				}
-				if (_bindingExpression != null && _bindingExpression.getOwner() instanceof Bindable) {
+				if (_bindingExpression.getOwner() instanceof Bindable) {
 					converter.setBindable((Bindable) _bindingExpression.getOwner());
 				}
 				newExpression = converter.parseExpressionFromString(expressionTA.getText());

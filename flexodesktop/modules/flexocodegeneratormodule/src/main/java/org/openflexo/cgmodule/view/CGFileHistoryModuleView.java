@@ -65,8 +65,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -158,12 +158,12 @@ public class CGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 			controlPanel = new JPanel(new FlowLayout());
 
 			FlexoActionButton revertToVersionAction = new FlexoActionButton(RevertToHistoryVersion.actionType, "revert_to_version",
-					CGFileHistoryModuleView.this, getController().getEditor());
+					CGFileHistoryModuleView.this, getController());
 			actionButtons.add(revertToVersionAction);
 			controlPanel.add(revertToVersionAction);
 
 			FlexoActionButton showDifferencesAction = new FlexoActionButton(ShowDifferences.actionType, "show_differences",
-					CGFileHistoryModuleView.this, getController().getEditor());
+					CGFileHistoryModuleView.this, getController());
 			actionButtons.add(showDifferencesAction);
 			controlPanel.add(showDifferencesAction);
 
@@ -263,7 +263,7 @@ public class CGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

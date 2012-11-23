@@ -48,12 +48,12 @@ public class CreateDMProperty extends FlexoAction<CreateDMProperty, DMEntity, DM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return object != null && !object.getIsReadOnly() && !(object instanceof ProcessDMEntity);
 		}
 

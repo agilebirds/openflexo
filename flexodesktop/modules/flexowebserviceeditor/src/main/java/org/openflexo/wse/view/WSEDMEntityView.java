@@ -24,10 +24,11 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEDMPropertyTableModel;
 
 /**
@@ -96,8 +97,8 @@ public class WSEDMEntityView extends WSEView<DMEntity> {
 	}
 
 	public DMProperty getSelectedDMProperty() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}

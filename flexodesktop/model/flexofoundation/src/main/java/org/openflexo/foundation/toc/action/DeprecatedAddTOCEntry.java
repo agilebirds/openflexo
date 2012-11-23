@@ -52,12 +52,12 @@ public class DeprecatedAddTOCEntry extends FlexoAction<DeprecatedAddTOCEntry, TO
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
 			return object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren();
 		}
 

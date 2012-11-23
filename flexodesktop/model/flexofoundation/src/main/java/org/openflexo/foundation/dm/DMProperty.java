@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -1838,13 +1837,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getEntity();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
 	}
 
 	/**

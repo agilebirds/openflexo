@@ -197,22 +197,11 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	public static final String ACTION_CONTEXT = "ACTION";
 	public static final String EXECUTION_CONTEXT = "EXECUTION";
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
 	private transient FlexoProject _project;
 
 	private FlexoProcessResource _resource;
 
 	private String _name;
-
-	// Now stored at workflow level
-	// private RoleList _roleList;
-
-	// deprecated
-	// private DeadLineList _deadLineList;
 
 	private StatusList _statusList;
 
@@ -1302,8 +1291,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 * 
 	 * @return a Vector of OperationNode
 	 */
-	public Vector<OperationNode> getAllOperationNodesWithComponent() {
-		Vector<OperationNode> retval = new Vector<OperationNode>();
+	public List<OperationNode> getAllOperationNodesWithComponent() {
+		List<OperationNode> retval = new Vector<OperationNode>();
 		for (OperationNode operation : getAllEmbeddedOperationNodes()) {
 			if (operation.hasWOComponent()) {
 				retval.add(operation);

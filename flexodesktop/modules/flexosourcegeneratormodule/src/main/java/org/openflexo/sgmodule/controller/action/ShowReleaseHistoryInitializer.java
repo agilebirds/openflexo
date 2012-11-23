@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -57,7 +58,7 @@ public class ShowReleaseHistoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowReleaseHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowReleaseHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowReleaseHistory action) {
+			public boolean run(EventObject e, ShowReleaseHistory action) {
 				return true;
 			}
 		};
@@ -67,7 +68,7 @@ public class ShowReleaseHistoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowReleaseHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowReleaseHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowReleaseHistory action) {
+			public boolean run(EventObject e, ShowReleaseHistory action) {
 				InfoLabelParameter infoLabel = new InfoLabelParameter("info", "info", action.getLocalizedDescription(), false);
 				final PropertyListParameter<CGRelease> releasesParam = new PropertyListParameter<CGRelease>("releases", "releases", action
 						.getFocusedObject().getReleases(), 20, 10);

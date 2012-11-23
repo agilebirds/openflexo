@@ -53,12 +53,12 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGFile file, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGFile file, Vector<CGObject> globalSelection) {
 			return file instanceof AbstractCGFile;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) {
 			if (!isVisibleForSelection(file, globalSelection)) {
 				return false;
 			}

@@ -58,7 +58,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 	public static final String COMMENT_ARGUMENT_PREFIX = "-Comment=";
 
-	protected FlexoEditor EDITOR = new DefaultFlexoEditor() {
+	protected FlexoEditor EDITOR = new DefaultFlexoEditor(null) {
 		@Override
 		public boolean performResourceScanning() {
 			return false;

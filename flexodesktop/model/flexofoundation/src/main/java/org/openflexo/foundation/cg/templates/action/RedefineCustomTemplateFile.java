@@ -52,12 +52,12 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 

@@ -122,7 +122,7 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		@Override
 		public Boolean getBooleanValue(E object) {
 			if (!isSelectable(object)) {
-				return null;
+				return Boolean.FALSE;
 			}
 			Boolean returned = _hashSet.get(object);
 			if (returned == null) {

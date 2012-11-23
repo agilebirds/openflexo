@@ -28,7 +28,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestExternalRepository extends FlexoTestCase {
 
@@ -50,7 +49,6 @@ public class TestExternalRepository extends FlexoTestCase {
 	 */
 	public void test0CreateProject() {
 		logger.info("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_ER, "");

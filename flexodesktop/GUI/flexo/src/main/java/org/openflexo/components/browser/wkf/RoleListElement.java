@@ -67,9 +67,6 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 
 	@Override
 	protected void buildChildrenVector() {
-		if (observedRole == null) {
-			observedRole = new HashSet<Role>();
-		}
 		clearObserving();
 		// We add the roles
 		if (!getRoleList().isImportedRoleList()) {
@@ -110,13 +107,12 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	}
 
 	private void clearObserving() {
-		if (observedRole == null) {
-			observedRole = new HashSet<Role>();
+		if (observedRole != null) {
+			for (Role r : observedRole) {
+				r.deleteObserver(this);
+			}
+			observedRole.clear();
 		}
-		for (Role r : observedRole) {
-			r.deleteObserver(this);
-		}
-		observedRole.clear();
 	}
 
 	private void observeRole(Role role) {

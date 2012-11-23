@@ -23,8 +23,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.eo.model.EOAttribute;
@@ -273,13 +271,8 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getDMEORelationship();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
 	}
 
 	/**

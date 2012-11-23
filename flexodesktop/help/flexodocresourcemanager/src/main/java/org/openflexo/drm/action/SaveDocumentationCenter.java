@@ -22,40 +22,40 @@ package org.openflexo.drm.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
-public class SaveDocumentationCenter extends FlexoAction {
+public class SaveDocumentationCenter extends FlexoAction<SaveDocumentationCenter, DRMObject, DRMObject> {
 
 	private static final Logger logger = Logger.getLogger(SaveDocumentationCenter.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("save_documentation_center", FlexoActionType.defaultGroup,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<SaveDocumentationCenter, DRMObject, DRMObject> actionType = new FlexoActionType<SaveDocumentationCenter, DRMObject, DRMObject>(
+			"save_documentation_center", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public SaveDocumentationCenter makeNewAction(DRMObject focusedObject, Vector<DRMObject> globalSelection, FlexoEditor editor) {
 			return new SaveDocumentationCenter(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DRMObject object, Vector<DRMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DRMObject object, Vector<DRMObject> globalSelection) {
 			return true;
 		}
 
 	};
 
-	SaveDocumentationCenter(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	SaveDocumentationCenter(DRMObject focusedObject, Vector<DRMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

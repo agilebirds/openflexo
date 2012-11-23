@@ -34,7 +34,7 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 			"move_toc_entry") {
 
 		@Override
-		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
+		public boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
 			if (object == null) {
 				return false;
 			}
@@ -47,7 +47,7 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
+		public boolean isVisibleForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
 			return false;
 		}
 

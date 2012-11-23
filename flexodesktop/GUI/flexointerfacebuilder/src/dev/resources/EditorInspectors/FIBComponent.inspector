@@ -207,37 +207,34 @@
 			
     		  <Panel layout="twocols" border="titled" borderTitle="font_and_colors" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)">
     		    <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=right;index=0;expandHorizontally=true;expandVertically=false)">
-    		      <CheckBox data="data.hasSpecificFont" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		      <Label label="define_specific_font" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
-    		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" enable="data.hasSpecificFont" localize="true" />
-    		      <CheckBox data="data.hasSpecificBackgroundColor" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
     		      <Label label="background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-    		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificBackgroundColor"/>
-    		      <CheckBox data="data.hasSpecificForegroundColor" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-     		     <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-     		     <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificForegroundColor"/>
-    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
+    		      <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+     		      <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
     		      <Label label="opaque" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		    </Panel>
   		    </Panel>
   			    
  			</Tab>
 			
-			<Tab name="DependanciesTab" title="Depends" index="5" layout="twocols" font="SansSerif,0,11" >
+			<Tab name="DependenciesTab" title="Depends" index="5" layout="twocols" font="SansSerif,0,11" >
 
-				<Panel border="titled" borderTitle="Dynamic dependancies" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"> 
-					<Table name="DependanciesTable" iteratorClassName="org.openflexo.fib.model.FIBComponent" data="data.mayDepends" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
+				<Panel border="titled" borderTitle="Dynamic dependencies" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"> 
+					<Table name="DependenciesTable" iteratorClassName="org.openflexo.fib.model.FIBComponent" data="data.mayDepends" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
 						<LabelColumn data="data.toString" title="owner" columnWidth="200" resizable="true"/>
-						<LabelColumn data="iterator.toString" title="dependancy" columnWidth="200" resizable="true" />
+						<LabelColumn data="iterator.toString" title="dependency" columnWidth="200" resizable="true" />
 					</Table>
 				</Panel>
 		
-				<Panel border="titled" borderTitle="Explicit dependancies" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"> 
-					<Table name="DependanciesTable" iteratorClassName="org.openflexo.fib.model.FIBDependancy" data="data.explicitDependancies" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
+				<Panel border="titled" borderTitle="Explicit dependencies" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"> 
+					<Table name="DependenciesTable" iteratorClassName="org.openflexo.fib.model.FIBDependancy" data="data.explicitDependancies" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
 						<LabelColumn data="iterator.owner.toString" title="owner" columnWidth="200" resizable="true"/>
-						<DropDownColumn data="iterator.masterComponent" list="iterator.rootComponent.namedComponents" title="dependancy" columnWidth="200" resizable="true" />
-						<AddAction name="make_new_dependancy" method="data.createNewExplicitDependancy()" />
-	    				<RemoveAction name="delete_dependancy" method="data.deleteExplicitDependancy(selected)"/>
+						<DropDownColumn data="iterator.masterComponent" list="iterator.rootComponent.namedComponents" title="dependency" columnWidth="200" resizable="true" />
+						<AddAction name="make_new_dependency" method="data.createNewExplicitDependancy()" />
+	    				<RemoveAction name="delete_dependency" method="data.deleteExplicitDependancy(selected)"/>
 					</Table>
 				</Panel>
 		
@@ -292,9 +289,9 @@
     <Localized key="bottom" lang="French">Bas</Localized>
     <Localized key="data" lang="French">Donnée</Localized>
     <Localized key="data_class" lang="French">Classe de donnée</Localized>
-    <Localized key="delete_dependancy" lang="French">Supprimer la dépendance</Localized>
+    <Localized key="delete_dependency" lang="French">Supprimer la dépendance</Localized>
     <Localized key="delete_parameter" lang="French">Supprimer le paramètre</Localized>
-    <Localized key="dependancy" lang="French">Dépendance</Localized>
+    <Localized key="dependency" lang="French">Dépendance</Localized>
     <Localized key="expand_horizontally" lang="French">Etendre horizontalement</Localized>
     <Localized key="expand_vertically" lang="French">Etendre verticalement</Localized>
     <Localized key="fill" lang="French">Remplir</Localized>
@@ -303,7 +300,7 @@
     <Localized key="gridX" lang="French">Grid X</Localized>
     <Localized key="gridY" lang="French">Grid Y</Localized>
     <Localized key="Insets" lang="French">Insets</Localized>
-    <Localized key="make_new_dependancy" lang="French">Créer une nouvelle dépendance</Localized>
+    <Localized key="make_new_dependency" lang="French">Créer une nouvelle dépendance</Localized>
     <Localized key="make_new_parameter" lang="French">Créer un nouveau paramètre</Localized>
     <Localized key="owner" lang="French">Propriétaire</Localized>
     <Localized key="pads" lang="French">Pads</Localized>
@@ -320,8 +317,8 @@
     <Localized key="owner" lang="Dutch">Owner</Localized>
     <Localized key="make_new_parameter" lang="English">Make new parameter</Localized>
     <Localized key="make_new_parameter" lang="Dutch">Make new parameter</Localized>
-    <Localized key="make_new_dependancy" lang="English">Make new dependancy</Localized>
-    <Localized key="make_new_dependancy" lang="Dutch">Make new dependancy</Localized>
+    <Localized key="make_new_dependency" lang="English">Make new dependency</Localized>
+    <Localized key="make_new_dependency" lang="Dutch">Make new dependency</Localized>
     <Localized key="gridY" lang="English">Grid Y</Localized>
     <Localized key="gridY" lang="Dutch">Grid Y</Localized>
     <Localized key="gridX" lang="English">Grid X</Localized>
@@ -336,12 +333,12 @@
     <Localized key="expand_vertically" lang="Dutch">Expand vertically</Localized>
     <Localized key="expand_horizontally" lang="English">Expand horizontally</Localized>
     <Localized key="expand_horizontally" lang="Dutch">Expand horizontally</Localized>
-    <Localized key="dependancy" lang="English">Dependancy</Localized>
-    <Localized key="dependancy" lang="Dutch">Dependancy</Localized>
+    <Localized key="dependency" lang="English">Dependency</Localized>
+    <Localized key="dependency" lang="Dutch">Dependency</Localized>
     <Localized key="delete_parameter" lang="English">Delete parameter</Localized>
     <Localized key="delete_parameter" lang="Dutch">Delete parameter</Localized>
-    <Localized key="delete_dependancy" lang="English">Delete dependancy</Localized>
-    <Localized key="delete_dependancy" lang="Dutch">Delete dependancy</Localized>
+    <Localized key="delete_dependency" lang="English">Delete dependency</Localized>
+    <Localized key="delete_dependency" lang="Dutch">Delete dependency</Localized>
     <Localized key="data_class" lang="English">Data class</Localized>
     <Localized key="data_class" lang="Dutch">Data class</Localized>
     <Localized key="data" lang="English">Data</Localized>

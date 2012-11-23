@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.controller.DGController;
@@ -28,7 +28,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.action.GenerateOperationScreenshot;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -50,13 +49,13 @@ public class GenerateOperationScreenshotInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateOperationScreenshot> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateOperationScreenshot>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateOperationScreenshot action) {
+			public boolean run(EventObject e, GenerateOperationScreenshot action) {
 				// This action could be called from outside the
 				// scope of the DocumentationGenerator, sooo....
 				// We always return true, here, but we also store
 				// controller in context object
-				logger.info("Active controller is: " + FlexoModule.getActiveModule().getFlexoController());
-				action.setContext(FlexoModule.getActiveModule().getFlexoController());
+				logger.info("Active controller is: " + getController());
+				action.setContext(getController());
 				return true;
 			}
 		};
@@ -66,7 +65,7 @@ public class GenerateOperationScreenshotInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateOperationScreenshot> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateOperationScreenshot>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateOperationScreenshot action) {
+			public boolean run(EventObject e, GenerateOperationScreenshot action) {
 				FlexoController controller = (FlexoController) action.getContext();
 				if (action.getScreenshotResource() == null) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("error_while_generating_screenshot"));

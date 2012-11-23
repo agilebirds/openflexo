@@ -34,8 +34,8 @@ import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.foundation.ws.action.WSDelete;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEPortTypeTableModel;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 import org.openflexo.wse.model.WSEServiceTableModel;
@@ -63,7 +63,7 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 		super(folder, controller, folder.getLocalizedName());
 		addAction(new TabularViewAction(CreateNewWebService.actionType, "ws_add_webservice", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -85,7 +85,7 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 		    });*/
 		addAction(new TabularViewAction(WSDelete.actionType, "delete_webservice", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -118,8 +118,8 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	}
 
 	public WSService getSelectedWSService() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof WSService) {
 			return (WSService) selection.firstElement();
 		}
@@ -140,8 +140,8 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	}
 
 	public ServiceInterface getSelectedServiceInterface() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
@@ -149,8 +149,8 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	}
 
 	public WSDLRepository getSelectedWSDLRepository() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof WSDLRepository) {
 			return (WSDLRepository) selection.firstElement();
 		}

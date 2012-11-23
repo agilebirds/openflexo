@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -37,8 +37,6 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.popups.AskNewComponentDialog;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -60,7 +58,7 @@ public class AddComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddComponent> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddComponent>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponent action) {
+			public boolean run(EventObject e, AddComponent action) {
 				if (action.getNewComponentName() != null && action.getComponentType() != null && action.getFolder() != null) {
 					return true;
 				}
@@ -90,19 +88,9 @@ public class AddComponentInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddComponent> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddComponent>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponent action) {
+			public boolean run(EventObject e, AddComponent action) {
 				if (action.getNewComponent() != null) {
-					ExternalIEModule ieModule = null;
-					try {
-						ieModule = getModuleLoader().getIEModule(getProject());
-					} catch (ModuleLoadingException e1) {
-						logger.warning("Cannot load IE module." + e1.getMessage());
-					}
-					if (ieModule == null) {
-						return false;
-					}
-					ieModule.focusOn();
-					ieModule.showScreenInterface(action.getNewComponent().getDummyComponentInstance());
+					getEditor().focusOn(action.getNewComponent().getDummyComponentInstance());
 				}
 				return true;
 			}

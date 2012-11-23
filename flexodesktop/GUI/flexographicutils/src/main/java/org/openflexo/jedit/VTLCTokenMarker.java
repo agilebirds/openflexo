@@ -34,7 +34,6 @@ import javax.swing.text.Segment;
  * VTL-C token marker.
  * 
  * @author gpolet
- * @version $Id: VTLCTokenMarker.java,v 1.2 2011/09/12 11:47:09 gpolet Exp $
  */
 public class VTLCTokenMarker extends TokenMarker {
 	public VTLCTokenMarker() {

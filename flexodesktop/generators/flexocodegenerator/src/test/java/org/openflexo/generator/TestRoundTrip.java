@@ -38,8 +38,6 @@ import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
@@ -88,14 +86,12 @@ import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.action.MarkAsMerged;
 import org.openflexo.generator.action.SaveGeneratedFile;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
-import org.openflexo.generator.action.ValidateProject;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.generator.rm.BuildPropertiesResource;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestRoundTrip extends CGTestCase {
 
@@ -143,7 +139,6 @@ public class TestRoundTrip extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");
@@ -155,7 +150,8 @@ public class TestRoundTrip extends CGTestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
+		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
+				getNewResourceCenter(_projectIdentifier));
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 
@@ -184,9 +180,9 @@ public class TestRoundTrip extends CGTestCase {
 
 		logger.info("Resources are WELL created and DEPENDANCIES checked");
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<?> resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
+				assertNotModified((FlexoStorageResource<?>) resource);
 			}
 		}
 
@@ -455,33 +451,7 @@ public class TestRoundTrip extends CGTestCase {
 		createDefaultGCRepository();
 		codeRepository.setTargetType(CodeType.PROTOTYPE);
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
-			@Override
-			public boolean handleException(FlexoException exception, ValidateProject action) {
-				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
-				}
-				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
-				}
-				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
-				}
-				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
-				}
-				return true;
-			}
-		});
-
-		ValidateProject validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-
-		// First project is not valid
-		assertFalse(validateProject.isProjectValid());
-
-		// Try to fix errors (GPO: this is not required anymore, prefix is always set on root folder unless done otherwise explicitly)
-		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
+		validateProject(codeRepository, false);
 		// rootFolder.setComponentPrefix("TST");
 		// To fix errors we need another process and operation on which we will bind the menu
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
@@ -528,11 +498,7 @@ public class TestRoundTrip extends CGTestCase {
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(operationNodeForMenu);
 		associateTabWithOperations();
 		// Project should be without errors now
-		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-		assertTrue(validateProject.isProjectValid());
-
-		saveProject();
+		assertProjectIsValid(codeRepository);
 
 		// Synchronize code generation
 		codeRepository.connect();

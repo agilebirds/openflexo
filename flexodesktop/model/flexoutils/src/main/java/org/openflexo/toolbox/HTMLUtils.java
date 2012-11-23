@@ -1133,7 +1133,7 @@ public class HTMLUtils {
 	}
 
 	public static String toHexString(Color color) {
-		return String.format("%1$02x%2$02x%3$02x", color.getRed(), color.getGreen(), color.getBlue());
+		return String.format("%1$02X%2$02X%3$02X", color.getRed(), color.getGreen(), color.getBlue());
 	}
 
 	public static String extractSourceFromEmbeddedTag(String htmlCode) {

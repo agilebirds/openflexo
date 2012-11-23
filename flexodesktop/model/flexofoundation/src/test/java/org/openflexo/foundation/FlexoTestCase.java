@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -38,16 +37,13 @@ import junit.framework.TestCase;
 
 import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateDMEOEntity;
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.action.CreateDMProperty;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
+import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
@@ -67,13 +63,17 @@ import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -103,7 +103,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
@@ -136,25 +135,6 @@ public abstract class FlexoTestCase extends TestCase {
 			super(project);
 		}
 
-		@Override
-		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-				FlexoActionType<A, T1, T2> actionType) {
-			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
-
-				@Override
-				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
-							FlexoTestEditor.this);
-					if (!reply) {
-						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
-								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
-					}
-					return reply;
-				}
-
-			};
-			return init;
-		}
 	}
 
 	public FlexoTestCase() {
@@ -196,10 +176,9 @@ public abstract class FlexoTestCase extends TestCase {
 		return createProject(projectName, getNewResourceCenter(projectName));
 	}
 
-	protected FlexoResourceCenter getNewResourceCenter(String name) {
+	protected FlexoResourceCenterService getNewResourceCenter(String name) {
 		try {
-			return LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(FileUtils.createTempDirectory(name,
-					"ResourceCenter"));
+			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
@@ -207,8 +186,7 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
-	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
-		ToolBox.setPlatform();
+	protected FlexoEditor createProject(String projectName, FlexoResourceCenterService resourceCenterService) {
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File _projectDirectory = null;
 		try {
@@ -221,7 +199,7 @@ public abstract class FlexoTestCase extends TestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		String _projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenter);
+		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenterService);
 		logger.info("Project has been SUCCESSFULLY created");
 		try {
 			reply.getProject().setProjectName(_projectIdentifier/*projectName*/);
@@ -244,10 +222,32 @@ public abstract class FlexoTestCase extends TestCase {
 		}
 	}
 
+	@Deprecated
 	protected FlexoEditor reloadProject(File prjDir) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, null));
+			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
+			return _editor;
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProjectLoadingCancelledException e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+		return null;
+	}
+
+	protected FlexoEditor reloadProject(File prjDir, FlexoResourceCenterService resourceCenterService,
+			FlexoProjectReferenceLoader projectReferenceLoader) {
+		try {
+			FlexoEditor _editor = null;
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
+					new DefaultProjectLoadingHandler(), projectReferenceLoader, resourceCenterService));
 			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {
@@ -307,7 +307,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertNotModified(FlexoStorageResource resource) {
 		try {
-			assertFalse(resource.isModified());
+			assertFalse("Resource " + resource.getResourceIdentifier() + " should not be modfied", resource.isModified());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT modified");
 			throw e;
@@ -316,7 +316,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertModified(FlexoStorageResource resource) {
 		try {
-			assertTrue(resource.isModified());
+			assertTrue("Resource " + resource.getResourceIdentifier() + " should be modfied", resource.isModified());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be modified");
 			throw e;
@@ -325,7 +325,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertNotLoaded(FlexoStorageResource resource) {
 		try {
-			assertFalse(resource.isLoaded());
+			assertFalse("Resource " + resource.getResourceIdentifier() + " should not be loaded", resource.isLoaded());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT loaded");
 			throw e;
@@ -334,7 +334,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected void assertLoaded(FlexoStorageResource resource) {
 		try {
-			assertTrue(resource.isLoaded());
+			assertTrue("Resource " + resource.getResourceIdentifier() + " should be loaded", resource.isLoaded());
 		} catch (AssertionFailedError e) {
 			logger.warning("RESOURCE status problem: " + resource + " MUST be loaded");
 			throw e;
@@ -550,8 +550,8 @@ public abstract class FlexoTestCase extends TestCase {
 		if (repName == null) {
 			repName = "MyNewRepository";
 		}
-		CreateDMRepository rep = CreateDMRepository.actionType.makeNewAction(editor.getProject().getDataModel(), null, editor);
-		rep.setRepositoryType(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
+		CreateProjectDatabaseRepository rep = CreateProjectDatabaseRepository.actionType.makeNewAction(editor.getProject().getDataModel(),
+				null, editor);
 		rep.setNewRepositoryName(repName);
 		rep.doAction();
 		if (!rep.hasActionExecutionSucceeded()) {
@@ -561,16 +561,17 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	public static FlexoProcess createSubProcess(String subProcessName, FlexoProcess parentProcess, FlexoEditor editor) {
-		AddSubProcess action = AddSubProcess.actionType.makeNewAction(parentProcess, null, editor);
+		AddSubProcess action = AddSubProcess.actionType.makeNewAction(parentProcess != null ? parentProcess : editor.getProject()
+				.getWorkflow(), null, editor);
 		action.setParentProcess(parentProcess);
 		action.setNewProcessName(subProcessName);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
-		FlexoProcessResource _subProcessResource = parentProcess.getProject().getFlexoProcessResource(subProcessName);
+		FlexoProcessResource _subProcessResource = editor.getProject().getFlexoProcessResource(subProcessName);
 		assertNotNull(_subProcessResource);
 		assertNotNull(_subProcessResource.getFlexoProcess());
 		assertEquals(_subProcessResource.getFlexoProcess().getParentProcess(), parentProcess);
-		assertEquals(_subProcessResource.getFlexoProcess(), parentProcess.getProject().getLocalFlexoProcess(subProcessName));
+		assertEquals(_subProcessResource.getFlexoProcess(), editor.getProject().getLocalFlexoProcess(subProcessName));
 		return _subProcessResource.getFlexoProcess();
 	}
 

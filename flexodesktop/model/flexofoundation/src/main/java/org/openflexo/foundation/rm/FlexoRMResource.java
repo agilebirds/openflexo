@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,8 +36,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -60,7 +59,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> implements Serializable {
+public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoRMResource.class.getPackage().getName());
 
@@ -74,7 +73,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	private File projectDirectory;
 
-	private boolean requireDependanciesRebuild = false;
+	private boolean requireDependenciesRebuild = false;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -141,7 +140,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	}
 
 	@Override
-	public Class getResourceDataClass() {
+	public Class<FlexoProject> getResourceDataClass() {
 		return FlexoProject.class;
 	}
 
@@ -151,6 +150,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			if (_resourceData != null) {
 				project = _resourceData;
 			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("We should never get here.");
+				}
 				try {
 					logger.warning("You should retrieve a ResourceCenter here !!!");
 					project = loadProject(null, getLoadingHandler(), null);
@@ -235,15 +237,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	private boolean isInitializingProject = false;
 
-	private FlexoResourceCenter resourceCenter;
+	private FlexoResourceCenterService resourceCenterService;
 
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
-	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter)
-			throws RuntimeException, ProjectLoadingCancelledException {
-		this.resourceCenter = resourceCenter;
+	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler,
+			FlexoResourceCenterService resourceCenterService) throws RuntimeException, ProjectLoadingCancelledException {
+		this.resourceCenterService = resourceCenterService;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -254,7 +256,11 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				progress.setProgress(FlexoLocalization.localizedForKey("loading_project"));
 				_loadProjectProgress = progress;
 			}
-			findAndSetRMVersion();
+			try {
+				findAndSetRMVersion();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			try {
 				_loadingHandler = loadingHandler;
 				projectDirectory = getFile().getParentFile();
@@ -332,29 +338,30 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			loadingHandler.loadAndConvertAllOldResourcesToLatestVersion(project, progress);
 
 			// Load the data model
-			if (!project.getFlexoDMResource().isLoaded()) {
+			/*if (!project.getFlexoDMResource().isLoaded()) {
 				project.getFlexoDMResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the DKV
-			if (!project.getFlexoDKVResource().isLoaded()) {
+			/*if (!project.getFlexoDKVResource().isLoaded()) {
 				project.getFlexoDKVResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the component library
+			/*
 			if (!project.getFlexoComponentLibraryResource().isLoaded()) {
 				project.getFlexoComponentLibraryResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the workflow
-			if (!project.getFlexoWorkflowResource().isLoaded()) {
+			/*if (!project.getFlexoWorkflowResource().isLoaded()) {
 				project.getFlexoWorkflowResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the navigation menu
-			if (!project.getFlexoNavigationMenuResource().isLoaded()) {
+			/*if (!project.getFlexoNavigationMenuResource().isLoaded()) {
 				project.getFlexoNavigationMenuResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the TOC's, it is loaded at the end so that it can resolve a maximum of model object reference.
-			if (!project.getTOCResource().isLoaded()) {
+			/*if (!project.getTOCResource().isLoaded()) {
 				project.getTOCResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 
 			// After loading the resources, we clear the isModified flag on RMResource (since basically we haven't changed anything yet)
 			if (!project.hasBackwardSynchronizationBeenPerformed()) {
@@ -363,21 +370,21 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)
-			for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
+			/*for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
 				if (resource.getSourceReference() == null) {
 					resource.delete();
 				}
-			}
+			}*/
+			// Project data contains information about imported projects, so let's load directly.
+			getProject().getProjectData();
 
-			if (requireDependanciesRebuild) {
+			if (requireDependenciesRebuild) {
 				getProject().rebuildDependencies();
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Dependancies rebuilding has been performed. Save RM file.");
+					logger.info("Dependencies rebuilding has been performed. Save RM file.");
 				}
 			}
-			//
 			try {
-				// saveResourceData();
 				if (project.isModified()) {
 					project.getFlexoRMResource().saveResourceData();
 					// Et surtout pas saveResourceData() car cette resource est a oublier, ne l'oublions pas ;-)
@@ -401,7 +408,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			if (progress != null) {
 				progress.setProgress("Check ProcessInstance consistency");
 			}
-			getProject().getFlexoWorkflow().checkProcessDMEntitiesConsitency();
 			_loadProjectProgress = null;
 			return project;
 		} catch (LoadXMLResourceException e) {
@@ -432,20 +438,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 			_loadProjectProgress = null;
 			throw new RuntimeException(e.getMessage());
-		} catch (FlexoFileNotFoundException e) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-			}
-			e.printStackTrace();
-			// Exit application
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Exiting application...");
-			}
-			_loadProjectProgress = null;
-			throw new RuntimeException(e.getMessage());
-		} catch (ProjectLoadingCancelledException e) {
-			throw e;
 		} catch (FlexoException e) {
 			// Warns about the exception
 			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
@@ -465,11 +457,12 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	}
 
 	/**
-	 *
+	 * @throws IOException
+	 * 
 	 */
-	private void findAndSetRMVersion() {
+	private void findAndSetRMVersion() throws IOException {
 		try {
-			String s = new String(FileUtils.getBytes(getFile()), "UTF-8");
+			String s = FileUtils.fileContents(getFile());
 			String version = null;
 			Matcher m = RM_TAG_PATTERN.matcher(s);
 			if (m.find()) {
@@ -505,7 +498,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Will rebuild dependancies later");
 			}
-			requireDependanciesRebuild = true;
+			requireDependenciesRebuild = true;
 			return true;
 		}
 		if (v1.equals(new FlexoVersion("3.1")) && v2.equals(new FlexoVersion("3.2"))) {
@@ -541,17 +534,17 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	private boolean convertFrom34To35() {
 		try {
 			Document document = XMLUtils.getJDOMDocument(getFile());
-			Iterator tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
+			Iterator<Element> tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
 			while (tableElementIterator.hasNext()) {
-				Element el = (Element) tableElementIterator.next();
-				if (el.getAttribute("genericTypingClassName") != null
-						&& el.getAttribute("genericTypingClassName").equals("org.openflexo.generator.rm.PListFileResource")) {
+				Element el = tableElementIterator.next();
+				if (el.getAttribute("genericTypingClassName") != null && el.getAttribute("genericTypingClassName").getValue() != null
+						&& el.getAttribute("genericTypingClassName").getValue().equals("org.openflexo.generator.rm.PListFileResource")) {
 					el.setAttribute("genericTypingClassName", "org.openflexo.generator.rm.EOEntityPListFileResource");
 				}
 			}
 			tableElementIterator = document.getDescendants(new ElementFilter("RMResource"));
 			while (tableElementIterator.hasNext()) {
-				((Element) tableElementIterator.next()).setAttribute("version", "3.5.0");
+				tableElementIterator.next().setAttribute("version", "3.5.0");
 			}
 			// saveResourceDataWithVersion(new Version("3.5.0"));
 
@@ -614,7 +607,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
-		returned.resourceCenter = resourceCenter;
+		returned.resourceCenterService = resourceCenterService;
 		return returned;
 	}
 

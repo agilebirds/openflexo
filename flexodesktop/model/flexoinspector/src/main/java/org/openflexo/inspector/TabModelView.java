@@ -19,7 +19,6 @@
  */
 package org.openflexo.inspector;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -44,7 +43,6 @@ import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 import org.openflexo.inspector.widget.InnerTabWidgetView;
 import org.openflexo.inspector.widget.LineWidget;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * View representing a tab in th inspector
@@ -80,9 +78,6 @@ public class TabModelView extends JPanel {
 		_invisibleWidgets = new Vector<InnerTabWidgetView>();
 		_inspectorModelView = inspectorModelView;
 		setName(FlexoLocalization.localizedForKey(model.name, this));
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			setBackground(Color.WHITE);
-		}
 		init(model, inspectorModelView);
 	}
 

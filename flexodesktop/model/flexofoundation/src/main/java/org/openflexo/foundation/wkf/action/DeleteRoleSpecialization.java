@@ -46,12 +46,12 @@ public class DeleteRoleSpecialization extends FlexoAction<DeleteRoleSpecializati
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isVisibleForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isEnabledForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
 			return role != null || globalSelection != null && globalSelection.size() > 0;
 		}
 

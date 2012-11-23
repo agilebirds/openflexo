@@ -22,6 +22,7 @@ package org.openflexo.dgmodule.controller.action;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -32,19 +33,22 @@ import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dgmodule.view.popups.SelectFilesPopup;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.OverrideWithVersion;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class OverrideWithVersionInitializer extends ActionInitializer {
+public class OverrideWithVersionInitializer extends ActionInitializer<OverrideWithVersion, CGObject, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OverrideWithVersionInitializer(DGControllerActionInitializer actionInitializer) {
-		super(null, actionInitializer);
+	OverrideWithVersionInitializer(FlexoActionType<OverrideWithVersion, CGObject, CGObject> actionType,
+			DGControllerActionInitializer actionInitializer) {
+		super(actionType, actionInitializer);
 	}
 
 	@Override
@@ -56,12 +60,11 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OverrideWithVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideWithVersion action) {
+			public boolean run(EventObject e, OverrideWithVersion action) {
 				if (action.getFilesToOverride().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
 				} else if (action.getFilesToOverride().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
-
 					SelectFilesPopup popup = new SelectFilesPopup(action.getActionType().getLocalizedName(), action.getActionType()
 							.getLocalizedDescription(), "override_files_on_disk", action.getFilesToOverride(), action.getFocusedObject()
 							.getProject(), getControllerActionInitializer().getDGController()) {
@@ -87,12 +90,16 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 						}
 
 					};
-					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
-						action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
-						action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
+							action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, ask confirmation
@@ -122,22 +129,10 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OverrideWithVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideWithVersion action) {
+			public boolean run(EventObject e, OverrideWithVersion action) {
 				return true;
 			}
 		};
-	}
-
-	@Override
-	public void init() {
-		initActionType(OverrideWithVersion.overrideWithPureGeneration, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithGeneratedMerge, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithLastGenerated, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithLastAccepted, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
 	}
 
 }

@@ -301,9 +301,9 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	@Override
 	public void delete() {
-		setChanged();
-		notifyObservers(new ComponentDeleted(this));
-		getProject().getFlexoComponentLibrary().delete(this);
+		if (getFolder() != null) {
+			getFolder().removeFromComponents(this);
+		}
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Removing component !");
 		}
@@ -313,6 +313,8 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		if (_componentDMEntity != null) {
 			_componentDMEntity.delete();
 		}
+		setChanged();
+		notifyObservers(new ComponentDeleted(this));
 		super.delete();
 		deleteObservers();
 	}

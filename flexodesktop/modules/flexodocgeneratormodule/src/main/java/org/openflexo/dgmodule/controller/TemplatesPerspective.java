@@ -16,9 +16,9 @@ import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.icon.DGIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This perspective is used to represent all templates defined in the scope of current project<br>
@@ -27,7 +27,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sylvain
  * 
  */
-public class TemplatesPerspective extends FlexoPerspective<FlexoModelObject> {
+public class TemplatesPerspective extends FlexoPerspective {
 
 	protected static final Logger logger = Logger.getLogger(TemplatesPerspective.class.getPackage().getName());
 
@@ -42,24 +42,10 @@ public class TemplatesPerspective extends FlexoPerspective<FlexoModelObject> {
 	public TemplatesPerspective(DGController dgController) {
 		super("templates");
 		this.dgController = dgController;
-		templatesBrowser = new FIBTemplatesBrowser(dgController.getProject().getGeneratedDoc().getTemplates(), dgController);
+		templatesBrowser = new FIBTemplatesBrowser(dgController);
 		infoLabel = new JLabel("Templates perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public FIBTemplatesBrowser getLeftView() {
-		return templatesBrowser;
+		setTopLeftView(templatesBrowser);
 	}
 
 	/**
@@ -89,11 +75,12 @@ public class TemplatesPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		System.out.println("Proposed object in TemplatesPerspective: " + proposedObject);
 		if (proposedObject instanceof CGTemplate) {
 			return proposedObject;
-		} else {
+		} else if (dgController.getProject() != null) {
 			return this.dgController.getProject().getGeneratedDoc().getTemplates();
+		} else {
+			return null;
 		}
 	}
 
@@ -111,11 +98,6 @@ public class TemplatesPerspective extends FlexoPerspective<FlexoModelObject> {
 			DGController.logger.info("No module view for object: " + object + " and perspective: " + this);
 		}
 		return null;
-	}
-
-	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
-		super.notifyModuleViewDisplayed(moduleView);
 	}
 
 }

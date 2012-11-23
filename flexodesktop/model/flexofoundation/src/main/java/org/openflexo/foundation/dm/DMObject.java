@@ -28,7 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -64,7 +63,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  */
 public abstract class DMObject extends RepresentableFlexoModelObject implements InspectableObject, DeletableObject, Validable,
-		DataFlexoObserver, TreeNode {
+		DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DMObject.class.getPackage().getName());
 
@@ -370,48 +369,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	public abstract boolean isDeletable();
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	public abstract Vector<? extends DMObject> getOrderedChildren();
 
-	@Override
-	public abstract TreeNode getParent();
-
-	@Override
-	public abstract boolean getAllowsChildren();
-
-	@Override
-	public int getIndex(TreeNode node) {
-		for (int i = 0; i < getChildCount(); i++) {
-			if (node == getChildAt(i)) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return getChildCount() == 0;
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return getOrderedChildren().get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return getOrderedChildren().size();
-	}
-
-	@Override
-	public Enumeration<? extends DMObject> children() {
-		return getOrderedChildren().elements();
-	}
+	public abstract DMObject getParent();
 
 	@Override
 	public String toString() {

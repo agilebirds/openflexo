@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -59,7 +59,7 @@ public class AddViewInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddView> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddView>() {
 			@Override
-			public boolean run(ActionEvent e, AddView action) {
+			public boolean run(EventObject e, AddView action) {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
@@ -76,7 +76,7 @@ public class AddViewInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddView> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddView>() {
 			@Override
-			public boolean run(ActionEvent e, AddView action) {
+			public boolean run(EventObject e, AddView action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
 				return true;
 			}

@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.drm.action.RemoveRelatedToItem;
@@ -46,7 +46,7 @@ public class RemoveRelatedToItemInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveRelatedToItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveRelatedToItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveRelatedToItem action) {
+			public boolean run(EventObject e, RemoveRelatedToItem action) {
 				return true;
 			}
 		};
@@ -56,7 +56,7 @@ public class RemoveRelatedToItemInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveRelatedToItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveRelatedToItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveRelatedToItem action) {
+			public boolean run(EventObject e, RemoveRelatedToItem action) {
 				return true;
 			}
 		};

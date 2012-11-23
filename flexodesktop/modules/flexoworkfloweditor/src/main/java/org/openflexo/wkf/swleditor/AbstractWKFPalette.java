@@ -116,6 +116,8 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 						action = AddPort.createOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
 					} else if (object instanceof InOutPort) {
 						action = AddPort.createInOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else {
+						return false;
 					}
 					action.setNewPortName(((FlexoPort) object).getDefaultName());
 

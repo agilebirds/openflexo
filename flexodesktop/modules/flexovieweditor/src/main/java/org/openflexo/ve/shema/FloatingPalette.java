@@ -63,6 +63,7 @@ import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewShape.DropAndLinkScheme;
+import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.DropScheme;
@@ -426,6 +427,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			popup.add(menuItem);*/
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
+		} else {
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, controller.getVEController()
+					.getEditor());
 		}
 		// It is no more possible to create a link without semantic from floating palette
 		/*else {

@@ -26,6 +26,7 @@ import javax.swing.JTabbedPane;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoRelativeWindow;
 
 /**
@@ -66,7 +67,7 @@ public class ComponentLibraryBrowserWindow extends FlexoRelativeWindow {
 	// ================================
 	// ==========================================================================
 
-	public ComponentLibraryBrowserWindow(IEFrame mainFrame) {
+	public ComponentLibraryBrowserWindow(FlexoFrame mainFrame) {
 		super(mainFrame);
 		getContentPane().setLayout(new BorderLayout());
 

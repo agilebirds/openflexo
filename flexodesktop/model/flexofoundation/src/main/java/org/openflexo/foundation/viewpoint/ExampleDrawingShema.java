@@ -39,7 +39,6 @@ import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
-import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
@@ -254,8 +253,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
 		try {
-			cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance(
-					getProject()) : null;
+			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();

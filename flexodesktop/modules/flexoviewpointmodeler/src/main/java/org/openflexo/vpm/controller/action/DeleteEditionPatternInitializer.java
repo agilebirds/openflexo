@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class DeleteEditionPatternInitializer extends ActionInitializer<DeleteEdi
 	protected FlexoActionInitializer<DeleteEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteEditionPattern action) {
+			public boolean run(EventObject e, DeleteEditionPattern action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_edition_pattern"));
 			}
 		};

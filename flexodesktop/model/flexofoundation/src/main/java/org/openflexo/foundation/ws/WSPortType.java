@@ -23,9 +23,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -213,23 +212,13 @@ public class WSPortType extends WSObject implements FlexoObserver {
 		deleteObservers();
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public WSObject getParent() {
 		return getWSService().getWSPortTypeFolder();
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return false;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
+	public Vector<? extends FlexoModelObject> getOrderedChildren() {
 		return null;
 	}
 

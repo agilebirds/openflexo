@@ -67,8 +67,8 @@ import org.openflexo.jedit.JEditTextArea.DisplayContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -153,9 +153,9 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 
 			if (isEdited) {
 				FlexoActionButton saveAction = new FlexoActionButton(SaveGeneratedFile.actionType, "save", ParsedCGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedGeneratedFile.actionType, "revert_to_saved",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
@@ -163,15 +163,15 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 			} else if (_cgFile.getGenerationStatus().isDiskModified() || _cgFile.getGenerationStatus().isGenerationModified()
 					|| _cgFile.getGenerationStatus().isConflicting() || _cgFile.getGenerationStatus() == GenerationStatus.UpToDate) {
 				FlexoActionButton editFileAction = new FlexoActionButton(EditGeneratedFile.actionType, "edit", ParsedCGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				actionButtons.add(editFileAction);
 				controlPanel.add(editFileAction);
 				FlexoActionButton reinjectInModelAction = new FlexoActionButton(ReinjectInModel.actionType, "reinject_in_model",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(reinjectInModelAction);
 				controlPanel.add(reinjectInModelAction);
 				FlexoActionButton updateModelAction = new FlexoActionButton(UpdateModel.actionType, "update_model",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(updateModelAction);
 				controlPanel.add(updateModelAction);
 			}
@@ -198,10 +198,10 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 
 			if (_cgFile.getGenerationStatus().isGenerationModified()) {
 				FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "regenerate",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(generateAction);
 				FlexoActionButton writeFileAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_file",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(writeFileAction);
 				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),
 						CG_PERSPECTIVE_ICON);
@@ -222,10 +222,10 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 				}
 			} else if (_cgFile.getGenerationStatus().isDiskModified()) {
 				FlexoActionButton acceptDiskVersionAction = new FlexoActionButton(AcceptDiskUpdate.actionType, "accept_disk_version",
-						ParsedCGFileModuleView.this, _controller.getEditor());
+						ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(acceptDiskVersionAction);
 				FlexoActionButton acceptAndReinjectAction = new FlexoActionButton(AcceptDiskUpdateAndReinjectInModel.actionType,
-						"accept_and_reinject", ParsedCGFileModuleView.this, _controller.getEditor());
+						"accept_and_reinject", ParsedCGFileModuleView.this, _controller);
 				actionButtons.add(acceptAndReinjectAction);
 				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),
 						CG_PERSPECTIVE_ICON);
@@ -374,7 +374,7 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.MODEL_REINJECTION_PERSPECTIVE;
 	}
 

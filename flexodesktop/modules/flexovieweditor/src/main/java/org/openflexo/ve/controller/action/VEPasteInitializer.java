@@ -19,8 +19,8 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class VEPasteInitializer extends ActionInitializer<VEPaste, ViewObject, V
 	protected FlexoActionInitializer<VEPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<VEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, VEPaste action) {
+			public boolean run(EventObject e, VEPaste action) {
 				return true;
 			}
 		};
@@ -68,7 +68,7 @@ public class VEPasteInitializer extends ActionInitializer<VEPaste, ViewObject, V
 	protected FlexoActionFinalizer<VEPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<VEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, VEPaste action) {
+			public boolean run(EventObject e, VEPaste action) {
 				getControllerActionInitializer().getVESelectionManager().performSelectionPaste();
 				return true;
 			}

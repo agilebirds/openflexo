@@ -37,7 +37,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -94,7 +93,7 @@ public class FontChooser extends JDialog implements ActionListener {
 	// dialog builds an AttributeSet suitable for use with JTextPane.
 	//
 
-	JColorChooser colorChooser;
+	// JColorChooser colorChooser;
 
 	JComboBox fontName;
 
@@ -282,11 +281,11 @@ public class FontChooser extends JDialog implements ActionListener {
 	}
 
 	// Get the appropriate color from our chooser and update previewLabel
-	protected void updatePreviewColor() {
+	/*protected void updatePreviewColor() {
 		previewLabel.setForeground(colorChooser.getColor());
 		// Manually force the label to repaint
 		previewLabel.repaint();
-	}
+	}*/
 
 	public Font getNewFont() {
 		return newFont;

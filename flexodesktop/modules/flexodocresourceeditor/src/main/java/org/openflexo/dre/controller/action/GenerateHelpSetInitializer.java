@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -58,7 +58,7 @@ public class GenerateHelpSetInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateHelpSet> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateHelpSet>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateHelpSet action) {
+			public boolean run(EventObject e, GenerateHelpSet action) {
 				ParameterDefinition[] parameters = new ParameterDefinition[4 + DocResourceManager.instance().getDocResourceCenter()
 						.getLanguages().size()];
 
@@ -113,7 +113,7 @@ public class GenerateHelpSetInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateHelpSet> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateHelpSet>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateHelpSet action) {
+			public boolean run(EventObject e, GenerateHelpSet action) {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("helpset_has_been_sucessfully_generated") + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_helpset_to_be_dynamically_reloaded"))) {
 					logger.info("Reload HelpSet...");

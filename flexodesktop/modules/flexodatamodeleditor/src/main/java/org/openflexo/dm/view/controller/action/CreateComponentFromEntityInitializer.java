@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -62,7 +62,7 @@ public class CreateComponentFromEntityInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateComponentFromEntity>() {
 
 			@Override
-			public boolean run(ActionEvent event, CreateComponentFromEntity action) {
+			public boolean run(EventObject event, CreateComponentFromEntity action) {
 				if (action.getFocusedObject() == null) {
 					return false;
 				}

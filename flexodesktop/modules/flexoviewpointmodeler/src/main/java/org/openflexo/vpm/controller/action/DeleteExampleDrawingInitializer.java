@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExa
 	protected FlexoActionInitializer<DeleteExampleDrawing> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteExampleDrawing action) {
+			public boolean run(EventObject e, DeleteExampleDrawing action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_example_diagram"));
 			}
 		};

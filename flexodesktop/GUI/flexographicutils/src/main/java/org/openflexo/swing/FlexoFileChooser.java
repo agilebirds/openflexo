@@ -140,12 +140,38 @@ public class FlexoFileChooser {
 
 	int _mode;
 
+	/**
+	 * <p>
+	 * All extensions should be prefaced with '*.'
+	 * <p>
+	 * For more than one entry, use the ',' character
+	 * <p>
+	 * Example: '*.xsd, *.owl'
+	 * <p>
+	 * Note: trims whitespaces before and after extensions, and ignores case
+	 * 
+	 * @param filter
+	 */
 	public void setFileFilterAsString(final String filter) {
 		if (filter == null) {
 			return;
 		}
+		final String[] extensions = filter.split(",");
+		for (int i = 0; i < extensions.length; i++) {
+			extensions[i] = extensions[i].trim();
+			extensions[i] = extensions[i].substring(1); // removes '*' from the string
+		}
 		final String endsWith = filter.substring(filter.indexOf("*") + 1);
 		setFileFilter(new FileFilter() {
+			private boolean accept(String name) {
+				for (String extension : extensions) {
+					if (name.toLowerCase().endsWith(extension.toLowerCase())) {
+						return true;
+					}
+				}
+				return false;
+			}
+
 			@Override
 			public boolean accept(File f) {
 				if (getImplementationType() == ImplementationType.FileDialogImplementation) {
@@ -157,9 +183,9 @@ public class FlexoFileChooser {
 					}
 				}
 				if (_mode == JFileChooser.DIRECTORIES_ONLY) {
-					return f.isDirectory() && f.getName().endsWith(endsWith);
+					return f.isDirectory() && accept(f.getName());
 				} else {
-					return f.isDirectory() || f.getName().endsWith(endsWith);
+					return f.isDirectory() || accept(f.getName());
 				}
 			}
 

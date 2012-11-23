@@ -6,6 +6,7 @@ package org.openflexo.dre.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import org.openflexo.dre.view.DREBrowserView;
 import org.openflexo.dre.view.DocCenterView;
 import org.openflexo.dre.view.DocFolderView;
 import org.openflexo.dre.view.DocItemView;
@@ -15,31 +16,32 @@ import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.view.EmptyPanel;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-class DREPerspective extends FlexoPerspective<DRMObject> {
+class DREPerspective extends FlexoPerspective {
 
 	/**
 	 * 
 	 */
-	private final DREController dreController;
+	private final DREController controller;
 
 	/**
 	 * @param dreController
 	 *            TODO
 	 * @param name
 	 */
-	public DREPerspective(DREController dreController) {
+	public DREPerspective(DREController controller) {
 		super("docresourceeditor_perspective");
-		this.dreController = dreController;
+		this.controller = controller;
+		setTopLeftView(new DREBrowserView(controller));
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -49,7 +51,7 @@ class DREPerspective extends FlexoPerspective<DRMObject> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -67,7 +69,7 @@ class DREPerspective extends FlexoPerspective<DRMObject> {
 	}
 
 	@Override
-	public ModuleView<? extends DRMObject> createModuleViewForObject(DRMObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof DocItemFolder) {
 			if (((DocItemFolder) object).isRootFolder()) {
 				return new DocCenterView((DocItemFolder) object, (DREController) controller);
@@ -76,19 +78,19 @@ class DREPerspective extends FlexoPerspective<DRMObject> {
 			}
 		} else if (object instanceof DocItem) {
 
-			if (this.dreController.docItemView == null) {
-				this.dreController.docItemView = new DocItemView((DocItem) object, (DREController) controller);
+			if (this.controller.docItemView == null) {
+				this.controller.docItemView = new DocItemView((DocItem) object, (DREController) controller);
 			} else {
-				this.dreController.docItemView.setDocItem((DocItem) object);
+				this.controller.docItemView.setDocItem((DocItem) object);
 			}
-			return this.dreController.docItemView;
+			return this.controller.docItemView;
 		} else {
-			return new EmptyPanel<DRMObject>(controller, this, object);
+			return new EmptyPanel<FlexoModelObject>(controller, this, object);
 		}
 	}
 
 	@Override
 	public JComponent getHeader() {
-		return this.dreController.getAdditionalActionPanel();
+		return this.controller.getAdditionalActionPanel();
 	}
 }

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -51,7 +51,7 @@ public class MoveIEElementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveIEElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, MoveIEElement action) {
+			public boolean run(EventObject e, MoveIEElement action) {
 				return true;
 			}
 		};
@@ -61,7 +61,7 @@ public class MoveIEElementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveIEElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, MoveIEElement action) {
+			public boolean run(EventObject e, MoveIEElement action) {
 				if (action.getMovedWidget() != null) {
 					getController().getIESelectionManager().setSelectedObject(action.getMovedWidget());
 				}

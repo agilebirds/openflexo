@@ -24,7 +24,13 @@ import java.lang.reflect.Type;
 
 public class FIBFont extends FIBWidget {
 
-	public String sampleText = "Sample for this font";
+	public static enum Parameters implements FIBModelAttribute {
+		allowsNull;
+	}
+
+	private String sampleText = "Sample for this font";
+
+	private boolean allowsNull = true;
 
 	public FIBFont() {
 	}
@@ -37,5 +43,32 @@ public class FIBFont extends FIBWidget {
 	@Override
 	public Type getDefaultDataClass() {
 		return Font.class;
+	}
+
+	public boolean getAllowsNull() {
+		return allowsNull;
+	}
+
+	public void setAllowsNull(boolean allowsNull) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
+		if (notification != null) {
+			this.allowsNull = allowsNull;
+			hasChanged(notification);
+		}
+	}
+
+	/**
+	 * @return the sampleText
+	 */
+	public String getSampleText() {
+		return sampleText;
+	}
+
+	/**
+	 * @param sampleText
+	 *            the sampleText to set
+	 */
+	public void setSampleText(String sampleText) {
+		this.sampleText = sampleText;
 	}
 }

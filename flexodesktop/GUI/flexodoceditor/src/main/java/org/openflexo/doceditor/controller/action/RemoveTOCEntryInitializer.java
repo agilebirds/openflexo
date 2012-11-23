@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class RemoveTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCEntry action) {
+			public boolean run(EventObject e, RemoveTOCEntry action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_toc_entry") + " "
 						+ action.getFocusedObject().getTitle());
 			}
@@ -58,7 +58,7 @@ public class RemoveTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCEntry action) {
+			public boolean run(EventObject e, RemoveTOCEntry action) {
 				return true;
 			}
 		};

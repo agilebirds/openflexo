@@ -44,12 +44,12 @@ public class VEPaste extends FlexoUndoableAction<VEPaste, ViewObject, ViewObject
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 

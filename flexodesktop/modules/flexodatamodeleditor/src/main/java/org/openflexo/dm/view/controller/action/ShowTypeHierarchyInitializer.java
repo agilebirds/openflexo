@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dm.view.popups.TypeHierarchyPopup;
@@ -48,7 +48,7 @@ public class ShowTypeHierarchyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowTypeHierarchyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowTypeHierarchyAction>() {
 			@Override
-			public boolean run(ActionEvent e, ShowTypeHierarchyAction action) {
+			public boolean run(EventObject e, ShowTypeHierarchyAction action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class ShowTypeHierarchyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowTypeHierarchyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowTypeHierarchyAction>() {
 			@Override
-			public boolean run(ActionEvent e, ShowTypeHierarchyAction action) {
+			public boolean run(EventObject e, ShowTypeHierarchyAction action) {
 				DMEntity focusedEntity = (DMEntity) action.getFocusedObject();
 				TypeHierarchyPopup popup = new TypeHierarchyPopup(focusedEntity, getControllerActionInitializer().getDMController());
 				return true;

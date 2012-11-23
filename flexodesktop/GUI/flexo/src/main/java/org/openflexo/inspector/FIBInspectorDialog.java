@@ -68,6 +68,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 	}
 
 	public void delete() {
+		setVisible(false);
 		dispose();
 		inspectorController.deleteObserver(this);
 		inspectorSync.removeFromSynchronizedWindows(this);

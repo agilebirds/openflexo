@@ -61,16 +61,23 @@
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
+  <entity name="org.openflexo.foundation.rm.ResourceList" abstract="YES">
 	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+	<property name="externalResources" contains="org.openflexo.foundation.rm.ResourceList$ExternalResource" type="vector" primary="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
   </entity>
   
   <entity name="org.openflexo.foundation.rm.AlteredResources" xmlTag="AlteredResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.SynchronizedResources" xmlTag="SynchronizedResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.ResourceList$ExternalResource" xmlTag="ExternalResource">
+    <property name="projectURI" xmlTag="projectURI"/>
+    <property name="resourceIdentifier" xmlTag="resourceIdentifier"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoFileResource" abstract="YES" contexts="Copy">
@@ -78,6 +85,13 @@
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoStorageResource" abstract="YES">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoPamelaResource" xmlTag="PamelaResource">
+    <property name="resourceDataClass" xmlTag="class" attribute="YES"/>
+    <property name="name" xmlTag="name" attribute="YES"/>
+    <property name="resourceType" xmlTag="type" attribute="YES"/>
+    <property name="useProjectName" xmlTag="useProjectName" attribute="YES"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoXMLStorageResource" abstract="YES">
@@ -107,6 +121,8 @@
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoXMLModelResource" xmlTag="XMLModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoOEShemaLibraryResource" xmlTag="ShemaLibrary"/>
 

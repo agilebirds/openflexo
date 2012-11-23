@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -24,9 +26,12 @@ public class JarClassLoader extends ClassLoader {
 
 	private List<File> jarDirectories;
 
+	private Set<JarFile> jarFiles;
+
 	public JarClassLoader(List<File> jarDirectories) {
 		super();
 		this.jarDirectories = jarDirectories;
+		jarFiles = new HashSet<JarFile>();
 		classForClassName = Collections.synchronizedMap(new HashMap<String, Class<?>>());
 	}
 
@@ -83,66 +88,87 @@ public class JarClassLoader extends ClassLoader {
 	}
 
 	private Class<?> lookupClass(String className, JarFile jarFile, JarEntry entry, boolean useClassForNameOnly) {
-		// Put the class name in right format
-		className = parseClassName(className);
-		// Look in this class loader
-		Class<?> class1 = getClassForClassName().get(className);
-		if (class1 != null) {
-			return class1;
-		}
-		// Look in the application class loader
+		boolean addedJarToList = jarFile != null && jarFiles.add(jarFile);
 		try {
-			Class<?> forName = Class.forName(className);
-			if (forName != null) {
-				classForClassName.put(className, forName);
+			// Put the class name in right format
+			className = parseClassName(className);
+			// Look in this class loader
+			Class<?> class1 = getClassForClassName().get(className);
+			if (class1 != null) {
+				return class1;
 			}
-			return forName;
-		} catch (ClassNotFoundException e) {
-		} catch (NoClassDefFoundError e) {
-		} catch (ExceptionInInitializerError e) {
-		} catch (LinkageError e) {
-		}
-		if (useClassForNameOnly) {
-			return null;
-		}
+			// Look in the application class loader
+			try {
+				Class<?> forName = Class.forName(className);
+				if (forName != null) {
+					classForClassName.put(className, forName);
+				}
+				return forName;
+			} catch (ClassNotFoundException e) {
+			} catch (NoClassDefFoundError e) {
+			} catch (ExceptionInInitializerError e) {
+			} catch (LinkageError e) {
+			}
+			if (useClassForNameOnly) {
+				return null;
+			}
 
-		if (jarFile != null && entry != null) {
-			return loadClass(jarFile, entry, className);
+			if (jarFile != null && entry != null) {
+				return loadClass(jarFile, entry, className);
+			}
+			class1 = findInJars(className);
+			if (class1 != null) {
+				return class1;
+			}
+			if (className.indexOf('.') == -1) {
+				class1 = lookupClass("java.lang." + className, null, null, true);
+			}
+			classForClassName.put(className, class1);
+			if (class1 == null) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Looked everywhere but I could not find " + className);
+				}
+			}
+			return null;
+		} finally {
+			if (addedJarToList) {
+				jarFiles.remove(jarFile);
+			}
 		}
-		class1 = findInJars(className);
-		if (class1 != null) {
-			return class1;
+	}
+
+	private Class<?> findInJars(String className) {
+		String jarEntryName = className.replace('.', '/') + ".class";
+		for (JarFile jarFile : this.jarFiles) {
+			Class<?> klass = lookupClassInJarFile(jarFile, jarEntryName, className);
+			if (klass != null) {
+				return klass;
+			}
 		}
-		if (className.indexOf('.') == -1) {
-			class1 = lookupClass("java.lang." + className, null, null, true);
+		List<File> jarFiles = new ArrayList<File>();
+		for (File jarDir : jarDirectories) {
+			jarFiles.addAll(FileUtils.listFiles(jarDir, new String[] { "jar" }, false));
 		}
-		classForClassName.put(className, class1);
-		if (class1 == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Looked everywhere but I could not find " + className);
+		for (File file : jarFiles) {
+			try {
+				JarFile jarFile = new JarFile(file);
+				Class<?> klass = lookupClassInJarFile(jarFile, jarEntryName, className);
+				if (klass != null) {
+					return klass;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
 	}
 
-	private Class<?> findInJars(String className) {
-		List<File> jarFiles = new ArrayList<File>();
-		for (File jarDir : jarDirectories) {
-			jarFiles.addAll(FileUtils.listFiles(jarDir, new String[] { "jar" }, false));
-		}
-		String jarEntryName = className.replace('.', '/') + ".class";
-		for (File file : jarFiles) {
-			try {
-				JarFile jarFile = new JarFile(file);
-				JarEntry e = jarFile.getJarEntry(jarEntryName);
-				if (e != null) {
-					Class<?> klass = loadClass(jarFile, e, className);
-					if (klass != null) {
-						return klass;
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+	public Class<?> lookupClassInJarFile(JarFile jarFile, String jarEntryName, String className) {
+		JarEntry e = jarFile.getJarEntry(jarEntryName);
+		if (e != null) {
+			Class<?> klass = loadClass(jarFile, e, className);
+			if (klass != null) {
+				return klass;
 			}
 		}
 		return null;

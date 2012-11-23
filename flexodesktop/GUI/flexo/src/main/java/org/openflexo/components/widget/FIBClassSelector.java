@@ -97,7 +97,8 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().retrieveBaseOntologyLibrary().getOntology(ontologyURI);
+			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
+					.getOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}

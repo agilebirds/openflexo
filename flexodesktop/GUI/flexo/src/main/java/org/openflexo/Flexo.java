@@ -49,17 +49,22 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.ProjectLoader;
+import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
@@ -69,7 +74,10 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -90,6 +98,12 @@ public class Flexo {
 	private static File errLogFile;
 
 	private static String fileNameToOpen;
+
+	private static boolean demoMode = false;
+
+	public static boolean isDemoMode() {
+		return demoMode;
+	}
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -136,11 +150,12 @@ public class Flexo {
 				@Override
 				public void handle(Signal arg0) {
 					FlexoFrame activeFrame = FlexoFrame.getActiveFrame(false);
-					if (activeFrame != null && activeFrame.getModule() != null) {
-						if (ProjectLoader.someResourcesNeedsSaving(activeFrame.getModule().getProject())) {
-							if (activeFrame.getModule().showSaveDialogAndClose()) {
-								System.exit(0);
-							}
+					if (activeFrame != null) {
+						try {
+							activeFrame.getController().getModuleLoader()
+									.quit(activeFrame.getController().getProjectLoader().someProjectsAreModified());
+						} catch (OperationCancelledException e) {
+							e.printStackTrace();
 						}
 					}
 				}
@@ -159,13 +174,12 @@ public class Flexo {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		String userTypeName = null;
 		boolean noSplash = false;
 		if (args.length > 0) {
 			// ATTENTION: Argument cannot start with "-D", nor start with "-X", nor start with "-agentlib" since they are reserved keywords
 			// for JVM
-			// See also WinFlexoLauncher classes.
 			for (int i = 0; i < args.length; i++) {
 				if (args[i].equals("-userType")) {
 					userTypeName = args[i + 1];
@@ -175,44 +189,71 @@ public class Flexo {
 				} else if (args[i].equalsIgnoreCase("DEV")) {
 					isDev = true;
 				} else if (args[i].equalsIgnoreCase("demo")) {
-
+					demoMode = true;
 				}
 			}
 		}
-		ToolBox.setPlatform();
-
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-		}
-
+		remapStandardOuputs(isDev);
+		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
+		UserType.setCurrentUserType(userTypeNamed);
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
+		SplashWindow splashWindow = null;
+		if (!noSplash) {
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
+		}
+		final SplashWindow splashWindow2 = splashWindow;
+		FlexoProperties.load();
+		initializeLoggingManager();
+		final ApplicationContext applicationContext = new ApplicationContext() {
 
-		remapStandardOuputs(isDev);
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new InteractiveFlexoEditor(this, project);
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return new InteractiveFlexoProjectReferenceLoader(this);
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return new InteractiveFlexoEditor(this, null);
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
+					return new BasicInteractiveProjectLoadingHandler(projectDirectory);
+				} else {
+					return new FullInteractiveProjectLoadingHandler(projectDirectory);
+				}
+			}
+		};
+		FlexoApplication.installEventQueue();
+		// Before starting the UI, we need to initialize localization
+		FlexoApplication.initialize(applicationContext.getModuleLoader());
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				initFlexo(applicationContext, splashWindow2);
+			}
+		});
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
+		Modules.getInstance();
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Could not insert security provider", e);
 			}
-		}
-		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		UserType.setCurrentUserType(userTypeNamed);
-		FlexoProperties.load();
-		initializeLoggingManager();
-		FlexoApplication.initialize();
-		initUILAF();
-		if (ToolBox.getFrame(null) != null) {
-			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
-		}
-		SplashWindow splashWindow = null;
-		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed);
-		}
-		if (isDev) {
-			FlexoLoggingFormatter.logDate = false;
 		}
 		initProxyManagement();
 		if (logger.isLoggable(Level.INFO)) {
@@ -224,69 +265,58 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Heap memory is about: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "Mb");
 		}
-		getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
+		applicationContext.getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
-		getFlexoResourceCenterService().getFlexoResourceCenter();
-		final SplashWindow splashWindow2 = splashWindow;
 		if (!isDev) {
 			registerShutdownHook();
 		}
-		SwingUtilities.invokeLater(new Runnable() {
-			/**
-			 * Overrides run
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				if (fileNameToOpen == null) {
-					WelcomeDialog welcomeDialog = new WelcomeDialog();
-					if (splashWindow2 != null) {
-						splashWindow2.setVisible(false);
-						splashWindow2.dispose();
-					}
-					welcomeDialog.showDialog();
-				} else {
-					try {
-						File projectDirectory = new File(fileNameToOpen);
-						if (splashWindow2 != null) {
-							splashWindow2.setVisible(false);
-							splashWindow2.dispose();
-						}
-						getModuleLoader().openProject(projectDirectory, null);
-					} catch (ProjectLoadingCancelledException e) {
-						// project need a conversion, but user cancelled the conversion.
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					} catch (ModuleLoadingException e) {
-						e.printStackTrace();
-						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					} catch (ProjectInitializerException e) {
-						e.printStackTrace();
-						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-								+ e.getProjectDirectory().getAbsolutePath());
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					}
+	}
+
+	protected static void initFlexo(ApplicationContext applicationContext, SplashWindow splashWindow) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+		initUILAF();
+		if (isDev) {
+			FlexoLoggingFormatter.logDate = false;
+		}
+
+		if (fileNameToOpen == null) {
+			showWelcomDialog(applicationContext, splashWindow);
+		} else {
+			try {
+				File projectDirectory = new File(fileNameToOpen);
+				if (splashWindow != null) {
+					splashWindow.setVisible(false);
+					splashWindow.dispose();
+					splashWindow = null;
 				}
+
+				applicationContext.getProjectLoader().loadProject(projectDirectory);
+			} catch (ProjectLoadingCancelledException e) {
+				// project need a conversion, but user cancelled the conversion.
+				showWelcomDialog(applicationContext, null);
+			} catch (ProjectInitializerException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+						+ e.getProjectDirectory().getAbsolutePath());
+				showWelcomDialog(applicationContext, null);
 			}
-		});
+		}
 	}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
+	public static void showWelcomDialog(final ApplicationContext applicationContext, final SplashWindow splashWindow) {
+		WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
+		welcomeDialog.pack();
+		welcomeDialog.center();
+		if (splashWindow != null) {
+			splashWindow.setVisible(false);
+			splashWindow.dispose();
+		}
+		welcomeDialog.setVisible(true);
+		welcomeDialog.toFront();
 	}
 
 	private static void initUILAF() {
@@ -390,12 +420,22 @@ public class Flexo {
 
 			outLogFile = getOutputFile(outString);
 			if (outLogFile != null) {
-				System.setOut(new PrintStream(new DoublePrintStream(new PrintStream(outLogFile), System.out)));
+				PrintStream ps1 = new PrintStream(outLogFile);
+				if (outputToConsole) {
+					System.setOut(new PrintStream(new DoublePrintStream(ps1, System.out)));
+				} else {
+					System.setOut(ps1);
+				}
 			}
 
 			errLogFile = getOutputFile(errString);
 			if (errLogFile != null) {
-				System.setErr(new PrintStream(new DoublePrintStream(new PrintStream(errLogFile), System.err)));
+				PrintStream ps1 = new PrintStream(errLogFile);
+				if (outputToConsole) {
+					System.setErr(new PrintStream(new DoublePrintStream(ps1, System.err)));
+				} else {
+					System.setErr(ps1);
+				}
 			}
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
@@ -486,7 +526,7 @@ public class Flexo {
 
 	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoProperties properties = FlexoProperties.load();
+			FlexoProperties properties = FlexoProperties.instance();
 			logger.info("Default logging config file " + System.getProperty("java.util.logging.config.file"));
 			return FlexoLoggingManager.initialize(
 					properties.getMaxLogCount(),

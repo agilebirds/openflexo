@@ -56,12 +56,12 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
 			return object instanceof ViewFolder || object instanceof ViewDefinition || object instanceof ViewLibrary;
 		}
 

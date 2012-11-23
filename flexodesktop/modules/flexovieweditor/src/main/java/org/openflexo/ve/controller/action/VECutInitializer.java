@@ -19,8 +19,8 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class VECutInitializer extends ActionInitializer<VECut, ViewObject, ViewO
 	protected FlexoActionInitializer<VECut> getDefaultInitializer() {
 		return new FlexoActionInitializer<VECut>() {
 			@Override
-			public boolean run(ActionEvent e, VECut action) {
+			public boolean run(EventObject e, VECut action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
@@ -64,7 +64,7 @@ public class VECutInitializer extends ActionInitializer<VECut, ViewObject, ViewO
 	protected FlexoActionFinalizer<VECut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<VECut>() {
 			@Override
-			public boolean run(ActionEvent e, VECut action) {
+			public boolean run(EventObject e, VECut action) {
 				getControllerActionInitializer().getVESelectionManager().performSelectionCut();
 				return true;
 			}

@@ -19,8 +19,10 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
+
+import javax.swing.Icon;
 
 import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.controller.FIBController.Status;
@@ -30,6 +32,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
@@ -66,7 +69,7 @@ public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportDocumentationTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportDocumentationTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDocumentationTemplates action) {
+			public boolean run(EventObject e, ImportDocumentationTemplates action) {
 				FIBDialog dialog = FIBDialog.instanciateDialog(DECst.IMPORT_DOCUMENTATION_TEMPLATES_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				dialog.setTitle(FlexoLocalization.localizedForKey("import_documentation_templates"));
@@ -76,6 +79,11 @@ public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 			}
 
 		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return IconLibrary.IMPORT_ICON;
 	}
 
 }

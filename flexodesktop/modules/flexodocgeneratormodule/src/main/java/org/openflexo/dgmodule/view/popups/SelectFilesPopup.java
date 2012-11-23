@@ -57,7 +57,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 	public SelectFilesPopup(String label, String description, String unlocalizedValidateButtonLabel, Vector<AbstractCGFile> files,
 			FlexoProject project, DGController controller) {
 		super(FlexoLocalization.localizedForKey("file_selection"), label, description, unlocalizedValidateButtonLabel,
-				new SelectFilesPopupBrowserConfiguration(files, project), project, controller.getFlexoFrame(), controller.getEditor());
+				new SelectFilesPopupBrowserConfiguration(files, project), project, controller.getFlexoFrame());
 		choicePanel.setSelectedObjects(getFileSet()._allObjects);
 	}
 

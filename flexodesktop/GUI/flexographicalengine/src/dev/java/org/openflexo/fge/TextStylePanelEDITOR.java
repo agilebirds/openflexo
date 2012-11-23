@@ -26,18 +26,17 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 
-
 public class TextStylePanelEDITOR {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
+			@Override
+			public Object[] getData() {
 				TextStyle ts = TextStyle.makeDefault();
 				return FIBAbstractEditor.makeArray(ts);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return FIBTextStyleSelector.FIB_FILE;
 			}

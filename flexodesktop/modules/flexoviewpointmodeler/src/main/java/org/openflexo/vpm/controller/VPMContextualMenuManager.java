@@ -22,7 +22,6 @@ package org.openflexo.vpm.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -34,11 +33,8 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class VPMContextualMenuManager extends ContextualMenuManager {
 
-	private VPMController _controller;
-
-	public VPMContextualMenuManager(VPMSelectionManager selectionManager, FlexoEditor editor, VPMController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public VPMContextualMenuManager(VPMSelectionManager selectionManager, VPMController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override

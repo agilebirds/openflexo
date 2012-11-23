@@ -210,8 +210,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
 			if (factory != null) {
-				factory.setBindable(getOwner());
-				binding = factory.convertFromString(getUnparsedBinding());
+				binding = factory.convertFromString(getUnparsedBinding(), getOwner());
 				binding.setBindingDefinition(getBindingDefinition());
 				// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 				// System.out.println("binding.isBindingValid()="+binding.isBindingValid());

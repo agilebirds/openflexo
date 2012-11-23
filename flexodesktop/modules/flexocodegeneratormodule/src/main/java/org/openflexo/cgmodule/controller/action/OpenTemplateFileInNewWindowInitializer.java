@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -54,7 +55,7 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenTemplateFileInNewWindow> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenTemplateFileInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
+			public boolean run(EventObject e, OpenTemplateFileInNewWindow action) {
 				return true;
 			}
 		};
@@ -64,9 +65,8 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenTemplateFileInNewWindow> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenTemplateFileInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
-				CGTemplateFileModuleView view = (CGTemplateFileModuleView) getControllerActionInitializer().getGeneratorController()
-						.createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
+			public boolean run(EventObject e, OpenTemplateFileInNewWindow action) {
+				CGTemplateFileModuleView view = new CGTemplateFileModuleView(action.getFocusedObject(), null);
 				view.setOpenedInSeparateWindow(true);
 				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getGeneratorController().getFlexoFrame(),
 						action.getFocusedObject().getTemplateName(), false);

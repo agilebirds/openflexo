@@ -348,10 +348,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					logger.warning("Could not access to BindingExpressionConverter");
 					return;
 				}
-				if (_bindingExpression != null && _bindingExpression.getOwner() instanceof Bindable) {
-					converter.setBindable(_bindingExpression.getOwner());
+				Bindable bindable = null;
+				if (_bindingExpression != null) {
+					bindable = _bindingExpression.getOwner();
 				}
-				newExpression = converter.parseExpressionFromString(expressionTA.getText());
+				newExpression = converter.parseExpressionFromString(expressionTA.getText(), bindable);
 			}
 			if (!newExpression.equals(_bindingExpression.getExpression()) || status == ExpressionParsingStatus.INVALID) {
 				_setEditedExpression(newExpression);

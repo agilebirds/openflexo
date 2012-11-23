@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.openflexo.inspector.AbstractController;
-import org.openflexo.inspector.InspectorCst;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.swing.JRadioButtonWithIcon;
@@ -131,7 +130,6 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 			JPanel _subPanel = new JPanel(new BorderLayout());
 			_subPanel.add(rb, BorderLayout.WEST);
 			_subPanel.add(Box.createGlue(), BorderLayout.CENTER);
-			_subPanel.setBackground(InspectorCst.BACK_COLOR);
 			_panel.add(_subPanel);
 			_radioButtonArray[i] = rb;
 			_buttonGroup.add(rb);

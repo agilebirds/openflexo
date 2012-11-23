@@ -26,24 +26,23 @@ import org.openflexo.selection.SelectionManagingDrawingController;
 
 public class ERDiagramController extends SelectionManagingDrawingController<ERDiagramRepresentation> {
 
-	private DMController _controller;
-	private DiagramPalette _palette;
+	private DMController controller;
+	private DiagramPalette palette;
 
 	public ERDiagramController(DMController controller, ERDiagram diagram) {
 		super(new ERDiagramRepresentation(diagram), controller.getSelectionManager());
-		_controller = controller;
-		_palette = new DiagramPalette();
-		registerPalette(_palette);
-		activatePalette(_palette);
+		this.controller = controller;
+		palette = new DiagramPalette();
+		registerPalette(palette);
+		activatePalette(palette);
 	}
 
 	@Override
 	public void delete() {
-		if (_controller != null) {
+		if (controller != null) {
 			if (getDrawingView() != null) {
-				_controller.removeModuleView(getDrawingView());
+				controller.removeModuleView(getDrawingView());
 			}
-			_controller.DIAGRAM_PERSPECTIVE.removeFromERControllers(this);
 		}
 		super.delete();
 		getDrawing().delete();
@@ -55,7 +54,7 @@ public class ERDiagramController extends SelectionManagingDrawingController<ERDi
 	}
 
 	public DMController getDMController() {
-		return _controller;
+		return controller;
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class ERDiagramController extends SelectionManagingDrawingController<ERDi
 	}
 
 	public DiagramPalette getPalette() {
-		return _palette;
+		return palette;
 	}
 
 }

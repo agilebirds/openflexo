@@ -29,7 +29,7 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.LibraryRepositoryFolder;
 
-public class ImportThesaurusDatabaseRepository extends CreateDMRepository {
+public class ImportThesaurusDatabaseRepository extends CreateDMRepository<ImportThesaurusDatabaseRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportThesaurusDatabaseRepository.class.getPackage().getName());
 
@@ -45,12 +45,12 @@ public class ImportThesaurusDatabaseRepository extends CreateDMRepository {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return false;
 		}
 

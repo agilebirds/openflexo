@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UpdateDMRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateDMRepository action) {
+			public boolean run(EventObject e, UpdateDMRepository action) {
 				DMRepository repository = action.getRepository();
 				if (repository instanceof JDKRepository) {
 					action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
@@ -112,7 +112,7 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UpdateDMRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateDMRepository action) {
+			public boolean run(EventObject e, UpdateDMRepository action) {
 				DMRepository repository = action.getRepository();
 				getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObject(repository);
 				return true;

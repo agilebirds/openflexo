@@ -106,7 +106,6 @@ public abstract class FIBWidget extends FIBComponent {
 		super();
 		formatter = new FIBFormatter();
 		eventListener = new FIBEventListener();
-		// FIBLibrary.instance().getBindingFactory().setBindable(this);
 	}
 
 	@Override

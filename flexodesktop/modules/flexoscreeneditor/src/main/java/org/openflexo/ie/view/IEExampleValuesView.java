@@ -47,9 +47,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.ie.view.controller.ComponentBrowser;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class IEExampleValuesView extends JPanel implements SelectionSynchronizedModuleView<ComponentInstance> {
 

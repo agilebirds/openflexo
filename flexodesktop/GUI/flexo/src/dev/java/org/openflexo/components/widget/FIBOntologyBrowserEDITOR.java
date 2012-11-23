@@ -7,9 +7,9 @@ import java.util.logging.Level;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -30,11 +30,12 @@ public class FIBOntologyBrowserEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public FIBController makeNewController(FIBComponent component) {
-		return new FlexoFIBController<FIBViewPointSelector>(component);
+		return new FlexoFIBController(component);
 	}
 
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
 	public static void main(String[] args) {
+
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {

@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -163,7 +163,8 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 				return _owner.isSelectable(o);
 			}
 		});
-		_browserView = new BrowserChooserView(_browser, _owner, _owner.getEditor()) {
+		// TODO: grab a hand on the FlexoController here.
+		_browserView = new BrowserChooserView(_browser, null, _owner) {
 			@Override
 			public void objectWasSelected(FlexoModelObject object) {
 				_owner.setEditedObject((T) object);
@@ -177,9 +178,9 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		};
 
 		sortedObjectList = new Vector<T>();
-		Enumeration en = _browser.getAllObjects();
-		while (en.hasMoreElements()) {
-			T o = (T) en.nextElement();
+		Iterator<FlexoModelObject> en = _browser.getAllObjects();
+		while (en.hasNext()) {
+			T o = (T) en.next();
 			if (_owner.isSelectable(o)) {
 				sortedObjectList.add(o);
 			}
@@ -278,7 +279,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		update();
 	}
 
-	// return true if an object was correctely selected, false otherwise
+	// return true if an object was correctly selected, false otherwise
 	protected boolean processEnterPressed() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on ENTER");

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class AddDomainInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddDomainAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action) {
+			public boolean run(EventObject e, AddDomainAction action) {
 				DKVModel model = action.getFocusedObject().getDkvModel();
 				boolean ok = false;
 				while (!ok) {
@@ -112,7 +112,7 @@ public class AddDomainInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddDomainAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action) {
+			public boolean run(EventObject e, AddDomainAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject(action.getNewDomain());
 				// getController().setCurrentEditedObjectAsModuleView(((AddDomainAction)
 				// action).getNewDomain());

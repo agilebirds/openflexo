@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.controller.DGController;
@@ -27,13 +27,14 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.RegenerateAndOverride;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class RegenerateAndOverrideInitializer extends ActionInitializer {
+public class RegenerateAndOverrideInitializer extends ActionInitializer<RegenerateAndOverride, CGObject, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -55,7 +56,7 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() {
 		return new FlexoActionInitializer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+			public boolean run(EventObject e, RegenerateAndOverride action) {
 				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
@@ -70,7 +71,7 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+			public boolean run(EventObject e, RegenerateAndOverride action) {
 				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
 				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;

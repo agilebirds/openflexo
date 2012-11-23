@@ -21,20 +21,19 @@ package org.openflexo.ve.controller;
 
 import java.awt.Dimension;
 import java.util.Hashtable;
+import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -42,16 +41,14 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
-import org.openflexo.view.EmptyPanel;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
+public class DiagramPerspective extends FlexoPerspective {
 
 	private final VEController _controller;
 
@@ -60,9 +57,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	private final VEBrowserView _browserView;
 	private final VEBrowserView shemaBrowserView;
 
-	private final Hashtable<View, VEShemaController> _controllers;
-
-	private final JSplitPane splitPane;
+	private final Map<View, VEShemaController> _controllers;
 
 	private final JLabel infoLabel;
 
@@ -70,7 +65,9 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	private final FIBInspectorPanel inspectorPanel;
 
-	private JSplitPane rightPanel;
+	private final JComponent inspectorPanelScrollPane;
+
+	private JComponent bottomRightDummy;
 
 	/**
 	 * @param controller
@@ -82,6 +79,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
+		bottomRightDummy = new JPanel();
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
@@ -92,41 +90,55 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 				}
 			}
 
-			/*
-			 * public void objectAddedToSelection(ObjectAddedToSelectionEvent event) { if (event.getAddedObject() instanceof ERDiagram) {
-			 * diagramBrowser.deleteBrowserListener(this); diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
-			 * diagramBrowser.update(); diagramBrowser.addBrowserListener(this); } super.objectAddedToSelection(event); }
-			 */
+			/*  public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
+			  {
+			  	if (event.getAddedObject() instanceof ERDiagram) {
+			  		diagramBrowser.deleteBrowserListener(this);
+			  		diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
+			  		diagramBrowser.update();
+			  		diagramBrowser.addBrowserListener(this);
+			  	}
+			  	super.objectAddedToSelection(event);
+			  }			*/
 		};
 		shemaBrowser = new ShemaBrowser(controller);
 		shemaBrowserView = new VEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, shemaBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);
-		rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		rightPanel.setDividerLocation(0.7);
-		rightPanel.setResizeWeight(0.3);
-		rightPanel.setOpaque(false);
-		rightPanel.setBorder(BorderFactory.createEmptyBorder());
-		new FlexoSplitPaneLocationSaver(rightPanel, "VE_DIAGRAM_PERSPECTIVE_RIGHT_PANE");
 		infoLabel = new JLabel("Diagram perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 
 		// Initialized inspector panel
 		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
+		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
+		setTopLeftView(_browserView);
+		setBottomLeftView(shemaBrowserView);
+	}
+
+	@Override
+	public JComponent getTopRightView() {
+		if (getCurrentShemaModuleView() == null) {
+			return EMPTY_RIGHT_VIEW;
+		}
+		return getCurrentShemaModuleView().getController().getPaletteView();
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentShemaModuleView() == null) {
+			return bottomRightDummy;
+		}
+		return inspectorPanelScrollPane;
 	}
 
 	public void focusOnShema(View shema) {
 		shemaBrowser.deleteBrowserListener(_browserView);
-		shemaBrowser.setRepresentedShema(shema);
-		shemaBrowser.update();
+		shemaBrowser.setRootObject(shema);
 		shemaBrowser.addBrowserListener(_browserView);
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -136,7 +148,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -148,31 +160,26 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		if (proposedObject instanceof View) {
 			return (View) proposedObject;
 		}
-		return proposedObject.getProject().getShemaLibrary();
+		if (proposedObject != null) {
+			return proposedObject.getProject().getShemaLibrary();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof AbstractViewObject;
+		return object instanceof View || object instanceof ViewDefinition;
 	}
 
 	@Override
-	public ModuleView<? extends AbstractViewObject> createModuleViewForObject(AbstractViewObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof View) {
 			return getControllerForShema((View) object).getModuleView();
 		}
 		if (object instanceof ViewDefinition) {
 			ViewDefinition viewDefinition = (ViewDefinition) object;
-			View shema;
-			if (!viewDefinition.isLoaded()) {
-				FlexoProgress progress = _controller.getEditor().getFlexoProgressFactory()
-						.makeFlexoProgress(FlexoLocalization.localizedForKey("loading_view..."), 3);
-				progress.setProgress("loading_view");
-				shema = viewDefinition.getView(progress);
-				progress.hideWindow();
-			} else {
-				shema = viewDefinition.getView();
-			}
+			View shema = viewDefinition.getView();
 			if (shema == null) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
 						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
@@ -181,17 +188,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 				return getControllerForShema(shema).getModuleView();
 			}
 		}
-		return new EmptyPanel<AbstractViewObject>(controller, this, object);
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return splitPane;
+		return null;
 	}
 
 	@Override
@@ -217,7 +214,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	public VEShemaController getControllerForShema(View shema) {
 		VEShemaController returned = _controllers.get(shema);
 		if (returned == null) {
-			returned = new VEShemaController(_controller, shema);
+			returned = new VEShemaController(_controller, shema, false);
 			_controllers.put(shema, returned);
 		}
 		return returned;
@@ -229,11 +226,6 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 				_controllers.remove(shemaController.getDrawing().getShema());
 			}
 		}
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	public String getWindowTitleforObject(FlexoModelObject object) {
@@ -252,39 +244,13 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}
 
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		if (getCurrentShemaModuleView() == null) {
-			return EMPTY_RIGHT_VIEW;
-		}
-		return getRightPanel();
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getRightPanel() {
-		rightPanel.setTopComponent(getCurrentShemaModuleView().getController().getPaletteView());
-		if (rightPanel.getBottomComponent() == null) {
-			// JScrollPane inspectorPanelSP = new JScrollPane(inspectorPanel);
-			// inspectorPanelSP.setOpaque(false);
-			// inspectorPanelSP.setBorder(BorderFactory.createEmptyBorder());
-			// rightPanel.setBottomComponent(inspectorPanelSP);
-			rightPanel.setBottomComponent(inspectorPanel);
-		}
-		return rightPanel;
+	public void setProject(FlexoProject project) {
+		_browser.setRootObject(project.getShemaLibrary());
 	}
 }

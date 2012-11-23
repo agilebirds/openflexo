@@ -1,6 +1,8 @@
 package org.openflexo.model.factory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
 import org.openflexo.model.annotations.Import;
@@ -26,14 +30,97 @@ public class ModelFactory {
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
 	private Map<Class, ModelEntity> modelEntities;
+	private Map<Class, PAMELAProxyFactory> proxyFactories;
 	private Map<String, ModelEntity> modelEntitiesByXmlTag;
 
 	private DefaultStringEncoder stringEncoder;
 
+	public class PAMELAProxyFactory<I> extends ProxyFactory {
+		private final ModelEntity<I> modelEntity;
+
+		public PAMELAProxyFactory(ModelEntity<I> modelEntity) throws ModelDefinitionException {
+			super();
+			this.modelEntity = modelEntity;
+			setFilter(new MethodFilter() {
+				@Override
+				public boolean isHandled(Method method) {
+					// System.out.println("isHandled for "+method+" in "+method.getDeclaringClass());
+					/*
+					 * return method.getAnnotation(Getter.class) != null ||
+					 * method.getAnnotation(Setter.class) != null ||
+					 * method.getAnnotation(Adder.class) != null ||
+					 * method.getAnnotation(Remover.class) != null;
+					 */
+
+					return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
+							&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;
+				}
+			});
+			Class<?> implementingClass = modelEntity.getImplementingClass();
+			if (implementingClass == null) {
+				implementingClass = defaultModelClass;
+			}
+			setSuperclass(implementingClass);
+			Class<?>[] interfaces = { modelEntity.getImplementedInterface() };
+			setInterfaces(interfaces);
+		}
+
+		public I newInstance(Object... args) throws IllegalArgumentException, NoSuchMethodException, InstantiationException,
+				IllegalAccessException, InvocationTargetException, ModelDefinitionException {
+			if (modelEntity.isAbstract()) {
+				throw new InstantiationException(modelEntity + " is declared as an abstract entity, cannot instantiate it");
+			}
+			ProxyMethodHandler<I> handler = new ProxyMethodHandler<I>(modelEntity);
+			I returned = (I) create(new Class<?>[0], new Object[0], handler);
+			handler.setObject(returned);
+			if (args == null) {
+				args = new Object[0];
+			}
+			if (args.length > 0 || modelEntity.hasInitializers()) {
+				Class<?>[] types = new Class<?>[args.length];
+				for (int i = 0; i < args.length; i++) {
+					Object o = args[i];
+					if (isProxyObject(o)) {
+						ModelEntity<?> modelEntity = getModelEntity(o);
+						types[i] = modelEntity.getImplementedInterface();
+					} else {
+						types[i] = o != null ? o.getClass() : null;
+					}
+				}
+				ModelInitializer initializerForArgs = modelEntity.getInitializerForArgs(types);
+				if (initializerForArgs != null) {
+					initializerForArgs.getInitializingMethod().invoke(returned, args);
+				} else {
+					if (args.length > 0) {
+						StringBuilder sb = new StringBuilder();
+						for (Class<?> c : types) {
+							if (sb.length() > 0) {
+								sb.append(',');
+							}
+							sb.append(c.getName());
+
+						}
+						throw new NoSuchMethodException("Could not find any initializer with args " + sb.toString());
+					}
+				}
+			}
+			return returned;
+		}
+	}
+
 	public ModelFactory() {
 		modelEntities = new HashMap<Class, ModelEntity>();
 		modelEntitiesByXmlTag = new HashMap<String, ModelEntity>();
+		proxyFactories = new HashMap<Class, PAMELAProxyFactory>();
 		stringEncoder = new DefaultStringEncoder(this);
+	}
+
+	public <I> I newInstance(ModelEntity<I> modelEntity) {
+		return newInstance(modelEntity, (Object[]) null);
+	}
+
+	public <I> I newInstance(ModelEntity<I> modelEntity, Object... args) {
+		return newInstance(modelEntity.getImplementedInterface(), args);
 	}
 
 	public <I> I newInstance(Class<I> implementedInterface) {
@@ -42,7 +129,7 @@ public class ModelFactory {
 
 	public <I> I newInstance(Class<I> implementedInterface, Object... args) {
 		try {
-			ModelEntity<I> entity = getModelEntity(implementedInterface);
+			PAMELAProxyFactory<I> entity = proxyFactories.get(implementedInterface);
 			if (entity != null) {
 				return entity.newInstance(args);
 			} else {
@@ -50,25 +137,24 @@ public class ModelFactory {
 						+ "'! Did you forget to import it or to annotated it with @ModelEntity?");
 			}
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		} catch (ModelDefinitionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ModelExecutionException(e);
 		}
-		return null;
 	}
 
 	public <T> ModelEntity<T> getModelEntity(Class<T> implementedInterface) throws ModelDefinitionException {
@@ -82,6 +168,7 @@ public class ModelFactory {
 						+ put.getImplementedInterface().getName());
 			}
 			returned.init();
+			proxyFactories.put(implementedInterface, new PAMELAProxyFactory(returned));
 		}
 		return returned;
 	}
@@ -103,7 +190,21 @@ public class ModelFactory {
 	}
 
 	public void setDefaultModelClass(Class<?> defaultModelClass) {
+		Class<?> old = defaultModelClass;
 		this.defaultModelClass = defaultModelClass;
+		for (PAMELAProxyFactory<?> factory : proxyFactories.values()) {
+			if (factory.getSuperclass() == old) {
+				factory.setSuperclass(defaultModelClass);
+			}
+		}
+	}
+
+	public <I> void setImplementingClassForInterface(Class<? extends I> klass, Class<I> interfaceClass) {
+		proxyFactories.get(interfaceClass).setSuperclass(klass);
+	}
+
+	public <I> void setImplementingClassForEntity(Class<? extends I> klass, ModelEntity<I> entity) {
+		setImplementingClassForInterface(klass, entity.getImplementedInterface());
 	}
 
 	public Class<? extends List> getListImplementationClass() {
@@ -157,7 +258,7 @@ public class ModelFactory {
 		stringEncoder.addConverter(converter);
 	}
 
-	public <I> void importClass(Class<I> type) throws ModelDefinitionException {
+	public <I> ModelFactory importClass(Class<I> type) throws ModelDefinitionException {
 		ModelEntity<I> modelEntity = getModelEntity(type);// Performs the import
 		if (modelEntity == null) {
 			throw new ModelDefinitionException("Type " + type.getName() + " is not a model entity. Did you forgot to annotated it with @"
@@ -169,6 +270,7 @@ public class ModelFactory {
 				importClass(imp.value());
 			}
 		}
+		return this;
 	}
 
 	public String debug() {

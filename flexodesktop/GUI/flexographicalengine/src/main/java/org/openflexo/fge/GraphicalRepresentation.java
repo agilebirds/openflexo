@@ -105,7 +105,32 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static enum Parameters implements GRParameter {
-		identifier, layer, hasText, text, isMultilineAllowed, lineWrap, continuousTextEditing, textStyle, absoluteTextX, absoluteTextY, horizontalTextAlignment, verticalTextAlignment, paragraphAlignment, isSelectable, isFocusable, isSelected, isFocused, drawControlPointsWhenFocused, drawControlPointsWhenSelected, isReadOnly, isLabelEditable, isVisible, mouseClickControls, mouseDragControls, toolTipText, variables
+		identifier,
+		layer,
+		hasText,
+		text,
+		isMultilineAllowed,
+		lineWrap,
+		continuousTextEditing,
+		textStyle,
+		absoluteTextX,
+		absoluteTextY,
+		horizontalTextAlignment,
+		verticalTextAlignment,
+		paragraphAlignment,
+		isSelectable,
+		isFocusable,
+		isSelected,
+		isFocused,
+		drawControlPointsWhenFocused,
+		drawControlPointsWhenSelected,
+		isReadOnly,
+		isLabelEditable,
+		isVisible,
+		mouseClickControls,
+		mouseDragControls,
+		toolTipText,
+		variables
 	}
 
 	protected int layer;
@@ -174,6 +199,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 						&& requiringParameter == opposite.requiringParameter && requiredParameter == opposite.requiredParameter;
 			}
 			return super.equals(obj);
+		}
+
+		@Override
+		public int hashCode() {
+			return super.hashCode();
 		}
 	}
 
@@ -310,6 +340,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			notifyObservers(new GraphicalRepresentationDeleted(this));
 			deleteObservers();
 			getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
+			// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
+			// TODO: Now we can really set the pcSupport to null here
+			// Until now, it still create big issues
 			// pcSupport = null;
 		}
 	}

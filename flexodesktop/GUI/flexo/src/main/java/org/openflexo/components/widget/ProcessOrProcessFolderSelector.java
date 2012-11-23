@@ -91,7 +91,6 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}
@@ -138,6 +137,7 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
+			setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		}
 
 		@Override

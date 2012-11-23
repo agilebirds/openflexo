@@ -25,8 +25,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,15 +46,15 @@ import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
+import org.openflexo.dgmodule.controller.browser.DGBrowser;
 import org.openflexo.dgmodule.menu.DGMenuBar;
+import org.openflexo.dgmodule.view.DGBrowserView;
 import org.openflexo.dgmodule.view.DGFileVersionPopup;
-import org.openflexo.dgmodule.view.DGFrame;
 import org.openflexo.dgmodule.view.DGMainPane;
-import org.openflexo.dgmodule.view.listener.DGKeyEventListener;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.DESelectionManager;
-import org.openflexo.doceditor.view.listener.DEKeyEventListener;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -69,10 +70,14 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.action.AcceptDiskUpdate;
+import org.openflexo.generator.action.GCAction.ProjectGeneratorFactory;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconLibrary;
@@ -82,15 +87,9 @@ import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
-import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -98,13 +97,13 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author gpolet
  */
-public class DGController extends DEController implements FlexoObserver, SelectionManagingController {
+public class DGController extends DEController implements FlexoObserver, ProjectGeneratorFactory {
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
-	public final DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
-	public final TemplatesPerspective TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this);
-	public final VersionningPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE;
+	public TemplatesPerspective TEMPLATES_PERSPECTIVE;
+	public VersionningPerspective VERSIONNING_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -116,68 +115,59 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		return false;
 	}
 
-	@Override
-	public void switchToPerspective(FlexoPerspective perspective) {
-		logger.info("================== > Switch to perspective: " + perspective);
-		super.switchToPerspective(perspective);
-	}
+	public static final FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
-	@Override
-	protected void setCurrentPerspective(FlexoPerspective<?> perspective) {
-		logger.info("================== > Change to perspective: " + perspective);
-		super.setCurrentPerspective(perspective);
-	}
-
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	protected Hashtable _generatorPanels;
-
-	public static FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
-
-	protected Hashtable<DGRepository, ProjectDocGenerator> _projectGenerators;
+	protected Map<DGRepository, ProjectDocGenerator> _projectGenerators;
 
 	protected DGFooter _footer;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private DGBrowserView dgBrowserView;
 
 	/**
 	 * Default constructor
 	 * 
-	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DGController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
-		ProjectLoader.instance().getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
-		createFooter();
-		// addToPerspectives(TOC_PERSPECTIVE);
-		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE);
-		addToPerspectives(TEMPLATES_PERSPECTIVE);
-		addToPerspectives(VERSIONNING_PERSPECTIVE);
-		setDefaultPespective(TOC_PERSPECTIVE);
+	public DGController(FlexoModule module) {
+		super(module);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
-		_generatorMenuBar = (DGMenuBar) createAndRegisterNewMenuBar();
-		_generatorKeyEventListener = new DGKeyEventListener(this);
-		_generatorFrame = new DGFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, (DGKeyEventListener) _generatorKeyEventListener,
-				(DGMenuBar) _generatorMenuBar);
-		init(_generatorFrame, _generatorKeyEventListener, _generatorMenuBar);
 
-		if (_selectionManager == null) {
-			_selectionManager = createSelectionManager();
-		}
-
-		_generatorPanels = new Hashtable();
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+	@Override
+	protected void initializePerspectives() {
+		super.initializePerspectives();
+		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
+		browser = new DGBrowser(this);
+		dgBrowserView = new DGBrowserView(this, browser);
+		createFooter();
+		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this));
+		addToPerspectives(TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this));
+		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
+	}
+
+	public DGBrowserView getDgBrowserView() {
+		return dgBrowserView;
+	}
+
+	@Override
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		if (from != null && from.getProject() != null) {
+			from.getProject().getGeneratedCode().setFactory(null);
+		}
+		if (to != null && to.getResourceUpdateHandler() != null) {
+			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		}
+		if (to != null && getEditor().getProject() != null) {
+			to.getProject().getGeneratedCode().setFactory(this);
+		}
+		browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getGeneratedDoc() : null);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getGeneratedDoc();
 	}
 
 	@Override
@@ -196,62 +186,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	}
 
 	@Override
-	public DGMenuBar getEditorMenuBar() {
-		return (DGMenuBar) _generatorMenuBar;
-	}
-
-	/*
-	 * public ModuleView getCurrentModuleView() { return null; }
-	 */
-
-	@Override
-	public DGKeyEventListener getGeneratorKeyEventListener() {
-		return (DGKeyEventListener) _generatorKeyEventListener;
-	}
-
-	/*
-	 * public ModuleView createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) { if (perspective ==
-	 * CODE_GENERATOR_PERSPECTIVE) { if (object instanceof GeneratedDoc) { return new GeneratedDocModuleView((GeneratedDoc) object, this); }
-	 * 
-	 * else if (object instanceof DGRepository) { return new DGRepositoryModuleView((DGRepository) object, this); } }
-	 * 
-	 * if (object instanceof CGFile) { if (perspective == CODE_GENERATOR_PERSPECTIVE) { return new DGFileModuleView((CGFile) object, this);
-	 * } else if (perspective == VERSIONNING_PERSPECTIVE) { return new DGFileHistoryModuleView((CGFile) object, this); } }
-	 * 
-	 * if (object instanceof CGTemplateFile) { return new DGTemplateFileModuleView((CGTemplateFile) object, this); }
-	 * 
-	 * return super.createModuleViewForObjectAndPerspective(object, perspective); }
-	 */
-
-	/**
-	 * Overrides hasViewForObjectAndPerpsective
-	 * 
-	 * @see org.openflexo.view.controller.FlexoController#hasViewForObjectAndPerspective(org.openflexo.foundation.FlexoModelObject,
-	 *      org.openflexo.view.FlexoPerspective)
-	 */
-	/*
-	 * @Override public boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) { if (perspective ==
-	 * CODE_GENERATOR_PERSPECTIVE) { if (object instanceof GeneratedDoc) { return true; } else if (object instanceof DGRepository) { return
-	 * true; } else if (object instanceof DGLatexFile) { return true; } else if (object instanceof DGScreenshotFile) { return true; } else
-	 * if (object instanceof CGTemplateFile) { return true; } else if (object instanceof TOCEntry) { return true; } else if (object
-	 * instanceof TOCRepository) { return true; } else if (object instanceof TOCData) { return true; } } else if (perspective ==
-	 * VERSIONNING_PERSPECTIVE) { if (object instanceof DGLatexFile) return true; } return super.hasViewForObjectAndPerspective(object,
-	 * perspective); }
-	 */
-
-	/*
-	 * @Override public FlexoModelObject getDefaultObjectForPerspective( FlexoModelObject currentObjectAsModuleView, FlexoPerspective
-	 * perspective) { if (perspective==DOCEDITOR_PERSPECTIVE) { if (currentObjectAsModuleView instanceof DGLatexFile) { return
-	 * ((DGLatexFile)currentObjectAsModuleView).getRepository(); } else if (currentObjectAsModuleView instanceof DGScreenshotFile) { return
-	 * ((DGScreenshotFile)currentObjectAsModuleView).getRepository(); } else { return getProject().getTOCData(); } } else if (perspective ==
-	 * CODE_GENERATOR_PERSPECTIVE) { if (currentObjectAsModuleView instanceof TOCEntry) { return
-	 * ((TOCEntry)currentObjectAsModuleView).getRepository(); } else { return getProject().getGeneratedDoc(); } } return
-	 * super.getDefaultObjectForPerspective(currentObjectAsModuleView, perspective); }
-	 */
-
-	@Override
 	protected FlexoMainPane createMainPane() {
-		return new DGMainPane(this, getEmptyPanel(), getFlexoFrame());
+		return new DGMainPane(this);
 	}
 
 	@Override
@@ -262,11 +198,6 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	@Override
 	public DGControllerActionInitializer createControllerActionInitializer() {
 		return new DGControllerActionInitializer(this);
-	}
-
-	@Override
-	public DEKeyEventListener getKeyEventListener() {
-		return _generatorKeyEventListener;
 	}
 
 	@Override
@@ -281,6 +212,18 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			observedRepositories.remove(observable);
 			observable.deleteObserver(this);
 		}
+	}
+
+	@Override
+	public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
+		if (repository instanceof DGRepository) {
+			return getProjectGenerator((DGRepository) repository);
+		} else {
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("Cannot create project generator for " + repository);
+			}
+		}
+		return null;
 	}
 
 	public ProjectDocGenerator getProjectGenerator(DGRepository repository) {
@@ -310,32 +253,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		return returned;
 	}
 
-	public Enumeration<ProjectDocGenerator> getProjectGenerators() {
-		return _projectGenerators.elements();
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		if (useOldInspectorScheme()) {
-			getDGSelectionManager().addObserver(getSharedInspectorController());
-		}
-	}
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
-	@Override
-	public DGSelectionManager getSelectionManager() {
-		return getDGSelectionManager();
-	}
-
-	public DGSelectionManager getDGSelectionManager() {
-		return (DGSelectionManager) _selectionManager;
+	public Collection<ProjectDocGenerator> getProjectGenerators() {
+		return _projectGenerators.values();
 	}
 
 	/**
@@ -588,19 +507,11 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	private DGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
 
+	private DGBrowser browser;
+
 	public class DGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook {
-		private GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice = GeneratedResourceModifiedChoice.ASK;
 
 		protected DGGeneratedResourceModifiedHook() {
-			defaultGeneratedResourceModifiedChoice = DGPreferences.getGeneratedResourceModifiedChoice();
-		}
-
-		public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice() {
-			return defaultGeneratedResourceModifiedChoice;
-		}
-
-		public void setDefaultGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice) {
-			this.defaultGeneratedResourceModifiedChoice = defaultGeneratedResourceModifiedChoice;
 		}
 
 		@Override
@@ -610,8 +521,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					logger.info("Resource " + aGeneratedResource + " has been modified on the disk.");
 				}
 				CGRepositoryFileResource generatedResource = (CGRepositoryFileResource) aGeneratedResource;
-				GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
-				if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
+				GeneratedResourceModifiedChoice choice = DGPreferences.getGeneratedResourceModifiedChoice();
+				if (choice == GeneratedResourceModifiedChoice.ASK) {
 
 					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
 							"what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),

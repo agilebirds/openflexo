@@ -24,7 +24,7 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
-public abstract class FlexoActionEnableCondition<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
+public abstract class FlexoActionEnableCondition<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
 
 	public abstract boolean isEnabled(FlexoActionType<A, T1, T2> actionType, T1 object, Vector<T2> globalSelection, FlexoEditor editor);
 }

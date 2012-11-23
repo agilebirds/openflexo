@@ -75,7 +75,6 @@ import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Defines the panel allowing to show and edit a ValidationReport
@@ -195,9 +194,8 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 					int selectedRow = lsm.getMinSelectionIndex();
 					ValidationIssue issue = _validationReport.getIssueAt(selectedRow);
 					setCurrentIssue(issue);
-					if (_consistencyCheckDialog.getController() instanceof SelectionManagingController) {
-						((SelectionManagingController) _consistencyCheckDialog.getController()).selectAndFocusObject(issue
-								.getSelectableObject());
+					if (_consistencyCheckDialog.getController() instanceof FlexoController) {
+						_consistencyCheckDialog.getController().selectAndFocusObject(issue.getSelectableObject());
 					}
 					ValidationReportEditor.this.grabFocus();
 				}
@@ -454,7 +452,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 
 	public void consistencyCheckWithValidationModel(Validable objectToValidate, ValidationModel validationModel) {
 		for (int i = 0; i < validationModel.getSize(); i++) {
-			ValidationRuleSet ruleSet = (ValidationRuleSet) validationModel.getElementAt(i);
+			ValidationRuleSet ruleSet = validationModel.getElementAt(i);
 			for (ValidationRule rule : ruleSet.getRules()) {
 				rule.setIsEnabled(GeneralPreferences.isValidationRuleEnabled(rule));
 			}

@@ -58,7 +58,7 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 	public SelectPropertiesAndMethodsPopup(String label, String description, String unlocalizedValidateButtonLabel, DMEntity entity,
 			FlexoProject project, DMController controller) {
 		super(FlexoLocalization.localizedForKey("attribute_selection"), label, description, unlocalizedValidateButtonLabel,
-				new SelectPropertiesPopupBrowserConfiguration(entity), project, controller.getFlexoFrame(), controller.getEditor());
+				new SelectPropertiesPopupBrowserConfiguration(entity), project, controller.getFlexoFrame());
 		configuration = (SelectPropertiesPopupBrowserConfiguration) getBrowserConfiguration();
 		selectedObjects = new Vector<DMObject>();
 		selectedAccessorWidgets = new Vector<DMAccessorWidget>();

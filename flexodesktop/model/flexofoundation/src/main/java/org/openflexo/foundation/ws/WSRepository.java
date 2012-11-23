@@ -23,9 +23,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.dm.WSDLRepository;
@@ -169,17 +168,12 @@ public class WSRepository extends WSObject implements FlexoObserver {
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public WSObject getParent() {
 		return getWSService().getWSRepositoryFolder();
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return false;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
+	public Vector<FlexoModelObject> getOrderedChildren() {
 		return null;
 	}
 

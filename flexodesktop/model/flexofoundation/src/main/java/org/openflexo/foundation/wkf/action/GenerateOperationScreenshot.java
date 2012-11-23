@@ -48,12 +48,12 @@ public class GenerateOperationScreenshot extends FlexoAction<GenerateOperationSc
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
+		public boolean isVisibleForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
+		public boolean isEnabledForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
 			return object != null;
 		}
 

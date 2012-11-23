@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class IECopyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IECopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<IECopy>() {
 			@Override
-			public boolean run(ActionEvent e, IECopy action) {
+			public boolean run(EventObject e, IECopy action) {
 				return true;
 			}
 		};
@@ -61,7 +61,7 @@ public class IECopyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<IECopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IECopy>() {
 			@Override
-			public boolean run(ActionEvent e, IECopy action) {
+			public boolean run(EventObject e, IECopy action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionCopy();
 				return true;
 			}

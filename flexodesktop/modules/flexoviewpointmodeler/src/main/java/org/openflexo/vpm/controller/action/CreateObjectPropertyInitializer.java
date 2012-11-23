@@ -19,16 +19,17 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.CreateObjectProperty;
+import org.openflexo.foundation.ontology.owl.action.CreateObjectProperty;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
@@ -54,7 +55,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateObjectProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action) {
+			public boolean run(EventObject e, CreateObjectProperty action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,8 +67,8 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateObjectProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action) {
-				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+			public boolean run(EventObject e, CreateObjectProperty action) {
+				((VPMController) getController()).getSelectionManager().setSelectedObject((FlexoModelObject) action.getNewProperty());
 				return true;
 			}
 		};

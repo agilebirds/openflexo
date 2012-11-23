@@ -58,7 +58,6 @@ import org.openflexo.foundation.wkf.WKFObject;
  */
 public class BindingValue extends AbstractBinding {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
 
 	BindingVariable _bindingVariable;
@@ -664,7 +663,7 @@ public class BindingValue extends AbstractBinding {
 
 			try {
 				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue);
+				Expression parsedExpression = parser.parse(aValue, null);
 				if (parsedExpression instanceof Function) {
 					methodName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();

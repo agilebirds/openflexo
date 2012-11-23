@@ -51,12 +51,12 @@ public class ShowExecutionControlGraphs extends FlexoGUIAction<ShowExecutionCont
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object != null && object instanceof ExecutableWorkflowElement && !object.getProcess().isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

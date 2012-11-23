@@ -158,7 +158,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
 		if (getRole() != null) {
-			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getRole());
+			return new FlexoModelObjectReference<FlexoModelObject>(getRole());
 		} else {
 			return null;
 		}

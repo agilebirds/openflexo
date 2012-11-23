@@ -47,8 +47,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class FIBOntologyEditor extends SelectionSynchronizedFIBView<FIBOntologyEditor> {
-	@SuppressWarnings("hiding")
+public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyEditor.fib");
@@ -74,12 +73,12 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView<FIBOntologyE
 
 	private boolean isSearching = false;
 	private String filteredName;
-	private List<OntologyObject<?>> matchingValues;
-	private OntologyObject<?> selectedValue;
+	private List<OntologyObject> matchingValues;
+	private OntologyObject selectedValue;
 
 	public FIBOntologyEditor(FlexoOntology ontology, FlexoController controller) {
 		super(null, controller, FIB_FILE);
-		matchingValues = new ArrayList<OntologyObject<?>>();
+		matchingValues = new ArrayList<OntologyObject>();
 		setOntology(ontology);
 		setDataObject(this);
 	}
@@ -264,7 +263,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView<FIBOntologyE
 		this.filteredName = filteredName;
 	}
 
-	public List<OntologyObject<?>> getMatchingValues() {
+	public List<OntologyObject> getMatchingValues() {
 		return matchingValues;
 	}
 

@@ -26,6 +26,7 @@ import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 
+@Deprecated
 public class FlexoImportedRoleLibraryDelta {
 
 	public interface DeltaVisitor {

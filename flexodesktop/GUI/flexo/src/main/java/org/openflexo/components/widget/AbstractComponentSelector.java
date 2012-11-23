@@ -95,8 +95,7 @@ public abstract class AbstractComponentSelector<T extends ComponentDefinition> e
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width + 100;
-			returned.height = returned.height /* + 40 */;
+			returned.width += 100;
 			return returned;
 		}
 

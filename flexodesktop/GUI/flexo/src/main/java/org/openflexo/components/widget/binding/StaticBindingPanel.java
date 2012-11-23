@@ -121,7 +121,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedKey));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedKey != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -275,7 +275,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedDate));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDate != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -309,7 +309,7 @@ class StaticBindingPanel extends JPanel {
 												.getEditedObject()));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDuration != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -399,28 +399,25 @@ class StaticBindingPanel extends JPanel {
 					}
 				}
 			});
-			if (typeCB != null) {
-				isUpdatingPanel = true;
-				if (currentType == EvaluationType.BOOLEAN) {
-					typeCB.setSelectedItem(BOOLEAN);
-				} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
-					typeCB.setSelectedItem(INTEGER);
-				} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-					typeCB.setSelectedItem(FLOAT);
-				} else if (currentType == EvaluationType.STRING) {
-					typeCB.setSelectedItem(STRING);
-				} else if (currentType == EvaluationType.DATE) {
-					typeCB.setSelectedItem(DATE);
-				} else if (currentType == EvaluationType.DURATION) {
-					typeCB.setSelectedItem(DURATION);
-				} else if (currentType == EvaluationType.ENUM) {
-					typeCB.setSelectedItem(DKV);
-				}
-				isUpdatingPanel = false;
+			isUpdatingPanel = true;
+			if (currentType == EvaluationType.BOOLEAN) {
+				typeCB.setSelectedItem(BOOLEAN);
+			} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
+				typeCB.setSelectedItem(INTEGER);
+			} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
+				typeCB.setSelectedItem(FLOAT);
+			} else if (currentType == EvaluationType.STRING) {
+				typeCB.setSelectedItem(STRING);
+			} else if (currentType == EvaluationType.DATE) {
+				typeCB.setSelectedItem(DATE);
+			} else if (currentType == EvaluationType.DURATION) {
+				typeCB.setSelectedItem(DURATION);
+			} else if (currentType == EvaluationType.ENUM) {
+				typeCB.setSelectedItem(DKV);
 			}
-
 			typeCB.setFont(FlexoCst.SMALL_FONT);
 			add(typeCB);
+			isUpdatingPanel = false;
 		}
 
 	}

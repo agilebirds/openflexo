@@ -44,13 +44,13 @@ public class SEIconLibrary extends IconLibrary {
 	public static final ImageIconResource SE_BIG_ICON = new ImageIconResource("Icons/SE/module-se-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon COMPONENT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ComponentPerspective_A.gif");
+	public static final ImageIcon COMPONENT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ComponentPerspective_A.png");
 	public static final ImageIcon COMPONENT_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/SE/ComponentPerspective_S.gif");
-	public static final ImageIcon EXAMPLE_VALUE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ExampleValuePerspective_A.gif");
+	public static final ImageIcon EXAMPLE_VALUE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ExampleValuePerspective_A.png");
 	public static final ImageIcon EXAMPLE_VALUE_SELECTED_ICON = new ImageIconResource("Icons/SE/ExampleValuePerspective_S.gif");
-	public static final ImageIcon MENU_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/MenuPerspective_A.gif");
+	public static final ImageIcon MENU_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/MenuPerspective_A.png");
 	public static final ImageIcon MENU_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/SE/MenuPerspective_S.gif");
-	public static final ImageIcon DKV_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/DKVPerspective_A.gif");
+	public static final ImageIcon DKV_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/DKVPerspective_A.png");
 	public static final ImageIcon DKV_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/SE/DKVPerspective_S.gif");
 
 	// Editor icons

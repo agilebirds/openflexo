@@ -22,9 +22,9 @@ package org.openflexo.cgmodule.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.cgmodule.menu.GeneratorMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to Data Model Editor module
@@ -37,10 +37,10 @@ public class GeneratorSelectionManager extends SelectionManager {
 
 	public GeneratorSelectionManager(GeneratorController controller) {
 		super(controller);
-		GeneratorMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new GeneratorClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new GeneratorContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new GeneratorContextualMenuManager(this, controller);
 	}
 
 	public GeneratorController getGeneratorController() {

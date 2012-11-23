@@ -41,8 +41,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
 	public static final String OUTPUT_FILE_ARGUMENT_PREFIX = "-Output=";
 
-	public static final String WORKING_DIR = "-WorkingDir=";
-
 	public static final String NO_POST_BUILD = "-nopostbuild";
 
 	public static final String TOC_FLEXOID = "-tocflexoid";
@@ -60,7 +58,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	private String docType = DefaultDocType.Business.name();
 	private Format format = Format.LATEX;
 	private String outputPath = null;
-	private String workingDir = null;
 	private boolean noPostBuild = false;
 	private String tocUserID;
 	private long tocFlexoID = -1;
@@ -89,14 +86,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					}
 					if (outputPath.endsWith("\"")) {
 						outputPath = outputPath.substring(0, outputPath.length() - 1);
-					}
-				} else if (args[i].startsWith(WORKING_DIR)) {
-					workingDir = args[i].substring(WORKING_DIR.length());
-					if (workingDir.startsWith("\"")) {
-						workingDir = workingDir.substring(1);
-					}
-					if (workingDir.endsWith("\"")) {
-						workingDir = workingDir.substring(0, workingDir.length() - 1);
 					}
 				} else if (args[i].startsWith(FORMAT)) {
 					String t = args[i].substring(FORMAT.length());
@@ -136,17 +125,12 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
 	@Override
 	protected void doRun() {
-		File output = null;
-		if (workingDir != null) {
-			output = new File(workingDir);
-			output.mkdirs();
-			if (!output.exists() || !output.canWrite()) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Output path: " + output.getAbsolutePath()
-							+ " either does not exist or does not have write permissions.");
-				}
-				output = null;
+		File output = getWorkingDir();
+		if (!output.exists() || !output.canWrite()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Output path: " + output.getAbsolutePath() + " either does not exist or does not have write permissions.");
 			}
+			output = null;
 		}
 		if (output == null) {
 			try {

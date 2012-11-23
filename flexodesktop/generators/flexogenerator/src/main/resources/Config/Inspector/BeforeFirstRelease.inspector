@@ -1,4 +1,4 @@
-<inspector title = "unreleased_version">
+<inspector title = "unreleased_version" inspectedClassName="org.openflexo.foundation.cg.version.CGFileReleaseVersion$BeforeFirstRelease">
 	<tab name="Basic" index="0">
 		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0">
 		<param name="displayLabel" value="false"/>

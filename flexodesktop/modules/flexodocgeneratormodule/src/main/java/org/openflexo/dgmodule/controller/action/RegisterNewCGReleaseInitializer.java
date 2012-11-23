@@ -19,9 +19,9 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -59,7 +59,7 @@ public class RegisterNewCGReleaseInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RegisterNewCGRelease> getDefaultInitializer() {
 		return new FlexoActionInitializer<RegisterNewCGRelease>() {
 			@Override
-			public boolean run(ActionEvent e, final RegisterNewCGRelease action) {
+			public boolean run(EventObject e, final RegisterNewCGRelease action) {
 				Date registeringDate = new Date();
 				TextFieldParameter nameParam = new TextFieldParameter("name", "name", "");
 				ReadOnlyTextFieldParameter dateParam = new ReadOnlyTextFieldParameter("date", "date",
@@ -114,7 +114,7 @@ public class RegisterNewCGReleaseInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RegisterNewCGRelease> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RegisterNewCGRelease>() {
 			@Override
-			public boolean run(ActionEvent e, RegisterNewCGRelease action) {
+			public boolean run(EventObject e, RegisterNewCGRelease action) {
 				return true;
 			}
 		};

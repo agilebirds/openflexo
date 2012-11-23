@@ -47,12 +47,12 @@ public class OpenOperationLevel extends FlexoUndoableAction<OpenOperationLevel, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return object.mightHaveOperationPetriGraph();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return object.mightHaveOperationPetriGraph();
 		}
 

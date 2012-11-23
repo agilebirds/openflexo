@@ -32,12 +32,12 @@ public class AddToConsultedRole extends AddToXRole<AddToConsultedRole> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
 			return object != null && object.getAvailableConsultedRoles().size() > 0;
 		}
 

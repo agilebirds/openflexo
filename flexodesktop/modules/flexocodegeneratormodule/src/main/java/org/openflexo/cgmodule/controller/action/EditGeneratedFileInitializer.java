@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -49,7 +49,7 @@ public class EditGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<EditGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action) {
+			public boolean run(EventObject e, EditGeneratedFile action) {
 				if (!(getControllerActionInitializer().getGeneratorController().moduleViewForObject(action.getFocusedObject()) instanceof FileContentEditor)) {
 					getControllerActionInitializer().getGeneratorController().switchToPerspective(
 							getControllerActionInitializer().getGeneratorController().CODE_GENERATOR_PERSPECTIVE);
@@ -69,7 +69,7 @@ public class EditGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<EditGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action) {
+			public boolean run(EventObject e, EditGeneratedFile action) {
 				getControllerActionInitializer().getGeneratorController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
 				return true;

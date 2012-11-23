@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -141,14 +140,8 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_process") + " " + next.getName());
 			}
 			if (project.getFlexoProcessResource(next.getProcessResourceName()) != null) {
-				try {
-					FlexoProcess process = project.getFlexoProcessResource(next.getProcessResourceName()).loadResourceData();
-					next.setProcess(process);
-				} catch (FlexoException e1) {
-					// Warns about the exception
-					logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-					e1.printStackTrace();
-				}
+				FlexoProcess process = project.getFlexoProcessResource(next.getProcessResourceName()).getResourceData();
+				next.setProcess(process);
 			}
 		}
 	}

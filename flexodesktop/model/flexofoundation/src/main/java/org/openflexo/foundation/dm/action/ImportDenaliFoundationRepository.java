@@ -32,7 +32,7 @@ import org.openflexo.foundation.dm.DMObject;
  * 
  */
 @Deprecated
-public class ImportDenaliFoundationRepository extends CreateDMRepository {
+public class ImportDenaliFoundationRepository extends CreateDMRepository<ImportDenaliFoundationRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportDenaliFoundationRepository.class.getPackage().getName());
 
@@ -48,12 +48,12 @@ public class ImportDenaliFoundationRepository extends CreateDMRepository {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 

@@ -25,7 +25,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fps.controller.FPSController;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
@@ -56,16 +55,9 @@ public final class FPSPreferences extends ModulePreferences {
 
 	protected static final String XMLMERGE_PREF_VALUE = "useXMLMerge";
 
-	private static FPSController _controller;
-
-	public static void init(FPSController controller) {
-		_controller = controller;
+	public static void init() {
 		preferences(FPS_PREFERENCES);
 		CVSFile.xmlDiff3MergeEnabled = getUseXMLMerge();
-	}
-
-	public static void reset() {
-		_controller = null;
 	}
 
 	public FPSPreferences() {

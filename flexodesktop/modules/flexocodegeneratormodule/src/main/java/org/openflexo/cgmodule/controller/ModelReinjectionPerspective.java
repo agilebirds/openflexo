@@ -20,11 +20,11 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-class ModelReinjectionPerspective extends FlexoPerspective<FlexoModelObject> {
+class ModelReinjectionPerspective extends FlexoPerspective {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ class ModelReinjectionPerspective extends FlexoPerspective<FlexoModelObject> {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -54,7 +54,7 @@ class ModelReinjectionPerspective extends FlexoPerspective<FlexoModelObject> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

@@ -22,8 +22,8 @@ package org.openflexo.foundation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -96,7 +96,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private boolean hasSpecificDescriptions = false;
 
-	private Vector<FlexoModelObjectReference> referencers;
+	private Vector<FlexoModelObjectReference<?>> referencers;
 
 	// Imported objects
 	private boolean isDeletedOnServer = false;
@@ -117,8 +117,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public static void setCurrentUserIdentifier(String aUserIdentifier) {
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
+			FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 		}
-		FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 	}
 
 	private String userIdentifier;
@@ -134,7 +134,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
 		}
-		userIdentifier = aUserIdentifier.intern();
+		userIdentifier = aUserIdentifier != null ? aUserIdentifier.intern() : null;
 		if (!isDeserializing()) {
 			fireSerializationIdChanged();
 		}
@@ -157,7 +157,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 */
 	public FlexoModelObject(FlexoProject project) {
 		super();
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		specificDescriptions = new TreeMap<String, String>();
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
@@ -458,37 +458,36 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	/**
 	 * A map that stores the different declared actions for each class
 	 */
-	private static final Map<Class, Vector<FlexoActionType>> _declaredActionsForClass = new Hashtable<Class, Vector<FlexoActionType>>();
+	private static final Map<Class, List<FlexoActionType<?, ?, ?>>> _declaredActionsForClass = new Hashtable<Class, List<FlexoActionType<?, ?, ?>>>();
 	/**
 	 * A map that stores all the actions for each class (computed with the inheritance of each class)
 	 */
-	private static final Hashtable<Class, Vector<FlexoActionType>> _actionListForClass = new Hashtable<Class, Vector<FlexoActionType>>();
+	private static final Hashtable<Class, List<FlexoActionType<?, ?, ?>>> _actionListForClass = new Hashtable<Class, List<FlexoActionType<?, ?, ?>>>();
 
-	public Vector<FlexoActionType> getActionList() {
+	public List<FlexoActionType<?, ?, ?>> getActionList() {
 		return getActionList(getClass());
 	}
 
-	public static <T extends FlexoModelObject> Vector<FlexoActionType> getActionList(Class<T> aClass) {
+	public static <T extends FlexoModelObject> List<FlexoActionType<?, ?, ?>> getActionList(Class<T> aClass) {
 		if (_actionListForClass.get(aClass) == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("COMPUTE ACTION_LIST FOR " + aClass.getName());
 			}
-			Vector<FlexoActionType> returned = updateActionListFor(aClass);
+			List<FlexoActionType<?, ?, ?>> returned = updateActionListFor(aClass);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("DONE. COMPUTE ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-				for (Enumeration<FlexoActionType> en = returned.elements(); en.hasMoreElements();) {
-					FlexoActionType next = en.nextElement();
+				for (FlexoActionType<?, ?, ?> next : returned) {
 					logger.fine(" " + next.getLocalizedName());
 				}
 				logger.fine(".");
 			}
 			return returned;
 		}
-		Vector<FlexoActionType> returned = _actionListForClass.get(aClass);
+		List<FlexoActionType<?, ?, ?>> returned = _actionListForClass.get(aClass);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("RETURN (NO COMPUTING) ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-			for (Enumeration<FlexoActionType> en = returned.elements(); en.hasMoreElements();) {
-				FlexoActionType next = en.nextElement();
+
+			for (FlexoActionType<?, ?, ?> next : returned) {
 				logger.fine(" " + next.getLocalizedName());
 			}
 			logger.fine(".");
@@ -501,9 +500,9 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("addActionForClass: " + actionType + " for " + objectClass);
 		}
-		Vector<FlexoActionType> actions = _declaredActionsForClass.get(objectClass);
+		List<FlexoActionType<?, ?, ?>> actions = _declaredActionsForClass.get(objectClass);
 		if (actions == null) {
-			actions = new Vector<FlexoActionType>();
+			actions = new ArrayList<FlexoActionType<?, ?, ?>>();
 			_declaredActionsForClass.put(objectClass, actions);
 		}
 		if (actionType != null) {
@@ -529,9 +528,9 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	}
 
-	private static <T extends FlexoModelObject> Vector<FlexoActionType> updateActionListFor(Class<T> aClass) {
-		Vector<FlexoActionType> newActionList = new Vector<FlexoActionType>();
-		for (Map.Entry<Class, Vector<FlexoActionType>> e : _declaredActionsForClass.entrySet()) {
+	private static <T extends FlexoModelObject> List<FlexoActionType<?, ?, ?>> updateActionListFor(Class<T> aClass) {
+		List<FlexoActionType<?, ?, ?>> newActionList = new Vector<FlexoActionType<?, ?, ?>>();
+		for (Map.Entry<Class, List<FlexoActionType<?, ?, ?>>> e : _declaredActionsForClass.entrySet()) {
 			if (e.getKey().isAssignableFrom(aClass)) {
 				newActionList.addAll(e.getValue());
 			}
@@ -552,8 +551,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	@Override
-	public FlexoActionType getActionTypeAt(int index) {
-		return getActionList().elementAt(index);
+	public FlexoActionType<?, ?, ?> getActionTypeAt(int index) {
+		return getActionList().get(index);
 	}
 
 	public void delete() {
@@ -579,7 +578,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 
-		for (EditionPatternReference ref : getEditionPatternReferences()) {
+		for (EditionPatternReference ref : new ArrayList<EditionPatternReference>(getEditionPatternReferences())) {
+			if (ref.getEditionPatternInstance() != null) {
+				ref.getEditionPatternInstance().nullifyPatternActor(ref.getPatternRole());
+			}
 			ref.delete();
 		}
 		_editionPatternReferences.clear();
@@ -615,7 +617,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 		isDeleted = false;
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		setChanged();
 		if (getProject() != null) {
 			getProject().notifyObjectCreated(this);
@@ -1025,7 +1027,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
-	public Vector<FlexoModelObjectReference> getReferencers() {
+	public Vector<FlexoModelObjectReference<?>> getReferencers() {
 		return referencers;
 	}
 

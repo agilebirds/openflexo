@@ -21,16 +21,17 @@ package org.openflexo.fps;
 
 import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalFPSModule;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * FPS module
@@ -42,11 +43,9 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 	private static final Logger logger = Logger.getLogger(CVSRepository.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.FPS };
 
-	public FPSModule() throws Exception {
-		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
-		setFlexoController(new FPSController(this));
-		getFPSController().loadRelativeWindows();
-		FPSPreferences.init(getFPSController());
+	public FPSModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		FPSPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
@@ -54,6 +53,16 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 
 		// Retain here all necessary resources
 		// retain(<the_required_resource_data>);
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new FPSController(this);
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.FPS_MODULE;
 	}
 
 	@Override
@@ -66,11 +75,6 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getFPSController().getSharedProject();
-	}
-
-	@Override
 	public void moduleWillClose() {
 		for (CVSRepository repository : getFPSController().getRepositories().getCVSRepositories()) {
 			if (repository.getRepositoryExploringDirectory() != null && repository.getRepositoryExploringDirectory().exists()) {
@@ -79,6 +83,5 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 			}
 		}
 		super.moduleWillClose();
-		FPSPreferences.reset();
 	}
 }

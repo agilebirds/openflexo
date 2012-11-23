@@ -19,14 +19,14 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddAnnotationStatement;
+import org.openflexo.foundation.ontology.owl.action.AddAnnotationStatement;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -49,7 +49,7 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddAnnotationStatement> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddAnnotationStatement>() {
 			@Override
-			public boolean run(ActionEvent e, final AddAnnotationStatement action) {
+			public boolean run(EventObject e, final AddAnnotationStatement action) {
 				return false;
 			}
 		};
@@ -59,7 +59,7 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddAnnotationStatement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddAnnotationStatement>() {
 			@Override
-			public boolean run(ActionEvent e, AddAnnotationStatement action) {
+			public boolean run(EventObject e, AddAnnotationStatement action) {
 				// ((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewStatement());
 				return true;
 			}

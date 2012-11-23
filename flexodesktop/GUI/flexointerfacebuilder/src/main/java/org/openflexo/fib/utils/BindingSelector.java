@@ -781,9 +781,11 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
 			// System.out.println("registering " + bindable + " for " + this);
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
 			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
 					BindingModelChanged.BINDING_MODEL_CHANGED, this);
 		}
+	}
 	}
 
 	public void unregisterListenerForBindable() {
@@ -791,8 +793,10 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			((Observable) _bindable).deleteObserver(this);
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
 			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
+	}
 	}
 
 	@Override

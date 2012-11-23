@@ -47,12 +47,12 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			Enumeration en = globalSelection.elements();
 			while (en.hasMoreElements()) {
 				Object o = en.nextElement();

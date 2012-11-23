@@ -99,7 +99,6 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		/*for (Class<?> c : inspectorController.getInspectors().keySet()) {
 			FIBInspector inspector = inspectorController.getInspectors().get(c);
 			FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
-			((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			if (logger.isLoggable(Level.FINE)) {
@@ -112,7 +111,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private FIBView<?, ?> buildViewFor(FIBInspector inspector) {
 
 		FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
-		((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
+		// TODO: See with Sylvain the purpose of the next line.
+		// ((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
 		FlexoLocalization.addToLocalizationListeners(inspectorView);
 		inspectorViews.put(inspector, inspectorView);
 		if (logger.isLoggable(Level.INFO)) {
@@ -172,7 +172,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	/*private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView<?, ?> view = viewForInspector(inspector);
-			FIBController<?> controller = view.getController();
+			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(inspector.getTabPanel());
 			tabPanelView.updateLayout();
 		} else {
@@ -204,7 +204,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		if (updateEPTabs) {
 			FIBView<?, ?> view = viewForInspector(newInspector);
-			FIBController<?> controller = view.getController();
+			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(newInspector.getTabPanel());
 			tabPanelView.updateLayout();
 		}

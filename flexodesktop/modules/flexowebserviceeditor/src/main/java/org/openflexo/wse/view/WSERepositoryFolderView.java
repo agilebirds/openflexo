@@ -24,10 +24,11 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 
 /**
@@ -94,8 +95,8 @@ public class WSERepositoryFolderView extends WSEView<WSRepositoryFolder> {
 	}
 
 	public DMRepository getSelectedDMRepository() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}

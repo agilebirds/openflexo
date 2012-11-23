@@ -161,8 +161,7 @@ public class DocResourceManager {
 	public void save() {
 		isSaving = true;
 		docResourceCenter.save();
-		for (Enumeration en = _versionsToEventuallySave.elements(); en.hasMoreElements();) {
-			DocItemVersion next = (DocItemVersion) en.nextElement();
+		for (DocItemVersion next : _versionsToEventuallySave) {
 			if (next.needsSaving()) {
 				next.save();
 			}
@@ -182,8 +181,7 @@ public class DocResourceManager {
 		if (docResourceCenter.isModified()) {
 			return true;
 		}
-		for (Enumeration en = _versionsToEventuallySave.elements(); en.hasMoreElements();) {
-			DocItemVersion next = (DocItemVersion) en.nextElement();
+		for (DocItemVersion next : _versionsToEventuallySave) {
 			if (next.needsSaving()) {
 				return true;
 			}
@@ -278,10 +276,8 @@ public class DocResourceManager {
 			inspectorGroupFolder = inspectorDocItem.getFolder();
 		}
 		if (inspectorDocItem != null) {
-			for (Enumeration en = inspectorModel.getTabs().elements(); en.hasMoreElements();) {
-				TabModel tabModel = (TabModel) en.nextElement();
-				for (Enumeration en2 = tabModel.getProperties().elements(); en2.hasMoreElements();) {
-					PropertyModel propertyModel = (PropertyModel) en2.nextElement();
+			for (TabModel tabModel : inspectorModel.getTabs().values()) {
+				for (PropertyModel propertyModel : tabModel.getProperties().values()) {
 					String propName = inspectorName + "-" + propertyModel.name;
 					DocItem propertyDocItem = inspectorGroupFolder.getItemNamed(propName);
 					if (propertyDocItem == null) {
@@ -325,7 +321,7 @@ public class DocResourceManager {
 		logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 		// TODO: Please implement this better later
 		// Used editor will be null
-		SubmitVersion action = (SubmitVersion) SubmitVersion.actionType.makeNewAction(docItem, null);
+		SubmitVersion action = SubmitVersion.actionType.makeNewAction(docItem, null, getEditor());
 		action.setAuthor(getUser());
 		action.setVersion(getEditedVersion(docItem));
 		action.doAction();
@@ -349,7 +345,7 @@ public class DocResourceManager {
 		logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 		// TODO: Please implement this better later
 		// Used editor will be null
-		SubmitVersion action = (SubmitVersion) SubmitVersion.actionType.makeNewAction(docItem, null);
+		SubmitVersion action = SubmitVersion.actionType.makeNewAction(docItem, null, getEditor());
 		action.setAuthor(getUser());
 		action.setVersion(getEditedVersion(docItem));
 		action.doAction();
@@ -365,7 +361,7 @@ public class DocResourceManager {
 		logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 		// TODO: Please implement this better later
 		// Used editor will be null
-		ApproveVersion action = (ApproveVersion) ApproveVersion.actionType.makeNewAction(version.getItem(), null);
+		ApproveVersion action = ApproveVersion.actionType.makeNewAction(version.getItem(), null, getEditor());
 		action.setAuthor(getUser());
 		action.setVersion(version);
 		action.doAction();
@@ -378,7 +374,7 @@ public class DocResourceManager {
 		logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 		// TODO: Please implement this better later
 		// Used editor will be null
-		RefuseVersion action = (RefuseVersion) RefuseVersion.actionType.makeNewAction(version.getItem(), null);
+		RefuseVersion action = RefuseVersion.actionType.makeNewAction(version.getItem(), null, getEditor());
 		action.setAuthor(getUser());
 		action.setVersion(version);
 		action.doAction();
@@ -571,7 +567,7 @@ public class DocResourceManager {
 
 	public FlexoEditor getEditor() {
 		if (_editor == null) {
-			_editor = new DefaultFlexoEditor();
+			_editor = new DefaultFlexoEditor(null);
 		}
 		return _editor;
 	}

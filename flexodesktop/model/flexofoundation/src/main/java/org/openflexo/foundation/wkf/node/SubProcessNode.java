@@ -126,8 +126,8 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (parentProcess != null && parentProcess.isImported()) {
 			return false;
 		}
-		if (aProcess.isImported()) {
-			return aProcess.isTopLevelProcess();
+		if (aProcess.isTopLevelProcess()) {
+			return true;
 		}
 
 		if (parentProcess == null) {
@@ -157,7 +157,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoProcess> getSubProcessReference() {
 		if (getSubProcess() != null) {
-			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getSubProcess());
+			return new FlexoModelObjectReference<FlexoProcess>(getSubProcess());
 		} else {
 			return _deserializedReference;
 		}

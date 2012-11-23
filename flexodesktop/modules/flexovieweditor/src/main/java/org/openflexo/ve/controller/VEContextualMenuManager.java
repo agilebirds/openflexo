@@ -22,7 +22,6 @@ package org.openflexo.ve.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -36,8 +35,8 @@ public class VEContextualMenuManager extends ContextualMenuManager {
 
 	private VEController _controller;
 
-	public VEContextualMenuManager(VESelectionManager selectionManager, FlexoEditor editor, VEController controller) {
-		super(selectionManager, editor);
+	public VEContextualMenuManager(VESelectionManager selectionManager, VEController controller) {
+		super(selectionManager, controller);
 		_controller = controller;
 	}
 

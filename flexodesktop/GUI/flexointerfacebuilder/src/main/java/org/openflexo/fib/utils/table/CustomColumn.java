@@ -110,7 +110,7 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 			D rowObject = elementAt(row);
 			if (isSelected && hasFocus) {
 				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
-				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+				if (ToolBox.isMacOSLaf()) {
 					setComponentBackground(returned, hasFocus, isSelected, row, column);
 				}
 				return returned;
@@ -186,8 +186,8 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 					table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 				}
 			});
-			setEditedRowObject(elementAt(row));
-			_selector = getEditSelector(elementAt(row), (T) value);
+			setEditedRowObject(elementAt(table.convertRowIndexToModel(row)));
+			_selector = getEditSelector(elementAt(table.convertRowIndexToModel(row)), (T) value);
 			_selector.getTextField().setBorder(null);
 			_selector.setBorder(null);
 			/*

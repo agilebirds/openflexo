@@ -37,12 +37,12 @@ public class InternalWSFolder extends WSFolder {
 		super(dl);
 	}
 
-	public Vector getInternalWSServices() {
+	public Vector<InternalWSService> getInternalWSServices() {
 		return getWSLibrary().getInternalWSServices();
 	}
 
 	@Override
-	public Vector getWSServices() {
+	public Vector<InternalWSService> getWSServices() {
 		return getInternalWSServices();
 	}
 

@@ -164,9 +164,7 @@ public class ModelEntity {
 				xmlTagIsSpecified = true;
 				parseXMLTags(tempAttribute.getNodeValue());
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.abstractLabel)) {
-				if (tempAttribute.getNodeValue().equalsIgnoreCase("yes")) {
-					isAbstract = true;
-				}
+				isAbstract = tempAttribute.getNodeValue().equalsIgnoreCase("yes") || tempAttribute.getNodeValue().equalsIgnoreCase("true");
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.finalizerLabel)) {
 				finalizer = tempAttribute.getNodeValue();
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.contextsLabel)) {

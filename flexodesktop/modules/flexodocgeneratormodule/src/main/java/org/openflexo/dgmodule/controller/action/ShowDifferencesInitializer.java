@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -55,7 +55,7 @@ public class ShowDifferencesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowDifferences> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowDifferences>() {
 			@Override
-			public boolean run(ActionEvent e, ShowDifferences action) {
+			public boolean run(EventObject e, ShowDifferences action) {
 				CGFileVersionParameter versionLeftParameter = new CGFileVersionParameter("versionLeft", "left_version", action.getCGFile(),
 						null);
 				CGFileVersionParameter versionRightParameter = new CGFileVersionParameter("versionRight", "right_version",
@@ -86,7 +86,7 @@ public class ShowDifferencesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowDifferences> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowDifferences>() {
 			@Override
-			public boolean run(ActionEvent e, ShowDifferences action) {
+			public boolean run(EventObject e, ShowDifferences action) {
 				DGFileDiffEditorPopup popup = new DGFileDiffEditorPopup(action.getCGFile(), action.getLeftSource(),
 						action.getRightSource(), getControllerActionInitializer().getDGController());
 				popup.setVisible(true);

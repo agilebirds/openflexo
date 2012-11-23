@@ -38,9 +38,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.controller.ProcessBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
@@ -100,7 +100,7 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 	}
 
 	@Override
-	public FlexoPerspective<FlexoProcess> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.DOCUMENTATION_PERSPECTIVE;
 	}
 
@@ -150,7 +150,7 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 
 	public ProjectBrowser makeBrowser(FlexoModelObject rootObject, FlexoController controller) {
 		ProcessBrowser returned = new ProcessBrowser((WKFController) controller);
-		returned.setCurrentProcess((FlexoProcess) rootObject);
+		returned.setRootObject(rootObject);
 		return returned;
 	}
 

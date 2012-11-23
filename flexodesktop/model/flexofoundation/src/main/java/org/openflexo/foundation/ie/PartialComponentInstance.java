@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.Serializable;
-
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
@@ -32,7 +30,7 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class PartialComponentInstance extends ComponentInstance implements Serializable {
+public class PartialComponentInstance extends ComponentInstance {
 
 	private IEReusableWidget reusableWidget;
 

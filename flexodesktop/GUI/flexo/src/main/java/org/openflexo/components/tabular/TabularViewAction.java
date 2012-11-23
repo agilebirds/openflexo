@@ -28,7 +28,6 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -51,8 +50,7 @@ public abstract class TabularViewAction implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
-		action.actionPerformed(event);
+		_editor.performActionType(_actionType, getFocusedObject(), getGlobalSelection(), event);
 	}
 
 	protected abstract Vector getGlobalSelection();

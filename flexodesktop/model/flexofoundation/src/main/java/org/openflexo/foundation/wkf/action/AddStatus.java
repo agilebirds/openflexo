@@ -48,12 +48,12 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object != null
 					&& (object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof StatusList || object instanceof Status);
 		}

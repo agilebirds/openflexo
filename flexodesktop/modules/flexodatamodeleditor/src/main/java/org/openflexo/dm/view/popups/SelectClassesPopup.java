@@ -54,21 +54,20 @@ public class SelectClassesPopup extends MultipleObjectSelectorPopup {
 
 	public SelectClassesPopup(String title, String label, String description, File jarFile, FlexoProject project, FlexoFrame owner,
 			FlexoProgress progress) {
-		super(title, label, description, new SelectClassPopupBrowserConfiguration(jarFile, project, progress), project, owner, owner
-				.getController().getEditor());
+		super(title, label, description, new SelectClassPopupBrowserConfiguration(jarFile, project, progress), project, owner);
 	}
 
 	public SelectClassesPopup(String title, String label, String description, ExternalRepository externalRepository, FlexoProject project,
 			DMController controller, FlexoProgress progress) {
 		super(title, label, description, new SelectClassPopupBrowserConfiguration(externalRepository, project, progress), project,
-				controller.getFlexoFrame(), controller.getEditor());
+				controller.getFlexoFrame());
 		choicePanel.setSelectedObjects(getDMSet().getSelectedObjects());
 	}
 
 	public SelectClassesPopup(String title, String label, String description, Vector entities, FlexoProject project,
 			DMController controller, FlexoProgress progress) {
 		super(title, label, description, new SelectClassPopupBrowserConfiguration(entities, project, progress), project, controller
-				.getFlexoFrame(), controller.getEditor());
+				.getFlexoFrame());
 		choicePanel.setSelectedObjects(getDMSet().getSelectedObjects());
 		/*for (Enumeration en=entities.elements(); en.hasMoreElements();) {
 		    LoadableDMEntity next = (LoadableDMEntity)en.nextElement();

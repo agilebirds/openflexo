@@ -92,8 +92,10 @@ public class IEFileMenu extends FileMenu {
 			public FlexoModelObject getFocusedObject() {
 				if (_controller.getCurrentEditedComponent() != null) {
 					return _controller.getCurrentEditedComponent().getComponentDefinition();
-				} else {
+				} else if (_controller.getProject() != null) {
 					return _controller.getProject().getFlexoComponentLibrary();
+				} else {
+					return null;
 				}
 			}
 

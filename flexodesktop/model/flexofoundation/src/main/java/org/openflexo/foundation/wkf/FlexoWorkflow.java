@@ -58,6 +58,7 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.imported.dm.ProcessAlreadyImportedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoWorkflowResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -91,6 +92,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
@@ -107,10 +109,19 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
 	public enum GraphicalProperties {
-		CONNECTOR_REPRESENTATION("connectorRepresentation"), COMPONENT_FONT("componentFont"), ROLE_FONT("roleFont"), EVENT_FONT("eventFont"), ACTION_FONT(
-				"actionFont"), OPERATION_FONT("operationFont"), ACTIVITY_FONT("activityFont"), ARTEFACT_FONT("artefactFont"), EDGE_FONT(
-				"edgeFont"), SHOW_MESSAGES("showMessages"), SHOW_WO_NAME("showWOName"), SHOW_SHADOWS("showShadows"), USE_TRANSPARENCY(
-				"useTransparency");
+		CONNECTOR_REPRESENTATION("connectorRepresentation"),
+		COMPONENT_FONT("componentFont"),
+		ROLE_FONT("roleFont"),
+		EVENT_FONT("eventFont"),
+		ACTION_FONT("actionFont"),
+		OPERATION_FONT("operationFont"),
+		ACTIVITY_FONT("activityFont"),
+		ARTEFACT_FONT("artefactFont"),
+		EDGE_FONT("edgeFont"),
+		SHOW_MESSAGES("showMessages"),
+		SHOW_WO_NAME("showWOName"),
+		SHOW_SHADOWS("showShadows"),
+		USE_TRANSPARENCY("useTransparency");
 		private String serializationName;
 
 		GraphicalProperties(String s) {
@@ -169,11 +180,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 */
 	public FlexoWorkflow(FlexoProject project) {
 		super(project);
-		if (project == null) {
-			logger.severe("No project for Workflow");
-		} else {
-			setProject(project);
-		}
+		setProject(project);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();
@@ -216,7 +223,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * @return a newly created workflow
 	 * @throws InvalidFileNameException
 	 */
-	public static FlexoWorkflow createNewWorkflow(FlexoProject project) throws InvalidFileNameException {
+	public static FlexoWorkflow createNewWorkflow(FlexoProject project) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN createNewWorkflow(), project=" + project);
 		}
@@ -224,7 +231,13 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 		File wkfFile = ProjectRestructuration.getExpectedWorkflowFile(project, project.getProjectName());
 		FlexoProjectFile workflowFile = new FlexoProjectFile(wkfFile, project);
-		FlexoWorkflowResource wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		FlexoWorkflowResource wkfRes = null;
+		try {
+			wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		} catch (InvalidFileNameException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		try {
 			project.registerResource(wkfRes);
 		} catch (DuplicateResourceException e) {
@@ -299,7 +312,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public void setWorkflowName(String newName) {
-		if (newName != _workflowName) {
+		if (!StringUtils.isSame(newName, _workflowName)) {
 			String _oldName = _workflowName;
 			_workflowName = newName;
 			setChanged();
@@ -1225,21 +1238,35 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public Vector<Role> getAllAssignableRoles() {
 		if (allAssignableRoles == null) {
 			allAssignableRoles = new Vector<Role>();
+			RoleList roleList = getRoleList();
+			appendRoles(roleList, allAssignableRoles);
+			if (getProject().getProjectData() != null) {
+				for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+						allAssignableRoles.addAll(ref.getReferredProject().getFlexoWorkflow().getAllAssignableRoles());
+					}
+				}
+			}
+			appendRoles(getImportedRoleList(), allAssignableRoles);
+		}
+		return allAssignableRoles;
+	}
 
-			for (Role r : getRoleList().getRoles()) {
+	public void appendRoles(RoleList roleList, Vector<Role> reply) {
+		if (roleList != null) {
+			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
-					allAssignableRoles.add(r);
+					reply.add(r);
 				}
 			}
 			if (getImportedRoleList() != null) {
 				for (Role r : getImportedRoleList().getRoles()) {
 					if (r.getIsAssignable()) {
-						allAssignableRoles.add(r);
+						reply.add(r);
 					}
 				}
 			}
 		}
-		return allAssignableRoles;
 	}
 
 	public Vector<Role> getAllSortedRoles() {
@@ -1498,10 +1525,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	/**
-	 * Recovery method use to detect and repair inconstencies in the model regarding Process and ProcessDMEntities.
+	 * Recovery method use to detect and repair inconsistencies in the model regarding Process and ProcessDMEntities.
 	 */
 
-	public void checkProcessDMEntitiesConsitency() {
+	public void checkProcessDMEntitiesConsistency() {
 		int processCount = getAllLocalFlexoProcesses().size();
 		int processDMEntityCount = getProject().getDataModel().getProcessInstanceRepository().getEntities().size();
 		if (processCount != processDMEntityCount) {

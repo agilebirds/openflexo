@@ -37,13 +37,12 @@ import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.antar.binding.KeyValueProperty;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.DataBinding;
@@ -57,6 +56,8 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBDropDownColumn;
+import org.openflexo.fib.model.FIBFile;
+import org.openflexo.fib.model.FIBFile.FileMode;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
 import org.openflexo.fib.model.FIBIconColumn;
@@ -316,7 +317,8 @@ public class FIBConverter {
 		newInspector.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		newInspector.addToParameters(new FIBParameter("title", im.title));
 		try {
-			newInspector.setControllerClass(Class.forName("org.openflexo.inspector.FIBInspectorController"));
+			newInspector.setControllerClass((Class<? extends FIBController>) Class
+					.forName("org.openflexo.inspector.FIBInspectorController"));
 		} catch (ClassNotFoundException e1) {
 			error("Not found class: org.openflexo.inspector.FIBInspectorController");
 			// exit(false);
@@ -413,12 +415,39 @@ public class FIBConverter {
 							// hackDeLaMort = ToolBox.replaceStringByStringInString("!=", " != ", hackDeLaMort);
 							// hackDeLaMort = ToolBox.replaceStringByStringInString("=", " = ", hackDeLaMort);
 							// System.out.println("Converted "+pm.conditional+" to "+hackDeLaMort);
-							Expression condition = parser.parse(hackDeLaMort);
+							Expression condition = parser.parse(hackDeLaMort, null);
 							// System.out.println("Expression="+condition);
-							conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
+							try {
+								conditional = condition.transform(new ExpressionTransformer() {
+									@Override
+									public Expression performTransformation(Expression e) throws TransformException {
+										if (e instanceof Variable) {
+											Variable value = (Variable) e;
+											if (tm.getPropertyNamed(value.getName()) != null)
+												return new Variable("data." + value.getName());
+											else {
+												Type accessedType = getAccessedType(value.getName(), dataClass);
+												// KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass,value.getValue());
+												// if (kvp != null) {
+												if (accessedType != null) {
+													return new Variable("data." + value.getName());
+												} else {
+													return new Variable('"' + value.getName() + '"');
+												}
+											}
+										}
+										return e;
+									}
+								});
+							} catch (TransformException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+							/*conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
 									new org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory() {
 										@Override
-										public Expression makeVariable(Word value) {
+										public Expression makeVariable(Word value, Bindable bindable) {
 											if (tm.getPropertyNamed(value.getValue()) != null)
 												return new Variable("data." + value.getValue());
 											else {
@@ -432,18 +461,18 @@ public class FIBConverter {
 												}
 											}
 										}
-									}, parser.getFunctionFactory()));
+									}, parser.getFunctionFactory()), null);*/
 							// System.out.println("conditional="+conditional);
 							// System.out.println("conditional="+conditional);
 							widget.setVisible(new DataBinding(conditional.toString()));
 							bindings.add(widget.getVisible());
-						} catch (ParseException e) {
+						} catch (org.openflexo.antar.expr.oldparser.ParseException e) {
 							error("Cound not parse: " + hackDeLaMort);
 							e.printStackTrace();
-						} catch (TypeMismatchException e) {
+						}/* catch (TypeMismatchException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+							}*/
 					}
 
 					// Handle display label
@@ -710,15 +739,15 @@ public class FIBConverter {
 			FIBTextField tf = new FIBTextField();
 			if (pm.hasValueForParameter(TextFieldWidget.COLUMNS_PARAM)) {
 				handleParam(TextFieldWidget.COLUMNS_PARAM, unhandledParams);
-				tf.columns = pm.getIntValueForParameter(TextFieldWidget.COLUMNS_PARAM);
+				tf.setColumns(pm.getIntValueForParameter(TextFieldWidget.COLUMNS_PARAM));
 			}
 			if (pm.hasValueForParameter(TextFieldWidget.PASSWORD_PARAM)) {
 				handleParam(TextFieldWidget.PASSWORD_PARAM, unhandledParams);
-				tf.passwd = pm.getBooleanValueForParameter(TextFieldWidget.PASSWORD_PARAM);
+				tf.setPasswd(pm.getBooleanValueForParameter(TextFieldWidget.PASSWORD_PARAM));
 			}
 			if (pm.hasValueForParameter(TextFieldWidget.VALIDATE_ON_RETURN)) {
 				handleParam(TextFieldWidget.VALIDATE_ON_RETURN, unhandledParams);
-				tf.validateOnReturn = pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
+				tf.setValidateOnReturn(pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN));
 			}
 			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_FIELD)) {
 				tf.setReadOnly(true);
@@ -731,7 +760,7 @@ public class FIBConverter {
 			ta.setUseScrollBar(true);
 			if (pm.hasValueForParameter(TextAreaWidget.COLUMNS)) {
 				handleParam(TextAreaWidget.COLUMNS, unhandledParams);
-				ta.columns = pm.getIntValueForParameter(TextAreaWidget.COLUMNS);
+				ta.setColumns(pm.getIntValueForParameter(TextAreaWidget.COLUMNS));
 			}
 			if (pm.hasValueForParameter(TextAreaWidget.ROWS)) {
 				handleParam(TextAreaWidget.ROWS, unhandledParams);
@@ -739,7 +768,7 @@ public class FIBConverter {
 			}
 			if (pm.hasValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN)) {
 				handleParam(TextAreaWidget.VALIDATE_ON_RETURN, unhandledParams);
-				ta.validateOnReturn = pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
+				ta.setValidateOnReturn(pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN));
 			}
 			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_AREA)) {
 				ta.setReadOnly(true);
@@ -894,10 +923,22 @@ public class FIBConverter {
 			handleParam("columns", unhandledParams); // Ignore this
 			if (pm.hasValueForParameter("sampleText")) {
 				handleParam("sampleText", unhandledParams);
-				c.sampleText = pm.getValueForParameter("sampleText");
+				c.setSampleText(pm.getValueForParameter("sampleText"));
 			}
 			checkUnhandledParams(pm, unhandledParams);
 			return c;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.FILE)) {
+			FIBFile fileSelector = new FIBFile();
+			fileSelector.setDirectory(false);
+			fileSelector.setMode(FileMode.SaveMode);
+			checkUnhandledParams(pm, unhandledParams);
+			return fileSelector;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.DIRECTORY)) {
+			FIBFile fileSelector = new FIBFile();
+			fileSelector.setDirectory(true);
+			fileSelector.setMode(FileMode.SaveMode);
+			checkUnhandledParams(pm, unhandledParams);
+			return fileSelector;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.CUSTOM)) {
 			return makeCustom(pm, bindings, dataClass, unhandledParams);
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.WYSIWYG_ULTRA_LIGHT)) {

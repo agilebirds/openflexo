@@ -126,7 +126,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().retrieveBaseOntologyLibrary().getOntology(ontologyURI);
+			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
+					.getOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}
@@ -315,7 +316,20 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 			model.setShowDataProperties(getSelectDataProperties());
 			model.setShowAnnotationProperties(getSelectAnnotationProperties());
 			model.setShowOWLAndRDFConcepts(getShowOWLAndRDFConcepts());
-			model.recomputeStructure();
+			/*System.out.println("Recomputing...");
+			System.out.println("context=" + getContext());
+			System.out.println("getStrictMode()=" + getStrictMode());
+			System.out.println("getHierarchicalMode()=" + getHierarchicalMode());
+			System.out.println("getDisplayPropertiesInClasses()=" + getDisplayPropertiesInClasses());
+			System.out.println("getRootClass()=" + getRootClass());
+			System.out.println("getDomain()=" + getDomain());
+			System.out.println("getRange()=" + getRange());
+			System.out.println("getDataType()=" + getDataType());
+			System.out.println("getSelectObjectProperties()=" + getSelectObjectProperties());
+			System.out.println("getSelectDataProperties()=" + getSelectDataProperties());
+			System.out.println("getSelectAnnotationProperties()=" + getSelectAnnotationProperties());
+			System.out.println("getShowOWLAndRDFConcepts()=" + getShowOWLAndRDFConcepts());
+			model.recomputeStructure();*/
 		}
 		return model;
 	}
@@ -381,8 +395,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				selector.setSelectObjectProperties(true);
 				selector.setSelectDataProperties(true);
 				selector.setStrictMode(true);
-				selector.setDomainClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmMode");
-				selector.setRangeClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmSubMode");
+				selector.setDomainClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#RootClassForOutputModel1");
+				// selector.setRangeClassURI("http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmSubMode");
 				return makeArray(selector);
 			}
 

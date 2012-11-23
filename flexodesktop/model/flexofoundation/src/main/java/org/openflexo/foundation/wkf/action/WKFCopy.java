@@ -47,12 +47,12 @@ public class WKFCopy extends FlexoAction<WKFCopy, FlexoModelObject, FlexoModelOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 
 			return !(object instanceof FlexoPetriGraph) && !(object instanceof FlexoProcess) && !(object instanceof WKFGroup);
 		}

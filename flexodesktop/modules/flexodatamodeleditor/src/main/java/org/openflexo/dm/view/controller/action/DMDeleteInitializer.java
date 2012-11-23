@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -73,7 +73,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DMDelete action) {
+			public boolean run(EventObject e, DMDelete action) {
 				// Selection is empty, nothing to delete, forget it
 				if (action.getObjectsToDelete().size() == 0) {
 					return false;
@@ -83,7 +83,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 				DMObject lastDeletedParent = null;
 				DMObject lastDeleted = action.getObjectsToDelete().lastElement();
 				if (lastDeleted != null) {
-					lastDeletedParent = (DMObject) lastDeleted.getParent();
+					lastDeletedParent = lastDeleted.getParent();
 					action.setContext(lastDeletedParent);
 				}
 				// Is there something to ask about deletion ?
@@ -225,8 +225,8 @@ public class DMDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DMDelete action) {
-				getControllerActionInitializer().getDMSelectionManager().resetSelection();
+			public boolean run(EventObject e, DMDelete action) {
+				getControllerActionInitializer().getSelectionManager().resetSelection();
 				// getDMSelectionManager().processDeletionOfSelected();
 				ModuleView<?> view = getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
 				if (view instanceof DMView) {
@@ -247,13 +247,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(DMDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

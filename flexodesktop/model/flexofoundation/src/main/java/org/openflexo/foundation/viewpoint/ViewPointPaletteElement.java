@@ -48,7 +48,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	private boolean boundLabelToElementName = true;
 
 	// Represent graphical representation to be used as representation in the palette
-	private ShapeGraphicalRepresentation graphicalRepresentation;
+	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 
 	// Represent graphical representation to be used as overriding representation
 	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
@@ -287,11 +287,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return Inspectors.VPM.CALC_PALETTE_ELEMENT_INSPECTOR;
 	}
 
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
@@ -363,13 +363,17 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			this.patternRoleName = patternRoleName;
 		}
 
-		public abstract GraphicalRepresentation getGraphicalRepresentation();
+		public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
+		@Override
+		public String getLanguageRepresentation() {
+			return "<not_implemented:" + getFullyQualifiedName() + ">";
+		}
 	}
 
 	public static class ShapeOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ShapeGraphicalRepresentation graphicalRepresentation;
+		private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
 		public ShapeOverridingGraphicalRepresentation(ViewPointBuilder builder) {
@@ -377,17 +381,17 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		}
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation gr) {
+		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation<?> gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
+		public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
@@ -395,7 +399,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ConnectorGraphicalRepresentation graphicalRepresentation;
+		private ConnectorGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
 		public ConnectorOverridingGraphicalRepresentation(ViewPointBuilder builder) {
@@ -403,17 +407,17 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		}
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation gr) {
+		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation<?> gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
@@ -429,6 +433,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			setChanged();
 			notifyObservers(new DataModification("boundLabelToElementName", !boundLabelToElementName, boundLabelToElementName));
 		}
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

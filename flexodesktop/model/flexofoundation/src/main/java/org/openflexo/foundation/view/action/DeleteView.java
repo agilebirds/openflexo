@@ -52,12 +52,12 @@ public class DeleteView extends FlexoAction<DeleteView, AbstractViewObject, View
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractViewObject view, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isVisibleForSelection(AbstractViewObject view, Vector<ViewLibraryObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewLibraryObject> globalSelection) {
+		public boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewLibraryObject> globalSelection) {
 			return view instanceof View || view instanceof ViewDefinition;
 		}
 
