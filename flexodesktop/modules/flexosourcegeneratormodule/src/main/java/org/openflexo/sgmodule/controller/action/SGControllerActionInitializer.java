@@ -22,6 +22,7 @@ package org.openflexo.sgmodule.controller.action;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.action.CompareFilesInitializer;
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.cg.CGFile;
@@ -154,6 +155,7 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 		new OpenDiffEditorInitializer(this).init();
 		new OpenFileInExplorerInitializer(this).init();
 		new CompareTemplatesInNewWindowInitializer(this).init();
+		new CompareFilesInitializer(this).init();
 
 		// Templates management
 		new AddCustomTemplateRepositoryInitializer(this).init();
