@@ -22,6 +22,7 @@ package org.openflexo.ws.client.PPMWebService;
 
 import java.util.StringTokenizer;
 
+@Deprecated
 public class PPMRole extends PPMObject implements java.io.Serializable {
 	private java.lang.String rgbColor;
 

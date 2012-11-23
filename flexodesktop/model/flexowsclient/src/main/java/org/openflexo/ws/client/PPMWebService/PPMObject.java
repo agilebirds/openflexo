@@ -19,6 +19,7 @@
  */
 package org.openflexo.ws.client.PPMWebService;
 
+@Deprecated
 public class PPMObject {
 
 	protected java.lang.String name;

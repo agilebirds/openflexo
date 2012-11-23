@@ -227,7 +227,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	private ModuleInspectorController mainInspectorController;
 
-	private PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
+	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
 
 	/**
 	 * Constructor
@@ -1116,7 +1116,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		Map<FlexoModelObject, ModuleView<?>> projectViews = perpsectiveViews.get(object.getProject());
 		if (projectViews == null) {
 			perpsectiveViews.put(object.getProject(), projectViews = new HashMap<FlexoModelObject, ModuleView<?>>());
-			manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this, object.getProject());
+			if (object.getProject() != null) {
+				manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this, object.getProject());
+			}
 		}
 		ModuleView<?> moduleView = projectViews.get(object);
 		if (moduleView == null) {
