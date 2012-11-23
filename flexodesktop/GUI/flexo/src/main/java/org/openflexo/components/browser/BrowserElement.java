@@ -198,7 +198,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		BrowserElement current = this;
 		while (i >= 0) {
 			path[i] = current;
-			current = (BrowserElement) current.getParent();
+			current = current.getParent();
 			i--;
 		}
 		return new TreePath(path);
@@ -475,6 +475,10 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		return refreshRequested;
 	}
 
+	public boolean isRoot() {
+		return !isDeleted() && getParent() == null;
+	}
+
 	// ==========================================================================
 	// ======================= TreeNode implementation
 	// ==========================
@@ -499,7 +503,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public BrowserElement getParent() {
 		return _parent;
 	}
 
