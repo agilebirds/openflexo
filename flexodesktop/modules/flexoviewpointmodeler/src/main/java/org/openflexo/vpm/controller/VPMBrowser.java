@@ -47,7 +47,8 @@ public abstract class VPMBrowser extends ProjectBrowser {
 	// ================================================
 
 	public VPMBrowser(VPMController controller) {
-		super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
+		super(controller.getEditor(),
+				controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */, false);
 		_controller = controller;
 		update();
 	}
