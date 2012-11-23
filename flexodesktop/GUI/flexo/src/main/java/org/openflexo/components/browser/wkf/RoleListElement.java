@@ -34,6 +34,8 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -58,8 +60,12 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 
 	@Override
 	public Icon getIcon() {
-		if (getRoleList().isImportedRoleList()) {
-			return WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON;
+		if (getRoleList().isImportedRoleList() || !isRoot() && getParent().getElementType() == BrowserElementType.ROLE_LIST) {
+			if (getRoleList().isImportedRoleList()) {
+				return IconFactory.getImageIcon(WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON, IconLibrary.WARNING);
+			} else {
+				return WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON;
+			}
 		} else {
 			return super.getIcon();
 		}
@@ -68,6 +74,14 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	@Override
 	protected void buildChildrenVector() {
 		clearObserving();
+		/*if (getRoleList().getProject().getProjectData() != null) {
+			for (FlexoProjectReference ref : getRoleList().getProject().getProjectData().getImportedProjects()) {
+				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+					addToChilds(ref.getReferredProject().getWorkflow().getRoleList());
+				}
+
+			}
+		}*/
 		// We add the roles
 		if (!getRoleList().isImportedRoleList()) {
 			switch (getProjectBrowser().getRoleViewMode()) {
