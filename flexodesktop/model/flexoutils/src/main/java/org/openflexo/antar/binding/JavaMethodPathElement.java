@@ -110,12 +110,12 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 		System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
-		Object[] args = new Object[getArguments().size()];
+		Object[] args = new Object[getFunction().getArguments().size()];
 		int i = 0;
 
-		for (FunctionArgument a : getArguments()) {
-			args[i] = TypeUtils.castTo(a.getValue().getBindingValue(context),
-					getMethodDefinition().getMethod().getGenericParameterTypes()[i]);
+		for (Function.FunctionArgument a : getFunction().getArguments()) {
+			args[i] = TypeUtils.castTo(getParameter(a).getBindingValue(context), getMethodDefinition().getMethod()
+					.getGenericParameterTypes()[i]);
 			i++;
 		}
 		try {
@@ -124,7 +124,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			StringBuffer warningMessage = new StringBuffer("While evaluating method " + getMethodDefinition().getMethod()
 					+ " exception occured: " + e.getMessage());
 			warningMessage.append(", object = " + target);
-			for (i = 0; i < getArguments().size(); i++) {
+			for (i = 0; i < getFunction().getArguments().size(); i++) {
 				warningMessage.append(", arg[" + i + "] = " + args[i]);
 			}
 			logger.warning(warningMessage.toString());

@@ -28,7 +28,7 @@ import java.util.logging.Level;
 
 import javax.swing.JButton;
 
-import org.openflexo.antar.binding.BindingExpression;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ButtonsControlPanel;
@@ -103,29 +103,24 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 		// BindingExpression newBindingExpression = new BindingExpression(new BindingExpression.BindingValueVariable(new
 		// Variable("parent")));
 
-		if (!(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
+		if (_bindingSelector.getEditedObject().getExpression() == null || !(_bindingSelector.getEditedObject().isExpression())) {
 			BindingSelector.logger.severe("Unexpected object " + _bindingSelector.getEditedObject().getClass().getSimpleName()
 					+ " found instead of BindingExpression");
-			_bindingSelector._editedObject = _bindingSelector.makeBindingExpression();
+			_bindingSelector.getEditedObject().setExpression(_bindingSelector.makeBindingExpression());
 		}
 
-		if (_bindingSelector.getEditedObject() == null || ((BindingExpression) _bindingSelector.getEditedObject()).getExpression() == null) {
+		/*if (_bindingSelector.getEditedObject() == null || ((BindingExpression) _bindingSelector.getEditedObject()).getExpression() == null) {
 			_bindingSelector._editedObject = _bindingSelector.makeBindingExpression();
-		}
+		}*/
 
 		if (BindingSelector.logger.isLoggable(Level.FINE)) {
-			BindingSelector.logger
-					.fine("init() called in BindingExpressionSelectorPanel with "
-							+ _bindingSelector.getEditedObject()
-							+ " expression="
-							+ (_bindingSelector.getEditedObject() != null
-									&& _bindingSelector.getEditedObject() instanceof BindingExpression ? ((BindingExpression) _bindingSelector
-									.getEditedObject()).getExpression() : null));
+			BindingSelector.logger.fine("init() called in BindingExpressionSelectorPanel with " + _bindingSelector.getEditedObject()
+					+ " expression=" + _bindingSelector.getEditedObject().getExpression());
 		}
 
-		_expressionPanel = new BindingExpressionPanel((BindingExpression) _bindingSelector.getEditedObject()) {
+		_expressionPanel = new BindingExpressionPanel(_bindingSelector.getEditedObject()) {
 			@Override
-			protected void fireEditedExpressionChanged(BindingExpression expression) {
+			protected void fireEditedExpressionChanged(DataBinding expression) {
 				super.fireEditedExpressionChanged(expression);
 				updateApplyButtonStatus();
 				BindingExpressionSelectorPanel.this._bindingSelector.checkIfDisplayModeShouldChange(expression, true);
@@ -194,7 +189,7 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 			BindingSelector.logger.fine("update() called for BindingExpressionSelectorPanel");
 		}
 
-		if (_bindingSelector.getEditedObject() != null && !(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
+		/*if (_bindingSelector.getEditedObject() != null && !(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
 			BindingSelector.logger.warning("update() called in BindingExpressionSelectorPanel with object of type "
 					+ _bindingSelector.getEditedObject().getClass().getSimpleName());
 			return;
@@ -202,30 +197,32 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 
 		BindingExpression bindingExpression = (BindingExpression) _bindingSelector.getEditedObject();
 
-		_expressionPanel.setEditedExpression(bindingExpression);
+		_expressionPanel.setEditedExpression(bindingExpression);*/
+
+		_expressionPanel.setEditedExpression(_bindingSelector.getEditedObject());
 
 		updateApplyButtonStatus();
 
 	}
 
 	void updateApplyButtonStatus() {
-		if (_bindingSelector.getEditedObject() != null && !(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
+		/*if (_bindingSelector.getEditedObject() != null && !(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
 			BindingSelector.logger.warning("updateApplyButtonStatus() called in BindingExpressionSelectorPanel with object of type "
 					+ _bindingSelector.getEditedObject().getClass().getSimpleName());
 			return;
-		}
+		}*/
 
-		BindingExpression bindingExpression = (BindingExpression) _bindingSelector.getEditedObject();
+		DataBinding<?> bindingExpression = _bindingSelector.getEditedObject();
 
 		// Update apply button state
-		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isBindingValid());
-		if (bindingExpression != null && bindingExpression.isBindingValid()) {
+		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isValid());
+		if (bindingExpression != null && bindingExpression.isValid()) {
 			if (ToolBox.isMacOSLaf()) {
 				_applyButton.setSelected(true);
 			}
 		}
 		if (bindingExpression != null) {
-			_bindingSelector.getTextField().setForeground(bindingExpression.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setForeground(bindingExpression.isValid() ? Color.BLACK : Color.RED);
 		}
 	}
 

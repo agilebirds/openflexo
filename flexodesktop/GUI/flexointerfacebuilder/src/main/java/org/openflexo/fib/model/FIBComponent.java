@@ -1339,7 +1339,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 		List<BindingValue> primitives;
 		try {
-			primitives = Expression.extractPrimitives(binding.getExpression());
+			primitives = Expression.extractBindingValues(binding.getExpression());
 
 			FIBComponent rootComponent = getRootComponent();
 			Iterator<FIBComponent> subComponents = rootComponent.subComponentIterator();

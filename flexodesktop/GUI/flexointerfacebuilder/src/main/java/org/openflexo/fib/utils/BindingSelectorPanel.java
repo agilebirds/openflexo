@@ -70,8 +70,8 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
-import org.openflexo.antar.binding.FunctionPathElement.FunctionArgument;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
 import org.openflexo.antar.expr.BindingValue;
@@ -235,18 +235,18 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		return null;
 	}
 
-	protected class MethodCallBindingsModel extends AbstractModel<FunctionPathElement, FunctionArgument> {
+	protected class MethodCallBindingsModel extends AbstractModel<FunctionPathElement, Function.FunctionArgument> {
 		public MethodCallBindingsModel() {
 			super(null);
-			addToColumns(new IconColumn<FunctionArgument>("icon", 25) {
+			addToColumns(new IconColumn<Function.FunctionArgument>("icon", 25) {
 				@Override
-				public Icon getIcon(FunctionArgument entity) {
+				public Icon getIcon(Function.FunctionArgument entity) {
 					return FIBIconLibrary.METHOD_ICON;
 				}
 			});
-			addToColumns(new StringColumn<FunctionArgument>("name", 100) {
+			addToColumns(new StringColumn<Function.FunctionArgument>("name", 100) {
 				@Override
-				public String getValue(FunctionArgument arg) {
+				public String getValue(Function.FunctionArgument arg) {
 					if (arg != null) {
 						return arg.getArgumentName();
 					}
@@ -257,54 +257,62 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					return "null";
 				}
 			});
-			addToColumns(new StringColumn<FunctionArgument>("type", 100) {
+			addToColumns(new StringColumn<Function.FunctionArgument>("type", 100) {
 				@Override
-				public String getValue(FunctionArgument arg) {
+				public String getValue(Function.FunctionArgument arg) {
 					if (arg != null) {
 						return TypeUtils.simpleRepresentation(arg.getArgumentType());
 					}
 					return "null";
 				}
 			});
-			addToColumns(new BindingValueColumn<FunctionArgument>("value", 250, true) {
+			addToColumns(new BindingValueColumn<Function.FunctionArgument>("value", 250, true) {
 
 				@Override
-				public DataBinding getValue(FunctionArgument arg) {
-					return arg.getValue();
+				public DataBinding getValue(Function.FunctionArgument arg) {
+					return getFunctionPathElement().getParameter(arg);
 				}
 
 				@Override
-				public void setValue(FunctionArgument arg, DataBinding aValue) {
+				public void setValue(Function.FunctionArgument arg, DataBinding aValue) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Sets value " + arg + " to be " + aValue);
 					}
 					if (arg != null) {
-						arg.setValue(aValue);
+						getFunctionPathElement().setParameter(arg, aValue);
 					}
 
 					bindingSelector.fireEditedObjectChanged();
 				}
 
 				@Override
-				public Bindable getBindableFor(DataBinding value, FunctionArgument rowObject) {
-					return bindingSelector.getBindable();
-				}
-
-				@Override
-				public BindingDefinition getBindingDefinitionFor(DataBinding value, FunctionArgument rowObject) {
-					if (rowObject != null) {
-						return rowObject.getValue().getBindingDefinition();
+				public Bindable getBindableFor(DataBinding<?> value, Function.FunctionArgument rowObject) {
+					if (value != null) {
+						return value.getOwner();
 					}
 					return null;
+					// return bindingSelector.getBindable();
 				}
 
 				@Override
-				public boolean allowsCompoundBinding(DataBinding value) {
+				public BindingDefinition getBindingDefinitionFor(DataBinding<?> value, Function.FunctionArgument rowObject) {
+					if (value != null) {
+						return value.getBindingDefinition();
+					}
+					return null;
+					/*if (rowObject != null) {
+						return getFunctionPathElement().getParameter(rowObject).getBindingDefinition();
+					}
+					return null;*/
+				}
+
+				@Override
+				public boolean allowsCompoundBinding(DataBinding<?> value) {
 					return true;
 				}
 
 				@Override
-				public boolean allowsNewEntryCreation(DataBinding value) {
+				public boolean allowsNewEntryCreation(DataBinding<?> value) {
 					return false;
 				}
 			});
@@ -324,9 +332,9 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		}
 
 		@Override
-		public FunctionArgument elementAt(int row) {
+		public Function.FunctionArgument elementAt(int row) {
 			if (row >= 0 && row < getRowCount()) {
-				return getFunctionPathElement().getArguments().get(row);
+				return getFunctionPathElement().getFunction().getArguments().get(row);
 			} else {
 				return null;
 			}
@@ -335,11 +343,19 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		@Override
 		public int getRowCount() {
 			if (getFunctionPathElement() != null) {
-				return getFunctionPathElement().getArguments().size();
+				return getFunctionPathElement().getFunction().getArguments().size();
 			}
 			return 0;
 		}
 
+		@Override
+		public void setModel(FunctionPathElement model) {
+			System.out.println("On set le modele avec " + model);
+			if (model != null) {
+				model.instanciateParameters(bindingSelector.getBindable());
+			}
+			super.setModel(model);
+		}
 	}
 
 	protected class MethodCallBindingsPanel extends TabularPanel {
@@ -758,6 +774,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					+ " _selectedPathElementIndex=" + _selectedPathElementIndex);
 		}
 		if (bindingSelector.editionMode == EditionMode.COMPOUND_BINDING && bindingSelector.getEditedObject().isBindingValue()) {
+			System.out.println("On se met le method call panel a jour");
 			if (((BindingValue) bindingSelector.getEditedObject().getExpression()).isCompoundBinding() && _selectedPathElementIndex == -1) {
 				_selectedPathElementIndex = ((BindingValue) bindingSelector.getEditedObject().getExpression()).getBindingPathElementCount();
 			}
@@ -770,18 +787,23 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			} else if (_selectedPathElementIndex > bindingValue.getBindingPath().size()) {
 				_selectedPathElementIndex = -1;
 			}
+			System.out.println("Ici avec _selectedPathElementIndex=" + _selectedPathElementIndex);
 			if (_selectedPathElementIndex > -1 && bindingValue != null) {
 				JList list = _lists.get(_selectedPathElementIndex);
 				int newSelectedIndex = list.getSelectedIndex();
 				if (newSelectedIndex > 0) {
+					System.out.println("newSelectedIndex=" + newSelectedIndex);
 					BindingColumnElement selectedValue = (BindingColumnElement) list.getSelectedValue();
 					if (selectedValue.getElement() instanceof FunctionPathElement) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
 						if (currentElement instanceof FunctionPathElement
 								&& ((FunctionPathElement) currentElement).getFunction().equals(
 										((FunctionPathElement) selectedValue.getElement()).getFunction())) {
+							System.out.println("On y arrive");
 							getMethodCallBindingsModel().setModel((FunctionPathElement) currentElement);
 							return;
+						} else {
+							System.out.println("On y arrive pas");
 						}
 					}
 				}

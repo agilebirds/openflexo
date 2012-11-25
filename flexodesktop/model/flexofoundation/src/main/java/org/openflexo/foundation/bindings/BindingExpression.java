@@ -30,11 +30,12 @@ import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
-import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.foundation.DataModification;
@@ -394,6 +395,11 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
+		}
+
+		@Override
 		public String toString() {
 			if (constant != null) {
 				return constant.toString();
@@ -496,6 +502,11 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public Expression transform(ExpressionTransformer transformer) throws TransformException {
 			return transformer.performTransformation(this);
+		}
+
+		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
 		}
 
 		@Override
@@ -671,6 +682,11 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public Expression transform(ExpressionTransformer transformer) throws TransformException {
 			return transformer.performTransformation(this);
+		}
+
+		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
 		}
 
 		@Override

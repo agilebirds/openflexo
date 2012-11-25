@@ -1,9 +1,11 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
-import java.util.Vector;
+
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 /**
  * Modelize a compound path element in a binding path, which is the symbolic representation of a call to a function and with a given amount
@@ -17,82 +19,36 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	private BindingPathElement parent;
 	private Function function;
 	private Type type;
-	private List<FunctionArgument> arguments;
+	private HashMap<Function.FunctionArgument, DataBinding<?>> parameters;
 
-	/**
-	 * Implemented by all classes which defines a function in the context of data binding
-	 * 
-	 * @author sylvain
-	 * 
-	 */
-	public static interface Function {
-
-		public String getName();
-
-		public Type getReturnType();
-	}
-
-	/**
-	 * Implementation of an argument of a {@link Function}
-	 * 
-	 * @author sylvain
-	 * 
-	 */
-	public class FunctionArgument extends Observable {
-
-		private Function function;
-		private String argumentName;
-		private Type argumentType;
-		private DataBinding<?> value;
-
-		public FunctionArgument(Function function, String argumentName, Type argumentType, DataBinding<?> value) {
-			super();
-			this.function = function;
-			this.argumentName = argumentName;
-			this.argumentType = argumentType;
-			this.value = value;
-		}
-
-		public Function getFunction() {
-			return function;
-		}
-
-		public String getArgumentName() {
-			return argumentName;
-		}
-
-		public void setArgumentName(String argumentName) {
-			this.argumentName = argumentName;
-		}
-
-		public Type getArgumentType() {
-			return argumentType;
-		}
-
-		public void setArgumentType(Type argumentType) {
-			this.argumentType = argumentType;
-		}
-
-		public DataBinding<?> getValue() {
-			return value;
-		}
-
-		public void setValue(DataBinding<?> value) {
-			this.value = value;
-		}
-	}
-
-	public FunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> args) {
+	public FunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> paramValues) {
 		this.parent = parent;
 		this.function = function;
 		this.type = function.getReturnType();
-		arguments = new Vector<FunctionArgument>();
-		if (args != null) {
+		parameters = new HashMap<Function.FunctionArgument, DataBinding<?>>();
+		if (paramValues != null) {
 			int i = 0;
-			for (DataBinding<?> v : args) {
-				FunctionArgument arg = new FunctionArgument(function, "arg" + i, v.getAnalyzedType(), v);
-				arguments.add(arg);
+			for (Function.FunctionArgument arg : function.getArguments()) {
+				if (i < paramValues.size()) {
+					DataBinding<?> paramValue = paramValues.get(i);
+					setParameter(arg, paramValue);
+				}
 				i++;
+			}
+		}
+	}
+
+	public void instanciateParameters(Bindable bindable) {
+		for (Function.FunctionArgument arg : function.getArguments()) {
+			DataBinding<?> parameter = getParameter(arg);
+			if (parameter == null) {
+				parameter = new DataBinding<Object>(bindable, arg.getArgumentType(), BindingDefinitionType.GET);
+				parameter.setUnparsedBinding("");
+				setParameter(arg, parameter);
+			} else {
+				parameter.setOwner(bindable);
+				parameter.setDeclaredType(arg.getArgumentType());
+				parameter.setBindingDefinitionType(BindingDefinitionType.GET);
 			}
 		}
 	}
@@ -124,8 +80,8 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 			returned.append(getFunction().getName());
 			returned.append("(");
 			boolean isFirst = true;
-			for (FunctionArgument a : getArguments()) {
-				returned.append((isFirst ? "" : ",") + a.getValue());
+			for (Function.FunctionArgument a : getFunction().getArguments()) {
+				returned.append((isFirst ? "" : ",") + getParameter(a));
 			}
 			returned.append(")");
 			serializationRepresentation = returned.toString();
@@ -138,8 +94,12 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 		return false;
 	}
 
-	public List<FunctionArgument> getArguments() {
-		return arguments;
+	public DataBinding<?> getParameter(Function.FunctionArgument argument) {
+		return parameters.get(argument);
+	}
+
+	public void setParameter(Function.FunctionArgument argument, DataBinding<?> value) {
+		parameters.put(argument, value);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class TestExpression extends TestCase {
 
 	public void testVariable1() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("this+is+a+test");
+			List<BindingValue> vars = Expression.extractBindingValues("this+is+a+test");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new Variable("this")));
@@ -39,7 +39,7 @@ public class TestExpression extends TestCase {
 
 	public void testVariable2() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("i+(am-a/test)+2");
+			List<BindingValue> vars = Expression.extractBindingValues("i+(am-a/test)+2");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new Variable("i")));
@@ -57,7 +57,7 @@ public class TestExpression extends TestCase {
 
 	public void testVariable3() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("this.is.a.little.test+and+this+is.not()");
+			List<BindingValue> vars = Expression.extractBindingValues("this.is.a.little.test+and+this+is.not()");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new BindingValue("this.is.a.little.test")));
@@ -75,7 +75,7 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive1() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("i+am+a+test");
+			List<BindingValue> vars = Expression.extractBindingValues("i+am+a+test");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new Variable("i")));
@@ -93,7 +93,7 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive2() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("i+(am-a/test)+2");
+			List<BindingValue> vars = Expression.extractBindingValues("i+(am-a/test)+2");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new Variable("i")));
@@ -111,7 +111,7 @@ public class TestExpression extends TestCase {
 
 	public void testPrimitive3() {
 		try {
-			List<BindingValue> vars = Expression.extractPrimitives("i.am.a.little.test+and+following+is.not()");
+			List<BindingValue> vars = Expression.extractBindingValues("i.am.a.little.test+and+following+is.not()");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
 			assertTrue(vars.contains(new BindingValue("i.am.a.little.test")));

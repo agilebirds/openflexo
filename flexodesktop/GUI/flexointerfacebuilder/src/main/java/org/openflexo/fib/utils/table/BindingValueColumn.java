@@ -42,9 +42,9 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 		super(title, defaultWidth);
 	}
 
-	public abstract boolean allowsCompoundBinding(DataBinding value);
+	public abstract boolean allowsCompoundBinding(DataBinding<?> value);
 
-	public abstract boolean allowsNewEntryCreation(DataBinding value);
+	public abstract boolean allowsNewEntryCreation(DataBinding<?> value);
 
 	@Override
 	public Class<DataBinding> getValueClass() {
@@ -55,7 +55,7 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 
 	private BindingSelector _editSelector;
 
-	private void updateSelectorWith(BindingSelector selector, D rowObject, DataBinding value) {
+	private void updateSelectorWith(BindingSelector selector, D rowObject, DataBinding<?> value) {
 		DataBinding oldBV = selector.getEditedObject();
 		if (oldBV == null || !oldBV.equals(value)) {
 			// selector.setEditedObjectAndUpdateBDAndOwner(value);
@@ -76,9 +76,9 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 		}
 	}
 
-	public abstract Bindable getBindableFor(DataBinding value, D rowObject);
+	public abstract Bindable getBindableFor(DataBinding<?> value, D rowObject);
 
-	public abstract BindingDefinition getBindingDefinitionFor(DataBinding value, D rowObject);
+	public abstract BindingDefinition getBindingDefinitionFor(DataBinding<?> value, D rowObject);
 
 	@Override
 	protected BindingSelector getViewSelector(D rowObject, DataBinding value) {

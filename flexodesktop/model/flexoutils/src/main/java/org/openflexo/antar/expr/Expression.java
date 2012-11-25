@@ -92,12 +92,45 @@ public abstract class Expression {
 	}
 
 	/**
-	 * Returns an iterator on atomic expressions
+	 * Return a list containing all {@link BindingValue} used in this expression
+	 * 
+	 * @param expression
+	 * @return
+	 * @throws ParseException
+	 * @throws TypeMismatchException
+	 */
+	public List<BindingValue> getAllBindingValues() {
+
+		final List<BindingValue> returned = new ArrayList<BindingValue>();
+
+		try {
+			visit(new ExpressionVisitor() {
+				@Override
+				public void visit(Expression e) {
+					if (e instanceof BindingValue) {
+						returned.add((BindingValue) e);
+					}
+				}
+			});
+		} catch (VisitorException e) {
+			logger.warning("Unexpected " + e);
+		}
+
+		return returned;
+	}
+
+	/**
+	 * Returns an iterator on atomic expressions, which are generally all expressions that are not decomposable into smaller expressions (an
+	 * atomic expression is a constant or a binding value, or a variable). An atomic expression has no child.
 	 */
 	public Iterator<Expression> atomicExpressions() {
 		return getAllAtomicExpressions().iterator();
 	}
 
+	/**
+	 * Returns all atomic expressions defined in this expression, which are generally all expressions that are not decomposable into smaller
+	 * expressions (an atomic expression is a constant or a binding value, or a variable). An atomic expression has no child.
+	 */
 	public Vector<Expression> getAllAtomicExpressions() {
 		Vector<Expression> returned = new Vector<Expression>();
 		appendAllAtomicExpressions(returned, this);
@@ -114,6 +147,12 @@ public abstract class Expression {
 		}
 	}
 
+	/**
+	 * Return the direct childs of this expression, which are involved in the direct decomposition of this expression. An atomic expression
+	 * has no child.
+	 * 
+	 * @return
+	 */
 	protected abstract Vector<Expression> getChilds();
 
 	/**
@@ -123,6 +162,7 @@ public abstract class Expression {
 	 * @return
 	 * @throws TypeMismatchException
 	 */
+	@Deprecated
 	public Expression evaluate(final Hashtable<String, ?> variables) throws TypeMismatchException {
 		try {
 			Expression resolvedExpression = transform(new ExpressionTransformer() {
@@ -142,39 +182,9 @@ public abstract class Expression {
 			e.printStackTrace();
 			return null;
 		}
-
-		/*return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value, Bindable bindable) {
-				Object valueObject = variables.get(value.getValue());
-				if (valueObject == null) {
-					return ObjectSymbolicConstant.NULL;
-				}
-				if (valueObject instanceof String) {
-					return new Constant.StringConstant((String) valueObject);
-				} else if (valueObject instanceof Enum) {
-					return new Constant.EnumConstant(((Enum) valueObject).name());
-				} else if (valueObject instanceof Integer) {
-					return new Constant.IntegerConstant((Integer) valueObject);
-				} else if (valueObject instanceof Long) {
-					return new Constant.IntegerConstant((Long) valueObject);
-				} else if (valueObject instanceof Short) {
-					return new Constant.IntegerConstant((Short) valueObject);
-				} else if (valueObject instanceof Float) {
-					return new Constant.FloatConstant((Float) valueObject);
-				} else if (valueObject instanceof Double) {
-					return new Constant.FloatConstant((Double) valueObject);
-				} else if (valueObject instanceof Boolean) {
-					return (Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE;
-				}
-				// TODO Handle others
-				// return new Variable(value.getValue());
-				return new Constant.StringConstant(value.getValue());
-			}
-		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
-
 	}
 
+	@Deprecated
 	public boolean evaluateCondition(final Hashtable<String, ?> variables) throws TypeMismatchException, UnresolvedExpressionException {
 		// logger.info("evaluate "+this);
 		// logger.info("variables "+variables);
@@ -191,29 +201,15 @@ public abstract class Expression {
 		throw new UnresolvedExpressionException();
 	}
 
-	public static List<BindingValue> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
+	@Deprecated
+	public static List<BindingValue> extractBindingValues(String anExpression) throws ParseException, TypeMismatchException {
 
-		return extractPrimitives(ExpressionParser.parse(anExpression));
+		return extractBindingValues(ExpressionParser.parse(anExpression));
 	}
 
-	public static List<BindingValue> extractPrimitives(final Expression expression) throws ParseException, TypeMismatchException {
-
-		final List<BindingValue> returned = new ArrayList<BindingValue>();
-
-		try {
-			expression.visit(new ExpressionVisitor() {
-				@Override
-				public void visit(Expression e) {
-					if (e instanceof BindingValue) {
-						returned.add((BindingValue) e);
-					}
-				}
-			});
-		} catch (VisitorException e) {
-			logger.warning("Unexpected " + e);
-		}
-
-		return returned;
+	@Deprecated
+	public static List<BindingValue> extractBindingValues(final Expression expression) throws ParseException, TypeMismatchException {
+		return expression.getAllBindingValues();
 	}
 
 	@Override

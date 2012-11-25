@@ -50,8 +50,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
@@ -63,6 +61,7 @@ import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
 import org.openflexo.antar.expr.ConditionalExpression;
+import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
@@ -73,6 +72,7 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
+import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -219,24 +219,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_EXPRESSION_MESSAGE);
 				return;
 			} else {
-				for (Expression e : _bindingExpression.getExpression().getAllAtomicExpressions()) {
-					if (e instanceof BindingValueConstant) {
-						BindingValueConstant c = (BindingValueConstant) e;
-						if (c.getStaticBinding() == null || !c.getStaticBinding().isBindingValid()) {
-							message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "invalid_value") + " "
-									+ c.getConstant();
-							status = ExpressionParsingStatus.INVALID;
-							return;
-						}
-					}
-					if (e instanceof BindingValueVariable) {
-						BindingValueVariable v = (BindingValueVariable) e;
-						if (v.getBindingValue() == null || !v.getBindingValue().isBindingValid()) {
-							message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "invalid_binding") + " "
-									+ v.getVariable();
-							status = ExpressionParsingStatus.INVALID;
-							return;
-						}
+				for (BindingValue bv : _bindingExpression.getExpression().getAllBindingValues()) {
+					if (!bv.isValid()) {
+						message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "invalid_binding") + " " + bv;
+						status = ExpressionParsingStatus.INVALID;
+						return;
 					}
 				}
 			}
@@ -244,7 +231,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 		if (_bindingExpression.getExpression() == null) {
 			message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "cannot_parse") + " "
-					+ _bindingExpression.getUnparsableValue();
+					+ _bindingExpression.getUnparsedBinding();
 			status = ExpressionParsingStatus.INVALID;
 		} else if ((undefinedOperator = firstOperatorWithUndefinedOperand(_bindingExpression.getExpression())) != null) {
 			status = ExpressionParsingStatus.INVALID;
@@ -257,7 +244,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			}
 		} else {
 			try {
-				EvaluationType evaluationType = _bindingExpression.getEvaluationType();
+				EvaluationType evaluationType = _bindingExpression.getExpression().getEvaluationType();
 
 				if (_bindingExpression != null && _bindingExpression.getBindingDefinition() != null
 						&& _bindingExpression.getBindingDefinition().getType() != null) {
@@ -281,9 +268,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				}
 
 				if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible() && _bindingExpression != null) {
-					BindingExpression evaluatedExpression = _bindingExpression.evaluate();
-					if (evaluatedExpression.getExpression() != null) {
-						evaluationTA.setText(evaluatedExpression.getExpression().toString());
+					Expression evaluatedExpression = _bindingExpression.getExpression().evaluate();
+					if (evaluatedExpression != null) {
+						evaluationTA.setText(evaluatedExpression.toString());
 					}
 				}
 
@@ -299,13 +286,13 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	private boolean expressionIsUndefined(Expression expression) {
-		return expression instanceof BindingValueVariable && ((BindingValueVariable) expression).getName().trim().equals("");
+		return expression instanceof BindingValue && ((BindingValue) expression).getBindingVariable() == null;
 	}
 
 	private Operator firstOperatorWithUndefinedOperand(Expression expression) {
-		if (expression instanceof BindingValueVariable) {
+		if (expression instanceof BindingValue) {
 			return null;
-		} else if (expression instanceof BindingValueConstant) {
+		} else if (expression instanceof Constant) {
 			return null;
 		} else if (expression instanceof BinaryOperatorExpression) {
 			Expression leftOperand = ((BinaryOperatorExpression) expression).getLeftArgument();
@@ -330,7 +317,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		return null;
 	}
 
-	public BindingExpression getEditedExpression() {
+	public DataBinding<?> getEditedExpression() {
 		return _bindingExpression;
 	}
 
@@ -341,18 +328,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 		try {
 			Expression newExpression;
-			if (expressionTA.getText().trim().equals("") && _bindingExpression.getOwner() instanceof Bindable) {
-				newExpression = new BindingExpression.BindingValueVariable("", _bindingExpression.getOwner());
+			if (expressionTA.getText().trim().equals("")) {
+				newExpression = new BindingValue();
+				// newExpression = new BindingExpression.BindingValueVariable("", _bindingExpression.getOwner());
 			} else {
-				if (converter == null) {
-					logger.warning("Could not access to BindingExpressionConverter");
-					return;
-				}
-				Bindable bindable = null;
-				if (_bindingExpression != null) {
-					bindable = _bindingExpression.getOwner();
-				}
-				newExpression = converter.parseExpressionFromString(expressionTA.getText(), bindable);
+				newExpression = ExpressionParser.parse(expressionTA.getText());
 			}
 			if (!newExpression.equals(_bindingExpression.getExpression()) || status == ExpressionParsingStatus.INVALID) {
 				_setEditedExpression(newExpression);
@@ -593,8 +573,8 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	protected abstract class ExpressionInnerPanel extends JPanel {
 
+		private DataBinding<?> innerDataBinding;
 		protected Expression _representedExpression;
-
 		private BindingSelector _bindingSelector;
 
 		// private JTextField variableOrConstantTextField;
@@ -605,6 +585,8 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				logger.fine("Build new ExpressionInnerPanel with " + (expression != null ? expression.toString() : "null"));
 			}
 			_representedExpression = expression;
+			innerDataBinding = new DataBinding<Object>(_bindingExpression.getOwner(), Object.class, BindingDefinitionType.GET);
+			innerDataBinding.setExpression(_representedExpression);
 			update();
 			// addFocusListeners();
 		}
@@ -1056,35 +1038,35 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				}
 			}*/
 
-			else if (_representedExpression instanceof BindingExpression.BindingValueVariable
-					|| _representedExpression instanceof BindingExpression.BindingValueFunction
-					|| _representedExpression instanceof BindingExpression.BindingValueConstant) {
+			else if (_representedExpression instanceof BindingValue || _representedExpression instanceof Constant) {
 				GridBagLayout gridbag = new GridBagLayout();
 				GridBagConstraints c = new GridBagConstraints();
 				setLayout(gridbag);
-				AbstractBinding binding = null;
+				/*AbstractBinding binding = null;
 				if (_representedExpression instanceof BindingExpression.BindingValueVariable) {
 					binding = ((BindingExpression.BindingValueVariable) _representedExpression).getBindingValue();
 				} else if (_representedExpression instanceof BindingExpression.BindingValueFunction) {
 					binding = ((BindingExpression.BindingValueFunction) _representedExpression).getBindingValue();
 				} else if (_representedExpression instanceof BindingExpression.BindingValueConstant) {
 					binding = ((BindingExpression.BindingValueConstant) _representedExpression).getStaticBinding();
-				}
+				}*/
+
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Building BindingSelector with " + binding);
+					logger.fine("Building BindingSelector with " + _representedExpression);
 				}
-				_bindingSelector = new BindingSelector(binding) {
+				_bindingSelector = new BindingSelector(innerDataBinding) {
 					@Override
 					public void apply() {
 						super.apply();
-						AbstractBinding newEditedBinding = getEditedObject();
+						setRepresentedExpression(innerDataBinding.getExpression());
+						/*AbstractBinding newEditedBinding = getEditedObject();
 						if (newEditedBinding instanceof StaticBinding) {
 							setRepresentedExpression(new BindingValueConstant((StaticBinding) newEditedBinding));
 						} else if (newEditedBinding instanceof BindingValue) {
 							setRepresentedExpression(new BindingValueVariable((BindingValue) newEditedBinding));
 						} else if (newEditedBinding instanceof BindingExpression) {
 							setRepresentedExpression(((BindingExpression) newEditedBinding).getExpression());
-						}
+						}*/
 					}
 
 					@Override
@@ -1106,16 +1088,16 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					System.out.println("setting textfield to be "+((BindingExpression.BindingValueVariable)_representedExpression).getVariable().getName());
 				}*/
 
-				if (binding != null) {
+				/*if (binding != null) {
 					_bindingSelector.setBindingDefinition(binding.getBindingDefinition());
 				} else {
 					_bindingSelector.setBindingDefinition(new BindingDefinition("common", Object.class, BindingDefinitionType.GET, true));
 				}
-				_bindingSelector.setBindable(_bindingExpression);
+				_bindingSelector.setBindable(_bindingExpression);*/
 
 				// _bindingSelector.setEditedObject(binding);
-				if (binding != null) {
-					_bindingSelector.setRevertValue(binding.clone());
+				if (innerDataBinding != null) {
+					_bindingSelector.setRevertValue(innerDataBinding.clone());
 				}
 				/*variableOrConstantTextField = new JTextField();
 				variableOrConstantTextField.addActionListener(new ActionListener(){
@@ -1188,7 +1170,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	protected void appendBinaryOperator(BinaryOperator operator) {
 		// System.out.println("appendBinaryOperator " + operator);
 		if (focusReceiver != null) {
-			BindingValueVariable variable = new BindingValueVariable("", _bindingExpression);
+			BindingValue variable = new BindingValue();
 			Expression newExpression = new BinaryOperatorExpression(operator, focusReceiver.getRepresentedExpression(), variable);
 			/*logger.info("variable="+variable.getBindingValue());
 			logger.info("owner="+variable.getBindingValue().getOwner());
@@ -1208,9 +1190,8 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	protected void appendConditional() {
 		// System.out.println("appendConditional");
 		if (focusReceiver != null) {
-			BindingValueVariable condition = new BindingValueVariable("true", _bindingExpression, new BindingDefinition("condition",
-					Boolean.class, BindingDefinitionType.GET, true));
-			BindingValueVariable elseExpression = new BindingValueVariable("", _bindingExpression);
+			BindingValue condition = new BindingValue();
+			BindingValue elseExpression = new BindingValue();
 			Expression newExpression = new ConditionalExpression(condition, focusReceiver.getRepresentedExpression(), elseExpression);
 			focusReceiver.setRepresentedExpression(newExpression);
 		}

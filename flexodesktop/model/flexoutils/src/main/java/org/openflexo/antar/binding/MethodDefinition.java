@@ -21,11 +21,12 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.FunctionPathElement.Function;
 import org.openflexo.toolbox.ToolBox;
 
 public class MethodDefinition extends Observable implements Function {
@@ -34,6 +35,7 @@ public class MethodDefinition extends Observable implements Function {
 
 	private Type declaringType;
 	private Method method;
+	private ArrayList<Function.FunctionArgument> arguments;
 	private static Hashtable<Method, MethodDefinition> cache = new Hashtable<Method, MethodDefinition>();
 
 	public static MethodDefinition getMethodDefinition(Type aDeclaringType, Method method) {
@@ -49,6 +51,14 @@ public class MethodDefinition extends Observable implements Function {
 		super();
 		this.method = method;
 		this.declaringType = aDeclaringType;
+		arguments = new ArrayList<Function.FunctionArgument>();
+		int i = 0;
+		for (Type t : method.getGenericParameterTypes()) {
+			String argName = "arg" + i;
+			Type argType = TypeUtils.makeInstantiatedType(t, aDeclaringType);
+			arguments.add(new Function.FunctionArgument(this, argName, argType));
+			i++;
+		}
 	}
 
 	public Method getMethod() {
@@ -200,4 +210,8 @@ public class MethodDefinition extends Observable implements Function {
 		return method.getGenericReturnType();
 	}
 
+	@Override
+	public List<Function.FunctionArgument> getArguments() {
+		return arguments;
+	}
 }
