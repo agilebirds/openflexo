@@ -34,19 +34,29 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.toolbox.ToolBox;
 
-class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
+/**
+ * This panel is the way a DataBinding is edited when it takes the form of a complex expression (responds true to
+ * {@link DataBinding#isExpression()}). This panel is always instanciated in the context of a {@link BindingSelector}
+ * 
+ * @author sylvain
+ * 
+ */
+@SuppressWarnings("serial")
+public class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 
-	/**
-	 *
-	 */
-	private final BindingSelector _bindingSelector;
+	private final BindingSelector bindingSelector;
+	protected ButtonsControlPanel _controlPanel;
+	protected JButton _applyButton;
+	protected JButton _cancelButton;
+	protected JButton _resetButton;
+	private BindingExpressionPanel _expressionPanel;
 
 	/**
 	 * @param bindingSelector
 	 */
 	BindingExpressionSelectorPanel(BindingSelector bindingSelector) {
 		super();
-		_bindingSelector = bindingSelector;
+		this.bindingSelector = bindingSelector;
 	}
 
 	@Override
@@ -56,12 +66,6 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 			_expressionPanel = null;
 		}
 	}
-
-	protected ButtonsControlPanel _controlPanel;
-	protected JButton _applyButton;
-	protected JButton _cancelButton;
-	protected JButton _resetButton;
-	private BindingExpressionPanel _expressionPanel;
 
 	@Override
 	public Dimension getDefaultSize() {
@@ -81,20 +85,20 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 		_applyButton = _controlPanel.addButton("apply", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BindingExpressionSelectorPanel.this._bindingSelector.apply();
+				BindingExpressionSelectorPanel.this.bindingSelector.apply();
 			}
 		});
 		_cancelButton = _controlPanel.addButton("cancel", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BindingExpressionSelectorPanel.this._bindingSelector.cancel();
+				BindingExpressionSelectorPanel.this.bindingSelector.cancel();
 			}
 		});
 		_resetButton = _controlPanel.addButton("reset", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BindingExpressionSelectorPanel.this._bindingSelector.setEditedObject(null);
-				BindingExpressionSelectorPanel.this._bindingSelector.apply();
+				BindingExpressionSelectorPanel.this.bindingSelector.setEditedObject(null);
+				BindingExpressionSelectorPanel.this.bindingSelector.apply();
 			}
 		});
 
@@ -103,27 +107,27 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 		// BindingExpression newBindingExpression = new BindingExpression(new BindingExpression.BindingValueVariable(new
 		// Variable("parent")));
 
-		if (_bindingSelector.getEditedObject().getExpression() == null || !(_bindingSelector.getEditedObject().isExpression())) {
-			BindingSelector.logger.severe("Unexpected object " + _bindingSelector.getEditedObject().getClass().getSimpleName()
+		/*if (bindingSelector.getEditedObject().getExpression() == null || !(bindingSelector.getEditedObject().isExpression())) {
+			BindingSelector.logger.severe("Unexpected object " + bindingSelector.getEditedObject().getClass().getSimpleName()
 					+ " found instead of BindingExpression");
-			_bindingSelector.getEditedObject().setExpression(_bindingSelector.makeBindingExpression());
-		}
+			bindingSelector.getEditedObject().setExpression(bindingSelector.makeBindingExpression());
+		}*/
 
 		/*if (_bindingSelector.getEditedObject() == null || ((BindingExpression) _bindingSelector.getEditedObject()).getExpression() == null) {
 			_bindingSelector._editedObject = _bindingSelector.makeBindingExpression();
 		}*/
 
 		if (BindingSelector.logger.isLoggable(Level.FINE)) {
-			BindingSelector.logger.fine("init() called in BindingExpressionSelectorPanel with " + _bindingSelector.getEditedObject()
-					+ " expression=" + _bindingSelector.getEditedObject().getExpression());
+			BindingSelector.logger.fine("init() called in BindingExpressionSelectorPanel with " + bindingSelector.getEditedObject()
+					+ " expression=" + bindingSelector.getEditedObject().getExpression());
 		}
 
-		_expressionPanel = new BindingExpressionPanel(_bindingSelector.getEditedObject()) {
+		_expressionPanel = new BindingExpressionPanel(bindingSelector.getEditedObject()) {
 			@Override
 			protected void fireEditedExpressionChanged(DataBinding expression) {
 				super.fireEditedExpressionChanged(expression);
 				updateApplyButtonStatus();
-				BindingExpressionSelectorPanel.this._bindingSelector.checkIfDisplayModeShouldChange(expression, true);
+				BindingExpressionSelectorPanel.this.bindingSelector.checkIfDisplayModeShouldChange(expression, true);
 			}
 		};
 
@@ -199,7 +203,7 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 
 		_expressionPanel.setEditedExpression(bindingExpression);*/
 
-		_expressionPanel.setEditedExpression(_bindingSelector.getEditedObject());
+		_expressionPanel.setEditedExpression(bindingSelector.getEditedObject());
 
 		updateApplyButtonStatus();
 
@@ -212,7 +216,7 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 			return;
 		}*/
 
-		DataBinding<?> bindingExpression = _bindingSelector.getEditedObject();
+		DataBinding<?> bindingExpression = bindingSelector.getEditedObject();
 
 		// Update apply button state
 		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isValid());
@@ -222,7 +226,7 @@ class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 			}
 		}
 		if (bindingExpression != null) {
-			_bindingSelector.getTextField().setForeground(bindingExpression.isValid() ? Color.BLACK : Color.RED);
+			bindingSelector.getTextField().setForeground(bindingExpression.isValid() ? Color.BLACK : Color.RED);
 		}
 	}
 

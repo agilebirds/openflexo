@@ -75,7 +75,6 @@ import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.fib.controller.FIBController;
@@ -949,12 +948,16 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		return (AbstractBindingSelectorPanel) super.getCustomPanel();
 	}
 
-	protected Expression makeBindingExpression() {
+	/*protected Expression makeBindingExpression() {
+		(new Exception("Qui m'appelle la ?")).printStackTrace();
 		return new Variable("");
-	}
+	}*/
 
 	protected Expression makeBinding() {
-		Expression returned = null;
+
+		return new BindingValue();
+
+		/*Expression returned = null;
 		if (editionMode == EditionMode.BINDING_EXPRESSION) {
 			if (getBindingDefinition() != null && getBindable() != null) {
 				returned = makeBindingExpression();
@@ -980,7 +983,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				returned = new BindingValue();
 			}
 		}
-		return returned;
+		return returned;*/
 	}
 
 	void recreateBindingValue() {

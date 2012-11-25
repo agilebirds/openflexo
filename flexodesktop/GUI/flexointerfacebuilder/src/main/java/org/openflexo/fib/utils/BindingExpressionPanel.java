@@ -82,7 +82,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	static final Logger logger = Logger.getLogger(BindingExpressionPanel.class.getPackage().getName());
 
-	DataBinding<?> _bindingExpression;
+	DataBinding<?> dataBinding;
 
 	protected static ImageIcon iconForOperator(Operator op) {
 		if (op == ArithmeticBinaryOperator.ADDITION) {
@@ -137,10 +137,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		return null;
 	}
 
-	public BindingExpressionPanel(DataBinding bindingExpression) {
+	public BindingExpressionPanel(DataBinding<?> aDataBinding) {
 		super();
+		logger.info("Instanciate BindingExpressionPanel with " + aDataBinding);
 		setLayout(new BorderLayout());
-		_bindingExpression = bindingExpression;
+		dataBinding = aDataBinding;
 		init();
 	}
 
@@ -149,7 +150,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			rootExpressionPanel.delete();
 		}
 		rootExpressionPanel = null;
-		_bindingExpression = null;
+		dataBinding = null;
 	}
 
 	private JTextArea expressionTA;
@@ -178,7 +179,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	private ExpressionInnerPanel focusReceiver = null;
 
 	public void setEditedExpression(DataBinding bindingExpression) {
-		_bindingExpression = bindingExpression;
+		dataBinding = bindingExpression;
 		if (bindingExpression != null) {
 			_setEditedExpression(bindingExpression.getExpression());
 			if (rootExpressionPanel.getRepresentedExpression() == null
@@ -192,12 +193,12 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	protected void setEditedExpression(Expression expression) {
 		_setEditedExpression(expression);
 		update();
-		fireEditedExpressionChanged(_bindingExpression);
+		fireEditedExpressionChanged(dataBinding);
 	}
 
 	private void _setEditedExpression(Expression expression) {
-		if (_bindingExpression != null) {
-			_bindingExpression.setExpression(expression);
+		if (dataBinding != null) {
+			dataBinding.setExpression(expression);
 		}
 		_checkEditedExpression();
 	}
@@ -205,7 +206,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	protected void _checkEditedExpression() {
 		Operator undefinedOperator = null;
 
-		if (_bindingExpression == null) {
+		if (dataBinding == null) {
 			return;
 		}
 
@@ -213,13 +214,13 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			evaluationTA.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "cannot_evaluate"));
 		}
 
-		if (_bindingExpression.getExpression() != null) {
-			if (expressionIsUndefined(_bindingExpression.getExpression())) {
+		if (dataBinding.getExpression() != null) {
+			if (expressionIsUndefined(dataBinding.getExpression())) {
 				status = ExpressionParsingStatus.UNDEFINED;
 				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_EXPRESSION_MESSAGE);
 				return;
 			} else {
-				for (BindingValue bv : _bindingExpression.getExpression().getAllBindingValues()) {
+				for (BindingValue bv : dataBinding.getExpression().getAllBindingValues()) {
 					if (!bv.isValid()) {
 						message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "invalid_binding") + " " + bv;
 						status = ExpressionParsingStatus.INVALID;
@@ -229,11 +230,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			}
 		}
 
-		if (_bindingExpression.getExpression() == null) {
+		if (dataBinding.getExpression() == null) {
 			message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "cannot_parse") + " "
-					+ _bindingExpression.getUnparsedBinding();
+					+ dataBinding.getUnparsedBinding();
 			status = ExpressionParsingStatus.INVALID;
-		} else if ((undefinedOperator = firstOperatorWithUndefinedOperand(_bindingExpression.getExpression())) != null) {
+		} else if ((undefinedOperator = firstOperatorWithUndefinedOperand(dataBinding.getExpression())) != null) {
 			status = ExpressionParsingStatus.INVALID;
 			try {
 				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_OPERAND_FOR_OPERATOR) + " "
@@ -244,11 +245,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			}
 		} else {
 			try {
-				EvaluationType evaluationType = _bindingExpression.getExpression().getEvaluationType();
+				EvaluationType evaluationType = dataBinding.getExpression().getEvaluationType();
 
-				if (_bindingExpression != null && _bindingExpression.getBindingDefinition() != null
-						&& _bindingExpression.getBindingDefinition().getType() != null) {
-					EvaluationType wantedEvaluationType = TypeUtils.kindOfType(_bindingExpression.getBindingDefinition().getType());
+				if (dataBinding != null && dataBinding.getBindingDefinition() != null
+						&& dataBinding.getBindingDefinition().getType() != null) {
+					EvaluationType wantedEvaluationType = TypeUtils.kindOfType(dataBinding.getBindingDefinition().getType());
 					if (wantedEvaluationType == EvaluationType.LITERAL || evaluationType == wantedEvaluationType
 							|| wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT
 							&& evaluationType == EvaluationType.ARITHMETIC_INTEGER) {
@@ -267,8 +268,8 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 							+ evaluationType.getLocalizedName();
 				}
 
-				if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible() && _bindingExpression != null) {
-					Expression evaluatedExpression = _bindingExpression.getExpression().evaluate();
+				if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible() && dataBinding != null) {
+					Expression evaluatedExpression = dataBinding.getExpression().evaluate();
 					if (evaluatedExpression != null) {
 						evaluationTA.setText(evaluatedExpression.toString());
 					}
@@ -318,11 +319,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	public DataBinding<?> getEditedExpression() {
-		return _bindingExpression;
+		return dataBinding;
 	}
 
 	protected void expressionMayHaveBeenEdited() {
-		if (_bindingExpression == null) {
+		if (dataBinding == null) {
 			return;
 		}
 
@@ -334,11 +335,11 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			} else {
 				newExpression = ExpressionParser.parse(expressionTA.getText());
 			}
-			if (!newExpression.equals(_bindingExpression.getExpression()) || status == ExpressionParsingStatus.INVALID) {
+			if (!newExpression.equals(dataBinding.getExpression()) || status == ExpressionParsingStatus.INVALID) {
 				_setEditedExpression(newExpression);
-				rootExpressionPanel.setRepresentedExpression(_bindingExpression.getExpression());
+				rootExpressionPanel.setRepresentedExpression(dataBinding.getExpression());
 				update();
-				fireEditedExpressionChanged(_bindingExpression);
+				fireEditedExpressionChanged(dataBinding);
 			}
 		} catch (org.openflexo.antar.expr.parser.ParseException e) {
 			message = "ERROR: cannot parse " + expressionTA.getText();
@@ -424,7 +425,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		evaluationPanel.setVisible(false);
 
 		add(topPanel, BorderLayout.NORTH);
-		rootExpressionPanel = new ExpressionInnerPanel(_bindingExpression.getExpression()) {
+		rootExpressionPanel = new ExpressionInnerPanel(dataBinding.getExpression()) {
 			@Override
 			public void representedExpressionChanged(Expression newExpression) {
 				setEditedExpression(newExpression);
@@ -542,10 +543,10 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	protected void updateExpressionTextArea() {
-		if (_bindingExpression == null) {
+		if (dataBinding == null) {
 			return;
 		}
-		expressionTA.setText(pp.getStringRepresentation(_bindingExpression.getExpression()));
+		expressionTA.setText(pp.getStringRepresentation(dataBinding.getExpression()));
 		if (status == ExpressionParsingStatus.UNDEFINED) {
 			statusIcon.setIcon(FIBIconLibrary.WARNING_ICON);
 		} else if (status == ExpressionParsingStatus.INVALID) {
@@ -585,7 +586,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				logger.fine("Build new ExpressionInnerPanel with " + (expression != null ? expression.toString() : "null"));
 			}
 			_representedExpression = expression;
-			innerDataBinding = new DataBinding<Object>(_bindingExpression.getOwner(), Object.class, BindingDefinitionType.GET);
+			innerDataBinding = new DataBinding<Object>(dataBinding.getOwner(), Object.class, BindingDefinitionType.GET);
 			innerDataBinding.setExpression(_representedExpression);
 			update();
 			// addFocusListeners();
