@@ -121,9 +121,11 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	protected String makeStringRepresentation(BindingValue bv) {
 		if (!bv.needsParsing()) {
 			StringBuffer sb = new StringBuffer();
-			sb.append(bv.getBindingVariable().getVariableName());
-			for (BindingPathElement e : bv.getBindingPath()) {
-				sb.append("." + e.getSerializationRepresentation());
+			if (bv.getBindingVariable() != null) {
+				sb.append(bv.getBindingVariable().getVariableName());
+				for (BindingPathElement e : bv.getBindingPath()) {
+					sb.append("." + e.getSerializationRepresentation());
+				}
 			}
 			return sb.toString();
 

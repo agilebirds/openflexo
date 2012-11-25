@@ -1,5 +1,3 @@
-#French
-#Tue Nov 13 12:58:52 CET 2012
 apply=Appliquer
 arithmetic=Arithm\u00E9tique
 boolean=Bool\u00E9en
@@ -9,6 +7,7 @@ choose=Choisir
 comparison=Comparaison
 connect=Connecter
 date=Date
+define_a_constant_value=define_a_constant_value
 define_a_static_value=D\u00E9finir une valeur
 duration=Dur\u00E9e
 enum=Enum

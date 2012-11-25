@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.toolbox.ToolBox;
 
-class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel {
+class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel {
 
 	/**
 	 *
@@ -45,7 +45,7 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 	 * @param bindingSelector
 	 */
 	BindingExpressionSelectorPanel(BindingSelector bindingSelector) {
-		bindingSelector.super();
+		super();
 		_bindingSelector = bindingSelector;
 	}
 

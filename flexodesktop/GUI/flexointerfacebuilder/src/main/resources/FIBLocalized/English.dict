@@ -1,5 +1,3 @@
-#English
-#Tue Nov 13 12:58:52 CET 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
@@ -9,6 +7,7 @@ choose=Choose
 comparison=Comparison
 connect=Connect
 date=Date
+define_a_constant_value=define_a_constant_value
 define_a_static_value=Define a constant value
 duration=Duration
 enum=Enum

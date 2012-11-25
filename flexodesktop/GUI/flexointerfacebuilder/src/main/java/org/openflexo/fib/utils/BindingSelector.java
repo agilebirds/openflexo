@@ -33,7 +33,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -63,6 +62,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.FunctionPathElement;
+import org.openflexo.antar.binding.FunctionPathElement.Function;
 import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.JavaMethodPathElement;
 import org.openflexo.antar.binding.MethodDefinition;
@@ -991,39 +991,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	Bindable _bindable;
 
-	protected abstract class AbstractBindingSelectorPanel extends ResizablePanel {
-		protected abstract void synchronizePanelWithTextFieldValue(String textValue);
-
-		protected abstract void init();
-
-		protected abstract void update();
-
-		protected abstract void fireBindingDefinitionChanged();
-
-		protected abstract void fireBindableChanged();
-
-		protected abstract void processTabPressed();
-
-		protected abstract void processDownPressed();
-
-		protected abstract void processUpPressed();
-
-		protected abstract void processLeftPressed();
-
-		protected abstract void processRightPressed();
-
-		protected abstract void processEnterPressed();
-
-		protected abstract void processBackspace();
-
-		protected abstract void processDelete();
-
-		protected abstract void willApply();
-
-		protected abstract void delete();
-
-	}
-
 	@Override
 	protected void openPopup() {
 		if (_selectorPanel != null) {
@@ -1160,14 +1127,19 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					fireEditedObjectChanged();
 				}
 			} else if (selectedValue.getElement() instanceof FunctionPathElement && editionMode == EditionMode.COMPOUND_BINDING) {
-				// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
 				BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(index - 1);
-				if (!(currentElement instanceof JavaMethodPathElement)
-						|| ((JavaMethodPathElement) currentElement).getMethod().getMethod() != ((MethodDefinition) selectedValue
-								.getElement()).getMethod()) {
-					Method method = ((MethodDefinition) selectedValue.getElement()).getMethod();
+				System.out.println("selectedValue.getElement()=" + selectedValue.getElement() + " of "
+						+ selectedValue.getElement().getClass());
+				System.out.println("currentElement=" + currentElement + " of " + currentElement.getClass());
+
+				if (!(currentElement instanceof FunctionPathElement)
+						|| (!((FunctionPathElement) currentElement).getFunction().equals(
+								((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+					Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
+					// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
 					JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
-							(MethodDefinition) selectedValue.getElement(), new ArrayList<DataBinding<?>>());
+							(MethodDefinition) ((FunctionPathElement) selectedValue.getElement()).getFunction(),
+							new ArrayList<DataBinding<?>>());
 					bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
 					getEditedObject().setExpression(bindingValue);
 					fireEditedObjectChanged();
@@ -1279,12 +1251,19 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	}
 
 	DataBinding makeBindingFromString(String stringValue) {
-		if (getBindable() != null) {
-			DataBinding<?> returned = new DataBinding<Object>(stringValue, getBindable(), getBindingDefinition().getType(),
-					getBindingDefinition().getBindingDefinitionType());
-			returned.decode();
-			return returned;
+		if (getEditedObject() != null) {
+			getEditedObject().setUnparsedBinding(stringValue);
+			getEditedObject().decode();
+			return getEditedObject();
 		}
+		/*
+				if (getBindable() != null) {
+					DataBinding<?> returned = new DataBinding<Object>(stringValue, getBindable(), getBindingDefinition().getType(),
+							getBindingDefinition().getBindingDefinitionType());
+					returned.decode();
+					return returned;
+				}*/
+		logger.warning("Cannot build binding: null DataBinding !");
 		return null;
 	}
 

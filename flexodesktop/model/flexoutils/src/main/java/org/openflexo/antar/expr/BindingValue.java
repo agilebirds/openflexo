@@ -108,7 +108,7 @@ public class BindingValue extends Expression {
 	private BindingVariable bindingVariable;
 	private ArrayList<BindingPathElement> bindingPath;
 
-	private boolean needsParsing = false;
+	private boolean needsParsing = true;
 
 	private DataBinding<?> dataBinding;
 
@@ -481,6 +481,7 @@ public class BindingValue extends Expression {
 
 	public boolean buildBindingPathFromParsedBindingPath(DataBinding<?> dataBinding) {
 
+		boolean pathDecodingSucceeded = false;
 		needsParsing = false;
 		setDataBinding(dataBinding);
 		bindingVariable = null;
@@ -492,6 +493,10 @@ public class BindingValue extends Expression {
 					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
+			if (bindingVariable == null) {
+				pathDecodingSucceeded = false;
+				return false;
+			}
 			int i = 0;
 			for (AbstractBindingPathElement pathElement : getParsedBindingPath()) {
 				if (i > 0) {
@@ -503,6 +508,7 @@ public class BindingValue extends Expression {
 							current = newPathElement;
 							// System.out.println("> SIMPLE " + pathElement);
 						} else {
+							pathDecodingSucceeded = false;
 							return false;
 						}
 					} else if (pathElement instanceof MethodCallBindingPathElement) {
@@ -524,18 +530,24 @@ public class BindingValue extends Expression {
 							current = newPathElement;
 							// System.out.println("> FUNCTION " + pathElement);
 						} else {
+							pathDecodingSucceeded = false;
 							return false;
 						}
 					} else {
 						logger.warning("Unexpected " + pathElement);
+						pathDecodingSucceeded = false;
 						return false;
 					}
 				}
 				i++;
 			}
+			pathDecodingSucceeded = true;
+		} else {
+			logger.warning("Invalid binding value");
+			pathDecodingSucceeded = false;
 		}
 
-		return true;
+		return pathDecodingSucceeded;
 	}
 
 	public Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
@@ -682,4 +694,10 @@ public class BindingValue extends Expression {
 		return returned;
 	}
 
+	public void debug() {
+		System.out.println("parsedBindingPath=" + parsedBindingPath);
+		System.out.println("bvar=" + bindingVariable);
+		System.out.println("bpath=" + bindingPath);
+		System.out.println("needsParsing=" + needsParsing);
+	}
 }

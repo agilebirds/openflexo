@@ -50,14 +50,21 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.DateSelector;
 import org.openflexo.toolbox.ToolBox;
 
-class StaticBindingPanel extends JPanel {
+/**
+ * This panel allows to select or edit a constant value in the context of a {@link BindingSelectorPanel}
+ * 
+ * @author sylvain
+ * 
+ */
+@SuppressWarnings("serial")
+class ConstantValuePanel extends JPanel {
 
 	public static final Font SMALL_FONT = new Font("SansSerif", Font.PLAIN, 9);
 
 	/**
 	 * 
 	 */
-	private final BindingSelectorPanel _bindingSelectorPanel;
+	private final BindingSelectorPanel bindingSelectorPanel;
 	boolean isUpdatingPanel = false;
 	protected JCheckBox selectStaticBindingCB = null;
 	protected JComboBox selectValueCB = null;
@@ -69,39 +76,39 @@ class StaticBindingPanel extends JPanel {
 
 	private EvaluationType currentType;
 
-	protected StaticBindingPanel(BindingSelectorPanel bindingSelectorPanel) {
-		_bindingSelectorPanel = bindingSelectorPanel;
+	protected ConstantValuePanel(BindingSelectorPanel bindingSelectorPanel) {
+		this.bindingSelectorPanel = bindingSelectorPanel;
 		setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		initStaticBindingPanel();
-		updateStaticBindingPanel();
+		initConstantValuePanel();
+		updateConstantValuePanel();
 	}
 
-	private void initStaticBindingPanel() {
+	private void initConstantValuePanel() {
 		selectStaticBindingCB = null;
 		selectValueCB = null;
 		enterValueTF = null;
 		dateSelector = null;
 		durationSelector = null;
 		integerValueChooser = null;
-		selectStaticBindingCB = new JCheckBox(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "define_a_static_value"));
+		selectStaticBindingCB = new JCheckBox(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "define_a_constant_value"));
 		selectStaticBindingCB.setFont(SMALL_FONT);
 		selectStaticBindingCB.setSelected(false);
 		selectStaticBindingCB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticBindingPanel.this._bindingSelectorPanel.setEditStaticValue(selectStaticBindingCB.isSelected());
+				ConstantValuePanel.this.bindingSelectorPanel.setEditStaticValue(selectStaticBindingCB.isSelected());
 			}
 		});
 		add(selectStaticBindingCB);
-		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
-				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
+		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
+				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(SMALL_FONT);
 			add(enterValueTF);
 			currentType = EvaluationType.LITERAL;
 			disableStaticBindingPanel();
 		} else {
-			currentType = kindOf(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType());
+			currentType = kindOf(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType());
 			if (currentType == EvaluationType.BOOLEAN) {
 				final String UNSELECTED = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select_a_value");
 				final String TRUE = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "true");
@@ -116,11 +123,11 @@ class StaticBindingPanel extends JPanel {
 							return;
 						}
 						if (selectValueCB.getSelectedItem().equals(TRUE)) {
-							_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(BooleanConstant.TRUE);
-							_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+							bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(BooleanConstant.TRUE);
+							bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 						} else if (selectValueCB.getSelectedItem().equals(FALSE)) {
-							_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(BooleanConstant.FALSE);
-							_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+							bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(BooleanConstant.FALSE);
+							bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 						}
 					}
 				});
@@ -139,9 +146,9 @@ class StaticBindingPanel extends JPanel {
 						}
 						Object v = integerValueChooser.getValue();
 						if (v instanceof Number) {
-							_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(
+							bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(
 									new Constant.IntegerConstant(((Number) v).longValue()));
-							_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+							bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 						}
 					}
 				});
@@ -157,21 +164,21 @@ class StaticBindingPanel extends JPanel {
 						if (isUpdatingPanel) {
 							return;
 						}
-						if (_bindingSelectorPanel._bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
-							_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(
-									_bindingSelectorPanel._bindingSelector.makeStaticBindingFromString(enterValueTF.getText()));
-							_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						if (bindingSelectorPanel.bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
+							bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(
+									bindingSelectorPanel.bindingSelector.makeStaticBindingFromString(enterValueTF.getText()));
+							bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 						}
 					}
 				});
 				enterValueTF.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyTyped(KeyEvent e) {
-						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled()
-								&& _bindingSelectorPanel._bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
-							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
+						if (!ConstantValuePanel.this.bindingSelectorPanel.connectButton.isEnabled()
+								&& bindingSelectorPanel.bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
+							ConstantValuePanel.this.bindingSelectorPanel.connectButton.setEnabled(true);
 							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
+								ConstantValuePanel.this.bindingSelectorPanel.connectButton.setSelected(true);
 							}
 						}
 					}
@@ -186,21 +193,20 @@ class StaticBindingPanel extends JPanel {
 						if (isUpdatingPanel) {
 							return;
 						}
-						if (_bindingSelectorPanel._bindingSelector.isAcceptableStaticBindingValue('"' + enterValueTF.getText() + '"')) {
-							_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(
-									_bindingSelectorPanel._bindingSelector.makeStaticBindingFromString('"' + enterValueTF.getText() + '"'));
-							_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						if (bindingSelectorPanel.bindingSelector.isAcceptableStaticBindingValue('"' + enterValueTF.getText() + '"')) {
+							bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(
+									bindingSelectorPanel.bindingSelector.makeStaticBindingFromString('"' + enterValueTF.getText() + '"'));
+							bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 						}
 					}
 				});
 				enterValueTF.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyTyped(KeyEvent e) {
-						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled()
-								&& enterValueTF.getText().length() > 0) {
-							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
+						if (!ConstantValuePanel.this.bindingSelectorPanel.connectButton.isEnabled() && enterValueTF.getText().length() > 0) {
+							ConstantValuePanel.this.bindingSelectorPanel.connectButton.setEnabled(true);
 							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
+								ConstantValuePanel.this.bindingSelectorPanel.connectButton.setSelected(true);
 							}
 						}
 					}
@@ -208,10 +214,10 @@ class StaticBindingPanel extends JPanel {
 				add(enterValueTF);
 			}
 
-			if (_bindingSelectorPanel.getEditStaticValue()) {
+			if (bindingSelectorPanel.getEditStaticValue()) {
 				enableStaticBindingPanel();
-				for (int i = 0; i < _bindingSelectorPanel.getVisibleColsCount(); i++) {
-					_bindingSelectorPanel.listAtIndex(i).setEnabled(false);
+				for (int i = 0; i < bindingSelectorPanel.getVisibleColsCount(); i++) {
+					bindingSelectorPanel.listAtIndex(i).setEnabled(false);
 				}
 			} else {
 				disableStaticBindingPanel();
@@ -219,9 +225,9 @@ class StaticBindingPanel extends JPanel {
 
 		}
 
-		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
-				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null
-				|| TypeUtils.isObject(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType())) {
+		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
+				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null
+				|| TypeUtils.isObject(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType())) {
 			final String SELECT = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "integer");
@@ -240,20 +246,20 @@ class StaticBindingPanel extends JPanel {
 						return;
 					}
 					if (typeCB.getSelectedItem().equals(BOOLEAN)) {
-						_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(Constant.BooleanConstant.TRUE);
-						_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(Constant.BooleanConstant.TRUE);
+						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 					} else if (typeCB.getSelectedItem().equals(INTEGER)) {
-						_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(new Constant.IntegerConstant(0));
-						_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(new Constant.IntegerConstant(0));
+						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 					} else if (typeCB.getSelectedItem().equals(FLOAT)) {
-						_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(new Constant.FloatConstant(0));
-						_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(new Constant.FloatConstant(0));
+						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 					} else if (typeCB.getSelectedItem().equals(STRING)) {
-						_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(new Constant.StringConstant(""));
-						_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(new Constant.StringConstant(""));
+						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 					} else if (typeCB.getSelectedItem().equals(NULL)) {
-						_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(ObjectSymbolicConstant.NULL);
-						_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(ObjectSymbolicConstant.NULL);
+						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 					}
 				}
 			});
@@ -275,7 +281,7 @@ class StaticBindingPanel extends JPanel {
 			}
 			isUpdatingPanel = false;
 
-			if (_bindingSelectorPanel._bindingSelector.getEditedObject().getExpression() == ObjectSymbolicConstant.NULL) {
+			if (bindingSelectorPanel.bindingSelector.getEditedObject().getExpression() == ObjectSymbolicConstant.NULL) {
 				isUpdatingPanel = true;
 				typeCB.setSelectedItem(NULL);
 				isUpdatingPanel = false;
@@ -289,45 +295,45 @@ class StaticBindingPanel extends JPanel {
 
 	void willApply() {
 		if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-			if (_bindingSelectorPanel._bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
-				_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(
-						_bindingSelectorPanel._bindingSelector.makeStaticBindingFromString(enterValueTF.getText()));
-				_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+			if (bindingSelectorPanel.bindingSelector.isAcceptableStaticBindingValue(enterValueTF.getText())) {
+				bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(
+						bindingSelectorPanel.bindingSelector.makeStaticBindingFromString(enterValueTF.getText()));
+				bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 			}
 		} else if (currentType == EvaluationType.STRING) {
-			if (_bindingSelectorPanel._bindingSelector.isAcceptableStaticBindingValue('"' + enterValueTF.getText() + '"')) {
-				_bindingSelectorPanel._bindingSelector.getEditedObject().setExpression(
-						_bindingSelectorPanel._bindingSelector.makeStaticBindingFromString('"' + enterValueTF.getText() + '"'));
-				_bindingSelectorPanel._bindingSelector.fireEditedObjectChanged();
+			if (bindingSelectorPanel.bindingSelector.isAcceptableStaticBindingValue('"' + enterValueTF.getText() + '"')) {
+				bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(
+						bindingSelectorPanel.bindingSelector.makeStaticBindingFromString('"' + enterValueTF.getText() + '"'));
+				bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
 			}
 		}
 	}
 
 	private EvaluationType kindOf(Type type) {
-		if (TypeUtils.isObject(type) && _bindingSelectorPanel._bindingSelector.getEditedObject().isConstant()) {
-			return ((Constant) _bindingSelectorPanel._bindingSelector.getEditedObject().getExpression()).getEvaluationType();
+		if (TypeUtils.isObject(type) && bindingSelectorPanel.bindingSelector.getEditedObject().isConstant()) {
+			return ((Constant) bindingSelectorPanel.bindingSelector.getEditedObject().getExpression()).getEvaluationType();
 		} else {
 			return TypeUtils.kindOfType(type);
 		}
 	}
 
-	void updateStaticBindingPanel() {
+	void updateConstantValuePanel() {
 		isUpdatingPanel = true;
 
 		EvaluationType newType;
-		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
-				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
+		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
+				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null) {
 			newType = EvaluationType.LITERAL;
 		} else {
-			newType = kindOf(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType());
+			newType = kindOf(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType());
 		}
 		if (newType != currentType) {
 			removeAll();
-			initStaticBindingPanel();
+			initConstantValuePanel();
 			revalidate();
 			repaint();
 		}
-		DataBinding edited = _bindingSelectorPanel._bindingSelector.getEditedObject();
+		DataBinding edited = bindingSelectorPanel.bindingSelector.getEditedObject();
 
 		isUpdatingPanel = true;
 
@@ -353,7 +359,7 @@ class StaticBindingPanel extends JPanel {
 	}
 
 	void enableStaticBindingPanel() {
-		_bindingSelectorPanel._connectButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "validate"));
+		bindingSelectorPanel.connectButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "validate"));
 		selectStaticBindingCB.setSelected(true);
 		if (selectValueCB != null) {
 			selectValueCB.setEnabled(true);
@@ -373,7 +379,7 @@ class StaticBindingPanel extends JPanel {
 	}
 
 	void disableStaticBindingPanel() {
-		_bindingSelectorPanel._connectButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "connect"));
+		bindingSelectorPanel.connectButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "connect"));
 		selectStaticBindingCB.setSelected(false);
 		if (selectValueCB != null) {
 			selectValueCB.setEnabled(false);

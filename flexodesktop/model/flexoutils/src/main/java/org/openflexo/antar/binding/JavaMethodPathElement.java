@@ -39,45 +39,47 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	static final Logger logger = Logger.getLogger(JavaMethodPathElement.class.getPackage().getName());
 
-	private MethodDefinition method;
-
 	public JavaMethodPathElement(BindingPathElement parent, String methodName, List<DataBinding<?>> args) {
-		super(parent, methodName, Object.class, args);
-		method = retrieveMethod();
-		if (method == null) {
+		super(parent, retrieveMethod(parent.getType(), methodName, args), args);
+
+		if (getMethodDefinition() == null) {
 			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType());
 		} else {
-			setType(method.getMethod().getGenericReturnType());
+			setType(getMethodDefinition().getMethod().getGenericReturnType());
 		}
 	}
 
 	public JavaMethodPathElement(BindingPathElement parent, MethodDefinition method, List<DataBinding<?>> args) {
-		super(parent, method.getMethodName(), method.getMethod().getGenericReturnType(), args);
-		this.method = method;
+		super(parent, method, args);
 	}
 
-	public MethodDefinition getMethod() {
-		return method;
+	public MethodDefinition getMethodDefinition() {
+		return getFunction();
+	}
+
+	@Override
+	public MethodDefinition getFunction() {
+		return (MethodDefinition) super.getFunction();
 	}
 
 	public String getMethodName() {
-		return super.getFunctionName();
+		return getMethodDefinition().getMethod().getName();
 	}
 
 	@Override
 	public Type getType() {
-		if (method != null) {
-			return TypeUtils.makeInstantiatedType(method.getMethod().getGenericReturnType(), getParent().getType());
+		if (getMethodDefinition() != null) {
+			return TypeUtils.makeInstantiatedType(getMethodDefinition().getMethod().getGenericReturnType(), getParent().getType());
 		}
 		return super.getType();
 	}
 
-	private MethodDefinition retrieveMethod() {
+	protected static MethodDefinition retrieveMethod(Type parentType, String methodName, List<DataBinding<?>> args) {
 		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
-		Class<?> typeClass = TypeUtils.getBaseClass(getParent().getType());
+		Class<?> typeClass = TypeUtils.getBaseClass(parentType);
 		Method[] allMethods = typeClass.getMethods();
 		for (Method method : allMethods) {
-			if (method.getName().equals(getMethodName()) && method.getGenericParameterTypes().length == getArguments().size()) {
+			if (method.getName().equals(methodName) && method.getGenericParameterTypes().length == args.size()) {
 				possiblyMatchingMethods.add(method);
 			}
 		}
@@ -85,9 +87,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			logger.warning("Please implement disambiguity here");
 			// Return the first one
 			// TODO: try to find the best one
-			return MethodDefinition.getMethodDefinition(getParent().getType(), possiblyMatchingMethods.get(0));
+			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
 		} else if (possiblyMatchingMethods.size() == 1) {
-			return MethodDefinition.getMethodDefinition(getParent().getType(), possiblyMatchingMethods.get(0));
+			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
 		} else {
 			return null;
 		}
@@ -95,31 +97,32 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	@Override
 	public String getLabel() {
-		return method.getLabel();
+		return getMethodDefinition().getLabel();
 	}
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return method.getTooltipText(resultingType);
+		return getMethodDefinition().getTooltipText(resultingType);
 	}
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 
-		System.out.println("evaluate " + method.getSignature() + " for " + target);
+		System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
 		Object[] args = new Object[getArguments().size()];
 		int i = 0;
 
 		for (FunctionArgument a : getArguments()) {
-			args[i] = TypeUtils.castTo(a.getValue().getBindingValue(context), method.getMethod().getGenericParameterTypes()[i]);
+			args[i] = TypeUtils.castTo(a.getValue().getBindingValue(context),
+					getMethodDefinition().getMethod().getGenericParameterTypes()[i]);
 			i++;
 		}
 		try {
-			return method.getMethod().invoke(target, args);
+			return getMethodDefinition().getMethod().invoke(target, args);
 		} catch (IllegalArgumentException e) {
-			StringBuffer warningMessage = new StringBuffer("While evaluating method " + method.getMethod() + " exception occured: "
-					+ e.getMessage());
+			StringBuffer warningMessage = new StringBuffer("While evaluating method " + getMethodDefinition().getMethod()
+					+ " exception occured: " + e.getMessage());
 			warningMessage.append(", object = " + target);
 			for (i = 0; i < getArguments().size(); i++) {
 				warningMessage.append(", arg[" + i + "] = " + args[i]);
@@ -130,7 +133,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			logger.info("InvocationTargetException while evaluating method " + method.getMethod() + " with args: ");
+			logger.info("InvocationTargetException while evaluating method " + getMethodDefinition().getMethod() + " with args: ");
 			for (int j = 0; j < args.length; j++) {
 				logger.info("arg " + j + " = " + args[j]);
 			}

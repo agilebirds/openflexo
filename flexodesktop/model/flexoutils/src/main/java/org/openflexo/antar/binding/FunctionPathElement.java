@@ -15,21 +15,46 @@ import java.util.Vector;
 public abstract class FunctionPathElement extends Observable implements BindingPathElement {
 
 	private BindingPathElement parent;
-	private String functionName;
+	private Function function;
 	private Type type;
 	private List<FunctionArgument> arguments;
 
+	/**
+	 * Implemented by all classes which defines a function in the context of data binding
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static interface Function {
+
+		public String getName();
+
+		public Type getReturnType();
+	}
+
+	/**
+	 * Implementation of an argument of a {@link Function}
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	public class FunctionArgument extends Observable {
 
+		private Function function;
 		private String argumentName;
 		private Type argumentType;
 		private DataBinding<?> value;
 
-		public FunctionArgument(String argumentName, Type argumentType, DataBinding<?> value) {
+		public FunctionArgument(Function function, String argumentName, Type argumentType, DataBinding<?> value) {
 			super();
+			this.function = function;
 			this.argumentName = argumentName;
 			this.argumentType = argumentType;
 			this.value = value;
+		}
+
+		public Function getFunction() {
+			return function;
 		}
 
 		public String getArgumentName() {
@@ -57,15 +82,15 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 		}
 	}
 
-	public FunctionPathElement(BindingPathElement parent, String functionName, Type type, List<DataBinding<?>> args) {
+	public FunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> args) {
 		this.parent = parent;
-		this.functionName = functionName;
-		this.type = type;
+		this.function = function;
+		this.type = function.getReturnType();
 		arguments = new Vector<FunctionArgument>();
 		if (args != null) {
 			int i = 0;
 			for (DataBinding<?> v : args) {
-				FunctionArgument arg = new FunctionArgument("arg" + i, v.getAnalyzedType(), v);
+				FunctionArgument arg = new FunctionArgument(function, "arg" + i, v.getAnalyzedType(), v);
 				arguments.add(arg);
 				i++;
 			}
@@ -77,12 +102,8 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 		return parent;
 	}
 
-	public String getFunctionName() {
-		return functionName;
-	}
-
-	public void setFunctionName(String propertyName) {
-		this.functionName = propertyName;
+	public Function getFunction() {
+		return function;
 	}
 
 	@Override
@@ -100,7 +121,7 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	public String getSerializationRepresentation() {
 		if (serializationRepresentation == null) {
 			StringBuffer returned = new StringBuffer();
-			returned.append(getFunctionName());
+			returned.append(getFunction().getName());
 			returned.append("(");
 			boolean isFirst = true;
 			for (FunctionArgument a : getArguments()) {

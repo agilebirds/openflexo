@@ -39,6 +39,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
@@ -86,6 +87,9 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	private Type declaredType = null;
 	private BindingDefinitionType bdType = null;
 
+	private boolean needsParsing = false;
+	private boolean isSuccessfullyParsed = false;
+
 	public DataBinding(Bindable owner, Type declaredType, BindingDefinitionType bdType) {
 		super();
 		setOwner(owner);
@@ -107,7 +111,18 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	@Override
 	public String toString() {
 		if (expression != null) {
+			if (StringUtils.isEmpty(expression.toString())) {
+				System.out.println("Pourquoi ya rien ?");
+				System.out.println("l'expression est une " + expression.getClass());
+				if (expression instanceof BindingValue) {
+					BindingValue bv = (BindingValue) expression;
+					bv.debug();
+				}
+			}
 			return expression.toString();
+		}
+		if (StringUtils.isEmpty(unparsedBinding)) {
+			System.out.println("Pourquoi ya rien 2?");
 		}
 		return unparsedBinding;
 	}
@@ -126,7 +141,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public void decode() {
-		if (expression == null && !isParsingAndAnalysing) {
+		if (needsParsing) {
 			parseExpression();
 		}
 	}
@@ -143,6 +158,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public void setExpression(Expression value) {
 		logger.info("setExpression() with " + value);
+		needsParsing = false;
 		Expression oldValue = this.expression;
 		if (oldValue == null) {
 			if (value == null) {
@@ -339,6 +355,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public void setUnparsedBinding(String unparsedBinding) {
 		this.unparsedBinding = unparsedBinding;
+		expression = null;
+		needsParsing = true;
 	}
 
 	public Bindable getOwner() {
@@ -354,26 +372,26 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return expression = null;
 		}
 
-		isParsingAndAnalysing = true;
 		if (getOwner() != null) {
 			try {
+				System.out.println("Je parse a nouveau " + getUnparsedBinding());
 				expression = ExpressionParser.parse(getUnparsedBinding());
 			} catch (ParseException e1) {
 				// parse error
-				e1.printStackTrace();
-				return expression = null;
+				isSuccessfullyParsed = false;
+				expression = null;
+				logger.warning(e1.getMessage());
+				return null;
 			}
+			isSuccessfullyParsed = true;
 			analyseExpressionAfterParsing();
 		}
-		isParsingAndAnalysing = false;
+		needsParsing = false;
 
 		return expression;
 	}
 
-	private boolean isParsingAndAnalysing = false;
-
 	private Expression analyseExpressionAfterParsing() {
-		isParsingAndAnalysing = true;
 		if (getOwner() != null) {
 			try {
 				expression.visit(new ExpressionVisitor() {
@@ -389,7 +407,6 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			}
 		}
 
-		isParsingAndAnalysing = false;
 		notifyBindingDecoded();
 		return expression;
 	}

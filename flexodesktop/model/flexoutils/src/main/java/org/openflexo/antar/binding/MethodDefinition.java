@@ -25,9 +25,10 @@ import java.util.Hashtable;
 import java.util.Observable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.FunctionPathElement.Function;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition extends Observable {
+public class MethodDefinition extends Observable implements Function {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
@@ -187,6 +188,16 @@ public class MethodDefinition extends Observable {
 		// "<p><i>"+(method.getDescription()!=null?method.getDescription():FlexoLocalization.localizedForKey("no_description"))+"</i></p>";
 		returned += "</html>";
 		return returned;
+	}
+
+	@Override
+	public String getName() {
+		return method.getName();
+	}
+
+	@Override
+	public Type getReturnType() {
+		return method.getGenericReturnType();
 	}
 
 }
