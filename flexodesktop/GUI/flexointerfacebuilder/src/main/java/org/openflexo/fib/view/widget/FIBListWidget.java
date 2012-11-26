@@ -329,7 +329,9 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		_list.setFont(getFont());
+		if (getFont() != null) {
+			_list.setFont(getFont());
+		}
 	}
 
 	@Override

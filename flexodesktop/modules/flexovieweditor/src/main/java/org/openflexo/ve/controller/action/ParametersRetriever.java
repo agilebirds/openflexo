@@ -122,7 +122,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			tf = new FIBTextField();
 			uriLabel = new FIBLabel("http://xxxxxx.owl");
 			Font f = uriLabel.retrieveValidFont();
-			uriLabel.setFont(f.deriveFont(10f));
+			if (f != null) {
+				uriLabel.setFont(f.deriveFont(10f));
+			}
 			/*uriLabel.setData(new DataBinding('"' + action.getProject().getProjectOntology().getURI() + "#" + '"' + "+parameters."
 					+ parameter.getName()) {
 				@Override
@@ -520,7 +522,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		}
 
 		Font f = returned.retrieveValidFont();
-		returned.setFont(f.deriveFont(11f));
+		if (f != null) {
+			returned.setFont(f.deriveFont(11f));
+		}
 
 		FIBLabel titleLabel = new FIBLabel();
 		titleLabel.setFont(titleLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));

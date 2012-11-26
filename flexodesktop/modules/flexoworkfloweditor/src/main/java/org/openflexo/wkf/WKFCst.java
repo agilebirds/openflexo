@@ -136,8 +136,8 @@ public class WKFCst {
 	public static final Font DEFAULT_OPERATION_NODE_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 10);
 	public static final Font DEFAULT_ACTION_NODE_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 10);
 	public static final Font DEFAULT_EVENT_NODE_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 10);
-	public static final Font DEFAULT_ROLE_LABEL_FONT = new Font("SansSerif", Font.ITALIC, 9);
-	public static final Font DEFAULT_COMPONENT_LABEL_FONT = new Font("Lucida Sans Typewriter", Font.PLAIN, 9);
+	public static final Font DEFAULT_ROLE_LABEL_FONT = new Font("SansSerif", Font.ITALIC, 10);
+	public static final Font DEFAULT_COMPONENT_LABEL_FONT = new Font("Lucida Sans Typewriter", Font.PLAIN, 10);
 
 	public static final Color OK = new Color(0, 191, 0);
 

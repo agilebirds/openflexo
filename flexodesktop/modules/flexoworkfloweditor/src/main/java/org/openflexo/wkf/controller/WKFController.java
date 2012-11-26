@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
@@ -144,7 +145,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public WKFController(FlexoModule module) {
 		super(module);
 		initWithWKFPreferences();
-		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+		manager.new PropertyChangeListenerRegistration(AdvancedPrefs.SHOW_ALL_TABS, this, WKFPreferences.getPreferences());
 	}
 
 	@Override

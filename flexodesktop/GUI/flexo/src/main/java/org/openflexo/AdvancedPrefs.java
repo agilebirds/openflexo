@@ -83,6 +83,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	private static final String HTTPS_PROXY_PORT = "HTTPSProxyPort";
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
+	public static final String SHOW_ALL_TABS = "show_all_tabs";
 
 	@Override
 	public String getName() {
@@ -593,6 +594,19 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setWebServiceInstance(String wsInstanceID) {
 		getPreferences().setProperty(WEB_SERVICE_INSTANCE, wsInstanceID);
+	}
+
+	public static boolean getShowAllTabs() {
+		Boolean answer = getPreferences().getBooleanProperty(SHOW_ALL_TABS);
+		if (answer == null) {
+			setShowAllTabs(false);
+			return false;
+		}
+		return answer;
+	}
+
+	public static void setShowAllTabs(boolean showAllTabs) {
+		getPreferences().setBooleanProperty(SHOW_ALL_TABS, showAllTabs);
 	}
 
 }

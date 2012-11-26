@@ -94,7 +94,10 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 				}
 			}
 
-			returned.setFont(getFont(representedObject));
+			Font font = getFont(representedObject);
+			if (font != null) {
+				returned.setFont(font);
+			}
 			returned.setText(getLabel(representedObject));
 			returned.setIcon(getIcon(representedObject));
 			returned.setToolTipText(getTooltip(representedObject));
