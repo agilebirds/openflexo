@@ -6,7 +6,7 @@
     <LabelColumn data="iterator.fullQualifiedName" title="location" columnWidth="200" resizable="true" displayTitle="true" name="label" />
     <LocalizedDictionary />
   </Table>
-  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="8" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedClassInfo" showFooter="true" rootVisible="false" showRootsHandle="true"constraints="twocols(location=center;index=2;expandVertically=true;expandHorizontally=true)" name="ClassesBrowser" localize="true" manageDynamicModel="true">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="8" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedClassInfo" showFooter="true" rootVisible="false" showRootsHandle="true" constraints="twocols(location=center;index=2;expandVertically=true;expandHorizontally=true)" name="ClassesBrowser" localize="true" manageDynamicModel="true">
     <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$PackageInfo" label="package.packageName" visible="(!(package.isFiltered))" isEditable="false" filtered="true" defaultVisible="true" name="package" icon="package.icon">
       <Children data="package.classes" name="children" />
     </BrowserElement>
