@@ -60,6 +60,8 @@ import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.inspector.widget.FileEditWidget;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
@@ -90,12 +92,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	private PropertyChangeSupport propertyChangeSupport;
 	private List<FlexoProject> rootProjects;
+	private ModelFactory modelFactory;
 
-	public ProjectLoader(ApplicationContext applicationContext) {
+	public ProjectLoader(ApplicationContext applicationContext) throws ModelDefinitionException {
 		this.applicationContext = applicationContext;
 		this.editors = new LinkedHashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
+		modelFactory = new ModelFactory().importClass(FlexoProjectReference.class);
 	}
 
 	@Override
@@ -207,6 +211,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		resetRootProjects();
 		getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, editor.getProject());
 		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
+		FlexoProjectReference ref = modelFactory.newInstance(FlexoProjectReference.class);
+		ref.init(editor.getProject());
+		try {
+			applicationContext.getResourceCenterService().getUserResourceCenter()
+					.publishResource(ref, editor.getProject().getVersion(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void resetRootProjects() {

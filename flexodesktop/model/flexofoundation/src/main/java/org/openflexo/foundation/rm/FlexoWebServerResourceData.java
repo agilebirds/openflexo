@@ -22,7 +22,6 @@ package org.openflexo.foundation.rm;
 public class FlexoWebServerResourceData implements ImportedResourceData {
 
 	private FlexoImportedResource _res;
-	private FlexoProject _project;
 
 	@Override
 	public FlexoImportedResource getFlexoResource() {
@@ -31,18 +30,12 @@ public class FlexoWebServerResourceData implements ImportedResourceData {
 
 	@Override
 	public FlexoProject getProject() {
-		return _project;
+		return getFlexoResource().getProject();
 	}
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_res = (FlexoImportedResource) resource;
-
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		_project = project;
 
 	}
 

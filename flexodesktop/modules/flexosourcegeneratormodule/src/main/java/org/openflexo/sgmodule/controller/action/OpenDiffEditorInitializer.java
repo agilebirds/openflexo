@@ -62,8 +62,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 						"left_source", null, ContentSourceType.values()) {
 					@Override
 					public boolean accept(ContentSourceType value) {
-						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null,
-								getController().getEditor());
+						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null);
 					}
 				};
 				leftSourceParam.addParameter("showReset", "false");
@@ -75,8 +74,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 						"right_source", null, ContentSourceType.values()) {
 					@Override
 					public boolean accept(ContentSourceType value) {
-						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null,
-								getController().getEditor());
+						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null);
 					}
 				};
 				rightSourceParam.addParameter("showReset", "false");

@@ -124,7 +124,6 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		setWSLibrary(this);
 		externalWSServices = new Vector<ExternalWSService>();
 		internalWSServices = new Vector<InternalWSService>();
-		setProject(project);
 	}
 
 	/**

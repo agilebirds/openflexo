@@ -20,7 +20,6 @@
 package org.openflexo.generator;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.ie.action.AddTab;
@@ -129,18 +127,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_CG, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
+		createProject(TEST_CG);
 		logger.info("Project has been SUCCESSFULLY created");
 		_bsHook = new DebugBackwardSynchronizationHook();
 		FlexoResourceManager.setBackwardSynchronizationHook(_bsHook);

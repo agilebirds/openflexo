@@ -54,7 +54,6 @@ import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract representation of an object defined in the data model
@@ -87,15 +86,6 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	public DMObject(FlexoProject project) {
 		super(project);
-	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getDMModel().getXMLMapping();
 	}
 
 	private DMGenericDeclaration _previousDMGenericDeclaration = null;
@@ -135,14 +125,6 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	public DMModel getDMModel() {
 		return _dmModel;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (getDMModel() != null) {
-			return getDMModel().getProject();
-		}
-		return null;
 	}
 
 	@Override

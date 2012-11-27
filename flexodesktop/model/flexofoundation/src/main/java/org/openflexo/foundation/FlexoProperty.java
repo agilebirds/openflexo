@@ -24,7 +24,6 @@ import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class FlexoProperty extends FlexoModelObject implements InspectableObject {
 
@@ -89,14 +88,6 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (getOwner() != null) {
-			return getOwner().getProject();
-		}
-		return super.getProject();
-	}
-
-	@Override
 	public String getClassNameKey() {
 		return "flexo_property";
 	}
@@ -104,14 +95,6 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 	@Override
 	public String getFullyQualifiedName() {
 		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (getOwner() != null) {
-			return getOwner().getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

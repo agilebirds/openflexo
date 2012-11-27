@@ -30,11 +30,9 @@ public class ProjectXSOntology extends XSOntology implements ProjectOntology {
 	protected static final Logger logger = Logger.getLogger(ProjectXSOntology.class.getPackage().getName());
 
 	private FlexoXMLModelResource modelResource;
-	private FlexoProject project;
 
 	public ProjectXSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
 		super(ontologyURI, xsdFile, library);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -50,13 +48,8 @@ public class ProjectXSOntology extends XSOntology implements ProjectOntology {
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-		this.project = project;
-	}
-
-	@Override
 	public FlexoProject getProject() {
-		return project;
+		return getFlexoResource().getProject();
 	}
 
 	@Override

@@ -39,7 +39,6 @@ import org.openflexo.foundation.ontology.dm.ShemaFolderDeleted;
 import org.openflexo.foundation.ontology.dm.ShemaFolderInserted;
 import org.openflexo.foundation.ontology.dm.ShemaInserted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
@@ -293,11 +292,6 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		return getShemaLibrary();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return getShemaLibrary().getProject();
 	}
 
 	@Deprecated

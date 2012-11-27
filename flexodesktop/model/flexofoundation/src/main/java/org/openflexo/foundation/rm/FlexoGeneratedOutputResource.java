@@ -88,7 +88,6 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> e
 			e.printStackTrace();
 			return null;
 		}
-		cg.setProject(getProject());
 
 		for (GenerationRepository repository : cg.getGeneratedRepositories()) {
 			repository.updatePreferredTemplateRepository();

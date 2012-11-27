@@ -59,21 +59,11 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 
-	// =====================================================================
-	// =========================== Instance variables ======================
-	// =====================================================================
-
-	private FlexoProject _project;
-
 	private FlexoOEShemaLibraryResource _resource;
 
 	private String name;
 
 	private ViewFolder _rootFolder;
-
-	// ========================================================
-	// =================== Constructor ========================
-	// ========================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -90,7 +80,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	 */
 	public ViewLibrary(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	@Override
@@ -161,16 +150,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoOEShemaLibraryResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override

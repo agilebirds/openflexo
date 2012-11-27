@@ -48,9 +48,6 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 	@ReturnedValue(FLEXO_RESOURCE + ".project")
 	public FlexoProject getProject();
 
-	@Override
-	public void setProject(FlexoProject aProject);
-
 	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
 	public List<FlexoProjectReference> getImportedProjects();
@@ -79,11 +76,6 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		@Override
 		public FlexoProject getProject() {
 			return getFlexoResource().getProject();
-		}
-
-		@Override
-		public void setProject(FlexoProject aProject) {
-
 		}
 
 		@Override

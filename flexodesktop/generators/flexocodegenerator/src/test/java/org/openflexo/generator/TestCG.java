@@ -30,7 +30,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateFile.TemplateFileContentEditor;
@@ -116,49 +115,13 @@ public class TestCG extends CGTestCase {
 		return suite;
 	}
 
-	/*
-	public static Test suite() {
-	     return new OrderedTestSuite(TestCG.class, new String[]{
-	    	 "test0CreateProject", 
-	    	 "test1CheckResources",
-	    	 "test2CreateSubProcessAndCheckResources",
-	    	 "test3CreateSubProcessNodeAndCheckResources",
-	    	 "test4CreateOperationAndCheckResources",
-	    	 "test5EditOperationComponent1",
-	    	 "test6CreateOperationComponent2",
-	    	 "test7CreateOperationComponent3",
-	    	 "test8CreateSubProcessNodeAndCheckResources",
-	    	 "test9InitializeCodeGeneration",
-	    	 "test10ValidateProject",
-	    	 "test11SynchronizeCodeGeneration",
-	    	 "test12CheckAllGeneratedResourcesDependancies",
-	    	 "test13CheckGeneratedResourcesStatus",
-	    	 "test14CheckOptimisticDependancyCheckingWithDataModel",
-	    	 "test15CheckOptimisticDependancyCheckingWithProcesses",
-	    	 "test16CheckOptimisticDependancyCheckingWithComponents",
-	    	 "test17CheckResourceDynamicDependancyRebuilding",
-	    	 "test18CheckTemplateDependancies"});
-	 }
-	 */
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_CG, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
-		logger.info("Project has been SUCCESSFULLY created");
+		createProject(TEST_CG);
 		_bsHook = new DebugBackwardSynchronizationHook();
 		FlexoResourceManager.setBackwardSynchronizationHook(_bsHook);
 	}

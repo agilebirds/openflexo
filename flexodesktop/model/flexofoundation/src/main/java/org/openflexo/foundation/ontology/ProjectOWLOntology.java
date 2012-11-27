@@ -49,7 +49,6 @@ public class ProjectOWLOntology extends OWLOntology implements ProjectOntology {
 
 	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
 
-	private FlexoProject _project;
 	private FlexoProjectOntologyResource _resource;
 
 	/**
@@ -122,7 +121,6 @@ public class ProjectOWLOntology extends OWLOntology implements ProjectOntology {
 
 	public ProjectOWLOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
 		super(anURI, owlFile, ontologyLibrary);
-		_project = ontologyLibrary.getProject();
 	}
 
 	@Override
@@ -148,16 +146,6 @@ public class ProjectOWLOntology extends OWLOntology implements ProjectOntology {
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override

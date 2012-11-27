@@ -69,7 +69,6 @@ import org.openflexo.foundation.ontology.owl.action.CreateOntologyIndividual;
 import org.openflexo.foundation.ontology.owl.action.DeleteOntologyObjects;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.toolbox.StringUtils;
 
@@ -1463,11 +1462,6 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	@Override
 	public OWLOntology getFlexoOntology() {
 		return this;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _library.getProject();
 	}
 
 	@Override
