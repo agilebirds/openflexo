@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
@@ -839,7 +838,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				setRootProcess(_getTopLevelNodeProcesses().firstElement().getProcess());
 				return getRootProcess();
 			} else {
-				logger.severe("No process found !");
 				return null;
 			}
 		}
@@ -850,12 +848,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public void setRootProcess(FlexoProcess aProcess) {
-		if (aProcess == null) {
-			logger.warning("Null not authorized as root process !");
-			setChanged();
-			notifyObserversAsReentrantModification(new DataModification("rootProcess", aProcess, getRootProcess()));
-			return;
-		}
 		_setRootProcessNode(aProcess.getProcessNode());
 
 	}
