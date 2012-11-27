@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.logging.FlexoLogger;
 
@@ -46,6 +47,11 @@ public class DummyComponentInstance extends ComponentInstance {
 	@Override
 	public String getFullyQualifiedName() {
 		return "DUMMY_COMPONENT_INSTANCE_" + getComponentDefinition().getFullyQualifiedName();
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		return getComponentDefinition().getProject();
 	}
 
 	@Override
