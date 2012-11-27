@@ -142,6 +142,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			public boolean isTabHeaderVisible(ModuleView<?> tab) {
 				return !(tab instanceof org.openflexo.view.EmptyPanel<?>)
 						&& (AdvancedPrefs.getShowAllTabs() || tab.getRepresentedObject() != null
+								&& tab.getRepresentedObject().getProject() != null
 								&& tab.getRepresentedObject().getProject()
 										.equals(FlexoMainPane.this.controller.getControllerModel().getCurrentProject()));
 			}
