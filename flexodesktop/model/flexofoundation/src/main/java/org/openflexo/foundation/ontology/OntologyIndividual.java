@@ -2,6 +2,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.List;
 
+// test
 public interface OntologyIndividual extends OntologyObject {
 
 	public List<? extends OntologyClass> getTypes();
