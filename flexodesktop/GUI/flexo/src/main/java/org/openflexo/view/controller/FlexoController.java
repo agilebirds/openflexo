@@ -1537,6 +1537,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (flexoFrame != null) {
 			flexoFrame.disposeAll();
 		}
+		if (menuBar != null) {
+			menuBar.dispose();
+		}
 		for (FlexoEditor editor : controllerModel.getEditors()) {
 			if (editor instanceof InteractiveFlexoEditor) {
 				((InteractiveFlexoEditor) editor).unregisterControllerActionInitializer(getControllerActionInitializer());
