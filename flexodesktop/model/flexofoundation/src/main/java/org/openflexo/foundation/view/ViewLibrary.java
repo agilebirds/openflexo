@@ -45,6 +45,7 @@ import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;

@@ -25,6 +25,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.localization.LocalizedDelegate;
 

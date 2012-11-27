@@ -122,15 +122,15 @@
 		<property name="value" xmlTag="value" attribute="yes" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.ViewObject"
+	<entity name="org.openflexo.foundation.view.diagram.model.ViewObject"
 		abstract="YES" finalizer="finalizeDeserialization">
 		<property name="childs" type="vector"
-			contains="org.openflexo.foundation.view.ViewElement" primary="yes"
+			contains="org.openflexo.foundation.view.diagram.model.ViewElement" primary="yes"
 			context="Contained" />
 		<property name="index" xmlTag="index" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.View" xmlTag="VEShema">
+	<entity name="org.openflexo.foundation.view.diagram.model.View" xmlTag="VEShema">
 		<description>VEShema</description>
 		<property name="graphicalRepresentation" xmlTag="DrawingGraphicalRepresentation" />
 		<property name="modelSlotInstances" xmlTag="modelSlotInstances"
@@ -160,7 +160,7 @@
 	<entity name="org.openflexo.foundation.ontology.xsd.XSModelSlot"
 		xmlTag="xsdModelSlot" />
 
-	<entity name="org.openflexo.foundation.view.ViewElement"
+	<entity name="org.openflexo.foundation.view.diagram.model.ViewElement"
 		abstract="yes" contexts="Contained">
 		<property name="indexRelativeToEPType" xmlTag="indexRelativeToEPType"
 			attribute="YES" />
@@ -170,21 +170,21 @@
 			attribute="YES"/> -->
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.ViewShape" xmlTag="VEShape"
+	<entity name="org.openflexo.foundation.view.diagram.model.ViewShape" xmlTag="VEShape"
 		contexts="From,To">
 		<description>Shape</description>
 		<property name="graphicalRepresentation" xmlTag="ShapeGraphicalRepresentation" />
 		<property name="name" xmlTag="name" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.ViewConnector"
+	<entity name="org.openflexo.foundation.view.diagram.model.ViewConnector"
 		xmlTag="VEConnector">
 		<description>Connector</description>
 		<property name="graphicalRepresentation" xmlTag="ConnectorGraphicalRepresentation" />
 		<property name="name" xmlTag="name" attribute="YES" />
-		<property name="startShape" contains="org.openflexo.foundation.view.ViewShape"
+		<property name="startShape" contains="org.openflexo.foundation.view.diagram.model.ViewShape"
 			context="From" primary="no" />
-		<property name="endShape" contains="org.openflexo.foundation.view.ViewShape"
+		<property name="endShape" contains="org.openflexo.foundation.view.diagram.model.ViewShape"
 			context="To" primary="no" />
 	</entity>
 

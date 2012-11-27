@@ -27,16 +27,23 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern extends AssignableAction {
+public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+		AssignableAction<MS, M, MM, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
@@ -199,6 +206,35 @@ public class AddEditionPattern extends AssignableAction {
 		for (AddEditionPatternParameter removeThis : parametersToRemove) {
 			removeFromParameters(removeThis);
 		}
+	}
+
+	@Override
+	public EditionPatternInstance performAction(EditionSchemeAction action) {
+		logger.info("Perform performAddEditionPattern " + action);
+		View view = getView(action);
+		logger.info("View: " + view);
+		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, action);
+		creationSchemeAction.setCreationScheme(getCreationScheme());
+		for (AddEditionPatternParameter p : getParameters()) {
+			EditionSchemeParameter param = p.getParam();
+			Object value = p.evaluateParameterValue(action);
+			logger.info("For parameter " + param + " value is " + value);
+			if (value != null) {
+				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+			}
+		}
+		creationSchemeAction.doAction();
+		if (creationSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed performAddEditionPattern " + action);
+			return creationSchemeAction.getEditionPatternInstance();
+		}
+		return null;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, EditionPatternInstance initialContext) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public static class AddEditionPatternParameter extends EditionSchemeObject implements Bindable {

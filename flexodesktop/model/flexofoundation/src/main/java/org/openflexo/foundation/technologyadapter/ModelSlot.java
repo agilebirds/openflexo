@@ -1,6 +1,7 @@
 package org.openflexo.foundation.technologyadapter;
 
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.viewpoint.EditionAction;
 
 /**
  * <p>
@@ -15,7 +16,7 @@ import org.openflexo.foundation.view.View;
  * 
  * @author Luka Le Roux, Sylvain Guerin
  * @see org.openflexo.foundation.viewpoint.ViewPoint
- * @see org.openflexo.foundation.view.View
+ * @see org.openflexo.foundation.view.diagram.model.View
  * 
  */
 public interface ModelSlot<M extends FlexoModel<MM>, MM extends FlexoMetaModel> {
@@ -47,4 +48,13 @@ public interface ModelSlot<M extends FlexoModel<MM>, MM extends FlexoMetaModel> 
 	 * @return a newly created model conform to supplied meta model
 	 */
 	public M createEmptyModel(View view, MM metaModel);
+
+	/**
+	 * Instantiate new action of required type
+	 * 
+	 * @param actionClass
+	 * @return
+	 */
+	public <A extends EditionAction<? extends ModelSlot<M, MM>, M, MM, ?>> A createAction(Class<A> actionClass);
+
 }

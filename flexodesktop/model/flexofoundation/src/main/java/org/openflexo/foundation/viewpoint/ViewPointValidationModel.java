@@ -21,6 +21,9 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
 import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;

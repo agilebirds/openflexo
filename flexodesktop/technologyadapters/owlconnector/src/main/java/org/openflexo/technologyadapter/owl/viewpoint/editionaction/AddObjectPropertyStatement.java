@@ -223,7 +223,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 				AddObjectPropertyStatement action) {
 			if (action.getObjectProperty() == null) {
 				Vector<FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>> v = new Vector<FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>>();
-				for (ObjectPropertyStatementPatternRole pr : action.getEditionPattern().getObjectPropertyStatementPatternRoles()) {
+				for (ObjectPropertyStatementPatternRole pr : action.getEditionPattern().getPatternRoles(
+						ObjectPropertyStatementPatternRole.class)) {
 					v.add(new SetsPatternRole(pr));
 				}
 				return new ValidationError<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>(this,

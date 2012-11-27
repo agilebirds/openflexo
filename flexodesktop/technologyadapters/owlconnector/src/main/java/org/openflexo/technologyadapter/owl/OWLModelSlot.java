@@ -2,7 +2,7 @@ package org.openflexo.technologyadapter.owl;
 
 import org.openflexo.foundation.technologyadapter.ModelSlotImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModel;

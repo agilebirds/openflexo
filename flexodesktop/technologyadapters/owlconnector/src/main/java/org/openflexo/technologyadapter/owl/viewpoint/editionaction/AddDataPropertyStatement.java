@@ -201,8 +201,6 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, DataPropertyStatement initialContext) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static class AddDataPropertyStatementActionMustDefineADataProperty extends
@@ -216,7 +214,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 				AddDataPropertyStatement action) {
 			if (action.getDataProperty() == null) {
 				Vector<FixProposal<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>> v = new Vector<FixProposal<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>>();
-				for (DataPropertyStatementPatternRole pr : action.getEditionPattern().getDataPropertyStatementPatternRoles()) {
+				for (DataPropertyStatementPatternRole pr : action.getEditionPattern().getPatternRoles(
+						DataPropertyStatementPatternRole.class)) {
 					v.add(new SetsPatternRole(pr));
 				}
 				return new ValidationError<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>(this, action,

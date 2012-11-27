@@ -6,15 +6,15 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.action.ActionSchemeAction;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
-import org.openflexo.foundation.view.action.NavigationSchemeAction;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
+import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
+import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.GraphicalElementAction;
-import org.openflexo.foundation.viewpoint.GraphicalElementAction.ActionMask;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 
 public class VEMouseClickControl extends MouseClickControl {

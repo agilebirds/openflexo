@@ -24,11 +24,16 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeclarePatternRole extends AssignableAction {
+public class DeclarePatternRole<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+		AssignableAction<MS, M, MM, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
@@ -119,6 +124,17 @@ public class DeclarePatternRole extends AssignableAction {
 		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
 			return object.getObjectBindingDefinition();
 		}
+
+	}
+
+	@Override
+	public FlexoModelObject performAction(EditionSchemeAction action) {
+		return (FlexoModelObject) getDeclaredObject(action);
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+		// TODO Auto-generated method stub
 
 	}
 
