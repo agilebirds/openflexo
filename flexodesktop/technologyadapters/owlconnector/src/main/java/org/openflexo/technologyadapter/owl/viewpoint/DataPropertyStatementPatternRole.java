@@ -1,7 +1,7 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -42,12 +42,12 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole {
 		this.dataPropertyURI = dataPropertyURI;
 	}
 
-	public OntologyDataProperty getDataProperty() {
+	public IFlexoOntologyDataProperty getDataProperty() {
 		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getViewpointOntology().getDataProperty(_getDataPropertyURI());
 	}
 
-	public void setDataProperty(OntologyProperty p) {
+	public void setDataProperty(IFlexoOntologyStructuralProperty p) {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
 

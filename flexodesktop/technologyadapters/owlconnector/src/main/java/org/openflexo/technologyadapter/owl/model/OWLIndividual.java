@@ -27,18 +27,18 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class OWLIndividual extends OWLObject<Individual> implements OntologyIndividual, Comparable<OntologyIndividual> {
+public class OWLIndividual extends OWLObject<Individual> implements IFlexoOntologyIndividual, Comparable<IFlexoOntologyIndividual> {
 
-	private static final Logger logger = Logger.getLogger(OntologyIndividual.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntologyIndividual.class.getPackage().getName());
 
 	private Individual individual;
 
@@ -51,7 +51,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	}
 
 	/**
-	 * Update this OntologyIndividual, given base Individual
+	 * Update this IFlexoOntologyIndividual, given base Individual
 	 */
 	protected void init() {
 		updateOntologyStatements(individual);
@@ -68,7 +68,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	}
 
 	/**
-	 * Update this OntologyIndividual, given base Individual
+	 * Update this IFlexoOntologyIndividual, given base Individual
 	 */
 	@Override
 	protected void update() {
@@ -77,7 +77,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	}
 
 	/**
-	 * Update this OntologyIndividual, given base Individual which is assumed to extends base Individual
+	 * Update this IFlexoOntologyIndividual, given base Individual which is assumed to extends base Individual
 	 * 
 	 * @param anOntClass
 	 */
@@ -159,7 +159,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	 * @param type
 	 */
 	@Override
-	public SubClassStatement addType(OntologyClass type) {
+	public SubClassStatement addType(IFlexoOntologyClass type) {
 		if (type instanceof OWLClass) {
 			getOntResource().addOntClass(((OWLClass) type).getOntResource());
 			updateOntologyStatements();
@@ -176,12 +176,12 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "OntologyIndividual:" + getURI();
+		return "IFlexoOntologyIndividual:" + getURI();
 	}
 
-	public static final Comparator<OntologyIndividual> COMPARATOR = new Comparator<OntologyIndividual>() {
+	public static final Comparator<IFlexoOntologyIndividual> COMPARATOR = new Comparator<IFlexoOntologyIndividual>() {
 		@Override
-		public int compare(OntologyIndividual o1, OntologyIndividual o2) {
+		public int compare(IFlexoOntologyIndividual o1, IFlexoOntologyIndividual o2) {
 			return Collator.getInstance().compare(o1.getName(), o2.getName());
 		}
 	};
@@ -196,7 +196,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	}
 
 	@Override
-	public int compareTo(OntologyIndividual o) {
+	public int compareTo(IFlexoOntologyIndividual o) {
 		return COMPARATOR.compare(this, o);
 	}
 
@@ -210,7 +210,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	}
 
 	@Override
-	public boolean isSuperConceptOf(OntologyObject concept) {
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
 		return false;
 	}
 
@@ -218,7 +218,7 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	public String getDisplayableDescription() {
 		String extendsLabel = " extends ";
 		boolean isFirst = true;
-		for (OntologyClass s : types) {
+		for (IFlexoOntologyClass s : types) {
 			extendsLabel += (isFirst ? "" : ",") + s.getName();
 			isFirst = false;
 		}
@@ -242,28 +242,28 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 	/*@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
-		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
-		for (OntologyClass aClass : getSuperClasses()) {
+		Vector<IFlexoOntologyClass> alreadyComputed = new Vector<IFlexoOntologyClass>();
+		for (IFlexoOntologyClass aClass : getSuperClasses()) {
 			_appendRangeAndDomains(aClass, alreadyComputed);
 		}
 	}
 
-	private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed) {
+	private void _appendRangeAndDomains(IFlexoOntologyClass superClass, Vector<IFlexoOntologyClass> alreadyComputed) {
 		if (alreadyComputed.contains(superClass)) {
 			return;
 		}
 		alreadyComputed.add(superClass);
-		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
+		for (IFlexoOntologyStructuralProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
 			if (!propertiesTakingMySelfAsDomain.contains(p)) {
 				propertiesTakingMySelfAsDomain.add(p);
 			}
 		}
-		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
+		for (IFlexoOntologyStructuralProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
 			if (!propertiesTakingMySelfAsRange.contains(p)) {
 				propertiesTakingMySelfAsRange.add(p);
 			}
 		}
-		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
+		for (IFlexoOntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
 	}*/

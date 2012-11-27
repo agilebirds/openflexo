@@ -10,14 +10,14 @@ public class OntologyFolder extends TemporaryFlexoModelObject {
 	private final String name;
 	private final OntologyFolder parent;
 	private final Vector<OntologyFolder> children;
-	private final Vector<FlexoOntology> ontologies;
+	private final Vector<IFlexoOntology> ontologies;
 
 	public OntologyFolder(String name, OntologyFolder parentFolder, OntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
 		this.name = name;
 		this.parent = parentFolder;
 		children = new Vector<OntologyFolder>();
-		ontologies = new Vector<FlexoOntology>();
+		ontologies = new Vector<IFlexoOntology>();
 		if (parentFolder != null) {
 			parentFolder.addToChildren(this);
 		}
@@ -40,15 +40,15 @@ public class OntologyFolder extends TemporaryFlexoModelObject {
 		children.remove(aFolder);
 	}
 
-	public Vector<FlexoOntology> getOntologies() {
+	public Vector<IFlexoOntology> getOntologies() {
 		return ontologies;
 	}
 
-	public void addToOntologies(FlexoOntology anOntology) {
+	public void addToOntologies(IFlexoOntology anOntology) {
 		ontologies.add(anOntology);
 	}
 
-	public void removeFromOntologies(FlexoOntology anOntology) {
+	public void removeFromOntologies(IFlexoOntology anOntology) {
 		ontologies.remove(anOntology);
 	}
 

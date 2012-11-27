@@ -31,11 +31,11 @@ import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
@@ -53,10 +53,10 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
-public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject implements OntologyObject, InspectableObject,
-		StringConvertable<OntologyObject> {
+public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject implements IFlexoOntologyConcept, InspectableObject,
+		StringConvertable<IFlexoOntologyConcept> {
 
-	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntologyConcept.class.getPackage().getName());
 
 	private final Vector<OWLStatement> _statements;
 	private final Vector<PropertyStatement> _annotationStatements;
@@ -244,10 +244,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 				} else if (predicate.getURI().equals(OWL_EQUIVALENT_CLASS_URI)) {
 					newStatement = new EquivalentClassStatement(this, s);
 				} else {
-					OntologyObject predicateProperty = getOntology().getOntologyObject(predicate.getURI());
-					if (predicateProperty instanceof OntologyObjectProperty) {
+					IFlexoOntologyConcept predicateProperty = getOntology().getOntologyObject(predicate.getURI());
+					if (predicateProperty instanceof IFlexoOntologyObjectProperty) {
 						newStatement = new ObjectPropertyStatement(this, s);
-					} else if (predicateProperty instanceof OntologyDataProperty) {
+					} else if (predicateProperty instanceof IFlexoOntologyDataProperty) {
 						newStatement = new DataPropertyStatement(this, s);
 					} else {
 						logger.warning("Inconsistant data: unkwown property " + predicate);
@@ -301,7 +301,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public Vector<PropertyStatement> getPropertyStatements(OntologyProperty property) {
+	public Vector<PropertyStatement> getPropertyStatements(IFlexoOntologyStructuralProperty property) {
 		Vector<PropertyStatement> returned = new Vector<PropertyStatement>();
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof PropertyStatement) {
@@ -320,7 +320,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public Vector<DataPropertyStatement> getAnnotationStatements(OntologyDataProperty property) {
+	public Vector<DataPropertyStatement> getAnnotationStatements(IFlexoOntologyDataProperty property) {
 		Vector<DataPropertyStatement> returned = new Vector<DataPropertyStatement>();
 		for (OWLStatement statement : getAnnotationStatements()) {
 			if (statement instanceof DataPropertyStatement) {
@@ -339,7 +339,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public Vector<ObjectPropertyStatement> getAnnotationObjectStatements(OntologyProperty property) {
+	public Vector<ObjectPropertyStatement> getAnnotationObjectStatements(IFlexoOntologyStructuralProperty property) {
 		Vector<ObjectPropertyStatement> returned = new Vector<ObjectPropertyStatement>();
 		for (OWLStatement statement : getAnnotationObjectStatements()) {
 			if (statement instanceof PropertyStatement) {
@@ -358,7 +358,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public Vector<ObjectPropertyStatement> getObjectPropertyStatements(OntologyObjectProperty property) {
+	public Vector<ObjectPropertyStatement> getObjectPropertyStatements(IFlexoOntologyObjectProperty property) {
 		Vector<ObjectPropertyStatement> returned = new Vector<ObjectPropertyStatement>();
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement) {
@@ -377,7 +377,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public Vector<DataPropertyStatement> getDataPropertyStatements(OntologyDataProperty property) {
+	public Vector<DataPropertyStatement> getDataPropertyStatements(IFlexoOntologyDataProperty property) {
 		Vector<DataPropertyStatement> returned = new Vector<DataPropertyStatement>();
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof DataPropertyStatement) {
@@ -396,7 +396,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public PropertyStatement getPropertyStatement(OntologyProperty property) {
+	public PropertyStatement getPropertyStatement(IFlexoOntologyStructuralProperty property) {
 		Vector<PropertyStatement> returned = getPropertyStatements(property);
 		if (returned.size() > 0) {
 			return returned.firstElement();
@@ -410,7 +410,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public DataPropertyStatement getDataPropertyStatement(OntologyDataProperty property, Object value) {
+	public DataPropertyStatement getDataPropertyStatement(IFlexoOntologyDataProperty property, Object value) {
 		Vector<DataPropertyStatement> returned = getDataPropertyStatements(property);
 		for (DataPropertyStatement statement : returned) {
 			if (statement.getValue().equals(value)) {
@@ -426,7 +426,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public PropertyStatement getPropertyStatement(OntologyProperty property, String value) {
+	public PropertyStatement getPropertyStatement(IFlexoOntologyStructuralProperty property, String value) {
 		Vector<PropertyStatement> returned = getPropertyStatements(property);
 		for (PropertyStatement statement : returned) {
 			if (statement.hasLitteralValue() && statement.getStringValue().equals(value)) {
@@ -442,7 +442,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public PropertyStatement getPropertyStatement(OntologyProperty property, Object value) {
+	public PropertyStatement getPropertyStatement(IFlexoOntologyStructuralProperty property, Object value) {
 		Vector<PropertyStatement> returned = getPropertyStatements(property);
 		for (PropertyStatement statement : returned) {
 			if (statement.hasLitteralValue() && statement.getLiteral().getValue().equals(value)) {
@@ -458,7 +458,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public ObjectPropertyStatement getPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+	public ObjectPropertyStatement getPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
 		Vector<ObjectPropertyStatement> returned = getObjectPropertyStatements(property);
 		for (ObjectPropertyStatement statement : returned) {
 			if (statement.getStatementObject() == object) {
@@ -474,7 +474,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public PropertyStatement getPropertyStatement(OntologyProperty property, String value, Language language) {
+	public PropertyStatement getPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language) {
 		Vector<PropertyStatement> returned = getPropertyStatements(property);
 		for (PropertyStatement statement : returned) {
 			if (statement.hasLitteralValue() && statement.getStringValue().equals(value)
@@ -492,7 +492,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	// TODO: need to handle multiple statements
-	public DataPropertyStatement getDataPropertyStatement(OntologyDataProperty property) {
+	public DataPropertyStatement getDataPropertyStatement(IFlexoOntologyDataProperty property) {
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof DataPropertyStatement && ((DataPropertyStatement) statement).getProperty() == property) {
 				return (DataPropertyStatement) statement;
@@ -508,7 +508,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	// TODO: need to handle multiple statements
-	public ObjectPropertyStatement getObjectPropertyStatement(OntologyObjectProperty property) {
+	public ObjectPropertyStatement getObjectPropertyStatement(IFlexoOntologyObjectProperty property) {
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property) {
 				return (ObjectPropertyStatement) statement;
@@ -523,7 +523,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param property
 	 * @return
 	 */
-	public ObjectPropertyStatement getObjectPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+	public ObjectPropertyStatement getObjectPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property
 					&& ((ObjectPropertyStatement) statement).getStatementObject() == object) {
@@ -540,7 +540,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	// TODO: need to handle multiple statements
-	public SubClassStatement getSubClassStatement(OntologyObject father) {
+	public SubClassStatement getSubClassStatement(IFlexoOntologyConcept father) {
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof SubClassStatement && ((SubClassStatement) statement).getParent().equals(father)) {
 				return (SubClassStatement) statement;
@@ -550,10 +550,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	}
 
 	@Override
-	public abstract boolean isSuperConceptOf(OntologyObject concept);
+	public abstract boolean isSuperConceptOf(IFlexoOntologyConcept concept);
 
 	@Override
-	public boolean isSubConceptOf(OntologyObject concept) {
+	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
 		return concept.isSuperConceptOf(concept);
 	}
 
@@ -623,7 +623,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	@Override
-	public Object getPropertyValue(OntologyProperty property) {
+	public Object getPropertyValue(IFlexoOntologyStructuralProperty property) {
 		if (property == null) {
 			logger.warning("getPropertyValue() called for null property");
 			return null;
@@ -657,7 +657,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param newValue
 	 */
 	@Override
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
+	public void setPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
 		if (property instanceof OWLProperty) {
 			PropertyStatement s = getPropertyStatement(property);
 			if (s != null) {
@@ -689,7 +689,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	@Override
-	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
+	public Object getAnnotationValue(IFlexoOntologyDataProperty property, Language language) {
 		List<DataPropertyStatement> literalAnnotations = getAnnotationStatements(property);
 		for (DataPropertyStatement annotation : literalAnnotations) {
 			if (annotation != null && annotation.getLanguage() == language) {
@@ -702,7 +702,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	}
 
 	@Override
-	public void setAnnotationValue(Object value, OntologyDataProperty property, Language language) {
+	public void setAnnotationValue(Object value, IFlexoOntologyDataProperty property, Language language) {
 		// TODO: implement this
 		logger.warning("setAnnotationValue not implemented !");
 	}
@@ -715,10 +715,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	@Override
-	public Object getAnnotationObjectValue(OntologyObjectProperty property) {
+	public Object getAnnotationObjectValue(IFlexoOntologyObjectProperty property) {
 		List<ObjectPropertyStatement> annotations = getAnnotationObjectStatements(property);
 		for (ObjectPropertyStatement annotation : annotations) {
-			OntologyObject returned = annotation.getStatementObject();
+			IFlexoOntologyConcept returned = annotation.getStatementObject();
 			if (returned != null) {
 				return returned;
 			}
@@ -734,7 +734,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @param language
 	 */
 	@Override
-	public void setAnnotationObjectValue(Object value, OntologyObjectProperty property, Language language) {
+	public void setAnnotationObjectValue(Object value, IFlexoOntologyObjectProperty property, Language language) {
 		// TODO: implement this
 		logger.warning("setAnnotationObjectValue not implemented !");
 	}
@@ -747,7 +747,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return an object representing the added statement
 	 */
 	@Override
-	public ObjectPropertyStatement addPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+	public ObjectPropertyStatement addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
 		if (property instanceof OWLObjectProperty && object instanceof OWLObject) {
 			// System.out.println("Subject: "+this+" resource="+getOntResource());
 			// System.out.println("Predicate: "+property+" resource="+property.getOntProperty());
@@ -770,7 +770,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return an object representing the added statement
 	 */
 	@Override
-	public PropertyStatement addPropertyStatement(OntologyProperty property, Object value) {
+	public PropertyStatement addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value) {
 		if (property instanceof OWLProperty) {
 			if (value instanceof String) {
 				getOntResource().addProperty(((OWLProperty) property).getOntProperty(), (String) value);
@@ -796,7 +796,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return an object representing the added statement
 	 */
 	@Override
-	public PropertyStatement addPropertyStatement(OntologyProperty property, String value, Language language) {
+	public PropertyStatement addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language) {
 		if (property instanceof OWLProperty) {
 			// System.out.println("****** Add statement for property "+property.getName()+" value="+value+" language="+language);
 			getOntResource().addProperty(((OWLProperty) property).getOntProperty(), value, language.getTag());
@@ -816,7 +816,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return an object representing the added statement
 	 */
 	@Override
-	public DataPropertyStatement addDataPropertyStatement(OntologyDataProperty property, Object value) {
+	public DataPropertyStatement addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value) {
 		if (property instanceof OWLDataProperty) {
 			getOntResource().addLiteral(((OWLProperty) property).getOntProperty(), value);
 			updateOntologyStatements();
@@ -833,7 +833,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		getOntology().setChanged();
 	}
 
-	public PropertyStatement addLiteral(OntologyProperty property, Object value) {
+	public PropertyStatement addLiteral(IFlexoOntologyStructuralProperty property, Object value) {
 		if (property instanceof OWLProperty) {
 			if (value instanceof String) {
 				getOntResource().addProperty(((OWLProperty) property).getOntProperty(), (String) value);
@@ -1092,7 +1092,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 * @return
 	 */
 	@Override
-	public boolean equalsToConcept(OntologyObject o) {
+	public boolean equalsToConcept(IFlexoOntologyConcept o) {
 		if (o == null) {
 			return false;
 		}

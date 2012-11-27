@@ -87,7 +87,7 @@ public class CreateOntologyIndividual extends FlexoAction<CreateOntologyIndividu
 
 	@Override
 	protected void doAction(Object context) throws DuplicateURIException {
-		logger.info("Create OntologyIndividual on " + getFocusedObject());
+		logger.info("Create IFlexoOntologyIndividual on " + getFocusedObject());
 		newIndividual = getOntology().createOntologyIndividual(newOntologyIndividualName, fatherClass);
 	}
 

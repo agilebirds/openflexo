@@ -19,12 +19,12 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class OntologyObjectParameter extends ParameterDefinition<OntologyObject> {
+public class OntologyObjectParameter extends ParameterDefinition<IFlexoOntologyConcept> {
 
-	public OntologyObjectParameter(String name, String label, OntologyObject defaultValue) {
+	public OntologyObjectParameter(String name, String label, IFlexoOntologyConcept defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("className", "org.openflexo.components.widget.OntologyObjectInspectorWidget");
 	}

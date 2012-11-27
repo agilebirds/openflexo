@@ -3,7 +3,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 /**
@@ -21,7 +21,7 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 	private String modelSlotName;
 	private boolean modelSlotIsRequired;
 	private boolean modelSlotIsReadOnly;
-	private FlexoOntology modelSlotMetaModel;
+	private IFlexoOntology modelSlotMetaModel;
 
 	private TechnologicalSpace modelSlotTechnologicalSpace;
 
@@ -59,11 +59,11 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 		this.modelSlotIsReadOnly = modelSlotIsReadOnly;
 	}
 
-	public FlexoOntology getModelSlotMetaModel() {
+	public IFlexoOntology getModelSlotMetaModel() {
 		return modelSlotMetaModel;
 	}
 
-	public void setModelSlotMetaModel(FlexoOntology modelSlotMetaModel) {
+	public void setModelSlotMetaModel(IFlexoOntology modelSlotMetaModel) {
 		this.modelSlotMetaModel = modelSlotMetaModel;
 	}
 
@@ -93,7 +93,7 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 	 * @return a new {@link ModelSlot}
 	 * @see #hasEnoughInformations()
 	 */
-	public ModelSlot<FlexoOntology> create() {
+	public ModelSlot<IFlexoOntology> create() {
 		if (hasEnoughInformations() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to create a new ModelSlot, some parameters are missing.");
@@ -102,7 +102,7 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 		}
 
 		@SuppressWarnings("unchecked")
-		ModelSlot<FlexoOntology> newModelSlot = (ModelSlot<FlexoOntology>) getModelSlotTechnologicalSpace().newSlot();
+		ModelSlot<IFlexoOntology> newModelSlot = (ModelSlot<IFlexoOntology>) getModelSlotTechnologicalSpace().newSlot();
 		newModelSlot.setName(this.getModelSlotName());
 		newModelSlot.setMetaModel(this.getModelSlotMetaModel());
 		newModelSlot.setIsReadOnly(this.getModelSlotIsReadOnly());

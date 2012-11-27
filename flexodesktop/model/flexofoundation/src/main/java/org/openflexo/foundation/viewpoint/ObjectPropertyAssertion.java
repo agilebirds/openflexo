@@ -25,8 +25,8 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -55,14 +55,14 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		return objectPropertyURI;
 	}
 
-	public OntologyProperty getOntologyProperty() {
+	public IFlexoOntologyStructuralProperty getOntologyProperty() {
 		if (getViewPoint().getViewpointOntology() != null) {
 			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
 		}
 		return null;
 	}
 
-	public void setOntologyProperty(OntologyProperty p) {
+	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
 		_setObjectPropertyURI(p != null ? p.getURI() : null);
 	}
 
@@ -73,7 +73,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
@@ -93,10 +93,10 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		this.object = object;
 	}
 
-	public OntologyObject getAssertionObject(EditionSchemeAction action) {
+	public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action) {
 		Object value = getObject().getBindingValue(action);
-		if (value instanceof OntologyObject) {
-			return (OntologyObject) value;
+		if (value instanceof IFlexoOntologyConcept) {
+			return (IFlexoOntologyConcept) value;
 		}
 		return null;
 	}

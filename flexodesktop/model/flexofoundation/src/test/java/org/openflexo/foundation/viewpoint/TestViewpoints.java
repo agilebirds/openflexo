@@ -81,7 +81,7 @@ public class TestViewpoints extends FlexoTestCase {
 		/*System.out.println("basicOntologyEditor=" + basicOntologyEditor);
 		System.out.println("ontology=" + basicOntologyEditor.getViewpointOntology());
 		System.out.println("loaded=" + basicOntologyEditor.getViewpointOntology().isLoaded());
-		for (OntologyClass c : basicOntologyEditor.getViewpointOntology().getClasses()) {
+		for (IFlexoOntologyClass c : basicOntologyEditor.getViewpointOntology().getClasses()) {
 			System.out.println("> Class " + c);
 		}*/
 

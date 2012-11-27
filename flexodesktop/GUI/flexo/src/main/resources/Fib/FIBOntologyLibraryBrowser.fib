@@ -9,7 +9,7 @@
       <Children data="ontologyFolder.children" name="subFolders" />
       <Children data="ontologyFolder.ontologies" name="ontologies" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.ontology.FlexoOntology" label="ontology.name" icon="controller.ontologyIcon" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.IFlexoOntology" label="ontology.name" icon="controller.ontologyIcon" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
   </Browser>
   <LocalizedDictionary />
 </Panel>

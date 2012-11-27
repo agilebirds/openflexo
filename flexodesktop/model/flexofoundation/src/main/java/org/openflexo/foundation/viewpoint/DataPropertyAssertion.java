@@ -23,8 +23,8 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -51,14 +51,14 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		return Inspectors.VPM.DATA_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
-	public OntologyProperty getOntologyProperty() {
+	public IFlexoOntologyStructuralProperty getOntologyProperty() {
 		if (getViewPoint().getViewpointOntology() != null) {
 			return getViewPoint().getViewpointOntology().getProperty(_getDataPropertyURI());
 		}
 		return null;
 	}
 
-	public void setOntologyProperty(OntologyProperty p) {
+	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
 
@@ -76,9 +76,9 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
-			if (getOntologyProperty() instanceof OntologyDataProperty) {
-				if (((OntologyDataProperty) getOntologyProperty()).getDataType() != null) {
-					return ((OntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
+			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
+				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType() != null) {
+					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
 				}
 			}
 			return Object.class;

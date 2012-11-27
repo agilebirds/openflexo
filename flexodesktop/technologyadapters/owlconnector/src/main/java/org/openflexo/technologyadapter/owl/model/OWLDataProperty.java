@@ -24,16 +24,16 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 
-public class OWLDataProperty extends OWLProperty implements OntologyDataProperty, Comparable<OntologyDataProperty> {
+public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataProperty, Comparable<IFlexoOntologyDataProperty> {
 
-	static final Logger logger = Logger.getLogger(OntologyDataProperty.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(IFlexoOntologyDataProperty.class.getPackage().getName());
 
 	protected OWLDataProperty(OntProperty aDataProperty, OWLOntology ontology) {
 		super(aDataProperty, ontology);
@@ -55,7 +55,7 @@ public class OWLDataProperty extends OWLProperty implements OntologyDataProperty
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "OntologyDataProperty:" + getURI();
+		return "IFlexoOntologyDataProperty:" + getURI();
 	}
 
 	@Override
@@ -73,12 +73,12 @@ public class OWLDataProperty extends OWLProperty implements OntologyDataProperty
 	}*/
 
 	@Override
-	public int compareTo(OntologyDataProperty o) {
+	public int compareTo(IFlexoOntologyDataProperty o) {
 		return COMPARATOR.compare(this, o);
 	}
 
 	@Override
-	public boolean isSuperConceptOf(OntologyObject concept) {
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
 		if (concept instanceof OWLDataProperty) {
 			OWLDataProperty ontologyDataProperty = (OWLDataProperty) concept;
 			return ontologyDataProperty.getOntProperty().hasSuperProperty(getOntProperty(), false);
@@ -94,7 +94,7 @@ public class OWLDataProperty extends OWLProperty implements OntologyDataProperty
 	 * @return
 	 */
 	@Override
-	public List<OWLDataProperty> getSubProperties(FlexoOntology context) {
+	public List<OWLDataProperty> getSubProperties(IFlexoOntology context) {
 		if (context instanceof OWLOntology) {
 			List<OWLDataProperty> returned = new Vector<OWLDataProperty>();
 			for (OWLDataProperty p : ((OWLOntology) context).getAccessibleDataProperties()) {

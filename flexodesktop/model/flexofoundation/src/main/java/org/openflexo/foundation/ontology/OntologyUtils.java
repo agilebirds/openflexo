@@ -9,7 +9,7 @@ public class OntologyUtils {
 
 	private static final Logger logger = Logger.getLogger(OntologyUtils.class.getPackage().getName());
 
-	public static <C extends OntologyClass> C getMostSpecializedClass(Collection<C> someClasses) {
+	public static <C extends IFlexoOntologyClass> C getMostSpecializedClass(Collection<C> someClasses) {
 
 		if (someClasses.size() == 0) {
 			return null;
@@ -17,12 +17,12 @@ public class OntologyUtils {
 		if (someClasses.size() == 1) {
 			return someClasses.iterator().next();
 		}
-		OntologyClass[] array = someClasses.toArray(new OntologyClass[someClasses.size()]);
+		IFlexoOntologyClass[] array = someClasses.toArray(new IFlexoOntologyClass[someClasses.size()]);
 
 		for (int i = 0; i < someClasses.size(); i++) {
 			for (int j = i + 1; j < someClasses.size(); j++) {
-				OntologyClass c1 = array[i];
-				OntologyClass c2 = array[j];
+				IFlexoOntologyClass c1 = array[i];
+				IFlexoOntologyClass c2 = array[j];
 				if (c1.isSuperClassOf(c2)) {
 					someClasses.remove(c1);
 					return getMostSpecializedClass(someClasses);
@@ -40,7 +40,7 @@ public class OntologyUtils {
 
 	}
 
-	public static <C extends OntologyClass> OntologyClass getFirstCommonAncestor(C c1, C c2) {
+	public static <C extends IFlexoOntologyClass> IFlexoOntologyClass getFirstCommonAncestor(C c1, C c2) {
 		Set<C> commonAncestors = new HashSet<C>();
 		Set<C> ancestors1 = (Set<C>) c1.getAllSuperClasses();
 		ancestors1.add(c1);

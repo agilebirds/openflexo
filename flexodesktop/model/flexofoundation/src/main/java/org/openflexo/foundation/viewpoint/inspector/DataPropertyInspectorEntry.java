@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
@@ -39,7 +39,7 @@ public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyDataProperty.class;
+		return IFlexoOntologyDataProperty.class;
 	}
 
 	@Override

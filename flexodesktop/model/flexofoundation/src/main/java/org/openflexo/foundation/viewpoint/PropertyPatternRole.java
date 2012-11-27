@@ -1,7 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class PropertyPatternRole extends OntologicObjectPatternRole {
@@ -21,7 +21,7 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 		this.parentPropertyURI = parentPropertyURI;
 	}
 
-	public OntologyProperty getParentProperty() {
+	public IFlexoOntologyStructuralProperty getParentProperty() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 			if (getViewPoint().getViewpointOntology() != null) {
@@ -31,7 +31,7 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 		return null;
 	}
 
-	public void setParentProperty(OntologyProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
@@ -43,12 +43,12 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 		this.domainURI = domainURI;
 	}
 
-	public OntologyClass getDomain() {
+	public IFlexoOntologyClass getDomain() {
 		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
 	}
 
-	public void setDomain(OntologyClass c) {
+	public void setDomain(IFlexoOntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 
@@ -67,7 +67,7 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 
 	@Override
 	public Class<?> getAccessedClass() {
-		return OntologyProperty.class;
+		return IFlexoOntologyStructuralProperty.class;
 	}
 
 }

@@ -1,8 +1,8 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class DataPropertyPatternRole extends PropertyPatternRole {
@@ -28,15 +28,15 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
 	public Class<?> getAccessedClass() {
-		return OntologyObjectProperty.class;
+		return IFlexoOntologyObjectProperty.class;
 	}
 
 	@Override
-	public OntologyDataProperty getParentProperty() {
-		return (OntologyDataProperty) super.getParentProperty();
+	public IFlexoOntologyDataProperty getParentProperty() {
+		return (IFlexoOntologyDataProperty) super.getParentProperty();
 	}
 
-	public void setParentProperty(OntologyDataProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyDataProperty ontologyProperty) {
 		super.setParentProperty(ontologyProperty);
 	}
 

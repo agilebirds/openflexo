@@ -3,23 +3,23 @@ package org.openflexo.foundation.ontology;
 import java.util.List;
 import java.util.Set;
 
-public interface OntologyClass extends OntologyObject {
+public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 
-	public boolean isSuperClassOf(OntologyClass aClass);
+	public boolean isSuperClassOf(IFlexoOntologyClass aClass);
 
 	/**
 	 * Return all direct super classes of this class
 	 * 
 	 * @return
 	 */
-	public List<? extends OntologyClass> getSuperClasses();
+	public List<? extends IFlexoOntologyClass> getSuperClasses();
 
 	/**
 	 * Return all direct and infered super classes of this class
 	 * 
 	 * @return
 	 */
-	public Set<? extends OntologyClass> getAllSuperClasses();
+	public Set<? extends IFlexoOntologyClass> getAllSuperClasses();
 
 	/**
 	 * Add super class to this class
@@ -27,7 +27,7 @@ public interface OntologyClass extends OntologyObject {
 	 * @param aClass
 	 * @return statement representing added super class
 	 */
-	public Object addSuperClass(OntologyClass aClass);
+	public Object addSuperClass(IFlexoOntologyClass aClass);
 
 	/**
 	 * Indicates if this class represents a named class

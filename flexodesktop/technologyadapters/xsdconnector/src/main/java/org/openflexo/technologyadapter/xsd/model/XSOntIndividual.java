@@ -8,16 +8,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndividual, XSOntologyURIDefinitions {
+public class XSOntIndividual extends AbstractXSOntObject implements IFlexoOntologyIndividual, XSOntologyURIDefinitions {
 
 	private XSOntClass type;
-	private Map<OntologyProperty, Object> values = new HashMap<OntologyProperty, Object>();
+	private Map<IFlexoOntologyStructuralProperty, Object> values = new HashMap<IFlexoOntologyStructuralProperty, Object>();
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
 
@@ -43,7 +43,7 @@ public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndi
 	}
 
 	@Override
-	public Object addType(OntologyClass type) {
+	public Object addType(IFlexoOntologyClass type) {
 		// Can only have one type.
 		if (type instanceof XSOntClass) {
 			setType((XSOntClass) type);
@@ -52,7 +52,7 @@ public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndi
 	}
 
 	@Override
-	public Object getPropertyValue(OntologyProperty property) {
+	public Object getPropertyValue(IFlexoOntologyStructuralProperty property) {
 		if (property.getURI().equals(XS_HASCHILD_PROPERTY_NAME)) {
 			return children;
 		}
@@ -63,7 +63,7 @@ public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndi
 	}
 
 	@Override
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
+	public void setPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
 		if (property.getURI().equals(XS_HASCHILD_PROPERTY_NAME)) {
 			// adds a child instead of a regular set
 			// TODO make sure that's the way to do it
@@ -103,7 +103,7 @@ public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndi
 			Element childElement = child.toXML(doc);
 			element.appendChild(childElement);
 		}
-		for (OntologyProperty property : values.keySet()) {
+		for (IFlexoOntologyStructuralProperty property : values.keySet()) {
 			if (property instanceof XSOntDataProperty) {
 				if (((XSOntDataProperty) property).getIsFromAttribute()) {
 					element.setAttribute(property.getName(), values.get(property).toString());

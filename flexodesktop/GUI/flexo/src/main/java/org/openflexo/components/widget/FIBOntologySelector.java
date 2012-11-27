@@ -22,7 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.toolbox.FileResource;
 
@@ -32,13 +32,13 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
+public class FIBOntologySelector extends FIBModelObjectSelector<IFlexoOntology> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologySelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/FIBOntologySelector.fib");
 
-	public FIBOntologySelector(FlexoOntology editedObject) {
+	public FIBOntologySelector(IFlexoOntology editedObject) {
 		super(editedObject);
 	}
 
@@ -54,12 +54,12 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	}
 
 	@Override
-	public Class<FlexoOntology> getRepresentedType() {
-		return FlexoOntology.class;
+	public Class<IFlexoOntology> getRepresentedType() {
+		return IFlexoOntology.class;
 	}
 
 	@Override
-	public String renderedString(FlexoOntology editedObject) {
+	public String renderedString(IFlexoOntology editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -83,9 +83,9 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	 * Return all viewpoints of this library
 	 */
 	/*@Override
-	protected Enumeration<FlexoOntology> getAllSelectableValues() {
+	protected Enumeration<IFlexoOntology> getAllSelectableValues() {
 		if (getOntologyLibrary() != null) {
-			Vector<FlexoOntology> allOntologies = new Vector<FlexoOntology>(getOntologyLibrary().getAllOntologies());
+			Vector<IFlexoOntology> allOntologies = new Vector<IFlexoOntology>(getOntologyLibrary().getAllOntologies());
 			return allOntologies.elements();
 		}
 		return null;

@@ -138,8 +138,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		for (String role : _editionPatternInstance.getActors().keySet()) {
 			// System.out.println("> role : "+role);
 			FlexoModelObject o = _editionPatternInstance.getActors().get(role);
-			if (o instanceof OntologyObject) {
-				actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
+			if (o instanceof IFlexoOntologyConcept) {
+				actors.put(role, new ConceptActorReference((IFlexoOntologyConcept) o, role, this));
 			} else if (o instanceof ObjectPropertyStatement) {
 				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
 			} else if (o instanceof DataPropertyStatement) {
@@ -231,10 +231,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 
 	public static class ConceptActorReference extends ActorReference {
-		private OntologyObject object;
+		private IFlexoOntologyConcept object;
 		private String objectURI;
 
-		public ConceptActorReference(OntologyObject o, String aPatternRole, EditionPatternReference ref) {
+		public ConceptActorReference(IFlexoOntologyConcept o, String aPatternRole, EditionPatternReference ref) {
 			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
@@ -293,7 +293,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			this.objectURI = objectURI;
 		}
 
-		public OntologyObject getObject() {
+		public IFlexoOntologyConcept getObject() {
 			return object;
 		}
 	}
@@ -346,7 +346,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				IFlexoOntologyConcept subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
@@ -360,7 +360,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 					return null;
 				}
 
-				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				IFlexoOntologyConcept object = getProject().getProjectOntology().getOntologyObject(objectURI);
 				if (object == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find object with URI " + objectURI);
@@ -368,7 +368,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 					return null;
 				}
 
-				OntologyObjectProperty property = (OntologyObjectProperty) getProject().retrieveOntologyObject(objectPropertyURI);
+				IFlexoOntologyObjectProperty property = (IFlexoOntologyObjectProperty) getProject().retrieveOntologyObject(objectPropertyURI);
 				if (property != null) {
 				// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
 				statement = ((OWLObject) subject).getObjectPropertyStatement(property, object);
@@ -430,14 +430,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				IFlexoOntologyConcept subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyDataProperty property = (OntologyDataProperty) getProject().retrieveOntologyObject(dataPropertyURI);
+				IFlexoOntologyDataProperty property = (IFlexoOntologyDataProperty) getProject().retrieveOntologyObject(dataPropertyURI);
 				if (property != null) {
 					statement = ((OWLObject<?>) subject).getDataPropertyStatement(property);
 					// logger.info("Found statement: "+statement);
@@ -498,10 +498,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public OntologyRestrictionClass retrieveObject() {
 			if (restriction == null) {
-				OntologyObject object = getProject().retrieveOntologyObject(objectURI);
-				OntologyProperty property = (OntologyProperty) getProject().retrieveOntologyObject(propertyURI);
-				if (object instanceof OntologyClass) {
-					// restriction = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
+				IFlexoOntologyConcept object = getProject().retrieveOntologyObject(objectURI);
+				IFlexoOntologyStructuralProperty property = (IFlexoOntologyStructuralProperty) getProject().retrieveOntologyObject(propertyURI);
+				if (object instanceof IFlexoOntologyClass) {
+					// restriction = subject.getObjectRestrictionStatement(property, (IFlexoOntologyClass) object);
 					// logger.info("Found restriction: " + restriction);
 					// TODO implement this
 					logger.warning("Not implemented !!!");
@@ -560,14 +560,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				IFlexoOntologyConcept subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyObject parent = getProject().retrieveOntologyObject(parentURI);
+				IFlexoOntologyConcept parent = getProject().retrieveOntologyObject(parentURI);
 				if (subject != null && parent != null) {
 				statement = ((OWLObject<?>) subject).getSubClassStatement(parent);
 				}
@@ -691,7 +691,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		return null;
 	}
 
-	public FlexoOntology getViewPointOntology() {
+	public IFlexoOntology getViewPointOntology() {
 		if (getViewPoint() != null) {
 			return getViewPoint().getViewpointOntology();
 		}

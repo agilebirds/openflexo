@@ -20,18 +20,18 @@
 package org.openflexo.foundation.param;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class OntologyIndividualParameter extends ParameterDefinition<OntologyIndividual> {
+public class OntologyIndividualParameter extends ParameterDefinition<IFlexoOntologyIndividual> {
 
-	public OntologyIndividualParameter(String name, String label, OntologyIndividual defaultValue) {
+	public OntologyIndividualParameter(String name, String label, IFlexoOntologyIndividual defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("className", "org.openflexo.components.widget.OntologyIndividualInspectorWidget");
 	}
 
-	public OntologyIndividualParameter(String name, String label, OntologyClass ontologyClass, OntologyIndividual defaultValue) {
+	public OntologyIndividualParameter(String name, String label, IFlexoOntologyClass ontologyClass, IFlexoOntologyIndividual defaultValue) {
 		this(name, label, defaultValue);
 		if (ontologyClass != null) {
 			setOntologyClass(ontologyClass);
@@ -43,9 +43,9 @@ public class OntologyIndividualParameter extends ParameterDefinition<OntologyInd
 		return DenaliWidget.CUSTOM;
 	}
 
-	private OntologyClass _ontologyClass;
+	private IFlexoOntologyClass _ontologyClass;
 
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		System.out.println("Class " + ontologyClass.getURI());
 		_ontologyClass = ontologyClass;
 		addParameter("ontologyClass", "params." + getName() + ".ontologyClass");

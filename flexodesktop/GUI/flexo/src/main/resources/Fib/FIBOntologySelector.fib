@@ -12,14 +12,14 @@
       <Children data="ontologyFolder.children" name="subFolders" />
       <Children data="ontologyFolder.ontologies" name="ontologies" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.ontology.FlexoOntology" label="ontology.name" icon="controller.iconForObject(ontology)" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.IFlexoOntology" label="ontology.name" icon="controller.iconForObject(ontology)" isEditable="false" filtered="false" defaultVisible="true" name="ontology" />
   </Browser>
   <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true" enable="(data.selectedValue != null)" />
     <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
     <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" localize="true" />
   </Panel>
-  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.name" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" autoSelectFirstRow="true" enterPressedAction="controller.apply()"/>
+  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.name" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.ontology.IFlexoOntology" autoSelectFirstRow="true" enterPressedAction="controller.apply()"/>
   <LocalizedDictionary />
 </Panel>
 

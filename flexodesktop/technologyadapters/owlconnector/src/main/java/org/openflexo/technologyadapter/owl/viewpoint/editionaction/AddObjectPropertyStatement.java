@@ -27,10 +27,10 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -72,8 +72,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	@Override
 	public Type getSubjectType() {
-		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof OntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getDomain());
+		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -83,7 +83,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return getEditionPattern().getPatternRoles(ObjectPropertyStatementPatternRole.class);
 	}*/
 
-	public OntologyProperty getObjectProperty() {
+	public IFlexoOntologyStructuralProperty getObjectProperty() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
@@ -99,7 +99,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return null;
 	}
 
-	public void setObjectProperty(OntologyProperty ontologyProperty) {
+	public void setObjectProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		if (ontologyProperty != null) {
 			if (getPatternRole() != null) {
 				if (getPatternRole().getObjectProperty().isSuperConceptOf(ontologyProperty)) {
@@ -130,8 +130,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		this.objectPropertyURI = objectPropertyURI;
 	}
 
-	public OntologyObject getPropertyObject(EditionSchemeAction action) {
-		return (OntologyObject) getObject().getBindingValue(action);
+	public IFlexoOntologyConcept getPropertyObject(EditionSchemeAction action) {
+		return (IFlexoOntologyConcept) getObject().getBindingValue(action);
 	}
 
 	@Override
@@ -149,14 +149,14 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true) {
+	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, BindingDefinitionType.GET, true) {
 		@Override
 		public Type getType() {
-			if (getObjectProperty() instanceof OntologyObjectProperty
-					&& ((OntologyObjectProperty) getObjectProperty()).getRange() instanceof OntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) getObjectProperty()).getRange());
+			if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
+					&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange());
 			}
-			return OntologyObject.class;
+			return IFlexoOntologyConcept.class;
 		}
 	};
 
@@ -193,9 +193,9 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	@Override
 	public ObjectPropertyStatement performAction(EditionSchemeAction action) {
-		OntologyObjectProperty property = (OntologyObjectProperty) getObjectProperty();
-		OntologyObject subject = getPropertySubject(action);
-		OntologyObject object = getPropertyObject(action);
+		IFlexoOntologyObjectProperty property = (IFlexoOntologyObjectProperty) getObjectProperty();
+		IFlexoOntologyConcept subject = getPropertySubject(action);
+		IFlexoOntologyConcept object = getPropertyObject(action);
 		if (property == null) {
 			return null;
 		}

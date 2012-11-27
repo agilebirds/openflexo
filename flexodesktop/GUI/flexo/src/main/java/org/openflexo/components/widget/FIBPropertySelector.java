@@ -24,15 +24,15 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select an OntologyProperty.<br>
+ * Widget allowing to select an IFlexoOntologyStructuralProperty.<br>
  * 
  * This widget provides many configuration options:
  * <ul>
@@ -54,16 +54,16 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty> {
+public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologyStructuralProperty> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBPropertySelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBPropertySelector.fib");
 
-	private FlexoOntology context;
-	private OntologyClass rootClass;
-	private OntologyClass domain;
-	private OntologyClass range;
+	private IFlexoOntology context;
+	private IFlexoOntologyClass rootClass;
+	private IFlexoOntologyClass domain;
+	private IFlexoOntologyClass range;
 	private OntologicDataType dataType;
 	private boolean hierarchicalMode = true;
 	private boolean selectObjectProperties = true;
@@ -75,7 +75,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 
 	private OntologyBrowserModel model = null;
 
-	public FIBPropertySelector(OntologyProperty editedObject) {
+	public FIBPropertySelector(IFlexoOntologyStructuralProperty editedObject) {
 		super(editedObject);
 	}
 
@@ -94,24 +94,24 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	}
 
 	@Override
-	public Class<OntologyProperty> getRepresentedType() {
-		return OntologyProperty.class;
+	public Class<IFlexoOntologyStructuralProperty> getRepresentedType() {
+		return IFlexoOntologyStructuralProperty.class;
 	}
 
 	@Override
-	public String renderedString(OntologyProperty editedObject) {
+	public String renderedString(IFlexoOntologyStructuralProperty editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return "";
 	}
 
-	public FlexoOntology getContext() {
+	public IFlexoOntology getContext() {
 		return context;
 	}
 
 	@CustomComponentParameter(name = "context", type = CustomComponentParameter.Type.MANDATORY)
-	public void setContext(FlexoOntology context) {
+	public void setContext(IFlexoOntology context) {
 		this.context = context;
 	}
 
@@ -126,7 +126,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
+			IFlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
 					.getOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
@@ -134,12 +134,12 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		}
 	}
 
-	public OntologyClass getRootClass() {
+	public IFlexoOntologyClass getRootClass() {
 		return rootClass;
 	}
 
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.MANDATORY)
-	public void setRootClass(OntologyClass rootClass) {
+	public void setRootClass(IFlexoOntologyClass rootClass) {
 		this.rootClass = rootClass;
 	}
 
@@ -154,19 +154,19 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setRootClassURI(String aRootClassURI) {
 		// logger.info("Sets rootClassURI with " + aRootClassURI + " context=" + getContext());
 		if (getContext() != null) {
-			OntologyClass rootClass = getContext().getClass(aRootClassURI);
+			IFlexoOntologyClass rootClass = getContext().getClass(aRootClassURI);
 			if (rootClass != null) {
 				setRootClass(rootClass);
 			}
 		}
 	}
 
-	public OntologyClass getDomain() {
+	public IFlexoOntologyClass getDomain() {
 		return domain;
 	}
 
 	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDomain(OntologyClass domain) {
+	public void setDomain(IFlexoOntologyClass domain) {
 		this.domain = domain;
 	}
 
@@ -181,19 +181,19 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setDomainClassURI(String aDomainClassURI) {
 		// logger.info("Sets domainClassURI with " + aDomainClassURI + " context=" + getContext());
 		if (getContext() != null) {
-			OntologyClass rootClass = getContext().getClass(aDomainClassURI);
+			IFlexoOntologyClass rootClass = getContext().getClass(aDomainClassURI);
 			if (rootClass != null) {
 				setDomain(rootClass);
 			}
 		}
 	}
 
-	public OntologyClass getRange() {
+	public IFlexoOntologyClass getRange() {
 		return range;
 	}
 
 	@CustomComponentParameter(name = "range", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRange(OntologyClass range) {
+	public void setRange(IFlexoOntologyClass range) {
 		this.range = range;
 	}
 
@@ -208,7 +208,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setRangeClassURI(String aRangeClassURI) {
 		// logger.info("Sets rangeClassURI with " + aRangeClassURI + " context=" + getContext());
 		if (getContext() != null) {
-			OntologyClass rootClass = getContext().getClass(aRangeClassURI);
+			IFlexoOntologyClass rootClass = getContext().getClass(aRangeClassURI);
 			if (rootClass != null) {
 				setRange(rootClass);
 			}
@@ -376,7 +376,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
 						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");

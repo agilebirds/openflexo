@@ -14,14 +14,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.Language;
@@ -37,7 +37,7 @@ import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
-public abstract class XSOntology extends AbstractXSOntObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -472,8 +472,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public OntologyProperty getProperty(String objectURI) {
-		OntologyProperty result = getDataProperty(objectURI);
+	public IFlexoOntologyStructuralProperty getProperty(String objectURI) {
+		IFlexoOntologyStructuralProperty result = getDataProperty(objectURI);
 		if (result == null) {
 			result = getObjectProperty(objectURI);
 		}
@@ -502,7 +502,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public XSOntIndividual createOntologyIndividual(String name, OntologyClass type) throws DuplicateURIException {
+	public XSOntIndividual createOntologyIndividual(String name, IFlexoOntologyClass type) throws DuplicateURIException {
 		String uri = getURI() + "#" + name;
 		if (getOntologyObject(uri) != null) {
 			throw new DuplicateURIException(uri);
@@ -520,8 +520,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public OntologyObject getOntologyObject(String objectURI) {
-		OntologyObject result = getClass(objectURI);
+	public IFlexoOntologyConcept getOntologyObject(String objectURI) {
+		IFlexoOntologyConcept result = getClass(objectURI);
 		if (result == null) {
 			result = getProperty(objectURI);
 		}
@@ -532,44 +532,44 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public OntologyClass createOntologyClass(String name) throws DuplicateURIException {
+	public IFlexoOntologyClass createOntologyClass(String name) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public OntologyDataProperty createDataProperty(String name, OntologyDataProperty superProperty, OntologyClass domain,
+	public IFlexoOntologyDataProperty createDataProperty(String name, IFlexoOntologyDataProperty superProperty, IFlexoOntologyClass domain,
 			OntologicDataType dataType) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public OntologyObjectProperty createObjectProperty(String name, OntologyObjectProperty superProperty, OntologyClass domain,
-			OntologyClass range) throws DuplicateURIException {
+	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty, IFlexoOntologyClass domain,
+			IFlexoOntologyClass range) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public OntologyClass createOntologyClass(String name, OntologyClass superClass) throws DuplicateURIException {
+	public IFlexoOntologyClass createOntologyClass(String name, IFlexoOntologyClass superClass) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object addDataPropertyStatement(OntologyDataProperty property, Object value) {
+	public Object addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object addPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+	public Object addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object addPropertyStatement(OntologyProperty property, Object value) {
+	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object addPropertyStatement(OntologyProperty property, String value, Language language) {
+	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -42,8 +42,8 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		super(builder);
 	}
 
-	public OntologyObject getPropertySubject(EditionSchemeAction action) {
-		return (OntologyObject) getSubject().getBindingValue(action);
+	public IFlexoOntologyConcept getPropertySubject(EditionSchemeAction action) {
+		return (IFlexoOntologyConcept) getSubject().getBindingValue(action);
 	}
 
 	/*@Override
@@ -66,7 +66,7 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, true) {
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", IFlexoOntologyConcept.class, BindingDefinitionType.GET, true) {
 		@Override
 		public Type getType() {
 			return getSubjectType();
@@ -74,7 +74,7 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 	};
 
 	public Type getSubjectType() {
-		return OntologyObject.class;
+		return IFlexoOntologyConcept.class;
 	}
 
 	public BindingDefinition getSubjectBindingDefinition() {

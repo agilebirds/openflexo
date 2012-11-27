@@ -2,21 +2,21 @@ package org.openflexo.foundation.ontology;
 
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class OntologyObjectConverter extends Converter<OntologyObject> {
-	private FlexoOntology ontology;
+public class OntologyObjectConverter extends Converter<IFlexoOntologyConcept> {
+	private IFlexoOntology ontology;
 
-	public OntologyObjectConverter(FlexoOntology ontology) {
-		super(OntologyObject.class);
+	public OntologyObjectConverter(IFlexoOntology ontology) {
+		super(IFlexoOntologyConcept.class);
 		this.ontology = ontology;
 	}
 
 	@Override
-	public OntologyObject convertFromString(String value) {
+	public IFlexoOntologyConcept convertFromString(String value) {
 		return ontology.getOntologyObject(value);
 	}
 
 	@Override
-	public String convertToString(OntologyObject value) {
+	public String convertToString(IFlexoOntologyConcept value) {
 		return value.getURI();
 	};
 }

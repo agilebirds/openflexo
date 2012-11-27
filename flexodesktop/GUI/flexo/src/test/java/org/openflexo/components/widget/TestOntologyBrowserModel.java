@@ -631,7 +631,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(transitivePropertyConcept);
 		OWLClass ontologyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "Ontology");
 		assertNotNull(ontologyConcept);
-		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "OntologyProperty");
+		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "IFlexoOntologyStructuralProperty");
 		assertNotNull(ontologyPropertyConcept);
 		OWLObjectProperty topObjectProperty = owlOntology
 				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");
@@ -857,7 +857,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(transitivePropertyConcept);
 		OWLClass ontologyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "Ontology");
 		assertNotNull(ontologyConcept);
-		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "OntologyProperty");
+		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "IFlexoOntologyStructuralProperty");
 		assertNotNull(ontologyPropertyConcept);
 		OWLObjectProperty topObjectProperty = owlOntology
 				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");
@@ -1080,7 +1080,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(transitivePropertyConcept);
 		OWLClass ontologyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "Ontology");
 		assertNotNull(ontologyConcept);
-		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "OntologyProperty");
+		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "IFlexoOntologyStructuralProperty");
 		assertNotNull(ontologyPropertyConcept);
 		OWLObjectProperty topObjectProperty = owlOntology
 				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");
@@ -1289,7 +1289,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(transitivePropertyConcept);
 		OWLClass ontologyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "Ontology");
 		assertNotNull(ontologyConcept);
-		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "OntologyProperty");
+		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "IFlexoOntologyStructuralProperty");
 		assertNotNull(ontologyPropertyConcept);
 		OWLObjectProperty topObjectProperty = owlOntology
 				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");
@@ -1479,7 +1479,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(transitivePropertyConcept);
 		OWLClass ontologyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "Ontology");
 		assertNotNull(ontologyConcept);
-		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "OntologyProperty");
+		OWLClass ontologyPropertyConcept = owlOntology.getClass(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "IFlexoOntologyStructuralProperty");
 		assertNotNull(ontologyPropertyConcept);
 		OWLObjectProperty topObjectProperty = owlOntology
 				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");

@@ -22,7 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class DataPropertyParameter extends PropertyParameter {
@@ -35,7 +35,7 @@ public class DataPropertyParameter extends PropertyParameter {
 
 	@Override
 	public Type getType() {
-		return OntologyDataProperty.class;
+		return IFlexoOntologyDataProperty.class;
 	};
 
 	@Override

@@ -86,7 +86,7 @@ public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, OWLObj
 
 	@Override
 	protected void doAction(Object context) throws DuplicateURIException {
-		logger.info("Create OntologyClass on " + getFocusedObject());
+		logger.info("Create IFlexoOntologyClass on " + getFocusedObject());
 		newClass = getOntology().createOntologyClass(newOntologyClassName, fatherClass);
 	}
 

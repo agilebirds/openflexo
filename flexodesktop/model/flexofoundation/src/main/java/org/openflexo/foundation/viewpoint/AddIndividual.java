@@ -27,8 +27,8 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -41,7 +41,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyIndividual>
+public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends IFlexoOntologyIndividual>
 		extends AddConcept<MS, M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
@@ -82,7 +82,7 @@ public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends Flexo
 	}
 
 	@Override
-	public OntologyClass getOntologyClass() {
+	public IFlexoOntologyClass getOntologyClass() {
 		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
@@ -103,7 +103,7 @@ public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends Flexo
 	}
 
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
@@ -234,7 +234,7 @@ public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends Flexo
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyIndividual.class;
+			return IFlexoOntologyIndividual.class;
 		}
 		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}

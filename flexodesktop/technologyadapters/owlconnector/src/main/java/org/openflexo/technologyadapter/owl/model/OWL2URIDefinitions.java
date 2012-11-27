@@ -27,7 +27,7 @@ public interface OWL2URIDefinitions {
 	public static final String OWL_SYMMETRIC_PROPERTY_URI = OWL_ONTOLOGY_URI + "#SymmetricProperty";
 	public static final String OWL_TRANSITIVE_PROPERTY_URI = OWL_ONTOLOGY_URI + "#TransitiveProperty";
 	public static final String OWL_ONTOLOGY_CLASS_URI = OWL_ONTOLOGY_URI + "#Ontology";
-	public static final String OWL_ONTOLOGY_PROPERTY_URI = OWL_ONTOLOGY_URI + "#OntologyProperty";
+	public static final String OWL_ONTOLOGY_PROPERTY_URI = OWL_ONTOLOGY_URI + "#IFlexoOntologyStructuralProperty";
 
 	/*public static final String EQUIVALENT_CLASS_URI = OWL_ONTOLOGY_URI + "#equivalentClass";
 	public static final String INVERSE_OF_URI = OWL_ONTOLOGY_URI + "#inverseOf";

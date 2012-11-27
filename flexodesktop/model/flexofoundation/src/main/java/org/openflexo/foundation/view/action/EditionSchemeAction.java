@@ -32,10 +32,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
@@ -214,11 +214,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			assignedObject = newConnector;
 		} else if (action instanceof AddIndividual) {
 			logger.info("Add individual " + action);
-			OntologyIndividual newIndividual = performAddIndividual((AddIndividual) action);
+			IFlexoOntologyIndividual newIndividual = performAddIndividual((AddIndividual) action);
 			assignedObject = newIndividual;
 		} else if (action instanceof AddClass) {
 			logger.info("Add class " + action);
-			OntologyClass newClass = performAddClass((AddClass) action);
+			IFlexoOntologyClass newClass = performAddClass((AddClass) action);
 			assignedObject = newClass;
 		} else if (action instanceof AddObjectPropertyStatement) {
 			logger.info("Add object property " + action);
@@ -344,11 +344,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return newShema;
 	}
 
-	// protected OntologyIndividual finalizePerformAddIndividual(AddIndividual action, OntologyIndividual newIndividual) {
+	// protected IFlexoOntologyIndividual finalizePerformAddIndividual(AddIndividual action, IFlexoOntologyIndividual newIndividual) {
 	/*for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
 		if (dataPropertyAssertion.evaluateCondition(this)) {
 			logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-			OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
+			IFlexoOntologyStructuralProperty property = dataPropertyAssertion.getOntologyProperty();
 			logger.info("Property=" + property);
 			Object value = dataPropertyAssertion.getValue(this);
 			newIndividual.addLiteral(property, value);
@@ -357,20 +357,20 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 	for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
 		if (objectPropertyAssertion.evaluateCondition(this)) {
 			// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
-			OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
+			IFlexoOntologyStructuralProperty property = objectPropertyAssertion.getOntologyProperty();
 			// logger.info("Property="+property);
-			if (property instanceof OntologyObjectProperty) {
-				if (((OntologyObjectProperty) property).isLiteralRange()) {
+			if (property instanceof IFlexoOntologyObjectProperty) {
+				if (((IFlexoOntologyObjectProperty) property).isLiteralRange()) {
 					Object value = objectPropertyAssertion.getValue(this);
 					newIndividual.addLiteral(property, value);
 				} else {
-					OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
+					IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(this);
 					if (assertionObject != null) {
 						newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
 					}
 				}
 			}
-			OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
+			IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(this);
 			// logger.info("assertionObject="+assertionObject);
 			if (assertionObject != null) {
 				newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
@@ -388,7 +388,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			return newIndividual;
 		}*/
 
-	/*	protected OntologyClass finalizePerformAddClass(AddClass action, OntologyClass newClass) {
+	/*	protected IFlexoOntologyClass finalizePerformAddClass(AddClass action, IFlexoOntologyClass newClass) {
 
 			// Register reference
 			newClass.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
@@ -420,13 +420,13 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 	}*/
 
 	protected Object performAddIsAProperty(AddIsAStatement action) {
-		OntologyObject subject = action.getPropertySubject(this);
-		OntologyObject father = action.getPropertyFather(this);
-		if (father instanceof OntologyClass) {
-			if (subject instanceof OntologyClass) {
-				return ((OntologyClass) subject).addSuperClass((OntologyClass) father);
-			} else if (subject instanceof OntologyIndividual) {
-				return ((OntologyIndividual) subject).addType((OntologyClass) father);
+		IFlexoOntologyConcept subject = action.getPropertySubject(this);
+		IFlexoOntologyConcept father = action.getPropertyFather(this);
+		if (father instanceof IFlexoOntologyClass) {
+			if (subject instanceof IFlexoOntologyClass) {
+				return ((IFlexoOntologyClass) subject).addSuperClass((IFlexoOntologyClass) father);
+			} else if (subject instanceof IFlexoOntologyIndividual) {
+				return ((IFlexoOntologyIndividual) subject).addType((IFlexoOntologyClass) father);
 			}
 		}
 		return null;
@@ -439,9 +439,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 	protected Object performAddRestriction(AddRestrictionStatement action) {
 		// System.out.println("Add restriction");
 
-		OntologyProperty property = action.getObjectProperty();
-		OntologyObject subject = action.getPropertySubject(this);
-		OntologyObject object = action.getPropertyObject(this);
+		IFlexoOntologyStructuralProperty property = action.getObjectProperty();
+		IFlexoOntologyConcept subject = action.getPropertySubject(this);
+		IFlexoOntologyConcept object = action.getPropertyObject(this);
 
 		// System.out.println("property="+property+" "+property.getURI());
 		// System.out.println("subject="+subject+" "+subject.getURI());

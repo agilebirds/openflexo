@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -49,8 +49,8 @@ public class AddIsAStatement extends AddStatement {
 		return getEditionPattern().getPatternRoles(IsAStatementPatternRole.class);
 	}*/
 
-	public OntologyObject getPropertyFather(EditionSchemeAction action) {
-		return (OntologyObject) getFather().getBindingValue(action);
+	public IFlexoOntologyConcept getPropertyFather(EditionSchemeAction action) {
+		return (IFlexoOntologyConcept) getFather().getBindingValue(action);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class AddIsAStatement extends AddStatement {
 
 	private ViewPointDataBinding father;
 
-	private BindingDefinition FATHER = new BindingDefinition("father", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition FATHER = new BindingDefinition("father", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
 
 	public BindingDefinition getFatherBindingDefinition() {
 		return FATHER;

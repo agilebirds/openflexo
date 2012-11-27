@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 
-public class XSOntObjectProperty extends XSOntProperty implements OntologyObjectProperty {
+public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntologyObjectProperty {
 
 	private AbstractXSOntObject range;
 	private boolean noRangeFoundYet = true;
@@ -39,13 +39,13 @@ public class XSOntObjectProperty extends XSOntProperty implements OntologyObject
 	}
 
 	@Override
-	public List<XSOntObjectProperty> getSubProperties(FlexoOntology context) {
+	public List<XSOntObjectProperty> getSubProperties(IFlexoOntology context) {
 		// TODO
 		return new ArrayList<XSOntObjectProperty>();
 	}
 
 	@Override
-	public OntologyObject getRange() {
+	public IFlexoOntologyConcept getRange() {
 		return range;
 	}
 

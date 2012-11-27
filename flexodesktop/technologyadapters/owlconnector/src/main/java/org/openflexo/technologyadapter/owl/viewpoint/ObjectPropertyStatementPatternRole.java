@@ -1,6 +1,6 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -41,7 +41,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 		this.objectPropertyURI = objectPropertyURI;
 	}
 
-	public OntologyProperty getObjectProperty() {
+	public IFlexoOntologyStructuralProperty getObjectProperty() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
@@ -51,7 +51,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 		return null;
 	}
 
-	public void setObjectProperty(OntologyProperty p) {
+	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {
 		_setObjectPropertyURI(p != null ? p.getURI() : null);
 	}
 

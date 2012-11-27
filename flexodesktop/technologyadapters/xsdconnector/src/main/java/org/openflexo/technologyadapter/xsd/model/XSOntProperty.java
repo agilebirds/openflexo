@@ -1,9 +1,9 @@
 package org.openflexo.technologyadapter.xsd.model;
 
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
-public abstract class XSOntProperty extends AbstractXSOntObject implements OntologyProperty, XSOntologyURIDefinitions {
+public abstract class XSOntProperty extends AbstractXSOntObject implements IFlexoOntologyStructuralProperty, XSOntologyURIDefinitions {
 
 	private AbstractXSOntObject domain;
 	private boolean noDomainFoundYet = true;
@@ -19,7 +19,7 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements Ontol
 	}
 
 	@Override
-	public OntologyObject getDomain() {
+	public IFlexoOntologyConcept getDomain() {
 		return domain;
 	}
 

@@ -27,15 +27,15 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
 
-public abstract class OWLProperty extends OWLObject<OntProperty> implements OntologyProperty {
+public abstract class OWLProperty extends OWLObject<OntProperty> implements IFlexoOntologyStructuralProperty {
 
-	private static final Logger logger = Logger.getLogger(OntologyProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntologyStructuralProperty.class.getPackage().getName());
 
 	private OntProperty ontProperty;
 
@@ -62,7 +62,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 	}
 
 	/**
-	 * Init this OntologyProperty, given base OntProperty
+	 * Init this IFlexoOntologyStructuralProperty, given base OntProperty
 	 */
 	protected void init() {
 		updateOntologyStatements(ontProperty);
@@ -70,7 +70,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 	}
 
 	/**
-	 * Update this OntologyProperty, given base OntProperty
+	 * Update this IFlexoOntologyStructuralProperty, given base OntProperty
 	 */
 	@Override
 	protected void update() {
@@ -79,7 +79,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 	}
 
 	/**
-	 * Update this OntologyProperty given a new OntProperty which is assumed to extends base OntProperty
+	 * Update this IFlexoOntologyStructuralProperty given a new OntProperty which is assumed to extends base OntProperty
 	 * 
 	 * @param anOntProperty
 	 */
@@ -98,9 +98,9 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 		ontProperty = r;
 	}
 
-	public static final Comparator<OntologyProperty> COMPARATOR = new Comparator<OntologyProperty>() {
+	public static final Comparator<IFlexoOntologyStructuralProperty> COMPARATOR = new Comparator<IFlexoOntologyStructuralProperty>() {
 		@Override
-		public int compare(OntologyProperty o1, OntologyProperty o2) {
+		public int compare(IFlexoOntologyStructuralProperty o1, IFlexoOntologyStructuralProperty o2) {
 			return Collator.getInstance().compare(o1.getName(), o2.getName());
 		}
 	};
@@ -146,11 +146,11 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 		return superProperties;
 	}
 
-	/*private boolean isRequired(OntologyProperty aProperty, FlexoOntology context) {
+	/*private boolean isRequired(IFlexoOntologyStructuralProperty aProperty, IFlexoOntology context) {
 		if (aProperty.getFlexoOntology() == context) {
 			return true;
 		}
-		for (OntologyProperty aSubProperty : aProperty.getSubProperties()) {
+		for (IFlexoOntologyStructuralProperty aSubProperty : aProperty.getSubProperties()) {
 			if (isRequired(aSubProperty, context)) {
 				return true;
 			}
@@ -226,7 +226,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 	 * @return
 	 */
 	@Override
-	public OntologyObject getDomain() {
+	public IFlexoOntologyConcept getDomain() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 		//			System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
 		//			return getOntologyLibrary().getOntologyObject("http://www.w3.org/2000/01/rdf-schema#Resource");
@@ -235,9 +235,9 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 				if (getURI().equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
 					System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
 					if (getDomainStatement() == null) {
-						for (OntologyProperty p : getSuperProperties()) {
+						for (IFlexoOntologyStructuralProperty p : getSuperProperties()) {
 							System.out.println("Examining "+p);
-							OntologyObject o = p.getDomain();
+							IFlexoOntologyConcept o = p.getDomain();
 							if (o != null) {
 								System.out.println("Je retourne "+o);
 								return o;
@@ -250,7 +250,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 				}*/
 		if (getDomainStatement() == null) {
 			for (OWLProperty p : getSuperProperties()) {
-				OntologyObject o = p.getDomain();
+				IFlexoOntologyConcept o = p.getDomain();
 				if (o != null) {
 					return o;
 				}
@@ -265,7 +265,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 	 * 
 	 * @return
 	 */
-	public OntologyObject getRange() {
+	public IFlexoOntologyConcept getRange() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 					System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
 				}*/

@@ -24,13 +24,13 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select an OntologyClass<br>
+ * Widget allowing to select an IFlexoOntologyClass<br>
  * 
  * This widget provides many configuration options:
  * <ul>
@@ -45,20 +45,20 @@ import org.openflexo.toolbox.FileResource;
  * 
  */
 @SuppressWarnings("serial")
-public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
+public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass> {
 	static final Logger logger = Logger.getLogger(FIBClassSelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBClassSelector.fib");
 
-	private FlexoOntology context;
-	private OntologyClass rootClass;
+	private IFlexoOntology context;
+	private IFlexoOntologyClass rootClass;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
 	private boolean showOWLAndRDFConcepts = false;
 
 	private OntologyBrowserModel model = null;
 
-	public FIBClassSelector(OntologyClass editedObject) {
+	public FIBClassSelector(IFlexoOntologyClass editedObject) {
 		super(editedObject);
 	}
 
@@ -74,12 +74,12 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	}
 
 	@Override
-	public Class<OntologyClass> getRepresentedType() {
-		return OntologyClass.class;
+	public Class<IFlexoOntologyClass> getRepresentedType() {
+		return IFlexoOntologyClass.class;
 	}
 
 	@Override
-	public String renderedString(OntologyClass editedObject) {
+	public String renderedString(IFlexoOntologyClass editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -97,7 +97,7 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
+			IFlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
 					.getOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
@@ -105,12 +105,12 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 		}
 	}
 
-	public FlexoOntology getContext() {
+	public IFlexoOntology getContext() {
 		return context;
 	}
 
 	@CustomComponentParameter(name = "context", type = CustomComponentParameter.Type.MANDATORY)
-	public void setContext(FlexoOntology context) {
+	public void setContext(IFlexoOntology context) {
 		this.context = context;
 		update();
 	}
@@ -126,19 +126,19 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	public void setRootClassURI(String aRootClassURI) {
 		// logger.info("Sets rootClassURI with " + aRootClassURI + " context=" + getContext());
 		if (getContext() != null) {
-			OntologyClass rootClass = getContext().getClass(aRootClassURI);
+			IFlexoOntologyClass rootClass = getContext().getClass(aRootClassURI);
 			if (rootClass != null) {
 				setRootClass(rootClass);
 			}
 		}
 	}
 
-	public OntologyClass getRootClass() {
+	public IFlexoOntologyClass getRootClass() {
 		return rootClass;
 	}
 
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRootClass(OntologyClass rootClass) {
+	public void setRootClass(IFlexoOntologyClass rootClass) {
 		this.rootClass = rootClass;
 		update();
 	}
@@ -244,7 +244,7 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
 						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");

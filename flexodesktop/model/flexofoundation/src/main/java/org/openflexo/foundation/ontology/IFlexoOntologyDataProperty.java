@@ -1,6 +1,6 @@
 package org.openflexo.foundation.ontology;
 
-public interface OntologyDataProperty extends OntologyProperty {
+public interface IFlexoOntologyDataProperty extends IFlexoOntologyStructuralProperty {
 
 	public OntologicDataType getDataType();
 

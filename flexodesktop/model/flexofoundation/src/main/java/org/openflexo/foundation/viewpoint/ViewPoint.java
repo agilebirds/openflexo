@@ -40,7 +40,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
@@ -466,7 +466,7 @@ public class ViewPoint extends ViewPointObject {
 
 		logger.info("Loaded ViewPoint " + viewPointURI);
 
-		/*for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
+		/*for (IFlexoOntologyClass clazz : getOntologyLibrary().getAllClasses()) {
 			System.out.println("Found: " + clazz);
 		}*/
 
@@ -532,7 +532,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	@Override
-	public FlexoOntology getViewpointOntology() {
+	public IFlexoOntology getViewpointOntology() {
 		if (isDeserializing()) {
 			return super.getViewpointOntology();
 		}
@@ -819,7 +819,7 @@ public class ViewPoint extends ViewPointObject {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
 		StringBuffer sb = new StringBuffer();
 		System.out.println("loaded: " + getViewpointOntology().isLoaded());
-		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
+		for (IFlexoOntology o : getViewpointOntology().getImportedOntologies()) {
 			if (o != getOntologyLibrary().getOWLOntology()) {
 				String modelName = JavaUtils.getVariableName(o.getName());
 				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);

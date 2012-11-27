@@ -22,9 +22,9 @@ package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -56,8 +56,8 @@ public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLModel, OWLM
 
 	@Override
 	public OWLIndividual performAction(EditionSchemeAction action) {
-		OntologyClass father = getOntologyClass();
-		// OntologyObject father = action.getOntologyObject(getProject());
+		IFlexoOntologyClass father = getOntologyClass();
+		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
 		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
 		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
 		String individualName = (String) getIndividualName().getBindingValue(action);
@@ -70,7 +70,7 @@ public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLModel, OWLM
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
 					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-					OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
+					IFlexoOntologyStructuralProperty property = dataPropertyAssertion.getOntologyProperty();
 					logger.info("Property=" + property);
 					Object value = dataPropertyAssertion.getValue(action);
 					newIndividual.addPropertyStatement(property, value);
@@ -93,7 +93,7 @@ public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLModel, OWLM
 							}
 						}
 					}
-					OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(action);
+					IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(action);
 					// logger.info("assertionObject="+assertionObject);
 					if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
 							&& assertionObject instanceof OWLObject) {

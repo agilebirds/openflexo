@@ -31,7 +31,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -92,7 +92,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	private ViewPointFolder _calcFolder;
 	private ViewPoint _newViewPoint;
 
-	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
+	public Vector<IFlexoOntology> importedOntologies = new Vector<IFlexoOntology>();
 
 	// private boolean createsOntology = false;
 
@@ -135,7 +135,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 		OWLMetaModel newOntology = OWLMetaModel.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
-		for (FlexoOntology importedOntology : importedOntologies) {
+		for (IFlexoOntology importedOntology : importedOntologies) {
 			try {
 				if (importedOntology instanceof OWLOntology) {
 					newOntology.importOntology(importedOntology);
@@ -275,12 +275,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 	}*/
 
-	public void addToImportedOntologies(FlexoOntology ontology) {
+	public void addToImportedOntologies(IFlexoOntology ontology) {
 		System.out.println("import ontology " + ontology);
 		importedOntologies.add(ontology);
 	}
 
-	public void removeFromImportedOntologies(FlexoOntology ontology) {
+	public void removeFromImportedOntologies(IFlexoOntology ontology) {
 		System.out.println("remove ontology " + ontology);
 		importedOntologies.remove(ontology);
 	}

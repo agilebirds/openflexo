@@ -7,12 +7,12 @@ import org.openflexo.foundation.rm.SaveResourceException;
 
 /**
  * This interface is implemented by any class handled as an ontology in openflexo.<br>
- * Basic implementation for a FlexoOntology is for example OWLOntology
+ * Basic implementation for a IFlexoOntology is for example OWLOntology
  * 
  * @author sylvain
  * 
  */
-public interface FlexoOntology extends OntologyObject {
+public interface IFlexoOntology extends IFlexoOntologyConcept {
 
 	public String getOntologyURI();
 
@@ -40,42 +40,42 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public List<? extends FlexoOntology> getAllImportedOntologies();
+	public List<? extends IFlexoOntology> getAllImportedOntologies();
 
 	/**
 	 * Return a vector of imported ontologies in the context of this ontology
 	 * 
 	 * @return
 	 */
-	public List<? extends FlexoOntology> getImportedOntologies();
+	public List<? extends IFlexoOntology> getImportedOntologies();
 
 	/**
 	 * Return all classes explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends OntologyClass> getClasses();
+	public abstract List<? extends IFlexoOntologyClass> getClasses();
 
 	/**
 	 * Return all individuals explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends OntologyIndividual> getIndividuals();
+	public abstract List<? extends IFlexoOntologyIndividual> getIndividuals();
 
 	/**
 	 * Return all datatype properties explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends OntologyDataProperty> getDataProperties();
+	public abstract List<? extends IFlexoOntologyDataProperty> getDataProperties();
 
 	/**
 	 * Return all object properties explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends OntologyObjectProperty> getObjectProperties();
+	public abstract List<? extends IFlexoOntologyObjectProperty> getObjectProperties();
 
 	/**
 	 * Retrieve an ontology object from its URI, in the context of current ontology.<br>
@@ -85,7 +85,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyObject getOntologyObject(String objectURI);
+	public abstract IFlexoOntologyConcept getOntologyObject(String objectURI);
 
 	/**
 	 * Retrieve an class from its URI, in the context of current ontology.<br>
@@ -95,7 +95,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyClass getClass(String classURI);
+	public abstract IFlexoOntologyClass getClass(String classURI);
 
 	/**
 	 * Retrieve an individual from its URI, in the context of current ontology.<br>
@@ -105,7 +105,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyIndividual getIndividual(String individualURI);
+	public abstract IFlexoOntologyIndividual getIndividual(String individualURI);
 
 	/**
 	 * Retrieve an object property from its URI, in the context of current ontology.<br>
@@ -115,7 +115,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyObjectProperty getObjectProperty(String propertyURI);
+	public abstract IFlexoOntologyObjectProperty getObjectProperty(String propertyURI);
 
 	/**
 	 * Retrieve an datatype property from its URI, in the context of current ontology.<br>
@@ -125,7 +125,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyDataProperty getDataProperty(String propertyURI);
+	public abstract IFlexoOntologyDataProperty getDataProperty(String propertyURI);
 
 	/**
 	 * Retrieve a property from its URI, in the context of current ontology.<br>
@@ -135,7 +135,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract OntologyProperty getProperty(String objectURI);
+	public abstract IFlexoOntologyStructuralProperty getProperty(String objectURI);
 
 	/**
 	 * Return all classes accessible in the context of this ontology.<br>
@@ -143,7 +143,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public List<? extends OntologyClass> getAccessibleClasses();
+	public List<? extends IFlexoOntologyClass> getAccessibleClasses();
 
 	/**
 	 * Return all individuals accessible in the context of this ontology.<br>
@@ -151,7 +151,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public List<? extends OntologyIndividual> getAccessibleIndividuals();
+	public List<? extends IFlexoOntologyIndividual> getAccessibleIndividuals();
 
 	/**
 	 * Return all object properties accessible in the context of this ontology.<br>
@@ -159,7 +159,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public List<? extends OntologyObjectProperty> getAccessibleObjectProperties();
+	public List<? extends IFlexoOntologyObjectProperty> getAccessibleObjectProperties();
 
 	/**
 	 * Return all data properties accessible in the context of this ontology.<br>
@@ -167,7 +167,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public List<? extends OntologyDataProperty> getAccessibleDataProperties();
+	public List<? extends IFlexoOntologyDataProperty> getAccessibleDataProperties();
 
 	/**
 	 * Creates a new class with specified name, and with specified superClass
@@ -177,7 +177,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	public OntologyClass createOntologyClass(String name, OntologyClass superClass) throws DuplicateURIException;
+	public IFlexoOntologyClass createOntologyClass(String name, IFlexoOntologyClass superClass) throws DuplicateURIException;
 
 	/**
 	 * Creates a new class with specified name
@@ -187,7 +187,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	public OntologyClass createOntologyClass(String name) throws DuplicateURIException;
+	public IFlexoOntologyClass createOntologyClass(String name) throws DuplicateURIException;
 
 	/**
 	 * Creates an new individual with specified name, and with specified type
@@ -197,7 +197,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	public OntologyIndividual createOntologyIndividual(String name, OntologyClass type) throws DuplicateURIException;
+	public IFlexoOntologyIndividual createOntologyIndividual(String name, IFlexoOntologyClass type) throws DuplicateURIException;
 
 	/**
 	 * Creates an new data property with specified name, super property, domain and range
@@ -207,8 +207,8 @@ public interface FlexoOntology extends OntologyObject {
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	public OntologyObjectProperty createObjectProperty(String name, OntologyObjectProperty superProperty, OntologyClass domain,
-			OntologyClass range) throws DuplicateURIException;
+	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty, IFlexoOntologyClass domain,
+			IFlexoOntologyClass range) throws DuplicateURIException;
 
 	/**
 	 * Creates an new data property with specified name, super property, domain and datatype
@@ -218,7 +218,7 @@ public interface FlexoOntology extends OntologyObject {
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	public OntologyDataProperty createDataProperty(String name, OntologyDataProperty superProperty, OntologyClass domain,
+	public IFlexoOntologyDataProperty createDataProperty(String name, IFlexoOntologyDataProperty superProperty, IFlexoOntologyClass domain,
 			OntologicDataType dataType) throws DuplicateURIException;
 
 	/**
@@ -226,6 +226,6 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public OntologyClass getThingConcept();
+	public IFlexoOntologyClass getThingConcept();
 
 }

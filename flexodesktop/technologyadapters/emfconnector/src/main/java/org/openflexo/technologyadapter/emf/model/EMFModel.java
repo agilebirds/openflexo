@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -13,7 +13,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
 
-public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFMetaModel>, FlexoOntology {
+public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFMetaModel>, IFlexoOntology {
 
 	protected static final Logger logger = Logger.getLogger(EMFModel.class.getPackage().getName());
 

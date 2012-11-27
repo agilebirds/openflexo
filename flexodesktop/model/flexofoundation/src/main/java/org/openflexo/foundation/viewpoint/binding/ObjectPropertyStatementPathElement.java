@@ -9,12 +9,12 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.ontology.owl.OWLIndividual;
@@ -26,10 +26,10 @@ import org.openflexo.foundation.ontology.owl.PropertyStatement;
 public abstract class ObjectPropertyStatementPathElement<T> extends StatementPathElement<T> {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
 
-	private OntologyObjectProperty ontologyProperty;
+	private IFlexoOntologyObjectProperty ontologyProperty;
 
 	public static ObjectPropertyStatementPathElement makeObjectPropertyStatementPathElement(BindingPathElement aParent,
-			OntologyObjectProperty anOntologyProperty, boolean recursive, int levels) {
+			IFlexoOntologyObjectProperty anOntologyProperty, boolean recursive, int levels) {
 		if (anOntologyProperty.isLiteralRange()) {
 			return new ObjectPropertyStatementAccessingLiteralPathElement(aParent, anOntologyProperty);
 		} else {
@@ -37,7 +37,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 	}
 
-	private ObjectPropertyStatementPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
+	private ObjectPropertyStatementPathElement(BindingPathElement aParent, IFlexoOntologyObjectProperty anOntologyProperty) {
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
 
@@ -58,16 +58,16 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		return true;
 	}
 
-	public OntologyObjectProperty getOntologyProperty() {
+	public IFlexoOntologyObjectProperty getOntologyProperty() {
 		return ontologyProperty;
 	}
 
-	public static class ObjectPropertyStatementAccessingObjectPathElement extends ObjectPropertyStatementPathElement<OntologyObject> {
+	public static class ObjectPropertyStatementAccessingObjectPathElement extends ObjectPropertyStatementPathElement<IFlexoOntologyConcept> {
 
 		private SimpleBindingPathElementImpl<String> uriNameProperty;
 		private SimpleBindingPathElementImpl<String> uriProperty;
 
-		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty,
+		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, IFlexoOntologyObjectProperty anOntologyProperty,
 				boolean recursive, int levels) {
 			super(aParent, anOntologyProperty);
 
@@ -75,8 +75,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 					String.class, true, "uri_name_as_supplied_in_ontology") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
-						return ((OntologyObject) target).getName();
+					if (target instanceof IFlexoOntologyConcept) {
+						return ((IFlexoOntologyConcept) target).getName();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -85,10 +85,10 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(String value, Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
+					if (target instanceof IFlexoOntologyConcept) {
 						try {
 							logger.info("Rename URI of object " + target + " with " + value);
-							((OntologyObject) target).setName(value);
+							((IFlexoOntologyConcept) target).setName(value);
 						} catch (Exception e) {
 							logger.warning("Unhandled exception: " + e);
 							e.printStackTrace();
@@ -103,8 +103,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 					false, "uri_as_supplied_in_ontology") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
-						return ((OntologyObject) target).getURI();
+					if (target instanceof IFlexoOntologyConcept) {
+						return ((IFlexoOntologyConcept) target).getURI();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -119,15 +119,15 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 			allProperties.add(uriProperty);
 
 			/*if (recursive && levels > 0) {
-				if (anOntologyProperty.getRange() instanceof OntologyClass) {
-					OntologyClass rangeClass = (OntologyClass) anOntologyProperty.getRange();
-					for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
+				if (anOntologyProperty.getRange() instanceof IFlexoOntologyClass) {
+					IFlexoOntologyClass rangeClass = (IFlexoOntologyClass) anOntologyProperty.getRange();
+					for (final IFlexoOntologyStructuralProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
 						StatementPathElement propertyPathElement = null;
-						if (property instanceof OntologyObjectProperty) {
+						if (property instanceof IFlexoOntologyObjectProperty) {
 							propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-									(OntologyObjectProperty) property, true, levels - 1);
-						} else if (property instanceof OntologyDataProperty) {
-							propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+									(IFlexoOntologyObjectProperty) property, true, levels - 1);
+						} else if (property instanceof IFlexoOntologyDataProperty) {
+							propertyPathElement = new DataPropertyStatementPathElement(this, (IFlexoOntologyDataProperty) property);
 						}
 						if (propertyPathElement != null) {
 							allProperties.add(propertyPathElement);
@@ -140,23 +140,23 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public List<BindingPathElement> getAllProperties() {
-			if (!propertiesFound && getOntologyProperty().getRange() instanceof OntologyClass) {
-				searchProperties((OntologyClass) getOntologyProperty().getRange());
+			if (!propertiesFound && getOntologyProperty().getRange() instanceof IFlexoOntologyClass) {
+				searchProperties((IFlexoOntologyClass) getOntologyProperty().getRange());
 			}
 			return allProperties;
 		}
 
 		boolean propertiesFound = false;
 
-		private void searchProperties(OntologyClass rangeClass) {
+		private void searchProperties(IFlexoOntologyClass rangeClass) {
 
-			for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
+			for (final IFlexoOntologyStructuralProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
 				StatementPathElement propertyPathElement = null;
-				if (property instanceof OntologyObjectProperty) {
+				if (property instanceof IFlexoOntologyObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-							(OntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
-				} else if (property instanceof OntologyDataProperty) {
-					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+							(IFlexoOntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
+				} else if (property instanceof IFlexoOntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (IFlexoOntologyDataProperty) property);
 				}
 				if (propertyPathElement != null) {
 					allProperties.add(propertyPathElement);
@@ -175,14 +175,14 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Type getType() {
-			if (getOntologyProperty().getRange() instanceof OntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((OntologyClass) getOntologyProperty().getRange());
+			if (getOntologyProperty().getRange() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getOntologyProperty().getRange());
 			}
-			return OntologyIndividual.class;
+			return IFlexoOntologyIndividual.class;
 		}
 
 		@Override
-		public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
+		public IFlexoOntologyConcept getBindingValue(Object target, BindingEvaluationContext context) {
 			if (target instanceof OWLIndividual) {
 				OWLIndividual individual = (OWLIndividual) target;
 				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
@@ -202,7 +202,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 
 		@Override
-		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
+		public void setBindingValue(IFlexoOntologyConcept value, Object target, BindingEvaluationContext context) {
 			if (target instanceof OWLIndividual && getOntologyProperty() instanceof OWLProperty && value instanceof OWLObject) {
 				OWLIndividual individual = (OWLIndividual) target;
 				OWLProperty property = (OWLProperty) getOntologyProperty();
@@ -236,7 +236,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		private SimpleBindingPathElementImpl<Float> asFloatProperty;
 		private SimpleBindingPathElementImpl<Double> asDoubleProperty;
 
-		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
+		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, IFlexoOntologyObjectProperty anOntologyProperty) {
 			super(aParent, anOntologyProperty);
 
 			asStringProperty = new SimpleBindingPathElementImpl<String>(PropertyStatement.AS_STRING, Object.class, String.class, true,

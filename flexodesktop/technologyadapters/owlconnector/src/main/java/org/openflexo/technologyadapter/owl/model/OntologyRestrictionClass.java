@@ -22,7 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.Restriction;
@@ -48,7 +48,7 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 
 	private final Restriction restriction;
 
-	private OntologyProperty property;
+	private IFlexoOntologyStructuralProperty property;
 
 	protected OntologyRestrictionClass(Restriction aRestriction, OWLOntology ontology) {
 		super(aRestriction, ontology);
@@ -71,7 +71,7 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 		property = getOntology().retrieveOntologyProperty(restriction.getOnProperty());
 	}
 
-	public OntologyProperty getProperty() {
+	public IFlexoOntologyStructuralProperty getProperty() {
 		return property;
 	}
 

@@ -58,7 +58,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test1AssertRDFOntologyPresentAndLoaded() {
 		log("test1AssertRDFOntologyPresentAndLoaded()");
-		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		IFlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
 		assertNotNull(rdfOntology);
 		assertTrue(rdfOntology.isLoaded());
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
@@ -83,39 +83,39 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertNotNull(CONTAINER);
 
-		OntologyProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);
+		IFlexoOntologyStructuralProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);
 		assertNotNull(DOMAIN);
 		assertFalse(DOMAIN.isAnnotationProperty());
 
-		OntologyProperty RANGE = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_RANGE_URI);
+		IFlexoOntologyStructuralProperty RANGE = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_RANGE_URI);
 		assertNotNull(RANGE);
 		assertFalse(RANGE.isAnnotationProperty());
 
-		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_CLASS_URI);
+		IFlexoOntologyStructuralProperty SUB_CLASS = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_CLASS_URI);
 		assertNotNull(SUB_CLASS);
 		assertFalse(SUB_CLASS.isAnnotationProperty());
 
-		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_PROPERTY_URI);
+		IFlexoOntologyStructuralProperty SUB_PROPERTY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_PROPERTY_URI);
 		assertNotNull(SUB_PROPERTY);
 		assertFalse(SUB_PROPERTY.isAnnotationProperty());
 
-		OntologyProperty MEMBER = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_MEMBER_URI);
+		IFlexoOntologyStructuralProperty MEMBER = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_MEMBER_URI);
 		assertNotNull(MEMBER);
 		assertFalse(MEMBER.isAnnotationProperty());
 
-		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
+		IFlexoOntologyStructuralProperty SEE_ALSO = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 
-		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_IS_DEFINED_BY_URI);
+		IFlexoOntologyStructuralProperty IS_DEFINED_BY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_IS_DEFINED_BY_URI);
 		assertNotNull(IS_DEFINED_BY);
 		assertTrue(IS_DEFINED_BY.isAnnotationProperty());
 
-		OntologyProperty LABEL = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_LABEL_URI);
+		IFlexoOntologyStructuralProperty LABEL = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_LABEL_URI);
 		assertNotNull(LABEL);
 		assertTrue(LABEL.isAnnotationProperty());
 
-		OntologyProperty COMMENT = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
+		IFlexoOntologyStructuralProperty COMMENT = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -123,8 +123,8 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test3AssertRDFAndRDFSOntologyCorrectImports() {
 		log("test3AssertRDFAndRDFSOntologyCorrectImports()");
-		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
-		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		IFlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		IFlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
 		assertTrue(rdfOntology.getImportedOntologies().get(0) == rdfsOntology);
 		assertTrue(rdfsOntology.getImportedOntologies().size() == 1);
@@ -133,7 +133,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test4AssertOWLOntologyPresentAndLoaded() {
 		log("test4AssertOWLOntologyPresentAndLoaded()");
-		FlexoOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
+		IFlexoOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
 		assertNotNull(owlOntology);
 		assertTrue(owlOntology.isLoaded());
 		assertTrue(owlOntology.getImportedOntologies().size() == 2);
@@ -490,7 +490,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test11TestLoadArchimateOntology() {
 		log("test11TestLoadArchimateOntology()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.bolton.ac.uk/archimate");
+		IFlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.bolton.ac.uk/archimate");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -499,7 +499,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test12TestLoadCPMFInstanceOntology() {
 		log("test12TestLoadCPMFInstanceOntology()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary()
+		IFlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary()
 				.getOntology("http://www.cpmf.org/ontologies/cpmfInstance");
 		assertNotNull(ontology);
 
@@ -509,7 +509,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test13TestLoadBPMNOntology() {
 		log("test13TestLoadBPMNOntology()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://dkm.fbk.eu/index.php/BPMN_Ontology");
+		IFlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://dkm.fbk.eu/index.php/BPMN_Ontology");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -518,7 +518,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test14TestBasicOntologEditor() {
 		log("test14TestBasicOntologEditor()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		IFlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				"http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl");
 		assertNotNull(ontology);
 
@@ -789,7 +789,7 @@ public class TestOntologies extends FlexoTestCase {
 			isLoaded = true;
 
 			for (Object o : ontModel.listImportedOntologyURIs()) {
-				FlexoOntology importedOnt = _library.getOntology((String) o);
+				IFlexoOntology importedOnt = _library.getOntology((String) o);
 				logger.info("importedOnt= " + importedOnt);
 				if (importedOnt != null) {
 					importedOnt.loadWhenUnloaded();
@@ -801,7 +801,7 @@ public class TestOntologies extends FlexoTestCase {
 
 			logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
-			for (FlexoOntology o : getImportedOntologies()) {
+			for (IFlexoOntology o : getImportedOntologies()) {
 				logger.info("Imported ontology: " + o);
 			}
 
@@ -822,7 +822,7 @@ public class TestOntologies extends FlexoTestCase {
 				"TestResourceCenter"));
 
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, testResourceCenter.retrieveBaseOntologyLibrary(), null);
-		for (FlexoOntology o : testResourceCenter.retrieveBaseOntologyLibrary().getAllOntologies()) {
+		for (IFlexoOntology o : testResourceCenter.retrieveBaseOntologyLibrary().getAllOntologies()) {
 			try {
 				System.out.println("Onto: " + o.getURI() + " file " + o.getAlternativeLocalFile().toURL().toString());
 				ontModel.getDocumentManager().addAltEntry(o.getURI(), o.getAlternativeLocalFile().toURL().toString());

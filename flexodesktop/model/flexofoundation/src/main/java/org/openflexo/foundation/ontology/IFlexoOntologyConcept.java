@@ -5,7 +5,7 @@ import java.util.Set;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
 
-public interface OntologyObject {
+public interface IFlexoOntologyConcept {
 
 	public String getURI();
 
@@ -15,11 +15,11 @@ public interface OntologyObject {
 
 	public abstract boolean getIsReadOnly();
 
-	public FlexoOntology getFlexoOntology();
+	public IFlexoOntology getFlexoOntology();
 
-	public boolean isSuperConceptOf(OntologyObject concept);
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept);
 
-	public boolean isSubConceptOf(OntologyObject concept);
+	public boolean isSubConceptOf(IFlexoOntologyConcept concept);
 
 	public String getDescription();
 
@@ -44,7 +44,7 @@ public interface OntologyObject {
 	 * @param property
 	 * @return
 	 */
-	public Object getPropertyValue(OntologyProperty property);
+	public Object getPropertyValue(IFlexoOntologyStructuralProperty property);
 
 	/**
 	 * Sets the value defined for supplied property, asserting that current individual defines one and only one assertion for this property.<br>
@@ -52,7 +52,7 @@ public interface OntologyObject {
 	 * @param property
 	 * @param newValue
 	 */
-	public void setPropertyValue(OntologyProperty property, Object newValue);
+	public void setPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue);
 
 	/**
 	 * Return value of specified property, asserting this property is an annotation property matching a literal value
@@ -61,7 +61,7 @@ public interface OntologyObject {
 	 * @param language
 	 * @return
 	 */
-	public Object getAnnotationValue(OntologyDataProperty property, Language language);
+	public Object getAnnotationValue(IFlexoOntologyDataProperty property, Language language);
 
 	/**
 	 * Sets value of specified property, asserting this property is an annotation property matching a literal value
@@ -70,7 +70,7 @@ public interface OntologyObject {
 	 * @param property
 	 * @param language
 	 */
-	public void setAnnotationValue(Object value, OntologyDataProperty property, Language language);
+	public void setAnnotationValue(Object value, IFlexoOntologyDataProperty property, Language language);
 
 	/**
 	 * Return value of specified property, asserting this property is an annotation property matching an object value
@@ -79,7 +79,7 @@ public interface OntologyObject {
 	 * @param language
 	 * @return
 	 */
-	public Object getAnnotationObjectValue(OntologyObjectProperty property);
+	public Object getAnnotationObjectValue(IFlexoOntologyObjectProperty property);
 
 	/**
 	 * Sets value of specified property, asserting this property is an annotation property matching an object value
@@ -88,7 +88,7 @@ public interface OntologyObject {
 	 * @param property
 	 * @param language
 	 */
-	public void setAnnotationObjectValue(Object value, OntologyObjectProperty property, Language language);
+	public void setAnnotationObjectValue(Object value, IFlexoOntologyObjectProperty property, Language language);
 
 	/**
 	 * Append object property statement for specified property and object
@@ -97,7 +97,7 @@ public interface OntologyObject {
 	 * @param object
 	 * @return an object representing the added statement
 	 */
-	public Object addPropertyStatement(OntologyObjectProperty property, OntologyObject object);
+	public Object addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object);
 
 	/**
 	 * Append property statement for specified property and object
@@ -106,7 +106,7 @@ public interface OntologyObject {
 	 * @param object
 	 * @return an object representing the added statement
 	 */
-	public Object addPropertyStatement(OntologyProperty property, Object value);
+	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value);
 
 	/**
 	 * Append property statement for specified property, object and language
@@ -115,7 +115,7 @@ public interface OntologyObject {
 	 * @param object
 	 * @return an object representing the added statement
 	 */
-	public Object addPropertyStatement(OntologyProperty property, String value, Language language);
+	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language);
 
 	/**
 	 * Append property statement for specified property and value
@@ -124,11 +124,11 @@ public interface OntologyObject {
 	 * @param object
 	 * @return an object representing the added statement
 	 */
-	public Object addDataPropertyStatement(OntologyDataProperty property, Object value);
+	public Object addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value);
 
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsRange();
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
 
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsDomain();
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsDomain();
 
 	/**
 	 * This equals has a particular semantics in the way that it returns true only and only if compared objects are representing same
@@ -138,7 +138,7 @@ public interface OntologyObject {
 	 * @param o
 	 * @return
 	 */
-	public boolean equalsToConcept(OntologyObject o);
+	public boolean equalsToConcept(IFlexoOntologyConcept o);
 
 	// NB: implemented in FlexoModelObject
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole);

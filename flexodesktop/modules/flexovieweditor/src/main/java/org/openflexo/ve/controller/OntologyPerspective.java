@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -84,7 +84,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject instanceof FlexoOntology) {
+		if (proposedObject instanceof IFlexoOntology) {
 			return proposedObject;
 		} else {
 			Set<ProjectOntology> allModels = _controller.getProject().getAllModels();
@@ -97,7 +97,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof FlexoOntology;
+		return object instanceof IFlexoOntology;
 	}
 
 	@Override

@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -61,17 +61,17 @@ public class AddRestrictionStatement extends AddStatement {
 		this.propertyURI = propertyURI;
 	}
 
-	public OntologyProperty getObjectProperty() {
+	public IFlexoOntologyStructuralProperty getObjectProperty() {
 		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getViewpointOntology().getObjectProperty(_getPropertyURI());
 	}
 
-	public void setObjectProperty(OntologyProperty p) {
+	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {
 		_setPropertyURI(p != null ? p.getURI() : null);
 	}
 
-	public OntologyObject getPropertyObject(EditionSchemeAction action) {
-		return (OntologyObject) getObject().getBindingValue(action);
+	public IFlexoOntologyConcept getPropertyObject(EditionSchemeAction action) {
+		return (IFlexoOntologyConcept) getObject().getBindingValue(action);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class AddRestrictionStatement extends AddStatement {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;

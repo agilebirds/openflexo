@@ -27,10 +27,10 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -60,8 +60,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	@Override
 	public Type getSubjectType() {
-		if (getDataProperty() != null && getDataProperty().getDomain() instanceof OntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain());
+		if (getDataProperty() != null && getDataProperty().getDomain() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getDataProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -83,7 +83,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return null;
 	}
 
-	public OntologyProperty getDataProperty() {
+	public IFlexoOntologyStructuralProperty getDataProperty() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
@@ -99,7 +99,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return null;
 	}
 
-	public void setDataProperty(OntologyProperty ontologyProperty) {
+	public void setDataProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		if (ontologyProperty != null) {
 			if (getPatternRole() != null) {
 				if (getPatternRole().getDataProperty().isSuperConceptOf(ontologyProperty)) {
@@ -145,7 +145,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getDataProperty() != null) {
-				return ((OntologyDataProperty) getDataProperty()).getDataType().getAccessedType();
+				return ((IFlexoOntologyDataProperty) getDataProperty()).getDataType().getAccessedType();
 			}
 			return Object.class;
 		};
@@ -184,8 +184,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	@Override
 	public DataPropertyStatement performAction(EditionSchemeAction action) {
-		OntologyDataProperty property = (OntologyDataProperty) getDataProperty();
-		OntologyObject subject = getPropertySubject(action);
+		IFlexoOntologyDataProperty property = (IFlexoOntologyDataProperty) getDataProperty();
+		IFlexoOntologyConcept subject = getPropertySubject(action);
 		Object value = getValue(action);
 		if (property == null) {
 			return null;

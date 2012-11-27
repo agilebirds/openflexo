@@ -1,4 +1,4 @@
-<inspector title = "Ontologic data property" inheritsfrom="OntologyObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.OntologyDataProperty">
+<inspector title = "Ontologic data property" inheritsfrom="OntologyObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.IFlexoOntologyDataProperty">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">

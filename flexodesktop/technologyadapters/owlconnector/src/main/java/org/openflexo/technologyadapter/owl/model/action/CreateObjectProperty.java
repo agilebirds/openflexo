@@ -27,8 +27,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -67,13 +67,13 @@ public class CreateObjectProperty extends FlexoAction<CreateObjectProperty, OWLO
 
 	public String newPropertyName;
 	public String description;
-	public OntologyObjectProperty parentProperty;
-	public OntologyClass domainClass;
-	public OntologyClass rangeClass;
+	public IFlexoOntologyObjectProperty parentProperty;
+	public IFlexoOntologyClass domainClass;
+	public IFlexoOntologyClass rangeClass;
 
 	public String validURILabel;
 
-	private OntologyObjectProperty newProperty;
+	private IFlexoOntologyObjectProperty newProperty;
 
 	private static final String VALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_well_formed_and_valid_regarding_its_unicity");
 	private static final String INVALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_not_valid_please_choose_another_class_name");
@@ -87,10 +87,10 @@ public class CreateObjectProperty extends FlexoAction<CreateObjectProperty, OWLO
 
 	@Override
 	protected void doAction(Object context) throws DuplicateURIException {
-		logger.info("Create OntologyObjectProperty on " + getFocusedObject());
+		logger.info("Create IFlexoOntologyObjectProperty on " + getFocusedObject());
 	}
 
-	public OntologyObjectProperty getNewProperty() {
+	public IFlexoOntologyObjectProperty getNewProperty() {
 		return newProperty;
 	}
 

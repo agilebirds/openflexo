@@ -28,8 +28,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
@@ -61,7 +61,7 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 			if (objectsToDelete.size() == 0) {
 				return false;
 			}
-			for (OntologyObject o : globalSelection) {
+			for (IFlexoOntologyConcept o : globalSelection) {
 				if (o.getIsReadOnly()) {
 					return false;
 				}
@@ -83,7 +83,7 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 		if (globalSelection != null) {
 			for (AbstractOntologyObject o : globalSelection) {
 				if (o instanceof OWLClass || o instanceof OWLIndividual || o instanceof OWLObjectProperty
-						|| o instanceof OntologyDataProperty) {
+						|| o instanceof IFlexoOntologyDataProperty) {
 					returned.add((OWLObject) o);
 				}
 			}

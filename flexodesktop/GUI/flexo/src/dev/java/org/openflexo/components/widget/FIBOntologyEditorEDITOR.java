@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
@@ -35,7 +35,7 @@ public class FIBOntologyEditorEDITOR {
 		FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
 				.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-		FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				"http://www.cpmf.org/ontologies/cpmfInstance");
 		// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
@@ -77,7 +77,7 @@ public class FIBOntologyEditorEDITOR {
 		JFrame frame = new JFrame();
 		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-		FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		IFlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				"http://www.w3.org/2002/07/owl");
 		// "http://www.cpmf.org/ontologies/cpmfInstance");

@@ -31,17 +31,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comparable<OntologyClass> {
+public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass, Comparable<IFlexoOntologyClass> {
 
-	private static final Logger logger = Logger.getLogger(OntologyClass.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntologyClass.class.getPackage().getName());
 
 	private OntClass ontClass;
 
@@ -54,7 +54,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	/**
-	 * Init this OntologyClass, given base OntClass
+	 * Init this IFlexoOntologyClass, given base OntClass
 	 */
 	protected void init() {
 		updateOntologyStatements(ontClass);
@@ -71,7 +71,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	/**
-	 * Update this OntologyClass, given base OntClass
+	 * Update this IFlexoOntologyClass, given base OntClass
 	 */
 	@Override
 	protected void update() {
@@ -79,7 +79,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	/**
-	 * Update this OntologyClass, given base OntClass which is assumed to extends base OntClass
+	 * Update this IFlexoOntologyClass, given base OntClass which is assumed to extends base OntClass
 	 * 
 	 * @param anOntClass
 	 */
@@ -171,12 +171,12 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "OntologyClass:" + getURI();
+		return "IFlexoOntologyClass:" + getURI();
 	}
 
-	public static final Comparator<OntologyClass> COMPARATOR = new Comparator<OntologyClass>() {
+	public static final Comparator<IFlexoOntologyClass> COMPARATOR = new Comparator<IFlexoOntologyClass>() {
 		@Override
-		public int compare(OntologyClass o1, OntologyClass o2) {
+		public int compare(IFlexoOntologyClass o1, IFlexoOntologyClass o2) {
 			return Collator.getInstance().compare(o1.getName(), o2.getName());
 		}
 	};
@@ -191,7 +191,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	@Override
-	public int compareTo(OntologyClass o) {
+	public int compareTo(IFlexoOntologyClass o) {
 		return COMPARATOR.compare(this, o);
 	}
 
@@ -244,7 +244,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	@Override
-	public boolean isSuperConceptOf(OntologyObject concept) {
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
 		if (OWL2URIDefinitions.OWL_THING_URI.equals(getURI())) {
 			return true;
 		}
@@ -265,7 +265,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	}
 
 	@Override
-	public boolean isSuperClassOf(OntologyClass aClass) {
+	public boolean isSuperClassOf(IFlexoOntologyClass aClass) {
 		if (aClass == this) {
 			return true;
 		}
@@ -316,7 +316,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	 * @param aClass
 	 */
 	@Override
-	public SubClassStatement addSuperClass(OntologyClass father) {
+	public SubClassStatement addSuperClass(IFlexoOntologyClass father) {
 		if (father instanceof OWLClass) {
 			getOntResource().addSuperClass(((OWLClass) father).getOntResource());
 			updateOntologyStatements();
@@ -334,7 +334,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	 * @return
 	 */
 	@Deprecated
-	public Vector<OntologyClass> getSubClasses(OWLOntology context) {
+	public Vector<IFlexoOntologyClass> getSubClasses(OWLOntology context) {
 		/*Vector<OWLClass> returned = new Vector<OWLClass>();
 		for (OWLClass aClass : getSubClasses()) {
 			if (isRequired(aClass, context)) {
@@ -345,16 +345,16 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		return null;
 	}
 
-	/*private boolean isRequired(OntologyClass aClass, FlexoOntology context) {
+	/*private boolean isRequired(IFlexoOntologyClass aClass, IFlexoOntology context) {
 		if (aClass.getFlexoOntology() == context) {
 			return true;
 		}
-		for (OntologyClass aSubClass : aClass.getSubClasses()) {
+		for (IFlexoOntologyClass aSubClass : aClass.getSubClasses()) {
 			if (isRequired(aSubClass, context)) {
 				return true;
 			}
 		}
-		for (OntologyIndividual anIndividual : aClass.getIndividuals()) {
+		for (IFlexoOntologyIndividual anIndividual : aClass.getIndividuals()) {
 			if (anIndividual.getFlexoOntology() == context) {
 				return true;
 			}
@@ -366,7 +366,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	public String getDisplayableDescription() {
 		/*String extendsLabel = " extends ";
 		boolean isFirst = true;
-		for (OntologyClass s : superClasses) {
+		for (IFlexoOntologyClass s : superClasses) {
 			extendsLabel += (isFirst ? "" : ",") + s.getName();
 			isFirst = false;
 		}
@@ -393,37 +393,37 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 			propertiesTakingMySelfAsDomain.addAll(CLASS_CONCEPT.getPropertiesTakingMySelfAsDomain());
 		}
 
-		/*Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		/*Vector<IFlexoOntologyClass> alreadyComputed = new Vector<IFlexoOntologyClass>();
 		if (redefinesOriginalDefinition()) {
 			_appendRangeAndDomains(getOriginalDefinition(), alreadyComputed);
 		}
-		for (OntologyClass aClass : getSuperClasses()) {
+		for (IFlexoOntologyClass aClass : getSuperClasses()) {
 			_appendRangeAndDomains(aClass, alreadyComputed);
 		}*/
 	}
 
-	/*private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed) {
+	/*private void _appendRangeAndDomains(IFlexoOntologyClass superClass, Vector<IFlexoOntologyClass> alreadyComputed) {
 		if (alreadyComputed.contains(superClass)) {
 			return;
 		}
 		alreadyComputed.add(superClass);
-		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
+		for (IFlexoOntologyStructuralProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
 			if (!propertiesTakingMySelfAsDomain.contains(p)) {
 				propertiesTakingMySelfAsDomain.add(p);
 			}
 		}
-		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
+		for (IFlexoOntologyStructuralProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
 			if (!propertiesTakingMySelfAsRange.contains(p)) {
 				propertiesTakingMySelfAsRange.add(p);
 			}
 		}
-		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
+		for (IFlexoOntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
 	}*/
 
-	private OntologyClass equivalentClass;
-	private List<OntologyClass> equivalentClasses = new ArrayList<OntologyClass>();
+	private IFlexoOntologyClass equivalentClass;
+	private List<IFlexoOntologyClass> equivalentClasses = new ArrayList<IFlexoOntologyClass>();
 
 	@Override
 	public void updateOntologyStatements(OntClass anOntResource) {
@@ -431,8 +431,8 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		equivalentClasses.clear();
 		for (OWLStatement s : getSemanticStatements()) {
 			if (s instanceof EquivalentClassStatement) {
-				if (((EquivalentClassStatement) s).getEquivalentObject() instanceof OntologyClass) {
-					equivalentClass = (OntologyClass) ((EquivalentClassStatement) s).getEquivalentObject();
+				if (((EquivalentClassStatement) s).getEquivalentObject() instanceof IFlexoOntologyClass) {
+					equivalentClass = (IFlexoOntologyClass) ((EquivalentClassStatement) s).getEquivalentObject();
 					equivalentClasses.add(equivalentClass);
 				}
 			}
@@ -444,7 +444,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	 * 
 	 * @return
 	 */
-	public OntologyClass getEquivalentClass() {
+	public IFlexoOntologyClass getEquivalentClass() {
 		return equivalentClass;
 	}
 
@@ -454,9 +454,9 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 	 * @param property
 	 * @return
 	 */
-	public List<OntologyRestrictionClass> getRestrictions(OntologyProperty property) {
+	public List<OntologyRestrictionClass> getRestrictions(IFlexoOntologyStructuralProperty property) {
 		List<OntologyRestrictionClass> returned = new ArrayList<OntologyRestrictionClass>();
-		for (OntologyClass c : getSuperClasses()) {
+		for (IFlexoOntologyClass c : getSuperClasses()) {
 			if (c instanceof OntologyRestrictionClass) {
 				OntologyRestrictionClass r = (OntologyRestrictionClass) c;
 				if (r.getProperty() == property) {

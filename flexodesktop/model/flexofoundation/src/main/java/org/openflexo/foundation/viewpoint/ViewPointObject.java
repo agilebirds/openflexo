@@ -29,7 +29,7 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -126,7 +126,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	public abstract ViewPoint getViewPoint();
 
-	public FlexoOntology getViewpointOntology() {
+	public IFlexoOntology getViewpointOntology() {
 		if (isDeserializing() || getViewPoint() == null) {
 			return viewPointOntology;
 		} else {

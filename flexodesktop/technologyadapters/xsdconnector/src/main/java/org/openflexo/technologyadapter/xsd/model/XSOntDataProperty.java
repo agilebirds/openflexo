@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 
-public class XSOntDataProperty extends XSOntProperty implements OntologyDataProperty {
+public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDataProperty {
 
 	private OntologicDataType dataType;
 	private boolean isFromAttribute = false;
@@ -24,7 +24,7 @@ public class XSOntDataProperty extends XSOntProperty implements OntologyDataProp
 	}
 
 	@Override
-	public List<XSOntDataProperty> getSubProperties(FlexoOntology context) {
+	public List<XSOntDataProperty> getSubProperties(IFlexoOntology context) {
 		// TODO Make sure it's always empty
 		return new ArrayList<XSOntDataProperty>();
 	}

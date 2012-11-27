@@ -1,7 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -33,7 +33,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 
 	@Override
 	public Class<?> getAccessedClass() {
-		return OntologyIndividual.class;
+		return IFlexoOntologyIndividual.class;
 	}
 
 	private String conceptURI;
@@ -46,7 +46,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getOntologicType() {
+	public IFlexoOntologyClass getOntologicType() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 			if (getViewPoint().getViewpointOntology() != null) {
@@ -56,7 +56,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 		return null;
 	}
 
-	public void setOntologicType(OntologyClass ontologyClass) {
+	public void setOntologicType(IFlexoOntologyClass ontologyClass) {
 		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 	}
 

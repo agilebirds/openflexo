@@ -10,13 +10,13 @@ import org.openflexo.foundation.rm.StorageResourceData;
 import com.hp.hpl.jena.ontology.OntModel;
 
 @Deprecated
-public interface ProjectOntology extends FlexoOntology, StorageResourceData {
+public interface ProjectOntology extends IFlexoOntology, StorageResourceData {
 
 	/*
 	 * All those methods should be dealt in a way or another. There shouldn't be any OWL specific code here.
 	 */
 
-	public boolean importOntology(FlexoOntology flexoOntology) throws OntologyNotFoundException;
+	public boolean importOntology(IFlexoOntology flexoOntology) throws OntologyNotFoundException;
 
 	public OntologyRestrictionClass createRestriction(OWLClass subject, OWLProperty property, RestrictionType restrictionType,
 			int cardinality, OWLClass object);

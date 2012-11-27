@@ -59,10 +59,10 @@ import org.openflexo.fib.model.GridBagLayoutConstraints.AnchorType;
 import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -228,19 +228,19 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				}
 			});
 			if (listParameter.getListType() == ListType.ObjectProperty) {
-				cbList.setIteratorClass(OntologyObjectProperty.class);
+				cbList.setIteratorClass(IFlexoOntologyObjectProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
 				cbList.setShowIcon(true);
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
 				cbList.setVGap(-2);
 			} else if (listParameter.getListType() == ListType.DataProperty) {
-				cbList.setIteratorClass(OntologyDataProperty.class);
+				cbList.setIteratorClass(IFlexoOntologyDataProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
 				cbList.setShowIcon(true);
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
 				cbList.setVGap(-2);
 			} else if (listParameter.getListType() == ListType.Property) {
-				cbList.setIteratorClass(OntologyProperty.class);
+				cbList.setIteratorClass(IFlexoOntologyStructuralProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
 				cbList.setShowIcon(true);
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
@@ -394,7 +394,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 						}
 					}, true));*/
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
-			OntologyClass conceptClass = null;
+			IFlexoOntologyClass conceptClass = null;
 			if (classParameter.getIsDynamicConceptValue()) {
 				conceptClass = classParameter.evaluateConceptValue(action);
 			} else {
@@ -434,7 +434,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 					}, true));*/
 
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
-			OntologyClass domainClass = null;
+			IFlexoOntologyClass domainClass = null;
 			if (propertyParameter.getIsDynamicDomainValue()) {
 				domainClass = propertyParameter.evaluateDomainValue(action);
 			} else {
@@ -452,7 +452,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			}
 
 			if (propertyParameter instanceof ObjectPropertyParameter) {
-				OntologyClass rangeClass = null;
+				IFlexoOntologyClass rangeClass = null;
 				if (propertyParameter.getIsDynamicDomainValue()) {
 					rangeClass = ((ObjectPropertyParameter) propertyParameter).evaluateRangeValue(action);
 				} else {
@@ -725,14 +725,14 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 						action.getParameterValues().put(parameter.getName(), defaultValue);
 					}
 				} else if (parameter instanceof IndividualParameter) {
-					OntologyClass ontologyClass = ((IndividualParameter) parameter).getConcept();
-					OntologyIndividual defaultIndividual = null;
+					IFlexoOntologyClass ontologyClass = ((IndividualParameter) parameter).getConcept();
+					IFlexoOntologyIndividual defaultIndividual = null;
 					if (ontologyClass != null && ontologyClass.getIndividuals().size() > 0) {
 						defaultIndividual = ontologyClass.getIndividuals().firstElement();
 					}
 					param = new OntologyIndividualParameter(parameter.getName(), parameter.getLabel(), ontologyClass, defaultIndividual) {
 						@Override
-						public void setValue(OntologyIndividual value) {
+						public void setValue(IFlexoOntologyIndividual value) {
 							super.setValue(value);
 							logger.info("Set as parameter " + parameter.getName() + " value=" + value);
 							action.getParameterValues().put(parameter.getName(), value);

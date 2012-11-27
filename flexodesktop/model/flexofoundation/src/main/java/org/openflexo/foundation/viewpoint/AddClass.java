@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -39,7 +39,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyClass>
+public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends IFlexoOntologyClass>
 		extends AddConcept<MS, M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
@@ -73,7 +73,7 @@ public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel
 	}
 
 	@Override
-	public OntologyClass getOntologyClass() {
+	public IFlexoOntologyClass getOntologyClass() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
@@ -90,7 +90,7 @@ public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel
 	}
 
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -159,7 +159,7 @@ public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyClass.class;
+			return IFlexoOntologyClass.class;
 		}
 		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}

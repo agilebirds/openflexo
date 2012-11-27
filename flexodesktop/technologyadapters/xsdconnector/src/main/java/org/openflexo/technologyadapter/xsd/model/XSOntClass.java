@@ -7,10 +7,10 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.toolbox.StringUtils;
 
-public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XSOntologyURIDefinitions {
+public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyClass, XSOntologyURIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntClass.class.getPackage()
 			.getName());
@@ -22,7 +22,7 @@ public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XS
 	}
 
 	@Override
-	public boolean isSuperClassOf(OntologyClass aClass) {
+	public boolean isSuperClassOf(IFlexoOntologyClass aClass) {
 		if (aClass instanceof XSOntClass == false) {
 			return false;
 		}
@@ -53,7 +53,7 @@ public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XS
 	}
 
 	@Override
-	public Object addSuperClass(OntologyClass aClass) {
+	public Object addSuperClass(IFlexoOntologyClass aClass) {
 		if (aClass instanceof XSOntClass == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Class " + aClass + " is not a XSOntClass");

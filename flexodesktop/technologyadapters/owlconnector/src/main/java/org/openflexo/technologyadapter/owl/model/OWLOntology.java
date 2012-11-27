@@ -45,14 +45,14 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -103,9 +103,9 @@ import com.hp.hpl.jena.util.ResourceUtils;
  * @author sylvain
  * 
  */
-public abstract class OWLOntology extends OWLObject implements FlexoOntology {
+public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
 
-	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntology.class.getPackage().getName());
 
 	private String name;
 	private final String ontologyURI;
@@ -465,7 +465,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @return
 	 * @throws OntologyNotFoundException
 	 */
-	public boolean importOntology(FlexoOntology anOntology) throws OntologyNotFoundException {
+	public boolean importOntology(IFlexoOntology anOntology) throws OntologyNotFoundException {
 		if (anOntology instanceof OWLOntology == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Tried to import a non-owl ontology to an owl ontology, this is not yet supported.");
@@ -540,7 +540,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		for (Iterator<Individual> i = getOntModel().listIndividuals(); i.hasNext();) {
 			Individual individual = i.next();
 			if (_individuals.get(individual) == null && isNamedResourceOfThisOntology(individual)) {
-				OntologyIndividual newIndividual = makeNewIndividual(individual);
+				IFlexoOntologyIndividual newIndividual = makeNewIndividual(individual);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Made individual " + individual.getURI());
 				}
@@ -1437,7 +1437,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 		logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
-		for (FlexoOntology o : getImportedOntologies()) {
+		for (IFlexoOntology o : getImportedOntologies()) {
 			logger.info("Imported ontology: " + o);
 		}
 
@@ -1530,7 +1530,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	}
 
 	@Override
-	public boolean isSuperConceptOf(OntologyObject concept) {
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
 		return false;
 	}
 
@@ -1652,7 +1652,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @throws DuplicateURIException
 	 */
 	@Override
-	public OWLIndividual createOntologyIndividual(String name, OntologyClass type) throws DuplicateURIException {
+	public OWLIndividual createOntologyIndividual(String name, IFlexoOntologyClass type) throws DuplicateURIException {
 		if (type instanceof OWLClass) {
 			assumeOntologyImportForReference((OWLClass) type);
 			OntModel ontModel = getOntModel();
@@ -1692,7 +1692,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @throws DuplicateURIException
 	 */
 	@Override
-	public OWLClass createOntologyClass(String name, OntologyClass father) throws DuplicateURIException {
+	public OWLClass createOntologyClass(String name, IFlexoOntologyClass father) throws DuplicateURIException {
 		if (father instanceof OWLClass) {
 			assumeOntologyImportForReference((OWLClass) father);
 			OntModel ontModel = getOntModel();
@@ -1722,8 +1722,8 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @throws DuplicateURIException
 	 */
 	@Override
-	public OntologyObjectProperty createObjectProperty(String name, OntologyObjectProperty superProperty, OntologyClass domain,
-			OntologyClass range) throws DuplicateURIException {
+	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty, IFlexoOntologyClass domain,
+			IFlexoOntologyClass range) throws DuplicateURIException {
 		// TODO implement this
 		logger.warning("createObjectProperty() not implemented yet");
 		return null;
@@ -1738,7 +1738,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @throws DuplicateURIException
 	 */
 	@Override
-	public OntologyDataProperty createDataProperty(String name, OntologyDataProperty superProperty, OntologyClass domain,
+	public IFlexoOntologyDataProperty createDataProperty(String name, IFlexoOntologyDataProperty superProperty, IFlexoOntologyClass domain,
 			OntologicDataType dataType) throws DuplicateURIException {
 		// TODO implement this
 		logger.warning("createDataProperty() not implemented yet");
@@ -1803,22 +1803,22 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		return null;
 	}
 
-	public OntologyClass newOntologyClass(FlexoEditor editor) {
+	public IFlexoOntologyClass newOntologyClass(FlexoEditor editor) {
 		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(this, null, editor).doAction();
 		return action.getNewClass();
 	}
 
-	public OntologyIndividual newOntologyIndividual(FlexoEditor editor) {
+	public IFlexoOntologyIndividual newOntologyIndividual(FlexoEditor editor) {
 		CreateOntologyIndividual action = CreateOntologyIndividual.actionType.makeNewAction(this, null, editor).doAction();
 		return action.getNewIndividual();
 	}
 
-	public OntologyObjectProperty newOntologyObjectProperty(FlexoEditor editor) {
+	public IFlexoOntologyObjectProperty newOntologyObjectProperty(FlexoEditor editor) {
 		CreateObjectProperty action = CreateObjectProperty.actionType.makeNewAction(this, null, editor).doAction();
 		return action.getNewProperty();
 	}
 
-	public OntologyDataProperty newCreateDataProperty(FlexoEditor editor) {
+	public IFlexoOntologyDataProperty newCreateDataProperty(FlexoEditor editor) {
 		CreateDataProperty action = CreateDataProperty.actionType.makeNewAction(this, null, editor).doAction();
 		return action.getNewProperty();
 	}
@@ -1845,7 +1845,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	public OWLObject<?> getOntologyObject(String objectURI) {
 
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("retrieve OntologyObject " + objectURI);
+			logger.fine("retrieve IFlexoOntologyConcept " + objectURI);
 		}
 
 		if (objectURI == null) {
@@ -1883,7 +1883,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			return returned;
 		}
 
-		// logger.warning("Cannot find OntologyObject " + objectURI);
+		// logger.warning("Cannot find IFlexoOntologyConcept " + objectURI);
 		return null;
 	}
 

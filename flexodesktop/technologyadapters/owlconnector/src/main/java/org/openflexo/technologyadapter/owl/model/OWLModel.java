@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -49,7 +49,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class OWLModel extends OWLOntology implements FlexoModel<OWLMetaModel> {
 
-	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IFlexoOntology.class.getPackage().getName());
 
 	private FlexoProject _project;
 	private FlexoProjectOntologyResource _resource;

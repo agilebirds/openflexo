@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 
 public class OntologyDataPropertyInserted extends OEDataModification {
-	public OntologyDataPropertyInserted(OntologyDataProperty property) {
+	public OntologyDataPropertyInserted(IFlexoOntologyDataProperty property) {
 		super(null, property);
 	}
 }

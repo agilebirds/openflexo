@@ -1,7 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ObjectPropertyPatternRole extends PropertyPatternRole {
@@ -27,15 +27,15 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
 	public Class<?> getAccessedClass() {
-		return OntologyObjectProperty.class;
+		return IFlexoOntologyObjectProperty.class;
 	}
 
 	@Override
-	public OntologyObjectProperty getParentProperty() {
-		return (OntologyObjectProperty) super.getParentProperty();
+	public IFlexoOntologyObjectProperty getParentProperty() {
+		return (IFlexoOntologyObjectProperty) super.getParentProperty();
 	}
 
-	public void setParentProperty(OntologyObjectProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyObjectProperty ontologyProperty) {
 		super.setParentProperty(ontologyProperty);
 	}
 
@@ -47,12 +47,12 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 		this.rangeURI = domainURI;
 	}
 
-	public OntologyClass getRange() {
+	public IFlexoOntologyClass getRange() {
 		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
 	}
 
-	public void setRange(OntologyClass c) {
+	public void setRange(IFlexoOntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
