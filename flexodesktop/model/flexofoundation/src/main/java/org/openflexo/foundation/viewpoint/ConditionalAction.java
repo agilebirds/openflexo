@@ -19,15 +19,21 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class ConditionalAction extends ControlStructureAction {
+public class ConditionalAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+		ControlStructureAction<MS, M, MM> {
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
 
@@ -87,6 +93,51 @@ public class ConditionalAction extends ControlStructureAction {
 			return getCondition() + " ?";
 		}
 		return super.getStringRepresentation();
+	}
+
+	/**
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public static Object performBatchOfActions(Collection<EditionAction> actions, EditionSchemeAction contextAction) {
+
+		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+
+		for (EditionAction editionAction : actions) {
+			if (editionAction.evaluateCondition(contextAction)) {
+				Object returned = editionAction.performAction(contextAction);
+				if (returned != null) {
+					performedActions.put(editionAction, returned);
+				}
+			}
+		}
+
+		for (EditionAction editionAction : performedActions.keySet()) {
+			editionAction.finalizePerformAction(contextAction, performedActions.get(editionAction));
+		}
+	}
+
+	@Override
+	public Object performAction(EditionSchemeAction action) {
+		if (evaluateCondition(action)) {
+			for (EditionAction editionAction : getActions()) {
+				if (editionAction.evaluateCondition(action)) {
+					editionAction.performAction(action);
+				}
+			}
+		}
+		return null;
+	}
+
+	protected void performConditionalAction(ConditionalAction conditionalAction, Hashtable<EditionAction, Object> performedActions) {
+		if (conditionalAction.evaluateCondition(this)) {
+			for (EditionAction action : conditionalAction.getActions()) {
+				if (action.evaluateCondition(this)) {
+					performAction(action, performedActions);
+				}
+			}
+		}
 	}
 
 	public static class ConditionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ConditionalAction> {

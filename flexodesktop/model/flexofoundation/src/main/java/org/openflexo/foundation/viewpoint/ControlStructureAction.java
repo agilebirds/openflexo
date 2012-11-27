@@ -22,14 +22,15 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement;
 
-public abstract class ControlStructureAction extends EditionAction implements ActionContainer {
+public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+		EditionAction<MS, M, MM, Object> implements ActionContainer {
 
 	private static final Logger logger = Logger.getLogger(ControlStructureAction.class.getPackage().getName());
 
@@ -287,4 +288,8 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 		return anAction;
 	}
 
+	@Override
+	public final void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
+		// Not applicable for ControlStructureAction
+	};
 }

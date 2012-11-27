@@ -23,11 +23,16 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeleteAction extends EditionAction {
+public class DeleteAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+		EditionAction<MS, M, MM, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
 
@@ -103,6 +108,25 @@ public class DeleteAction extends EditionAction {
 		public BindingDefinition getBindingDefinition(DeleteAction object) {
 			return object.getObjectBindingDefinition();
 		}
+
+	}
+
+	@Override
+	public FlexoModelObject performAction(EditionSchemeAction action) {
+		FlexoModelObject objectToDelete = (FlexoModelObject) getObject().getBindingValue(action);
+		try {
+			logger.info("Delete object " + objectToDelete + " for object " + getObject() + " this=" + this);
+			objectToDelete.delete();
+		} catch (Exception e) {
+			logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return objectToDelete;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+		// TODO Auto-generated method stub
 
 	}
 

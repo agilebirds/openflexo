@@ -29,8 +29,6 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
-import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -38,6 +36,8 @@ import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
 
 /**
  * This class defines and implements the EMF technology adapter
@@ -56,9 +56,9 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
 @DeclarePatternRole(ObjectPropertyPatternRole.class) })
 @DeclareEditionActions({
 /** Add instance */
-@DeclareEditionAction(AddIndividual.class),
+@DeclareEditionAction(AddEMFInstance.class),
 /** Add class */
-@DeclareEditionAction(AddClass.class),
+@DeclareEditionAction(AddEMFClass.class),
 /** Add class */
 @DeclareEditionAction(DeleteAction.class) })
 public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel, EMFModelSlot> {

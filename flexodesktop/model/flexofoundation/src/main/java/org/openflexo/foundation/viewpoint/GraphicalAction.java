@@ -21,11 +21,15 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -38,7 +42,8 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class GraphicalAction extends EditionAction {
+public class GraphicalAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+		EditionAction<MS, M, MM, ViewElement> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
@@ -220,6 +225,24 @@ public class GraphicalAction extends EditionAction {
 	@Override
 	public String getStringRepresentation() {
 		return getClass().getSimpleName() + " (" + getSubject() + "." + _getGraphicalFeatureName() + "=" + getValue() + ")";
+	}
+
+	@Override
+	public ViewElement performAction(EditionSchemeAction action) {
+		logger.info("Perform graphical action " + action);
+		ViewElement graphicalElement = getSubject(action);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Element is " + graphicalElement);
+			logger.fine("Feature is " + getGraphicalFeature());
+			logger.fine("Value is " + getValue().getBindingValue(action));
+		}
+		getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(),
+				getValue().getBindingValue(action));
+		return graphicalElement;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, ViewElement initialContext) {
 	}
 
 	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {

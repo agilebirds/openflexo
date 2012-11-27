@@ -23,11 +23,13 @@ public class XSDModelSlot extends ModelSlotImpl<XMLModel, XSDMetaModel> {
 		super(builder);
 	}
 
+	@Deprecated
 	@Override
 	public String getFullyQualifiedName() {
 		return "XSDModelSlot";
 	}
 
+	@Deprecated
 	@Override
 	public String getClassNameKey() {
 		return "xsd_model_slot";

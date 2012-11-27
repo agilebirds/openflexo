@@ -22,7 +22,6 @@ package org.openflexo.foundation.view.action;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -48,7 +47,6 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -284,16 +282,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return assignedObject;
 	}
 
-	protected void performConditionalAction(ConditionalAction conditionalAction, Hashtable<EditionAction, Object> performedActions) {
-		if (conditionalAction.evaluateCondition(this)) {
-			for (EditionAction action : conditionalAction.getActions()) {
-				if (action.evaluateCondition(this)) {
-					performAction(action, performedActions);
-				}
-			}
-		}
-	}
-
 	protected void performIterationAction(IterationAction iterationAction, Hashtable<EditionAction, Object> performedActions) {
 		List<?> items = iterationAction.evaluateIteration(this);
 		if (items != null) {
@@ -504,30 +492,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			return creationSchemeAction.getEditionPatternInstance();
 		}
 		return null;
-	}
-
-	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
-		logger.info("Perform graphical action " + action);
-		ViewElement graphicalElement = action.getSubject(this);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Element is " + graphicalElement);
-			logger.fine("Feature is " + action.getGraphicalFeature());
-			logger.fine("Value is " + action.getValue().getBindingValue(this));
-		}
-		action.getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(),
-				action.getValue().getBindingValue(this));
-	}
-
-	protected FlexoModelObject performDeleteAction(DeleteAction action) {
-		FlexoModelObject objectToDelete = (FlexoModelObject) action.getObject().getBindingValue(this);
-		try {
-			logger.info("Delete object " + objectToDelete + " for object " + action.getObject() + " this=" + this);
-			objectToDelete.delete();
-		} catch (Exception e) {
-			logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return objectToDelete;
 	}
 
 	@Override
