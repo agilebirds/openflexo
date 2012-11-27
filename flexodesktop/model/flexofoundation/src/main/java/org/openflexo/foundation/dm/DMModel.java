@@ -197,6 +197,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	private void installEOGenerators() {
+		if (getProject() == null) {
+			return;
+		}
 		Class<?> eoEntityGeneratorClass;
 		try {
 			eoEntityGeneratorClass = Class.forName("org.openflexo.generator.dm.DefaultEOEntityGenerator");
@@ -233,6 +236,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		this(builder.getProject());
 		builder.dmModel = this;
 		_resource = builder.resource;
+		installEOGenerators();
 		initializeDeserialization(builder);
 	}
 
