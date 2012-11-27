@@ -219,6 +219,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
 			}
 		}
+		System.err.println("coucou");
 		return null;
 	}
 
@@ -250,6 +251,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		} else {
 			if (enclosingProjectIdentifier != null) {
 				if (getReferringProject() != null) {
+					if (getReferringProject().getURI().equals(enclosingProjectIdentifier)) {
+						return getReferringProject();
+					}
 					ProjectData data = getReferringProject().getProjectData();
 					if (data != null) {
 						return data.getImportedProjectWithURI(enclosingProjectIdentifier);

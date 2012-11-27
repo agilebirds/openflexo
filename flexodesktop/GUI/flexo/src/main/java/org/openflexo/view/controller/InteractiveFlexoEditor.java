@@ -505,7 +505,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (actionType instanceof ActionSchemeActionType) {
 			return true;
 		}
-		if (actionType.isEnabledForSelection(focusedObject, globalSelection)) {
+		if (actionType.isEnabled(focusedObject, globalSelection)) {
 			ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
 			if (actionInitializer != null) {
 				FlexoActionEnableCondition<A, T1, T2> condition = actionInitializer.getEnableCondition();

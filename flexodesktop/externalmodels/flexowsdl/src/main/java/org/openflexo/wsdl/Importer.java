@@ -279,7 +279,6 @@ public class Importer implements DataImporter {
 			String processName = pt.getQName().getLocalPart();
 
 			FlexoWorkflow wkf = getProject().getFlexoWorkflow();
-			wkf.getRootFlexoProcess();
 
 			// will throw a DuplicateResourceException if process already exist
 			FlexoProcess _newProcess = FlexoProcess.createNewProcess(wkf, null, processName, false);

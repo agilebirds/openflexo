@@ -46,9 +46,4 @@ public interface FlexoResourceData {
 	 */
 	public FlexoProject getProject();
 
-	/**
-	 * Sets the project related to this object
-	 */
-	public void setProject(FlexoProject aProject);
-
 }

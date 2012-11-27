@@ -33,7 +33,6 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class BindingAssignment extends FlexoModelObject implements Bindable, InspectableObject, StringConvertable {
 	static final Logger logger = Logger.getLogger(BindingAssignment.class.getPackage().getName());
@@ -67,22 +66,6 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 	public String getFullyQualifiedName() {
 		return "ASSIGNMENT:" + (getReceiver() != null ? getReceiver().getStringRepresentation() : null) + "="
 				+ (getValue() != null ? getValue().getStringRepresentation() : null);
-	}
-
-	@Override
-	public final FlexoProject getProject() {
-		if (_owner != null) {
-			return _owner.getProject();
-		}
-		return null;
-	}
-
-	@Override
-	public final XMLMapping getXMLMapping() {
-		if (_owner != null) {
-			return _owner.getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override
@@ -193,10 +176,6 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 			return BindingAssignment.this.getOwner();
 		}
 
-		@Override
-		public FlexoProject getProject() {
-			return BindingAssignment.this.getProject();
-		}
 	}
 
 	protected class ValueBindingDefinition extends BindingDefinition {
@@ -218,10 +197,6 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 			return BindingAssignment.this.getOwner();
 		}
 
-		@Override
-		public FlexoProject getProject() {
-			return BindingAssignment.this.getProject();
-		}
 	}
 
 	@Override

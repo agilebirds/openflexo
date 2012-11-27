@@ -383,7 +383,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 		// return utilsGenerator.getDirectActionGenerator().getGeneratedClassName() + "/open"
 		// + nameForOperation(getProject().getFlexoNavigationMenu().getRootMenu().getOperation());
 		if (getProject().getFlexoNavigationMenu().getRootMenu().getOperation() == null) {
-			if (getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().size() > 0) {
+			if (getProject().getFlexoWorkflow() != null
+					&& getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().size() > 0) {
 				return getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().get(0)
 						.getStaticDirectActionUrl();
 			} else {

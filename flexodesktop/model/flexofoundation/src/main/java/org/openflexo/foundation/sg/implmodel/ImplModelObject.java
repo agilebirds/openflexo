@@ -26,7 +26,6 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class ImplModelObject extends FlexoModelObject implements InspectableObject {
 
@@ -70,11 +69,6 @@ public abstract class ImplModelObject extends FlexoModelObject implements Inspec
 	@Override
 	public ImplementationModel getXMLResourceData() {
 		return getImplementationModel();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getImplementationModel().getXMLMapping();
 	}
 
 	@Override

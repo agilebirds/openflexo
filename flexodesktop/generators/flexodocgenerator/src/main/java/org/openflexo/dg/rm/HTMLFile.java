@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.dg.html.DGHTMLGenerator;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.rm.GenerationAvailableFile;
@@ -66,15 +65,4 @@ public class HTMLFile extends TextFile implements GenerationAvailableFile {
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 
 	}
-
-	/**
-	 * Overrides setProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	@Override
-	public void setProject(FlexoProject aProject) {
-
-	}
-
 }

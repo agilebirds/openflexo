@@ -208,7 +208,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 	}
 
 	public static Test suite() {
-		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
+		final TestSuite suite = new TestSuite(TestImportedProcesses.class);
 		suite.addTest(new TestImportedProcesses("test0CreateImportedProcessLibrary"));
 		suite.addTest(new TestImportedProcesses("test1ImportProcesses"));
 		suite.addTest(new TestImportedProcesses("test2RefreshImportedProcesses"));

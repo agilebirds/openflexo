@@ -37,10 +37,8 @@ import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMTranstyper;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class TranstypedBinding extends AbstractBinding {
 
@@ -99,23 +97,13 @@ public class TranstypedBinding extends AbstractBinding {
 		}
 
 		@Override
-		public FlexoProject getProject() {
-			return TranstypedBinding.this.getProject();
-		}
-
-		@Override
 		public String getFullyQualifiedName() {
 			return TranstypedBinding.this.getFullyQualifiedName() + "." + (getEntry() != null ? entry.getName() : null);
 		}
 
 		@Override
-		public XMLMapping getXMLMapping() {
-			return TranstypedBinding.this.getXMLMapping();
-		}
-
-		@Override
 		public XMLStorageResourceData getXMLResourceData() {
-			return TranstypedBinding.this.getProject();
+			return TranstypedBinding.this.getOwner().getXMLResourceData();
 		}
 
 		@Override

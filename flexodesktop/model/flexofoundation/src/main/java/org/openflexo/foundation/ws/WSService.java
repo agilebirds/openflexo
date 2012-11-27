@@ -76,7 +76,6 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 		wsPortTypes = new Vector<WSPortType>();
 		wsRepositories = new Vector<WSRepository>();
 		setWSLibrary(wsLib);
-		setProject(wsLib.getProject());
 		wsPortTypeList = new WSPortTypeFolder(this);
 		wsRepositoryList = new WSRepositoryFolder(this);
 

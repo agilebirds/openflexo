@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
@@ -84,10 +83,6 @@ public class FlexoXMLMappings {
 
 	public XMLMapping getRMMapping() {
 		return getMappingForClass(FlexoProject.class);
-	}
-
-	public XMLMapping getLinksMapping() {
-		return getMappingForClass(FlexoLinks.class);
 	}
 
 	public XMLMapping getWKFMapping() {

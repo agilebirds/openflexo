@@ -7,6 +7,7 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 
@@ -24,7 +25,12 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
-		projectLoader = new ProjectLoader(this);
+		try {
+			projectLoader = new ProjectLoader(this);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 		moduleLoader = new ModuleLoader(this);
 		projectReferenceLoader = createProjectReferenceLoader();
 		resourceCenterService = createResourceCenterService();

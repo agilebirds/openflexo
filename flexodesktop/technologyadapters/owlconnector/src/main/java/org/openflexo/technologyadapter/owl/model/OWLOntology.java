@@ -64,7 +64,6 @@ import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
@@ -1469,11 +1468,6 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	@Override
 	public OWLOntology getFlexoOntology() {
 		return this;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _library.getProject();
 	}
 
 	@Override

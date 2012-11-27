@@ -28,7 +28,6 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringRepresentable;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (Business Technical, UserManual)
@@ -106,26 +105,6 @@ public class DocType extends TargetType implements ChoiceList, StringRepresentab
 	@Override
 	public String getFullyQualifiedName() {
 		return "DOC_TYPE." + getName();
-	}
-
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		return project;
-	}
-
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getRMMapping();
 	}
 
 	/**

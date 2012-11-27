@@ -424,15 +424,6 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			return getFlexoResource().getProject();
 		}
 
-		/**
-		 * Overrides setProject
-		 * 
-		 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-		 */
-		@Override
-		public void setProject(FlexoProject aProject) {
-		}
-
 		@Override
 		public void generate() {
 			generateScreenshot();

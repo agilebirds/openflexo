@@ -25,7 +25,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class TOCObject extends FlexoModelObject {
 
@@ -44,16 +43,6 @@ public abstract class TOCObject extends FlexoModelObject {
 
 	public TOCData getData() {
 		return data;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return getData() == null ? null : getData().getProject();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getTOCMapping();
 	}
 
 	@Override

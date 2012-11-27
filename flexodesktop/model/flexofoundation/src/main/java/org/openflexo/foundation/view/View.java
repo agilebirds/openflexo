@@ -56,7 +56,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
-	private FlexoProject _project;
 	private FlexoOEShemaResource _resource;
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
@@ -72,7 +71,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		this(builder.shemaDefinition, builder.getProject());
 		builder.shema = this;
 		initializeDeserialization(builder);
-		loadViewpointIfRequiredAndEnsureOntologyImports();
 	}
 
 	/**
@@ -83,18 +81,17 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	public View(ViewDefinition shemaDefinition, FlexoProject project) {
 		super(project);
 		logger.info("Created new shema with project " + project);
-		_project = project;
 		_viewDefinition = shemaDefinition;
 		setShema(this);
-		loadViewpointIfRequiredAndEnsureOntologyImports();
+		loadViewpointIfRequiredAndEnsureOntologyImports(project);
 	}
 
-	private void loadViewpointIfRequiredAndEnsureOntologyImports() {
+	private void loadViewpointIfRequiredAndEnsureOntologyImports(FlexoProject project) {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
 		try {
-			if (getProject().getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
+			if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
 				logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
 			}
 		} catch (OntologyNotFoundException e) {
@@ -166,16 +163,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override

@@ -62,7 +62,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
@@ -487,11 +486,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_resource = (FlexoRMResource) resource;
 		// registerResource(_resource);
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		// Does nothing, since this is the project itself !!!
 	}
 
 	@Override
@@ -3170,16 +3164,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public OperationNode getFirstOperation() {
-		if (firstOperation == null && firstOperationFlexoID > -1) {
-			firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
-		}
-		if (firstOperation == null) {
-			List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
-			if (v.size() > 0) {
-				firstOperation = v.get(0);
-				setChanged();
-				notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
+		if (getRootFlexoProcess() != null) {
+			if (firstOperation == null && firstOperationFlexoID > -1) {
+				firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
+			}
+			if (firstOperation == null) {
+				List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
+				if (v.size() > 0) {
+					firstOperation = v.get(0);
+					setChanged();
+					notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
 
+				}
 			}
 		}
 		return firstOperation;
@@ -4050,19 +4046,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public RoleList getImportedRoleList() {
 		return getWorkflow().getImportedRoleList();
-	}
-
-	public FlexoLinksResource getFlexoLinksResource() {
-		FlexoLinksResource returned = (FlexoLinksResource) resourceForKey(ResourceType.LINKS, getProjectName());
-		if (returned == null) {
-			FlexoLinks.createLinks(this);
-			return getFlexoLinksResource();
-		}
-		return returned;
-	}
-
-	public FlexoLinks getFlexoLinks() {
-		return getFlexoLinksResource().getResourceData();
 	}
 
 	public boolean getIsLocalized() {
