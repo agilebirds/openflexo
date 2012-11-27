@@ -49,13 +49,13 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+	PushToPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(PushToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

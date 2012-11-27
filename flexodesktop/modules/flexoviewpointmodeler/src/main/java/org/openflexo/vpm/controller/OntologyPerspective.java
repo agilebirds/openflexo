@@ -27,10 +27,10 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -109,8 +109,8 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
-		if (object instanceof ImportedOWLOntology) {
-			return ((ImportedOWLOntology) object).getName();
+		if (object instanceof OWLMetaModel) {
+			return ((OWLMetaModel) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

@@ -39,13 +39,13 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcShemaElementsInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteCalcShemaElementsInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeleteExampleDrawingElements.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

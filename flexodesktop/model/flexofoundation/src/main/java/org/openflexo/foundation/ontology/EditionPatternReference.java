@@ -36,9 +36,9 @@ import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
 import org.openflexo.foundation.ontology.owl.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -184,7 +184,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	public static abstract class ActorReference extends FlexoModelObject {
 		public String patternRole;
-		private ModelSlot<?> modelSlot;
+		private ModelSlot<?,?> modelSlot;
 		private FlexoProject _project;
 		private EditionPatternReference _patternReference;
 
@@ -193,11 +193,11 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			_project = project;
 		}
 
-		public ModelSlot<?> getModelSlot() {
+		public ModelSlot<?,?> getModelSlot() {
 			return modelSlot;
 		}
 
-		public void setModelSlot(ModelSlot<?> modelSlot) {
+		public void setModelSlot(ModelSlot<?,?> modelSlot) {
 			this.modelSlot = modelSlot;
 		}
 

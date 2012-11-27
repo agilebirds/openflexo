@@ -24,6 +24,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement;
 
 public abstract class ControlStructureAction extends EditionAction implements ActionContainer {
 

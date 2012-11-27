@@ -22,6 +22,10 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement;
 
 public interface ActionContainer {
 

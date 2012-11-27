@@ -43,6 +43,11 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		}
 	}
 
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return true;
+	}
+
 	public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
 	public abstract void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation);

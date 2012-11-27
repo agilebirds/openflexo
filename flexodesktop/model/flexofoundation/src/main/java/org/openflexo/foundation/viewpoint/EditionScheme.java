@@ -30,6 +30,10 @@ import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement;
 import org.openflexo.toolbox.StringUtils;
 
 /**

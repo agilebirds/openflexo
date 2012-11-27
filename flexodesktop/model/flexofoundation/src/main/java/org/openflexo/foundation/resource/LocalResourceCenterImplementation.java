@@ -27,8 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.xsd.XSOntology;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -103,7 +102,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			File baseOntologyFolder = new File(localDirectory, "Ontologies");
 			logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
 			baseOntologyLibrary = new OntologyLibrary(this, null);
-			findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+			findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
 
 			// Bug fix: compatibility with old versions:
@@ -111,7 +110,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
 					|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
 				copyOntologies(localDirectory, CopyStrategy.REPLACE);
-				findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+				findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			}
 
 			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
@@ -138,7 +137,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		return viewPointLibrary;
 	}
 
-	private static String findOntologyURI(File file, String baseUri) {
+	/*private static String findOntologyURI(File file, String baseUri) {
 		String uri = null;
 		if (file.getName().endsWith(".owl")) {
 			uri = OWLOntology.findOntologyURI(file);
@@ -149,19 +148,27 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			uri = baseUri + "/" + file.getName();
 		}
 		return uri;
-	}
+	}*/
 
-	private void findOntologies(File dir, String baseUri, OntologyFolder folder) {
+	private void findMetaModels(File dir, String baseUri, OntologyFolder folder) {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		for (File f : dir.listFiles()) {
-			if (f.isFile() && (f.getName().endsWith(".owl") || f.getName().endsWith(".xsd"))) {
+			for (TechnologyAdapter<?, ?, ?> technologyAdapter : TechnologyAdapter.getLoadedAdapters()) {
+				if (technologyAdapter.isValidMetaModelFile(f)) {
+					baseOntologyLibrary.importMetaModel(technologyAdapter.loadMetaModel(f, baseOntologyLibrary));
+				}
+			}
+
+			/*if (f.isFile() && (f.getName().endsWith(".owl") || f.getName().endsWith(".xsd"))) {
 				String uri = findOntologyURI(f, baseUri);
-				baseOntologyLibrary.importOntology(uri, f, folder);
-			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
+				baseOntologyLibrary.importMetaModel(uri, f, folder);
+			} else*/
+
+			if (f.isDirectory() && !f.getName().equals("CVS")) {
 				OntologyFolder newFolder = new OntologyFolder(f.getName(), folder, baseOntologyLibrary);
-				findOntologies(f, baseUri + "/" + f.getName(), newFolder);
+				findMetaModels(f, baseUri + "/" + f.getName(), newFolder);
 			}
 		}
 	}

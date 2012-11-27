@@ -21,10 +21,13 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
@@ -32,6 +35,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -44,7 +48,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
  * @author sylvain
  * 
  */
-public class AddConnector extends AddShemaElementAction {
+public class AddConnector extends AddShemaElementAction<ViewConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
@@ -180,6 +184,46 @@ public class AddConnector extends AddShemaElementAction {
 	@Override
 	public boolean isAssignationRequired() {
 		return true;
+	}
+
+	@Override
+	public ViewConnector performAction(EditionSchemeAction action) {
+		ViewShape fromShape = getFromShape(action);
+		ViewShape toShape = getToShape(action);
+		ViewConnector newConnector = new ViewConnector(fromShape.getShema(), fromShape, toShape);
+		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
+		if (parent == null) {
+			throw new IllegalArgumentException("No common ancestor");
+		}
+
+		GraphicalRepresentation<?> grToUse = null;
+
+		// If an overriden graphical representation is defined, use it
+		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
+		} else if (getPatternRole().getGraphicalRepresentation() != null) {
+			grToUse = getPatternRole().getGraphicalRepresentation();
+		}
+
+		ConnectorGraphicalRepresentation<ViewConnector> newGR = new ConnectorGraphicalRepresentation<ViewConnector>();
+		newGR.setsWith(grToUse);
+		newConnector.setGraphicalRepresentation(newGR);
+
+		parent.addToChilds(newConnector);
+
+		// Register reference
+		newConnector.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added connector " + newConnector + " under " + parent);
+		}
+		return newConnector;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, ViewConnector newConnector) {
+		// Be sure that the newly created shape is updated
+		newConnector.update();
 	}
 
 	public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends

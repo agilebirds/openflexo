@@ -22,6 +22,11 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
+import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 
 /**
  * Please comment this class

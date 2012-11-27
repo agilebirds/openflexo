@@ -40,9 +40,7 @@ import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
@@ -309,7 +307,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	public List<FlexoModelObject> objectsThatWillBeDeleted() {
 		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
 		for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+			if (pr.defaultBehaviourIsToBeDeleted()) {
 				returned.add(getPatternActor(pr));
 			}
 		}

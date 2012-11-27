@@ -15,16 +15,12 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PropertyPatternRole;
-import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPatternRolePathElement.ConnectorPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPatternRolePathElement.ShapePatternRolePathElement;
@@ -37,6 +33,10 @@ import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePath
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicPropertyPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.RestrictionStatementPatternRolePathElement;
+import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.IsAStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
 
 public class PatternRolePathElement<T extends Object> implements SimplePathElement<T>, BindingVariable<T> {
 	private static final Logger logger = Logger.getLogger(PatternRolePathElement.class.getPackage().getName());

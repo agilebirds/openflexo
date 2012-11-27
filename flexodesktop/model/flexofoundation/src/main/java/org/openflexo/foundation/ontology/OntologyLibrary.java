@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -31,12 +30,8 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
-import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
-import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
-import org.openflexo.foundation.ontology.xsd.ImportedXSOntology;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -54,6 +49,9 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.DoesNotExistException;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+// TODO: an ontology library must handle MetaModel only, and not FlexoOntology
+// TODO: should be renamed as MetaModelLibrary
+@Deprecated
 public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelMaker, InspectableObject, DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(OntologyLibrary.class.getPackage().getName());
@@ -215,46 +213,43 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return returned;
 	}
 
-	public OWLOntology getFlexoConceptOntology() {
-		return (OWLOntology) getOntology(FLEXO_CONCEPT_ONTOLOGY_URI);
+	public FlexoOntology getFlexoConceptOntology() {
+		return getOntology(FLEXO_CONCEPT_ONTOLOGY_URI);
 	}
 
-	public OWLOntology getRDFOntology() {
-		return (OWLOntology) getOntology(RDFURIDefinitions.RDF_ONTOLOGY_URI);
+	public FlexoOntology getRDFOntology() {
+		return getOntology(RDFURIDefinitions.RDF_ONTOLOGY_URI);
 	}
 
-	public OWLOntology getRDFSOntology() {
-		return (OWLOntology) getOntology(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+	public FlexoOntology getRDFSOntology() {
+		return getOntology(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 	}
 
-	public OWLOntology getOWLOntology() {
-		return (OWLOntology) getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
+	public FlexoOntology getOWLOntology() {
+		return getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
-	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {
-		return importOntology(ontologyUri, alternativeLocalFile, null);
+	public FlexoMetaModel importMetaModel(FlexoMetaModel metaModel) {
+		return importMetaModel(metaModel, null);
 	}
 
-	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
-		logger.fine("Import ontology " + ontologyUri + " as " + alternativeLocalFile);
+	public FlexoMetaModel importMetaModel(FlexoMetaModel metaModel, OntologyFolder folder) {
+		logger.fine("Import meta model " + metaModel.getURI());
 		if (_allOntologies != null) {
 			_allOntologies.clear();
 		}
 		_allOntologies = null;
-		ImportedOntology newOntology = null;
-		if (alternativeLocalFile.getName().endsWith(".owl")) {
-			newOntology = new ImportedOWLOntology(ontologyUri, alternativeLocalFile, this);
-		} else if (alternativeLocalFile.getName().endsWith(".xsd")) {
-			newOntology = new ImportedXSOntology(ontologyUri, alternativeLocalFile, this);
-		}
-		registerOntology(newOntology);
+
+		// TODO: an ontology library must handle MetaModel only, and not FlexoOntology
+
+		registerOntology((FlexoOntology) metaModel);
 		// ontologies.put(ontologyUri, newOntology);
 		if (folder != null) {
-			folder.addToOntologies(newOntology);
+			folder.addToOntologies((FlexoOntology) metaModel);
 		}
 		setChanged();
-		notifyObservers(new OntologyImported(newOntology));
-		return newOntology;
+		notifyObservers(new OntologyImported((FlexoOntology) metaModel));
+		return metaModel;
 	}
 
 	public void registerOntology(FlexoOntology ontology) {
@@ -300,7 +295,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			return ((OWLOntology) ont).getOntModel();
 		}
 		if (!strict) {
-			ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
+			OWLMetaModel newOntology = new OWLMetaModel(name, null, this);
 			newOntology.setOntModel(createFreshModel());
 			ontologies.put(name, newOntology);
 			setChanged();
@@ -329,7 +324,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			}
 			return createDefaultModel();
 		}
-		ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
+		OWLMetaModel newOntology = new OWLMetaModel(name, null, this);
 		newOntology.setOntModel(createFreshModel());
 		ontologies.put(name, newOntology);
 		setChanged();

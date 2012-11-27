@@ -65,13 +65,6 @@ public class CEDCst {
 			"Fib/Dialog/DeclareConnectorInEditionPatternDialog.fib");
 	public static File PUSH_TO_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/PushToPaletteDialog.fib");
 
-	// Ontology edition
-	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
-	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
-	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
-	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
-	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
-
 	// Saving operations
 	public static File REVIEW_UNSAVED_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedViewPointModelerDialog.fib");
 	public static File SAVE_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/SaveViewPointModelerDialog.fib");

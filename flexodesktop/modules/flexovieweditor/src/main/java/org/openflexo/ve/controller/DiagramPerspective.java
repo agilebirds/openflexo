@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
@@ -41,6 +40,7 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
@@ -244,8 +244,8 @@ public class DiagramPerspective extends FlexoPerspective {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOWLOntology) {
-			return ((ImportedOWLOntology) object).getName();
+		if (object instanceof OWLMetaModel) {
+			return ((OWLMetaModel) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

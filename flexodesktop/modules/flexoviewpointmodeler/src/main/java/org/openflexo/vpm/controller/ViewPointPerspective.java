@@ -29,7 +29,6 @@ import javax.swing.JPanel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -37,6 +36,7 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -97,8 +97,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPointPalette) {
 					focusOnPalette((ViewPointPalette) object);
-				} else if (object instanceof ImportedOWLOntology) {
-					focusOnOntology((ImportedOWLOntology) object);
+				} else if (object instanceof OWLMetaModel) {
+					focusOnOntology((OWLMetaModel) object);
 				} else if (object instanceof EditionPattern) {
 					hideBottomBrowser();
 				}
@@ -107,7 +107,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			@Override
 			public void treeSingleClick(FlexoModelObject object) {
 				super.treeSingleClick(object);
-				if (!(object instanceof ViewPointPalette) && !(object instanceof ImportedOWLOntology)) {
+				if (!(object instanceof ViewPointPalette) && !(object instanceof OWLMetaModel)) {
 					hideBottomBrowser();
 				}
 			}
@@ -156,7 +156,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		calcDrawingShemaBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnOntology(ImportedOWLOntology ontology) {
+	public void focusOnOntology(OWLMetaModel ontology) {
 		setBottomLeftView(ontologyBrowserView);
 		ontologyBrowser.deleteBrowserListener(_browserView);
 		ontologyBrowser.setRepresentedOntology(ontology);

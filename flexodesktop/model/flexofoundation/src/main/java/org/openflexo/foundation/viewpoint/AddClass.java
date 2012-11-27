@@ -28,6 +28,9 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -36,12 +39,12 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddClass extends AddConcept {
+public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyClass>
+		extends AddConcept<MS, M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	private String ontologyClassURI = null;
-	private ModelSlot<?> modelSlot = null;
 
 	public AddClass(ViewPointBuilder builder) {
 		super(builder);
@@ -216,16 +219,6 @@ public class AddClass extends AddConcept {
 			return object.getClassNameBindingDefinition();
 		}
 
-	}
-
-	@Override
-	public ModelSlot<?> getModelSlot() {
-		return modelSlot;
-	}
-
-	@Override
-	public void setModelSlot(ModelSlot<?> modelSlot) {
-		this.modelSlot = modelSlot;
 	}
 
 }

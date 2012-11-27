@@ -23,10 +23,14 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept extends AssignableAction {
+public abstract class AddConcept<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+		AssignableAction<MS, M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
@@ -37,10 +41,6 @@ public abstract class AddConcept extends AssignableAction {
 	public abstract OntologyClass getOntologyClass();
 
 	public abstract void setOntologyClass(OntologyClass ontologyClass);
-
-	public abstract ModelSlot<?> getModelSlot();
-
-	public abstract void setModelSlot(ModelSlot<?> modelSlot);
 
 	/*public OntologyObject getOntologyObject(FlexoProject project)
 	{

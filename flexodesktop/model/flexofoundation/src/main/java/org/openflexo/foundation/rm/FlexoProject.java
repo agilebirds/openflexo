@@ -123,7 +123,6 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -132,6 +131,7 @@ import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -153,13 +153,12 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.ModelSlotAssociation;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
-import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -180,6 +179,7 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.IModuleLoader;
+import org.openflexo.technologyadapter.owl.ontology.OWLModel;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -325,8 +325,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private IModuleLoader moduleLoader;
 
-	private List<ModelSlotAssociation> models;
-	private Map<View, Map<ModelSlot<?>, ModelSlotAssociation>> modelsAssociationMap; // Do not serialize this
+	private List<ModelSlotInstance> models;
+	private Map<View, Map<ModelSlot<?,?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -3986,7 +3986,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private ProjectOntology createProjectOntology() {
 		// Temporary hack to select the type of the project ontology
 		// To be updated with model slots
-		return ProjectOWLOntology.createNewProjectOntology(this);
+		return OWLModel.createNewOWLModel(this);
 		// return ProjectXSOntology.createNewProjectOntology(this);
 	}
 

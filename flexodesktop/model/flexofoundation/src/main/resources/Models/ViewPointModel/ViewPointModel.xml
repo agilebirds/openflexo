@@ -16,7 +16,7 @@
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
 		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
-		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.viewpoint.ModelSlot"/>
+		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"
@@ -161,7 +161,7 @@
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.StatementPatternRole" abstract="yes">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole" abstract="yes">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ClassPatternRole" xmlTag="ClassPatternRole">
@@ -180,17 +180,17 @@
 			<property name="rangeURI" xmlTag="range" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.IsAStatementPatternRole" xmlTag="IsAStatementPatternRole"/>
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.IsAStatementPatternRole" xmlTag="IsAStatementPatternRole"/>
 
-	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole" xmlTag="ObjectPropertyStatementPatternRole">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole" xmlTag="ObjectPropertyStatementPatternRole">
 		<property name="objectPropertyURI" xmlTag="objectProperty" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole" xmlTag="DataPropertyStatementPatternRole">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole" xmlTag="DataPropertyStatementPatternRole">
 		<property name="dataPropertyURI" xmlTag="dataProperty" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole" xmlTag="RestrictionStatementPatternRole"/>
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole" xmlTag="RestrictionStatementPatternRole"/>
 
 	<entity name="org.openflexo.foundation.viewpoint.PrimitivePatternRole" xmlTag="PrimitivePatternRole">
 		<property name="primitiveType" xmlTag="primitiveType" attribute="YES" />
@@ -437,29 +437,29 @@
 		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddStatement"
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.AddStatement"
 		abstract="yes">
 		<property name="subject" xmlTag="subject" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddObjectPropertyStatement"
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement"
 		xmlTag="AddObjectPropertyStatement">
 		<property name="object" xmlTag="object" attribute="YES" />
 		<property name="objectPropertyURI" xmlTag="objectPropertyURI" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddDataPropertyStatement"
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement"
 		xmlTag="AddDataPropertyStatement">
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="dataPropertyURI" xmlTag="dataPropertyURI" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddIsAStatement"
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement"
 		xmlTag="AddIsAPropertyStatement">
 		<property name="father" xmlTag="father" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddRestrictionStatement"
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement"
 		xmlTag="AddRestrictionStatement">
 		<property name="object" xmlTag="object" attribute="YES" />
 		<property name="propertyURI" xmlTag="propertyURI" attribute="YES" />

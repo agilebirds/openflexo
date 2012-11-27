@@ -41,16 +41,17 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -93,7 +94,7 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
-	private List<ModelSlot<?>> modelSlots;
+	private List<ModelSlot<?,?>> modelSlots;
 
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
@@ -210,7 +211,7 @@ public class ViewPoint extends ViewPointObject {
 			if (StringUtils.isEmpty(ontologyURI)) {
 				ontologyURI = viewPointURI;
 			}
-			viewpointOntology = library.getOntologyLibrary().importOntology(ontologyURI, owlFile);
+			viewpointOntology = library.getOntologyLibrary().importMetaModel(ontologyURI, owlFile);
 			viewpointOntology.setIsReadOnly(false);
 		}
 
@@ -538,7 +539,7 @@ public class ViewPoint extends ViewPointObject {
 		return viewpointOntology;
 	}
 
-	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
+	public void setViewpointOntology(OWLMetaModel viewpointOntology) {
 		this.viewpointOntology = viewpointOntology;
 	}
 
@@ -786,25 +787,25 @@ public class ViewPoint extends ViewPointObject {
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot<?>> modelSlots) {
+	public void setModelSlots(List<ModelSlot<?,?>> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot<?>> getModelSlots() {
+	public List<ModelSlot<?,?>> getModelSlots() {
 		return modelSlots;
 	}
 
-	public void addToModelSlots(ModelSlot<?> modelSlot) {
+	public void addToModelSlots(ModelSlot<?,?> modelSlot) {
 		modelSlots.add(modelSlot);
 	}
 
-	public void removeFromModelSlots(ModelSlot<?> modelSlot) {
+	public void removeFromModelSlots(ModelSlot<?,?> modelSlot) {
 		modelSlots.remove(modelSlot);
 	}
 
-	public List<ModelSlot<?>> getRequiredModelSlots() {
-		List<ModelSlot<?>> requiredModelSlots = new ArrayList<ModelSlot<?>>();
-		for (ModelSlot<?> modelSlot : getModelSlots()) {
+	public List<ModelSlot<?,?>> getRequiredModelSlots() {
+		List<ModelSlot<?,?>> requiredModelSlots = new ArrayList<ModelSlot<?,?>>();
+		for (ModelSlot<?,?> modelSlot : getModelSlots()) {
 			if (modelSlot.getIsRequired()) {
 				requiredModelSlots.add(modelSlot);
 			}

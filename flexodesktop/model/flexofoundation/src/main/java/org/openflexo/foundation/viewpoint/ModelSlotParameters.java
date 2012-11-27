@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 /**
  * <p>

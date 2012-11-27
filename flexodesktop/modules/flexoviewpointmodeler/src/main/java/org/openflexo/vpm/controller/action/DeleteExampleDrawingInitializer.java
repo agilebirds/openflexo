@@ -38,13 +38,13 @@ public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExa
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteExampleDrawingInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteExampleDrawingInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeleteExampleDrawing.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

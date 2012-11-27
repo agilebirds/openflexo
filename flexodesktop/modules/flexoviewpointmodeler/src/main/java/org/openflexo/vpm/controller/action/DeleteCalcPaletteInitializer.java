@@ -35,13 +35,13 @@ public class DeleteCalcPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteCalcPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeleteViewPointPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

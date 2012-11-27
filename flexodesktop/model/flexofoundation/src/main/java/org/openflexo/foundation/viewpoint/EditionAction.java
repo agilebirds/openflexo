@@ -24,6 +24,10 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -32,20 +36,60 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
  * 
+ * An edition action matches a {@link ModelSlot}
+ * 
  * @author sylvain
  * 
  */
-public abstract class EditionAction extends EditionSchemeObject {
+public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+		EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
 	public static enum EditionActionType {
-		AddClass, AddIndividual, AddObjectPropertyStatement, AddDataPropertyStatement, AddIsAStatement, AddRestrictionStatement, AddConnector, AddShape, AddDiagram, AddEditionPattern, CloneShape, CloneConnector, CloneIndividual, DeclarePatternRole, DeleteAction, GraphicalAction, GoToObject, Iteration, Conditional
+		AddClass,
+		AddIndividual,
+		AddObjectPropertyStatement,
+		AddDataPropertyStatement,
+		AddIsAStatement,
+		AddRestrictionStatement,
+		AddConnector,
+		AddShape,
+		AddDiagram,
+		AddEditionPattern,
+		CloneShape,
+		CloneConnector,
+		CloneIndividual,
+		DeclarePatternRole,
+		DeleteAction,
+		GraphicalAction,
+		GoToObject,
+		Iteration,
+		Conditional
 	}
 
 	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
-		conditional, assignation, individualName, className, container, fromShape, toShape, object, subject, father, value, restrictionType, cardinality, target, diagramName, view, condition, iteration
+		conditional,
+		assignation,
+		individualName,
+		className,
+		container,
+		fromShape,
+		toShape,
+		object,
+		subject,
+		father,
+		value,
+		restrictionType,
+		cardinality,
+		target,
+		diagramName,
+		view,
+		condition,
+		iteration
 	}
+
+	private MS modelSlot;
 
 	// private EditionScheme _scheme;
 	private String description;
@@ -97,12 +141,43 @@ public abstract class EditionAction extends EditionSchemeObject {
 		return null;
 	}
 
+	public final MS getModelSlot() {
+		return modelSlot;
+	}
+
+	public final void setModelSlot(MS modelSlot) {
+		this.modelSlot = modelSlot;
+	}
+
+	public ModelSlotInstance<MS, M, MM> getModelSlotInstance(EditionSchemeAction action) {
+		return action.getView().getModelSlotInstance(getModelSlot());
+	}
+
 	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid()) {
 			return (Boolean) getConditional().getBindingValue(action);
 		}
 		return true;
 	}
+
+	/**
+	 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
+	 * Note than returned object will be used to be further reinjected in finalizer
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public abstract T performAction(EditionSchemeAction action);
+
+	/**
+	 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
+	 * 
+	 * @param action
+	 * @param initialContext
+	 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
+	 * @return
+	 */
+	public abstract void finalizePerformAction(EditionSchemeAction action, T initialContext);
 
 	@Override
 	public EditionPattern getEditionPattern() {

@@ -9,6 +9,7 @@ import org.openflexo.foundation.rm.StorageResourceData;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
+@Deprecated
 public interface ProjectOntology extends FlexoOntology, StorageResourceData {
 
 	/*

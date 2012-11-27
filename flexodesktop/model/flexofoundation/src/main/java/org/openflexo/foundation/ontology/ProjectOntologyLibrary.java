@@ -24,6 +24,7 @@ import java.io.File;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.technologyadapter.owl.ontology.OWLModel;
 
 public class ProjectOntologyLibrary extends OntologyLibrary {
 
@@ -39,8 +40,8 @@ public class ProjectOntologyLibrary extends OntologyLibrary {
 		return project;
 	}
 
-	public ProjectOWLOntology _loadProjectOntology(String ontologyUri, File projectOntologyFile) {
-		ProjectOWLOntology projectOntology = new ProjectOWLOntology(ontologyUri, projectOntologyFile, this);
+	public OWLModel _loadProjectOntology(String ontologyUri, File projectOntologyFile) {
+		OWLModel projectOntology = new OWLModel(ontologyUri, projectOntologyFile, this);
 		ontologies.put(ontologyUri, projectOntology);
 		setChanged();
 		notifyObservers(new OntologyImported(projectOntology));

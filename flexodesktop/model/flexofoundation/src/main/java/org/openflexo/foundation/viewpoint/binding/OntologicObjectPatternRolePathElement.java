@@ -32,20 +32,20 @@ import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
 import org.openflexo.foundation.ontology.owl.SubClassStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PropertyPatternRole;
-import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
-import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyClassPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyDataPropertyPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyObjectPropertyPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyPropertyPathElement;
+import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.IsAStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole;
 
 public abstract class OntologicObjectPatternRolePathElement<T extends OntologyObject> extends PatternRolePathElement<T> {
 	private static final Logger logger = Logger.getLogger(OntologicObjectPatternRolePathElement.class.getPackage().getName());

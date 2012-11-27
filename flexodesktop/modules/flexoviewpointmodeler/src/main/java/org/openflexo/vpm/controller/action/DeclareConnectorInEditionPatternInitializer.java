@@ -41,13 +41,13 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareConnectorInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeclareConnectorInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

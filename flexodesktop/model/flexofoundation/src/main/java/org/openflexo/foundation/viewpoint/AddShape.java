@@ -21,10 +21,13 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
@@ -43,7 +46,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
  * @author sylvain
  * 
  */
-public class AddShape extends AddShemaElementAction {
+public class AddShape extends AddShemaElementAction<ViewShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
@@ -151,6 +154,47 @@ public class AddShape extends AddShemaElementAction {
 	@Override
 	public boolean isAssignationRequired() {
 		return true;
+	}
+
+	@Override
+	public ViewShape performAction(EditionSchemeAction action) {
+		ViewShape newShape = new ViewShape(action.retrieveOEShema());
+
+		GraphicalRepresentation<?> grToUse = null;
+
+		// If an overriden graphical representation is defined, use it
+		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
+		} else if (getPatternRole().getGraphicalRepresentation() != null) {
+			grToUse = getPatternRole().getGraphicalRepresentation();
+		}
+
+		ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
+		newGR.setsWith(grToUse);
+		newShape.setGraphicalRepresentation(newGR);
+
+		// Register reference
+		newShape.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
+
+		ViewObject container = getContainer(action);
+
+		if (container == null) {
+			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action));
+			return null;
+		}
+
+		container.addToChilds(newShape);
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added shape " + newShape + " under " + container);
+		}
+		return newShape;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, ViewShape newShape) {
+		// Be sure that the newly created shape is updated
+		newShape.update();
 	}
 
 	public static class AddShapeActionMustAdressAValidShapePatternRole extends

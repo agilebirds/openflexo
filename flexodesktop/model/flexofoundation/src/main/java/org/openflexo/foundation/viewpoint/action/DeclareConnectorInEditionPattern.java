@@ -50,7 +50,6 @@ import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -61,6 +60,7 @@ import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 

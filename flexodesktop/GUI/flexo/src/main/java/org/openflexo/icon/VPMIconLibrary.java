@@ -30,7 +30,6 @@ import org.openflexo.foundation.viewpoint.AddDiagram;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddShape;
-import org.openflexo.foundation.viewpoint.AddStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.CloneConnector;
 import org.openflexo.foundation.viewpoint.CloneIndividual;
@@ -67,13 +66,14 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.technologyadapter.owl.viewpoint.AddStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**

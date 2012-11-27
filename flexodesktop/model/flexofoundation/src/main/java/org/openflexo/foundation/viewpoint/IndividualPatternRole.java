@@ -14,6 +14,11 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 	}
 
 	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return true;
+	}
+
+	@Override
 	public PatternRoleType getType() {
 		return PatternRoleType.Individual;
 	}

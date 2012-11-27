@@ -36,10 +36,7 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
-import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -47,8 +44,10 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -61,8 +60,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private FlexoOEShemaResource _resource;
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
-	private List<ModelSlotAssociation> modelSlotAssociations;
-	private Map<ModelSlot<?>, ProjectOntology> modelsMap = new HashMap<ModelSlot<?>, ProjectOntology>(); // Do not serialize this.
+	private List<ModelSlotInstance> modelSlotInstances;
+	private Map<ModelSlot<?, ?>, FlexoModel<?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?>>(); // Do not serialize this.
 
 	/**
 	 * Constructor invoked during deserialization
@@ -319,75 +318,89 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlotAssociations(List<ModelSlotAssociation> associations) {
-		this.modelSlotAssociations = associations;
+	/**
+	 * This is the binding point between a {@link ModelSlot} and its concretization in a {@link View} through notion of
+	 * {@link ModelSlotInstance}
+	 * 
+	 * @param modelSlot
+	 * @return
+	 */
+	public <MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> ModelSlotInstance<MS, M, MM> getModelSlotInstance(
+			MS modelSlot) {
+		// TODO
+		logger.warning("Please implement me");
+		return null;
+	}
+
+	public void setModelSlotInstances(List<ModelSlotInstance> instances) {
+		this.modelSlotInstances = instances;
 		modelsMap.clear();
-		for (ModelSlotAssociation model : associations) {
+		for (ModelSlotInstance model : instances) {
 			modelsMap.put(model.getModelSlot(), model.getModel());
 		}
 	}
 
-	public List<ModelSlotAssociation> getModelSlotAssociations() {
-		return modelSlotAssociations;
+	public List<ModelSlotInstance> getModelSlotInstances() {
+		return modelSlotInstances;
 	}
 
-	public void removeFromModelSlotAssociation(ModelSlotAssociation association) {
-		modelSlotAssociations.remove(association);
-		modelsMap.remove(association.getModelSlot());
+	public void removeFromModelSlotInstance(ModelSlotInstance instance) {
+		modelSlotInstances.remove(instance);
+		modelsMap.remove(instance.getModelSlot());
 	}
 
-	public void addToModelSlotAssociations(ModelSlotAssociation association) {
-		Iterator<ModelSlotAssociation> it = modelSlotAssociations.iterator();
+	public void addToModelSlotInstances(ModelSlotInstance instance) {
+		Iterator<ModelSlotInstance> it = modelSlotInstances.iterator();
 		while (it.hasNext()) {
-			if (it.next().getModelSlot().equals(association.getModelSlot())) {
+			if (it.next().getModelSlot().equals(instance.getModelSlot())) {
 				it.remove();
 			}
 		}
-		modelSlotAssociations.add(association);
-		modelsMap.put(association.getModelSlot(), association.getModel());
+		modelSlotInstances.add(instance);
+		modelsMap.put(instance.getModelSlot(), instance.getModel());
 	}
 
-	public void setModel(ModelSlot<?> modelSlot, ProjectOntology model) {
+	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> void setModel(ModelSlot<M, MM> modelSlot, M model) {
 		modelsMap.put(modelSlot, model);
-		for (ModelSlotAssociation association : modelSlotAssociations) {
-			if (association.getModelSlot().equals(modelSlot)) {
-				association.setModel(model);
+		for (ModelSlotInstance instance : modelSlotInstances) {
+			if (instance.getModelSlot().equals(modelSlot)) {
+				instance.setModel(model);
 				return;
 			}
 		}
-		ModelSlotAssociation association = new ModelSlotAssociation(this, modelSlot);
-		association.setModel(model);
-		modelSlotAssociations.add(association);
+		ModelSlotInstance<ModelSlot<M, MM>, M, MM> instance = new ModelSlotInstance<ModelSlot<M, MM>, M, MM>(this, modelSlot);
+		instance.setModel(model);
+		modelSlotInstances.add(instance);
 	}
 
-	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
-		ProjectOntology model = modelsMap.get(modelSlot);
+	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
+		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
-			model = (ProjectOntology) modelSlot.createEmptyModel(this);
+			model = modelSlot.createEmptyModel(this, modelSlot.getMetaModel());
 			setModel(modelSlot, model);
 		}
 		return model;
 	}
 
-	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> M getModel(ModelSlot<M, MM> modelSlot) {
 		return getModel(modelSlot, true);
 	}
 
-	public Set<FlexoOntology> getAllMetaModels() {
-		Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
-		for (ModelSlotAssociation association : getModelSlotAssociations()) {
-			if (association.getModelSlot() != null && association.getModelSlot().getMetaModel() != null) {
-				allMetaModels.add(association.getModelSlot().getMetaModel());
+	public Set<FlexoMetaModel> getAllMetaModels() {
+		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
+		for (ModelSlotInstance instance : getModelSlotInstances()) {
+			if (instance.getModelSlot() != null && instance.getModelSlot().getMetaModel() != null) {
+				allMetaModels.add(instance.getModelSlot().getMetaModel());
 			}
 		}
 		return allMetaModels;
 	}
 
-	public Set<ProjectOntology> getAllModels() {
-		Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
-		for (ModelSlotAssociation association : getModelSlotAssociations()) {
-			if (association.getModel() != null) {
-				allModels.add(association.getModel());
+	public Set<FlexoModel<?>> getAllModels() {
+		Set<FlexoModel<?>> allModels = new HashSet<FlexoModel<?>>();
+		for (ModelSlotInstance instance : getModelSlotInstances()) {
+			if (instance.getModel() != null) {
+				allModels.add(instance.getModel());
 			}
 		}
 		return allModels;

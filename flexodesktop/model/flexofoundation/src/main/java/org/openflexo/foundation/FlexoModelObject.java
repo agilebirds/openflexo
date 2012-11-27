@@ -40,6 +40,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ScreenshotResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.Validable;
@@ -61,6 +62,11 @@ import org.openflexo.xmlcode.StringEncoder;
  * 
  */
 public abstract class FlexoModelObject extends FlexoXMLSerializableObject implements FlexoActionnable {
+
+	static {
+		// To be sure all Technology Adapters are recorded
+		TechnologyAdapter.loadTechnologyAdapters();
+	}
 
 	public static boolean stringHasChanged(String old, String newString) {
 		return old == null && newString != null || old != null && !old.equals(newString);

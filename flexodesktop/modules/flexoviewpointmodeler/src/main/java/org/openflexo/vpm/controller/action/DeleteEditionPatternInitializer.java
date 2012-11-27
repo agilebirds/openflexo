@@ -38,13 +38,13 @@ public class DeleteEditionPatternInitializer extends ActionInitializer<DeleteEdi
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeleteEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

@@ -695,6 +695,24 @@
 				<type>zip</type>
 			</dependency>
 
+			<!--  Technology adaptors -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
 			<!-- packaging -->
 			<dependency>
 				<groupId>org.openflexo.packaging</groupId>

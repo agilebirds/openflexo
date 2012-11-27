@@ -29,6 +29,9 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -38,14 +41,14 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddIndividual extends AddConcept {
+public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyIndividual>
+		extends AddConcept<MS, M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
 	private String ontologyClassURI = null;
-	private ModelSlot<?> modelSlot = null;
 
 	public AddIndividual(ViewPointBuilder builder) {
 		super(builder);
@@ -292,16 +295,6 @@ public class AddIndividual extends AddConcept {
 			return object.getIndividualNameBindingDefinition();
 		}
 
-	}
-
-	@Override
-	public ModelSlot<?> getModelSlot() {
-		return modelSlot;
-	}
-
-	@Override
-	public void setModelSlot(ModelSlot<?> modelSlot) {
-		this.modelSlot = modelSlot;
 	}
 
 }

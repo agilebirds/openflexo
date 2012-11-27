@@ -32,7 +32,6 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -41,6 +40,7 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -131,9 +131,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		viewPointLibrary.registerViewPoint(_newViewPoint);
 	}
 
-	private ImportedOWLOntology buildOntology() {
+	private OWLMetaModel buildOntology() {
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
-		ImportedOWLOntology newOntology = ImportedOWLOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
+		OWLMetaModel newOntology = OWLMetaModel.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
 		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
