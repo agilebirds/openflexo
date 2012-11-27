@@ -19,44 +19,31 @@
  * Contributors :
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.foundation.ontology.io;
 
-import java.util.List;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 
 /**
- * Concept of Class.
+ * Reader / Writer for a Specific Ontology.
  * 
  * @author gbesancon
  * 
  */
-public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
-	/**
-	 * Super Classes of Class.
-	 * 
-	 * @return
-	 */
-	List<IFlexoOntologyClass> getSuperClasses();
+public interface IFlexoOntologyReaderWriter<IO, ONTOLOGY extends IFlexoOntology, BUILDER extends IFlexoOntologyBuilder<ONTOLOGY>, CONVERTER extends IFlexoOntologyConverter<ONTOLOGY, BUILDER>> {
 
 	/**
-	 * Sub Classes of Class.
+	 * Load Ontology from IO input.
 	 * 
+	 * @param input
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSubClasses();
+	ONTOLOGY load(IO input);
 
 	/**
-	 * Is this a Super Class of aClass.
+	 * Save Ontology to IO output.
 	 * 
-	 * 
-	 * @return
+	 * @param ontology
+	 * @param output
 	 */
-	boolean isSuperClassOf(IFlexoOntologyClass aClass);
-
-	/**
-	 * Is this a Sub Class of Class.
-	 * 
-	 * @return
-	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
-
+	void save(ONTOLOGY ontology, IO output);
 }

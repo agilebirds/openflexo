@@ -1,149 +1,95 @@
+/** Copyright (c) 2012, THALES SYSTEMES AEROPORTES - All Rights Reserved
+ * Author : Gilles Besançon
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contributors :
+ *
+ */
 package org.openflexo.foundation.ontology;
 
-import java.util.Set;
+import java.util.List;
 
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.localization.Language;
+import org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor;
 
-public interface IFlexoOntologyConcept {
-
-	public String getURI();
-
-	public String getName();
-
-	public void setName(String aName);
-
-	public abstract boolean getIsReadOnly();
-
-	public IFlexoOntology getFlexoOntology();
-
-	public boolean isSuperConceptOf(IFlexoOntologyConcept concept);
-
-	public boolean isSubConceptOf(IFlexoOntologyConcept concept);
-
-	public String getDescription();
-
-	public void setDescription(String aDescription);
-
-	public String getDisplayableDescription();
-
-	public String getHTMLDescription();
-
-	public OntologyLibrary getOntologyLibrary();
-
+/**
+ * Common interface for concepts of Ontology.
+ * 
+ * @author gbesancon
+ */
+public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	/**
-	 * Return the value defined for supplied property, asserting that current individual defines one and only one assertion for this
-	 * property.<br>
-	 * <ul>
-	 * <li>If many assertions for this properties are defined for this individual, then the first assertion is used<br>
-	 * Special case: if supplied property is an annotation property defined on a literal (datatype property) then the returned value will
-	 * match the current language as defined in FlexoLocalization.</li>
-	 * <li>If no assertion is defined for this property, then the result will be null</li>
-	 * </ul>
+	 * Ontology of Concept.
 	 * 
-	 * @param property
 	 * @return
 	 */
-	public Object getPropertyValue(IFlexoOntologyStructuralProperty property);
+	IFlexoOntology getOntology();
 
 	/**
-	 * Sets the value defined for supplied property, asserting that current individual defines one and only one assertion for this property.<br>
+	 * Annotation upon Concept.
 	 * 
-	 * @param property
-	 * @param newValue
-	 */
-	public void setPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue);
-
-	/**
-	 * Return value of specified property, asserting this property is an annotation property matching a literal value
-	 * 
-	 * @param property
-	 * @param language
 	 * @return
 	 */
-	public Object getAnnotationValue(IFlexoOntologyDataProperty property, Language language);
+	List<IFlexoOntologyAnnotation> getAnnotations();
 
 	/**
-	 * Sets value of specified property, asserting this property is an annotation property matching a literal value
+	 * Container of Concept.
 	 * 
-	 * @param value
-	 * @param property
-	 * @param language
-	 */
-	public void setAnnotationValue(Object value, IFlexoOntologyDataProperty property, Language language);
-
-	/**
-	 * Return value of specified property, asserting this property is an annotation property matching an object value
-	 * 
-	 * @param property
-	 * @param language
 	 * @return
 	 */
-	public Object getAnnotationObjectValue(IFlexoOntologyObjectProperty property);
+	IFlexoOntologyConceptContainer getContainer();
 
 	/**
-	 * Sets value of specified property, asserting this property is an annotation property matching an object value
+	 * Association with features for Concept.
 	 * 
-	 * @param value
-	 * @param property
-	 * @param language
-	 */
-	public void setAnnotationObjectValue(Object value, IFlexoOntologyObjectProperty property, Language language);
-
-	/**
-	 * Append object property statement for specified property and object
-	 * 
-	 * @param property
-	 * @param object
-	 * @return an object representing the added statement
-	 */
-	public Object addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object);
-
-	/**
-	 * Append property statement for specified property and object
-	 * 
-	 * @param property
-	 * @param object
-	 * @return an object representing the added statement
-	 */
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value);
-
-	/**
-	 * Append property statement for specified property, object and language
-	 * 
-	 * @param property
-	 * @param object
-	 * @return an object representing the added statement
-	 */
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language);
-
-	/**
-	 * Append property statement for specified property and value
-	 * 
-	 * @param property
-	 * @param object
-	 * @return an object representing the added statement
-	 */
-	public Object addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value);
-
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
-
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsDomain();
-
-	/**
-	 * This equals has a particular semantics in the way that it returns true only and only if compared objects are representing same
-	 * concept regarding URI. This does not guarantee that both objects will respond the same way to some methods.<br>
-	 * This method returns true if and only if objects are same, or if one of both object redefine the other one (with eventual many levels)
-	 * 
-	 * @param o
 	 * @return
 	 */
-	public boolean equalsToConcept(IFlexoOntologyConcept o);
+	List<IFlexoOntologyFeatureAssociation> getFeatureAssociations();
 
-	// NB: implemented in FlexoModelObject
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole);
+	/**
+	 * 
+	 * Is this a Super Concept of concept.
+	 * 
+	 * @return
+	 */
+	boolean isSuperConceptOf(IFlexoOntologyConcept concept);
 
-	// NB: implemented in FlexoModelObject
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole);
+	/**
+	 * 
+	 * Is this a equal to concept.
+	 * 
+	 * @return
+	 */
+	boolean isEqualToConcept(IFlexoOntologyConcept concept);
 
+	/**
+	 * 
+	 * Is this a Sub Concept of concept.
+	 * 
+	 * @return
+	 */
+	boolean isSubConceptOf(IFlexoOntologyConcept concept);
+
+	/**
+	 * Visitor access.
+	 * 
+	 * @param visitor
+	 * @return
+	 * 
+	 * @pattern visitor
+	 */
+	<T> T accept(IFlexoOntologyConceptVisitor<T> visitor);
 }

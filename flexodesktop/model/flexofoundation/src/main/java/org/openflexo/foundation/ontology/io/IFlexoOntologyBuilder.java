@@ -19,44 +19,17 @@
  * Contributors :
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.foundation.ontology.io;
 
-import java.util.List;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 
 /**
- * Concept of Class.
+ * Interface to incitate to use a builder to instantiate objects.
  * 
  * @author gbesancon
  * 
+ * @pattern builder
  */
-public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
-	/**
-	 * Super Classes of Class.
-	 * 
-	 * @return
-	 */
-	List<IFlexoOntologyClass> getSuperClasses();
-
-	/**
-	 * Sub Classes of Class.
-	 * 
-	 * @return
-	 */
-	List<IFlexoOntologyClass> getSubClasses();
-
-	/**
-	 * Is this a Super Class of aClass.
-	 * 
-	 * 
-	 * @return
-	 */
-	boolean isSuperClassOf(IFlexoOntologyClass aClass);
-
-	/**
-	 * Is this a Sub Class of Class.
-	 * 
-	 * @return
-	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
+public interface IFlexoOntologyBuilder<ONTOLOGY extends IFlexoOntology> {
 
 }

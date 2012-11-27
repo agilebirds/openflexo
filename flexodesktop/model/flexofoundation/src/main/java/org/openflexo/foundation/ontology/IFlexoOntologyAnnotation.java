@@ -21,42 +21,25 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.util.List;
+import java.util.Map;
 
 /**
- * Concept of Class.
+ * Annotation.
  * 
  * @author gbesancon
- * 
  */
-public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
+public interface IFlexoOntologyAnnotation {
 	/**
-	 * Super Classes of Class.
+	 * Name of annotation.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSuperClasses();
+	String getName();
 
 	/**
-	 * Sub Classes of Class.
+	 * Details of annotations.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSubClasses();
-
-	/**
-	 * Is this a Super Class of aClass.
-	 * 
-	 * 
-	 * @return
-	 */
-	boolean isSuperClassOf(IFlexoOntologyClass aClass);
-
-	/**
-	 * Is this a Sub Class of Class.
-	 * 
-	 * @return
-	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
-
+	Map<String, String> getDetails();
 }

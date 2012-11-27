@@ -21,42 +21,37 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.util.List;
-
 /**
- * Concept of Class.
+ * Feature Association with a Concept.
  * 
  * @author gbesancon
- * 
  */
-public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
+public interface IFlexoOntologyFeatureAssociation {
 	/**
-	 * Super Classes of Class.
+	 * Domain of association.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSuperClasses();
+	IFlexoOntologyConcept getDomain();
 
 	/**
-	 * Sub Classes of Class.
+	 * Feature associated.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSubClasses();
+	IFlexoOntologyFeature getFeature();
 
 	/**
-	 * Is this a Super Class of aClass.
-	 * 
+	 * Min cardinality of association.
 	 * 
 	 * @return
 	 */
-	boolean isSuperClassOf(IFlexoOntologyClass aClass);
+	Integer getLowerBound();
 
 	/**
-	 * Is this a Sub Class of Class.
+	 * Max cardinality of association.
 	 * 
 	 * @return
 	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
-
+	Integer getUpperBound();
 }

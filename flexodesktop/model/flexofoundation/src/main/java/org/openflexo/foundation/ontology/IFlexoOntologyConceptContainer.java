@@ -24,39 +24,30 @@ package org.openflexo.foundation.ontology;
 import java.util.List;
 
 /**
- * Concept of Class.
+ * Concept Container.
  * 
  * @author gbesancon
- * 
  */
-public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
+public interface IFlexoOntologyConceptContainer {
+
 	/**
-	 * Super Classes of Class.
+	 * Sub container of container.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSuperClasses();
+	List<IFlexoOntologyContainer> getSubContainers();
 
 	/**
-	 * Sub Classes of Class.
+	 * Concepts defined by Ontology.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSubClasses();
+	List<IFlexoOntologyConcept> getConcepts();
 
 	/**
-	 * Is this a Super Class of aClass.
-	 * 
+	 * DataTypes defined by Ontology.
 	 * 
 	 * @return
 	 */
-	boolean isSuperClassOf(IFlexoOntologyClass aClass);
-
-	/**
-	 * Is this a Sub Class of Class.
-	 * 
-	 * @return
-	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
-
+	List<IFlexoOntologyDataType> getDataTypes();
 }
