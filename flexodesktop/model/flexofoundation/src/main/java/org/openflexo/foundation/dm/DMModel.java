@@ -135,8 +135,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	private Hashtable<String, DMRepository> repositories;
 
-	private transient FlexoProject _project;
-
 	private transient FlexoDMResource _resource;
 
 	private transient EOModelGroup _modelGroup = null;
@@ -199,6 +197,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	private void installEOGenerators() {
+		if (getProject() == null) {
+			return;
+		}
 		Class<?> eoEntityGeneratorClass;
 		try {
 			eoEntityGeneratorClass = Class.forName("org.openflexo.generator.dm.DefaultEOEntityGenerator");
@@ -235,6 +236,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		this(builder.getProject());
 		builder.dmModel = this;
 		_resource = builder.resource;
+		installEOGenerators();
 		initializeDeserialization(builder);
 	}
 
@@ -246,7 +248,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		dmTypeConverter = new DMTypeStringConverter(this);
 		project.getStringEncoder()._addConverter(dmTypeConverter);
 		cachedEntitiesForTypes = new CachedEntitiesForTypes();
-		_project = project;
 		_dmModel = this;
 		entities = new Hashtable<String, DMEntity>();
 		repositories = new Hashtable<String, DMRepository>();
@@ -333,8 +334,8 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	 * 
 	 * @return a newly created DMModel
 	 */
-	public static DMModel createNewDMModel(FlexoProject project, FlexoDMResource dmRes) {
-		DMModel newDMModel = new DMModel(project);
+	public static DMModel createNewDMModel(FlexoDMResource dmRes) {
+		DMModel newDMModel = new DMModel(dmRes.getProject());
 		newDMModel.setFlexoResource(dmRes);
 		newDMModel.initializeDefaultRepositories(dmRes);
 		return newDMModel;
@@ -359,6 +360,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	@Override
 	public void initializeDeserialization(Object builder) {
+		if (builder instanceof FlexoDMBuilder) {
+			setFlexoResource(((FlexoDMBuilder) builder).resource);
+		}
 		super.initializeDeserialization(builder);
 		getDmTypeConverter().dataModelStartDeserialization(this);
 	}
@@ -374,7 +378,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		// (avoid loop of DataModel loading whene trying to access project.getDataModel()
 		// somewhere in contained objects deserialization
 		if (builder instanceof FlexoDMBuilder) {
-			setProject(((FlexoDMBuilder) builder).getProject());
 			((FlexoDMBuilder) builder).getProject().getFlexoDMResource()._setDeserializingDataModel(this);
 		}
 
@@ -569,16 +572,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoDMResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	/**
@@ -1382,7 +1375,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		xmlSchemaRepositories = null;
 		entities = null;
 		repositories = null;
-		_project = null;
 		_resource = null;
 		_modelGroup = null;
 		_internalRepositoryFolder = null;

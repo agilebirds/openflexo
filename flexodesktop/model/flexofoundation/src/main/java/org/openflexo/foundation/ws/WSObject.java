@@ -27,11 +27,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class WSObject extends FlexoModelObject {
-
-	private FlexoProject project;
 
 	private FlexoWSLibrary wsLibrary;
 
@@ -44,7 +41,6 @@ public abstract class WSObject extends FlexoModelObject {
 	 */
 	public WSObject(FlexoProject project) {
 		super(project);
-		this.project = project;
 	}
 
 	/**
@@ -53,7 +49,6 @@ public abstract class WSObject extends FlexoModelObject {
 	public WSObject(FlexoWSLibrary wsl) {
 		super(wsl.getProject());
 		this.wsLibrary = wsl;
-		this.project = wsl.getProject();
 	}
 
 	/**
@@ -63,25 +58,6 @@ public abstract class WSObject extends FlexoModelObject {
 	 */
 	public FlexoResource getFlexoResource() {
 		return wsLibrary.getFlexoResource();
-	}
-
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		return project;
-	}
-
-	/**
-	 * Overrides setProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	public void setProject(FlexoProject aProject) {
-		this.project = aProject;
 	}
 
 	/**
@@ -134,16 +110,6 @@ public abstract class WSObject extends FlexoModelObject {
 	public void receiveRMNotification(RMNotification notification) throws FlexoException {
 		// TODO Auto-generated method stub
 
-	}
-
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getWSLibrary().getXMLMapping();
 	}
 
 	/**

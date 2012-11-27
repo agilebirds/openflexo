@@ -174,6 +174,7 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 				folder, widget.getProject());
 		FlexoComponentResource compRes = compDef.getComponentResource();// Creates the resource
 		comp = new IEReusableComponent(compDef, widget.getProject());
+		comp.setFlexoResource(compRes);
 		for (IEWidget w : widgets) {
 			w.setWOComponent(comp);
 			comp.getRootSequence().addToInnerWidgets(w);

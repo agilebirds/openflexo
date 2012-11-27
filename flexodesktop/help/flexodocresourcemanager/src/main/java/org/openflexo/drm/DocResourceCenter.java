@@ -27,7 +27,6 @@ import java.util.Vector;
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
 import org.openflexo.drm.dm.DocResourceCenterIsSaved;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -230,11 +229,6 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
 		// TODO Auto-generated method stub
 	}
 

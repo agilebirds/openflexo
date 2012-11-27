@@ -30,7 +30,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract class implemented by all objects involved in Generated Code representation
@@ -83,20 +82,6 @@ public abstract class CGObject extends FlexoModelObject implements FlexoObserver
 		super(project);
 	}
 
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getGeneratedCode().getXMLMapping();
-	}
-
-	// ==========================================================================
-	// ============================= Instance Methods
-	// ===========================
-	// ==========================================================================
-
 	public void update(Observable observable, Object obj) {
 		// Do nothing, since Observer interface is no more used
 		// See FlexoObserver
@@ -105,17 +90,6 @@ public abstract class CGObject extends FlexoModelObject implements FlexoObserver
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
 		// Ignored at this level: implements it in sub-classes
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (getGeneratedCode() != null) {
-			return getGeneratedCode().getProject();
-		}
-		return null;
-	}
-
-	public void setProject(FlexoProject aProject) {
 	}
 
 	protected boolean hasGenerationErrors = false;

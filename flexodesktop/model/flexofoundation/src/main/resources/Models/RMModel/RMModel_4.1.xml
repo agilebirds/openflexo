@@ -177,8 +177,6 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
  
-  <entity name="org.openflexo.foundation.rm.FlexoLinksResource" xmlTag="LinksResource"/>
-  
   <entity name="org.openflexo.foundation.rm.cg.CGRepositoryFileResource" abstract="yes" genericTypingStoredIn="resourceClassName">
  	<property name="name" xmlTag="name" attribute="YES"/>
  	<property name="lastAcceptingDate" xmlTag="lastAcceptingDate" attribute="YES"/>

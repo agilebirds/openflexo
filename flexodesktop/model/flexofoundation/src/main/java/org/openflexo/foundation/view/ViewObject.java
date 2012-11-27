@@ -35,7 +35,6 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.xmlcode.XMLMapping;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -94,11 +93,6 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		return getShema();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getShema().getXMLMapping();
 	}
 
 	@Override

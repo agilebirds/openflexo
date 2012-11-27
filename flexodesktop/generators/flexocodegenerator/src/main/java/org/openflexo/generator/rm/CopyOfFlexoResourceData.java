@@ -158,11 +158,6 @@ public class CopyOfFlexoResourceData implements GeneratedResourceData, Generatio
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-
-	}
-
-	@Override
 	public FlexoResourceGenerator getGenerator() {
 		return null;
 	}

@@ -34,13 +34,10 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  */
 public class WSDLResourceData extends FlexoObservable implements ImportedResourceData {
 
-	private FlexoProject _project;
-
 	private FlexoWSDLResource _resource;
 
 	public WSDLResourceData(FlexoProject aProject, FlexoWSDLResource resource) {
 		super();
-		_project = aProject;
 		_resource = resource;
 	}
 
@@ -66,12 +63,7 @@ public class WSDLResourceData extends FlexoObservable implements ImportedResourc
 
 	@Override
 	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+		return getFlexoResource().getProject();
 	}
 
 }

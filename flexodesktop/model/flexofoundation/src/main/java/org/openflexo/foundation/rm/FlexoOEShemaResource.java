@@ -145,9 +145,6 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 			}
 			_resourceData = shema;
 		}
-		if (shema != null) {
-			shema.setProject(getProject());
-		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for shema " + getShemaDefinition().getName());
 		}

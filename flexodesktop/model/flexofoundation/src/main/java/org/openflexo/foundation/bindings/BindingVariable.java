@@ -27,9 +27,7 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.Typed;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -55,16 +53,6 @@ public class BindingVariable extends FlexoModelObject implements Typed {
 
 	public Bindable getContainer() {
 		return _container;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _dataModel.getProject();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return ((FlexoModelObject) _container).getXMLMapping();
 	}
 
 	@Override

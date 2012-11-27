@@ -37,8 +37,8 @@ public class FlexoDMBuilder extends FlexoBuilder<FlexoDMResource> {
 
 	public DMModel dmModel = null;
 
-	public FlexoDMBuilder(FlexoDMResource project) {
-		super(project);
+	public FlexoDMBuilder(FlexoDMResource resource) {
+		super(resource);
 	}
 
 }

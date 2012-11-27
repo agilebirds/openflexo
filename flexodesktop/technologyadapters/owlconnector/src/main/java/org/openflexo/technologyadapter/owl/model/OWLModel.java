@@ -51,7 +51,6 @@ public class OWLModel extends OWLOntology implements FlexoModel<OWLMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
 
-	private FlexoProject _project;
 	private FlexoProjectOntologyResource _resource;
 
 	/**
@@ -124,7 +123,6 @@ public class OWLModel extends OWLOntology implements FlexoModel<OWLMetaModel> {
 
 	public OWLModel(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
 		super(anURI, owlFile, ontologyLibrary);
-		_project = ontologyLibrary.getProject();
 	}
 
 	@Override
@@ -156,16 +154,6 @@ public class OWLModel extends OWLOntology implements FlexoModel<OWLMetaModel> {
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override
