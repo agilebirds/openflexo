@@ -36,8 +36,6 @@ import java.util.logging.Logger;
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.antar.binding.KeyValueLibrary;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
@@ -57,7 +55,6 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.UnreadableProjectException;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
-import org.openflexo.help.FlexoHelp;
 import org.openflexo.inspector.widget.FileEditWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -68,7 +65,6 @@ import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.xmlcode.KeyValueCoder;
 
 public class ProjectLoader implements HasPropertyChangeSupport {
 
@@ -236,11 +232,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		project.close();
 		getPropertyChangeSupport().firePropertyChange(PROJECT_CLOSED, project, null);
 		getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
-		KeyValueCoder.clearClassCache();
-		KeyValueLibrary.clearCache();
-		FCH.clearComponentsHashtable();
-		FlexoHelp.instance.deleteObservers();
-		FlexoLocalization.clearStoredLocalizedForComponents();
+		resetRootProjects();
 	}
 
 	public AutoSaveService getAutoSaveService(FlexoProject project) {
