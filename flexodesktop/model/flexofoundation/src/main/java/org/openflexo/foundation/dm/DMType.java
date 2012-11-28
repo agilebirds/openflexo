@@ -64,7 +64,7 @@ import com.thoughtworks.qdox.model.Type;
  * @author sylvain
  * 
  */
-public class DMType extends Type implements FlexoObserver, StringConvertable, KeyValueCoding, DMTypeOwner, InspectableObject,
+public class DMType extends Type implements FlexoObserver, StringConvertable<DMType>, KeyValueCoding, DMTypeOwner, InspectableObject,
 		java.lang.reflect.Type {
 
 	protected static final Logger logger = Logger.getLogger(DMType.class.getPackage().getName());
