@@ -135,6 +135,8 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	private Hashtable<String, DMRepository> repositories;
 
+	private transient FlexoProject _project;
+
 	private transient FlexoDMResource _resource;
 
 	private transient EOModelGroup _modelGroup = null;
@@ -236,7 +238,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		this(builder.getProject());
 		builder.dmModel = this;
 		_resource = builder.resource;
-		installEOGenerators();
 		initializeDeserialization(builder);
 	}
 
@@ -248,7 +249,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		dmTypeConverter = new DMTypeStringConverter(this);
 		project.getStringEncoder()._addConverter(dmTypeConverter);
 		cachedEntitiesForTypes = new CachedEntitiesForTypes();
-		_dmModel = this;
+		_dmModel = this;		_project = project;
 		entities = new Hashtable<String, DMEntity>();
 		repositories = new Hashtable<String, DMRepository>();
 		projectRepositories = new Vector<ProjectRepository>();
@@ -271,6 +272,13 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		_declaredTranstypers = new Hashtable<DMType, Vector<DMTranstyper>>();
 		diagrams = new Vector<ERDiagram>();
 		installEOGenerators();
+	}
+	
+	@Override
+	public FlexoProject getProject() {
+		if (getFlexoResource()!=null)
+			return getFlexoResource().getProject();
+		return _project;
 	}
 
 	/**
