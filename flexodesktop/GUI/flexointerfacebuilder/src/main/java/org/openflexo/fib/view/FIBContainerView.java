@@ -20,6 +20,7 @@
 package org.openflexo.fib.view;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -134,7 +135,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		}
 		update(new Vector<FIBComponent>());
 		if (isComponentVisible()) {
-			for (FIBView v : subViews) {
+			for (FIBView v : new ArrayList<FIBView>(subViews)) {
 				v.updateDataObject(dataObject);
 			}
 			if (getDynamicModel() != null) {
