@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.dm.DMCardinality;
@@ -91,7 +90,6 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.xmlcode.XMLMapping;
@@ -143,8 +141,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	private Vector<FlexoProcessNode> _topLevelNodeProcesses;
 	private Vector<FlexoProcessNode> importedRootNodeProcesses;
 
-	private String _workflowName;
-
 	private RoleList _roleList;
 	private RoleList importedRoleList;
 
@@ -181,7 +177,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		operationMetricsDefinitions = new Vector<MetricsDefinition>();
 		edgeMetricsDefinitions = new Vector<MetricsDefinition>();
 		artefactMetricsDefinitions = new Vector<MetricsDefinition>();
-		_workflowName = project.getProjectName();
+		try {
+			setName(project.getProjectName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -269,11 +269,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _resource.getProject();
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return getProject().getProjectName() + ".WORKFLOW";
 	}
@@ -297,16 +292,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public String getWorkflowName() {
-		return _workflowName;
+		return getName();
 	}
 
-	public void setWorkflowName(String newName) {
-		if (!StringUtils.isSame(newName, _workflowName)) {
-			String _oldName = _workflowName;
-			_workflowName = newName;
-			setChanged();
-			notifyObservers(new NameChanged(_oldName, newName));
-		}
+	public void setWorkflowName(String newName) throws Exception {
+		super.setName(newName);
 	}
 
 	public File getFile() {

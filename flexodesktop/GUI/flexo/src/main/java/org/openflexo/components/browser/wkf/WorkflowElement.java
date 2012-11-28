@@ -93,7 +93,12 @@ public class WorkflowElement extends BrowserElement {
 
 	@Override
 	public void setName(String aName) throws FlexoException {
-		getFlexoWorkflow().setWorkflowName(aName);
+		try {
+			getFlexoWorkflow().setWorkflowName(aName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FlexoException(e);
+		}
 	}
 
 	public FlexoWorkflow getFlexoWorkflow() {
