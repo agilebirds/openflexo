@@ -2,6 +2,8 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,7 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.factory.XMLDeserializer;
+import org.openflexo.model.factory.XMLSerializer;
 import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.IProgress;
 
@@ -159,7 +162,25 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	@Override
 	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
-		retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
+		FlexoResource<?> oldResource = retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
+		if (oldResource != null) {
+			storage.removeFromResources(oldResource);
+		}
+		storage.addToResources(resource);
+		saveStorage();
+	}
+
+	private void saveStorage() throws FileNotFoundException {
+		if (!userResourceCenterStorageFile.exists()) {
+			userResourceCenterStorageFile.getParentFile().mkdirs();
+		}
+		FileOutputStream fos = new FileOutputStream(userResourceCenterStorageFile);
+		try {
+			XMLSerializer serializer = new XMLSerializer();
+			serializer.serializeDocument(storage, fos);
+		} finally {
+			IOUtils.closeQuietly(fos);
+		}
 	}
 
 	@Override
@@ -180,6 +201,19 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			}
 		} finally {
 			IOUtils.closeQuietly(fis);
+		}
+		checkKnownResources();
+	}
+
+	private void checkKnownResources() throws FileNotFoundException {
+		if (storage != null) {
+			boolean changed = false;
+			for (FlexoResource<?> resource : storage.getResources()) {
+				// TODO check resources
+			}
+			if (changed) {
+				saveStorage();
+			}
 		}
 	}
 

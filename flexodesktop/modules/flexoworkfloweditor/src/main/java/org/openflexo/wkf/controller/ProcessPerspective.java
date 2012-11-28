@@ -25,10 +25,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -42,6 +48,8 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	private JComponent topRightDummy;
 
+	private FIBView<?, ?> importedWorkflowView;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -54,6 +62,9 @@ public class ProcessPerspective extends FlexoPerspective {
 		setTopLeftView(_controller.getWkfBrowserView());
 		setBottomLeftView(_controller.getProcessBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
+		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedWorkflowTree.fib"));
+		importedWorkflowView = FIBController.makeView(comp, FlexoLocalization.getMainLocalizer());
+		importedWorkflowView.getController().setDataObject(controller.getControllerModel());
 	}
 
 	@Override
@@ -63,6 +74,14 @@ public class ProcessPerspective extends FlexoPerspective {
 		} else {
 			return topRightDummy;
 		}
+	}
+
+	@Override
+	public JComponent getMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			return importedWorkflowView.getResultingJComponent();
+		}
+		return null;
 	}
 
 	/**

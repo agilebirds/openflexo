@@ -163,6 +163,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			while (!done) {
 				dialog.setMinimumSize(new Dimension(800, 250));
 				dialog.showDialog();
+				dialog.dispose();
 				if (dialog.getStatus() == Status.VALIDATED) {
 					done = true;
 					for (ProjectReferenceFileAssociation a : data.getAssociations()) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.view.controller.model.ControllerModel" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Browser root="data" iteratorClassName="java.lang.Object" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" showFooter="false" rootVisible="false" showRootsHandle="false" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" width="100" height="100">
+    <BrowserElement dataClassName="org.openflexo.view.controller.model.ControllerModel" isEditable="false" filtered="false" defaultVisible="true" name="controllerModel">
+      <Children data="controllerModel.currentProject.projectData.importedProjects" cast="child.referredProject.flexoWorkflow" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" label="workflow.name" icon="controller.iconForObject(workflow)" isEditable="false" filtered="false" defaultVisible="true" name="workflow">
+      <Children data="workflow.sortedTopLevelProcesses" cast="child.process" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcess" label="process.name" icon="controller.iconForObject(process)" isEditable="false" filtered="false" defaultVisible="true" name="process">
+      <Children data="process.processNode.sortedSubprocesses" cast="child.process" name="children" />
+    </BrowserElement>
+  </Browser>
+</Panel>
