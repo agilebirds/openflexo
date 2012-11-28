@@ -1,3 +1,22 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.openflexo.technologyadapter.xsd.rm;
 
 import java.io.FileNotFoundException;
@@ -13,8 +32,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -23,7 +42,6 @@ import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -31,7 +49,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 
 @SuppressWarnings("serial")
-public class FlexoXMLModelResource extends FlexoStorageResource<XMLModel> {
+public class FlexoXMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoResource<XMLModel> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoXMLModelResource.class
 			.getPackage().getName());
@@ -115,9 +133,14 @@ public class FlexoXMLModelResource extends FlexoStorageResource<XMLModel> {
 	}
 
 	@Override
-	protected XMLModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-			throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
+	protected XMLModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
+			FileNotFoundException, ProjectLoadingCancelledException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<XMLModel> getResourceDataClass() {
+		return XMLModel.class;
 	}
 }

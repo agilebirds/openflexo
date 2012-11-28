@@ -56,7 +56,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class ViewLibrary extends ViewLibraryObject implements XMLStorageResourceData, InspectableObject {
+public class ViewLibrary extends ViewLibraryObject implements XMLStorageResourceData<ViewLibrary>, InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 

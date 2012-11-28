@@ -61,7 +61,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class View extends ViewObject implements XMLStorageResourceData, FlexoModel<DiagramMetaModel> {
+public class View extends ViewObject implements XMLStorageResourceData<View>, FlexoModel<View, DiagramMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
@@ -69,7 +69,7 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
 	private List<ModelSlotInstance> modelSlotInstances;
-	private Map<ModelSlot<?, ?>, FlexoModel<?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?>>(); // Do not serialize this.
+	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
 
 	/**
 	 * Constructor invoked during deserialization
@@ -326,7 +326,7 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 	 * @param modelSlot
 	 * @return
 	 */
-	public <MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> ModelSlotInstance<MS, M, MM> getModelSlotInstance(
+	public <MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<MS, M, MM> getModelSlotInstance(
 			MS modelSlot) {
 		// TODO
 		logger.warning("Please implement me");
@@ -361,7 +361,7 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 		modelsMap.put(instance.getModelSlot(), instance.getModel());
 	}
 
-	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> void setModel(ModelSlot<M, MM> modelSlot, M model) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
 		modelsMap.put(modelSlot, model);
 		for (ModelSlotInstance instance : modelSlotInstances) {
 			if (instance.getModelSlot().equals(modelSlot)) {
@@ -374,7 +374,7 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 		modelSlotInstances.add(instance);
 	}
 
-	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
 		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
 			model = modelSlot.createEmptyModel(this, modelSlot.getMetaModel());
@@ -383,7 +383,7 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 		return model;
 	}
 
-	public <M extends FlexoModel<MM>, MM extends FlexoMetaModel> M getModel(ModelSlot<M, MM> modelSlot) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot) {
 		return getModel(modelSlot, true);
 	}
 
@@ -397,8 +397,8 @@ public class View extends ViewObject implements XMLStorageResourceData, FlexoMod
 		return allMetaModels;
 	}
 
-	public Set<FlexoModel<?>> getAllModels() {
-		Set<FlexoModel<?>> allModels = new HashSet<FlexoModel<?>>();
+	public Set<FlexoModel<?, ?>> getAllModels() {
+		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
 			if (instance.getModel() != null) {
 				allModels.add(instance.getModel());

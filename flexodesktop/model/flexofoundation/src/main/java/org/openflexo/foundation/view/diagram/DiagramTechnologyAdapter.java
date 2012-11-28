@@ -23,11 +23,15 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -40,6 +44,7 @@ import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
  * This class defines and implements the Openflexo built-in diagram technology adapter
@@ -76,13 +81,12 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 
 	@Override
 	public String getName() {
-		return "EMF technology adapter";
+		return "Openflexo built-in diagram technology adapter";
 	}
 
 	@Override
-	protected DiagramModelSlot createNewModelSlot() {
-		// TODO implement this
-		return null;
+	protected DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new DiagramModelSlot(viewPoint, this);
 	}
 
 	/**
@@ -173,6 +177,20 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
 		// Creates the resource here
 		_newShema.getShemaResource();*/
+	}
+
+	@Override
+	public <R extends FlexoResource<? extends View>> ModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel, DiagramModelSlot>> createModelRepository(
+			FlexoResourceCenter resourceCenter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <R extends FlexoResource<? extends DiagramMetaModel>> MetaModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel, DiagramModelSlot>> createMetaModelRepository(
+			FlexoResourceCenter resourceCenter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

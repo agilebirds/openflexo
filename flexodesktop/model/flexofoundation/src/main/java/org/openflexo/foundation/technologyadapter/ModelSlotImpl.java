@@ -24,7 +24,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
  * @see org.openflexo.foundation.viewpoint.ViewPoint
  * @see org.openflexo.foundation.view.diagram.model.View
  */
-public abstract class ModelSlotImpl<M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends ViewPointObject implements
+public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ViewPointObject implements
 		ModelSlot<M, MM> {
 
 	private static final Logger logger = Logger.getLogger(ModelSlotImpl.class.getPackage().getName());
@@ -34,11 +34,14 @@ public abstract class ModelSlotImpl<M extends FlexoModel<MM>, MM extends FlexoMe
 	private boolean isReadOnly;
 	private MM metaModel;
 
+	private TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> technologyAdapter;
+
 	private ViewPoint viewPoint;
 
-	protected ModelSlotImpl(ViewPoint viewPoint) {
+	protected ModelSlotImpl(ViewPoint viewPoint, TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> technologyAdapter) {
 		super(null);
 		this.viewPoint = viewPoint;
+		this.technologyAdapter = technologyAdapter;
 	}
 
 	protected ModelSlotImpl(ViewPointBuilder builder) {
@@ -153,6 +156,11 @@ public abstract class ModelSlotImpl<M extends FlexoModel<MM>, MM extends FlexoMe
 	@Override
 	public String getLanguageRepresentation() {
 		return "ModelSlot " + getName() + " conformTo " + getMetaModel().getURI() + " access=READ cardinality=ONE";
+	}
+
+	@Override
+	public final TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> getTechnologyAdapter() {
+		return technologyAdapter;
 	}
 
 }

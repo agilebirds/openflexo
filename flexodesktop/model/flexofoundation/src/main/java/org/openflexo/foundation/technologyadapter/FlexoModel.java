@@ -1,5 +1,6 @@
 package org.openflexo.foundation.technologyadapter;
 
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.StorageResourceData;
 
 /**
@@ -18,7 +19,7 @@ import org.openflexo.foundation.rm.StorageResourceData;
  * 
  * @param <MM>
  */
-public interface FlexoModel<MM extends FlexoMetaModel> extends StorageResourceData {
+public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends StorageResourceData<M>, ResourceData<M> {
 
 	public MM getMetaModel();
 

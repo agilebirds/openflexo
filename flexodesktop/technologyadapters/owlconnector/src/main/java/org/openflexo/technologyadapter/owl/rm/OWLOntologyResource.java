@@ -25,48 +25,58 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.dm.OntologyImported;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OntologyLibrary;
 
 /**
- * Represents the resource associated to a {@link OWLModel}
+ * Represents the resource associated to a {@link OWLOntology}
  * 
  * @author sguerin
  * 
  */
-public class FlexoProjectOntologyResource extends FlexoStorageResource<OWLModel> {
+public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> implements FlexoResource<OWLOntology> {
 
-	private static final Logger logger = Logger.getLogger(FlexoProjectOntologyResource.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OWLOntologyResource.class.getPackage().getName());
+
+	private OntologyLibrary ontologyLibrary = null;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
 	 * 
 	 * @param builder
 	 */
-	public FlexoProjectOntologyResource(FlexoProjectBuilder builder) {
+	public OWLOntologyResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoProjectOntologyResource(FlexoProject aProject) {
+	public OWLOntologyResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
-	/*public FlexoProjectOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
+	public OntologyLibrary getOntologyLibrary() {
+		return ontologyLibrary;
+	}
+
+	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
+		this.ontologyLibrary = ontologyLibrary;
+	}
+
+	/*public OWLOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
 	        throws InvalidFileNameException
 	{
 	    this(aProject);
@@ -76,11 +86,11 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<OWLModel>
 	        logger.info("Build new FlexoEOModelResource");
 	}*/
 
-	public FlexoProjectOntologyResource(FlexoProject aProject, OWLModel aProjectOntology, FlexoProjectFile ontologyFile)
+	public OWLOntologyResource(FlexoProject aProject, OWLOntology anOntology, FlexoProjectFile ontologyFile)
 			throws InvalidFileNameException, DuplicateResourceException {
 		this(aProject);
-		_resourceData = aProjectOntology;
-		aProjectOntology.setFlexoResource(this);
+		_resourceData = anOntology;
+		anOntology.setFlexoResource(this);
 		setResourceFile(ontologyFile);
 	}
 
@@ -94,8 +104,9 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<OWLModel>
 		return getProject().getProjectName();
 	}
 
+	@Override
 	public Class getResourceDataClass() {
-		return OWLModel.class;
+		return OWLOntology.class;
 	}
 
 	@Override
@@ -104,8 +115,15 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<OWLModel>
 	}
 
 	@Override
-	public OWLModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
-		_resourceData = getProject().getProjectOntologyLibrary()._loadProjectOntology(getProject().getURI(), getFile());
+	public OWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
+
+		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary());
+		getOntologyLibrary().registerOntology(ontology);
+		setChanged();
+		notifyObservers(new OntologyImported(ontology));
+
+		_resourceData = ontology;
+
 		try {
 			_resourceData.setFlexoResource(this);
 		} catch (DuplicateResourceException e) {

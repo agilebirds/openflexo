@@ -43,7 +43,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());

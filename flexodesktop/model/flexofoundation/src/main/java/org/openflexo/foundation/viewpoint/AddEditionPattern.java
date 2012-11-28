@@ -42,7 +42,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		AssignableAction<MS, M, MM, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());

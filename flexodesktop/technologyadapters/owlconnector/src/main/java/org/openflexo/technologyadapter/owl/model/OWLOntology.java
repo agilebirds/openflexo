@@ -50,7 +50,6 @@ import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
@@ -64,7 +63,13 @@ import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
@@ -97,12 +102,15 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
 /**
- * Represents an OWL Ontology
+ * Represents an OWL Ontology<br>
+ * 
+ * Note that in the context of this particular technological space, an ontology is both a model and a metamodel
  * 
  * @author sylvain
  * 
  */
-public abstract class OWLOntology extends OWLObject implements FlexoOntology {
+public class OWLOntology extends OWLObject implements FlexoOntology, ResourceData<OWLOntology>, FlexoMetaModel<OWLOntology>,
+		FlexoModel<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
 
@@ -1607,6 +1615,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		return readOnly;
 	}
 
+	@Override
 	public void setIsReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
@@ -2070,6 +2079,42 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
+	}
+
+	@Override
+	public FlexoStorageResource getFlexoResource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OWLOntology getMetaModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

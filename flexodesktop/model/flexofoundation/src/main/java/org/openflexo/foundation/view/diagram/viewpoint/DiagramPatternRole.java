@@ -3,7 +3,6 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -70,6 +69,11 @@ public class DiagramPatternRole extends PatternRole {
 			viewpoint = getViewPointLibrary().getViewPoint(uri);
 		}
 		viewpointURI = uri;
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
 	}
 
 }

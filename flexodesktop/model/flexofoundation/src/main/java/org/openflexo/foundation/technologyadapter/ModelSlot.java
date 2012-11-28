@@ -19,7 +19,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
  * @see org.openflexo.foundation.view.diagram.model.View
  * 
  */
-public interface ModelSlot<M extends FlexoModel<MM>, MM extends FlexoMetaModel> {
+public interface ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> {
 
 	public String getName();
 

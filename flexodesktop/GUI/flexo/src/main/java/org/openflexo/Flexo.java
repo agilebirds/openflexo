@@ -55,6 +55,8 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -235,6 +237,14 @@ public class Flexo {
 				} else {
 					return new FullInteractiveProjectLoadingHandler(projectDirectory);
 				}
+			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService() {
+				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
+				returned.setFlexoResourceCenterService(getResourceCenterService());
+				returned.loadAvailableTechnologyAdapters();
+				return returned;
 			}
 		};
 		FlexoApplication.installEventQueue();

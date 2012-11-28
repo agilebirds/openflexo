@@ -44,15 +44,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalFeature;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionType;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class GraphicalAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
+public class GraphicalAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		EditionAction<MS, M, MM, ViewElement> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());

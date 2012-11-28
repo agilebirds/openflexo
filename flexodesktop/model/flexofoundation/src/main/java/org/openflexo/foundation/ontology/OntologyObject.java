@@ -11,7 +11,7 @@ public interface OntologyObject {
 
 	public String getName();
 
-	public void setName(String aName);
+	public void setName(String aName) throws Exception;
 
 	public abstract boolean getIsReadOnly();
 

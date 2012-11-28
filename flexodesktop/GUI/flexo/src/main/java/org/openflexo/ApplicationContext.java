@@ -6,6 +6,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
@@ -22,6 +23,8 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private FlexoResourceCenterService resourceCenterService;
+
+	private TechnologyAdapterService technologyAdapterService;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -52,6 +55,10 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		return resourceCenterService;
 	}
 
+	public final TechnologyAdapterService getTechnologyAdapterService() {
+		return technologyAdapterService;
+	}
+
 	public final FlexoEditor getApplicationEditor() {
 		return applicationEditor;
 	}
@@ -67,5 +74,7 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
 
 	protected abstract FlexoResourceCenterService createResourceCenterService();
+
+	protected abstract TechnologyAdapterService createTechnologyAdapterService();
 
 }

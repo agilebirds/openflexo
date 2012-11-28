@@ -61,7 +61,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
-public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceData> extends FlexoStorageResource<XMLRD> {
+public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceData<XMLRD>> extends FlexoStorageResource<XMLRD> {
 
 	private static final Logger logger = Logger.getLogger(FlexoXMLStorageResource.class.getPackage().getName());
 
@@ -1001,6 +1001,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		return false;
 	}
 
+	@Override
 	public abstract Class<XMLRD> getResourceDataClass();
 
 	/**

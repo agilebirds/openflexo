@@ -20,7 +20,7 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
 @XMLElement
-public interface ProjectData extends StorageResourceData, AccessibleProxyObject {
+public interface ProjectData extends StorageResourceData<ProjectData>, AccessibleProxyObject {
 
 	public static final String FLEXO_RESOURCE = "flexoResource";
 	public static final String PROJECT = "project";
@@ -28,10 +28,10 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	@Override
 	@Getter(value = FLEXO_RESOURCE, ignoreType = true)
-	public FlexoStorageResource getFlexoResource();
+	public FlexoStorageResource<ProjectData> getFlexoResource();
 
 	@Setter(FLEXO_RESOURCE)
-	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
+	public void setFlexoStorageResource(FlexoStorageResource<ProjectData> resource) throws DuplicateResourceException;
 
 	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.URI, isMultiValued = false)
 	public FlexoProjectReference getProjectReferenceWithURI(String uri);
@@ -89,8 +89,8 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 				if (ref.getURI().equals(projectURI)) {
 					return ref.getReferredProject();
 
-					}
 				}
+			}
 			if (searchRecursively) {
 				for (FlexoProjectReference ref : getImportedProjects()) {
 					FlexoProject projectWithURI = null;
@@ -98,12 +98,12 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 					if (projectData != null) {
 						projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
 					}
-						if (projectWithURI != null) {
-							return projectWithURI;
-						}
-
+					if (projectWithURI != null) {
+						return projectWithURI;
 					}
+
 				}
+			}
 			return null;
 		}
 
@@ -112,7 +112,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 			if (!isDeserializing()) {
 				if (getImportedProjects().contains(projectReference)) {
 					return;
-		}
+				}
 				String reason = canImportProject(projectReference.getReferredProject());
 				if (reason != null) {
 					throw new ProjectImportLoopException(reason);
@@ -148,11 +148,11 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		public void removeFromImportedProjects(FlexoProject project) {
 			for (FlexoProjectReference ref : getImportedProjects()) {
 				if (ref.getReferredProject() == project) {
-						removeFromImportedProjects(ref);
-						break;
-					}
+					removeFromImportedProjects(ref);
+					break;
 				}
 			}
+		}
 
 		@Override
 		public void setModified(boolean modified) {

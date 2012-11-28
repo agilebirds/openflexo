@@ -32,7 +32,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeclarePatternRole<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+public class DeclarePatternRole<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		AssignableAction<MS, M, MM, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());

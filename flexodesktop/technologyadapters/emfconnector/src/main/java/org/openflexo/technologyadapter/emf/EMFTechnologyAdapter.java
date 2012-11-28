@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.emf;
 import java.io.File;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -34,8 +35,11 @@ import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
 
@@ -72,9 +76,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	@Override
-	protected EMFModelSlot createNewModelSlot() {
-		// TODO implement this
-		return null;
+	protected EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new EMFModelSlot(viewPoint, this);
 	}
 
 	/**
@@ -138,6 +141,16 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFModel createNewModel(FlexoProject project, EMFMetaModel metaModel) {
 		// TODO implement this
 		// See code in XSD/XML connector
+		return null;
+	}
+
+	@Override
+	public EMFModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
+		return null;
+	}
+
+	@Override
+	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
 		return null;
 	}
 

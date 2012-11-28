@@ -44,7 +44,7 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibi
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class ImplementationModel extends ImplModelObject implements XMLStorageResourceData {
+public class ImplementationModel extends ImplModelObject implements XMLStorageResourceData<ImplementationModel> {
 
 	private static final Logger logger = Logger.getLogger(ImplementationModel.class.getPackage().getName());
 

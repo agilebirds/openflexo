@@ -87,4 +87,9 @@ public class FlexoEMFModelResource extends FlexoStorageResource<EMFModel> {
 
 		return null;
 	}
+
+	@Override
+	public Class<EMFModel> getResourceDataClass() {
+		return EMFModel.class;
+	}
 }

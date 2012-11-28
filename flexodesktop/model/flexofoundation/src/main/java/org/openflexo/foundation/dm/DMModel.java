@@ -88,7 +88,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class DMModel extends DMObject implements XMLStorageResourceData {
+public class DMModel extends DMObject implements XMLStorageResourceData<DMModel> {
 
 	static final Logger logger = Logger.getLogger(DMModel.class.getPackage().getName());
 

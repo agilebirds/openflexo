@@ -28,8 +28,8 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends
-		EditionAction<MS, M, MM, Object> implements ActionContainer {
+public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>>
+		extends EditionAction<MS, M, MM, Object> implements ActionContainer {
 
 	private static final Logger logger = Logger.getLogger(ControlStructureAction.class.getPackage().getName());
 
@@ -288,7 +288,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> A createAction(
+	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
 			Class<A> actionClass, MS modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);

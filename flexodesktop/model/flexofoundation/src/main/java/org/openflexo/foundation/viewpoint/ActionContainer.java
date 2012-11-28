@@ -54,7 +54,7 @@ public interface ActionContainer {
 
 	public void actionLast(EditionAction<?, ?, ?, ?> a);
 
-	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> A createAction(
+	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
 			Class<A> actionClass, MS modelSlot);
 
 	/*public AddShape createAddShapeAction();

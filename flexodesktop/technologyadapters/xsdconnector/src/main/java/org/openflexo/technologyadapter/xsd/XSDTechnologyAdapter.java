@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
@@ -43,8 +43,11 @@ import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.model.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.FlexoXMLModelResource;
 
@@ -83,9 +86,8 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	}
 
 	@Override
-	protected XSDModelSlot createNewModelSlot() {
-		// TODO Auto-generated method stub
-		return null;
+	protected XSDModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new XSDModelSlot(viewPoint, this);
 	}
 
 	/**
@@ -194,9 +196,13 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 		return newProjectOntology;
 	}
 
-	private XMLModel createProjectOntology(String anURI, File xsdFile, ProjectOntologyLibrary ontologyLibrary) {
-		XMLModel returned = new XMLModel(anURI, xsdFile, ontologyLibrary);
+	@Override
+	public XMLModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
+		return null;
+	}
 
-		return returned;
+	@Override
+	public XSDMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
+		return null;
 	}
 }

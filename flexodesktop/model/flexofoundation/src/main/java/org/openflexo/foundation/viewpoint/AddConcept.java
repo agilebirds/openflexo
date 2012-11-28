@@ -29,7 +29,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+public abstract class AddConcept<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		AssignableAction<MS, M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());

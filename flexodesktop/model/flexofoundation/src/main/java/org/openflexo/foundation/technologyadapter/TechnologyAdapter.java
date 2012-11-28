@@ -20,15 +20,13 @@
 package org.openflexo.foundation.technologyadapter;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
  * This class represents a technology adapter<br>
@@ -40,65 +38,11 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sylvain
  * 
  */
-public abstract class TechnologyAdapter<M extends FlexoModel<MM>, MM extends FlexoMetaModel, MS extends ModelSlot<M, MM>> {
+public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapter.class.getPackage().getName());
 
-	static {
-		loadTechnologyAdapters();
-	}
-
-	private static Map<Class, TechnologyAdapter<?, ?, ?>> loadedAdapters;
-
-	/**
-	 * Retrieve all {@link TechnologyAdapter} available from classpath. <br>
-	 * Map contains the TechnologyAdapter class name as key and the TechnologyAdapter itself as value.
-	 * 
-	 * @return the retrieved TechnologyModuleDefinition map.
-	 */
-	public static Map<Class, TechnologyAdapter<?, ?, ?>> loadTechnologyAdapters() {
-		if (loadedAdapters == null) {
-			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?, ?>>();
-			logger.info("Loading available technology adapters...");
-			ServiceLoader<TechnologyAdapter> loader = ServiceLoader.load(TechnologyAdapter.class);
-			Iterator<TechnologyAdapter> iterator = loader.iterator();
-			while (iterator.hasNext()) {
-				TechnologyAdapter technologyAdapter = iterator.next();
-
-				logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
-
-				if (loadedAdapters.containsKey(technologyAdapter.getClass())) {
-					logger.severe("Cannot include TechnologyAdapter with classname '" + technologyAdapter.getClass().getName()
-							+ "' because it already exists !!!! A TechnologyAdapter name MUST be unique !");
-				} else {
-					loadedAdapters.put(technologyAdapter.getClass(), technologyAdapter);
-				}
-			}
-			logger.info("Loading available technology adapters. Done.");
-		}
-
-		return loadedAdapters;
-	}
-
-	/**
-	 * Return loaded technology adapter mapping supplied class<br>
-	 * If adapter is not loaded, return null
-	 * 
-	 * @param technologyAdapterClass
-	 * @return
-	 */
-	public static <TA extends TechnologyAdapter<?, ?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
-		return (TA) loadedAdapters.get(technologyAdapterClass);
-	}
-
-	/**
-	 * Iterates over loaded technology adapters
-	 * 
-	 * @return
-	 */
-	public static Collection<TechnologyAdapter<?, ?, ?>> getLoadedAdapters() {
-		return loadedAdapters.values();
-	}
+	private TechnologyAdapterService technologyAdapterService;
 
 	/**
 	 * Return human-understandable name for this technology adapter<br>
@@ -113,7 +57,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<MM>, MM extends Fle
 	 * 
 	 * @return a new {@link ModelSlot}
 	 */
-	protected abstract MS createNewModelSlot();
+	protected abstract MS createNewModelSlot(ViewPoint viewPoint);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XSD schema
@@ -156,5 +100,41 @@ public abstract class TechnologyAdapter<M extends FlexoModel<MM>, MM extends Fle
 	 * @return
 	 */
 	public abstract M createNewModel(FlexoProject project, MM metaModel);
+
+	/**
+	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 * @param resourceCenter
+	 * @return
+	 */
+	public abstract <R extends FlexoResource<? extends M>> ModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM, MS>> createModelRepository(
+			FlexoResourceCenter resourceCenter);
+
+	/**
+	 * Create a metamodel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 * @param resourceCenter
+	 * @return
+	 */
+	public abstract <R extends FlexoResource<? extends MM>> MetaModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM, MS>> createMetaModelRepository(
+			FlexoResourceCenter resourceCenter);
+
+	/**
+	 * Returns applicable {@link TechnologyAdapterService}
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapterService getTechnologyAdapterService() {
+		return technologyAdapterService;
+	}
+
+	/**
+	 * Sets applicable {@link TechnologyAdapterService}
+	 * 
+	 * @param technologyAdapterService
+	 */
+	public void setTechnologyAdapterService(TechnologyAdapterService technologyAdapterService) {
+		this.technologyAdapterService = technologyAdapterService;
+	}
 
 }

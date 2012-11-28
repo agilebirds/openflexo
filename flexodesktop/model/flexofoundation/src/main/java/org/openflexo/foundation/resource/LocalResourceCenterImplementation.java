@@ -22,11 +22,16 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -91,11 +96,13 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return retrieveViewPointLibrary().getOntologyCalc(ontologyCalcUri);
 	}
 
+	@Deprecated
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
 		if (baseOntologyLibrary == null) {
@@ -128,6 +135,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
 	}
 
+	@Deprecated
 	@Override
 	public ViewPointLibrary retrieveViewPointLibrary() {
 		if (viewPointLibrary == null) {
@@ -150,7 +158,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		return uri;
 	}*/
 
-	private void findMetaModels(File dir, String baseUri, OntologyFolder folder) {
+	private void findMetaModels(File dir, String baseUri, RepositoryFolder folder) {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -167,7 +175,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			} else*/
 
 			if (f.isDirectory() && !f.getName().equals("CVS")) {
-				OntologyFolder newFolder = new OntologyFolder(f.getName(), folder, baseOntologyLibrary);
+				RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, baseOntologyLibrary);
 				findMetaModels(f, baseUri + "/" + f.getName(), newFolder);
 			}
 		}
@@ -196,6 +204,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		return localDirectory;
 	}
 
+	@Deprecated
 	@Override
 	public File getNewCalcSandboxDirectory() {
 		return newViewPointSandboxDirectory;
@@ -295,7 +304,41 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Override
 	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
 		// TODO Auto-generated method stub
+	}
 
+	private HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>>();
+	private HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>>();
+
+	/**
+	 * Retrieve model repository for a given {@link TechnologyAdapter}
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> ModelRepository<R, M, MM, TA> getModelRepository(
+			TA technologyAdapter) {
+		ModelRepository<R, M, MM, TA> returned = (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
+		if (returned == null) {
+			returned = (ModelRepository<R, M, MM, TA>) technologyAdapter.createModelRepository(this);
+		}
+		return returned;
+	}
+
+	/**
+	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
+			TA technologyAdapter) {
+		MetaModelRepository<R, M, MM, TA> returned = (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
+		if (returned == null) {
+			returned = (MetaModelRepository<R, M, MM, TA>) technologyAdapter.createMetaModelRepository(this);
+		}
+		return returned;
 	}
 
 }

@@ -50,7 +50,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author gpolet
  * 
  */
-public class DKVModel extends DKVObject implements XMLStorageResourceData {
+public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVModel> {
 
 	private FlexoDKVResource resource;
 

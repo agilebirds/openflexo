@@ -1,5 +1,7 @@
 package org.openflexo.foundation.technologyadapter;
 
+import org.openflexo.foundation.resource.ResourceData;
+
 /**
  * This interface is implemented by all objects considered in Flexo Modelling Language as a meta-model, as defined to be metamodels of
  * {@link FlexoModel} (see {@link FlexoModel}<br>
@@ -13,7 +15,7 @@ package org.openflexo.foundation.technologyadapter;
  * 
  * @param <MM>
  */
-public interface FlexoMetaModel {
+public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*StorageResourceData,*/ResourceData<MM> {
 
 	public String getURI();
 

@@ -123,7 +123,6 @@ import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorRef
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
@@ -178,7 +177,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.IModuleLoader;
-import org.openflexo.technologyadapter.owl.ontology.OWLModel;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -204,7 +202,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author sguerin
  */
-public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
+public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData<FlexoProject>, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
 	private static final String REVISION = "revision";
@@ -325,7 +323,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private IModuleLoader moduleLoader;
 
 	private List<ModelSlotInstance> models;
-	private Map<View, Map<ModelSlot<?,?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -3975,6 +3973,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
+	/*
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
@@ -4007,8 +4006,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return resource.getResourceData();
 	}
+	*/
 
-	private ProjectOntologyLibrary ontologyLibrary = null;
+	/*private ProjectOntologyLibrary ontologyLibrary = null;
 
 	public ProjectOntologyLibrary getProjectOntologyLibrary() {
 		return getProjectOntologyLibrary(true);
@@ -4026,7 +4026,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		}
 		return ontologyLibrary;
-	}
+	}*/
 
 	/*
 	 * private CalcLibrary calcLibrary = null;

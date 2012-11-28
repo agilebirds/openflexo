@@ -39,7 +39,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyClass>
+public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyClass>
 		extends AddConcept<MS, M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());

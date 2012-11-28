@@ -41,7 +41,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T extends OntologyIndividual>
+public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyIndividual>
 		extends AddConcept<MS, M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());

@@ -105,8 +105,8 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
-import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -365,7 +365,7 @@ public enum BrowserElementType {
 	PROJECT_ONTOLOGY("project_ontology", OWLModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	IMPORTED_ONTOLOGY("imported_ontology", OWLMetaModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
-	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
+	ONTOLOGY_FOLDER("ontology_folder", RepositoryFolder.class, IconLibrary.FOLDER_ICON),
 	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
 		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
 		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),

@@ -42,7 +42,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class EOModelResourceData extends FlexoObservable implements StorageResourceData {
+public class EOModelResourceData extends FlexoObservable implements StorageResourceData<EOModelResourceData> {
 
 	private static final Logger logger = Logger.getLogger(EOModelResourceData.class.getPackage().getName());
 

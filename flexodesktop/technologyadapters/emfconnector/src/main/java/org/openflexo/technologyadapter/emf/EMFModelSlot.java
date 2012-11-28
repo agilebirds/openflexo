@@ -1,7 +1,6 @@
 package org.openflexo.technologyadapter.emf;
 
 import org.openflexo.foundation.technologyadapter.ModelSlotImpl;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
@@ -15,8 +14,8 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
  */
 public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 
-	public EMFModelSlot(ViewPoint viewPoint) {
-		super(viewPoint);
+	public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
+		super(viewPoint, adapter);
 	}
 
 	public EMFModelSlot(ViewPointBuilder builder) {
@@ -31,11 +30,6 @@ public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 	@Override
 	public String getClassNameKey() {
 		return "xsd_model_slot";
-	}
-
-	@Override
-	public EMFTechnologyAdapter getTechnologyAdapter() {
-		return TechnologyAdapter.getTechnologyAdapter(EMFTechnologyAdapter.class);
 	}
 
 }

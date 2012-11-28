@@ -100,7 +100,8 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @author bmangez, sguerin
  */
-public abstract class IEWOComponent extends IEObject implements XMLStorageResourceData, InspectableObject, Validable, Bindable {
+public abstract class IEWOComponent extends IEObject implements XMLStorageResourceData<IEWOComponent>, InspectableObject, Validable,
+		Bindable {
 	private static final Logger logger = Logger.getLogger(IEWOComponent.class.getPackage().getName());
 
 	// ==========================================================================

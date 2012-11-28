@@ -64,7 +64,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData<FlexoComponentLibrary>, InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibrary.class.getPackage().getName());
 

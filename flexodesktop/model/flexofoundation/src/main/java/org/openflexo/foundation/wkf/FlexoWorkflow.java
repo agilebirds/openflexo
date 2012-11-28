@@ -104,7 +104,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData<FlexoWorkflow>, InspectableObject {
 
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
