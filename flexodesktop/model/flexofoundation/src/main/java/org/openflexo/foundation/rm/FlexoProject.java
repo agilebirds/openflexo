@@ -3835,6 +3835,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
+	public static final String RESOURCES = "resources";
 
 	public String getProjectVersionURI() {
 		return projectVersionURI;
@@ -4221,6 +4222,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		} else {
 			return getProjectData().canImportProject(project);
 		}
+	}
+
+	public boolean hasImportedProjects() {
+		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
 	}
 
 }
