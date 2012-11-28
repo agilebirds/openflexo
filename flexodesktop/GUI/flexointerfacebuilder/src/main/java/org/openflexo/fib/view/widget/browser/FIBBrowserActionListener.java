@@ -37,6 +37,7 @@ import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
 import org.openflexo.fib.model.FIBTableAction;
+import org.openflexo.fib.view.widget.FIBBrowserWidget;
 
 public class FIBBrowserActionListener implements ActionListener, BindingEvaluationContext, Observer {
 
@@ -46,24 +47,20 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 
 	private Object model;
 
-	private FIBBrowserModel browserModel;
-	private FIBController controller;
+	private final FIBBrowserWidget widget;
 
-	public FIBBrowserActionListener(FIBBrowserAction browserAction, FIBBrowserModel browserModel, FIBController controller) {
+	public FIBBrowserActionListener(FIBBrowserWidget widget, FIBBrowserAction browserAction) {
 		super();
-		this.controller = controller;
+		this.widget = widget;
 		this.browserAction = browserAction;
 		selectedObject = null;
-		this.browserModel = browserModel;
 		browserAction.addObserver(this);
 	}
 
 	public void delete() {
 		browserAction.deleteObserver(this);
-		this.controller = null;
 		this.browserAction = null;
 		selectedObject = null;
-		this.browserModel = null;
 	}
 
 	@Override
@@ -72,13 +69,13 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
 			if (dataModification.getAttribute() == FIBTableAction.Parameters.method
 					|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
-				browserModel.getWidget().updateBrowser();
+				widget.updateBrowser();
 			}
 		}
 	}
 
 	public FIBController getController() {
-		return controller;
+		return widget.getController();
 	}
 
 	public boolean isAddAction() {
@@ -125,7 +122,7 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					browserModel.getBrowserWidget().setSelectedObject(newObject);
+					widget.setSelectedObject(newObject);
 				}
 			});
 		}

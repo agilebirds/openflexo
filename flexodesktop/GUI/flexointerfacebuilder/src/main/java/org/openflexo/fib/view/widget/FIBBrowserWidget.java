@@ -34,6 +34,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -47,13 +49,15 @@ import org.openflexo.fib.view.widget.browser.FIBBrowserCellEditor;
 import org.openflexo.fib.view.widget.browser.FIBBrowserCellRenderer;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel.BrowserCell;
+import org.openflexo.fib.view.widget.browser.FIBBrowserWidgetFooter;
 
 /**
  * Widget allowing to display a browser (a tree of various objects)
  * 
  * @author sguerin
  */
-public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeModelListener {
+public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeModelListener,
+		TreeSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserWidget.class.getPackage().getName());
 
@@ -63,19 +67,27 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	private final JPanel _dynamicComponent;
 	private final FIBBrowser _fibBrowser;
 	private FIBBrowserModel _browserModel;
+	private FIBBrowserWidgetFooter _footer;
 	// private ListSelectionModel _listSelectionModel;
 	private JScrollPane scrollPane;
+	private Object selectedObject;
+	private final Vector<Object> selection;
 
 	public FIBBrowserWidget(FIBBrowser fibBrowser, FIBController controller) {
 		super(fibBrowser, controller);
-
 		_fibBrowser = fibBrowser;
-
 		_dynamicComponent = new JPanel();
 		_dynamicComponent.setOpaque(false);
 		_dynamicComponent.setLayout(new BorderLayout());
-
+		selection = new Vector<Object>();
+		_footer = new FIBBrowserWidgetFooter(this);
 		buildBrowser();
+	}
+
+	@Override
+	public synchronized void delete() {
+		_footer.delete();
+		super.delete();
 	}
 
 	public FIBBrowser getBrowser() {
@@ -91,6 +103,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public JTree getJTree() {
 		return _tree;
+	}
+
+	public FIBBrowserWidgetFooter getFooter() {
+		return _footer;
 	}
 
 	public Object getRootValue() {
@@ -126,7 +142,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
-
+		if (!getBrowser().getRootVisible() && ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
+			// Only one cell and roots are hidden, expand this first cell
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getJTree().expandPath(
+							new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
+									((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+				}
+			});
+		}
 		// getBrowserModel().setModel(getDataObject());
 
 		// We restore value if and only if we represent same browser
@@ -154,16 +180,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public TreeSelectionModel getTreeSelectionModel() {
 		return _tree.getSelectionModel();
-	}
-
-	@Override
-	public Object getSelectedObject() {
-		return _browserModel.getSelectedObject();
-	}
-
-	@Override
-	public Vector<Object> getSelection() {
-		return _browserModel.getSelection();
 	}
 
 	public void setSelectedObject(Object object) {
@@ -267,9 +283,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		if (_tree != null) {
 			_tree.removeFocusListener(this);
 		}
-		if (getTreeSelectionModel() != null) {
-			getTreeSelectionModel().removeTreeSelectionListener(getBrowserModel());
-		}
 		for (MouseListener l : _tree.getMouseListeners()) {
 			_tree.removeMouseListener(l);
 		}
@@ -297,11 +310,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			_tree.setRowHeight(_fibBrowser.getRowHeight());
 		}
 
-		_tree.getSelectionModel().addTreeSelectionListener(getBrowserModel());
-		_tree.getSelectionModel().setSelectionMode(getBrowser().getSelectionMode().getMode());
-
-		// _listSelectionModel = _table.getSelectionModel();
-		// _listSelectionModel.addListSelectionListener(this);
+		getTreeSelectionModel().setSelectionMode(getBrowser().getSelectionMode().getMode());
+		getTreeSelectionModel().addTreeSelectionListener(this);
 
 		scrollPane = new JScrollPane(_tree);
 
@@ -317,7 +327,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
 
 		if (_fibBrowser.getShowFooter()) {
-			_dynamicComponent.add(getBrowserModel().getFooter(), BorderLayout.SOUTH);
+			_dynamicComponent.add(getFooter(), BorderLayout.SOUTH);
 		}
 		if (_fibBrowser.getVisibleRowCount() != null) {
 			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
@@ -343,32 +353,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	@Override
 	public void objectAddedToSelection(Object o) {
-		getBrowserModel().addToSelectionNoNotification(o);
+		addToSelectionNoNotification(o);
 	}
 
 	@Override
 	public void objectRemovedFromSelection(Object o) {
-		getBrowserModel().removeFromSelectionNoNotification(o);
+		removeFromSelectionNoNotification(o);
 	}
 
 	@Override
 	public void selectionResetted() {
-		getBrowserModel().resetSelectionNoNotification();
-	}
-
-	@Override
-	public void addToSelection(Object o) {
-		getBrowserModel().addToSelection(o);
-	}
-
-	@Override
-	public void removeFromSelection(Object o) {
-		getBrowserModel().removeFromSelection(o);
-	}
-
-	@Override
-	public void resetSelection() {
-		getBrowserModel().resetSelection();
+		resetSelectionNoNotification();
 	}
 
 	@Override
@@ -384,6 +379,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	@Override
 	public void treeNodesRemoved(TreeModelEvent e) {
 		// logger.fine("treeNodesRemoved "+e);
+		// Here maybe check if objects represented by the removed nodes should be removed from current selection/selectedObject
 	}
 
 	@Override
@@ -409,4 +405,100 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		getBrowserModel().fireTreeRestructured();
 	}
 
+	@Override
+	public Object getSelectedObject() {
+		return selectedObject;
+	}
+
+	@Override
+	public Vector<Object> getSelection() {
+		return selection;
+	}
+
+	private boolean ignoreNotifications = false;
+
+	public synchronized void addToSelectionNoNotification(Object o) {
+		ignoreNotifications = true;
+		addToSelection(o);
+		ignoreNotifications = false;
+	}
+
+	public synchronized void removeFromSelectionNoNotification(Object o) {
+		ignoreNotifications = true;
+		removeFromSelection(o);
+		ignoreNotifications = false;
+	}
+
+	public synchronized void resetSelectionNoNotification() {
+		ignoreNotifications = true;
+		resetSelection();
+		ignoreNotifications = false;
+	}
+
+	@Override
+	public void addToSelection(Object o) {
+		for (TreePath path : getBrowserModel().getPaths(o)) {
+			getTreeSelectionModel().addSelectionPath(path);
+			getJTree().scrollPathToVisible(path);
+		}
+	}
+
+	@Override
+	public void removeFromSelection(Object o) {
+		for (TreePath path : getBrowserModel().getPaths(o)) {
+			getTreeSelectionModel().removeSelectionPath(path);
+		}
+	}
+
+	@Override
+	public void resetSelection() {
+		getTreeSelectionModel().clearSelection();
+	}
+
+	@Override
+	public synchronized void valueChanged(TreeSelectionEvent e) {
+		Vector<Object> oldSelection = new Vector<Object>();
+		oldSelection.addAll(selection);
+		/*System.out.println("Selection: "+e);
+
+		System.out.println("Paths="+e.getPaths());
+		for (TreePath tp : e.getPaths()) {
+			System.out.println("> "+tp.getLastPathComponent()+" added="+e.isAddedPath(tp));
+		}
+		System.out.println("New LEAD="+(e.getNewLeadSelectionPath()!=null?e.getNewLeadSelectionPath().getLastPathComponent():"null"));
+		System.out.println("Old LEAD="+(e.getOldLeadSelectionPath()!=null?e.getOldLeadSelectionPath().getLastPathComponent():"null"));
+		*/
+		if (e.getNewLeadSelectionPath() == null || (BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent() == null) {
+			selectedObject = null;
+		} else {
+			selectedObject = ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
+		}
+		for (TreePath tp : e.getPaths()) {
+			if (e.isAddedPath(tp)) {
+				selection.add(((BrowserCell) tp.getLastPathComponent()).getRepresentedObject());
+			} else {
+				selection.remove(((BrowserCell) tp.getLastPathComponent()).getRepresentedObject());
+			}
+		}
+
+		// logger.info("BrowserModel, selected object is now "+selectedObject);
+
+		getDynamicModel().selected = selectedObject;
+		getDynamicModel().selection = selection;
+		notifyDynamicModelChanged();
+
+		if (getComponent().getSelected().isValid()) {
+			logger.fine("Sets SELECTED binding with " + selectedObject);
+			getComponent().getSelected().setBindingValue(selectedObject, getController());
+		}
+
+		updateFont();
+
+		if (!ignoreNotifications) {
+			getController().updateSelection(this, oldSelection, selection);
+		}
+
+		_footer.setFocusedObject(selectedObject);
+
+	}
 }
