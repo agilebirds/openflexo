@@ -347,7 +347,7 @@ public class FIBTableWidgetFooter extends JPanel {
 		_otherActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
 
 		for (FIBTableAction plAction : tableWidget.getComponent().getActions()) {
-			FIBTableActionListener plActionListener = new FIBTableActionListener(plAction, tableWidget, _widget.getController());
+			FIBTableActionListener plActionListener = new FIBTableActionListener(plAction, tableWidget);
 			if (plActionListener.isAddAction()) {
 				_addActions.put(plAction, plActionListener);
 			} else if (plActionListener.isRemoveAction()) {
