@@ -103,8 +103,8 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
@@ -1537,6 +1537,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (flexoFrame != null) {
 			flexoFrame.disposeAll();
 		}
+		if (menuBar != null) {
+			menuBar.dispose();
+		}
 		for (FlexoEditor editor : controllerModel.getEditors()) {
 			if (editor instanceof InteractiveFlexoEditor) {
 				((InteractiveFlexoEditor) editor).unregisterControllerActionInitializer(getControllerActionInitializer());
@@ -1856,7 +1859,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
 		} else if (object instanceof OntologyLibrary) {
 			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
-		} else if (object instanceof OntologyFolder) {
+		} else if (object instanceof RepositoryFolder) {
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);

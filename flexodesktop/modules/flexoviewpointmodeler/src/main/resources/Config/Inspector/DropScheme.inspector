@@ -1,4 +1,4 @@
-<inspector title = "Drop Scheme" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.DropScheme">
+<inspector title = "Drop Scheme" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">

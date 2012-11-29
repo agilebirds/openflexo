@@ -49,7 +49,7 @@ import org.openflexo.foundation.toc.IterationSection;
 import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;

@@ -30,10 +30,16 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
+import org.openflexo.technologyadapter.owl.model.OWLStatement;
+import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass;
 import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
-public class AddRestrictionStatement extends AddStatement {
+// No more applicable
+@Deprecated
+public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private static final Logger logger = Logger.getLogger(AddRestrictionStatement.class.getPackage().getName());
 
@@ -170,6 +176,43 @@ public class AddRestrictionStatement extends AddStatement {
 	@Override
 	public Type getAssignableType() {
 		return SubClassStatement.class;
+	}
+
+	@Override
+	public OWLStatement performAction(EditionSchemeAction action) {
+		OntologyProperty property = getObjectProperty();
+		OntologyObject subject = getPropertySubject(action);
+		OntologyObject object = getPropertyObject(action);
+
+		// System.out.println("property="+property+" "+property.getURI());
+		// System.out.println("subject="+subject+" "+subject.getURI());
+		// System.out.println("object="+object+" "+object.getURI());
+		// System.out.println("restrictionType="+getParameterValues().get(action.getRestrictionType()));
+		// System.out.println("cardinality="+getParameterValues().get(action.getCardinality()));
+
+		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
+			RestrictionType restrictionType = getRestrictionType(action);
+			int cardinality = getCardinality(action);
+			OntologyRestrictionClass restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject,
+					(OWLProperty) property, restrictionType, cardinality, (OWLClass) object);
+
+			if (subject instanceof OWLClass) {
+				if (subject instanceof OWLClass) {
+					((OWLClass) subject).getOntResource().addSuperClass(restriction.getOntResource());
+				}
+				((OWLClass) subject).updateOntologyStatements();
+				return ((OWLClass) subject).getSubClassStatement(restriction);
+			}
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, OWLStatement initialContext) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

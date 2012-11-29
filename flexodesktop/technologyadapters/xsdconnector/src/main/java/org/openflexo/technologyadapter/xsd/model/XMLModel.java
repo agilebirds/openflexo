@@ -1,3 +1,22 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
@@ -10,13 +29,13 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.technologyadapter.xsd.rm.FlexoXMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 
-public class XMLModel extends XSOntology implements FlexoModel<XSDMetaModel> {
+public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMetaModel> {
 
 	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
 
-	private FlexoXMLModelResource modelResource;
+	private XMLModelResource modelResource;
 	private FlexoProject project;
 
 	public XMLModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
@@ -30,18 +49,17 @@ public class XMLModel extends XSOntology implements FlexoModel<XSDMetaModel> {
 	}
 
 	@Override
-	public FlexoXMLModelResource getFlexoResource() {
+	public XMLModelResource getFlexoResource() {
 		return modelResource;
 	}
 
 	@Override
 	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof FlexoXMLModelResource) {
-			this.modelResource = (FlexoXMLModelResource) resource;
+		if (resource instanceof XMLModelResource) {
+			this.modelResource = (XMLModelResource) resource;
 		}
 	}
 
-	@Override
 	public void setProject(FlexoProject project) {
 		this.project = project;
 	}

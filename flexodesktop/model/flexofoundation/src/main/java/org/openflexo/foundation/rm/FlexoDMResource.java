@@ -130,7 +130,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 				}
 				r.delete();
 			}
-			dmModel = DMModel.createNewDMModel(getProject(), this);
+			dmModel = DMModel.createNewDMModel(this);
 			_resourceData = dmModel;
 		} else {
 			try {
@@ -143,9 +143,6 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 				return null;
 			}
 		}
-
-		dmModel.setProject(getProject());
-
 		return dmModel;
 	}
 
@@ -247,7 +244,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 				getProject().getResources().remove(getResourceIdentifier());
 			}
 			FileWritingLock lock = willWriteOnDisk();
-			_resourceData = DMModel.createNewDMModel(getProject(), this);
+			_resourceData = DMModel.createNewDMModel(this);
 			hasWrittenOnDisk(lock);
 			return true;
 		} else if (v1.equals(new FlexoVersion("2.0")) && v2.equals(new FlexoVersion("2.1"))) {

@@ -23,12 +23,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * container for a Binding. (a binding value)
@@ -161,25 +159,9 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (_messageBindings != null) {
-			return _messageBindings.getProject();
-		}
-		return null;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return (_messageBindings != null ? _messageBindings.getFullyQualifiedName() : "null") + "." + getBindingDefinitionName() + "="
 				+ (getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation());
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (_messageBindings != null) {
-			return _messageBindings.getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

@@ -45,6 +45,8 @@ import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;

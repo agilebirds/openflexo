@@ -483,7 +483,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 					}
 					if (startNode.getParentPetriGraph().getContainer() instanceof SubProcessNode) {
 						SubProcessNode sub = (SubProcessNode) startNode.getParentPetriGraph().getContainer();
-						if (sub.getPortMapRegistery().getAllOutPortmaps().size() > 0) {
+						if (sub.getPortMapRegistery() != null && sub.getPortMapRegistery().getAllOutPortmaps().size() > 0) {
 							return null;
 						}
 					}

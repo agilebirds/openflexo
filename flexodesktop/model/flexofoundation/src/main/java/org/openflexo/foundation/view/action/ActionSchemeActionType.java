@@ -45,7 +45,7 @@ public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, 
 	}
 
 	@Override
-	public boolean isEnabled(FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public boolean isEnabled(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 		return isEnabledForSelection(object, globalSelection);
 	}
 

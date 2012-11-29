@@ -60,6 +60,15 @@ public abstract class FlexoMenuBar extends JMenuBar {
 
 	}
 
+	public void dispose() {
+		for (int i = 0; i < getMenuCount(); i++) {
+			JMenu menu = getMenu(i);
+			if (menu instanceof FlexoMenu) {
+				((FlexoMenu) menu).dispose();
+			}
+		}
+	}
+
 	@Override
 	public JMenu add(JMenu c) {
 		if (c.getItemCount() == 0) {

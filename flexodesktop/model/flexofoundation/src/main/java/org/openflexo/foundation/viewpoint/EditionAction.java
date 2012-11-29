@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -36,12 +38,12 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
  * 
- * An edition action matches a {@link ModelSlot}
+ * An edition action adresses a {@link ModelSlot}
  * 
  * @author sylvain
  * 
  */
-public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
@@ -161,6 +163,32 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 	}
 
 	/**
+	 * Perform batch of actions, in the context provided by supplied {@link EditionSchemeAction}<br>
+	 * An action is performed if and only if the condition evaluation returns true. All finalizers of actions are invoked in a second step
+	 * when all actions are performed.
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public static void performBatchOfActions(Collection<EditionAction<?, ?, ?, ?>> actions, EditionSchemeAction contextAction) {
+
+		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+
+		for (EditionAction editionAction : actions) {
+			if (editionAction.evaluateCondition(contextAction)) {
+				Object returned = editionAction.performAction(contextAction);
+				if (returned != null) {
+					performedActions.put(editionAction, returned);
+				}
+			}
+		}
+
+		for (EditionAction editionAction : performedActions.keySet()) {
+			editionAction.finalizePerformAction(contextAction, performedActions.get(editionAction));
+		}
+	}
+
+	/**
 	 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
 	 * Note than returned object will be used to be further reinjected in finalizer
 	 * 
@@ -266,7 +294,7 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
 	}
 
-	public AddShape createAddShapeAction() {
+	/*public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape(null);
 		if (getEditionPattern().getDefaultShapePatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
@@ -378,6 +406,19 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 		CloneIndividual newAction = new CloneIndividual(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
+	}*/
+
+	/**
+	 * Creates a new {@link EditionAction} of supplied class, and add it to parent container at the index where this action is itself
+	 * registered<br>
+	 * Delegates creation to model slot
+	 * 
+	 * @return newly created {@link EditionAction}
+	 */
+	public <A extends EditionAction<MS, M, MM, ?>> A createActionAtCurrentIndex(Class<A> actionClass, MS modelSlot) {
+		A newAction = modelSlot.createAction(actionClass);
+		insertActionAtCurrentIndex(newAction);
+		return null;
 	}
 
 	public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {

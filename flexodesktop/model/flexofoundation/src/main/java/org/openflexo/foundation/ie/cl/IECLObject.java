@@ -23,7 +23,6 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract class implemented by all objects involved in Component Library coding
@@ -74,13 +73,4 @@ public abstract class IECLObject extends IEObject implements Validable {
 		return getComponentLibrary();
 	}
 
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getComponentLibrary().getXMLMapping();
-	}
 }

@@ -24,16 +24,14 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddIsAStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddRestrictionStatement;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -62,7 +60,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private String name;
 	private String label;
 	private String description;
-	private Vector<EditionAction> actions;
+	private Vector<EditionAction<?, ?, ?, ?>> actions;
 	private Vector<EditionSchemeParameter> parameters;
 	private boolean skipConfirmationPanel = false;
 
@@ -74,7 +72,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	public EditionScheme(ViewPointBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction>();
+		actions = new Vector<EditionAction<?, ?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
 	}
 
@@ -146,19 +144,19 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}*/
 
 	@Override
-	public Vector<EditionAction> getActions() {
+	public Vector<EditionAction<?, ?, ?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction> actions) {
+	public void setActions(Vector<EditionAction<?, ?, ?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction action) {
+	public void addToActions(EditionAction<?, ?, ?, ?> action) {
 		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.add(action);
@@ -168,7 +166,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public void removeFromActions(EditionAction action) {
+	public void removeFromActions(EditionAction<?, ?, ?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
@@ -307,6 +305,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return null;
 	}
 
+	/*
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape(null);
@@ -438,6 +437,20 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public DeleteAction createDeleteAction() {
 		DeleteAction newAction = new DeleteAction(null);
+		addToActions(newAction);
+		return newAction;
+	}*/
+
+	/**
+	 * Creates a new {@link EditionAction} of supplied class, and add it at the end of action list<br>
+	 * Delegates creation to model slot
+	 * 
+	 * @return newly created {@link EditionAction}
+	 */
+	@Override
+	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
+			Class<A> actionClass, MS modelSlot) {
+		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;
 	}

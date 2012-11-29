@@ -121,9 +121,29 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				}
 				// We break since there won't be any other active frame.
 				break;
+			} else if (frame instanceof FlexoFrame) {
+				if (hasActiveOwnedWindows(frame)) {
+					return (FlexoFrame) frame;
+				}
+			}
+		}
+		for (Frame frame : getFrames()) {
+			if (frame instanceof FlexoFrame) {
+				return (FlexoFrame) frame;
 			}
 		}
 		return createDefaultIfNull ? getDefaultFrame() : null;
+	}
+
+	protected static boolean hasActiveOwnedWindows(Window window) {
+		for (Window w : window.getOwnedWindows()) {
+			if (w.isActive()) {
+				return true;
+			} else if (hasActiveOwnedWindows(w)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Frame getOwner(Frame owner) {
@@ -159,6 +179,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 			boolean isDisposable = true;
 			for (Window w : f.getOwnedWindows()) {
 				isDisposable &= !w.isVisible();
+				if (w.isVisible()) {
+					System.err.println("Cannot dispose default frame because " + w + " is visible");
+				}
 			}
 			if (isDisposable) {
 				f.setVisible(false);

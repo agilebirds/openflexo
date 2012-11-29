@@ -25,7 +25,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 
 public class VESelectAll extends FlexoGUIAction<VESelectAll, ViewObject, ViewObject> {
 

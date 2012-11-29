@@ -25,25 +25,24 @@ import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.module.UserType;
 
-public class JIRAReportEDITOR {
+public class JIRAReportEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		JIRAIssueReportDialog.SubmitIssueReport report = new JIRAIssueReportDialog.SubmitIssueReport();
+		report.setIssueLink("https://bugs.openflexo.com/browse/OPENFLEXO-21");
+		report.addToErrors("Could not attach screenshot");
+		report.addToErrors("Could not send files");
+		return FIBAbstractEditor.makeArray(report);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return JIRAIssueReportDialog.REPORT_FIB_FILE;
+	}
 
 	public static void main(String[] args) {
 		UserType.setCurrentUserType(UserType.MAINTAINER);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				JIRAIssueReportDialog.SubmitIssueReport report = new JIRAIssueReportDialog.SubmitIssueReport();
-				report.setIssueLink("https://bugs.openflexo.com/browse/OPENFLEXO-21");
-				report.addToErrors("Could not attach screenshot");
-				report.addToErrors("Could not send files");
-				return FIBAbstractEditor.makeArray(report);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return JIRAIssueReportDialog.REPORT_FIB_FILE;
-			}
-		};
-		editor.launch();
+		main(JIRAReportEDITOR.class);
 	}
 }

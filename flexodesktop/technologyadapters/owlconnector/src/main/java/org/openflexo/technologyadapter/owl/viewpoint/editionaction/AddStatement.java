@@ -30,11 +30,10 @@ import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
-import org.openflexo.technologyadapter.owl.model.OWLMetaModel;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
-public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, OWLModel, OWLMetaModel, S> {
+public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, OWLOntology, OWLOntology, S> {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 

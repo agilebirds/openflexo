@@ -51,8 +51,8 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 		@Override
 		public boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object != null && object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
-					&& !((Role) object).isImported();
+			return object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
+					&& !((Role) object).isImported() || object instanceof FlexoWorkflow;
 		}
 
 		@Override

@@ -155,7 +155,6 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 			e.printStackTrace();
 			return null;
 		}
-		library.setProject(getProject());
 		return library;
 	}
 

@@ -35,7 +35,6 @@ import org.openflexo.diff.merge.MergeChange;
 import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.Format;
@@ -129,11 +128,6 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	protected static final String OPERATION_COMPONENT_3 = "Operation3";
 	protected static final String TAB_COMPONENT1 = "Tab1";
 	protected static final String TAB_COMPONENT2 = "Tab2";
-
-	protected static DefaultFlexoEditor _editor;
-	protected static FlexoProject _project;
-	protected static File _projectDirectory;
-	protected static String _projectIdentifier;
 
 	protected static FlexoRMResource _rmResource;
 	protected static FlexoWorkflowResource _wkfResource;
@@ -621,8 +615,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		resetVariables();
 
 		try {
-			assertNotNull(_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY,
-					null));
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, null));
 			_project = _editor.getProject();
 			_project.getGeneratedCode().setFactory(this);
 		} catch (ProjectInitializerException e) {

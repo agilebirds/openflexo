@@ -70,7 +70,6 @@ import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A ComponentInstance represents an instance (a use case) of a ComponentDefinition in a given context (this context can be determined with
@@ -204,23 +203,6 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			return ((Bindable) getXMLResourceData()).getBindingModel();
 		}
 		return null;
-	}
-
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (getOwner() != null) {
-			return getOwner().getXMLResourceData().getXMLMapping();
-		} else {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("This component instance does not have nor an owner, nor a container nor a project. This is totally unacceptable.");
-			}
-			return null;
-		}
 	}
 
 	/**

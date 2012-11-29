@@ -100,7 +100,8 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 		}
 		if (getFocusedObject() != null) {
 			_project = getFocusedObject().getProject();
-			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(), false);
+			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(),
+					getParentProcess() != null | _project.getFlexoWorkflow().getRootProcess() != null);
 		} else {
 			logger.warning("Focused object is null !");
 		}

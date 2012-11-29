@@ -264,17 +264,12 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	 * @param object
 	 * @return
 	 */
-	public boolean isEnabled(T1 object, Vector<T2> globalSelection, FlexoEditor editor) {
-		if (editor == null) {
-			logger.warning("FlexoAction invoked with null editor ");
-			return true;
-		}
-
+	public boolean isEnabled(T1 object, Vector<T2> globalSelection) {
 		if (object != null && object.getActionList().indexOf(this) == -1) {
 			return false;
 		}
 
-		return false;
+		return isEnabledForSelection(object, globalSelection);
 	}
 
 	public String getDisabledReason(T1 object, Vector<T2> globalSelection, FlexoEditor editor) {

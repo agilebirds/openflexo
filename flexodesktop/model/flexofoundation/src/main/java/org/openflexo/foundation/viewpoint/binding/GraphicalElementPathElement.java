@@ -11,11 +11,11 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.FinalBindingPathElementImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewElement;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 
 public class GraphicalElementPathElement<T extends ViewObject> implements SimplePathElement<T>, BindingVariable<T> {

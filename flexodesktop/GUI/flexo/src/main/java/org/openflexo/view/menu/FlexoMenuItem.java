@@ -123,7 +123,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 	public void itemWillShow() {
 		if (actionType instanceof FlexoActionType && getSelectionManager() != null) {
 			if (getFocusedObject() == null || getFocusedObject().getActionList().indexOf(actionType) > -1) {
-				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
+				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection()));
 			} else {
 				setEnabled(false);
 			}

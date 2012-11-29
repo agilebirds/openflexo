@@ -20,23 +20,32 @@
 package org.openflexo.technologyadapter.owl;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
-import org.openflexo.technologyadapter.owl.model.OWLMetaModel;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
+import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 
@@ -62,7 +71,9 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
 @DeclareEditionAction(AddOWLClass.class),
 /** Add class */
 @DeclareEditionAction(DeleteAction.class) })
-public class OWLTechnologyAdapter extends TechnologyAdapter<OWLModel, OWLMetaModel, OWLModelSlot> {
+public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology, OWLModelSlot> {
+
+	private static final Logger logger = Logger.getLogger(OWLTechnologyAdapter.class.getPackage().getName());
 
 	public OWLTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
@@ -73,9 +84,8 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLModel, OWLMetaMod
 	}
 
 	@Override
-	protected OWLModelSlot createNewModelSlot() {
-		// TODO Auto-generated method stub
-		return null;
+	protected OWLModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new OWLModelSlot(viewPoint, this);
 	}
 
 	/**
@@ -109,7 +119,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLModel, OWLMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, OWLMetaModel metaModel) {
+	public boolean isValidModelFile(File aModelFile, OWLOntology metaModel) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		return aModelFile.getName().endsWith(".owl");
 	}
@@ -126,8 +136,66 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLModel, OWLMetaMod
 	}
 
 	@Override
-	public OWLModel createNewModel(FlexoProject project, OWLMetaModel metaModel) {
-		return OWLModel.createNewOWLModel(project, metaModel);
+	public OWLOntology createNewModel(FlexoProject project, OWLOntology metaModel) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("createNewOWLModel(), project=" + project);
+		}
+		logger.info("-------------> Create ontology for " + project.getProjectName());
+		File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
+		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
+
+		OWLOntology newProjectOntology = createNewOWLModel(project.getURI(), owlFile, project.getProjectOntologyLibrary());
+		project.getProjectOntologyLibrary().registerOntology(newProjectOntology);
+
+		OWLOntologyResource ontologyRes;
+		try {
+			ontologyRes = new OWLOntologyResource(project, newProjectOntology, ontologyFile);
+		} catch (InvalidFileNameException e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("This should not happen: invalid file " + ontologyFile);
+			}
+			return null;
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("This should not happen: DuplicateResourceException for " + ontologyFile);
+			}
+			return null;
+		}
+		// newDMModel.initializeDefaultRepositories(dmRes);
+		try {
+			// dmRes.saveResourceData();
+			project.registerResource(ontologyRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
+
+		try {
+			ontologyRes.saveResourceData();
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
+
+		return newProjectOntology;
+	}
+
+	@Override
+	public OWLModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
+		return null;
+	}
+
+	@Override
+	public OWLMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
+		return null;
 	}
 
 }

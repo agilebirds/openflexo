@@ -50,7 +50,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author gpolet
  * 
  */
-public class DKVModel extends DKVObject implements XMLStorageResourceData {
+public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVModel> {
 
 	private FlexoDKVResource resource;
 
@@ -108,7 +108,6 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
      */
 	public DKVModel(FlexoProject project) {
 		super(project);
-		setProject(project);
 		dkvModel = this;
 		domainList = new DomainList(this);
 		languageList = new LanguageList(this);
@@ -151,9 +150,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		if (domainName.trim().length() == 0) {
 			throw new EmptyStringException();
 		}
-		Enumeration en = getDomains().elements();
+		Enumeration<Domain> en = getDomains().elements();
 		while (en.hasMoreElements()) {
-			Domain dom = (Domain) en.nextElement();
+			Domain dom = en.nextElement();
 			if (dom.getName().equals(domainName)) {
 				throw new DuplicateDKVObjectException(dom);
 			}
@@ -168,9 +167,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		if (domainName.trim().length() == 0) {
 			throw new EmptyStringException();
 		}
-		Enumeration en = getDomains().elements();
+		Enumeration<Domain> en = getDomains().elements();
 		while (en.hasMoreElements()) {
-			Domain dom = (Domain) en.nextElement();
+			Domain dom = en.nextElement();
 			if (dom.getName().equals(domainName)) {
 				throw new DuplicateDKVObjectException(dom);
 			}
@@ -189,9 +188,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		if (lgName.trim().length() == 0) {
 			throw new EmptyStringException();
 		}
-		Enumeration en = getLanguages().elements();
+		Enumeration<Language> en = getLanguages().elements();
 		while (en.hasMoreElements()) {
-			Language lg = (Language) en.nextElement();
+			Language lg = en.nextElement();
 			if (lg.getName().equals(lgName)) {
 				throw new DuplicateDKVObjectException(lg);
 			}

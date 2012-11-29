@@ -99,7 +99,6 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 			logger.fine("loadResourceData() in FlexoWorkflowResource");
 		}
 		workflow = super.performLoadResourceData(progress, loadingHandler);
-		workflow.setProject(getProject());
 		// Load all processes
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_processes"));

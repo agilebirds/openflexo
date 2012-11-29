@@ -38,7 +38,6 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author sylvain
@@ -108,11 +107,6 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 	@Override
 	public void delete(FlexoProgress progress, boolean deleteFiles) {
 		super.delete(progress, deleteFiles);
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getGeneratedSourcesMapping();
 	}
 
 	@Override

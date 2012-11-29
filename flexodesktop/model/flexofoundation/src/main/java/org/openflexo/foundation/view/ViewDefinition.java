@@ -45,6 +45,7 @@ import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.Sortable;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
