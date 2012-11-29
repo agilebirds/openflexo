@@ -19,13 +19,14 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.rm.FlexoXMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 
-public class XMLModelRepository extends ModelRepository<FlexoXMLModelResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> {
+public class XMLModelRepository extends ModelRepository<XMLModelResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> {
 
-	public XMLModelRepository(XSDTechnologyAdapter adapter) {
-		super(adapter);
+	public XMLModelRepository(XSDTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
+		super(adapter, resourceCenter);
 	}
 }

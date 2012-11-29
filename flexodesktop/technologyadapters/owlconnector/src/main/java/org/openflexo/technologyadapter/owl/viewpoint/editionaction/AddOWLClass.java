@@ -27,10 +27,9 @@ import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
-import org.openflexo.technologyadapter.owl.model.OWLMetaModel;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 
-public class AddOWLClass extends AddClass<OWLModelSlot, OWLModel, OWLMetaModel, OWLClass> {
+public class AddOWLClass extends AddClass<OWLModelSlot, OWLOntology, OWLOntology, OWLClass> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
 

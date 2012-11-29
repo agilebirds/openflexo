@@ -20,22 +20,17 @@
 package org.openflexo.technologyadapter.xsd;
 
 import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
@@ -49,7 +44,8 @@ import org.openflexo.technologyadapter.xsd.model.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
-import org.openflexo.technologyadapter.xsd.rm.FlexoXMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
 /**
  * This class defines and implements the XSD/XML technology adapter
@@ -121,20 +117,33 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, XSDMetaModel metaModel) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		return aModelFile.getName().endsWith(".xml");
 	}
 
 	/**
-	 * Instantiate new meta model stored in supplied meta model file
+	 * Instantiate new meta model resource stored in supplied meta model file
 	 * 
 	 * @param aMetaModelFile
 	 * @return
 	 */
 	@Override
-	public XSDMetaModel loadMetaModel(File aMetaModelFile, OntologyLibrary library) {
-		return new XSDMetaModel(retrieveMetaModelURI(aMetaModelFile), aMetaModelFile, library);
+	public XSDMetaModelResource retrieveMetaModelResource(File aMetaModelFile) {
+		// TODO to be implemented
+		return null;
+	}
+
+	/**
+	 * Instantiate new model resource stored in supplied model file
+	 * 
+	 * @param aMetaModelFile
+	 * @return
+	 */
+	@Override
+	public XMLModelResource retrieveModelResource(File aModelFile) {
+		// TODO to be implemented
+		return null;
 	}
 
 	/**
@@ -149,7 +158,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 		// TODO: meta model not handled here !
 
-		if (logger.isLoggable(Level.FINE)) {
+		/*if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewXMLModel(), project=" + project);
 		}
 		logger.info("-------------> Create XMLModel for " + project.getProjectName());
@@ -193,16 +202,18 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 			e1.printStackTrace();
 		}
 
-		return newProjectOntology;
+		return newProjectOntology;*/
+
+		return null;
 	}
 
 	@Override
 	public XMLModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
-		return null;
+		return new XMLModelRepository(this, resourceCenter);
 	}
 
 	@Override
 	public XSDMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
-		return null;
+		return new XSDMetaModelRepository(this, resourceCenter);
 	}
 }

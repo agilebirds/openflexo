@@ -18,21 +18,21 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
-public class FlexoEMFModelResource extends FlexoStorageResource<EMFModel> {
+public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoEMFModelResource.class
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class
 			.getPackage().getName());
 
-	public FlexoEMFModelResource(FlexoProjectBuilder builder) {
+	public EMFModelResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoEMFModelResource(FlexoProject aProject) {
+	public EMFModelResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
-	public FlexoEMFModelResource(FlexoProject project, EMFModel newEMFModel, FlexoProjectFile ontologyFile)
+	public EMFModelResource(FlexoProject project, EMFModel newEMFModel, FlexoProjectFile ontologyFile)
 			throws InvalidFileNameException, DuplicateResourceException {
 		super(project);
 		_resourceData = newEMFModel;

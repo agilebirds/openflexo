@@ -7,8 +7,8 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 
 @ModelEntity
-@ImplementationClass(FlexoEMFMetaModelResourceImpl.class)
+@ImplementationClass(EMFMetaModelResourceImpl.class)
 @XMLElement
-public interface FlexoEMFMetaModelResource extends FlexoResource<EMFMetaModel> {
+public interface EMFMetaModelResource extends FlexoResource<EMFMetaModel> {
 
 }

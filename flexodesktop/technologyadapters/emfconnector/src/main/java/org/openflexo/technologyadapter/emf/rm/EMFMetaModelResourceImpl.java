@@ -6,7 +6,7 @@ import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.toolbox.IProgress;
 
-public abstract class FlexoEMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMetaModel> implements FlexoEMFMetaModelResource {
+public abstract class EMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMetaModel> implements EMFMetaModelResource {
 
 	/**
 	 * Load the &quot;real&quot; load resource data of this resource.

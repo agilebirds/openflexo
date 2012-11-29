@@ -7,8 +7,8 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 
 @ModelEntity
-@ImplementationClass(FlexoXSDMetaModelResourceImpl.class)
+@ImplementationClass(XSDMetaModelResourceImpl.class)
 @XMLElement
-public interface FlexoXSDMetaModelResource extends FlexoResource<XSDMetaModel> {
+public interface XSDMetaModelResource extends FlexoResource<XSDMetaModel> {
 
 }

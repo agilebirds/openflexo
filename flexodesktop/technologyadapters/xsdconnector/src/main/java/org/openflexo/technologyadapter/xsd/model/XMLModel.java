@@ -29,13 +29,13 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.technologyadapter.xsd.rm.FlexoXMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 
 public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMetaModel> {
 
 	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
 
-	private FlexoXMLModelResource modelResource;
+	private XMLModelResource modelResource;
 	private FlexoProject project;
 
 	public XMLModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
@@ -49,14 +49,14 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 	}
 
 	@Override
-	public FlexoXMLModelResource getFlexoResource() {
+	public XMLModelResource getFlexoResource() {
 		return modelResource;
 	}
 
 	@Override
 	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof FlexoXMLModelResource) {
-			this.modelResource = (FlexoXMLModelResource) resource;
+		if (resource instanceof XMLModelResource) {
+			this.modelResource = (XMLModelResource) resource;
 		}
 	}
 

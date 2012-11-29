@@ -22,7 +22,6 @@ package org.openflexo.foundation.technologyadapter;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -76,21 +75,29 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	public abstract String retrieveMetaModelURI(File aMetaModelFile);
 
 	/**
-	 * Instantiate new meta model stored in supplied meta model file
+	 * Instantiate new meta model resource stored in supplied meta model file
 	 * 
 	 * @param aMetaModelFile
 	 * @return
 	 */
-	public abstract MM loadMetaModel(File aMetaModelFile, OntologyLibrary library);
+	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
 	 * 
 	 * @param aModelFile
-	 * @param metaModel
+	 * @param metaModelResource
 	 * @return
 	 */
-	public abstract boolean isValidModelFile(File aModelFile, MM metaModel);
+	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource);
+
+	/**
+	 * Instantiate new model resource stored in supplied model file
+	 * 
+	 * @param aMetaModelFile
+	 * @return
+	 */
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile);
 
 	/**
 	 * Creates new model conform to the supplied meta model

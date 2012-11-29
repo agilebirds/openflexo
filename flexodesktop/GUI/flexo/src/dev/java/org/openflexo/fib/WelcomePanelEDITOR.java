@@ -66,7 +66,7 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 			}
 
 			@Override
-			protected TechnologyAdapterService createTechnologyAdapterService() {
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
 				return null;
 			}
 		});

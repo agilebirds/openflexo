@@ -49,21 +49,21 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 
 @SuppressWarnings("serial")
-public class FlexoXMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoResource<XMLModel> {
+public class XMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoResource<XMLModel> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoXMLModelResource.class
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLModelResource.class
 			.getPackage().getName());
 
-	public FlexoXMLModelResource(FlexoProjectBuilder builder) {
+	public XMLModelResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoXMLModelResource(FlexoProject aProject) {
+	public XMLModelResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
-	public FlexoXMLModelResource(FlexoProject project, XMLModel newProjectOntology, FlexoProjectFile ontologyFile)
+	public XMLModelResource(FlexoProject project, XMLModel newProjectOntology, FlexoProjectFile ontologyFile)
 			throws InvalidFileNameException, DuplicateResourceException {
 		super(project);
 		_resourceData = newProjectOntology;

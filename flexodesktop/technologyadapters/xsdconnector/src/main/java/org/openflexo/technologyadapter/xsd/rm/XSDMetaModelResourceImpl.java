@@ -6,8 +6,7 @@ import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.toolbox.IProgress;
 
-public abstract class FlexoXSDMetaModelResourceImpl /*extends FlexoStorageResource<XMLModel>*/extends FlexoResourceImpl<XSDMetaModel>
-		implements FlexoXSDMetaModelResource {
+public abstract class XSDMetaModelResourceImpl extends FlexoResourceImpl<XSDMetaModel> implements XSDMetaModelResource {
 
 	/**
 	 * Load the &quot;real&quot; load resource data of this resource.

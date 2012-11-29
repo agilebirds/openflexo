@@ -3,6 +3,7 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
@@ -62,6 +63,12 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
 		userResourceCenter = new UserResourceCenter(new File(FileUtils.getDocumentDirectory(),
 				"FlexoUserResourceCenter/ResourceCenterData.xml"));
+	}
+
+	@Override
+	public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService) {
+		openFlexoResourceCenter.initialize(technologyAdapterService);
+		userResourceCenter.initialize(technologyAdapterService);
 	}
 
 	@Override

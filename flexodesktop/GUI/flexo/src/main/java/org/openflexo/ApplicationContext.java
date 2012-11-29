@@ -37,6 +37,8 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		moduleLoader = new ModuleLoader(this);
 		projectReferenceLoader = createProjectReferenceLoader();
 		resourceCenterService = createResourceCenterService();
+		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
+		resourceCenterService.registerTechnologyAdapterService(technologyAdapterService);
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -75,6 +77,6 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 
 	protected abstract FlexoResourceCenterService createResourceCenterService();
 
-	protected abstract TechnologyAdapterService createTechnologyAdapterService();
+	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService);
 
 }

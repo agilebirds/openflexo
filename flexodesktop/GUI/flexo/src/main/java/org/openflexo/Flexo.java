@@ -240,9 +240,9 @@ public class Flexo {
 			}
 
 			@Override
-			protected TechnologyAdapterService createTechnologyAdapterService() {
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
 				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
-				returned.setFlexoResourceCenterService(getResourceCenterService());
+				returned.setFlexoResourceCenterService(resourceCenterService);
 				returned.loadAvailableTechnologyAdapters();
 				return returned;
 			}

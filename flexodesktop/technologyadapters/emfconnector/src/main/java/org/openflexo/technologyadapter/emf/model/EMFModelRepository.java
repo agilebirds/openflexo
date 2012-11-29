@@ -19,13 +19,14 @@
  */
 package org.openflexo.technologyadapter.emf.model;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
-public class EMFModelRepository extends ModelRepository<FlexoEMFModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
+public class EMFModelRepository extends ModelRepository<EMFModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
 
-	public EMFModelRepository(EMFTechnologyAdapter adapter) {
-		super(adapter);
+	public EMFModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
+		super(adapter, resourceCenter);
 	}
 }

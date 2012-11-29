@@ -22,17 +22,12 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -41,7 +36,7 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.IProgress;
 
-public class LocalResourceCenterImplementation implements FlexoResourceCenter {
+public class LocalResourceCenterImplementation extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
@@ -49,14 +44,12 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	private static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
-	private File localDirectory;
 	private OntologyLibrary baseOntologyLibrary;
 	private ViewPointLibrary viewPointLibrary;
 	private File newViewPointSandboxDirectory;
 
 	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
-		super();
-		localDirectory = resourceCenterDirectory;
+		super(resourceCenterDirectory);
 		newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
 	}
 
@@ -71,6 +64,11 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		logger.info("Instanciate TEST ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
 		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
 		return localResourceCenterImplementation;
+	}
+
+	@Override
+	public final void initialize(TechnologyAdapterService technologyAdapterService) {
+		super.initialize(technologyAdapterService);
 	}
 
 	private static void copyViewPoints(File resourceCenterDirectory, CopyStrategy copyStrategy) {
@@ -105,32 +103,35 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Deprecated
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
-		if (baseOntologyLibrary == null) {
-			File baseOntologyFolder = new File(localDirectory, "Ontologies");
-			logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
-			baseOntologyLibrary = new OntologyLibrary(this, null);
+		return baseOntologyLibrary;
+	}
+
+	@Deprecated
+	private OntologyLibrary retrieveBaseOntologyLibrary(TechnologyAdapterService technologyAdapterService) {
+		File baseOntologyFolder = new File(getRootDirectory(), "Ontologies");
+		logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
+		baseOntologyLibrary = new OntologyLibrary(this, null);
+		findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+		// baseOntologyLibrary.init();
+
+		// Bug fix: compatibility with old versions:
+		// If some of those ontologies were not found, try to copy default ontologies
+		if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
+				|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
+			copyOntologies(getRootDirectory(), CopyStrategy.REPLACE);
 			findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
-			// baseOntologyLibrary.init();
-
-			// Bug fix: compatibility with old versions:
-			// If some of those ontologies were not found, try to copy default ontologies
-			if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
-					|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
-				copyOntologies(localDirectory, CopyStrategy.REPLACE);
-				findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
-			}
-
-			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
-			// baseOntologyLibrary.debug();
-			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
-			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
-			baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-			baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
-			baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
-			baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();
-			baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
-			// baseOntologyLibrary.debug();
 		}
+
+		logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
+		// baseOntologyLibrary.debug();
+		baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
+		baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
+		baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
+		baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
+		baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
+		baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();
+		baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
+
 		return baseOntologyLibrary;
 
 	}
@@ -140,30 +141,18 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	public ViewPointLibrary retrieveViewPointLibrary() {
 		if (viewPointLibrary == null) {
 			viewPointLibrary = new ViewPointLibrary(this, retrieveBaseOntologyLibrary());
-			findViewPoints(new File(localDirectory, "ViewPoints"), viewPointLibrary.getRootFolder());
+			findViewPoints(new File(getRootDirectory(), "ViewPoints"), viewPointLibrary.getRootFolder());
 		}
 		return viewPointLibrary;
 	}
 
-	/*private static String findOntologyURI(File file, String baseUri) {
-		String uri = null;
-		if (file.getName().endsWith(".owl")) {
-			uri = OWLOntology.findOntologyURI(file);
-		} else if (file.getName().endsWith(".xsd")) {
-			uri = XSOntology.findOntologyURI(file);
-		}
-		if (uri == null) {
-			uri = baseUri + "/" + file.getName();
-		}
-		return uri;
-	}*/
-
-	private void findMetaModels(File dir, String baseUri, RepositoryFolder folder) {
+	@Deprecated
+	private void findMetaModels(File dir, String baseUri, RepositoryFolder folder, TechnologyAdapterService technologyAdapterService) {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		for (File f : dir.listFiles()) {
-			for (TechnologyAdapter<?, ?, ?> technologyAdapter : TechnologyAdapter.getLoadedAdapters()) {
+			for (TechnologyAdapter<?, ?, ?> technologyAdapter : technologyAdapterService.getTechnologyAdapters()) {
 				if (technologyAdapter.isValidMetaModelFile(f)) {
 					baseOntologyLibrary.importMetaModel(technologyAdapter.loadMetaModel(f, baseOntologyLibrary));
 				}
@@ -304,41 +293,6 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Override
 	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
 		// TODO Auto-generated method stub
-	}
-
-	private HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>>();
-	private HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>>();
-
-	/**
-	 * Retrieve model repository for a given {@link TechnologyAdapter}
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	@Override
-	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> ModelRepository<R, M, MM, TA> getModelRepository(
-			TA technologyAdapter) {
-		ModelRepository<R, M, MM, TA> returned = (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
-		if (returned == null) {
-			returned = (ModelRepository<R, M, MM, TA>) technologyAdapter.createModelRepository(this);
-		}
-		return returned;
-	}
-
-	/**
-	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	@Override
-	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
-			TA technologyAdapter) {
-		MetaModelRepository<R, M, MM, TA> returned = (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
-		if (returned == null) {
-			returned = (MetaModelRepository<R, M, MM, TA>) technologyAdapter.createMetaModelRepository(this);
-		}
-		return returned;
 	}
 
 }

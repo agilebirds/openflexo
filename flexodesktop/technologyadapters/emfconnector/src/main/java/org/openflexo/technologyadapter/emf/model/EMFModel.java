@@ -22,13 +22,13 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.localization.Language;
-import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFModel, EMFMetaModel>, FlexoOntology {
 
 	protected static final Logger logger = Logger.getLogger(EMFModel.class.getPackage().getName());
 
-	private FlexoEMFModelResource modelResource;
+	private EMFModelResource modelResource;
 	private FlexoProject project;
 
 	public EMFModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
@@ -42,14 +42,14 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	}
 
 	@Override
-	public FlexoEMFModelResource getFlexoResource() {
+	public EMFModelResource getFlexoResource() {
 		return modelResource;
 	}
 
 	@Override
 	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof FlexoEMFModelResource) {
-			this.modelResource = (FlexoEMFModelResource) resource;
+		if (resource instanceof EMFModelResource) {
+			this.modelResource = (EMFModelResource) resource;
 		}
 	}
 

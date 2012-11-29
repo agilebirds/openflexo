@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -13,12 +12,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -37,14 +30,13 @@ import org.openflexo.model.factory.XMLDeserializer;
 import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter implements FlexoResourceCenter {
+public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	private ModelFactory modelFactory;
-	private File userResourceCenterStorageFile;
 	private Storage storage;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		super(userResourceCenterStorageFile);
 		this.modelFactory = new ModelFactory();
 		try {
 			modelFactory.importClass(Storage.class);
@@ -78,11 +70,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	}
 
 	public File getUserResourceCenterStorageFile() {
-		return userResourceCenterStorageFile;
-	}
-
-	public void setUserResourceCenterStorageFile(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		return getRootDirectory();
 	}
 
 	@ModelEntity
@@ -171,7 +159,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	@Override
 	public void update() throws IOException {
-		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
+		FileInputStream fis = new FileInputStream(getRootDirectory());
 		try {
 			try {
 				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
@@ -211,42 +199,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	@Deprecated
 	@Override
 	public File getNewCalcSandboxDirectory() {
-		return new File(userResourceCenterStorageFile.getParentFile(), "ViewPoints");
-	}
-
-	private HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>>();
-	private HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>>();
-
-	/**
-	 * Retrieve model repository for a given {@link TechnologyAdapter}
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	@Override
-	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> ModelRepository<R, M, MM, TA> getModelRepository(
-			TA technologyAdapter) {
-		ModelRepository<R, M, MM, TA> returned = (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
-		if (returned == null) {
-			returned = (ModelRepository<R, M, MM, TA>) technologyAdapter.createModelRepository(this);
-		}
-		return returned;
-	}
-
-	/**
-	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	@Override
-	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
-			TA technologyAdapter) {
-		MetaModelRepository<R, M, MM, TA> returned = (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
-		if (returned == null) {
-			returned = (MetaModelRepository<R, M, MM, TA>) technologyAdapter.createMetaModelRepository(this);
-		}
-		return returned;
+		return new File(getRootDirectory().getParentFile(), "ViewPoints");
 	}
 
 }

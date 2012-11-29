@@ -22,6 +22,7 @@ package org.openflexo.foundation.technologyadapter;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceRepository;
 
 /**
@@ -39,9 +40,11 @@ public abstract class ModelRepository<R extends FlexoResource<? extends M>, M ex
 	private static final Logger logger = Logger.getLogger(ModelRepository.class.getPackage().getName());
 
 	private TA technologyAdapter;
+	private FlexoResourceCenter resourceCenter;
 
-	public ModelRepository(TA technologyAdapter) {
+	public ModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
 		this.technologyAdapter = technologyAdapter;
+		this.resourceCenter = resourceCenter;
 	}
 
 	public TA getTechnologyAdapter() {

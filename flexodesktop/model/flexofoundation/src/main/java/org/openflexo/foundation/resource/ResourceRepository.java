@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.resource;
 
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataFlexoObserver;
@@ -45,7 +46,7 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	/**
 	 * Hashtable where resources are stored, used key is the URI of the resource
 	 */
-	protected Hashtable<String, R> resources;
+	protected HashMap<String, R> resources;
 
 	private RepositoryFolder<R> rootFolder;
 
@@ -63,10 +64,10 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	/**
 	 * Register supplied resource in default root folder
 	 * 
-	 * @param resource
+	 * @param flexoResource
 	 */
-	public void registerResource(R resource) {
-		registerResource(resource, getRootFolder());
+	public void registerResource(R flexoResource) {
+		registerResource(flexoResource, getRootFolder());
 	}
 
 	/**
@@ -100,6 +101,15 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	 */
 	public RepositoryFolder<R> createNewFolder(String folderName) {
 		return createNewFolder(folderName, getRootFolder());
+	}
+
+	/**
+	 * Return a collection storing all resources contained in this repository
+	 * 
+	 * @return
+	 */
+	public Collection<R> getAllResources() {
+		return resources.values();
 	}
 
 	@Override
