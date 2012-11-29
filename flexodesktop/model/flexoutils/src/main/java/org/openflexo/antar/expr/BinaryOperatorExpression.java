@@ -36,15 +36,6 @@ public class BinaryOperatorExpression extends Expression {
 
 	@Override
 	public int getDepth() {
-		/* GPO: Removal of all System.exit()
-		 * if (leftArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}
-		if (rightArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}*/
 		return Math.max(leftArgument.getDepth(), rightArgument.getDepth()) + 1;
 	}
 
