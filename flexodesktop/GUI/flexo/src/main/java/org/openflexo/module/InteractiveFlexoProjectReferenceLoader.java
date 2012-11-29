@@ -1,5 +1,6 @@
 package org.openflexo.module;
 
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -55,6 +56,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		public static final String REFERENCE = "reference";
 		public static final String SELECTED_FILE = "selectedFile";
 		public static final String MESSAGE = "message";
+		public static final String BG_COLOR = "backgroundColor";
 
 		@Initializer
 		public ProjectReferenceFileAssociation init(@Parameter(REFERENCE) FlexoProjectReference reference,
@@ -77,6 +79,12 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 
 		@Setter(MESSAGE)
 		public void setMessage(String message);
+
+		@Getter(BG_COLOR)
+		public Color getBackgroundColor();
+
+		@Setter(BG_COLOR)
+		public void setBackgroundColor(Color color);
 	}
 
 	public static class ProjectReferenceLoaderData implements HasPropertyChangeSupport {
@@ -103,6 +111,11 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			getProjectChooserComponent().setSelectedFile(association.getSelectedFile());
 			if (getProjectChooserComponent().showOpenDialog() == JFileChooser.APPROVE_OPTION) {
 				association.setSelectedFile(getProjectChooserComponent().getSelectedFile());
+				if (association.getSelectedFile() != null) {
+					association.setBackgroundColor(null);
+				} else {
+					association.setBackgroundColor(Color.RED);
+				}
 				boolean isValid = isValid();
 				getPropertyChangeSupport().firePropertyChange("isValid", !isValid, isValid);
 			}
@@ -209,6 +222,8 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 												+ FlexoLocalization.localizedForKey("was_found") + "\n"
 												+ FlexoLocalization.localizedForKey("but") + " " + reference + " "
 												+ FlexoLocalization.localizedForKey("was_expected"));
+										a.setBackgroundColor(Color.RED);
+										a.setSelectedFile(null);
 										done = false;
 										break;
 									}
