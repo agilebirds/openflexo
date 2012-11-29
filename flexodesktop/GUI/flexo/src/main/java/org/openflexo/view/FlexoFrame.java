@@ -180,9 +180,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 			for (Window w : f.getOwnedWindows()) {
 				if (w.isVisible()) {
 					// a bit clumsy if two dialogs are visible but eventually the frame should get disposed.
-					w.addComponentListener(new ComponentAdapter() {
+					w.addWindowListener(new WindowAdapter() {
 						@Override
-						public void componentHidden(ComponentEvent e) {
+						public void windowClosed(WindowEvent e) {
 							disposeDefaultFrameWhenPossible();
 						}
 					});
@@ -193,7 +193,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				f.setVisible(false);
 				f.dispose();
 				defaultFrame = null;
-				System.err.println("Default frame disposed");
 			}
 		}
 	}
