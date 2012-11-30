@@ -92,6 +92,9 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new CreateDataPropertyInitializer(this).init();
 		new DeleteOntologyObjectsInitializer(this).init();
 		new AddAnnotationStatementInitializer(this).init();
+
+		// Sepel only, remove this later
+		new GenerateSepelCleanedUpProjectInitializer(this).init();
 	}
 
 }
