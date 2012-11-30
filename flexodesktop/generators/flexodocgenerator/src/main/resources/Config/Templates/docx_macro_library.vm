@@ -1675,7 +1675,7 @@ name of the template corresponding to the specific toc_entry.
         
     #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
     #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
-    
+    #if($imageWidth > 0 && $imageHeight > 0)
     <w:p>
         <w:pPr>
             <w:jc w:val="center"/>
@@ -1720,6 +1720,9 @@ name of the template corresponding to the specific toc_entry.
             </w:drawing>
         </w:r>
     </w:p>
+    #else
+        <!-- #escape($_object.toString()) has no screenshot -->
+    #end
 <!-- Exiting macro renderScreenshotForObject -->
 #end
 #macro(renderImportedImageFile $importedImagePath)
