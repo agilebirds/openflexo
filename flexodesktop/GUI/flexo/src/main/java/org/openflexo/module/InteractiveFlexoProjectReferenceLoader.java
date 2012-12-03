@@ -159,7 +159,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
 		try {
 			boolean done = false;
-			ModelFactory factory = new ModelFactory().importClass(ProjectReferenceFileAssociation.class);
+			ModelFactory factory = new ModelFactory(ProjectReferenceFileAssociation.class);
 			List<ProjectReferenceFileAssociation> associations = new ArrayList<InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation>();
 			for (FlexoProjectReference ref : references) {
 				FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()

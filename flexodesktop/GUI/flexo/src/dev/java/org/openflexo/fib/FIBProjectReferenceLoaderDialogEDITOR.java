@@ -28,6 +28,7 @@ import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelContext;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation;
@@ -56,8 +57,8 @@ public class FIBProjectReferenceLoaderDialogEDITOR extends FIBAbstractEditor {
 	public Object[] getData() {
 		List<ProjectReferenceFileAssociation> associations = new ArrayList<InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation>();
 		try {
-			ModelFactory factory = new ModelFactory().importClass(ProjectReferenceFileAssociation.class);
-			factory.importClass(FlexoProjectReferenceImpl.class);
+			ModelContext context = new ModelContext(FlexoProjectReferenceImpl.class, ProjectReferenceFileAssociation.class);
+			ModelFactory factory = new ModelFactory(context);
 			for (int i = 0; i < 5; i++) {
 				FlexoProjectReferenceImpl ref = factory.newInstance(FlexoProjectReferenceImpl.class);
 				ref.init(null);

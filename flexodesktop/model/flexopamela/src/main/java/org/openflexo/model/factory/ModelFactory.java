@@ -497,4 +497,14 @@ public class ModelFactory {
 		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
 		return deserializer.deserializeDocument(is);
 	}
+
+	public Object deserialize(String input) throws IOException, JDOMException, InvalidXMLDataException, ModelDefinitionException {
+		return deserialize(input, DeserializationPolicy.PERMISSIVE);
+	}
+
+	public Object deserialize(String input, DeserializationPolicy policy) throws IOException, JDOMException, InvalidXMLDataException,
+			ModelDefinitionException {
+		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
+		return deserializer.deserializeDocument(input);
+	}
 }

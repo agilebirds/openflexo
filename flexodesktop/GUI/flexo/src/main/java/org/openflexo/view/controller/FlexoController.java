@@ -141,6 +141,7 @@ import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
@@ -1575,12 +1576,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public PPMWebServiceClient getWSClient(boolean forceDialog) {
-		ModelFactory factory = new ModelFactory();
+		ModelFactory factory;
 		try {
-			factory.importClass(PPMWSClientParameter.class);
-		} catch (org.openflexo.model.exceptions.ModelDefinitionException e) {
-			// It sucks but it seems that a developer left a crappy thing.
+			factory = new ModelFactory(PPMWSClientParameter.class);
+		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
+			throw new Error("Improperly configured PPMWSClientParameter. ", e);
 		}
 		FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
 				.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());

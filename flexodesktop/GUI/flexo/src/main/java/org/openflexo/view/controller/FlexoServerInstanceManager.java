@@ -13,7 +13,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.XMLDeserializer;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileUtils;
 
@@ -26,11 +25,9 @@ public class FlexoServerInstanceManager {
 	private ModelFactory factory;
 
 	private FlexoServerInstanceManager() {
-		factory = new ModelFactory();
 		try {
-			factory.importClass(FlexoServerAddressBook.class);
+			factory = new ModelFactory(FlexoServerAddressBook.class);
 		} catch (ModelDefinitionException e) {
-			// OK this sucks.
 			e.printStackTrace();
 		}
 	}
@@ -57,11 +54,12 @@ public class FlexoServerInstanceManager {
 	}
 
 	public static FlexoServerAddressBook getDefaultAddressBook() {
-		ModelFactory factory = new ModelFactory();
+		ModelFactory factory;
 		try {
-			factory.importClass(FlexoServerAddressBook.class);
+			factory = new ModelFactory(FlexoServerAddressBook.class);
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
+			throw new Error("FlexoServerAddressBook model is not properly configured", e);
 		}
 		FlexoServerAddressBook addressBook = factory.newInstance(FlexoServerAddressBook.class);
 		FlexoServerInstance prod = factory.newInstance(FlexoServerInstance.class);
@@ -99,7 +97,7 @@ public class FlexoServerInstanceManager {
 			String fileContent = FileUtils.createOrUpdateFileFromURL(url, serverInstanceFile);
 			if (fileContent != null) {
 				try {
-					addressBook = (FlexoServerAddressBook) new XMLDeserializer(factory).deserializeDocument(fileContent);
+					addressBook = (FlexoServerAddressBook) factory.deserialize(fileContent);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

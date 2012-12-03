@@ -98,7 +98,7 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 		this.editors = new LinkedHashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
-		modelFactory = new ModelFactory().importClass(FlexoProjectReference.class);
+		modelFactory = new ModelFactory(FlexoProjectReference.class);
 	}
 
 	@Override
