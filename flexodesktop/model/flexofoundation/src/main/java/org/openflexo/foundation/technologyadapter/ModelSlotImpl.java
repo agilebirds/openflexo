@@ -58,7 +58,7 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public final M createEmptyModel(View view, MM metaModel) {
-		return getTechnologyAdapter().createNewModel(view.getProject(), metaModel);
+		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModel);
 	};
 
 	/**

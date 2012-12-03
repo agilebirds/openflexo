@@ -27,7 +27,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	public static TechnologyAdapterService getNewInstance() {
 		try {
-			ModelFactory factory = new ModelFactory().importClass(DefaultTechnologyAdapterService.class);
+			ModelFactory factory = new ModelFactory().importClass(TechnologyAdapterService.class);
 			factory.setImplementingClassForInterface(DefaultTechnologyAdapterService.class, TechnologyAdapterService.class);
 			return factory.newInstance(TechnologyAdapterService.class);
 		} catch (ModelDefinitionException e) {
@@ -53,6 +53,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 			while (iterator.hasNext()) {
 				TechnologyAdapter technologyAdapter = iterator.next();
 				technologyAdapter.setTechnologyAdapterService(this);
+				addToTechnologyAdapters(technologyAdapter);
 
 				logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
 

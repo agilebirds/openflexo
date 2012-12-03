@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -45,6 +44,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
@@ -95,7 +95,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".owl");
 	}
@@ -107,7 +107,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile) {
+	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
 		return OWLOntology.findOntologyURI(aMetaModelFile);
 	}
 
@@ -131,12 +131,12 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 * @return
 	 */
 	@Override
-	public OWLMetaModel loadMetaModel(File aMetaModelFile, OntologyLibrary library) {
-		return new OWLMetaModel(retrieveMetaModelURI(aMetaModelFile), aMetaModelFile, library);
+	public OWLMetaModel loadMetaModel(File aMetaModelFile, OWLOntologyLibrary library) {
+		return new OWLMetaModel(retrieveMetaModelURI(aMetaModelFile, prout), aMetaModelFile, library);
 	}
 
 	@Override
-	public OWLOntology createNewModel(FlexoProject project, OWLOntology metaModel) {
+	public OWLOntology createEmptyModel(FlexoProject project, OWLOntology metaModel) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewOWLModel(), project=" + project);
 		}
@@ -190,12 +190,12 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	@Override
 	public OWLModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
-		return null;
+		return new OWLModelRepository(this, resourceCenter);
 	}
 
 	@Override
 	public OWLMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
-		return null;
+		return new OWLMetaModelRepository(this, resourceCenter);
 	}
 
 }

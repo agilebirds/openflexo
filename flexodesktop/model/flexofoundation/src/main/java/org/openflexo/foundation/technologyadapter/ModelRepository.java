@@ -50,4 +50,13 @@ public abstract class ModelRepository<R extends FlexoResource<? extends M>, M ex
 	public TA getTechnologyAdapter() {
 		return technologyAdapter;
 	}
+
+	public FlexoResourceCenter getResourceCenter() {
+		return resourceCenter;
+	}
+
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		this.resourceCenter = resourceCenter;
+	}
+
 }

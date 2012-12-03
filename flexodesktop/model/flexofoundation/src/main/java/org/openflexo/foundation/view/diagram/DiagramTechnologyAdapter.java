@@ -96,7 +96,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
 		return false;
 	}
 
@@ -107,7 +107,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile) {
+	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
 		return DiagramMetaModel.INSTANCE.getURI();
 	}
 
@@ -143,7 +143,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public View createNewModel(FlexoProject project, DiagramMetaModel metaModel) {
+	public View createEmptyModel(FlexoProject project, DiagramMetaModel metaModel) {
 		logger.info("Add shema");
 		logger.warning("Not implemented yet");
 		return null;

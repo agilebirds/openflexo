@@ -58,7 +58,18 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	 * Creates a new {@link ResourceRepository}
 	 */
 	public ResourceRepository() {
+		resources = new HashMap<String, R>();
 		rootFolder = new RepositoryFolder<R>("root", null, this);
+	}
+
+	/**
+	 * Return resource with the supplied URI, if this resource was already declared
+	 * 
+	 * @param resourceURI
+	 * @return
+	 */
+	public R getResource(String resourceURI) {
+		return resources.get(resourceURI);
 	}
 
 	/**

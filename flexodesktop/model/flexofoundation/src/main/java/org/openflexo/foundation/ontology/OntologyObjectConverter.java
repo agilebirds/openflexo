@@ -2,6 +2,7 @@ package org.openflexo.foundation.ontology;
 
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
+@Deprecated
 public class OntologyObjectConverter extends Converter<OntologyObject> {
 	private FlexoOntology ontology;
 

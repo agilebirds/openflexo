@@ -83,7 +83,7 @@ public abstract class OWLStatement extends AbstractOWLObject implements Inspecta
 		return _statement;
 	}
 
-	/*public OntologyLibrary getOntologyLibrary()
+	/*public OWLOntologyLibrary getOntologyLibrary()
 	{
 		return getProject().getOntologyLibrary();
 	}*/

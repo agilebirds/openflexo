@@ -59,7 +59,9 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public void initialize(TechnologyAdapterService technologyAdapterService) {
+		logger.info("Initializing " + technologyAdapterService);
 		for (TechnologyAdapter<?, ?, ?> adapter : technologyAdapterService.getTechnologyAdapters()) {
+			logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
 			initializeForTechnology(adapter);
 		}
 	}
@@ -77,13 +79,16 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>, TA extends TechnologyAdapter<M, MM, MS>> void exploreDirectoryLookingForMetaModels(
 			File directory, RepositoryFolder folder, TA technologyAdapter, MetaModelRepository<MMR, M, MM, TA> mmRepository) {
-		for (File f : directory.listFiles()) {
-			if (technologyAdapter.isValidMetaModelFile(f)) {
-				mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f), folder);
-			}
-			if (f.isDirectory() && !f.getName().equals("CVS")) {
-				RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-				exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, mmRepository);
+		System.out.println("Exploring " + directory);
+		if (directory.exists() && directory.isDirectory()) {
+			for (File f : directory.listFiles()) {
+				if (technologyAdapter.isValidMetaModelFile(f, prout)) {
+					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f, prout), folder);
+				}
+				if (f.isDirectory() && !f.getName().equals("CVS")) {
+					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
+					exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, mmRepository);
+				}
 			}
 		}
 	}
@@ -91,18 +96,19 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>, TA extends TechnologyAdapter<M, MM, MS>> void exploreDirectoryLookingForModels(
 			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM, ?> technologyAdapter,
 			MetaModelRepository<MMR, ?, ?, ?> mmRepository, ModelRepository<MR, ?, ?, ?> modelRepository) {
-		for (File f : directory.listFiles()) {
-			for (MMR metaModelResource : mmRepository.getAllResources()) {
-				if (technologyAdapter.isValidModelFile(f, metaModelResource)) {
-					modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f), folder);
+		if (directory.exists() && directory.isDirectory()) {
+			for (File f : directory.listFiles()) {
+				for (MMR metaModelResource : mmRepository.getAllResources()) {
+					if (technologyAdapter.isValidModelFile(f, metaModelResource, prout)) {
+						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f, prout), folder);
+					}
+				}
+				if (f.isDirectory() && !f.getName().equals("CVS")) {
+					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
+					exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, mmRepository, modelRepository);
 				}
 			}
-			if (f.isDirectory() && !f.getName().equals("CVS")) {
-				RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-				exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, mmRepository, modelRepository);
-			}
 		}
-
 	}
 
 	/**

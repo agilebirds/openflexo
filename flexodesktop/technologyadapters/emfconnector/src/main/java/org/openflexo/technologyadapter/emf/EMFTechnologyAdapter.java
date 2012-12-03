@@ -89,7 +89,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".ecore");
 	}
@@ -101,7 +101,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile) {
+	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO implement this
 		return null;
 	}
@@ -114,7 +114,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, FlexoResourceCenter rc) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		// TODO implement this
 		return false;
@@ -127,19 +127,19 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile) {
+	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO to be implemented
 		return null;
 	}
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
-	 * 
 	 * @param aMetaModelFile
+	 * 
 	 * @return
 	 */
 	@Override
-	public EMFModelResource retrieveModelResource(File aModelFile) {
+	public EMFModelResource retrieveModelResource(File aModelFile, FlexoResourceCenter rc) {
 		// TODO to be implemented
 		return null;
 	}
@@ -152,7 +152,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public EMFModel createNewModel(FlexoProject project, EMFMetaModel metaModel) {
+	public EMFModel createEmptyModel(FlexoProject project, EMFMetaModel metaModel) {
 		// TODO implement this
 		// See code in XSD/XML connector
 		return null;
