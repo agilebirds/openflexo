@@ -14,7 +14,7 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 
 	public static FlexoResourceCenterService getNewInstance() {
 		try {
-			ModelFactory factory = new ModelFactory().importClass(FlexoResourceCenterService.class);
+			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
 			factory.setImplementingClassForInterface(DefaultResourceCenterService.class, FlexoResourceCenterService.class);
 			return factory.newInstance(FlexoResourceCenterService.class);
 		} catch (ModelDefinitionException e) {

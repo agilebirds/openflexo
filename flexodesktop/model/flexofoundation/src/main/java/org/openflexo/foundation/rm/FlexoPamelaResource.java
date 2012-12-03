@@ -12,13 +12,12 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelContext;
+import org.openflexo.model.factory.ModelContextLibrary;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.XMLDeserializer;
-import org.openflexo.model.factory.XMLSerializer;
-import org.openflexo.model.xml.DefaultStringEncoder;
 import org.openflexo.model.xml.InvalidDataException;
-import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {
@@ -32,7 +31,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		}
 	}
 
-	public static final class ConverterAdapter<T> extends DefaultStringEncoder.Converter<T> {
+	public static final class ConverterAdapter<T> extends ModelContext.Converter<T> {
 
 		private final Converter<T> converter;
 
@@ -59,6 +58,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 	private String name;
 	private ResourceType resourceType;
 	private Class<SRD> resourceDataClass;
+
 	private ModelFactory modelFactory;
 
 	public FlexoPamelaResource(FlexoProject project, String name, ResourceType resourceType, Class<SRD> resourceDataClass,
@@ -67,14 +67,13 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		this.name = name;
 		this.useProjectName = name == null;
 		this.resourceType = resourceType;
-		this.resourceDataClass = resourceDataClass;
 		if (project.getProjectName().equals(name)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("You are creating a PAMELA resource with the exact same name as the project but it is not synched with it.");
 			}
 		}
+		setResourceDataClass(resourceDataClass);
 		setResourceFile(file);
-		this.modelFactory.importClass(resourceDataClass);
 		this._resourceData = modelFactory.newInstance(resourceDataClass);
 		this._resourceData.setFlexoResource(this);
 	}
@@ -84,9 +83,8 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		this(project);
 		this.useProjectName = true;
 		this.resourceType = resourceType;
-		this.resourceDataClass = resourceDataClass;
+		setResourceDataClass(resourceDataClass);
 		setResourceFile(file);
-		this.modelFactory.importClass(resourceDataClass);
 		this._resourceData = modelFactory.newInstance(resourceDataClass);
 		this._resourceData.setFlexoResource(this);
 	}
@@ -98,10 +96,6 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 
 	private FlexoPamelaResource(FlexoProject aProject) {
 		super(aProject);
-		this.modelFactory = new ModelFactory();
-		for (Converter<?> c : project.getStringEncoder().getConverters()) {
-			modelFactory.addConverter(new ConverterAdapter(c));
-		}
 	}
 
 	public ModelFactory getModelFactory() {
@@ -115,7 +109,10 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 	public void setResourceDataClass(Class<SRD> resourceDataClass) throws ModelDefinitionException {
 		this.resourceDataClass = resourceDataClass;
 		if (resourceDataClass != null) {
-			modelFactory.importClass(resourceDataClass);
+			this.modelFactory = new ModelFactory(ModelContextLibrary.getModelContext(resourceDataClass));
+			for (Converter<?> c : project.getStringEncoder().getConverters()) {
+				modelFactory.addConverter(new ConverterAdapter(c));
+			}
 		}
 	}
 
@@ -157,12 +154,11 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 
 	@Override
 	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
-		XMLSerializer serializer = new XMLSerializer(modelFactory.getStringEncoder());
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(getFile());
-			serializer.serializeDocument(getResourceData(), out);
-		} catch (FileNotFoundException e) {
+			modelFactory.serialize(getResourceData(), out);
+		} catch (IOException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} finally {
@@ -181,10 +177,9 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		if (!isLoadable()) {
 			return null;
 		}
-		XMLDeserializer deserializer = new XMLDeserializer(modelFactory);
 		FileInputStream fis = new FileInputStream(getFile());
 		try {
-			return (SRD) deserializer.deserializeDocument(fis);
+			return (SRD) modelFactory.deserialize(fis);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new PAMELALoadResourceException(this, "I/O exception: " + e.getMessage());

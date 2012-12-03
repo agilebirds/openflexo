@@ -2,14 +2,11 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
@@ -25,12 +22,11 @@ import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.XMLDeserializer;
-import org.openflexo.model.factory.XMLSerializer;
-import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.IProgress;
 
 public class UserResourceCenter implements FlexoResourceCenter {
@@ -41,17 +37,17 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
 		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
-		this.modelFactory = new ModelFactory();
 		try {
-			modelFactory.importClass(Storage.class);
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
+			this.modelFactory = new ModelFactory(Storage.class);
+		} catch (ModelDefinitionException e1) {
+			// Hum this sucks...
+			e1.printStackTrace();
 		}
 		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile()) {
 			FileInputStream fis = null;
 			try {
 				fis = new FileInputStream(userResourceCenterStorageFile);
-				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
+				storage = (Storage) modelFactory.deserialize(fis);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -107,7 +103,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		public static final String FILE = "file";
 
 		@Getter(FILE)
-		@XmlAttribute
+		@XMLAttribute
 		public File getFile();
 
 		@Setter(FILE)
@@ -131,7 +127,8 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			}
 			if (resource.getURI().equals(uri)) {
 				if (resource.getVersion() == null && version == null || resource.getVersion() != null
-						&& resource.getVersion().equals(version) && type.isAssignableFrom(resource.getResourceDataClass())) {
+						&& resource.getVersion().equals(version)
+						&& (type == null || type.isAssignableFrom(resource.getResourceDataClass()))) {
 					return (FlexoResource<T>) resource;
 				}
 			}
@@ -170,14 +167,13 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		saveStorage();
 	}
 
-	private void saveStorage() throws FileNotFoundException {
+	private void saveStorage() throws IOException {
 		if (!userResourceCenterStorageFile.exists()) {
 			userResourceCenterStorageFile.getParentFile().mkdirs();
 		}
 		FileOutputStream fos = new FileOutputStream(userResourceCenterStorageFile);
 		try {
-			XMLSerializer serializer = new XMLSerializer();
-			serializer.serializeDocument(storage, fos);
+			modelFactory.serialize(storage, fos);
 		} finally {
 			IOUtils.closeQuietly(fos);
 		}
@@ -188,7 +184,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
 		try {
 			try {
-				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
+				storage = (Storage) modelFactory.deserialize(fis);
 			} catch (JDOMException e) {
 				e.printStackTrace();
 				throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
@@ -205,7 +201,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		checkKnownResources();
 	}
 
-	private void checkKnownResources() throws FileNotFoundException {
+	private void checkKnownResources() throws IOException {
 		if (storage != null) {
 			boolean changed = false;
 			for (FlexoResource<?> resource : storage.getResources()) {

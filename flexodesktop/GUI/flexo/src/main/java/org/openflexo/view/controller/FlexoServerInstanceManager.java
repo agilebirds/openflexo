@@ -10,10 +10,10 @@ import java.util.List;
 import org.jdom2.JDOMException;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.factory.XMLDeserializer;
-import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileUtils;
 

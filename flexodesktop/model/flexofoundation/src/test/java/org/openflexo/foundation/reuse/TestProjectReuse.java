@@ -45,8 +45,7 @@ public class TestProjectReuse extends FlexoTestCase {
 	}
 
 	public void testProjectDataClassValidity() throws ModelDefinitionException {
-		ModelFactory factory = new ModelFactory();
-		factory.importClass(ProjectData.class);
+		ModelFactory factory = new ModelFactory(ProjectData.class);
 	}
 
 	@Override
