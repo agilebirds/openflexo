@@ -62,42 +62,63 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * Return flag indicating if supplied file represents a valid XSD schema
 	 * 
 	 * @param aMetaModelFile
+	 * @param rc
+	 * 
 	 * @return
 	 */
-	public abstract boolean isValidMetaModelFile(File aMetaModelFile);
+	public abstract boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc);
 
 	/**
-	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid XSD meta model
+	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid meta model
 	 * 
 	 * @param aMetaModelFile
+	 * @param rc
+	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveMetaModelURI(File aMetaModelFile);
+	public abstract String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc);
 
 	/**
 	 * Instantiate new meta model resource stored in supplied meta model file
 	 * 
 	 * @param aMetaModelFile
+	 * @param rc
+	 *            TODO
 	 * @return
 	 */
-	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile);
+	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile, FlexoResourceCenter rc);
 
 	/**
-	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
+	 * Return flag indicating if supplied file represents a valid model conform to supplied meta-model
 	 * 
 	 * @param aModelFile
 	 * @param metaModelResource
+	 * @param rc
+	 *            TODO
 	 * @return
 	 */
-	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource);
+	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource, FlexoResourceCenter rc);
+
+	/**
+	 * Retrieve and return URI for supplied model file
+	 * 
+	 * @param aModelFile
+	 * @param rc
+	 *            TODO
+	 * @return
+	 */
+	public abstract String retrieveModelURI(File aModelFile, FlexoResourceCenter rc);
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
 	 * 
+	 * @param rc
+	 *            TODO
 	 * @param aMetaModelFile
+	 * 
 	 * @return
 	 */
-	public abstract FlexoResource<M> retrieveModelResource(File aModelFile);
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, FlexoResourceCenter rc);
 
 	/**
 	 * Creates new model conform to the supplied meta model
@@ -106,7 +127,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param metaModel
 	 * @return
 	 */
-	public abstract M createNewModel(FlexoProject project, MM metaModel);
+	public abstract M createEmptyModel(FlexoProject project, MM metaModel);
 
 	/**
 	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}

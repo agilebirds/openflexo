@@ -50,4 +50,13 @@ public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>,
 	public TA getTechnologyAdapter() {
 		return technologyAdapter;
 	}
+
+	public FlexoResourceCenter getResourceCenter() {
+		return resourceCenter;
+	}
+
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		this.resourceCenter = resourceCenter;
+	}
+
 }

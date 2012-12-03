@@ -118,7 +118,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	private final String ontologyURI;
 	protected OntModel ontModel;
 	private final File alternativeLocalFile;
-	private final OntologyLibrary _library;
+	private final OWLOntologyLibrary _library;
 	protected boolean isLoaded = false;
 	protected boolean isLoading = false;
 	private boolean readOnly = true;
@@ -142,7 +142,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	private OWLClass THING_CONCEPT;
 
-	public OWLOntology(String anURI, File owlFile, OntologyLibrary library) {
+	public OWLOntology(String anURI, File owlFile, OWLOntologyLibrary library) {
 		super(null, null);
 
 		logger.info("Register ontology " + anURI + " file: " + owlFile);
@@ -415,12 +415,12 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 
 		/*if (importedOntologies.size() == 0) {
-			if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+			if (getURI().equals(OWLOntologyLibrary.OWL_ONTOLOGY_URI)) {
 				importedOntologies.add(getOntologyLibrary().getRDFOntology());
 				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
-			} else if (getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)) {
+			} else if (getURI().equals(OWLOntologyLibrary.RDF_ONTOLOGY_URI)) {
 				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
-			} else if (!getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+			} else if (!getURI().equals(OWLOntologyLibrary.RDFS_ONTOLOGY_URI)) {
 				importedOntologies.add(getOntologyLibrary().getOWLOntology());
 			}
 		}*/
@@ -611,7 +611,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 			}
 		}
 
-		/*if (getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+		/*if (getURI().equals(OWLOntologyLibrary.RDFS_ONTOLOGY_URI)) {
 			for (StmtIterator i = getOntModel().listStatements(); i.hasNext();) {
 				Statement s = i.nextStatement();
 				System.out.println("statement = " + s);
@@ -1527,7 +1527,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	}
 
 	@Override
-	public OntologyLibrary getOntologyLibrary() {
+	public OWLOntologyLibrary getOntologyLibrary() {
 		return _library;
 	}
 
@@ -1839,7 +1839,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	/**
 	 * Retrieve an ontology object from its URI, in the context of current ontology.<br>
 	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * ontologies. If you want to do this, try using method in OWLOntologyLibrary.
 	 * 
 	 * @param objectURI
 	 * @return
@@ -1969,7 +1969,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	/**
 	 * Retrieve a data property from its URI, in the context of current ontology.<br>
 	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * ontologies. If you want to do this, try using method in OWLOntologyLibrary.
 	 * 
 	 * @param objectURI
 	 * @return

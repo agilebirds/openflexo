@@ -153,7 +153,7 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		}
 		for (File f : dir.listFiles()) {
 			for (TechnologyAdapter<?, ?, ?> technologyAdapter : technologyAdapterService.getTechnologyAdapters()) {
-				if (technologyAdapter.isValidMetaModelFile(f)) {
+				if (technologyAdapter.isValidMetaModelFile(f, prout)) {
 					baseOntologyLibrary.importMetaModel(technologyAdapter.loadMetaModel(f, baseOntologyLibrary));
 				}
 			}

@@ -82,8 +82,8 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		System.out.println("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
-				if (technologyAdapter.isValidMetaModelFile(f)) {
-					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f), folder);
+				if (technologyAdapter.isValidMetaModelFile(f, this)) {
+					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f, this), folder);
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
@@ -99,8 +99,8 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
-					if (technologyAdapter.isValidModelFile(f, metaModelResource)) {
-						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f), folder);
+					if (technologyAdapter.isValidModelFile(f, metaModelResource, this)) {
+						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f, this), folder);
 					}
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {

@@ -93,7 +93,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".xsd");
 	}
@@ -105,7 +105,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile) {
+	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
 		return XSOntology.findOntologyURI(aMetaModelFile);
 	}
 
@@ -117,7 +117,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource, FlexoResourceCenter rc) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		return aModelFile.getName().endsWith(".xml");
 	}
@@ -129,19 +129,19 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public XSDMetaModelResource retrieveMetaModelResource(File aMetaModelFile) {
+	public XSDMetaModelResource retrieveMetaModelResource(File aMetaModelFile, FlexoResourceCenter rc) {
 		// TODO to be implemented
 		return null;
 	}
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
-	 * 
 	 * @param aMetaModelFile
+	 * 
 	 * @return
 	 */
 	@Override
-	public XMLModelResource retrieveModelResource(File aModelFile) {
+	public XMLModelResource retrieveModelResource(File aModelFile, FlexoResourceCenter rc) {
 		// TODO to be implemented
 		return null;
 	}
@@ -154,7 +154,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public XMLModel createNewModel(FlexoProject project, XSDMetaModel metaModel) {
+	public XMLModel createEmptyModel(FlexoProject project, XSDMetaModel metaModel) {
 
 		// TODO: meta model not handled here !
 

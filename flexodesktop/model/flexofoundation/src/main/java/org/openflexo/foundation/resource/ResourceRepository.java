@@ -63,6 +63,16 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	}
 
 	/**
+	 * Return resource with the supplied URI, if this resource was already declared
+	 * 
+	 * @param resourceURI
+	 * @return
+	 */
+	public R getResource(String resourceURI) {
+		return resources.get(resourceURI);
+	}
+
+	/**
 	 * Register supplied resource in default root folder
 	 * 
 	 * @param flexoResource

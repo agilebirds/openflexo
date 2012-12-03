@@ -40,7 +40,7 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
-import org.openflexo.technologyadapter.owl.model.OntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 
 /**
  * Represents the resource associated to a {@link OWLOntology}
@@ -52,7 +52,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyResource.class.getPackage().getName());
 
-	private OntologyLibrary ontologyLibrary = null;
+	private OWLOntologyLibrary ontologyLibrary = null;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -68,11 +68,11 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		super(aProject);
 	}
 
-	public OntologyLibrary getOntologyLibrary() {
+	public OWLOntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
 	}
 
-	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
+	public void setOntologyLibrary(OWLOntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
 	}
 
