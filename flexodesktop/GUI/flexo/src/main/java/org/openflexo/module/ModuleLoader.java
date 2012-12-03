@@ -376,12 +376,12 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	private void proceedQuitWithoutConfirmation() {
 		if (activeModule != null) {
-			GeneralPreferences.setFavoriteModuleName(activeModule.getName());
+			GeneralPreferences.setFavoriteModuleName(activeModule.getModule().getName());
 			FlexoPreferences.savePreferences(true);
 		}
 
 		for (Enumeration<FlexoModule> en = loadedModules(); en.hasMoreElements();) {
-			en.nextElement().moduleWillClose();
+			en.nextElement().closeWithoutConfirmation(false);
 		}
 		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
