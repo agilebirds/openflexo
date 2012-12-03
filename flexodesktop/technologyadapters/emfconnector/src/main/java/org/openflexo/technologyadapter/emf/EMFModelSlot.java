@@ -2,10 +2,9 @@ package org.openflexo.technologyadapter.emf;
 
 import org.openflexo.foundation.technologyadapter.ModelSlotImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
 /**
@@ -16,40 +15,51 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
  */
 public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param viewPoint
+	 */
 	public EMFModelSlot(ViewPoint viewPoint) {
 		super(viewPoint);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param builder
+	 */
 	public EMFModelSlot(ViewPointBuilder builder) {
 		super(builder);
 	}
 
 	/**
-	 * Instantiate and returns an empty model to be used as model for this slot.
+	 * Follow the link.
 	 * 
-	 * @param view
-	 * @param metaModel
-	 * 
-	 * @return a newly created model conform to supplied meta model
+	 * @see org.openflexo.foundation.viewpoint.ViewPointObject#getFullyQualifiedName()
 	 */
-	@Override
-	public EMFModel createEmptyModel(View view, EMFMetaModel metaModel) {
-		return getTechnologyAdapter().createNewModel(view.getProject(), metaModel);
-	}
-
 	@Override
 	public String getFullyQualifiedName() {
 		return "EMFModelSlot";
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.TemporaryFlexoModelObject#getClassNameKey()
+	 */
 	@Override
 	public String getClassNameKey() {
-		return "xsd_model_slot";
+		return "emf_model_slot";
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.ModelSlot#getTechnologyAdapter()
+	 */
 	@Override
 	public EMFTechnologyAdapter getTechnologyAdapter() {
 		return TechnologyAdapter.getTechnologyAdapter(EMFTechnologyAdapter.class);
 	}
-
 }
