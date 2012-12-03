@@ -16,20 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or 
+ * combining it with eclipse EMF (or a modified version of that library), 
+ * containing parts covered by the terms of EPL 1.0, the licensors of this 
+ * Program grant you additional permission to convey the resulting work.
+ *
  * Contributors :
  *
  */
-package org.openflexo.foundation.ontology.io;
-
-import org.openflexo.foundation.ontology.IFlexoOntology;
+package org.openflexo.foundation.ontology.util;
 
 /**
- * Interface to incitate to use a builder to instantiate objects.
+ * Wrapper of object.
  * 
  * @author gbesancon
  * 
- * @pattern builder
  */
-public interface IFlexoOntologyBuilder<ONTOLOGY extends IFlexoOntology> {
+public class AWrapperObject<T> {
+	/** Object. */
+	protected T object;
 
+	/**
+	 * Constructor.
+	 */
+	public AWrapperObject(T object) {
+		this.object = object;
+	}
+
+	/**
+	 * Getter of object.
+	 * 
+	 * @return the object value
+	 */
+	public T getObject() {
+		return object;
+	}
+
+	/**
+	 * Setter of object.
+	 * 
+	 * @param object
+	 *            the object to set
+	 */
+	public void setObject(T object) {
+		this.object = object;
+	}
 }

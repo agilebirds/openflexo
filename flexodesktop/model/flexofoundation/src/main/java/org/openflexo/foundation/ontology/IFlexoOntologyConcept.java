@@ -23,7 +23,6 @@ package org.openflexo.foundation.ontology;
 
 import java.util.List;
 
-import org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor;
 
 /**
  * Common interface for concepts of Ontology.

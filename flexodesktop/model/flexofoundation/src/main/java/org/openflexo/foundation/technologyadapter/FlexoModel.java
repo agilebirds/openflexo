@@ -20,9 +20,18 @@ import org.openflexo.foundation.rm.StorageResourceData;
  * @param <MM>
  */
 public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends StorageResourceData<M>, ResourceData<M> {
-
+	/**
+	 * Meta Model.
+	 * 
+	 * @return
+	 */
 	public MM getMetaModel();
 
+	/**
+	 * URI of Model.
+	 * 
+	 * @return
+	 */
 	public String getURI();
 
 }

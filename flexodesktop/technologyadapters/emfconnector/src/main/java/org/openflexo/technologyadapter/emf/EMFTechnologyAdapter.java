@@ -40,7 +40,6 @@ import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
-import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
@@ -109,9 +108,19 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	/**
 	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
 	 * 
-	 * @param aModelFile
-	 * @param metaModel
-	 * @return
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveMetaModelResource(java.io.File)
+	 */
+	@Override
+	public FlexoResource<EMFMetaModel> retrieveMetaModelResource(File aMetaModelFile) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(java.io.File,
+	 *      org.openflexo.foundation.technologyadapter.FlexoMetaModel)
 	 */
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, FlexoResourceCenter rc) {

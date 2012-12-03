@@ -19,16 +19,8 @@
  * Contributors :
  *
  */
-package org.openflexo.foundation.ontology.visitor;
+package org.openflexo.foundation.ontology;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyBehaviouralProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyClabject;
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyConstraint;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
-import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 
 /**
  * Visitor for Concept of Ontology.
