@@ -17,13 +17,14 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.xml.DefaultStringEncoder;
+import org.openflexo.model.exceptions.RestrictiveDeserializationException;
 import org.openflexo.model.xml.InvalidDataException;
-import org.openflexo.model.xml.InvalidXMLDataException;
+import org.openflexo.model.xml.StringEncoder;
 
-public class XMLDeserializer {
+class XMLDeserializer {
 
 	public static final String ID = "id";
 	public static final String ID_REF = "idref";
@@ -37,13 +38,19 @@ public class XMLDeserializer {
 	 * object
 	 */
 	private Map<Object, Object> alreadyDeserialized;
+	private final DeserializationPolicy policy;
 
 	public XMLDeserializer(ModelFactory factory) {
+		this(factory, DeserializationPolicy.PERMISSIVE);
+	}
+
+	public XMLDeserializer(ModelFactory factory, DeserializationPolicy policy) {
 		this.modelFactory = factory;
+		this.policy = policy;
 		alreadyDeserialized = new HashMap<Object, Object>();
 	}
 
-	private DefaultStringEncoder getStringEncoder() {
+	private StringEncoder getStringEncoder() {
 		return modelFactory.getStringEncoder();
 	}
 
@@ -64,13 +71,52 @@ public class XMLDeserializer {
 	private Object buildObjectFromNode(Element node) throws InvalidXMLDataException, ModelDefinitionException {
 		// System.out.println("What to do with "+node+" ?");
 
-		ModelEntity<?> modelEntity = modelFactory.getModelEntity(node.getName());
+		ModelEntity<?> modelEntity = modelFactory.getModelContext().getModelEntity(node.getName());
 
 		return buildObjectFromNodeAndModelEntity(node, modelEntity);
 	}
 
 	private <I> Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity<I> modelEntity) throws InvalidXMLDataException,
 			ModelDefinitionException {
+		Class<I> implementedInterface = null;
+		Class<?> implementingClass = null;
+		String entityName = node.getAttributeValue(PAMELAConstants.MODEL_ENTITY_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+		String className = node.getAttributeValue(PAMELAConstants.CLASS_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+		if (entityName != null) {
+			try {
+				implementedInterface = (Class<I>) Class.forName(entityName);
+			} catch (ClassNotFoundException e) {
+				// TODO: log something here
+			}
+		}
+		if (className != null) {
+			try {
+				implementingClass = Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				// TODO: log something here
+			}
+		}
+
+		if (modelEntity == null) {
+			switch (policy) {
+			case EXTENSIVE:
+				if (implementedInterface == null) {
+					// TODO: Here we need to find a way to store this element so that we can store it back
+					break;
+				}
+			case PERMISSIVE:
+				if (implementedInterface == null) {
+					// We stop here: we have an unknown element or a class which is not available. We must simply skip this element and
+					// forget about it.
+				}
+				break;
+			case RESTRICTIVE:
+				throw new RestrictiveDeserializationException("No entity found for the tag: " + node.getName());
+			}
+		} else if (implementedInterface == null) {
+			implementedInterface = modelEntity.getImplementedInterface();
+		}
+
 		Object currentDeserializedReference = null;
 
 		Attribute idAttribute = node.getAttribute(ID);
@@ -123,8 +169,16 @@ public class XMLDeserializer {
 				throw new ModelExecutionException(e);
 			}
 		} else {
-			returned = modelFactory.newInstance(modelEntity);
-
+			if (implementingClass != null) {
+				if (implementedInterface.isAssignableFrom(implementingClass)) {
+					// Check done
+					modelFactory.setImplementingClassForInterface((Class<? extends I>) implementingClass, implementedInterface);
+				} else {
+					throw new ModelDefinitionException("Implementing class: " + implementingClass.getName() + " does not implement "
+							+ implementedInterface.getName());
+				}
+			}
+			returned = modelFactory.newInstance(implementedInterface);
 		}
 
 		if (currentDeserializedReference != null) {

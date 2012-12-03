@@ -37,6 +37,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.NoSuchEntityException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
+import org.openflexo.model.factory.ModelFactory.PAMELAProxyFactory;
 import org.openflexo.model.xml.InvalidDataException;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -48,11 +49,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static final String MODIFIED = "modified";
 	private static final String DESERIALIZING = "deserializing";
 	private static final String SERIALIZING = "serializing";
-	private Map<String, Object> values;
-	private Map<String, Object> oldValues;
-	private ModelEntity<I> modelEntity;
 
 	private I object;
+
+	private Map<String, Object> values;
+	private Map<String, Object> oldValues;
 
 	private boolean deleted = false;
 	private boolean initialized = false;
@@ -88,6 +89,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method CLONE_OBJECT_WITH_CONTEXT;
 	private static Method IS_CREATED_BY_CLONING;
 	private static Method IS_BEING_CLONED;
+	private final PAMELAProxyFactory<I> pamelaProxyFactory;
 
 	static {
 		try {
@@ -126,10 +128,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
-	public ProxyMethodHandler(ModelEntity<I> modelEntity) throws ModelDefinitionException {
-		this.modelEntity = modelEntity;
-		values = new HashMap<String, Object>(modelEntity.getPropertiesSize(), 1.0f);
-		initialized = !modelEntity.hasInitializers();
+	public ProxyMethodHandler(PAMELAProxyFactory<I> pamelaProxyFactory) throws ModelDefinitionException {
+		this.pamelaProxyFactory = pamelaProxyFactory;
+		values = new HashMap<String, Object>(getModelEntity().getPropertiesSize(), 1.0f);
+		initialized = !getModelEntity().hasInitializers();
 	}
 
 	public I getObject() {
@@ -141,11 +143,23 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	public ModelFactory getModelFactory() {
-		return getModelEntity().getModelFactory();
+		return pamelaProxyFactory.getModelFactory();
 	}
 
 	public ModelEntity<I> getModelEntity() {
-		return modelEntity;
+		return pamelaProxyFactory.getModelEntity();
+	}
+
+	public Class getSuperClass() {
+		return pamelaProxyFactory.getSuperclass();
+	}
+
+	public Class getOverridingSuperClass() {
+		return pamelaProxyFactory.getOverridingSuperClass();
+	}
+
+	public ModelContext getModelMapping() {
+		return getModelFactory().getModelContext();
 	}
 
 	@Override
@@ -191,15 +205,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 
 		if (methodIsEquivalentTo(method, PERFORM_SUPER_GETTER)) {
-			return internallyInvokeGetter(modelEntity.getModelProperty((String) args[0]));
+			return internallyInvokeGetter(getModelEntity().getModelProperty((String) args[0]));
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_SETTER)) {
-			internallyInvokeSetter(modelEntity.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeSetter(getModelEntity().getModelProperty((String) args[0]), args[1]);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_ADDER)) {
-			internallyInvokeAdder(modelEntity.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeAdder(getModelEntity().getModelProperty((String) args[0]), args[1]);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER)) {
-			internallyInvokeRemover(modelEntity.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeRemover(getModelEntity().getModelProperty((String) args[0]), args[1]);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
 			internallyInvokeDeleter();
@@ -305,13 +319,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private @Nonnull
 	ModelEntity<? super I> getModelEntityFromArg(Class<?> class1) throws ModelDefinitionException {
-		ModelEntity<?> e = getModelFactory().getModelEntity(class1);
+		ModelEntity<?> e = getModelMapping().getModelEntity(class1);
 		if (e == null) {
 			throw new NoSuchEntityException(class1);
 		}
-		if (!e.isAncestorOf(modelEntity)) {
+		if (!e.isAncestorOf(getModelEntity())) {
 			throw new ModelExecutionException(((Class<?>) class1).getName() + " is not a super interface of "
-					+ modelEntity.getImplementedInterface().getName());
+					+ getModelEntity().getImplementedInterface().getName());
 		}
 		// Is e is an ancestor of modelEntity, this means that e is a super interface of the implementedInterface of modelEntity and we can
 		// therefore cast e to ModelEntity<? super I>
@@ -319,22 +333,22 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private Object internallyInvokeGetter(String propertyIdentifier) throws ModelDefinitionException {
-		ModelProperty<? super I> property = modelEntity.getModelProperty(propertyIdentifier);
+		ModelProperty<? super I> property = getModelEntity().getModelProperty(propertyIdentifier);
 		return internallyInvokeGetter(property);
 	}
 
 	private void internallyInvokeSetter(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
-		ModelProperty<? super I> property = modelEntity.getModelProperty(propertyIdentifier);
+		ModelProperty<? super I> property = getModelEntity().getModelProperty(propertyIdentifier);
 		internallyInvokeSetter(property, args[0]);
 	}
 
 	private void internallyInvokeAdder(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
-		ModelProperty<? super I> property = modelEntity.getModelProperty(propertyIdentifier);
+		ModelProperty<? super I> property = getModelEntity().getModelProperty(propertyIdentifier);
 		internallyInvokeAdder(property, args[0]);
 	}
 
 	private void internallyInvokerRemover(String id, Object[] args) throws ModelDefinitionException {
-		ModelProperty<? super I> property = modelEntity.getModelProperty(id);
+		ModelProperty<? super I> property = getModelEntity().getModelProperty(id);
 		internallyInvokeRemover(property, args[0]);
 	}
 
@@ -643,8 +657,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				values.put(property.getPropertyIdentifier(), value);
 			}
 			firePropertyChange(property.getPropertyIdentifier(), oldValue, value);
-			if (modelEntity.getModify() != null && modelEntity.getModify().synchWithForward()
-					&& property.getPropertyIdentifier().equals(modelEntity.getModify().forward())) {
+			if (getModelEntity().getModify() != null && getModelEntity().getModify().synchWithForward()
+					&& property.getPropertyIdentifier().equals(getModelEntity().getModify().forward())) {
 				if (oldValue instanceof HasPropertyChangeSupport) {
 					((HasPropertyChangeSupport) oldValue).getPropertyChangeSupport().removePropertyChangeListener(MODIFIED, this);
 				}
@@ -687,8 +701,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		try {
-			if (modelEntity.getModify() != null && modelEntity.getModify().synchWithForward()) {
-				Object forwarded = internallyInvokeGetter(modelEntity.getModify().forward());
+			if (getModelEntity().getModify() != null && getModelEntity().getModify().synchWithForward()) {
+				Object forwarded = internallyInvokeGetter(getModelEntity().getModify().forward());
 				if (evt.getSource() == forwarded) {
 					if (MODIFIED.equals(evt.getPropertyName())) {
 						setModified((Boolean) evt.getNewValue());
@@ -706,8 +720,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			modified = true;
 			if (!old) {
 				firePropertyChange(MODIFIED, old, modified);
-				if (modelEntity.getModify() != null && modelEntity.getModify().forward() != null) {
-					ModelProperty<? super I> modelProperty = modelEntity.getModelProperty(modelEntity.getModify().forward());
+				if (getModelEntity().getModify() != null && getModelEntity().getModify().forward() != null) {
+					ModelProperty<? super I> modelProperty = getModelEntity().getModelProperty(getModelEntity().getModify().forward());
 					if (modelProperty != null) {
 						Object forward = invokeGetter(modelProperty);
 						if (forward instanceof ProxyObject) {
@@ -1180,7 +1194,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						Object singleValue = invokeGetter(p);
 						switch (p.getCloningStrategy()) {
 						case CLONE:
-							if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+							if (getModelMapping().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
 								if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 									// Don't do it, outside of context
 								} else {
@@ -1201,7 +1215,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						for (Object value : values) {
 							switch (p.getCloningStrategy()) {
 							case CLONE:
-								if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+								if (getModelMapping().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
 									if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
 										// Don't do it, outside of context
 									} else {
@@ -1268,7 +1282,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 								throw new ModelExecutionException(e);
 							}
 							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
-						} else if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+						} else if (getModelMapping().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
 							Object clonedValue = clonedObjects.get(singleValue);
 							if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 								clonedValue = null;
@@ -1312,7 +1326,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 								}
 								List<?> l = (List<?>) clonedObjectHandler.invokeGetter(p);
 								clonedObjectHandler.invokeAdder(p, clonedValue);
-							} else if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+							} else if (getModelMapping().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
 								Object clonedValue = clonedObjects.get(value);
 								if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
 									clonedValue = null;
@@ -1417,7 +1431,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	protected Object paste(Clipboard clipboard) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
-		Collection<ModelProperty<? super I>> propertiesAssignableFrom = modelEntity.getPropertiesAssignableFrom(clipboard.getType());
+		Collection<ModelProperty<? super I>> propertiesAssignableFrom = getModelEntity().getPropertiesAssignableFrom(clipboard.getType());
 		Collection<ModelProperty<? super I>> pastingPointProperties = Collections2.filter(propertiesAssignableFrom,
 				new Predicate<ModelProperty<?>>() {
 					@Override
@@ -1570,4 +1584,5 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			firePropertyChange(MODIFIED, !modified, modified);
 		}
 	}
+
 }

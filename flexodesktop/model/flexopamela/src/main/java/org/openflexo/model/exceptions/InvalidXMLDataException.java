@@ -1,4 +1,4 @@
-package org.openflexo.model.xml;
+package org.openflexo.model.exceptions;
 
 public class InvalidXMLDataException extends Exception {
 

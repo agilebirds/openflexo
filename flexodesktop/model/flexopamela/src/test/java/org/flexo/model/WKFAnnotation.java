@@ -7,7 +7,7 @@ import org.openflexo.model.annotations.Parameter;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.StringConverter;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.xml.DefaultStringEncoder.Converter;
+import org.openflexo.model.factory.ModelContext.Converter;
 import org.openflexo.model.xml.InvalidDataException;
 
 @ModelEntity

@@ -10,6 +10,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.io.IOUtils;
 import org.flexo.model.AbstractNode;
 import org.flexo.model.ActivityNode;
 import org.flexo.model.Edge;
@@ -26,22 +27,21 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.openflexo.model.exceptions.InvalidXMLDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
 import org.openflexo.model.factory.EmbeddingType;
+import org.openflexo.model.factory.ModelContext;
 import org.openflexo.model.factory.ModelEntity;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.XMLDeserializer;
-import org.openflexo.model.factory.XMLSerializer;
-import org.openflexo.model.xml.InvalidXMLDataException;
+import org.openflexo.toolbox.FileUtils;
 
 public class BasicTests extends TestCase {
 
 	private ModelFactory factory;
-	private XMLDeserializer deserializer;
-	private XMLSerializer serializer;
+	private ModelContext mapping;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -56,10 +56,8 @@ public class BasicTests extends TestCase {
 	@Before
 	public void setUp() throws Exception {
 		new File("/tmp").mkdirs();
-		factory = new ModelFactory();
-		factory.importClass(FlexoProcess.class);
-		deserializer = new XMLDeserializer(factory);
-		serializer = new XMLSerializer(factory.getStringEncoder());
+		mapping = new ModelContext(FlexoProcess.class);
+		factory = new ModelFactory(mapping);
 	}
 
 	@Override
@@ -73,18 +71,17 @@ public class BasicTests extends TestCase {
 	 * @throws Exception
 	 */
 	public void test1() throws Exception {
-		factory.importClass(FlexoProcess.class);
 
-		System.out.println(factory.debug());
+		System.out.println(mapping.debug());
 
-		assertEquals(11, factory.getEntityCount());
+		assertEquals(11, mapping.getEntityCount());
 
-		ModelEntity<FlexoModelObject> modelObjectEntity = factory.getModelEntity(FlexoModelObject.class);
-		ModelEntity<FlexoProcess> processEntity = factory.getModelEntity(FlexoProcess.class);
-		ModelEntity<AbstractNode> abstractNodeEntity = factory.getModelEntity(AbstractNode.class);
-		ModelEntity<StartNode> startNodeEntity = factory.getModelEntity(StartNode.class);
-		ModelEntity<TokenEdge> tokenEdgeEntity = factory.getModelEntity(TokenEdge.class);
-		ModelEntity<WKFObject> wkfObjectEntity = factory.getModelEntity(WKFObject.class);
+		ModelEntity<FlexoModelObject> modelObjectEntity = mapping.getModelEntity(FlexoModelObject.class);
+		ModelEntity<FlexoProcess> processEntity = mapping.getModelEntity(FlexoProcess.class);
+		ModelEntity<AbstractNode> abstractNodeEntity = mapping.getModelEntity(AbstractNode.class);
+		ModelEntity<StartNode> startNodeEntity = mapping.getModelEntity(StartNode.class);
+		ModelEntity<TokenEdge> tokenEdgeEntity = mapping.getModelEntity(TokenEdge.class);
+		ModelEntity<WKFObject> wkfObjectEntity = mapping.getModelEntity(WKFObject.class);
 
 		assertNotNull(processEntity);
 		assertNotNull(abstractNodeEntity);
@@ -166,10 +163,9 @@ public class BasicTests extends TestCase {
 
 		try {
 			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			doc = serializer.serializeDocument(process, fos);
+			factory.serialize(process, fos);
 			fos.flush();
 			fos.close();
-			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -179,8 +175,7 @@ public class BasicTests extends TestCase {
 	}
 
 	public void test3() throws Exception {
-		Document doc;
-
+		File file = File.createTempFile("Pamela.test3TestFile", ".xml");
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.init("234XX");
 		process.setName("NewProcess");
@@ -211,20 +206,18 @@ public class BasicTests extends TestCase {
 		startNode.setMasterAnnotation(annotation1);
 		startNode.addToOtherAnnotations(annotation2);
 
-		String xml1 = null;
-
+		FileOutputStream fos = null;
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			xml1 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 1:\n" + xml1);
+			fos = new FileOutputStream(file);
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
+		String xml1 = FileUtils.fileContents(file);
 
 		edge2.setStartNode(startNode);
 		assertEquals(startNode, edge2.getStartNode());
@@ -232,19 +225,15 @@ public class BasicTests extends TestCase {
 		assertEquals(2, startNode.getOutgoingEdges().size());
 		assertEquals(0, activityNode.getOutgoingEdges().size());
 
-		String xml2 = null;
-
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			xml2 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 2:\n" + xml2);
+			fos = new FileOutputStream(file);
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 
 		activityNode.addToOutgoingEdges(edge2);
@@ -254,47 +243,43 @@ public class BasicTests extends TestCase {
 		assertEquals(1, startNode.getOutgoingEdges().size());
 		assertEquals(1, activityNode.getOutgoingEdges().size());
 
-		String xml3 = null;
-
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			xml3 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 3:\n" + xml3);
+			fos = new FileOutputStream(file);
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 
+		String xml3 = FileUtils.fileContents(file, "UTF-8");
 		assertEquals(xml1, xml3);
-	}
 
-	public void test4() throws Exception {
-		FlexoProcess process = loadProcessFromFile();
+		// test4
+		process = loadProcessFromFile(file);
 
 		assertTrue(process instanceof FlexoProcess);
 
 		assertEquals("NewProcess", process.getName());
 		assertEquals("234XX", process.getFlexoID());
 		assertEquals(8, process.getFoo());
-		ActivityNode activityNode = (ActivityNode) process.getNodeNamed("MyActivity");
+		activityNode = (ActivityNode) process.getNodeNamed("MyActivity");
 		assertNotNull(activityNode);
 		assertEquals("MyActivity", activityNode.getName());
 		assertTrue(process.getNodes().contains(activityNode));
 		assertEquals(process, activityNode.getProcess());
-		StartNode startNode = (StartNode) process.getNodeNamed("Start");
+		startNode = (StartNode) process.getNodeNamed("Start");
 		assertNotNull(startNode);
 		assertNotNull(startNode.getMasterAnnotation());
 		assertEquals("Annotation 1", startNode.getMasterAnnotation().getText());
 		assertEquals(1, startNode.getOtherAnnotations().size());
-		EndNode endNode = (EndNode) process.getNodeNamed("End");
+		endNode = (EndNode) process.getNodeNamed("End");
 		assertNotNull(endNode);
-		TokenEdge edge1 = (TokenEdge) process.getEdgeNamed("edge1");
+		edge1 = (TokenEdge) process.getEdgeNamed("edge1");
 		assertNotNull(edge1);
-		TokenEdge edge2 = (TokenEdge) process.getEdgeNamed("edge2");
+		edge2 = (TokenEdge) process.getEdgeNamed("edge2");
 		assertNotNull(edge2);
 		assertEquals(process, edge1.getProcess());
 		assertEquals(process, edge2.getProcess());
@@ -302,23 +287,24 @@ public class BasicTests extends TestCase {
 		assertTrue(activityNode.getOutgoingEdges().contains(edge2));
 		assertEquals(1, startNode.getOutgoingEdges().size());
 		assertEquals(1, activityNode.getOutgoingEdges().size());
+		file.delete();
 	}
 
-	private FlexoProcess loadProcessFromFile() throws ModelDefinitionException {
-		factory.importClass(FlexoProcess.class);
+	private FlexoProcess loadProcessFromFile(File file) throws ModelDefinitionException {
 
-		System.out.println(factory.debug());
 		FlexoProcess process = null;
 
+		FileOutputStream fos = null;
 		try {
-			FileInputStream fis = new FileInputStream("/tmp/TestFile.xml");
-			process = (FlexoProcess) deserializer.deserializeDocument(fis);
+			FileInputStream fis = new FileInputStream(file);
+			try {
+				process = (FlexoProcess) factory.deserialize(fis);
+			} finally {
+				IOUtils.closeQuietly(fis);
+			}
 			System.out.println("Read: " + process);
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			Document doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			System.out.println("After deserialization:\n" + serializer.buildXMLOutput(doc));
+			fos = new FileOutputStream(file);
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -327,6 +313,8 @@ public class BasicTests extends TestCase {
 			fail(e.getMessage());
 		} catch (InvalidXMLDataException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 		return process;
 	}
@@ -402,6 +390,7 @@ public class BasicTests extends TestCase {
 	 * @throws Exception
 	 */
 	public void test7() throws Exception {
+		File file = File.createTempFile("PAMELA.test7", ".xml");
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.init("234XX");
 		process.setName("NewProcess");
@@ -451,17 +440,17 @@ public class BasicTests extends TestCase {
 
 		assertNotSame(edge1, edge1Copy);
 		assertNotSame(edge2, edge2Copy);
-
+		FileOutputStream fos = null;
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			Document doc = serializer.serializeDocument(processCopy, fos);
-			fos.flush();
-			fos.close();
-			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
+			fos = new FileOutputStream(file);
+			factory.serialize(processCopy, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
+			file.delete();
 		}
 
 	}
@@ -564,17 +553,16 @@ public class BasicTests extends TestCase {
 		ActivityNode newNode = (ActivityNode) pasted;
 		assertEquals(0, newNode.getIncomingEdges().size());
 		assertEquals(0, newNode.getOutgoingEdges().size());
-
+		FileOutputStream fos = null;
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			Document doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
+			fos = new FileOutputStream("/tmp/TestFile.xml");
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 
 	}
@@ -639,17 +627,16 @@ public class BasicTests extends TestCase {
 		assertEquals(0, newStartNode.getIncomingEdges().size());
 		assertEquals(1, newStartNode.getOutgoingEdges().size());
 		assertSame(newStartNode.getOutgoingEdges().get(0), newActivity.getIncomingEdges().get(0));
-
+		FileOutputStream fos = null;
 		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			Document doc = serializer.serializeDocument(process, fos);
-			fos.flush();
-			fos.close();
-			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
+			fos = new FileOutputStream("/tmp/TestFile.xml");
+			factory.serialize(process, fos);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 	}
 
@@ -698,9 +685,14 @@ public class BasicTests extends TestCase {
 		assertTrue(activityNode.isModified()); // And that activity node is no longer synched with its previous container process.
 	}
 
-	public Document serializeObject(AccessibleProxyObject object) {
-		Document doc = serializer.serializeDocument(object, new ByteArrayOutputStream());
-		return doc;
+	private void serializeObject(AccessibleProxyObject object) {
+		try {
+			factory.serialize(object, new ByteArrayOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+
 	}
 
 	public String debug(Object o) {

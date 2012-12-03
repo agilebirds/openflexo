@@ -13,6 +13,7 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.ModelContext;
 
 /**
  * Class of tests to measure the performance of pamela vs regular written classes.
@@ -311,11 +312,10 @@ public class PerformanceTest {
 
 	public static void main(String[] args) throws ModelDefinitionException {
 		PerformanceTest test = new PerformanceTest();
-		ModelFactory factory = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelContext mapping = new ModelContext(ModelObject.class);
+		ModelFactory factory = new ModelFactory(mapping);
 		factory.setListImplementationClass(ArrayList.class);
-		ModelFactory factory2 = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelFactory factory2 = new ModelFactory(mapping);
 		factory.setListImplementationClass(Vector.class);
 		test.testModel(new DumbModelRunnable(), factory, factory2);
 		test.testModel(new BuildBasicModelRunnable(), factory, factory2);

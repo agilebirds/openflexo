@@ -22,7 +22,9 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelContext.Converter;
 import org.openflexo.model.xml.InvalidDataException;
+import org.openflexo.model.xml.StringEncoder;
 
 public class ModelProperty<I> {
 
@@ -131,7 +133,7 @@ public class ModelProperty<I> {
 	protected ModelProperty(ModelEntity<I> modelEntity, String propertyIdentifier, Getter getter, Setter setter, Adder adder,
 			Remover remover, XMLAttribute xmlAttribute, XMLElement xmlElement, ReturnedValue returnedValue, Embedded embedded,
 			ComplexEmbedded complexEmbedded, CloningStrategy cloningStrategy, PastingPoint setPastingPoint, PastingPoint addPastingPoint,
-			Method getterMethod, Method setterMethod, Method adderMethod, Method removerMethod) {
+			Method getterMethod, Method setterMethod, Method adderMethod, Method removerMethod) throws ModelDefinitionException {
 		this.modelEntity = modelEntity;
 		this.propertyIdentifier = propertyIdentifier;
 		this.getter = getter;
@@ -180,7 +182,20 @@ public class ModelProperty<I> {
 		}
 	}
 
+	protected ModelProperty<I> init() throws ModelDefinitionException {
+		findInverseProperty();
+		return this;
+	}
+
 	public void validate() throws ModelDefinitionException {
+		if (propertyIdentifier == null || propertyIdentifier.equals("")) {
+			throw new ModelDefinitionException("No property identifier defined!");
+		}
+		if (getXMLAttribute() != null && getXMLAttribute().xmlTag().equals(PAMELAConstants.CLASS_ATTRIBUTE)
+				&& getXMLAttribute().namespace().equals(PAMELAConstants.NS)) {
+			throw new ModelDefinitionException("Invalid property identifier '" + PAMELAConstants.CLASS_ATTRIBUTE + "' with namespace "
+					+ PAMELAConstants.NS + "!");
+		}
 		if (getGetter() == null) {
 			throw new ModelDefinitionException("No getter defined for " + propertyIdentifier + ", interface "
 					+ modelEntity.getImplementedInterface());
@@ -190,17 +205,23 @@ public class ModelProperty<I> {
 		}
 		if (!Getter.UNDEFINED.equals(getter.defaultValue())) {
 			try {
-				defaultValue = getModelFactory().getStringEncoder().fromString(getType(), getter.defaultValue());
+				Converter<?> converter = StringEncoder.converterForClass(getType(), getModelMapping().getConverters());
+				if (converter != null) {
+					defaultValue = converter.convertFromString(getter.defaultValue(), null);
+				} else {
+					throw new ModelDefinitionException("No converter for type '" + getType() + "'. Cannot convert default value "
+							+ getter.defaultValue());
+				}
 			} catch (InvalidDataException e) {
 				throw new ModelDefinitionException("Invalid default value for property " + this + " : " + e.getMessage());
 			}
 		}
 
-		// Actually, this can happen when the property is string convertable
-		/*if (isSerializable() && ignoreType()) {
+		if (isSerializable() && ignoreType()) {
 			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier
-					+ "'. It cannot be serializable (annotation XMLAttribute or XMLElement) and ignore");
-		}*/
+					+ "'. It cannot be serializable (annotation XMLAttribute or XMLElement) and ignored. "
+					+ "If it is string convertable, mark it with the attribute 'stringConvertable'.");
+		}
 
 		if (embedded != null && complexEmbedded != null) {
 			throw new ModelDefinitionException("Cannot define both " + Embedded.class.getSimpleName() + " and "
@@ -496,8 +517,10 @@ public class ModelProperty<I> {
 	 * @param property
 	 * @param rulingProperty
 	 * @return
+	 * @throws ModelDefinitionException
 	 */
-	protected <J extends I> ModelProperty<I> combineWith(ModelProperty<?> property, ModelProperty<J> rulingProperty) {
+	protected <J extends I> ModelProperty<I> combineWith(ModelProperty<?> property, ModelProperty<J> rulingProperty)
+			throws ModelDefinitionException {
 		if (property == null && (rulingProperty == null || rulingProperty == this)) {
 			return this;
 		}
@@ -523,6 +546,7 @@ public class ModelProperty<I> {
 			Cardinality cardinality = null;
 			String inverse = null;
 			String defaultValue = null;
+			boolean stringConvertable;
 			boolean ignoreType;
 			if (getGetter() != null) {
 				cardinality = getGetter().cardinality();
@@ -540,11 +564,13 @@ public class ModelProperty<I> {
 				defaultValue = getGetter().defaultValue();
 			}
 			if (getGetter() == null) {
+				stringConvertable = property.getGetter().isStringConvertable();
 				ignoreType = property.getGetter().ignoreType();
 			} else {
+				stringConvertable = getGetter().isStringConvertable();
 				ignoreType = getGetter().ignoreType();
 			}
-			getter = new Getter.GetterImpl(propertyIdentifier, cardinality, inverse, defaultValue, ignoreType);
+			getter = new Getter.GetterImpl(propertyIdentifier, cardinality, inverse, defaultValue, stringConvertable, ignoreType);
 		}
 		if (rulingProperty != null && rulingProperty.getSetter() != null) {
 			setter = rulingProperty.getSetter();
@@ -691,8 +717,8 @@ public class ModelProperty<I> {
 				adderMethod, removerMethod);
 	}
 
-	public ModelFactory getModelFactory() {
-		return getModelEntity().getModelFactory();
+	public ModelContext getModelMapping() {
+		return getModelEntity().getModelContext();
 	}
 
 	public ModelEntity<I> getModelEntity() {
@@ -763,6 +789,13 @@ public class ModelProperty<I> {
 		return defaultValue;
 	}
 
+	public boolean isStringConvertable() {
+		if (getGetter() != null) {
+			return getGetter().isStringConvertable();
+		}
+		return false;
+	}
+
 	public boolean ignoreType() {
 		if (getGetter() != null) {
 			return getGetter().ignoreType();
@@ -780,34 +813,25 @@ public class ModelProperty<I> {
 	private ModelProperty<?> inverseProperty = null;
 	private Cardinality cardinality;
 
-	// TODO: optimize this (for the case of inverse is incorrectly defined)
 	public ModelProperty getInverseProperty() {
-		if (inverseProperty == null) {
-			if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-				try {
-					inverseProperty = findInverseProperty();
-				} catch (ModelDefinitionException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		return inverseProperty;
 	}
 
-	private ModelProperty<?> findInverseProperty() throws ModelDefinitionException {
-		ModelProperty<?> returned = null;
+	// TODO: optimize this (for the case of inverse is incorrectly defined)
+	private void findInverseProperty() throws ModelDefinitionException {
 		if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-			ModelEntity<?> oppositeEntity = getModelFactory().getModelEntity(getType());
-			if (oppositeEntity == null) {
-				throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
-			}
-			returned = oppositeEntity.getModelProperty(getGetter().inverse());
-			if (returned == null) {
-				throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse() + " for "
-						+ oppositeEntity.getImplementedInterface().getSimpleName());
+			if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
+				ModelEntity<?> oppositeEntity = getModelMapping().getModelEntity(getType(), true);
+				if (oppositeEntity == null) {
+					throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
+				}
+				inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse(), true);
+				if (inverseProperty == null) {
+					throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse()
+							+ " for " + oppositeEntity.getImplementedInterface().getSimpleName());
+				}
 			}
 		}
-		return returned;
 	}
 
 	@Override
@@ -816,7 +840,7 @@ public class ModelProperty<I> {
 	}
 
 	public ModelEntity<?> getAccessedEntity() throws ModelDefinitionException {
-		return getModelFactory().getModelEntity(getType());
+		return getModelMapping().getModelEntity(getType());
 	}
 
 	public ReturnedValue getReturnedValue() {
@@ -837,7 +861,7 @@ public class ModelProperty<I> {
 
 	public StrategyType getCloningStrategy() {
 		if (cloningStrategy == null) {
-			if (getModelFactory().isModelEntity(getType())) {
+			if (getModelMapping().isModelEntity(getType())) {
 				return StrategyType.REFERENCE;
 			} else {
 				return StrategyType.CLONE;

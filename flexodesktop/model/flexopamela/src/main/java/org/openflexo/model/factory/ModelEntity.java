@@ -9,20 +9,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.Modify;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.StringConverter;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.LockedContextException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.PropertyClashException;
-import org.openflexo.model.xml.DefaultStringEncoder.Converter;
+import org.openflexo.model.factory.ModelContext.Converter;
 
 /**
  * This class represents an instance of the {@link org.openflexo.model.annotations.ModelEntity} annotation declared on an interface.
@@ -34,14 +39,14 @@ import org.openflexo.model.xml.DefaultStringEncoder.Converter;
 public class ModelEntity<I> {
 
 	/**
-	 * The model factory in which this entity is declared
+	 * The model mapping in which this entity is declared
 	 */
-	private ModelFactory modelFactory;
+	private final ModelContext modelContext;
 
 	/**
 	 * The implemented interface corresponding to this model entity
 	 */
-	private Class<I> implementedInterface;
+	private final Class<I> implementedInterface;
 
 	/**
 	 * The model entity annotation describing this entity
@@ -72,13 +77,13 @@ public class ModelEntity<I> {
 	private List<ModelEntity<? super I>> directSuperEntities;
 	private Map<Method, ModelInitializer> initializers;
 
-	protected ModelEntity(Class<I> implementedInterface, ModelFactory modelFactory) throws ModelDefinitionException {
+	protected ModelEntity(@Nonnull Class<I> implementedInterface, @Nonnull ModelContext modelMapping) throws ModelDefinitionException {
 		// System.out.println("CREATED ModelEntity for "+implementedInterface.getSimpleName());
 
 		// declaredModelProperties = new Hashtable<String, ModelProperty<I>>();
 		properties = new HashMap<String, ModelProperty<? super I>>();
 		this.initializers = new HashMap<Method, ModelInitializer>();
-		this.modelFactory = modelFactory;
+		this.modelContext = modelMapping;
 		this.implementedInterface = implementedInterface;
 		entityAnnotation = implementedInterface.getAnnotation(org.openflexo.model.annotations.ModelEntity.class);
 		implementationClass = implementedInterface.getAnnotation(ImplementationClass.class);
@@ -109,7 +114,7 @@ public class ModelEntity<I> {
 			StringConverter converter = field.getAnnotation(StringConverter.class);
 			if (converter != null) {
 				try {
-					modelFactory.addConverter((Converter<?>) field.get(null));
+					modelContext.addConverter((Converter<?>) field.get(null));
 				} catch (IllegalArgumentException e) {
 					// This should not happen since interfaces can only have static fields
 					// and we pass 'null'
@@ -147,7 +152,7 @@ public class ModelEntity<I> {
 			}
 			if (propertyIdentifier != null) {
 				// The next line creates the property
-				getModelProperty(propertyIdentifier);
+				getModelProperty(propertyIdentifier, true);
 			}
 			org.openflexo.model.annotations.Initializer initializer = m.getAnnotation(org.openflexo.model.annotations.Initializer.class);
 			if (initializer != null) {
@@ -159,7 +164,7 @@ public class ModelEntity<I> {
 		if (getDirectSuperEntities() != null) {
 			for (ModelEntity<? super I> parentEntity : getDirectSuperEntities()) {
 				for (ModelProperty<? super I> property : parentEntity.properties.values()) {
-					getModelProperty(property.getPropertyIdentifier());
+					getModelProperty(property.getPropertyIdentifier(), true);
 				}
 			}
 		}
@@ -167,7 +172,8 @@ public class ModelEntity<I> {
 		// TODO: maybe it would be better to be closer to what constructors do, ie, if there are super-initializer,
 		// And none of them are without arguments, then this entity should define an initializer with the same
 		// method signature (this is to enforce the developer to be aware of what the parameters do):
-		// FlexoModelObject.init(flexoID) vs AbstractNode.init(nodeName)
+		// FlexoModelObject.init(String flexoID) vs AbstractNode.init(String nodeName)-->same signature but the semantics of the parameter
+		// is different
 
 		// 4. Validate initializers
 		for (ModelInitializer i : initializers.values()) {
@@ -184,8 +190,15 @@ public class ModelEntity<I> {
 		}
 
 		for (ModelProperty<? super I> property : properties.values()) {
-			if (!property.getType().isPrimitive() && !getModelFactory().isStringConvertable(property.getType()) && !property.ignoreType()) {
-				getModelFactory().importClass(property.getType());
+			if (!modelContext.isStringConvertable(property.getType()) && !property.isStringConvertable() && !property.ignoreType()) {
+				modelContext.importModelEntity(property.getType());
+			}
+		}
+
+		Imports imports = implementedInterface.getAnnotation(Imports.class);
+		if (imports != null) {
+			for (Import imp : imports.value()) {
+				modelContext.importModelEntity(imp.value());
 			}
 		}
 	}
@@ -232,7 +245,7 @@ public class ModelEntity<I> {
 		if (directSuperEntities == null && superImplementedInterfaces != null) {
 			directSuperEntities = new ArrayList<ModelEntity<? super I>>(superImplementedInterfaces.size());
 			for (Class<? super I> superInterface : superImplementedInterfaces) {
-				ModelEntity<? super I> superEntity = getModelFactory().getModelEntity(superInterface);
+				ModelEntity<? super I> superEntity = getModelContext().getModelEntity(superInterface, true);
 				directSuperEntities.add(superEntity);
 			}
 		}
@@ -305,7 +318,7 @@ public class ModelEntity<I> {
 	}
 
 	/**
-	 * Returns and create, if it does not exist yet, the {@link ModelProperty} with the identifier <code>propertyIdentifier</code>.
+	 * Returns the {@link ModelProperty} with the identifier <code>propertyIdentifier</code>.
 	 * 
 	 * @param propertyIdentifier
 	 *            the identifier of the property
@@ -313,13 +326,40 @@ public class ModelEntity<I> {
 	 * @throws ModelDefinitionException
 	 */
 	public ModelProperty<? super I> getModelProperty(String propertyIdentifier) throws ModelDefinitionException {
+		return getModelProperty(propertyIdentifier, false);
+	}
+
+	/**
+	 * Returns and create, if it does not exist yet, the {@link ModelProperty} with the identifier <code>propertyIdentifier</code>.
+	 * 
+	 * @param propertyIdentifier
+	 *            the identifier of the property
+	 * @param create
+	 *            whether the property should be create or not, if not found
+	 * @return the property with the identifier <code>propertyIdentifier</code>.
+	 * @throws ModelDefinitionException
+	 */
+	public ModelProperty<? super I> getModelProperty(String propertyIdentifier, boolean create) throws ModelDefinitionException {
 		ModelProperty<? super I> returned = properties.get(propertyIdentifier);
-		if (returned == null && !properties.containsKey(propertyIdentifier) && propertyExists(propertyIdentifier)) {
+		if (create && returned == null && !properties.containsKey(propertyIdentifier) && propertyExists(propertyIdentifier)) {
+			if (getModelContext().isLocked()) {
+				throw new LockedContextException("You cannot modify a mapping that has been locked. Model property '" + propertyIdentifier
+						+ "' in " + this + " cannot be added!");
+			}
 			returned = buildModelProperty(propertyIdentifier);
 			// Validation should only occur in the end, when the all graph has been merged. When building the merged model property
 			// it can go through a set of invalid model properties
-			returned.validate();
 			properties.put(propertyIdentifier, returned);
+			boolean ok = false;
+			try {
+				returned.init();
+				returned.validate();
+				ok = true;
+			} finally {
+				if (!ok) {
+					properties.remove(propertyIdentifier);
+				}
+			}
 		}
 		return returned;
 	}
@@ -390,12 +430,13 @@ public class ModelEntity<I> {
 	 * @return a combined/merged property
 	 * @throws ModelDefinitionException
 	 */
-	private ModelProperty<? super I> combine(ModelProperty<I> property, ModelProperty<? super I> parentProperty) {
+	private ModelProperty<? super I> combine(ModelProperty<I> property, ModelProperty<? super I> parentProperty)
+			throws ModelDefinitionException {
 		return property.combineWith(parentProperty, property);
 	}
 
 	private ModelProperty<? super I> combineAsAncestors(ModelProperty<? super I> property1, ModelProperty<? super I> property2,
-			ModelProperty<I> declaredProperty) throws PropertyClashException {
+			ModelProperty<I> declaredProperty) throws ModelDefinitionException {
 		if (property1 == null) {
 			return property2;
 		}
@@ -445,8 +486,8 @@ public class ModelEntity<I> {
 		return isAbstract;
 	}
 
-	public ModelFactory getModelFactory() {
-		return modelFactory;
+	public ModelContext getModelContext() {
+		return modelContext;
 	}
 
 	public ImplementationClass getImplementationClass() {
@@ -490,7 +531,7 @@ public class ModelEntity<I> {
 
 	public List<ModelEntity> getAllDescendants() throws ModelDefinitionException {
 		List<ModelEntity> returned = new ArrayList<ModelEntity>();
-		Iterator<ModelEntity> i = getModelFactory().getEntities();
+		Iterator<ModelEntity> i = getModelContext().getEntities();
 		while (i.hasNext()) {
 			ModelEntity entity = i.next();
 			if (isAncestorOf(entity)) {
@@ -536,7 +577,7 @@ public class ModelEntity<I> {
 
 	public ModelInitializer getInitializers(Method m) throws ModelDefinitionException {
 		if (m.getDeclaringClass() != implementedInterface) {
-			ModelEntity<?> e = getModelFactory().getModelEntity(m.getDeclaringClass());
+			ModelEntity<?> e = getModelContext().getModelEntity(m.getDeclaringClass());
 			if (e == null) {
 				throw new ModelExecutionException("Could not find initializer for method " + m.toGenericString() + ". Make sure that "
 						+ m.getDeclaringClass().getName() + " is annotated with ModelEntity and has been imported.");
