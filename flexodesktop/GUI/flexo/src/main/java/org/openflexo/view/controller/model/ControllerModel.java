@@ -119,6 +119,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	@Override
 	public void delete() {
+		for (FlexoPerspective p : perspectives) {
+			p.delete();
+		}
 		perspectives.clear();
 		lastEditedObjectsForPerspective.clear();
 		editors.clear();

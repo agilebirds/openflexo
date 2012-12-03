@@ -19,21 +19,16 @@
  */
 package org.openflexo.view.controller.model;
 
-import java.beans.PropertyChangeSupport;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class FlexoPerspective implements HasPropertyChangeSupport {
-
-	private PropertyChangeSupport propertyChangeSupport;
+public abstract class FlexoPerspective extends ControllerModelObject {
 
 	private String name;
 
@@ -69,18 +64,6 @@ public abstract class FlexoPerspective implements HasPropertyChangeSupport {
 	public FlexoPerspective(String name) {
 		super();
 		this.name = name;
-		propertyChangeSupport = new PropertyChangeSupport(this);
-	}
-
-	@Override
-	public String getDeletedProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		return propertyChangeSupport;
 	}
 
 	public String getName() {
