@@ -60,7 +60,7 @@ public class FlexoOntologyUtility {
 			builder.append("Ontology : ");
 			builder.append(flexoOntology.getName());
 			builder.append(" (");
-			builder.append(flexoOntology.getUri());
+			builder.append(flexoOntology.getURI());
 			builder.append(")\n");
 			for (IFlexoOntologyConcept concept : flexoOntology.getConcepts()) {
 				builder.append(concept.accept(new ToStringVisitor()));
@@ -69,7 +69,7 @@ public class FlexoOntologyUtility {
 			for (IFlexoOntologyDataType dataType : flexoOntology.getDataTypes()) {
 				builder.append(dataType.getName());
 				builder.append(" (");
-				builder.append(dataType.getUri());
+				builder.append(dataType.getURI());
 				builder.append(")\n");
 			}
 			for (IFlexoOntologyContainer subContainer : flexoOntology.getSubContainers()) {
@@ -100,7 +100,7 @@ public class FlexoOntologyUtility {
 		for (IFlexoOntologyDataType dataType : container.getDataTypes()) {
 			builder.append(dataType.getName());
 			builder.append(" (");
-			builder.append(dataType.getUri());
+			builder.append(dataType.getURI());
 			builder.append(")\n");
 		}
 		for (IFlexoOntologyContainer subContainer : container.getSubContainers()) {
@@ -135,7 +135,7 @@ public class FlexoOntologyUtility {
 		IFlexoOntologyClass result = null;
 		for (IFlexoOntologyConcept concept : getAllConcepts(flexoOntology)) {
 			if (concept instanceof IFlexoOntologyClass) {
-				if (concept.getUri().equalsIgnoreCase(uri)) {
+				if (concept.getURI().equalsIgnoreCase(uri)) {
 					result = (IFlexoOntologyClass) concept;
 				}
 			}
@@ -154,7 +154,7 @@ public class FlexoOntologyUtility {
 		IFlexoOntologyIndividual result = null;
 		for (IFlexoOntologyConcept concept : getAllConcepts(flexoOntology)) {
 			if (concept instanceof IFlexoOntologyIndividual) {
-				if (concept.getUri().equalsIgnoreCase(uri)) {
+				if (concept.getURI().equalsIgnoreCase(uri)) {
 					result = (IFlexoOntologyIndividual) concept;
 				}
 			}
@@ -192,7 +192,7 @@ public class FlexoOntologyUtility {
 		IFlexoOntologyFeature result = null;
 		for (IFlexoOntologyConcept concept : getAllConcepts(flexoOntology)) {
 			if (concept instanceof IFlexoOntologyFeature) {
-				if (concept.getUri().equalsIgnoreCase(uri)) {
+				if (concept.getURI().equalsIgnoreCase(uri)) {
 					result = (IFlexoOntologyFeature) concept;
 				}
 			}

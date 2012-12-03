@@ -26,31 +26,81 @@
  * Contributors :
  *
  */
-package org.openflexo.foundation.ontology.io;
+package org.openflexo.foundation.ontology;
 
-import org.openflexo.foundation.ontology.IFlexoOntology;
 
 /**
- * Reader / Writer for a Specific Ontology.
+ * Visitor for Concept of Ontology.
  * 
  * @author gbesancon
  * 
+ * @param <T>
+ * 
+ * @pattern visitor
  */
-public interface IFlexoOntologyReaderWriter<IO, ONTOLOGY extends IFlexoOntology, BUILDER extends IFlexoOntologyBuilder<ONTOLOGY>, CONVERTER extends IFlexoOntologyConverter<ONTOLOGY, BUILDER>> {
+public interface IFlexoOntologyConceptVisitor<T> {
 
 	/**
-	 * Load Ontology from IO input.
+	 * Visit a Constraint.
 	 * 
-	 * @param input
+	 * @param aConstraint
 	 * @return
 	 */
-	ONTOLOGY load(IO input);
+	T visit(IFlexoOntologyConstraint aConstraint);
 
 	/**
-	 * Save Ontology to IO output.
+	 * Visit a DataType.
 	 * 
-	 * @param ontology
-	 * @param output
+	 * @param aDataType
+	 * @return
 	 */
-	void save(ONTOLOGY ontology, IO output);
+	T visit(IFlexoOntologyDataType aDataType);
+
+	/**
+	 * Visit an Individual.
+	 * 
+	 * @param aIndividual
+	 * @return
+	 */
+	T visit(IFlexoOntologyIndividual aIndividual);
+
+	/**
+	 * Visit a Class.
+	 * 
+	 * @param aClass
+	 * @return
+	 */
+	T visit(IFlexoOntologyClass aClass);
+
+	/**
+	 * Visit a Clabject.
+	 * 
+	 * @param aClabject
+	 * @return
+	 */
+	T visit(IFlexoOntologyClabject aClabject);
+
+	/**
+	 * Visit a Data Property.
+	 * 
+	 * @param aDataProperty
+	 * @return
+	 */
+	T visit(IFlexoOntologyDataProperty aDataProperty);
+
+	/**
+	 * Visit an Object Property.
+	 * 
+	 * @param aObjectProperty
+	 * @return
+	 */
+	T visit(IFlexoOntologyObjectProperty aObjectProperty);
+
+	/**
+	 * Visit a Behavioural Property.
+	 * 
+	 * @param aBehaviouralProperty
+	 * @return
+	 */
+	T visit(IFlexoOntologyBehaviouralProperty aBehaviouralProperty);
 }

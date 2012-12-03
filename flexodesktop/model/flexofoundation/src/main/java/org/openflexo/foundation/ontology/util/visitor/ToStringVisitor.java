@@ -32,6 +32,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyBehaviouralProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyClabject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyConstraint;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue;
@@ -41,7 +42,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
-import org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor;
 
 /**
  * To Sting Visitor for Concepts.
@@ -58,7 +58,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyConstraint)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyConstraint)
 	 */
 	@Override
 	public String visit(IFlexoOntologyConstraint aConstraint) {
@@ -69,7 +69,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyDataType)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyDataType)
 	 */
 	@Override
 	public String visit(IFlexoOntologyDataType aDataType) {
@@ -82,7 +82,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyIndividual)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyIndividual)
 	 */
 	@Override
 	public String visit(IFlexoOntologyIndividual aIndividual) {
@@ -90,7 +90,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 		builder.append("Individual - ");
 		builder.append(aIndividual.getName());
 		builder.append(" (");
-		builder.append(aIndividual.getUri());
+		builder.append(aIndividual.getURI());
 		builder.append(") : ");
 		if (aIndividual.getTypes().size() != 0) {
 			for (IFlexoOntologyClass aClass : aIndividual.getTypes()) {
@@ -135,7 +135,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyClass)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyClass)
 	 */
 	@Override
 	public String visit(IFlexoOntologyClass aClass) {
@@ -143,7 +143,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 		builder.append("Class - ");
 		builder.append(aClass.getName());
 		builder.append(" (");
-		builder.append(aClass.getUri());
+		builder.append(aClass.getURI());
 		builder.append(")");
 		if (aClass.getSuperClasses().size() != 0) {
 			builder.append(" > ");
@@ -172,7 +172,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyClabject)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyClabject)
 	 */
 	@Override
 	public String visit(IFlexoOntologyClabject aClabject) {
@@ -183,7 +183,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyDataProperty)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyDataProperty)
 	 */
 	@Override
 	public String visit(IFlexoOntologyDataProperty aDataProperty) {
@@ -191,7 +191,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 		builder.append("Data Property - ");
 		builder.append(aDataProperty.getName());
 		builder.append(" (");
-		builder.append(aDataProperty.getUri());
+		builder.append(aDataProperty.getURI());
 		builder.append(")");
 		builder.append(" : ");
 		builder.append(aDataProperty.getRange().getName());
@@ -201,7 +201,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty)
 	 */
 	@Override
 	public String visit(IFlexoOntologyObjectProperty aObjectProperty) {
@@ -209,7 +209,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 		builder.append("Object Property - ");
 		builder.append(aObjectProperty.getName());
 		builder.append(" (");
-		builder.append(aObjectProperty.getUri());
+		builder.append(aObjectProperty.getURI());
 		builder.append(")");
 		builder.append(" : ");
 		builder.append(aObjectProperty.getRange().getName());
@@ -219,7 +219,7 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyBehaviouralProperty)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor#visit(org.openflexo.foundation.ontology.IFlexoOntologyBehaviouralProperty)
 	 */
 	@Override
 	public String visit(IFlexoOntologyBehaviouralProperty aBehaviouralProperty) {

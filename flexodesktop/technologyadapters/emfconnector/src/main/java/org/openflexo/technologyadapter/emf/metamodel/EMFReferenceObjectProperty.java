@@ -37,10 +37,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
-import org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor;
 
 /**
  * EMF Reference.
@@ -59,10 +59,10 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getUri()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getURI()
 	 */
 	@Override
-	public String getUri() {
+	public String getURI() {
 		return EMFMetaModelURIBuilder.getUri(object);
 	}
 
@@ -159,7 +159,7 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
 	 */
 	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {

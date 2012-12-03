@@ -49,10 +49,10 @@ public class EMFDataTypeDataType extends AFlexoOntologyWrapperObject<EMFMetaMode
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getUri()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getURI()
 	 */
 	@Override
-	public String getUri() {
+	public String getURI() {
 		return EMFMetaModelURIBuilder.getUri(object);
 	}
 

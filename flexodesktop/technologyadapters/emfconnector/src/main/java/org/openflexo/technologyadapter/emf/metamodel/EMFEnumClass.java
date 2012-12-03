@@ -38,9 +38,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
-import org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor;
 
 /**
  * EMF Enum.
@@ -68,10 +68,10 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getUri()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getURI()
 	 */
 	@Override
-	public String getUri() {
+	public String getURI() {
 		return EMFMetaModelURIBuilder.getUri(object);
 	}
 
@@ -198,7 +198,7 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.visitor.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
 	 */
 	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {

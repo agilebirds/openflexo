@@ -15,7 +15,7 @@ import org.openflexo.foundation.resource.ResourceData;
  * 
  * @param <MM>
  */
-public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*StorageResourceData,*/ResourceData<MM> {
+public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends ResourceData<MM> {
 
 	/**
 	 * MetaModel URI.

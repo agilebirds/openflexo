@@ -40,7 +40,6 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
-import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
@@ -115,6 +114,17 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	@Override
 	public String retrieveMetaModelURI(File aMetaModelFile) {
 		// TODO implement this
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveMetaModelResource(java.io.File)
+	 */
+	@Override
+	public FlexoResource<EMFMetaModel> retrieveMetaModelResource(File aMetaModelFile) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

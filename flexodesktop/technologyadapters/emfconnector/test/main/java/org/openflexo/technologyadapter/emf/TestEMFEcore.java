@@ -22,23 +22,14 @@
 package org.openflexo.technologyadapter.emf;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.junit.Test;
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
-import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.util.FlexoOntologyUtility;
-import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
-import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
-import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelPackageReaderWriter;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.io.EMFModelResourceReaderWriter;
 
 /**
@@ -101,53 +92,5 @@ public class TestEMFEcore {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Modify model
-	 * 
-	 * @param m
-	 */
-	protected void modifyModel(EMFModel m) {
-
-		IFlexoOntologyClass classClass = FlexoOntologyUtility.getClass(m.getMetaModel(), "http://www.eclipse.org/uml2/4.0.0/UML/Class");
-		CreateClassIndividual createIndividualAction = new CreateClassIndividual(m, (EMFClassClass) classClass);
-		createIndividualAction.execute();
-		EMFObjectIndividual classIndividual = createIndividualAction.getResult();
-
-		IFlexoOntologyFeature nameFeature = FlexoOntologyUtility.getFeature(m.getMetaModel(),
-				"http://www.eclipse.org/uml2/4.0.0/UML/NamedElement/name");
-		SetAttributeDataPropertyValue setAttributeDataPropertyValue = new SetAttributeDataPropertyValue(
-				(EMFObjectIndividual) classIndividual, (EMFAttributeDataProperty) nameFeature, "newClass");
-		setAttributeDataPropertyValue.execute();
-
-		IFlexoOntologyFeature visibilityFeature = FlexoOntologyUtility.getFeature(m.getMetaModel(),
-				"http://www.eclipse.org/uml2/4.0.0/UML/NamedElement/visibility");
-		SetAttributeObjectPropertyValue setAttributeObjectPropertyValue = new SetAttributeObjectPropertyValue(
-				(EMFObjectIndividual) classIndividual, (EMFAttributeObjectProperty) visibilityFeature, "private");
-		setAttributeObjectPropertyValue.execute();
-
-		IFlexoOntologyClass packageClass = FlexoOntologyUtility.getClass(m.getMetaModel(), "http://www.eclipse.org/uml2/4.0.0/UML/Package");
-		List<IFlexoOntologyIndividual> individuals = FlexoOntologyUtility.getIndividualOfType(m, packageClass);
-		IFlexoOntologyIndividual packageIndividual = individuals.get(0);
-		IFlexoOntologyFeature packagedElementFeature = FlexoOntologyUtility.getFeature(m.getMetaModel(),
-				"http://www.eclipse.org/uml2/4.0.0/UML/Package/packagedElement");
-
-		SetReferenceObjectPropertyValue setReferenceObjectPropertyValue = new SetReferenceObjectPropertyValue(
-				(EMFObjectIndividual) packageIndividual, (EMFReferenceObjectProperty) packagedElementFeature, classIndividual);
-		setReferenceObjectPropertyValue.execute();
-	}
-
-	/**
-	 * Modify model 2
-	 * 
-	 * @param m
-	 */
-	protected void modifyModel2(EMFModel m) {
-		EMFObjectIndividual classIndividual = (EMFObjectIndividual) FlexoOntologyUtility.getIndividual(m,
-				"file:/D:/gbe/workspaces/workspace-openflexo/ecore_project/m/test.uml/p11/newClass");
-
-		DeleteClassIndividual deleteClassIndividual = new DeleteClassIndividual(m, classIndividual);
-		deleteClassIndividual.execute();
 	}
 }

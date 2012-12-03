@@ -49,7 +49,7 @@ import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
  * 
  * @author gbesancon
  */
-public class EMFMetaModel extends TemporaryFlexoModelObject implements FlexoMetaModel, IFlexoOntologyMetaModel {
+public class EMFMetaModel extends TemporaryFlexoModelObject implements FlexoMetaModel<EMFMetaModel>, IFlexoOntologyMetaModel {
 	/** Package. */
 	protected final EPackage ePackage;
 	/** Converter. */
@@ -66,10 +66,10 @@ public class EMFMetaModel extends TemporaryFlexoModelObject implements FlexoMeta
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getUri()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getURI()
 	 */
 	@Override
-	public String getUri() {
+	public String getURI() {
 		return EMFMetaModelURIBuilder.getUri(ePackage);
 	}
 

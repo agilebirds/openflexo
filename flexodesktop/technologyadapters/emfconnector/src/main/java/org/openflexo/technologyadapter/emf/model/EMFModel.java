@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
@@ -49,7 +48,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.io.EMFModelConverter;
-import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 /**
  * EMF Model.
@@ -59,7 +58,7 @@ import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
 public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
 
 	/** Resource. */
-	protected final Resource resource;
+	protected EMFModelResource resource;
 	/** MetaModel. */
 	protected final EMFMetaModel metaModel;
 	/** Converter. */
@@ -72,10 +71,10 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	 * 
 	 * @param object
 	 */
-	public EMFModel(EMFMetaModel metaModel, EMFModelConverter converter, Resource resource) {
-		this.resource = resource;
+	public EMFModel(EMFMetaModel metaModel, EMFModelConverter converter, EMFModelResource resource) {
 		this.metaModel = metaModel;
 		this.converter = converter;
+		this.resource = resource;
 	}
 
 	/**
@@ -91,10 +90,10 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getUri()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getURI()
 	 */
 	@Override
-	public String getUri() {
+	public String getURI() {
 		return EMFModelURIBuilder.getUri(resource);
 	}
 
@@ -213,27 +212,6 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	@Override
-	public void setProject(FlexoProject aProject) {
-		this.project = aProject;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.StorageResourceData#getFlexoResource()
-	 */
-	@Override
-	public FlexoEMFModelResource getFlexoResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.rm.StorageResourceData#save()
 	 */
 	@Override
@@ -252,7 +230,8 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	 */
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		// TODO Auto-generated method stub
-
+		if (resource instanceof EMFModelResource) {
+			this.resource = (EMFModelResource) resource;
+		}
 	}
 }
