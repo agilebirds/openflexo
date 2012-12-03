@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.GraphicalElementAction;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 
 public class GraphicalElementActionRemoved extends OEDataModification {
 

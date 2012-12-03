@@ -42,11 +42,9 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class EOModelResourceData extends FlexoObservable implements StorageResourceData {
+public class EOModelResourceData extends FlexoObservable implements StorageResourceData<EOModelResourceData> {
 
 	private static final Logger logger = Logger.getLogger(EOModelResourceData.class.getPackage().getName());
-
-	private FlexoProject _project;
 
 	private EOModel _eoModel;
 
@@ -62,9 +60,8 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	 * isModified = false; lastMemoryUpdate = null; }
 	 */
 
-	public EOModelResourceData(FlexoProject aProject, FlexoEOModelResource resource) {
+	public EOModelResourceData(FlexoEOModelResource resource) {
 		super();
-		_project = aProject;
 		_eoModel = null;
 		isModified = false;
 		lastMemoryUpdate = null;
@@ -101,12 +98,7 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 
 	@Override
 	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+		return getFlexoResource().getProject();
 	}
 
 	public DMModel getDMModel() {

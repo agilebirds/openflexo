@@ -18,6 +18,8 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -125,6 +127,15 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 				}
 				return null;
 			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
+				returned.setFlexoResourceCenterService(resourceCenterService);
+				returned.loadAvailableTechnologyAdapters();
+				return returned;
+			}
+
 		};
 		try {
 			editor = loadProject(projectDirectory);

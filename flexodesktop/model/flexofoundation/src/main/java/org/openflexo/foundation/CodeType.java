@@ -31,7 +31,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (proto,hc-wo,engine)
@@ -50,19 +49,6 @@ public abstract class CodeType extends TargetType implements StringConvertable<C
 	@Override
 	public String getFullyQualifiedName() {
 		return "CODE_TYPE." + getName();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Don't do that.");
-		}
-		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return null;
 	}
 
 	@Override

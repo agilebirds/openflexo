@@ -255,7 +255,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 			TabularViewAction action = e.getValue();
 			FlexoActionType actionType = action.getActionType();
 			try {
-				button.setEnabled(actionType.isEnabled(action.getFocusedObject(), action.getGlobalSelection(), getController().getEditor()));
+				button.setEnabled(actionType.isEnabled(action.getFocusedObject(), action.getGlobalSelection()));
 			} catch (NullPointerException e1) {
 				button.setEnabled(false);
 			}

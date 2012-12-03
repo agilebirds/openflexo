@@ -44,7 +44,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class GeneratedSources extends GeneratedOutput {
+public class GeneratedSources extends GeneratedOutput<GeneratedSources> {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeneratedSources.class.getPackage().getName());
 

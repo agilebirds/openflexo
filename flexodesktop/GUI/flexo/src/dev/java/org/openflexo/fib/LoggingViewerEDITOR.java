@@ -28,25 +28,24 @@ import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 
-public class LoggingViewerEDITOR {
+public class LoggingViewerEDITOR extends FIBAbstractEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(LoggingViewerEDITOR.class.getPackage().getName());
+
+	@Override
+	public Object[] getData() {
+		return makeArray(new FlexoLoggingViewer(FlexoLoggingManager.instance()));
+	}
+
+	@Override
+	public File getFIBFile() {
+		return FlexoLoggingViewer.LOGGING_VIEWER_FIB;
+	}
 
 	public static void main(String[] args) {
 		final FlexoLoggingManager loggingManager = Flexo.initializeLoggingManager();
 		loggingManager.setKeepLogTrace(true);
 		loggingManager.setMaxLogCount(-1);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				return makeArray(new FlexoLoggingViewer(loggingManager));
-			}
-
-			@Override
-			public File getFIBFile() {
-				return FlexoLoggingViewer.LOGGING_VIEWER_FIB;
-			}
-		};
-		editor.launch();
+		main(LoggingViewerEDITOR.class);
 	}
 }

@@ -24,7 +24,6 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class AdditionalBindingDefinition extends FlexoModelObject implements InspectableObject {
 
@@ -75,14 +74,6 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 	}
 
 	@Override
-	public XMLMapping getXMLMapping() {
-		if (getOwner() != null) {
-			return getOwner().getXMLMapping();
-		}
-		return null;
-	}
-
-	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		if (getOwner() != null) {
 			return getOwner().getXMLResourceData();
@@ -115,17 +106,4 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 		return "ADDITIONAL_BINDING_" + getFlexoID();
 	}
 
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		if (_owner != null) {
-			return _owner.getProject();
-		} else {
-			return null;
-		}
-	}
 }

@@ -99,7 +99,6 @@ public class MultiSplitPane extends JPanel {
 
 		private void updateNodeForComponent(int offset, Node node, Component comp) {
 			if (node.getPercentage() < 0) {
-				System.err.println("Fixed" + node.getSize() + offset);
 				node.setSize(node.getSize() + offset);
 			} else {
 				int size;

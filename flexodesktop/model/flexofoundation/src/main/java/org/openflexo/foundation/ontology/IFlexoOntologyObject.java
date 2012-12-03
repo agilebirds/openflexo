@@ -47,7 +47,7 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	String getUri();
+	String getURI();
 
 	/**
 	 * Description of Object.

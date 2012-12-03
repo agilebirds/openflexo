@@ -31,7 +31,6 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A WorkflowModelObject represents an object declared as workflow level. This means that its visibility is not related to a particular
@@ -98,31 +97,10 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 		return getFlexoWorkflow();
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		if (getFlexoWorkflow() != null) {
-			return getFlexoWorkflow().getProject();
-		}
-		return null;
-	}
-
 	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
 		setChanged();
 		notifyObservers(new WKFAttributeDataModification(attributeName, oldValue, newValue));
 	}
-
-	// ========================================================================
-	// ========================= XML Serialization ============================
-	// ========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getWorkflowMapping();
-	}
-
-	// ========================================================================
-	// ========================= Validable interface ==========================
-	// ========================================================================
 
 	/**
 	 * Return default validation model for this object

@@ -76,10 +76,6 @@ public abstract class AbstractGeneratedFile implements GeneratedResourceData {
 		return getFlexoResource().getProject();
 	}
 
-	@Override
-	public void setProject(FlexoProject aProject) {
-	}
-
 	public File getFile() {
 		return _file;
 	}

@@ -20,15 +20,11 @@
 package org.openflexo.foundation.rm;
 
 import java.util.Enumeration;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 
 /**
@@ -84,26 +80,6 @@ public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNa
 	@Override
 	public Class getResourceDataClass() {
 		return FlexoNavigationMenu.class;
-	}
-
-	@Override
-	public FlexoNavigationMenu performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
-		FlexoNavigationMenu menu;
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("loadResourceData() in FlexoNavigationMenuResource");
-		}
-		try {
-			menu = super.performLoadResourceData(progress, loadingHandler);
-		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("File " + getFile().getName() + " NOT found");
-			}
-			e.printStackTrace();
-			return null;
-		}
-		menu.setProject(getProject());
-		return menu;
 	}
 
 	@Override

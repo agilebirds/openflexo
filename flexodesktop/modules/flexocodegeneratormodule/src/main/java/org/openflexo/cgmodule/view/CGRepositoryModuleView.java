@@ -141,7 +141,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null, controller.getEditor())) {
+				if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null)) {
 					SynchronizeRepositoryCodeGeneration action = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
 							codeRepository, null, controller.getEditor());
 					action.doAction();
@@ -177,7 +177,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 		warButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor())) {
+				if (GenerateWAR.actionType.isEnabled(codeRepository, null)) {
 					GenerateWAR action = GenerateWAR.actionType.makeNewAction(codeRepository, null, controller.getEditor());
 					action.setCustomErrStream(new JConsoleOutputStream(console, Color.RED));
 					action.setCustomOutStream(new JConsoleOutputStream(console, Color.BLACK));
@@ -188,7 +188,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		});
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor()));
+		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
 		secondPanel.add(warButton);
 		bigButtonsPanel.add(secondPanel);
 		if (repository.includeReader()) {
@@ -214,7 +214,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 
 		// chooseFileButton.setEnabled(repository.isEnabled());
 		// chooseWarLocationButton.setEnabled(repository.isEnabled());
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository, null, controller.getEditor()));
+		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository, null));
 		console = new JConsole();
 		if (controller.getProjectGenerator(codeRepository) != null) {
 			controller.getProjectGenerator(codeRepository).addToLogListeners(this);
@@ -316,8 +316,8 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		}
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null, controller.getEditor()));
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor()));
+		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null));
+		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
 	}
 
 	/**

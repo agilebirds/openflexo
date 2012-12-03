@@ -141,7 +141,7 @@ public abstract class PatternRole extends EditionPatternObject {
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
 
-	public boolean defaultBehaviourIsToBeDeleted();
+	public abstract boolean defaultBehaviourIsToBeDeleted();
 
 	// @Override
 	// public abstract String getLanguageRepresentation();

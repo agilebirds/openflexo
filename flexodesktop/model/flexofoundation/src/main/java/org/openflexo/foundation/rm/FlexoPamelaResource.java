@@ -21,7 +21,7 @@ import org.openflexo.model.xml.InvalidDataException;
 import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {
+public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends FlexoStorageResource<SRD> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoPamelaResource.class
 			.getPackage().getName());
@@ -101,13 +101,14 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		this.modelFactory = new ModelFactory();
 		for (Converter<?> c : project.getStringEncoder().getConverters()) {
 			modelFactory.addConverter(new ConverterAdapter(c));
-	}
+		}
 	}
 
 	public ModelFactory getModelFactory() {
 		return modelFactory;
 	}
 
+	@Override
 	public Class<SRD> getResourceDataClass() {
 		return resourceDataClass;
 	}
@@ -179,8 +180,8 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 	protected SRD performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
 		if (!isLoadable()) {
-		return null;
-	}
+			return null;
+		}
 		XMLDeserializer deserializer = new XMLDeserializer(modelFactory);
 		FileInputStream fis = new FileInputStream(getFile());
 		try {

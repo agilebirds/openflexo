@@ -62,7 +62,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
@@ -124,7 +123,6 @@ import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorRef
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
@@ -154,9 +152,9 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -179,7 +177,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.IModuleLoader;
-import org.openflexo.technologyadapter.owl.ontology.OWLModel;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -205,7 +202,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author sguerin
  */
-public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
+public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData<FlexoProject>, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
 	private static final String REVISION = "revision";
@@ -326,7 +323,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private IModuleLoader moduleLoader;
 
 	private List<ModelSlotInstance> models;
-	private Map<View, Map<ModelSlot<?,?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -487,11 +484,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_resource = (FlexoRMResource) resource;
 		// registerResource(_resource);
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		// Does nothing, since this is the project itself !!!
 	}
 
 	@Override
@@ -3170,16 +3162,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public OperationNode getFirstOperation() {
-		if (firstOperation == null && firstOperationFlexoID > -1) {
-			firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
-		}
-		if (firstOperation == null) {
-			List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
-			if (v.size() > 0) {
-				firstOperation = v.get(0);
-				setChanged();
-				notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
+		if (getRootFlexoProcess() != null) {
+			if (firstOperation == null && firstOperationFlexoID > -1) {
+				firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
+			}
+			if (firstOperation == null) {
+				List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
+				if (v.size() > 0) {
+					firstOperation = v.get(0);
+					setChanged();
+					notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
 
+				}
 			}
 		}
 		return firstOperation;
@@ -3979,6 +3973,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
+	/*
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
@@ -4011,8 +4006,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return resource.getResourceData();
 	}
+	*/
 
-	private ProjectOntologyLibrary ontologyLibrary = null;
+	/*private ProjectOntologyLibrary ontologyLibrary = null;
 
 	public ProjectOntologyLibrary getProjectOntologyLibrary() {
 		return getProjectOntologyLibrary(true);
@@ -4030,7 +4026,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		}
 		return ontologyLibrary;
-	}
+	}*/
 
 	/*
 	 * private CalcLibrary calcLibrary = null;
@@ -4050,19 +4046,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public RoleList getImportedRoleList() {
 		return getWorkflow().getImportedRoleList();
-	}
-
-	public FlexoLinksResource getFlexoLinksResource() {
-		FlexoLinksResource returned = (FlexoLinksResource) resourceForKey(ResourceType.LINKS, getProjectName());
-		if (returned == null) {
-			FlexoLinks.createLinks(this);
-			return getFlexoLinksResource();
-		}
-		return returned;
-	}
-
-	public FlexoLinks getFlexoLinks() {
-		return getFlexoLinksResource().getResourceData();
 	}
 
 	public boolean getIsLocalized() {

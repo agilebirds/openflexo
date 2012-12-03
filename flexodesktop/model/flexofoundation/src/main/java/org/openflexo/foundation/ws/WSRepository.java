@@ -42,7 +42,6 @@ public class WSRepository extends WSObject implements FlexoObserver {
 	public WSRepository(FlexoWSLibraryBuilder builder) {
 		this(builder.wsLibrary);
 		initializeDeserialization(builder);
-		setProject(builder.getProject());
 	}
 
 	/**
@@ -50,7 +49,6 @@ public class WSRepository extends WSObject implements FlexoObserver {
 	     */
 	public WSRepository(FlexoWSLibrary wsLib) {
 		super(wsLib);
-		this.setProject(wsLib.getProject());
 	}
 
 	/**

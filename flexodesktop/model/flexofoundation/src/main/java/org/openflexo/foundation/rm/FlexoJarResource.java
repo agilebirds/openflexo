@@ -78,7 +78,6 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 			FlexoProjectFile jarFile) {
 		this(aProject, jarRepository, dmResource, jarFile);
 		_resourceData = aJarLoader;
-		aJarLoader.setProject(getProject());
 		aJarLoader.setFlexoResource(this);
 	}
 
@@ -134,7 +133,6 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 	protected JarLoader doImport() throws FlexoException {
 		logger.info("doImport() " + this);
 		JarLoader returned = new JarLoader(getFile(), this, getProject());
-		returned.setProject(getProject());
 		returned.setFlexoResource(this);
 		return returned;
 	}

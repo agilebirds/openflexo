@@ -58,17 +58,17 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewElement;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.view.ViewShape.DropAndLinkScheme;
 import org.openflexo.foundation.view.action.AddConnector;
-import org.openflexo.foundation.view.action.DropSchemeAction;
-import org.openflexo.foundation.view.action.LinkSchemeAction;
-import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
+import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.ViewShape.DropAndLinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {

@@ -29,7 +29,7 @@ import javax.swing.JMenuItem;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;

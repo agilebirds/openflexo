@@ -9,6 +9,8 @@ import org.openflexo.foundation.rm.FlexoPamelaResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectData;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 
 public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, FlexoModelObject> {
 
@@ -30,6 +32,12 @@ public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, 
 			return object != null && object.getProject() != null;
 		}
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+	}
 
 	private FlexoProject projectToImport;
 

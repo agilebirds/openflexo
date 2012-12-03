@@ -83,7 +83,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 		logger.info("Reload project");
 
-		_editor = reloadProject(_project.getProjectDirectory());
+		_editor = reloadProject(_project.getProjectDirectory(), _resourceCenter, null);
 		if (_project != null) {
 			_project.close();
 		}

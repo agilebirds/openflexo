@@ -25,22 +25,21 @@ import org.openflexo.br.view.JIRAURLCredentialsDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.module.UserType;
 
-public class JIRALoginPasswordEDITOR {
+public class JIRALoginPasswordEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		JIRAURLCredentialsDialog o = new JIRAURLCredentialsDialog();
+		return FIBAbstractEditor.makeArray(o);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return JIRAURLCredentialsDialog.URL_FIB_FILE;
+	}
 
 	public static void main(String[] args) {
 		UserType.setCurrentUserType(UserType.MAINTAINER);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				JIRAURLCredentialsDialog o = new JIRAURLCredentialsDialog();
-				return FIBAbstractEditor.makeArray(o);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return JIRAURLCredentialsDialog.URL_FIB_FILE;
-			}
-		};
-		editor.launch();
+		main(JIRALoginPasswordEDITOR.class);
 	}
 }

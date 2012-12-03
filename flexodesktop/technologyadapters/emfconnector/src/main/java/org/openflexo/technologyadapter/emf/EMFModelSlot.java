@@ -20,8 +20,8 @@ public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 	 * 
 	 * @param viewPoint
 	 */
-	public EMFModelSlot(ViewPoint viewPoint) {
-		super(viewPoint);
+	public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
+		super(viewPoint, adapter);
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 	 */
 	@Override
 	public String getFullyQualifiedName() {
-		return "EMFModelSlot";
+		return "DiagramModelSlot";
 	}
 
 	/**
@@ -51,15 +51,5 @@ public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
 	@Override
 	public String getClassNameKey() {
 		return "emf_model_slot";
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.ModelSlot#getTechnologyAdapter()
-	 */
-	@Override
-	public EMFTechnologyAdapter getTechnologyAdapter() {
-		return TechnologyAdapter.getTechnologyAdapter(EMFTechnologyAdapter.class);
 	}
 }

@@ -6,6 +6,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -19,7 +20,8 @@ import org.openflexo.xmlcode.XMLMapping;
  * @see View
  * 
  */
-public class ModelSlotInstance<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel> extends FlexoModelObject {
+public class ModelSlotInstance<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
+		FlexoModelObject {
 
 	private View view;
 	private ModelSlot<M, MM> modelSlot;

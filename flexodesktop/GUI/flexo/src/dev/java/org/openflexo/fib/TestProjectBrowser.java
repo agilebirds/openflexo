@@ -32,7 +32,7 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.toolbox.FileResource;
 
-public class TestProjectBrowser {
+public class TestProjectBrowser extends FIBAbstractEditor {
 
 	public static FileResource PRJ_FILE = new FileResource("Prj/TestBrowser.prj");
 	public static FileResource FIB_FILE = new FileResource("Fib/ProjectBrowser.fib");
@@ -44,25 +44,18 @@ public class TestProjectBrowser {
 		}
 	};
 
-	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				return FIBAbstractEditor.makeArray(loadProject());
-			}
+	@Override
+	public Object[] getData() {
+		return FIBAbstractEditor.makeArray(loadProject());
+	}
 
-			@Override
-			public File getFIBFile() {
-				return FIB_FILE;
-			}
-		};
-		/*editor.addAction("change_name",new ActionListener() {		
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				class1.setName("new_class_1_name");
-			}
-		});*/
-		editor.launch();
+	@Override
+	public File getFIBFile() {
+		return FIB_FILE;
+	}
+
+	public static void main(String[] args) {
+		main(TestProjectBrowser.class);
 	}
 
 	public static FlexoProject loadProject() {

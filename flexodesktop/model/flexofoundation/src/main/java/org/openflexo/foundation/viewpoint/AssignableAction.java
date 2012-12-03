@@ -37,7 +37,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class AssignableAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<MM>, MM extends FlexoMetaModel, T> extends
+public abstract class AssignableAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		EditionAction<MS, M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());

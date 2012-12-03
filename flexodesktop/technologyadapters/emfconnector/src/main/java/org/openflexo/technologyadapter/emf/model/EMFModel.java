@@ -56,7 +56,7 @@ import org.openflexo.technologyadapter.emf.rm.FlexoEMFModelResource;
  * 
  * @author gbesancon
  */
-public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFMetaModel>, IFlexoOntologyModel {
+public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
 
 	/** Resource. */
 	protected final Resource resource;
