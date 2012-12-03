@@ -22,7 +22,6 @@ package org.openflexo.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
@@ -125,12 +124,12 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 			@Override
 			public Icon getTabHeaderIcon(ModuleView<?> tab) {
-				return FlexoController.iconForObject(tab.getRepresentedObject());
+				return getController().iconForObject(tab.getRepresentedObject());
 			}
 
 			@Override
 			public String getTabHeaderTitle(ModuleView<?> tab) {
-				return FlexoMainPane.this.controller.getWindowTitleforObject(tab.getRepresentedObject());
+				return getController().getWindowTitleforObject(tab.getRepresentedObject());
 			}
 
 			@Override
@@ -380,14 +379,23 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			if (previous != null) {
 				centerPanel.remove(previous);
 			}
-			toAdd.setPreferredSize(new Dimension(0, 0));
+			// toAdd.setPreferredSize(new Dimension(0, 0));
 			centerPanel.add(toAdd, position.name());
-			centerLayout.displayNode(position.name(), next != null);
+			// boolean wasVisible = centerLayout.getNodeForName(position.name()).isVisible();
+			boolean visible = next != null;
+			centerLayout.displayNode(position.name(), visible);
 			Node node = centerLayout.getNodeForName(position.name());
 			Split parent = node.getParent();
 			if (parent != centerLayout.getNodeForName(LayoutColumns.CENTER.name())) {
 				fixWeightForNodeChildren(parent);
 			}
+			/*
+			if (!wasVisible && visible) {
+				for (Node child : parent.getChildren()) {
+					 child.setBounds(new Rectangle());
+				}
+			}
+			*/
 			centerPanel.revalidate();
 		}
 	}
@@ -538,6 +546,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
 				saveLayout();
 				perspective = next;
+				restoreLayout();
 				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView());
 				if (moduleView != null) {
 					tabbedPane.selectTab(moduleView);
@@ -593,7 +602,6 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		if (perspective == null) {
 			return;
 		}
-		restoreLayout();
 
 		boolean hasLeftView = false;
 		boolean hasRightView = false;
