@@ -1,5 +1,3 @@
-#English
-#Fri Oct 05 19:23:07 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1212,6 +1210,7 @@ business_data_class_must_not_be_read_only_description=business data class must b
 business_data_must_not_be_readonly=business data class must be an editable entity
 business_description=business description
 businessrule=business rule
+but=but
 button=Button
 button_container=Button container
 button_label=Button label
@@ -4071,6 +4070,7 @@ project_repository=Project repository
 project_repository_description=A project repository is used to store data used in the context of the project, but not stored in a database (volatile data).
 project_restoration=Project restoration
 project_shared_on=Project shared on
+project_uri_do_not_match=Project URI does not match
 project_was_not_properly_saved_permission_denied_directory=The project was not saved properly. Please verify that you have write access for the following directory and all the file it contains\: 
 project_was_not_properly_saved_permission_denied_file=The project was not saved properly. Please verify that you have write access for the following file\: 
 project_will_be_checkouted_in=Project will be checkouted in
@@ -5185,6 +5185,8 @@ war_install_directory=WAR install directory
 war_name=WAR name
 warning=Warning \!
 warnings=Warnings
+was_expected=was expected
+was_found=was found
 was_up_to_date=was up-to-date
 web_image_file_(png,jpg,gif)=Web Images (PNG,JPG,GIF)
 web_service_cannot_be_moved=Web service cannot be moved
