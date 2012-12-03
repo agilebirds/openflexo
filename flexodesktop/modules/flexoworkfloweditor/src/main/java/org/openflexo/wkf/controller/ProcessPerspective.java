@@ -30,6 +30,7 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
@@ -74,14 +75,6 @@ public class ProcessPerspective extends FlexoPerspective {
 		} else {
 			return topRightDummy;
 		}
-	}
-
-	@Override
-	public JComponent getMiddleLeftView() {
-		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
-			return importedWorkflowView.getResultingJComponent();
-		}
-		return null;
 	}
 
 	/**
@@ -154,6 +147,18 @@ public class ProcessPerspective extends FlexoPerspective {
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
 		}
+	}
+
+	private void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedWorkflowView.getResultingJComponent());
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }
