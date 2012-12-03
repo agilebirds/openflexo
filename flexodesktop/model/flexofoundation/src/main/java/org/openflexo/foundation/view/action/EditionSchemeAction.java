@@ -32,6 +32,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
@@ -199,7 +203,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 	 * Recursively invoke {@link #performAction(EditionAction, Hashtable)}
 	 */
 	protected void applyEditionActions() {
-
 		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
 
 		// Perform actions
@@ -213,7 +216,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		// Finalize actions
 		for (EditionAction action : performedActions.keySet()) {
 			action.finalizePerformAction(this, performedActions.get(action));
-		}
+			}
 
 	}
 

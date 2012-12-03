@@ -19,7 +19,7 @@
  * Contributors :
  *
  */
-package org.openflexo.technologyadapter.emf;
+package org.openflexo.technologyadapter.emf.model;
 
 import java.lang.reflect.Field;
 

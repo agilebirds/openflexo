@@ -36,8 +36,8 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
+import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
@@ -64,52 +64,40 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstanc
 @DeclareEditionAction(AddEMFInstance.class),
 /** Add class */
 @DeclareEditionAction(AddEMFClass.class),
-/** Delete */
+/** Add class */
 @DeclareEditionAction(DeleteAction.class) })
 public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel, EMFModelSlot> {
 
-	/**
-	 * Constructor.
-	 * 
-	 * @throws TechnologyAdapterInitializationException
-	 */
 	public EMFTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#getName()
-	 */
 	@Override
 	public String getName() {
 		return "EMF technology adapter";
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createNewModelSlot()
-	 */
 	@Override
 	protected EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new EMFModelSlot(viewPoint, this);
 	}
 
 	/**
-	 * Follow the link.
+	 * Return flag indicating if supplied file represents a valid XSD schema
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidMetaModelFile(java.io.File)
+	 * @param aMetaModelFile
+	 * @return
 	 */
 	@Override
 	public boolean isValidMetaModelFile(File aMetaModelFile) {
+		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".ecore");
 	}
 
 	/**
-	 * Follow the link.
+	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid XSD meta model
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveMetaModelURI(java.io.File)
+	 * @param aMetaModelFile
+	 * @return
 	 */
 	@Override
 	public String retrieveMetaModelURI(File aMetaModelFile) {
@@ -118,7 +106,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	/**
-	 * Follow the link.
+	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveMetaModelResource(java.io.File)
 	 */
@@ -142,10 +130,22 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	/**
-	 * Follow the link.
+	 * Instantiate new meta model resource stored in supplied meta model file
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#loadMetaModel(java.io.File,
-	 *      org.openflexo.foundation.ontology.OntologyLibrary)
+	 * @param aMetaModelFile
+	 * @return
+	 */
+	@Override
+	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile) {
+		// TODO to be implemented
+		return null;
+	}
+
+	/**
+	 * Instantiate new model resource stored in supplied model file
+	 * 
+	 * @param aMetaModelFile
+	 * @return
 	 */
 	@Override
 	public EMFModelResource retrieveModelResource(File aModelFile) {
@@ -154,10 +154,11 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	/**
-	 * Follow the link.
+	 * Creates new model conform to the supplied meta model
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createNewModel(org.openflexo.foundation.rm.FlexoProject,
-	 *      org.openflexo.foundation.technologyadapter.FlexoMetaModel)
+	 * @param project
+	 * @param metaModel
+	 * @return
 	 */
 	@Override
 	public EMFModel createNewModel(FlexoProject project, EMFMetaModel metaModel) {

@@ -15,27 +15,12 @@ import org.openflexo.foundation.resource.ResourceData;
  * 
  * @param <MM>
  */
-public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends ResourceData<MM> {
+public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*StorageResourceData,*/ResourceData<MM> {
 
-	/**
-	 * MetaModel URI.
-	 * 
-	 * @return
-	 */
 	public String getURI();
 
-	/**
-	 * Is Read Only.
-	 * 
-	 * @return
-	 */
 	public boolean isReadOnly();
 
-	/**
-	 * Set Is Read Only.
-	 * 
-	 * @param b
-	 */
 	public void setIsReadOnly(boolean b);
 
 }
