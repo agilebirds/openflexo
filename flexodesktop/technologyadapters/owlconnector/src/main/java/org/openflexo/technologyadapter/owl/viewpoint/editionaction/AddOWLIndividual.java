@@ -33,13 +33,12 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
-import org.openflexo.technologyadapter.owl.model.OWLMetaModel;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 
-public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLModel, OWLMetaModel, OWLIndividual> {
+public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLOntology, OWLOntology, OWLIndividual> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLIndividual.class.getPackage().getName());
 

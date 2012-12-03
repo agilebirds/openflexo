@@ -37,7 +37,6 @@ import org.openflexo.diff.merge.MergeChange.MergeChangeAction;
 import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
@@ -140,19 +139,7 @@ public class TestRoundTrip extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_RT, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
-				getNewResourceCenter(_projectIdentifier));
-		_project = _editor.getProject();
+		createProject(TEST_RT);
 		logger.info("Project has been SUCCESSFULLY created");
 
 		assertNotNull(_rmResource = _project.getFlexoRMResource());

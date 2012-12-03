@@ -1,12 +1,9 @@
 package org.openflexo.technologyadapter.owl;
 
 import org.openflexo.foundation.technologyadapter.ModelSlotImpl;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.technologyadapter.owl.model.OWLMetaModel;
-import org.openflexo.technologyadapter.owl.model.OWLModel;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 
 /**
  * <p>
@@ -15,20 +12,14 @@ import org.openflexo.technologyadapter.owl.model.OWLModel;
  * @author Luka Le Roux
  * 
  */
-public class OWLModelSlot extends ModelSlotImpl<OWLModel, OWLMetaModel> {
+public class OWLModelSlot extends ModelSlotImpl<OWLOntology, OWLOntology> {
 
-	public OWLModelSlot(ViewPoint viewPoint) {
-		super(viewPoint);
+	public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
+		super(viewPoint, adapter);
 	}
 
 	public OWLModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public OWLModel createEmptyModel(View view) {
-		// TODO this is a stub
-		return OWLModel.createNewOWLModel(view.getProject());
 	}
 
 	@Override
@@ -39,11 +30,6 @@ public class OWLModelSlot extends ModelSlotImpl<OWLModel, OWLMetaModel> {
 	@Override
 	public String getClassNameKey() {
 		return "owl_model_slot";
-	}
-
-	@Override
-	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return TechnologyAdapter.getTechnologyAdapter(OWLTechnologyAdapter.class);
 	}
 
 }

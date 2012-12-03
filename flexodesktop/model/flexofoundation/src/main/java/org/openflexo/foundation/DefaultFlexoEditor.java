@@ -119,6 +119,9 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action,
 			EventObject e) {
+		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
+			return null;
+		}
 		try {
 			return action.doActionInContext();
 		} catch (FlexoException e1) {
@@ -158,7 +161,7 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
-		return true;
+		return actionType.isEnabled(focusedObject, globalSelection);
 	}
 
 	@Override

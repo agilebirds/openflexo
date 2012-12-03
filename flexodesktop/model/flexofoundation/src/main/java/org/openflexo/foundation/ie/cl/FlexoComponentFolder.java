@@ -47,7 +47,6 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.util.FolderType;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoFileResource;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
@@ -73,11 +72,6 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 	public static final FolderComparator COMPARATOR = new FolderComparator();
 
 	protected static final Logger logger = Logger.getLogger(FlexoComponentFolder.class.getPackage().getName());
-
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
 
 	private String _name;
 
@@ -331,11 +325,6 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 
 	public List<PopupComponentDefinition> getPopupsComponentList() {
 		return getComponentsOfType(PopupComponentDefinition.class);
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return getComponentLibrary().getProject();
 	}
 
 	public Vector<ComponentDefinition> getComponents() {

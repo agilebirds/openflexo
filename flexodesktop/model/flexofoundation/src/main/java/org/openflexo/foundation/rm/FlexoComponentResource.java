@@ -142,9 +142,6 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 			component.setFlexoResource(this);
 			_resourceData = component;
 		}
-		if (component != null) {
-			component.setProject(getProject());
-		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for component " + getComponentDefinition().getName());
 		}

@@ -29,35 +29,34 @@ import org.openflexo.module.UserType;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-public class JIRAClientEDITOR {
+public class JIRAClientEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		JIRAIssueReportDialog o;
+		try {
+			o = new JIRAIssueReportDialog();
+			return FIBAbstractEditor.makeArray(o);
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Object[0];
+	}
+
+	@Override
+	public File getFIBFile() {
+		return JIRAIssueReportDialog.FIB_FILE;
+	}
 
 	public static void main(String[] args) {
 		UserType.setCurrentUserType(UserType.MAINTAINER);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				JIRAIssueReportDialog o;
-				try {
-					o = new JIRAIssueReportDialog();
-					return FIBAbstractEditor.makeArray(o);
-				} catch (JsonSyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonIOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return new Object[0];
-			}
-
-			@Override
-			public File getFIBFile() {
-				return JIRAIssueReportDialog.FIB_FILE;
-			}
-		};
-		editor.launch();
+		main(JIRAClientEDITOR.class);
 	}
 }

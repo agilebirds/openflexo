@@ -45,6 +45,7 @@ import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
@@ -55,25 +56,15 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class ViewLibrary extends ViewLibraryObject implements XMLStorageResourceData, InspectableObject {
+public class ViewLibrary extends ViewLibraryObject implements XMLStorageResourceData<ViewLibrary>, InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
-
-	// =====================================================================
-	// =========================== Instance variables ======================
-	// =====================================================================
-
-	private FlexoProject _project;
 
 	private FlexoOEShemaLibraryResource _resource;
 
 	private String name;
 
 	private ViewFolder _rootFolder;
-
-	// ========================================================
-	// =================== Constructor ========================
-	// ========================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -90,7 +81,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	 */
 	public ViewLibrary(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	@Override
@@ -161,16 +151,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoOEShemaLibraryResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override

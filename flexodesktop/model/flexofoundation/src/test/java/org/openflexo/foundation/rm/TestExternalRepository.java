@@ -20,11 +20,9 @@
 package org.openflexo.foundation.rm;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
@@ -39,30 +37,13 @@ public class TestExternalRepository extends FlexoTestCase {
 
 	private static final String TEST_ER = "TestExternalRepository";
 
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-	private static File _projectDirectory;
-	private static String _projectIdentifier;
-
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
 		logger.info("test0CreateProject");
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_ER, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
-		logger.info("Project has been SUCCESSFULLY created");
+		createProject(TEST_ER);
 	}
 
 	/**

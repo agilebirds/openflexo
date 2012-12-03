@@ -105,8 +105,8 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
-import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -115,12 +115,12 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
@@ -365,11 +365,19 @@ public enum BrowserElementType {
 	PROJECT_ONTOLOGY("project_ontology", OWLModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	IMPORTED_ONTOLOGY("imported_ontology", OWLMetaModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
+<<<<<<< HEAD
 	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
 	/*	ONTOLOGY_CLASS("ontology_class", IFlexoOntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
 		ONTOLOGY_INDIVIDUAL("ontology_individual", IFlexoOntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
 		ONTOLOGY_DATA_PROPERTY("ontology_data_property", IFlexoOntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
 		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", IFlexoOntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
+=======
+	ONTOLOGY_FOLDER("ontology_folder", RepositoryFolder.class, IconLibrary.FOLDER_ICON),
+	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
+		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
+		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
+		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
+>>>>>>> model_slot
 		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
 	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
 	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),

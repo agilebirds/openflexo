@@ -14,7 +14,7 @@
     <DropDown format="object.name" localize="true" name="editionPatternDropdown" data="data.editionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
-    <DropDown localize="true" name="patternRoleDropDown" data="data.patternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="editionPatternDropdown.selected.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+    <DropDown localize="true" name="patternRoleDropDown" data="data.patternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="editionPatternDropdown.selected.shapePatternRoles" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
     <Label label="DECLARE_IN_EXISTING_EDITION_PATTERN_description" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=20;insetsLeft=2;insetsRight=2;insetsTop=20;location=center)">

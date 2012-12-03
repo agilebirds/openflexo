@@ -29,11 +29,15 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class IterationAction extends ControlStructureAction {
+public class IterationAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
+		ControlStructureAction<MS, M, MM> {
 
 	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
 
@@ -127,6 +131,19 @@ public class IterationAction extends ControlStructureAction {
 		if (getIteration().isValid()) {
 			return (List<?>) getIteration().getBindingValue(action);
 		}
+		return null;
+	}
+
+	@Override
+	public Object performAction(EditionSchemeAction action) {
+		List<?> items = evaluateIteration(action);
+		if (items != null) {
+			for (Object item : items) {
+				action.declareVariable(getIteratorName(), item);
+				performBatchOfActions(getActions(), action);
+			}
+		}
+		action.dereferenceVariable(getIteratorName());
 		return null;
 	}
 

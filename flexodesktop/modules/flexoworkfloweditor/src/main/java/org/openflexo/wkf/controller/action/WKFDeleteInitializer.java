@@ -219,7 +219,8 @@ public class WKFDeleteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFDelete>() {
 			@Override
 			public boolean run(EventObject e, WKFDelete action) {
-				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())) {
+				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())
+						&& getProject().getRootFlexoProcess() != null) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(getProject().getRootFlexoProcess());
 				}
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null

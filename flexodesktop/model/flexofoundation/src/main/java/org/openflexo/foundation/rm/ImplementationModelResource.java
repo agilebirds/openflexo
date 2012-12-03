@@ -126,9 +126,6 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 			}
 			_resourceData = implModel;
 		}
-		if (implModel != null) {
-			implModel.setProject(getProject());
-		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for implementation model " + getImplementationModelDefinition().getName());
 		}

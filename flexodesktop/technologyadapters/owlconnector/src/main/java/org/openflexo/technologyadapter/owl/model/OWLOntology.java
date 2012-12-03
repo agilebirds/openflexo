@@ -46,13 +46,12 @@ import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -64,8 +63,13 @@ import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
@@ -98,12 +102,15 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
 /**
- * Represents an OWL Ontology
+ * Represents an OWL Ontology<br>
+ * 
+ * Note that in the context of this particular technological space, an ontology is both a model and a metamodel
  * 
  * @author sylvain
  * 
  */
-public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
+public abstract class OWLOntology extends OWLObject implements IFlexoOntology, ResourceData<OWLOntology>, FlexoMetaModel<OWLOntology>,
+		FlexoModel<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntology.class.getPackage().getName());
 
@@ -1472,11 +1479,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _library.getProject();
-	}
-
-	@Override
 	public void setDescription(String description) {
 		// TODO
 	}
@@ -1613,6 +1615,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
 		return readOnly;
 	}
 
+	@Override
 	public void setIsReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
@@ -1722,8 +1725,8 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
 	 * @throws DuplicateURIException
 	 */
 	@Override
-	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty, IFlexoOntologyClass domain,
-			IFlexoOntologyClass range) throws DuplicateURIException {
+	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty,
+			IFlexoOntologyClass domain, IFlexoOntologyClass range) throws DuplicateURIException {
 		// TODO implement this
 		logger.warning("createObjectProperty() not implemented yet");
 		return null;
@@ -2076,6 +2079,42 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology {
 			}
 		}
 
+	}
+
+	@Override
+	public FlexoStorageResource getFlexoResource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OWLOntology getMetaModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

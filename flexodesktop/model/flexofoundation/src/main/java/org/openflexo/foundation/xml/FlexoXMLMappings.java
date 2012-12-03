@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
@@ -45,8 +44,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
@@ -84,10 +83,6 @@ public class FlexoXMLMappings {
 
 	public XMLMapping getRMMapping() {
 		return getMappingForClass(FlexoProject.class);
-	}
-
-	public XMLMapping getLinksMapping() {
-		return getMappingForClass(FlexoLinks.class);
 	}
 
 	public XMLMapping getWKFMapping() {

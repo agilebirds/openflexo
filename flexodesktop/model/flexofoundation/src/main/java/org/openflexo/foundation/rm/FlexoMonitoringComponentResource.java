@@ -19,16 +19,11 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ie.IEMonitoringScreen;
-import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.MonitoringComponentDefinition;
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
 public class FlexoMonitoringComponentResource extends FlexoComponentResource {
 
@@ -62,17 +57,6 @@ public class FlexoMonitoringComponentResource extends FlexoComponentResource {
 
 	public IEMonitoringScreen getIEScreenComponent() {
 		return (IEMonitoringScreen) getResourceData();
-	}
-
-	@Override
-	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Loading component " + getName());
-		}
-		IEMonitoringScreen monitoringScreen = (IEMonitoringScreen) super.performLoadResourceData(progress, loadingHandler);
-		monitoringScreen.setProject(getProject());
-		return monitoringScreen;
 	}
 
 	@Override

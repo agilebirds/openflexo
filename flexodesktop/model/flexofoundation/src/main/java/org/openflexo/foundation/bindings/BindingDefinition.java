@@ -35,11 +35,9 @@ import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -65,8 +63,6 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 
 	private BindingDefinitionType _bindingDefinitionType = BindingDefinitionType.GET;
 
-	protected transient FlexoProject _project;
-
 	public static enum BindingDefinitionType {
 		GET, SET, GET_SET, EXECUTE
 	}
@@ -74,9 +70,6 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	public BindingDefinition(FlexoModelObject owner) {
 		super(owner != null ? owner.getProject() : null);
 		_owner = owner;
-		if (owner != null) {
-			_project = owner.getProject();
-		}
 	}
 
 	/*public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, boolean mandatory)
@@ -219,21 +212,8 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return "BINDING_DEFINITION." + getVariableName() + "." + getTypeName();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (getOwner() != null) {
-			return getOwner().getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

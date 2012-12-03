@@ -100,7 +100,8 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @author bmangez, sguerin
  */
-public abstract class IEWOComponent extends IEObject implements XMLStorageResourceData, InspectableObject, Validable, Bindable {
+public abstract class IEWOComponent extends IEObject implements XMLStorageResourceData<IEWOComponent>, InspectableObject, Validable,
+		Bindable {
 	private static final Logger logger = Logger.getLogger(IEWOComponent.class.getPackage().getName());
 
 	// ==========================================================================
@@ -109,8 +110,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	// ==========================================================================
 
 	private FlexoComponentResource _resource;
-
-	private transient FlexoProject _project;
 
 	private String _helpText;
 
@@ -131,11 +130,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 
 	private Date lastUpdate;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public IEWOComponent(FlexoComponentBuilder builder) {
 		this(builder.componentDefinition, builder.getProject());
 		builder.woComponent = this;
@@ -151,7 +145,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		if (project == null) {
 			new Exception("No project at all, this is going to kill me!").printStackTrace();
 		}
-		setProject(project);
 		setRootSequence(new IESequenceWidget(this, this, project));
 		_componentDefinition = model;
 		tabContainers = new Vector<IESequenceTab>();
@@ -471,11 +464,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		return true;
 	}
 
-	// ==========================================================================
-	// ===================== Resource managing
-	// ==================================
-	// ==========================================================================
-
 	@Override
 	public FlexoComponentResource getFlexoResource() {
 		return _resource;
@@ -489,16 +477,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	/**

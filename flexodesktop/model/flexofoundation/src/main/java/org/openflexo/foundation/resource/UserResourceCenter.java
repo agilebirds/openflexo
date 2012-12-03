@@ -30,14 +30,13 @@ import org.openflexo.model.factory.XMLDeserializer;
 import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter implements FlexoResourceCenter {
+public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	private ModelFactory modelFactory;
-	private File userResourceCenterStorageFile;
 	private Storage storage;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		super(userResourceCenterStorageFile);
 		this.modelFactory = new ModelFactory();
 		try {
 			modelFactory.importClass(Storage.class);
@@ -71,11 +70,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	}
 
 	public File getUserResourceCenterStorageFile() {
-		return userResourceCenterStorageFile;
-	}
-
-	public void setUserResourceCenterStorageFile(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		return getRootDirectory();
 	}
 
 	@ModelEntity
@@ -164,7 +159,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	@Override
 	public void update() throws IOException {
-		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
+		FileInputStream fis = new FileInputStream(getRootDirectory());
 		try {
 			try {
 				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
@@ -183,24 +178,28 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
 		return null;
 	}
 
+	@Deprecated
 	@Override
 	public ViewPointLibrary retrieveViewPointLibrary() {
 		return null;
 	}
 
+	@Deprecated
 	@Override
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return null;
 	}
 
+	@Deprecated
 	@Override
 	public File getNewCalcSandboxDirectory() {
-		return new File(userResourceCenterStorageFile.getParentFile(), "ViewPoints");
+		return new File(getRootDirectory().getParentFile(), "ViewPoints");
 	}
 
 }

@@ -21,7 +21,8 @@ package org.openflexo.technologyadapter.emf;
 
 import java.io.File;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -34,8 +35,13 @@ import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
 
@@ -72,9 +78,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	@Override
-	protected EMFModelSlot createNewModelSlot() {
-		// TODO implement this
-		return null;
+	protected EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new EMFModelSlot(viewPoint, this);
 	}
 
 	/**
@@ -109,21 +114,33 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, EMFMetaModel metaModel) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		// TODO implement this
 		return false;
 	}
 
 	/**
-	 * Instantiate new meta model stored in supplied meta model file
+	 * Instantiate new meta model resource stored in supplied meta model file
 	 * 
 	 * @param aMetaModelFile
 	 * @return
 	 */
 	@Override
-	public EMFMetaModel loadMetaModel(File aMetaModelFile, OntologyLibrary library) {
-		// TODO implement this
+	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile) {
+		// TODO to be implemented
+		return null;
+	}
+
+	/**
+	 * Instantiate new model resource stored in supplied model file
+	 * 
+	 * @param aMetaModelFile
+	 * @return
+	 */
+	@Override
+	public EMFModelResource retrieveModelResource(File aModelFile) {
+		// TODO to be implemented
 		return null;
 	}
 
@@ -139,6 +156,16 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		// TODO implement this
 		// See code in XSD/XML connector
 		return null;
+	}
+
+	@Override
+	public EMFModelRepository createModelRepository(FlexoResourceCenter resourceCenter) {
+		return new EMFModelRepository(this, resourceCenter);
+	}
+
+	@Override
+	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
+		return new EMFMetaModelRepository(this, resourceCenter);
 	}
 
 }

@@ -25,13 +25,15 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
 
-public class AddIsAStatement extends AddStatement {
+public class AddIsAStatement extends AddStatement<IsAStatement> {
 
 	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
@@ -83,6 +85,24 @@ public class AddIsAStatement extends AddStatement {
 	@Override
 	public Type getAssignableType() {
 		return IsAStatement.class;
+	}
+
+	@Override
+	public IsAStatement performAction(EditionSchemeAction action) {
+		OntologyObject subject = getPropertySubject(action);
+		OntologyObject father = getPropertyFather(action);
+		if (father instanceof OntologyClass) {
+			if (subject instanceof OntologyClass) {
+				return (IsAStatement) ((OntologyClass) subject).addSuperClass((OntologyClass) father);
+			} else if (subject instanceof OntologyIndividual) {
+				return (IsAStatement) ((OntologyIndividual) subject).addType((OntologyClass) father);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, IsAStatement initialContext) {
 	}
 
 }

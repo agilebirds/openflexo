@@ -31,6 +31,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
@@ -88,7 +89,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	private FlexoResourceCenter resourceCenter;
 	private OntologyLibrary parentOntologyLibrary = null;
 
-	private OntologyFolder rootFolder;
+	private RepositoryFolder rootFolder;
 
 	private OntologyObjectConverter ontologyObjectConverter;
 
@@ -116,7 +117,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		objectProperties = new Hashtable<String, IFlexoOntologyObjectProperty>();*/
 		// findOntologies(ONTOLOGY_LIBRARY_DIR, FLEXO_ONTOLOGY_ROOT_URI);
 
-		rootFolder = new OntologyFolder("root", null, this);
+		rootFolder = new RepositoryFolder("root", null, this);
 
 	}
 
@@ -233,7 +234,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return importMetaModel(metaModel, null);
 	}
 
-	public FlexoMetaModel importMetaModel(FlexoMetaModel metaModel, OntologyFolder folder) {
+	public FlexoMetaModel importMetaModel(FlexoMetaModel metaModel, RepositoryFolder folder) {
 		logger.fine("Import meta model " + metaModel.getURI());
 		if (_allOntologies != null) {
 			_allOntologies.clear();
@@ -763,7 +764,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		}
 	}
 
-	public OntologyFolder getRootFolder() {
+	public RepositoryFolder getRootFolder() {
 		return rootFolder;
 	}
 

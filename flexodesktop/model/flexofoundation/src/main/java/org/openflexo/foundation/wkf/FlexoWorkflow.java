@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
@@ -95,6 +94,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A FlexoWorkflow represent all the processes defined in corresponding project, and their hierarchy. A FlexoWorkflow always codes one and
@@ -104,7 +104,7 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
  * @author benoit,sylvain
  */
 
-public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData<FlexoWorkflow>, InspectableObject {
 
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
@@ -136,12 +136,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private static final Logger logger = Logger.getLogger(FlexoWorkflow.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 	private FlexoWorkflowResource _resource;
 
 	private FlexoProcessNode _rootProcessNode;
@@ -180,7 +174,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 */
 	public FlexoWorkflow(FlexoProject project) {
 		super(project);
-		setProject(project);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();
@@ -188,7 +181,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		operationMetricsDefinitions = new Vector<MetricsDefinition>();
 		edgeMetricsDefinitions = new Vector<MetricsDefinition>();
 		artefactMetricsDefinitions = new Vector<MetricsDefinition>();
-		setWorkflowName(project.getProjectName());
+		_workflowName = project.getProjectName();
 	}
 
 	@Override
@@ -199,6 +192,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getWorkflowMapping();
 	}
 
 	/**
@@ -252,7 +250,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		newWorkflow.createDefaultEdgeMetricsDefinitions();
 		newWorkflow.createDefaultArtefactMetricsDefinitions();
 
-		FlexoProcess.createNewRootProcess(newWorkflow);
+		// FlexoProcess.createNewRootProcess(newWorkflow);
 
 		try {
 			wkfRes.saveResourceData();
@@ -272,10 +270,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	@Override
 	public FlexoProject getProject() {
-		if (_resource != null) {
-			return _resource.getProject();
-		}
-		return _project;
+		return _resource.getProject();
 	}
 
 	@Override
@@ -286,12 +281,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
-		_project = null;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	/**
@@ -849,7 +838,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				setRootProcess(_getTopLevelNodeProcesses().firstElement().getProcess());
 				return getRootProcess();
 			} else {
-				logger.severe("No process found !");
 				return null;
 			}
 		}
@@ -860,12 +848,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public void setRootProcess(FlexoProcess aProcess) {
-		if (aProcess == null) {
-			logger.warning("Null not authorized as root process !");
-			setChanged();
-			notifyObserversAsReentrantModification(new DataModification("rootProcess", getRootProcess(), getRootProcess()));
-			return;
-		}
 		_setRootProcessNode(aProcess.getProcessNode());
 
 	}

@@ -40,7 +40,6 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ScreenshotResource;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.Validable;
@@ -54,6 +53,7 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.ws.client.PPMWebService.PPMObject;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract class for all objects involved in FLEXO model definition
@@ -62,11 +62,6 @@ import org.openflexo.xmlcode.StringEncoder;
  * 
  */
 public abstract class FlexoModelObject extends FlexoXMLSerializableObject implements FlexoActionnable {
-
-	static {
-		// To be sure all Technology Adapters are recorded
-		TechnologyAdapter.loadTechnologyAdapters();
-	}
 
 	public static boolean stringHasChanged(String old, String newString) {
 		return old == null && newString != null || old != null && !old.equals(newString);
@@ -204,8 +199,16 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public FlexoProject getProject() {
+		if (getXMLResourceData() != null && getXMLResourceData().getFlexoResource() != null) {
+			return getXMLResourceData().getFlexoResource().getProject();
+		}
+		return null;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
 		if (getXMLResourceData() != null) {
-			return getXMLResourceData().getProject();
+			return getXMLResourceData().getXMLMapping();
 		}
 		return null;
 	}
@@ -252,14 +255,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				logger.log(Level.SEVERE, "setName threw an exception on " + this + "! This should never happen for imported objects", e);
 			}
 		}
-	}
-
-	public Vector<FlexoLink> getLinks() {
-		return getProject().getFlexoLinks().getLinksFor(this);
-	}
-
-	public void notifyLinksChanged() {
-
 	}
 
 	/**

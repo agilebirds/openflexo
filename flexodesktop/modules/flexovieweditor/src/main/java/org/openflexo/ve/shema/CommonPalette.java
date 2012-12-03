@@ -36,8 +36,8 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 
 public class CommonPalette extends DrawingPalette {
 

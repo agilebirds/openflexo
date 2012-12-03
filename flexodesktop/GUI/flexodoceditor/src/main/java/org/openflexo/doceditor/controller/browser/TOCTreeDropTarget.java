@@ -48,7 +48,7 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over, v, getEditor());
+				return MoveTOCEntry.actionType.isEnabled(over, v);
 			} else if (targ instanceof TOCRepositoryElement) {
 				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
 				if (over == null || dragged == null) {
@@ -56,7 +56,7 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over, v, getEditor());
+				return MoveTOCEntry.actionType.isEnabled(over, v);
 			}
 		}
 		return false;

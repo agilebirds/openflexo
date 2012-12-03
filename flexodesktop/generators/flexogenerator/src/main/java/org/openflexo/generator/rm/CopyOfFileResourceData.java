@@ -154,12 +154,6 @@ public class CopyOfFileResourceData implements GeneratedResourceData, Generation
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public IFlexoResourceGenerator getGenerator() {
 		return flexoCopiedResource.getGenerator();
 	}

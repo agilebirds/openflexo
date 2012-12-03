@@ -28,9 +28,9 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public interface XMLStorageResourceData extends StorageResourceData, XMLSerializable {
+public interface XMLStorageResourceData<RD extends XMLStorageResourceData<RD>> extends StorageResourceData<RD>, XMLSerializable {
 
-	public FlexoXMLStorageResource getFlexoXMLFileResource();
+	public FlexoXMLStorageResource<RD> getFlexoXMLFileResource();
 
 	public boolean isSerializing();
 
