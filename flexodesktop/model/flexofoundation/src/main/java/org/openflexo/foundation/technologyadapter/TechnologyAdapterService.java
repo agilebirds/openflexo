@@ -30,7 +30,7 @@ public interface TechnologyAdapterService {
 	 */
 	public void loadAvailableTechnologyAdapters();
 
-	@Getter(value = TECHNOLOGY_ADAPTERS, cardinality = Cardinality.LIST)
+	@Getter(value = TECHNOLOGY_ADAPTERS, cardinality = Cardinality.LIST, ignoreType = true)
 	public List<TechnologyAdapter<?, ?, ?>> getTechnologyAdapters();
 
 	@Setter(TECHNOLOGY_ADAPTERS)
