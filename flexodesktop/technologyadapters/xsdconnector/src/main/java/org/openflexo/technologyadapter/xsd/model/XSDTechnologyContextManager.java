@@ -2,9 +2,8 @@ package org.openflexo.technologyadapter.xsd.model;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 
-public class XSDTechnologyContextManager extends TechnologyContextManager<XMLModel, XSDMetaModel, XSDModelSlot> {
+public class XSDTechnologyContextManager extends TechnologyContextManager<XMLModel, XSDMetaModel> {
 
 	@Override
 	public void registerModel(FlexoResource<XMLModel> newModelResource) {

@@ -28,13 +28,12 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFClass;
 import org.openflexo.technologyadapter.emf.model.EMFInstance;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
-public class AddEMFInstance extends AddIndividual<EMFModelSlot, EMFModel, EMFMetaModel, EMFInstance> {
+public class AddEMFInstance extends AddIndividual<EMFModel, EMFMetaModel, EMFInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEMFInstance.class.getPackage().getName());
 

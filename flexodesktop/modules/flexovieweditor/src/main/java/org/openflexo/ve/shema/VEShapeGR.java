@@ -31,7 +31,7 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.model.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.ElementUpdated;

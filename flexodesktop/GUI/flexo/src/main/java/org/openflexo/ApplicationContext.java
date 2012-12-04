@@ -4,8 +4,10 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -38,7 +40,15 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		projectReferenceLoader = createProjectReferenceLoader();
 		resourceCenterService = createResourceCenterService();
 		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
-		resourceCenterService.registerTechnologyAdapterService(technologyAdapterService);
+
+		// At this point, the resource center service is initialized, and so is the technology adapter service
+		for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
+			rc.initialize(technologyAdapterService);
+		}
+		for (TechnologyAdapter<?, ?, ?> ta : technologyAdapterService.getTechnologyAdapters()) {
+			ta.initialize();
+		}
+
 	}
 
 	public ModuleLoader getModuleLoader() {

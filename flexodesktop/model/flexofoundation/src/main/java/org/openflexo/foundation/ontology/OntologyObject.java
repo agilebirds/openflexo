@@ -2,6 +2,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.Set;
 
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
 

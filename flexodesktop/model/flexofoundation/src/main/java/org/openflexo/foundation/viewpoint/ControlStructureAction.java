@@ -28,16 +28,16 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>>
-		extends EditionAction<MS, M, MM, Object> implements ActionContainer {
+public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
+		EditionAction<M, MM, Object> implements ActionContainer {
 
 	private static final Logger logger = Logger.getLogger(ControlStructureAction.class.getPackage().getName());
 
-	private Vector<EditionAction<?, ?, ?, ?>> actions;
+	private Vector<EditionAction<?, ?, ?>> actions;
 
 	public ControlStructureAction(ViewPointBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction<?, ?, ?, ?>>();
+		actions = new Vector<EditionAction<?, ?, ?>>();
 	}
 
 	/*@Override
@@ -48,7 +48,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	@Override
 	protected void rebuildInferedBindingModel() {
 		super.rebuildInferedBindingModel();
-		for (EditionAction<?, ?, ?, ?> action : getActions()) {
+		for (EditionAction<?, ?, ?> action : getActions()) {
 			action.rebuildInferedBindingModel();
 		}
 	}
@@ -59,19 +59,19 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public Vector<EditionAction<?, ?, ?, ?>> getActions() {
+	public Vector<EditionAction<?, ?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction<?, ?, ?, ?>> actions) {
+	public void setActions(Vector<EditionAction<?, ?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction<?, ?, ?, ?> action) {
+	public void addToActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(getEditionScheme());
 		action.setActionContainer(this);
 		actions.add(action);
@@ -81,7 +81,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public void removeFromActions(EditionAction<?, ?, ?, ?> action) {
+	public void removeFromActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
@@ -90,12 +90,12 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public int getIndex(EditionAction<?, ?, ?, ?> action) {
+	public int getIndex(EditionAction<?, ?, ?> action) {
 		return actions.indexOf(action);
 	}
 
 	@Override
-	public void insertActionAtIndex(EditionAction<?, ?, ?, ?> action, int index) {
+	public void insertActionAtIndex(EditionAction<?, ?, ?> action, int index) {
 		// action.setScheme(getEditionScheme());
 		action.setActionContainer(this);
 		actions.insertElementAt(action, index);
@@ -105,7 +105,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public void actionFirst(EditionAction<?, ?, ?, ?> a) {
+	public void actionFirst(EditionAction<?, ?, ?> a) {
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
 		setChanged();
@@ -113,7 +113,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public void actionUp(EditionAction<?, ?, ?, ?> a) {
+	public void actionUp(EditionAction<?, ?, ?> a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
 			actions.remove(a);
@@ -124,7 +124,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public void actionDown(EditionAction<?, ?, ?, ?> a) {
+	public void actionDown(EditionAction<?, ?, ?> a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
 			actions.remove(a);
@@ -135,7 +135,7 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	}
 
 	@Override
-	public void actionLast(EditionAction<?, ?, ?, ?> a) {
+	public void actionLast(EditionAction<?, ?, ?> a) {
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
@@ -288,15 +288,15 @@ public abstract class ControlStructureAction<MS extends ModelSlot<M, MM>, M exte
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, MS modelSlot) {
+	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
+			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
-	public EditionAction<?, ?, ?, ?> deleteAction(EditionAction<?, ?, ?, ?> anAction) {
+	public EditionAction<?, ?, ?> deleteAction(EditionAction<?, ?, ?> anAction) {
 		removeFromActions(anAction);
 		anAction.delete();
 		return anAction;

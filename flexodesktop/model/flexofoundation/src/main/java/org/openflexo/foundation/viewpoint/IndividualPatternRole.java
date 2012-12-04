@@ -5,9 +5,11 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class IndividualPatternRole extends OntologicObjectPatternRole {
+public class IndividualPatternRole extends OntologicObjectPatternRole<OntologyIndividual> {
 
 	public IndividualPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -75,6 +77,11 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public ConceptActorReference<OntologyIndividual> makeActorReference(OntologyIndividual object, EditionPatternReference epRef) {
+		return new ConceptActorReference<OntologyIndividual>(object, this, epRef);
 	}
 
 }

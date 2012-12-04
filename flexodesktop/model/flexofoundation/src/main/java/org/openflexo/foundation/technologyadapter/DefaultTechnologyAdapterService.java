@@ -24,8 +24,8 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	private FlexoResourceCenterService flexoResourceCenterService;
 
-	private Map<Class, TechnologyAdapter<?, ?, ?>> loadedAdapters;
-	private Map<TechnologyAdapter<?, ?, ?>, TechnologyContextManager<?, ?, ?>> technologyContextManager;
+	private Map<Class, TechnologyAdapter<?, ?>> loadedAdapters;
+	private Map<TechnologyAdapter<?, ?>, TechnologyContextManager<?, ?>> technologyContextManager;
 
 	public static TechnologyAdapterService getNewInstance() {
 		try {
@@ -48,14 +48,14 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	@Override
 	public void loadAvailableTechnologyAdapters() {
 		if (loadedAdapters == null) {
-			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?, ?>>();
+			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?>>();
 			logger.info("Loading available technology adapters...");
 			ServiceLoader<TechnologyAdapter> loader = ServiceLoader.load(TechnologyAdapter.class);
 			Iterator<TechnologyAdapter> iterator = loader.iterator();
 			while (iterator.hasNext()) {
 				TechnologyAdapter technologyAdapter = iterator.next();
 				technologyAdapter.setTechnologyAdapterService(this);
-				TechnologyContextManager tcm = technologyAdapter.createTechnologyContextManager();
+				TechnologyContextManager tcm = technologyAdapter.createTechnologyContextManager(getFlexoResourceCenterService());
 				technologyContextManager.put(technologyAdapter, tcm);
 				addToTechnologyAdapters(technologyAdapter);
 
@@ -81,7 +81,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * @return
 	 */
 	@Override
-	public <TA extends TechnologyAdapter<?, ?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
+	public <TA extends TechnologyAdapter<?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
 		return (TA) loadedAdapters.get(technologyAdapterClass);
 	}
 
@@ -90,7 +90,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * 
 	 * @return
 	 */
-	public Collection<TechnologyAdapter<?, ?, ?>> getLoadedAdapters() {
+	public Collection<TechnologyAdapter<?, ?>> getLoadedAdapters() {
 		return loadedAdapters.values();
 	}
 
@@ -101,7 +101,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * @return
 	 */
 	@Override
-	public TechnologyContextManager<?, ?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?, ?> technologyAdapter) {
+	public TechnologyContextManager<?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?> technologyAdapter) {
 		return technologyContextManager.get(technologyAdapter);
 	}
 

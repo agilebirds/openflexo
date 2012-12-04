@@ -25,12 +25,11 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFClass;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
-public class AddEMFClass extends AddClass<EMFModelSlot, EMFModel, EMFMetaModel, EMFClass> {
+public class AddEMFClass extends AddClass<EMFModel, EMFMetaModel, EMFClass> {
 
 	private static final Logger logger = Logger.getLogger(AddEMFClass.class.getPackage().getName());
 

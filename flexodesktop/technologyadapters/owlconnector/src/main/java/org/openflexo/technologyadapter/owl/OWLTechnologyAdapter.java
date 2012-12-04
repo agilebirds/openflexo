@@ -75,7 +75,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
 @DeclareEditionAction(AddOWLClass.class),
 /** Add class */
 @DeclareEditionAction(DeleteAction.class) })
-public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology, OWLModelSlot> {
+public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLTechnologyAdapter.class.getPackage().getName());
 
@@ -99,8 +99,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".owl");
 	}
@@ -112,8 +111,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		return OWLOntology.findOntologyURI(aMetaModelFile);
 	}
 
@@ -126,14 +124,14 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<OWLOntology> metaModelResource,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		return aModelFile.getName().endsWith(".owl");
 	}
 
 	@Override
 	public FlexoResource<OWLOntology> retrieveMetaModelResource(File aMetaModelFile,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		logger.warning("Not implemened yet");
 
 		OWLOntologyResource ontologyResource = new OWLOntologyResource((FlexoProjectBuilder) null);
@@ -145,7 +143,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	@Override
 	public OWLOntologyResource retrieveModelResource(File aModelFile,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 
 		logger.warning("Not implemented yet");
 		OWLOntologyResource ontologyResource = new OWLOntologyResource((FlexoProjectBuilder) null);
@@ -157,7 +155,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	@Override
 	public OWLOntology createEmptyModel(FlexoProject project, OWLOntology metaModel,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewOWLModel(), project=" + project);
 		}
@@ -223,16 +221,28 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
-	public TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> createTechnologyContextManager(
+	public TechnologyContextManager<OWLOntology, OWLOntology> createTechnologyContextManager(
 			FlexoResourceCenterService resourceCenterService) {
 		return new OWLOntologyLibrary(this, resourceCenterService);
 	}
 
 	@Override
-	public String retrieveModelURI(File aModelFile,
-			TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> technologyContextManager) {
+	public String retrieveModelURI(File aModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Provides a hook to finalize initialization of a TechnologyAdapter.<br>
+	 * This method is called:
+	 * <ul>
+	 * <li>after all TechnologyAdapter have been loaded</li>
+	 * <li>after all {@link FlexoResourceCenter} have been initialized</li>
+	 * </ul>
+	 */
+	@Override
+	public void initialize() {
+		((OWLOntologyLibrary) getTechnologyContextManager()).init();
 	}
 
 }

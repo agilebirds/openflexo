@@ -20,8 +20,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @see View
  * 
  */
-public class ModelSlotInstance<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		FlexoModelObject {
+public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends FlexoModelObject {
 
 	private View view;
 	private ModelSlot<M, MM> modelSlot;

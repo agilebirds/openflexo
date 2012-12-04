@@ -34,11 +34,11 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 	private boolean isReadOnly;
 	private MM metaModel;
 
-	private TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> technologyAdapter;
+	private TechnologyAdapter<M, MM> technologyAdapter;
 
 	private ViewPoint viewPoint;
 
-	protected ModelSlotImpl(ViewPoint viewPoint, TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> technologyAdapter) {
+	protected ModelSlotImpl(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
 		super(null);
 		this.viewPoint = viewPoint;
 		this.technologyAdapter = technologyAdapter;
@@ -58,7 +58,7 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public final M createEmptyModel(View view, MM metaModel) {
-		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModel);
+		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModel, technologyAdapter.getTechnologyContextManager());
 	};
 
 	/**
@@ -69,7 +69,7 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 	 * @return
 	 */
 	@Override
-	public <A extends EditionAction<? extends ModelSlot<M, MM>, M, MM, ?>> A createAction(Class<A> actionClass) {
+	public <A extends EditionAction<M, MM, ?>> A createAction(Class<A> actionClass) {
 		Class[] constructorParams = new Class[1];
 		constructorParams[0] = ViewPointBuilder.class;
 		try {
@@ -159,7 +159,7 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 	}
 
 	@Override
-	public final TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> getTechnologyAdapter() {
+	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 

@@ -2,9 +2,12 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class PropertyPatternRole extends OntologicObjectPatternRole {
+public class PropertyPatternRole<T extends OntologyProperty> extends OntologicObjectPatternRole<T> {
 
 	private String parentPropertyURI;
 	private String domainURI;
@@ -68,6 +71,16 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 	@Override
 	public Class<?> getAccessedClass() {
 		return OntologyProperty.class;
+	}
+
+	@Override
+	public ActorReference<T> makeActorReference(T object, EditionPatternReference epRef) {
+		return new ConceptActorReference<T>(object, this, epRef);
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
 	}
 
 }

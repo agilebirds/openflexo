@@ -2,9 +2,12 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ObjectPropertyPatternRole extends PropertyPatternRole {
+public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjectProperty> {
 
 	private String rangeURI;
 
@@ -54,6 +57,11 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 
 	public void setRange(OntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
+	}
+
+	@Override
+	public ActorReference<OntologyObjectProperty> makeActorReference(OntologyObjectProperty object, EditionPatternReference epRef) {
+		return new ConceptActorReference<OntologyObjectProperty>(object, this, epRef);
 	}
 
 }

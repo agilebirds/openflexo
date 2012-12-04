@@ -30,7 +30,6 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -39,8 +38,8 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyClass>
-		extends AddConcept<MS, M, MM, T> {
+public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyClass> extends
+		AddConcept<M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
@@ -161,7 +160,7 @@ public abstract class AddClass<MS extends ModelSlot<M, MM>, M extends FlexoModel
 		if (getOntologyClass() == null) {
 			return OntologyClass.class;
 		}
-		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
+		return SubClassOfClass.getSubClassOfClass(getOntologyClass(), getModelSlot().getTechnologyAdapter());
 	}
 
 	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {

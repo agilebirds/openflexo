@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.foundation.view;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -33,7 +33,6 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -54,7 +53,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	private FlexoProject _project;
 	private EditionPattern pattern;
 	private long instanceId;
-	private Hashtable<String, FlexoModelObject> actors;
+	private Hashtable<PatternRole<?>, FlexoModelObject> actors;
 
 	/**
 	 * 
@@ -67,12 +66,12 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		_project = aPattern.getProject();
 		pattern = aPattern.getEditionPattern();
 		instanceId = aPattern.getInstanceId();
-		actors = new Hashtable<String, FlexoModelObject>();
-		for (String patternRole : aPattern.getActors().keySet()) {
-			ActorReference actor = aPattern.getActors().get(patternRole);
-			FlexoModelObject object = actor.retrieveObject();
-			if (object != null) {
-				actors.put(patternRole, object);
+		actors = new Hashtable<PatternRole<?>, FlexoModelObject>();
+		for (PatternRole<?> patternRole : aPattern.getActors().keySet()) {
+			ActorReference<?> actor = aPattern.getActors().get(patternRole);
+			Object object = actor.retrieveObject();
+			if (object instanceof FlexoModelObject) {
+				actors.put(patternRole, (FlexoModelObject) object);
 			}
 		}
 	}
@@ -83,24 +82,19 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		_project = project;
 		instanceId = _project.getNewFlexoID();
 		this.pattern = aPattern;
-		actors = new Hashtable<String, FlexoModelObject>();
+		actors = new Hashtable<PatternRole<?>, FlexoModelObject>();
 	}
 
-	public FlexoModelObject getPatternActor(String patternRole) {
+	public FlexoModelObject getPatternActor(PatternRole<?> patternRole) {
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		return actors.get(patternRole);
 	}
 
-	public FlexoModelObject getPatternActor(PatternRole patternRole) {
-		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
-		return actors.get(patternRole.getPatternRoleName());
-	}
-
-	public void setPatternActor(FlexoModelObject object, PatternRole patternRole) {
+	public void setPatternActor(FlexoModelObject object, PatternRole<?> patternRole) {
 		setObjectForPatternRole(object, patternRole);
 	}
 
-	public void nullifyPatternActor(PatternRole patternRole) {
+	public void nullifyPatternActor(PatternRole<?> patternRole) {
 		setObjectForPatternRole(null, patternRole);
 	}
 
@@ -119,7 +113,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 			}
 
 			if (object != null) {
-				actors.put(patternRole.getPatternRoleName(), object);
+				actors.put(patternRole, object);
 			} else {
 				actors.remove(patternRole.getPatternRoleName());
 			}
@@ -138,7 +132,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		StringBuffer sb = new StringBuffer();
 		sb.append("EditionPattern: " + pattern.getName() + "\n");
 		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
-		for (String patternRole : actors.keySet()) {
+		for (PatternRole<?> patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
 			sb.append("Role: " + patternRole + " : " + object + "\n");
 		}
@@ -165,19 +159,19 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		this.instanceId = instanceId;
 	}
 
-	public Hashtable<String, FlexoModelObject> getActors() {
+	public Hashtable<PatternRole<?>, FlexoModelObject> getActors() {
 		return actors;
 	}
 
-	public void setActors(Hashtable<String, FlexoModelObject> actors) {
+	public void setActors(Hashtable<PatternRole<?>, FlexoModelObject> actors) {
 		this.actors = actors;
 	}
 
-	public void setActorForKey(FlexoModelObject o, String key) {
+	public void setActorForKey(FlexoModelObject o, PatternRole<?> key) {
 		actors.put(key, o);
 	}
 
-	public void removeActorWithKey(String key) {
+	public void removeActorWithKey(PatternRole<?> key) {
 		actors.remove(key);
 	}
 

@@ -2,7 +2,6 @@ package org.openflexo.foundation.resource;
 
 import java.util.List;
 
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -30,5 +29,5 @@ public interface FlexoResourceCenterService {
 
 	public FlexoResourceCenter getOpenFlexoResourceCenter();
 
-	public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService);
+	// public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService);
 }

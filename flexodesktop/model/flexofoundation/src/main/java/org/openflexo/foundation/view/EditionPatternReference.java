@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.foundation.view;
 
 import java.util.Hashtable;
 import java.util.logging.Logger;
@@ -28,15 +28,9 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
-import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.owl.SubClassStatement;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -44,9 +38,6 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementActorReference;
-import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementActorReference;
-import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementActorReference;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class EditionPatternReference extends FlexoModelObject implements DataFlexoObserver, BindingEvaluationContext {
@@ -54,16 +45,16 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
 	private EditionPatternInstance _editionPatternInstance;
-	private PatternRole patternRole;
+	private PatternRole<?> patternRole;
 
 	private EditionPattern editionPattern;
 	private long instanceId;
-	private Hashtable<String, ActorReference> actors;
+	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private FlexoProject _project;
 
 	private EditionPatternReference() {
 		super();
-		actors = new Hashtable<String, ActorReference>();
+		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
 	}
 
 	private EditionPatternReference(FlexoProject project) {
@@ -135,26 +126,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	private void update() {
 		actors.clear();
 		if (_editionPatternInstance != null) {
-		editionPattern = _editionPatternInstance.getPattern();
-		instanceId = _editionPatternInstance.getInstanceId();
-		for (String role : _editionPatternInstance.getActors().keySet()) {
-			// System.out.println("> role : "+role);
-			FlexoModelObject o = _editionPatternInstance.getActors().get(role);
-			if (o instanceof OntologyObject) {
-				actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
-			} else if (o instanceof ObjectPropertyStatement) {
-				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
-			} else if (o instanceof DataPropertyStatement) {
-				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
-			} else if (o instanceof SubClassStatement) {
-				actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
-			} /*else if (o instanceof ObjectRestrictionStatement) {
-				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
-				}*/else {
-				actors.put(role, new ModelObjectActorReference(o, role, this));
+			editionPattern = _editionPatternInstance.getPattern();
+			instanceId = _editionPatternInstance.getInstanceId();
+			for (PatternRole role : _editionPatternInstance.getEditionPattern().getPatternRoles()) {
+				// System.out.println("> role : "+role);
+				FlexoModelObject o = _editionPatternInstance.getPatternActor(role);
+				actors.put(role, role.makeActorReference(o, this));
 			}
 		}
-	}
 	}
 
 	@Override
@@ -182,175 +161,6 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	public XMLStorageResourceData getXMLResourceData() {
 		// Not defined in this context, since this is cross-model object
 		return null;
-	}
-
-	public static abstract class ActorReference extends FlexoModelObject {
-		public String patternRole;
-		private ModelSlot<?,?> modelSlot;
-		private FlexoProject _project;
-		private EditionPatternReference _patternReference;
-
-		protected ActorReference(FlexoProject project) {
-			super(project);
-			_project = project;
-		}
-
-		public ModelSlot<?,?> getModelSlot() {
-			return modelSlot;
-		}
-
-		public void setModelSlot(ModelSlot<?,?> modelSlot) {
-			this.modelSlot = modelSlot;
-		}
-
-		@Override
-		public FlexoProject getProject() {
-			return _project;
-		}
-
-		@Override
-		public XMLMapping getXMLMapping() {
-			// Not defined in this context, since this is cross-model object
-			return null;
-		}
-
-		@Override
-		public XMLStorageResourceData getXMLResourceData() {
-			// Not defined in this context, since this is cross-model object
-			return null;
-		}
-
-		public abstract FlexoModelObject retrieveObject();
-
-		public EditionPatternReference getPatternReference() {
-			return _patternReference;
-		}
-
-		public void setPatternReference(EditionPatternReference _patternReference) {
-			this._patternReference = _patternReference;
-		}
-
-	}
-
-	public static class ConceptActorReference extends ActorReference {
-		private OntologyObject object;
-		private String objectURI;
-
-		public ConceptActorReference(OntologyObject o, String aPatternRole, EditionPatternReference ref) {
-			super(ref.getProject());
-			setPatternReference(ref);
-			patternRole = aPatternRole;
-			object = o;
-			objectURI = o.getURI();
-		}
-
-		// Constructor used during deserialization
-		public ConceptActorReference(VEShemaBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ConceptActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ConceptActorReference(FlexoWorkflowBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "concept_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public FlexoModelObject retrieveObject() {
-			if (object == null) {
-				object = getProject().retrieveOntologyObject(objectURI);
-			}
-			if (object == null) {
-				logger.warning("Could not retrieve object " + objectURI);
-			}
-			return (FlexoModelObject) object;
-		}
-
-		public String _getObjectURI() {
-			if (object != null) {
-				return object.getURI();
-			}
-			return objectURI;
-		}
-
-		public void _setObjectURI(String objectURI) {
-			this.objectURI = objectURI;
-		}
-
-		public OntologyObject getObject() {
-			return object;
-		}
-	}
-
-	public static class ModelObjectActorReference extends ActorReference {
-		public FlexoModelObject object;
-		public FlexoModelObjectReference objectReference;
-
-		public ModelObjectActorReference(FlexoModelObject o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
-			setPatternReference(ref);
-			patternRole = aPatternRole;
-			object = o;
-			objectReference = new FlexoModelObjectReference(o);
-		}
-
-		// Constructor used during deserialization
-		public ModelObjectActorReference(VEShemaBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ModelObjectActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ModelObjectActorReference(FlexoWorkflowBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "model_object_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public FlexoModelObject retrieveObject() {
-			if (object == null) {
-				object = objectReference.getObject(true);
-			}
-			if (object == null) {
-				logger.warning("Could not retrieve object " + objectReference);
-			}
-			return object;
-		}
 	}
 
 	public EditionPatternInstance getEditionPatternInstance() {
@@ -426,20 +236,20 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		this.instanceId = instanceId;
 	}
 
-	public Hashtable<String, ActorReference> getActors() {
+	public Hashtable<PatternRole<?>, ActorReference<?>> getActors() {
 		return actors;
 	}
 
-	public void setActors(Hashtable<String, ActorReference> actors) {
+	public void setActors(Hashtable<PatternRole<?>, ActorReference<?>> actors) {
 		this.actors = actors;
 	}
 
-	public void setActorForKey(ActorReference o, String key) {
+	public void setActorForKey(ActorReference<?> o, PatternRole<?> key) {
 		actors.put(key, o);
 		o.setPatternReference(this);
 	}
 
-	public void removeActorWithKey(String key) {
+	public void removeActorWithKey(PatternRole<?> key) {
 		actors.remove(key);
 	}
 
@@ -453,9 +263,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		sb.append("Reference to EditionPattern with role : " + getPatternRole() + "\n");
 		sb.append("EditionPattern: " + getEditionPatternInstance().getPattern().getName() + "\n");
 		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
-		for (String patternRole : actors.keySet()) {
-			FlexoModelObject object = actors.get(patternRole);
-			sb.append("Role: " + patternRole + " : " + object + "\n");
+		for (PatternRole<?> patternRole : actors.keySet()) {
+			ActorReference<?> actorReference = actors.get(patternRole);
+			sb.append("Role: " + patternRole + " : " + actorReference.retrieveObject() + "\n");
 		}
 		return sb.toString();
 	}

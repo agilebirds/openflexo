@@ -1,9 +1,16 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
 
-public class PrimitivePatternRole extends PatternRole {
+public class PrimitivePatternRole extends PatternRole<Object> {
+
+	protected static final Logger logger = FlexoLogger.getLogger(PrimitivePatternRole.class.getPackage().getName());
 
 	public static enum PrimitiveType {
 		Boolean, String, LocalizedString, Integer, Float
@@ -78,6 +85,17 @@ public class PrimitivePatternRole extends PatternRole {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return true;
+	}
+
+	@Override
+	public ActorReference<Object> makeActorReference(Object object, EditionPatternReference epRef) {
+		logger.warning("Not implemented");
+		return null;
 	}
 
 }

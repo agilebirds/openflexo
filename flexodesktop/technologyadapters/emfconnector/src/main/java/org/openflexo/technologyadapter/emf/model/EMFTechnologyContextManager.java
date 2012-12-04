@@ -2,9 +2,8 @@ package org.openflexo.technologyadapter.emf.model;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.emf.EMFModelSlot;
 
-public class EMFTechnologyContextManager extends TechnologyContextManager<EMFModel, EMFMetaModel, EMFModelSlot> {
+public class EMFTechnologyContextManager extends TechnologyContextManager<EMFModel, EMFMetaModel> {
 
 	@Override
 	public void registerModel(FlexoResource<EMFModel> newModelResource) {

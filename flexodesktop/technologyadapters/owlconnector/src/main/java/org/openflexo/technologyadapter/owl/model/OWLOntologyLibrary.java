@@ -21,24 +21,17 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.SubClassOfClass;
-import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -63,7 +56,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author sylvain
  * 
  */
-public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> implements ModelMaker {
+public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OWLOntology> implements ModelMaker {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
 
@@ -81,10 +74,6 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	private OntologyObjectConverter ontologyObjectConverter;
 
-	protected Hashtable<OntologyClass, IndividualOfClass> individualsOfClass = new Hashtable<OntologyClass, IndividualOfClass>();
-	protected Hashtable<OntologyClass, SubClassOfClass> subclassesOfClass = new Hashtable<OntologyClass, SubClassOfClass>();
-	protected Hashtable<OntologyProperty, SubPropertyOfProperty> subpropertiesOfProperty = new Hashtable<OntologyProperty, SubPropertyOfProperty>();
-
 	public OWLOntologyLibrary(OWLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super();
 		this.adapter = adapter;
@@ -94,6 +83,18 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		graphMaker = new SimpleGraphMaker();
 
 		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
+	}
+
+	public void init() {
+		logger.fine("Instantiating OWLOntologyLibrary Done. Loading some ontologies...");
+		// baseOntologyLibrary.debug();
+		getRDFSOntology().loadWhenUnloaded();
+		getRDFOntology().loadWhenUnloaded();
+		getOWLOntology().loadWhenUnloaded();
+		getRDFSOntology().updateConceptsAndProperties();
+		getRDFOntology().updateConceptsAndProperties();
+		getOWLOntology().updateConceptsAndProperties();
+		getFlexoConceptOntology().loadWhenUnloaded();
 	}
 
 	public OntologyObjectConverter getOntologyObjectConverter() {

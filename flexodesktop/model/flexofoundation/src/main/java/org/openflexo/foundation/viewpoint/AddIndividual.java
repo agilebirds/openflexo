@@ -31,7 +31,6 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -41,8 +40,8 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyIndividual>
-		extends AddConcept<MS, M, MM, T> {
+public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends OntologyIndividual> extends
+		AddConcept<M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
@@ -236,7 +235,7 @@ public abstract class AddIndividual<MS extends ModelSlot<M, MM>, M extends Flexo
 		if (getOntologyClass() == null) {
 			return OntologyIndividual.class;
 		}
-		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
+		return IndividualOfClass.getIndividualOfClass(getOntologyClass(), getModelSlot().getTechnologyAdapter());
 	}
 
 	public static class AddIndividualActionMustDefineAnOntologyClass extends

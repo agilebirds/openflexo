@@ -25,10 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -42,8 +39,7 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
 	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
-	private static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
-	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
+	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
 
 	private ViewPointLibrary viewPointLibrary;
 	private File newViewPointSandboxDirectory;
@@ -71,29 +67,6 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		super.initialize(technologyAdapterService);
 	}
 
-	private static void copyViewPoints(File resourceCenterDirectory, CopyStrategy copyStrategy) {
-		if (VIEWPOINT_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-
-		try {
-			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void copyOntologies(File resourceCenterDirectory, CopyStrategy copyStrategy) {
-		if (ONTOLOGY_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-		try {
-			FileUtils.copyDirToDir(ONTOLOGY_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Deprecated
 	@Override
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
@@ -102,80 +75,12 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 
 	@Deprecated
 	@Override
-	public OntologyLibrary retrieveBaseOntologyLibrary() {
-		return baseOntologyLibrary;
-	}
-
-	@Deprecated
-	private TechnologyContextManager<?, ?, ?> retrieveBaseOntologyLibrary(TechnologyAdapterService technologyAdapterService) {
-		
-		Class owlAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-		
-		TechnologyAdapter<?, ?, ?> owlAdapter = technologyAdapterService.getTechnologyAdapter(owlAdapterClass);
-		return technologyAdapterService.getTechnologyContextManager(owlAdapter);
-
-		return owlAdapter
-		
-		File baseOntologyFolder = new File(getRootDirectory(), "Ontologies");
-		logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
-		baseOntologyLibrary = new OntologyLibrary(this, null);
-		findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
-		// baseOntologyLibrary.init();
-
-		// Bug fix: compatibility with old versions:
-		// If some of those ontologies were not found, try to copy default ontologies
-		if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
-				|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
-			copyOntologies(getRootDirectory(), CopyStrategy.REPLACE);
-			findMetaModels(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
-		}
-
-		logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
-		// baseOntologyLibrary.debug();
-		baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
-		baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
-		baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-		baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
-		baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
-		baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();
-		baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
-
-		return baseOntologyLibrary;
-
-	}
-
-	@Deprecated
-	@Override
 	public ViewPointLibrary retrieveViewPointLibrary() {
 		if (viewPointLibrary == null) {
-			viewPointLibrary = new ViewPointLibrary(this, retrieveBaseOntologyLibrary());
+			viewPointLibrary = new ViewPointLibrary(this);
 			findViewPoints(new File(getRootDirectory(), "ViewPoints"), viewPointLibrary.getRootFolder());
 		}
 		return viewPointLibrary;
-	}
-
-	@Deprecated
-	private void findMetaModels(File dir, String baseUri, RepositoryFolder folder, TechnologyAdapterService technologyAdapterService) {
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		for (File f : dir.listFiles()) {
-			for (TechnologyAdapter<?, ?, ?> technologyAdapter : technologyAdapterService.getTechnologyAdapters()) {
-				if (technologyAdapter.isValidMetaModelFile(f, prout)) {
-					baseOntologyLibrary.importMetaModel(technologyAdapter.loadMetaModel(f, baseOntologyLibrary));
-				}
-			}
-
-			/*if (f.isFile() && (f.getName().endsWith(".owl") || f.getName().endsWith(".xsd"))) {
-				String uri = findOntologyURI(f, baseUri);
-				baseOntologyLibrary.importMetaModel(uri, f, folder);
-			} else*/
-
-			if (f.isDirectory() && !f.getName().equals("CVS")) {
-				RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, baseOntologyLibrary);
-				findMetaModels(f, baseUri + "/" + f.getName(), newFolder);
-			}
-		}
 	}
 
 	private void findViewPoints(File dir, ViewPointFolder folder) {
@@ -183,7 +88,7 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 			dir.mkdirs();
 		}
 		if (dir.listFiles().length == 0) {
-			copyViewPoints(localDirectory, CopyStrategy.REPLACE);
+			copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
@@ -197,90 +102,10 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		}
 	}
 
-	public File getLocalDirectory() {
-		return localDirectory;
-	}
-
 	@Deprecated
 	@Override
 	public File getNewCalcSandboxDirectory() {
 		return newViewPointSandboxDirectory;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + " directory=" + localDirectory.getAbsolutePath();
-	}
-
-	@Override
-	public void update() {
-		updateOntologiesOrganization();
-		copyOntologies(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
-		copyViewPoints(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
-	}
-
-	/**
-	 * Called to ensure compatibility with ontologies as in 1.4.4
-	 */
-	private void updateOntologiesOrganization() {
-		File localOntologyDir = new File(localDirectory, "Ontologies");
-		File rdfFile = new File(localOntologyDir, "22-rdf-syntax-ns.owl");
-		File rdfsFile = new File(localOntologyDir, "rdf-schema.owl");
-		File owlFile = new File(localOntologyDir, "owl.owl");
-		File fcoFile = new File(localOntologyDir, "FlexoConceptsOntology.owl");
-		File archimateDir = new File(localOntologyDir, "Archimate");
-		File bpmnDir = new File(localOntologyDir, "BPMN");
-		File fmDir = new File(localOntologyDir, "FlexoMethodology");
-		File otDir = new File(localOntologyDir, "OrganizationTree");
-		File sdDir = new File(localOntologyDir, "ScopeDefinition");
-		File skosDir = new File(localOntologyDir, "SKOS");
-		File umlDir = new File(localOntologyDir, "UML");
-		File w3cDir = new File(localOntologyDir, "www.w3.org");
-		File abDir = new File(localOntologyDir, "www.agilebirds.com");
-		File archiDir = new File(localOntologyDir, "www.bolton.ac.uk");
-		File omgDir = new File(localOntologyDir, "www.omg.org");
-		File ofDir = new File(localOntologyDir, "www.openflexo.org");
-		if (!w3cDir.exists()) {
-			if (rdfFile.exists()) {
-				rdfFile.delete();
-			}
-			if (rdfsFile.exists()) {
-				rdfsFile.delete();
-			}
-			if (owlFile.exists()) {
-				owlFile.delete();
-			}
-			if (skosDir.exists()) {
-				FileUtils.deleteDir(skosDir);
-			}
-		}
-		if (!ofDir.exists()) {
-			if (fcoFile.exists()) {
-				fcoFile.delete();
-			}
-		}
-		if (archimateDir.exists() && !archiDir.exists()) {
-			FileUtils.deleteDir(archimateDir);
-		}
-		if (!omgDir.exists()) {
-			if (bpmnDir.exists()) {
-				FileUtils.deleteDir(bpmnDir);
-			}
-			if (umlDir.exists()) {
-				FileUtils.deleteDir(umlDir);
-			}
-		}
-		if (!abDir.exists()) {
-			if (fmDir.exists()) {
-				FileUtils.deleteDir(fmDir);
-			}
-			if (otDir.exists()) {
-				FileUtils.deleteDir(otDir);
-			}
-			if (sdDir.exists()) {
-				FileUtils.deleteDir(sdDir);
-			}
-		}
 	}
 
 	@Override
@@ -301,6 +126,35 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	@Override
 	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void update() {
+		copyOntologies(ONTOLOGIES_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
+		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
+	}
+
+	private static void copyOntologies(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
+		try {
+			FileUtils.copyDirToDir(initialDirectory, resourceCenterDirectory, copyStrategy);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
+
+		try {
+			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

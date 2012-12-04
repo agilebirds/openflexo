@@ -3,28 +3,20 @@ package org.openflexo.foundation.ontology;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.CustomType;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 public class IndividualOfClass implements CustomType {
 
-	public static IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass) {
+	public static IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass, TechnologyAdapter<?, ?> technologyAdapter) {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		if (anOntologyClass.getOntologyLibrary() != null) {
-			if (anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass) != null) {
-				return anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass);
-			} else {
-				IndividualOfClass returned = new IndividualOfClass(anOntologyClass);
-				anOntologyClass.getOntologyLibrary().individualsOfClass.put(anOntologyClass, returned);
-				return returned;
-			}
-		}
-		return null;
+		return technologyAdapter.getTechnologyContextManager().getIndividualOfClass(anOntologyClass);
 	}
 
 	private OntologyClass ontologyClass;
 
-	private IndividualOfClass(OntologyClass anOntologyClass) {
+	public IndividualOfClass(OntologyClass anOntologyClass) {
 		this.ontologyClass = anOntologyClass;
 	}
 

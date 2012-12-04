@@ -19,8 +19,14 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.SubClassOfClass;
+import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -36,9 +42,49 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
  * @author sylvain
  * 
  */
-public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>> {
+public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
+
+	protected Hashtable<OntologyClass, IndividualOfClass> individualsOfClass;
+	protected Hashtable<OntologyClass, SubClassOfClass> subclassesOfClass;
+	protected Hashtable<OntologyProperty, SubPropertyOfProperty> subpropertiesOfProperty;
+
+	public IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass) {
+		if (individualsOfClass.get(anOntologyClass) != null) {
+			return individualsOfClass.get(anOntologyClass);
+		} else {
+			IndividualOfClass returned = new IndividualOfClass(anOntologyClass);
+			individualsOfClass.put(anOntologyClass, returned);
+			return returned;
+		}
+	}
+
+	public SubClassOfClass getSubClassOfClass(OntologyClass anOntologyClass) {
+		if (subclassesOfClass.get(anOntologyClass) != null) {
+			return subclassesOfClass.get(anOntologyClass);
+		} else {
+			SubClassOfClass returned = new SubClassOfClass(anOntologyClass);
+			subclassesOfClass.put(anOntologyClass, returned);
+			return returned;
+		}
+	}
+
+	public SubPropertyOfProperty getSubPropertyOfProperty(OntologyProperty anOntologyProperty) {
+		if (subpropertiesOfProperty.get(anOntologyProperty) != null) {
+			return subpropertiesOfProperty.get(anOntologyProperty);
+		} else {
+			SubPropertyOfProperty returned = new SubPropertyOfProperty(anOntologyProperty);
+			subpropertiesOfProperty.put(anOntologyProperty, returned);
+			return returned;
+		}
+	}
+
+	public TechnologyContextManager() {
+		individualsOfClass = new Hashtable<OntologyClass, IndividualOfClass>();
+		subclassesOfClass = new Hashtable<OntologyClass, SubClassOfClass>();
+		subpropertiesOfProperty = new Hashtable<OntologyProperty, SubPropertyOfProperty>();
+	}
 
 	/**
 	 * Called when a new model was registered, notify the {@link TechnologyContextManager}

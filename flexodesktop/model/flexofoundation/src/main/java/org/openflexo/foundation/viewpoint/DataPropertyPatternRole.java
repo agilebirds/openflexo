@@ -3,9 +3,12 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class DataPropertyPatternRole extends PropertyPatternRole {
+public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataProperty> {
 
 	private OntologicDataType dataType;
 
@@ -48,4 +51,8 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 		this.dataType = dataType;
 	}
 
+	@Override
+	public ActorReference<OntologyDataProperty> makeActorReference(OntologyDataProperty object, EditionPatternReference epRef) {
+		return new ConceptActorReference<OntologyDataProperty>(object, this, epRef);
+	}
 }

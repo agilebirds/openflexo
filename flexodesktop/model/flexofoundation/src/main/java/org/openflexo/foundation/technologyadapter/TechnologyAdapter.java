@@ -38,7 +38,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sylvain
  * 
  */
-public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>> {
+public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapter.class.getPackage().getName());
 
@@ -57,7 +57,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return a new {@link ModelSlot}
 	 */
-	protected abstract MS createNewModelSlot(ViewPoint viewPoint);
+	protected abstract ModelSlot<M, MM> createNewModelSlot(ViewPoint viewPoint);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XSD schema
@@ -67,7 +67,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
+	public abstract boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid meta model
@@ -77,7 +77,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
+	public abstract String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Instantiate new meta model resource stored in supplied meta model file
@@ -88,7 +88,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @return
 	 */
 	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile,
-			TechnologyContextManager<M, MM, MS> technologyContextManager);
+			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid model conform to supplied meta-model
@@ -100,7 +100,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @return
 	 */
 	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource,
-			TechnologyContextManager<M, MM, MS> technologyContextManager);
+			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Retrieve and return URI for supplied model file
@@ -110,7 +110,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveModelURI(File aModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
+	public abstract String retrieveModelURI(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
@@ -121,7 +121,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Creates new model conform to the supplied meta model
@@ -130,7 +130,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param metaModel
 	 * @return
 	 */
-	public abstract M createEmptyModel(FlexoProject project, MM metaModel, TechnologyContextManager<M, MM, MS> technologyContextManager);
+	public abstract M createEmptyModel(FlexoProject project, MM metaModel, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
@@ -138,7 +138,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param resourceCenter
 	 * @return
 	 */
-	public abstract <R extends FlexoResource<? extends M>> ModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM, MS>> createModelRepository(
+	public abstract <R extends FlexoResource<? extends M>> ModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM>> createModelRepository(
 			FlexoResourceCenter resourceCenter);
 
 	/**
@@ -147,7 +147,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param resourceCenter
 	 * @return
 	 */
-	public abstract <R extends FlexoResource<? extends MM>> MetaModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM, MS>> createMetaModelRepository(
+	public abstract <R extends FlexoResource<? extends MM>> MetaModelRepository<R, M, MM, ? extends TechnologyAdapter<M, MM>> createMetaModelRepository(
 			FlexoResourceCenter resourceCenter);
 
 	/**
@@ -174,5 +174,27 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract TechnologyContextManager<M, MM, MS> createTechnologyContextManager(FlexoResourceCenterService service);
+	public abstract TechnologyContextManager<M, MM> createTechnologyContextManager(FlexoResourceCenterService service);
+
+	/**
+	 * Return the {@link TechnologyContextManager} for this technology shared by all {@link FlexoResourceCenter} declared in the scope of
+	 * {@link FlexoResourceCenterService}
+	 * 
+	 * @return
+	 */
+	public final TechnologyContextManager<M, MM> getTechnologyContextManager() {
+		return (TechnologyContextManager<M, MM>) getTechnologyAdapterService().getTechnologyContextManager(this);
+	}
+
+	/**
+	 * Provides a hook to finalize initialization of a TechnologyAdapter.<br>
+	 * This method is called:
+	 * <ul>
+	 * <li>after all TechnologyAdapter have been loaded</li>
+	 * <li>after all {@link FlexoResourceCenter} have been initialized</li>
+	 * </ul>
+	 */
+	public void initialize() {
+	}
+
 }

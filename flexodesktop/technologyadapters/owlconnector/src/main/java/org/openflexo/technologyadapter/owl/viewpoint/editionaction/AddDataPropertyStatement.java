@@ -61,7 +61,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	@Override
 	public Type getSubjectType() {
 		if (getDataProperty() != null && getDataProperty().getDomain() instanceof OntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain());
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain(), getModelSlot()
+					.getTechnologyAdapter());
 		}
 		return super.getSubjectType();
 	}

@@ -43,7 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -117,12 +116,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
@@ -151,8 +145,10 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -4162,7 +4158,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			// No pending EditionPattern references for object
 			return;
 		} else {
-			List<ConceptActorReference> clonedValues = new ArrayList<EditionPatternReference.ConceptActorReference>(values);
+			List<ConceptActorReference> clonedValues = new ArrayList<ConceptActorReference>(values);
 			for (ConceptActorReference actorReference : clonedValues) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
 				if (instance == null) {
@@ -4184,10 +4180,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void resolvePendingEditionPatternReferences() {
 		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
 		for (String conceptURI : allKeys) {
-			OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
+			logger.warning("Unresolved ontology object " + conceptURI);
+			/*OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);
-			}
+			}*/
 		}
 	}
 
@@ -4232,39 +4229,42 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public Set<FlexoOntology> getAllMetaModels() {
-		Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
-		for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
-			allMetaModels.addAll(viewDefinition.getView().getAllMetaModels());
+	/*	public Set<FlexoOntology> getAllMetaModels() {
+			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
+			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+				allMetaModels.addAll(viewDefinition.getView().getAllMetaModels());
+			}
+			return allMetaModels;
 		}
-		return allMetaModels;
-	}
 
-	public Set<ProjectOntology> getAllModels() {
-		Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
-		for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
-			allModels.addAll(viewDefinition.getView().getAllModels());
+		public Set<ProjectOntology> getAllModels() {
+			Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
+			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+				allModels.addAll(viewDefinition.getView().getAllModels());
+			}
+			return allModels;
 		}
-		return allModels;
-	}
 
-	public Set<FlexoOntology> getAllOntologies() {
-		// TODO cache
-		Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
-		allOntologies.addAll(getAllMetaModels());
-		allOntologies.addAll(getAllModels());
-		return allOntologies;
-	}
+		public Set<FlexoOntology> getAllOntologies() {
+			// TODO cache
+			Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
+			allOntologies.addAll(getAllMetaModels());
+			allOntologies.addAll(getAllModels());
+			return allOntologies;
+		}*/
 
 	public OntologyObject retrieveOntologyObject(String uri) {
-		for (FlexoOntology ontology : getAllOntologies()) {
+		logger.warning("Ontology object retrieving not implemented yet, looking up " + uri);
+		return null;
+
+		/*for (FlexoOntology ontology : getAllOntologies()) {
 			ontology.loadWhenUnloaded();
 			OntologyObject object = ontology.getOntologyObject(uri);
 			if (object != null) {
 				return object;
 			}
 		}
-		return null;
+		return null;*/
 	}
 
 }

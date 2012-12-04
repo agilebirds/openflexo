@@ -144,19 +144,19 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}*/
 
 	@Override
-	public Vector<EditionAction<?, ?, ?, ?>> getActions() {
+	public Vector<EditionAction<?, ?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction<?, ?, ?, ?>> actions) {
+	public void setActions(Vector<EditionAction<?, ?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction<?, ?, ?, ?> action) {
+	public void addToActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.add(action);
@@ -166,7 +166,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public void removeFromActions(EditionAction<?, ?, ?, ?> action) {
+	public void removeFromActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
