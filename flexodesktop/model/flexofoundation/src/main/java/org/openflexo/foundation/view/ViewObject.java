@@ -231,6 +231,9 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	}
 
 	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type) {
+		if (type.equals(ViewConnector.class)) {
+			// logger.info("On cherche les ViewConnector");
+		}
 		return getChildrenOfType(type, true);
 	}
 
@@ -244,7 +247,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 			}
 		});
 		if (recursive) {
-			for (T object : new ArrayList<T>(objects)) {
+			for (ViewObject object : childs) {
 				objects.addAll(object.getChildrenOfType(type, true));
 			}
 		}
