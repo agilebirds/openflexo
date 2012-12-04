@@ -118,7 +118,6 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	public OWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
 
 		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary());
-		getOntologyLibrary().registerOntology(ontology);
 		setChanged();
 		notifyObservers(new OntologyImported(ontology));
 

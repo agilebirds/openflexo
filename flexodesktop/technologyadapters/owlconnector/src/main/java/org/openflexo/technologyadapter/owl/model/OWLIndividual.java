@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 
 import com.hp.hpl.jena.ontology.ConversionException;
@@ -288,41 +287,41 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 
 	@Override
 	public String getDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setDescription(String aDescription) {
-		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
+		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
 	}
 
 	@Override
 	public String getTechnicalDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.TECHNICAL_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setTechnicalDescription(String technicalDescription) {
-		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
+		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
 	};
 
 	@Override
 	public String getBusinessDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.BUSINESS_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setBusinessDescription(String businessDescription) {
-		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
+		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
 	}
 
 	@Override
 	public String getUserManualDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setUserManualDescription(String userManualDescription) {
-		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
+		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
 	}
 }

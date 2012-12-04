@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -24,6 +25,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	private FlexoResourceCenterService flexoResourceCenterService;
 
 	private Map<Class, TechnologyAdapter<?, ?, ?>> loadedAdapters;
+	private Map<TechnologyAdapter<?, ?, ?>, TechnologyContextManager<?, ?, ?>> technologyContextManager;
 
 	public static TechnologyAdapterService getNewInstance() {
 		try {
@@ -53,6 +55,8 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 			while (iterator.hasNext()) {
 				TechnologyAdapter technologyAdapter = iterator.next();
 				technologyAdapter.setTechnologyAdapterService(this);
+				TechnologyContextManager tcm = technologyAdapter.createTechnologyContextManager();
+				technologyContextManager.put(technologyAdapter, tcm);
 				addToTechnologyAdapters(technologyAdapter);
 
 				logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
@@ -76,6 +80,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * @param technologyAdapterClass
 	 * @return
 	 */
+	@Override
 	public <TA extends TechnologyAdapter<?, ?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
 		return (TA) loadedAdapters.get(technologyAdapterClass);
 	}
@@ -87,6 +92,17 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 */
 	public Collection<TechnologyAdapter<?, ?, ?>> getLoadedAdapters() {
 		return loadedAdapters.values();
+	}
+
+	/**
+	 * Return the {@link TechnologyContextManager} for this technology for this technology shared by all {@link FlexoResourceCenter}
+	 * declared in the scope of {@link FlexoResourceCenterService}
+	 * 
+	 * @return
+	 */
+	@Override
+	public TechnologyContextManager<?, ?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?, ?> technologyAdapter) {
+		return technologyContextManager.get(technologyAdapter);
 	}
 
 }

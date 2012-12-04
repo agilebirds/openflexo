@@ -18,9 +18,6 @@ public interface FlexoOntology extends OntologyObject {
 
 	public abstract FlexoProject getProject();
 
-	@Override
-	public abstract OntologyLibrary getOntologyLibrary();
-
 	/**
 	 * Force load ontology when unloaded
 	 * 

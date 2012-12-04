@@ -26,7 +26,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
@@ -139,9 +138,6 @@ public interface FlexoResourceCenter {
 	 */
 	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter);
-
-	@Deprecated
-	public OntologyLibrary retrieveBaseOntologyLibrary();
 
 	@Deprecated
 	public ViewPointLibrary retrieveViewPointLibrary();

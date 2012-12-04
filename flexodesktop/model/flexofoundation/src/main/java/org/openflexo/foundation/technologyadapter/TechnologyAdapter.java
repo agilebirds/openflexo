@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
@@ -66,7 +67,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc);
+	public abstract boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid meta model
@@ -76,7 +77,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc);
+	public abstract String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Instantiate new meta model resource stored in supplied meta model file
@@ -86,7 +87,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile, FlexoResourceCenter rc);
+	public abstract FlexoResource<MM> retrieveMetaModelResource(File aMetaModelFile,
+			TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid model conform to supplied meta-model
@@ -97,7 +99,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource, FlexoResourceCenter rc);
+	public abstract boolean isValidModelFile(File aModelFile, FlexoResource<MM> metaModelResource,
+			TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Retrieve and return URI for supplied model file
@@ -107,7 +110,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveModelURI(File aModelFile, FlexoResourceCenter rc);
+	public abstract String retrieveModelURI(File aModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
@@ -118,7 +121,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, FlexoResourceCenter rc);
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Creates new model conform to the supplied meta model
@@ -127,7 +130,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param metaModel
 	 * @return
 	 */
-	public abstract M createEmptyModel(FlexoProject project, MM metaModel);
+	public abstract M createEmptyModel(FlexoProject project, MM metaModel, TechnologyContextManager<M, MM, MS> technologyContextManager);
 
 	/**
 	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
@@ -165,4 +168,11 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 		this.technologyAdapterService = technologyAdapterService;
 	}
 
+	/**
+	 * Creates and return the {@link TechnologyContextManager} for this technology and for all {@link FlexoResourceCenter} declared in the
+	 * scope of {@link FlexoResourceCenterService}
+	 * 
+	 * @return
+	 */
+	public abstract TechnologyContextManager<M, MM, MS> createTechnologyContextManager(FlexoResourceCenterService service);
 }

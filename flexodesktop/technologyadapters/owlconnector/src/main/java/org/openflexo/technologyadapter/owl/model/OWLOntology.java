@@ -90,6 +90,7 @@ import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.ontology.UnionClass;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -141,6 +142,17 @@ public class OWLOntology extends OWLObject implements FlexoOntology, ResourceDat
 	private final Vector<OWLObjectProperty> orderedObjectProperties;
 
 	private OWLClass THING_CONCEPT;
+
+	public static OWLOntology createOWLEmptyOntology(String anURI, File owlFile, OWLOntologyLibrary ontologyLibrary) {
+		OWLOntology returned = new OWLOntology(anURI, owlFile, ontologyLibrary);
+
+		Model base = ModelFactory.createDefaultModel();
+		returned.ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, ontologyLibrary, base);
+		returned.ontModel.createOntology(anURI);
+		returned.ontModel.setDynamicImports(true);
+		returned.isLoaded = true;
+		return returned;
+	}
 
 	public OWLOntology(String anURI, File owlFile, OWLOntologyLibrary library) {
 		super(null, null);
@@ -1432,7 +1444,7 @@ public class OWLOntology extends OWLObject implements FlexoOntology, ResourceDat
 		isLoaded = true;
 
 		for (Object o : ontModel.listImportedOntologyURIs()) {
-			OWLOntology importedOnt = (OWLOntology) _library.getOntology((String) o);
+			OWLOntology importedOnt = _library.getOntology((String) o);
 			logger.info("importedOnt= " + importedOnt);
 			if (importedOnt != null) {
 				importedOnt.loadWhenUnloaded();
@@ -1857,7 +1869,7 @@ public class OWLOntology extends OWLObject implements FlexoOntology, ResourceDat
 
 		if (objectURI.endsWith("#")) {
 			String potentialOntologyURI = objectURI.substring(0, objectURI.lastIndexOf("#"));
-			OWLOntology returned = (OWLOntology) getOntologyLibrary().getOntology(ontologyURI);
+			OWLOntology returned = getOntologyLibrary().getOntology(ontologyURI);
 			if (returned != null) {
 				return returned;
 			}
@@ -2019,7 +2031,7 @@ public class OWLOntology extends OWLObject implements FlexoOntology, ResourceDat
 		System.out.println("uri: " + findOntologyName(f));
 		FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new File(
 				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
-		resourceCenter.retrieveBaseOntologyLibrary();
+		// resourceCenter.retrieveBaseOntologyLibrary();
 		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());
 		// o.load();
 		/*try {

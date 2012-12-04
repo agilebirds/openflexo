@@ -70,7 +70,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$ObjectPropertyStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementActorReference"
 		xmlTag="ObjectPropertyStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -81,7 +81,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$DataPropertyStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementActorReference"
 		xmlTag="DataPropertyStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -92,7 +92,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$SubClassStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementActorReference"
 		xmlTag="SubClassStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -101,7 +101,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementActorReference"
 		xmlTag="RestrictionStatementActorReference">
 		<!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
 		<property name="propertyURI" xmlTag="propertyURI" attribute="YES"

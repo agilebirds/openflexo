@@ -29,8 +29,6 @@ public interface OntologyObject {
 
 	public String getHTMLDescription();
 
-	public OntologyLibrary getOntologyLibrary();
-
 	/**
 	 * Return the value defined for supplied property, asserting that current individual defines one and only one assertion for this
 	 * property.<br>

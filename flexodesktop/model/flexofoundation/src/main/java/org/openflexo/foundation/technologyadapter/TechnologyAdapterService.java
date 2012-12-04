@@ -2,6 +2,7 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.List;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -47,5 +48,22 @@ public interface TechnologyAdapterService {
 
 	@Setter(RESOURCE_CENTER_SERVICE)
 	public void setFlexoResourceCenterService(FlexoResourceCenterService flexoResourceCenterService);
+
+	/**
+	 * Return loaded technology adapter mapping supplied class<br>
+	 * If adapter is not loaded, return null
+	 * 
+	 * @param technologyAdapterClass
+	 * @return
+	 */
+	public <TA extends TechnologyAdapter<?, ?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass);
+
+	/**
+	 * Return the {@link TechnologyContextManager} for this technology shared by all {@link FlexoResourceCenter} declared in the scope of
+	 * {@link FlexoResourceCenterService}
+	 * 
+	 * @return
+	 */
+	public TechnologyContextManager<?, ?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?, ?> technologyAdapter);
 
 }

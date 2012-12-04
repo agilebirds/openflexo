@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -44,7 +45,6 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	private static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
-	private OntologyLibrary baseOntologyLibrary;
 	private ViewPointLibrary viewPointLibrary;
 	private File newViewPointSandboxDirectory;
 
@@ -107,7 +107,15 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	}
 
 	@Deprecated
-	private OntologyLibrary retrieveBaseOntologyLibrary(TechnologyAdapterService technologyAdapterService) {
+	private TechnologyContextManager<?, ?, ?> retrieveBaseOntologyLibrary(TechnologyAdapterService technologyAdapterService) {
+		
+		Class owlAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
+		
+		TechnologyAdapter<?, ?, ?> owlAdapter = technologyAdapterService.getTechnologyAdapter(owlAdapterClass);
+		return technologyAdapterService.getTechnologyContextManager(owlAdapter);
+
+		return owlAdapter
+		
 		File baseOntologyFolder = new File(getRootDirectory(), "Ontologies");
 		logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
 		baseOntologyLibrary = new OntologyLibrary(this, null);

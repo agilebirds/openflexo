@@ -124,6 +124,13 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		return getFlexoOntology();
 	}
 
+	public OWLOntologyLibrary getOntologyLibrary() {
+		if (getOntology() != null) {
+			return getOntology().getOntologyLibrary();
+		}
+		return null;
+	}
+
 	@Override
 	public String getName() {
 		return name;

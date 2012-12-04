@@ -19,10 +19,13 @@
  */
 package org.openflexo.technologyadapter.owl.model;
 
+import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
@@ -30,12 +33,13 @@ import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
+import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
-import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -59,7 +63,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author sylvain
  * 
  */
-public class OWLOntologyLibrary extends TemporaryFlexoModelObject implements ModelMaker {
+public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OWLOntology, OWLModelSlot> implements ModelMaker {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
 
@@ -89,10 +93,17 @@ public class OWLOntologyLibrary extends TemporaryFlexoModelObject implements Mod
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
 
+		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
 	}
 
 	public OntologyObjectConverter getOntologyObjectConverter() {
 		return ontologyObjectConverter;
+	}
+
+	private Map<String, FlexoResource<OWLOntology>> ontologies;
+
+	public void registerOntology(FlexoResource<OWLOntology> ontologyResource) {
+		ontologies.put(ontologyResource.getURI(), ontologyResource);
 	}
 
 	/**
@@ -102,7 +113,7 @@ public class OWLOntologyLibrary extends TemporaryFlexoModelObject implements Mod
 	 * @return
 	 */
 	public OWLOntology getOntology(String ontologyURI) {
-		for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
+		/*for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
 			MetaModelRepository<? extends OWLOntologyResource, OWLOntology, OWLOntology, OWLTechnologyAdapter> mmRep = rc
 					.getMetaModelRepository(adapter);
 			OWLOntologyResource mmResource = mmRep.getResource(ontologyURI);
@@ -117,22 +128,41 @@ public class OWLOntologyLibrary extends TemporaryFlexoModelObject implements Mod
 			}
 		}
 		logger.warning("Not found ontology: " + ontologyURI);
+		return null;*/
+		FlexoResource<OWLOntology> ontologyResource = ontologies.get(ontologyURI);
+		if (ontologyResource != null) {
+			try {
+				return ontologyResource.getResourceData(null);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 
-	public FlexoOntology getFlexoConceptOntology() {
+	public OWLOntology getFlexoConceptOntology() {
 		return getOntology(FLEXO_CONCEPT_ONTOLOGY_URI);
 	}
 
-	public FlexoOntology getRDFOntology() {
+	public OWLOntology getRDFOntology() {
 		return getOntology(RDFURIDefinitions.RDF_ONTOLOGY_URI);
 	}
 
-	public FlexoOntology getRDFSOntology() {
+	public OWLOntology getRDFSOntology() {
 		return getOntology(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 	}
 
-	public FlexoOntology getOWLOntology() {
+	public OWLOntology getOWLOntology() {
 		return getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
@@ -282,5 +312,15 @@ public class OWLOntologyLibrary extends TemporaryFlexoModelObject implements Mod
 			return o.getOntologyObject(ontologyURI + "#" + conceptURI) != null;
 		}
 		return false;
+	}
+
+	@Override
+	public void registerModel(FlexoResource<OWLOntology> ontologyResource) {
+		registerOntology(ontologyResource);
+	}
+
+	@Override
+	public void registerMetaModel(FlexoResource<OWLOntology> ontologyResource) {
+		registerOntology(ontologyResource);
 	}
 }
