@@ -4,12 +4,28 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicPropertyPatternRolePathElement;
 
 /**
  * Provides default implementation of the {@link ModelSlot} interface.
@@ -161,6 +177,38 @@ public abstract class ModelSlotImpl<M extends FlexoModel<M, MM>, MM extends Flex
 	@Override
 	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
 		return technologyAdapter;
+	}
+
+	@Override
+	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
+		if (pr instanceof OntologicObjectPatternRole) {
+			if (pr instanceof ClassPatternRole) {
+				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
+			} else if (pr instanceof IndividualPatternRole) {
+				return new OntologicIndividualPatternRolePathElement((IndividualPatternRole) pr, container);
+			} else if (pr instanceof ObjectPropertyPatternRole) {
+				return new OntologicObjectPropertyPatternRolePathElement((ObjectPropertyPatternRole) pr, container);
+			} else if (pr instanceof DataPropertyPatternRole) {
+				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
+			} else if (pr instanceof PropertyPatternRole) {
+				return new OntologicPropertyPatternRolePathElement((PropertyPatternRole) pr, container);
+			} else if (pr instanceof DataPropertyPatternRole) {
+				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
+			} else {
+				logger.warning("Unexpected " + pr);
+				return null;
+			}
+		} else if (pr instanceof EditionPatternPatternRole) {
+			return new EditionPatternPathElement(pr.getPatternRoleName(), ((EditionPatternPatternRole) pr).getEditionPatternType(),
+					container);
+		} else {
+			return null;
+		}
 	}
 
 }

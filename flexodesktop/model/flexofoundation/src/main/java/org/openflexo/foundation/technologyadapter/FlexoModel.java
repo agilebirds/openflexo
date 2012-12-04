@@ -25,4 +25,5 @@ public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaMod
 
 	public String getURI();
 
+	public Object getObject(String objectURI);
 }

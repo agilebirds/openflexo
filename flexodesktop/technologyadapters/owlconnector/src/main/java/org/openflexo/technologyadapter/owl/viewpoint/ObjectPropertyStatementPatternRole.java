@@ -59,10 +59,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
-		}
-		return null;
+		return getViewPoint().getOntologyObjectProperty(_getObjectPropertyURI());
 	}
 
 	public void setObjectProperty(OntologyProperty p) {
@@ -141,7 +138,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		@Override
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				OntologyObject subject = getProject().getOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
@@ -155,7 +152,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 					return null;
 				}
 
-				OntologyObject object = getProject().retrieveOntologyObject(objectURI);
+				OntologyObject object = getProject().getOntologyObject(objectURI);
 				if (object == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find object with URI " + objectURI);
@@ -163,7 +160,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 					return null;
 				}
 
-				OntologyObjectProperty property = (OntologyObjectProperty) getProject().retrieveOntologyObject(objectPropertyURI);
+				OntologyObjectProperty property = (OntologyObjectProperty) getProject().getObject(objectPropertyURI);
 				if (property != null) {
 					// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
 					statement = ((OWLObject) subject).getObjectPropertyStatement(property, object);

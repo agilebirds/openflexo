@@ -41,14 +41,14 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 				}
 			}
 			return null;
-		} else if (father instanceof StatementPathElement) {
+		}/* else if (father instanceof StatementPathElement) {
 			for (BindingPathElement prop : ((StatementPathElement<?>) father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) {
 					return prop;
 				}
 			}
 			return null;
-		} else if (father instanceof EditionSchemeParameterListPathElement) {
+			}*/else if (father instanceof EditionSchemeParameterListPathElement) {
 			for (BindingPathElement prop : ((EditionSchemeParameterListPathElement) father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) {
 					return prop;
@@ -81,9 +81,9 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 			return ((EditionPatternPathElement) father).getAllElements();
 		} else if (father instanceof PatternRolePathElement) {
 			return ((PatternRolePathElement) father).getAllProperties();
-		} else if (father instanceof StatementPathElement) {
+		} /*else if (father instanceof StatementPathElement) {
 			return ((StatementPathElement) father).getAllProperties();
-		} else if (father instanceof EditionSchemeParameterListPathElement) {
+			}*/else if (father instanceof EditionSchemeParameterListPathElement) {
 			return ((EditionSchemeParameterListPathElement) father).getAllProperties();
 		} else if (father instanceof GraphicalElementPathElement) {
 			return ((GraphicalElementPathElement) father).getAllProperties();
@@ -101,9 +101,9 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 			return EMPTY_LIST;
 		} else if (father.getType() instanceof PatternRolePathElement) {
 			return EMPTY_LIST;
-		} else if (father.getType() instanceof StatementPathElement) {
+		} /*else if (father.getType() instanceof StatementPathElement) {
 			return EMPTY_LIST;
-		} else if (father.getType() instanceof EditionSchemeParameterListPathElement) {
+			}*/else if (father.getType() instanceof EditionSchemeParameterListPathElement) {
 			return EMPTY_LIST;
 		} else if (father.getType() instanceof GraphicalElementPathElement) {
 			return EMPTY_LIST;

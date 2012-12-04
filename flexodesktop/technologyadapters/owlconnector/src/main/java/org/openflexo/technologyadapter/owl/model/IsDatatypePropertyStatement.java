@@ -21,14 +21,16 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.rdf.model.Statement;
 
 public class IsDatatypePropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsDatatypePropertyStatement.class.getPackage().getName());
 
-	public IsDatatypePropertyStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public IsDatatypePropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 	}
 
 	@Override

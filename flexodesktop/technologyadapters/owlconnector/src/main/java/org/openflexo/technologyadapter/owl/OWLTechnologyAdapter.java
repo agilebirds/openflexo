@@ -88,7 +88,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
-	protected OWLModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public OWLModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new OWLModelSlot(viewPoint, this);
 	}
 
@@ -165,7 +165,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
 
-		OWLOntology newOntology = OWLOntology.createOWLEmptyOntology(project.getURI(), owlFile, ontologyLibrary);
+		OWLOntology newOntology = OWLOntology.createOWLEmptyOntology(project.getURI(), owlFile, ontologyLibrary, this);
 
 		OWLOntologyResource ontologyRes;
 		try {

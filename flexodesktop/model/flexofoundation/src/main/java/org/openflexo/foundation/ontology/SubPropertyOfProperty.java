@@ -3,16 +3,14 @@ package org.openflexo.foundation.ontology;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.CustomType;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 public class SubPropertyOfProperty implements CustomType {
 
-	public static SubPropertyOfProperty getSubPropertyOfProperty(OntologyProperty anOntologyProperty,
-			TechnologyAdapter<?, ?> technologyAdapter) {
+	public static SubPropertyOfProperty getSubPropertyOfProperty(OntologyProperty anOntologyProperty) {
 		if (anOntologyProperty == null) {
 			return null;
 		}
-		return technologyAdapter.getTechnologyContextManager().getSubPropertyOfProperty(anOntologyProperty);
+		return anOntologyProperty.getTechnologyAdapter().getTechnologyContextManager().getSubPropertyOfProperty(anOntologyProperty);
 	}
 
 	private OntologyProperty ontologyProperty;

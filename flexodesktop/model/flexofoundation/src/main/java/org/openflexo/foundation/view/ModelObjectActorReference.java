@@ -8,10 +8,10 @@ import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
 public class ModelObjectActorReference<T extends FlexoModelObject> extends ActorReference<T> {
-	public FlexoModelObject object;
+	public T object;
 	public FlexoModelObjectReference objectReference;
 
-	public ModelObjectActorReference(FlexoModelObject o, PatternRole aPatternRole, EditionPatternReference ref) {
+	public ModelObjectActorReference(T o, PatternRole aPatternRole, EditionPatternReference ref) {
 		super(o.getProject());
 		setPatternReference(ref);
 		setPatternRole(aPatternRole);
@@ -49,9 +49,9 @@ public class ModelObjectActorReference<T extends FlexoModelObject> extends Actor
 	}
 
 	@Override
-	public FlexoModelObject retrieveObject() {
+	public T retrieveObject() {
 		if (object == null) {
-			object = objectReference.getObject(true);
+			object = (T) objectReference.getObject(true);
 		}
 		if (object == null) {
 			EditionPatternReference.logger.warning("Could not retrieve object " + objectReference);

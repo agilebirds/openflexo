@@ -1,4 +1,4 @@
-package org.openflexo.foundation.viewpoint.binding;
+package org.openflexo.technologyadapter.owl.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -17,11 +17,12 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
-import org.openflexo.foundation.ontology.owl.OWLIndividual;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.OWLProperty;
-import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
-import org.openflexo.foundation.ontology.owl.PropertyStatement;
+import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
+import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 
 public abstract class ObjectPropertyStatementPathElement<T> extends StatementPathElement<T> {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
@@ -466,4 +467,5 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}
 	}
+
 }

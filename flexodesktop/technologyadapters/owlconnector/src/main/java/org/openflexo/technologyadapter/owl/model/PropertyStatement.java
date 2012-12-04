@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -40,8 +41,8 @@ public abstract class PropertyStatement extends OWLStatement {
 	public static final String AS_FLOAT = "asFloat";
 	public static final String AS_DOUBLE = "asDouble";
 
-	public PropertyStatement(OWLObject subject, Statement s) {
-		super(subject, s);
+	public PropertyStatement(OWLObject subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 	}
 
 	public abstract OWLProperty getProperty();

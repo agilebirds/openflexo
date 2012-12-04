@@ -34,6 +34,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -47,8 +48,8 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 
 	private final Vector<OWLClass> superClasses;
 
-	protected OWLClass(OntClass anOntClass, OWLOntology ontology) {
-		super(anOntClass, ontology);
+	protected OWLClass(OntClass anOntClass, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anOntClass, ontology, adapter);
 		superClasses = new Vector<OWLClass>();
 		ontClass = anOntClass;
 	}

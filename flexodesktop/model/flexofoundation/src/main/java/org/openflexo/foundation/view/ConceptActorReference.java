@@ -50,7 +50,7 @@ public class ConceptActorReference<T extends OntologyObject> extends ActorRefere
 	@Override
 	public T retrieveObject() {
 		if (object == null) {
-			object = (T) getProject().retrieveOntologyObject(objectURI);
+			object = (T) getProject().getObject(objectURI);
 		}
 		if (object == null) {
 			EditionPatternReference.logger.warning("Could not retrieve object " + objectURI);

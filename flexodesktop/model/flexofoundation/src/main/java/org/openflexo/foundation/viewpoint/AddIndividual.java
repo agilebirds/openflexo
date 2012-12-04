@@ -87,10 +87,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				// System.out.println("Je reponds avec " + ontologyClassURI);
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
 				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
@@ -235,7 +232,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		if (getOntologyClass() == null) {
 			return OntologyIndividual.class;
 		}
-		return IndividualOfClass.getIndividualOfClass(getOntologyClass(), getModelSlot().getTechnologyAdapter());
+		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}
 
 	public static class AddIndividualActionMustDefineAnOntologyClass extends

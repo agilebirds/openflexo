@@ -56,10 +56,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	}
 
 	public OntologyProperty getOntologyProperty() {
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
-		}
-		return null;
+		return getViewPoint().getOntologyObjectProperty(_getObjectPropertyURI());
 	}
 
 	public void setOntologyProperty(OntologyProperty p) {

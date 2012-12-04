@@ -27,9 +27,7 @@ public class PropertyPatternRole<T extends OntologyProperty> extends OntologicOb
 	public OntologyProperty getParentProperty() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
-			}
+			return getViewPoint().getOntologyProperty(_getParentPropertyURI());
 		}
 		return null;
 	}
@@ -48,7 +46,7 @@ public class PropertyPatternRole<T extends OntologyProperty> extends OntologicOb
 
 	public OntologyClass getDomain() {
 		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
+		return getViewPoint().getOntologyClass(_getDomainURI());
 	}
 
 	public void setDomain(OntologyClass c) {
@@ -69,8 +67,8 @@ public class PropertyPatternRole<T extends OntologyProperty> extends OntologicOb
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyProperty.class;
+	public Class<T> getAccessedClass() {
+		return (Class<T>) OntologyProperty.class;
 	}
 
 	@Override

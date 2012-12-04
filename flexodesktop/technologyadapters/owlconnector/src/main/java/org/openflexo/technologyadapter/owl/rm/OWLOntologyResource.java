@@ -39,6 +39,7 @@ import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 
@@ -114,10 +115,14 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		// Not allowed
 	}
 
+	public OWLTechnologyAdapter getTechnologyAdapter() {
+		return null;
+	}
+
 	@Override
 	public OWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
 
-		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary());
+		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
 		setChanged();
 		notifyObservers(new OntologyImported(ontology));
 

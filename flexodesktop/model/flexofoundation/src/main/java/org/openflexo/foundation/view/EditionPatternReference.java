@@ -28,7 +28,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -217,13 +216,6 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getViewPoint();
-		}
-		return null;
-	}
-
-	public FlexoOntology getViewPointOntology() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getViewpointOntology();
 		}
 		return null;
 	}

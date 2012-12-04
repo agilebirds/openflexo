@@ -3,15 +3,14 @@ package org.openflexo.foundation.ontology;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.CustomType;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 public class IndividualOfClass implements CustomType {
 
-	public static IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass, TechnologyAdapter<?, ?> technologyAdapter) {
+	public static IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass) {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		return technologyAdapter.getTechnologyContextManager().getIndividualOfClass(anOntologyClass);
+		return anOntologyClass.getTechnologyAdapter().getTechnologyContextManager().getIndividualOfClass(anOntologyClass);
 	}
 
 	private OntologyClass ontologyClass;

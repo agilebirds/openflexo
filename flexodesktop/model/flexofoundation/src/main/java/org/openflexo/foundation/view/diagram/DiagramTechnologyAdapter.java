@@ -86,7 +86,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	}
 
 	@Override
-	protected DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new DiagramModelSlot(viewPoint, this);
 	}
 

@@ -45,7 +45,7 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
 			rc.initialize(technologyAdapterService);
 		}
-		for (TechnologyAdapter<?, ?, ?> ta : technologyAdapterService.getTechnologyAdapters()) {
+		for (TechnologyAdapter<?, ?> ta : technologyAdapterService.getTechnologyAdapters()) {
 			ta.initialize();
 		}
 

@@ -60,7 +60,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private String name;
 	private String label;
 	private String description;
-	private Vector<EditionAction<?, ?, ?, ?>> actions;
+	private Vector<EditionAction<?, ?, ?>> actions;
 	private Vector<EditionSchemeParameter> parameters;
 	private boolean skipConfirmationPanel = false;
 
@@ -72,7 +72,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	public EditionScheme(ViewPointBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction<?, ?, ?, ?>>();
+		actions = new Vector<EditionAction<?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
 	}
 
@@ -448,8 +448,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, MS modelSlot) {
+	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
+			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;

@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -59,8 +60,18 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	private String patternRoleName;
 	private String description;
 
+	private ModelSlot<?, ?> modelSlot;
+
 	public PatternRole(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	public final ModelSlot<?, ?> getModelSlot() {
+		return modelSlot;
+	}
+
+	public final void setModelSlot(ModelSlot<?, ?> modelSlot) {
+		this.modelSlot = modelSlot;
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {

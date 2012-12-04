@@ -73,8 +73,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	@Override
 	public Type getSubjectType() {
 		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof OntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getDomain(), getModelSlot()
-					.getTechnologyAdapter());
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -89,9 +88,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(objectPropertyURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getObjectProperty(objectPropertyURI);
-			}
+			return getViewPoint().getOntologyObjectProperty(objectPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getObjectProperty();
@@ -155,8 +152,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		public Type getType() {
 			if (getObjectProperty() instanceof OntologyObjectProperty
 					&& ((OntologyObjectProperty) getObjectProperty()).getRange() instanceof OntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) getObjectProperty()).getRange(),
-						getModelSlot().getTechnologyAdapter());
+				return IndividualOfClass.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) getObjectProperty()).getRange());
 			}
 			return OntologyObject.class;
 		}

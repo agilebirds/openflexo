@@ -1,4 +1,4 @@
-package org.openflexo.foundation.viewpoint.binding;
+package org.openflexo.technologyadapter.owl.viewpoint;
 
 import java.util.List;
 import java.util.Vector;

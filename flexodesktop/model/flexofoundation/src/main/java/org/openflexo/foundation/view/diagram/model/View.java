@@ -113,6 +113,11 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		}*/
 	}
 
+	@Override
+	public Object getObject(String objectURI) {
+		return null;
+	}
+
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
 		EditionPattern ep = getCalc().getEditionPattern(epName);
 		return getEPInstances(ep);

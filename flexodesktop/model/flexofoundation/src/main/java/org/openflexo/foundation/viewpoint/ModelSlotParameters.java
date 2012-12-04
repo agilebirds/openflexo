@@ -3,8 +3,10 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * <p>
@@ -21,16 +23,13 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 	private String modelSlotName;
 	private boolean modelSlotIsRequired;
 	private boolean modelSlotIsReadOnly;
-	private FlexoOntology modelSlotMetaModel;
-
-	private TechnologicalSpace modelSlotTechnologicalSpace;
+	private FlexoMetaModel<?> modelSlotMetaModel;
 
 	/**
 	 * <p>
 	 * Creates a new ModelSlotParameters object with default values. </br>Note both name and meta-model don't have default values.
 	 */
 	public ModelSlotParameters() {
-		setModelSlotTechnologicalSpace(TechnologicalSpace.OWL);
 		setModelSlotIsReadOnly(true);
 		setModelSlotIsRequired(true);
 	}
@@ -59,20 +58,12 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 		this.modelSlotIsReadOnly = modelSlotIsReadOnly;
 	}
 
-	public FlexoOntology getModelSlotMetaModel() {
+	public FlexoMetaModel<?> getModelSlotMetaModel() {
 		return modelSlotMetaModel;
 	}
 
-	public void setModelSlotMetaModel(FlexoOntology modelSlotMetaModel) {
+	public void setModelSlotMetaModel(FlexoMetaModel<?> modelSlotMetaModel) {
 		this.modelSlotMetaModel = modelSlotMetaModel;
-	}
-
-	public TechnologicalSpace getModelSlotTechnologicalSpace() {
-		return modelSlotTechnologicalSpace;
-	}
-
-	public void setModelSlotTechnologicalSpace(TechnologicalSpace modeSlotTechnologicalSpace) {
-		this.modelSlotTechnologicalSpace = modeSlotTechnologicalSpace;
 	}
 
 	/**
@@ -93,7 +84,8 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 	 * @return a new {@link ModelSlot}
 	 * @see #hasEnoughInformations()
 	 */
-	public ModelSlot<FlexoOntology> create() {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlot<M, MM> create(ViewPoint viewPoint,
+			TechnologyAdapter<M, MM> technologyAdapter) {
 		if (hasEnoughInformations() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to create a new ModelSlot, some parameters are missing.");
@@ -101,10 +93,9 @@ public class ModelSlotParameters extends TemporaryFlexoModelObject {
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
-		ModelSlot<FlexoOntology> newModelSlot = (ModelSlot<FlexoOntology>) getModelSlotTechnologicalSpace().newSlot();
+		ModelSlot<M, MM> newModelSlot = technologyAdapter.createNewModelSlot(viewPoint);
 		newModelSlot.setName(this.getModelSlotName());
-		newModelSlot.setMetaModel(this.getModelSlotMetaModel());
+		newModelSlot.setMetaModel((MM) this.getModelSlotMetaModel());
 		newModelSlot.setIsReadOnly(this.getModelSlotIsReadOnly());
 		newModelSlot.setIsRequired(this.getModelSlotIsRequired());
 		if (logger.isLoggable(Level.INFO)) {

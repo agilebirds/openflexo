@@ -23,7 +23,6 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
-import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.localization.FlexoLocalization;
 
 public class OntologyObjectPathElement<T extends OntologyObject> implements SimplePathElement<T>, BindingVariable<T> {
@@ -36,19 +35,19 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	private SimpleBindingPathElementImpl uriProperty;
 
 	protected List<BindingPathElement> allProperties;
-	private Vector<StatementPathElement> accessibleStatements;
+	// private Vector<StatementPathElement> accessibleStatements;
 
 	private FlexoOntology viewpointOntology;
 
 	public static final int MAX_LEVELS = 3;
 
-	public OntologyObjectPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+	public OntologyObjectPathElement(String name, BindingPathElement aParentElement) {
 		super();
 		this.name = name;
 		parentElement = aParentElement;
 		this.viewpointOntology = viewpointOntology;
 		allProperties = new Vector<BindingPathElement>();
-		accessibleStatements = new Vector<StatementPathElement>();
+		// accessibleStatements = new Vector<StatementPathElement>();
 		uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY, TypeUtils.getBaseClass(getType()),
 				String.class, true, "uri_name_as_supplied_in_ontology") {
 			@Override
@@ -134,7 +133,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 				// Swapping p1 and p2
 			}
 
-			for (final OntologyProperty property : array) {
+			/*for (final OntologyProperty property : array) {
 				StatementPathElement<?> propertyPathElement = null;
 				if (property instanceof OntologyObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
@@ -147,7 +146,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 					accessibleStatements.add(propertyPathElement);
 					allProperties.add(propertyPathElement);
 				}
-			}
+			}*/
 			propertiesFound = true;
 		}
 	}
@@ -226,13 +225,12 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	public static class OntologyClassPathElement extends OntologyObjectPathElement<OntologyClass> {
 		private OntologyClass ontologyType;
 
-		public OntologyClassPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
-			this(name, viewpointOntology.getThingConcept(), aParentElement, viewpointOntology);
+		public OntologyClassPathElement(String name, BindingPathElement aParentElement) {
+			this(name, null, aParentElement);
 		}
 
-		public OntologyClassPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement,
-				FlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyClassPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 			this.ontologyType = ontologyType;
 			/*accessibleStatements = new Vector<StatementPathElement>();
 			if (ontologyType != null) {
@@ -281,13 +279,12 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	public static class OntologyIndividualPathElement extends OntologyObjectPathElement<OntologyIndividual> {
 		private OntologyClass ontologyType;
 
-		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
-			this(name, null, aParentElement, viewpointOntology);
+		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement) {
+			this(name, null, aParentElement);
 		}
 
-		public OntologyIndividualPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement,
-				FlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyIndividualPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 			this.ontologyType = ontologyType;
 			/*accessibleStatements = new Vector<StatementPathElement>();
 			if (ontologyType != null) {
@@ -326,8 +323,8 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	}
 
 	public static abstract class OntologyPropertyPathElement<T extends OntologyProperty> extends OntologyObjectPathElement<T> {
-		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -338,8 +335,8 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	}
 
 	public static class OntologyDataPropertyPathElement extends OntologyPropertyPathElement<OntologyDataProperty> {
-		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -349,17 +346,17 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 
 		@Override
 		public OntologyClass getOntologicType() {
-			if (getViewpointOntology() != null) {
+			/*if (getViewpointOntology() != null) {
 				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_DATA_PROPERTY_URI);
-			}
+			}*/
 			return null;
 		}
 
 	}
 
 	public static class OntologyObjectPropertyPathElement extends OntologyPropertyPathElement<OntologyObjectProperty> {
-		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -369,9 +366,9 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 
 		@Override
 		public OntologyClass getOntologicType() {
-			if (getViewpointOntology() != null) {
+			/*if (getViewpointOntology() != null) {
 				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_OBJECT_PROPERTY_URI);
-			}
+			}*/
 			return null;
 		}
 

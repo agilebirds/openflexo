@@ -77,9 +77,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				return getPatternRole().getOntologicType();
@@ -160,7 +158,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		if (getOntologyClass() == null) {
 			return OntologyClass.class;
 		}
-		return SubClassOfClass.getSubClassOfClass(getOntologyClass(), getModelSlot().getTechnologyAdapter());
+		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}
 
 	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {

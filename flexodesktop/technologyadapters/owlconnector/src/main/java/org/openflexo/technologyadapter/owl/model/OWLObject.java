@@ -43,6 +43,7 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 
@@ -76,8 +77,8 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 	private OWLObject<R> originalDefinition;
 
-	public OWLObject(OntResource ontResource, OWLOntology ontology) {
-		super();
+	public OWLObject(OntResource ontResource, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(adapter);
 
 		_ontology = ontology;
 		if (ontResource != null) {
@@ -227,35 +228,35 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 				if (predicate.getURI().equals(TYPE_URI)) {
 					if (s.getObject() instanceof Resource && StringUtils.isNotEmpty(((Resource) s.getObject()).getURI())) {
 						if (((Resource) s.getObject()).getURI().equals(OWL_CLASS_URI)) {
-							newStatement = new IsClassStatement(this, s);
+							newStatement = new IsClassStatement(this, s, getTechnologyAdapter());
 						} else if (((Resource) s.getObject()).getURI().equals(OWL_OBJECT_PROPERTY_URI)) {
-							newStatement = new IsObjectPropertyStatement(this, s);
+							newStatement = new IsObjectPropertyStatement(this, s, getTechnologyAdapter());
 						} else if (((Resource) s.getObject()).getURI().equals(OWL_DATA_PROPERTY_URI)) {
-							newStatement = new IsDatatypePropertyStatement(this, s);
+							newStatement = new IsDatatypePropertyStatement(this, s, getTechnologyAdapter());
 						} else {
-							newStatement = new TypeStatement(this, s);
+							newStatement = new TypeStatement(this, s, getTechnologyAdapter());
 						}
 					} else {
-						newStatement = new TypeStatement(this, s);
+						newStatement = new TypeStatement(this, s, getTechnologyAdapter());
 					}
 				} else if (predicate.getURI().equals(RDFS_SUB_CLASS_URI)) {
-					newStatement = new SubClassStatement(this, s);
+					newStatement = new SubClassStatement(this, s, getTechnologyAdapter());
 				} else if (predicate.getURI().equals(RDFS_RANGE_URI)) {
-					newStatement = new RangeStatement(this, s);
+					newStatement = new RangeStatement(this, s, getTechnologyAdapter());
 				} else if (predicate.getURI().equals(RDFS_DOMAIN_URI)) {
-					newStatement = new DomainStatement(this, s);
+					newStatement = new DomainStatement(this, s, getTechnologyAdapter());
 				} else if (predicate.getURI().equals(OWL_INVERSE_OF_URI)) {
-					newStatement = new InverseOfStatement(this, s);
+					newStatement = new InverseOfStatement(this, s, getTechnologyAdapter());
 				} else if (predicate.getURI().equals(RDFS_SUB_PROPERTY_URI)) {
-					newStatement = new SubPropertyStatement(this, s);
+					newStatement = new SubPropertyStatement(this, s, getTechnologyAdapter());
 				} else if (predicate.getURI().equals(OWL_EQUIVALENT_CLASS_URI)) {
-					newStatement = new EquivalentClassStatement(this, s);
+					newStatement = new EquivalentClassStatement(this, s, getTechnologyAdapter());
 				} else {
 					OntologyObject predicateProperty = getOntology().getOntologyObject(predicate.getURI());
 					if (predicateProperty instanceof OntologyObjectProperty) {
-						newStatement = new ObjectPropertyStatement(this, s);
+						newStatement = new ObjectPropertyStatement(this, s, getTechnologyAdapter());
 					} else if (predicateProperty instanceof OntologyDataProperty) {
-						newStatement = new DataPropertyStatement(this, s);
+						newStatement = new DataPropertyStatement(this, s, getTechnologyAdapter());
 					} else {
 						logger.warning("Inconsistant data: unkwown property " + predicate);
 					}

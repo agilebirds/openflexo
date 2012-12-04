@@ -34,7 +34,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole<OntologyIn
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<OntologyIndividual> getAccessedClass() {
 		return OntologyIndividual.class;
 	}
 
@@ -51,9 +51,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole<OntologyIn
 	public OntologyClass getOntologicType() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-			}
+			return getViewPoint().getOntologyClass(_getConceptURI());
 		}
 		return null;
 	}

@@ -38,9 +38,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
-import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
-import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -51,7 +49,6 @@ import org.openflexo.foundation.viewpoint.FloatParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
-import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -288,7 +285,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						}
 
 						// Add individual action
-						AddIndividual newAddIndividual = new AddIndividual(builder);
+						/*AddIndividual newAddIndividual = new AddIndividual(builder);
 						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 						for (PropertyEntry e : propertyEntries) {
@@ -309,7 +306,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}
 						}
-						newDropScheme.addToActions(newAddIndividual);
+						newDropScheme.addToActions(newAddIndividual);*/
 					}
 
 					// Add shape/connector actions

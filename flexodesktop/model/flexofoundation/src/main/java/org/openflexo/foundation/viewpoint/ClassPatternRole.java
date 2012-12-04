@@ -28,7 +28,7 @@ public class ClassPatternRole extends OntologicObjectPatternRole<OntologyClass> 
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<OntologyClass> getAccessedClass() {
 		return OntologyClass.class;
 	}
 
@@ -46,10 +46,7 @@ public class ClassPatternRole extends OntologicObjectPatternRole<OntologyClass> 
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-		}
-		return null;
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {

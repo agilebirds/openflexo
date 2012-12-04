@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
@@ -51,8 +52,8 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements Onto
 
 	private final Vector<OWLProperty> superProperties;
 
-	protected OWLProperty(OntProperty anOntProperty, OWLOntology ontology) {
-		super(anOntProperty, ontology);
+	protected OWLProperty(OntProperty anOntProperty, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anOntProperty, ontology, adapter);
 		ontProperty = anOntProperty;
 		superProperties = new Vector<OWLProperty>();
 		domainStatementList = new ArrayList<DomainStatement>();

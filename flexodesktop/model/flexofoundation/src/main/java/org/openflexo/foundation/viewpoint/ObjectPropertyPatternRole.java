@@ -29,7 +29,7 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjec
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<OntologyObjectProperty> getAccessedClass() {
 		return OntologyObjectProperty.class;
 	}
 
@@ -52,7 +52,7 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjec
 
 	public OntologyClass getRange() {
 		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
+		return getViewPoint().getOntologyClass(_getRangeURI());
 	}
 
 	public void setRange(OntologyClass c) {

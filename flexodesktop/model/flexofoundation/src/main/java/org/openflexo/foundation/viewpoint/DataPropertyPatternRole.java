@@ -2,7 +2,6 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
@@ -30,8 +29,8 @@ public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataPro
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyObjectProperty.class;
+	public Class<OntologyDataProperty> getAccessedClass() {
+		return OntologyDataProperty.class;
 	}
 
 	@Override

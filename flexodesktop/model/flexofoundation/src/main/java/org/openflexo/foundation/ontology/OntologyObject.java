@@ -2,6 +2,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.Set;
 
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
@@ -29,6 +30,8 @@ public interface OntologyObject {
 	public String getDisplayableDescription();
 
 	public String getHTMLDescription();
+
+	public TechnologyAdapter<?, ?> getTechnologyAdapter();
 
 	/**
 	 * Return the value defined for supplied property, asserting that current individual defines one and only one assertion for this

@@ -167,7 +167,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		return null;
 	}
 
-	public GraphicalElementPatternRole getPatternRole() {
+	public GraphicalElementPatternRole<?> getPatternRole() {
 		EditionPatternReference ref = getEditionPatternReference();
 		if (ref != null && ref.getPatternRole() instanceof GraphicalElementPatternRole) {
 			return (GraphicalElementPatternRole) ref.getPatternRole();

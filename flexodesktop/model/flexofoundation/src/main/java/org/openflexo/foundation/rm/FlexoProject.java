@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -116,13 +117,20 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCDataBinding;
@@ -149,6 +157,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -177,6 +186,7 @@ import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.WRLocator;
 import org.openflexo.toolbox.ZipUtils;
@@ -4168,7 +4178,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
 					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
 				} else {
-					PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+					PatternRole pr = actorReference.getPatternReference().getPatternRole();
 					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
 					object.registerEditionPatternReference(instance, pr);
 				}
@@ -4253,18 +4263,213 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			return allOntologies;
 		}*/
 
-	public OntologyObject retrieveOntologyObject(String uri) {
-		logger.warning("Ontology object retrieving not implemented yet, looking up " + uri);
+	/**
+	 * Retrieve object referenced by its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public Object getObject(String uri) {
+		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
+			Object o = m.getObject(uri);
+			if (o != null)
+				return o;
+		}
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			Object o = m.getObject(uri);
+			if (o != null)
+				return o;
+		}
 		return null;
+	}
 
-		/*for (FlexoOntology ontology : getAllOntologies()) {
-			ontology.loadWhenUnloaded();
-			OntologyObject object = ontology.getOntologyObject(uri);
-			if (object != null) {
-				return object;
+	/**
+	 * Retrieve ontology object from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyObject getOntologyObject(String uri) {
+		Object returned = getObject(uri);
+		if (returned instanceof OntologyObject) {
+			return (OntologyObject) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology class from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyClass getOntologyClass(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof OntologyClass) {
+			return (OntologyClass) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology individual from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyIndividual getOntologyIndividual(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof OntologyIndividual) {
+			return (OntologyIndividual) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyProperty getOntologyProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof OntologyProperty) {
+			return (OntologyProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyObjectProperty getOntologyObjectProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof OntologyObjectProperty) {
+			return (OntologyObjectProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public OntologyDataProperty getOntologyDataProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof OntologyDataProperty) {
+			return (OntologyDataProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean testValidURI(String ontologyURI, String conceptURI) {
+		if (StringUtils.isEmpty(conceptURI)) {
+			return false;
+		}
+		if (StringUtils.isEmpty(conceptURI.trim())) {
+			return false;
+		}
+		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
+	}
+
+	/**
+	 * Return true if URI is duplicated in the context of this project
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean isDuplicatedURI(String modelURI, String conceptURI) {
+		FlexoModel<?, ?> m = getModel(modelURI);
+		if (m != null) {
+			return m.getObject(modelURI + "#" + conceptURI) != null;
+		}
+		FlexoMetaModel<?> mm = getMetaModel(modelURI);
+		if (mm != null) {
+			return mm.getObject(modelURI + "#" + conceptURI) != null;
+		}
+		return false;
+	}
+
+	/**
+	 * Retrieve model referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoModel<?, ?> getModel(String modelURI) {
+		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
+			if (m.getURI().equals(modelURI))
+				return m;
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all models used in the scope of current project<br>
+	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * 
+	 * @return
+	 */
+	public Set<FlexoModel<?, ?>> getAllReferencedModels() {
+		HashSet<FlexoModel<?, ?>> returned = new HashSet<FlexoModel<?, ?>>();
+		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
+			View v = vd.getView();
+			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+				returned.add(msi.getModel());
 			}
 		}
-		return null;*/
+		return returned;
+	}
+
+	/**
+	 * Retrieve metamodel referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			if (m.getURI().equals(metaModelURI))
+				return m;
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all models used in the scope of current project<br>
+	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * 
+	 * @return
+	 */
+	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
+		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
+		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
+			View v = vd.getView();
+			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+				returned.add(msi.getModelSlot().getMetaModel());
+			}
+		}
+		return returned;
 	}
 
 }

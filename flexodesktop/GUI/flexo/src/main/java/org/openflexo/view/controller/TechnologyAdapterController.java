@@ -27,6 +27,7 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 
 /**
  * This class represents a technology adapter controller<br>
@@ -34,13 +35,11 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
  * @author sylvain
  * 
  */
-public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?, ?, ?>> {
+public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?, ?>> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapterController.class.getPackage().getName());
 
-	static {
-		loadTechnologyAdapterControllers();
-	}
+	private TechnologyAdapterService technologyAdapterService;
 
 	private static Map<TechnologyAdapter, TechnologyAdapterController<?>> loadedAdapterControllers;
 
@@ -50,7 +49,8 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 * 
 	 * @return the retrieved TechnologyModuleDefinition map.
 	 */
-	public static Map<TechnologyAdapter, TechnologyAdapterController<?>> loadTechnologyAdapterControllers() {
+	public static Map<TechnologyAdapter, TechnologyAdapterController<?>> loadTechnologyAdapterControllers(
+			TechnologyAdapterService technologyAdapterService) {
 		if (loadedAdapterControllers == null) {
 			loadedAdapterControllers = new Hashtable<TechnologyAdapter, TechnologyAdapterController<?>>();
 			logger.info("Loading available technology adapter controllers...");
@@ -58,6 +58,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 			Iterator<TechnologyAdapterController> iterator = loader.iterator();
 			while (iterator.hasNext()) {
 				TechnologyAdapterController technologyAdapterController = iterator.next();
+				technologyAdapterController.technologyAdapterService = technologyAdapterService;
 				TechnologyAdapter technologyAdapter = technologyAdapterController.getTechnologyAdapter();
 
 				logger.info("Load " + technologyAdapterController.getClass().getName() + " as controller for "
@@ -101,7 +102,16 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 * 
 	 * @return
 	 */
-	public abstract TA getTechnologyAdapter();
+	public final TA getTechnologyAdapter() {
+		return technologyAdapterService.getTechnologyAdapter(getTechnologyAdapterClass());
+	}
+
+	/**
+	 * Return TechnologyAdapter class
+	 * 
+	 * @return
+	 */
+	public abstract Class<TA> getTechnologyAdapterClass();
 
 	public abstract void initializeActions(ControllerActionInitializer actionInitializer);
 

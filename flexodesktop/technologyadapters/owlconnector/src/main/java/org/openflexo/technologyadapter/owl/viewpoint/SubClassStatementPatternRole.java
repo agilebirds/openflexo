@@ -90,14 +90,14 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		@Override
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				OntologyObject subject = getProject().getOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyObject parent = getProject().retrieveOntologyObject(parentURI);
+				OntologyObject parent = getProject().getOntologyObject(parentURI);
 				if (subject != null && parent != null) {
 					statement = ((OWLObject<?>) subject).getSubClassStatement(parent);
 				}

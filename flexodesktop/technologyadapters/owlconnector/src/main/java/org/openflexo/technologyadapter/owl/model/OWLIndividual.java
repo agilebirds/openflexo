@@ -30,6 +30,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
@@ -43,8 +44,8 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 
 	private final Vector<OWLClass> types;
 
-	protected OWLIndividual(Individual anIndividual, OWLOntology ontology) {
-		super(anIndividual, ontology);
+	protected OWLIndividual(Individual anIndividual, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anIndividual, ontology, adapter);
 		individual = anIndividual;
 		types = new Vector<OWLClass>();
 	}

@@ -100,15 +100,15 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	private String getActionOntologyURI(EditionSchemeAction<?> action) {
-		return action.getProject().getProjectOntology().getURI();
+		return action.getProject().getURI();
 	}
 
 	private boolean proposalIsNotUnique(EditionSchemeAction<?> action, String uriProposal) {
-		return action.getProject().getProjectOntologyLibrary().isDuplicatedURI(getActionOntologyURI(action), uriProposal);
+		return action.getProject().isDuplicatedURI(getActionOntologyURI(action), uriProposal);
 	}
 
 	private boolean proposalIsWellFormed(EditionSchemeAction<?> action, String uriProposal) {
-		return action.getProject().getProjectOntologyLibrary().testValidURI(getActionOntologyURI(action), uriProposal);
+		return action.getProject().testValidURI(getActionOntologyURI(action), uriProposal);
 	}
 
 	@Override

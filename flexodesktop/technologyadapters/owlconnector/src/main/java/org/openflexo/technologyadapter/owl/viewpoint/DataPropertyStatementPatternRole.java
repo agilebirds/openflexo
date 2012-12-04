@@ -57,7 +57,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 
 	public OntologyDataProperty getDataProperty() {
 		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getDataProperty(_getDataPropertyURI());
+		return getViewPoint().getOntologyDataProperty(_getDataPropertyURI());
 	}
 
 	public void setDataProperty(OntologyProperty p) {
@@ -136,14 +136,14 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 		@Override
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
+				OntologyObject subject = getProject().getOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyDataProperty property = (OntologyDataProperty) getProject().retrieveOntologyObject(dataPropertyURI);
+				OntologyDataProperty property = (OntologyDataProperty) getProject().getObject(dataPropertyURI);
 				if (property != null) {
 					statement = ((OWLObject<?>) subject).getDataPropertyStatement(property);
 					// logger.info("Found statement: "+statement);

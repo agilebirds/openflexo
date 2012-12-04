@@ -57,7 +57,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return a new {@link ModelSlot}
 	 */
-	protected abstract ModelSlot<M, MM> createNewModelSlot(ViewPoint viewPoint);
+	public abstract ModelSlot<M, MM> createNewModelSlot(ViewPoint viewPoint);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XSD schema

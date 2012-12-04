@@ -61,8 +61,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	@Override
 	public Type getSubjectType() {
 		if (getDataProperty() != null && getDataProperty().getDomain() instanceof OntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain(), getModelSlot()
-					.getTechnologyAdapter());
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -89,9 +88,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(dataPropertyURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getDataProperty(dataPropertyURI);
-			}
+			return getViewPoint().getOntologyDataProperty(dataPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getDataProperty();

@@ -25,19 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.toolbox.FileUtils;
-
-import com.hp.hpl.jena.ontology.DatatypeProperty;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
 
 public class TestProjectOntologyManipulations extends FlexoTestCase {
 
@@ -74,7 +63,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory, create ontology, reload project
 	 */
-	public void test2CreateOntology() {
+	/*public void test2CreateOntology() {
 		log("test2CreateOntology()");
 
 		logger.info("Hop" + _project.getProjectOntology());
@@ -94,12 +83,12 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 		OWLOntology flexoConceptsOntology = _project.getProjectOntologyLibrary().getFlexoConceptOntology();
 		flexoConceptsOntology.describe();
 
-	}
+	}*/
 
 	/**
 	 * Import ontologies
 	 */
-	public void test3ImportOntologies() {
+	/*public void test3ImportOntologies() {
 		log("test3ImportOntologies()");
 
 		OWLOntology basicOrganizationTreeOntology = (OWLOntology) _project.getProjectOntologyLibrary().getOntology(
@@ -113,7 +102,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 		}
 
 		saveProject(_project);
-	}
+	}*/
 
 	/**
 	 * Load calcs, import calc
@@ -147,7 +136,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	/**
 	 * Edit ontology and reload project
 	 */
-	public void test4ManuallyEditOntology() {
+	/*public void test4ManuallyEditOntology() {
 		log("test5ManuallyEditOntology()");
 
 		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
@@ -213,6 +202,6 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 		_editor = null;
 		_resourceCenter = null;
 		_resourceCenterDirectory = null;
-	}
+	}*/
 
 }

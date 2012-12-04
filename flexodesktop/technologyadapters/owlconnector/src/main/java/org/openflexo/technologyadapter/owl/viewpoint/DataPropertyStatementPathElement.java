@@ -1,4 +1,4 @@
-package org.openflexo.foundation.viewpoint.binding;
+package org.openflexo.technologyadapter.owl.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
-import org.openflexo.foundation.ontology.owl.OWLIndividual;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.PropertyStatement;
+import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 
 public class DataPropertyStatementPathElement extends StatementPathElement<Object> {
 	private static final Logger logger = Logger.getLogger(DataPropertyStatementPathElement.class.getPackage().getName());

@@ -1,4 +1,6 @@
 /*
+
+
  * (c) Copyright 2010-2011 AgileBirds
  *
  * This file is part of OpenFlexo.
@@ -80,10 +82,7 @@ public class IndividualInspectorEntry extends InspectorEntry {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getOntologyLibrary() != null) {
-			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-		}
-		return null;
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
 	public void setConcept(OntologyClass c) {

@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
@@ -30,8 +32,8 @@ public class EquivalentClassStatement extends OWLStatement {
 
 	private OWLObject<?> equivalentObject;
 
-	public EquivalentClassStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public EquivalentClassStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			equivalentObject = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {

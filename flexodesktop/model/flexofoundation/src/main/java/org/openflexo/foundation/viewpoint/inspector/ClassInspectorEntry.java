@@ -66,7 +66,7 @@ public class ClassInspectorEntry extends InspectorEntry {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
 	public void setConcept(OntologyClass c) {
