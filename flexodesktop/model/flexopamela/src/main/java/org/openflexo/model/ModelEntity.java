@@ -112,8 +112,6 @@ public class ModelEntity<I> {
 
 	private boolean initialized;
 
-	private boolean propertiesMerged;
-
 	private HashMap<String, ModelProperty<I>> declaredModelProperties;
 
 	private Set<ModelEntity<?>> embeddedEntities;
@@ -192,9 +190,6 @@ public class ModelEntity<I> {
 	}
 
 	void init() throws ModelDefinitionException {
-		if (initialized) {
-			return;
-		}
 
 		// We now resolve our inherited entities and properties
 		if (getDirectSuperEntities() != null) {
@@ -216,11 +211,10 @@ public class ModelEntity<I> {
 		}
 
 		embeddedEntities = Collections.unmodifiableSet(embeddedEntities);
-		initialized = true;
 	}
 
 	void mergeProperties() throws ModelDefinitionException {
-		if (propertiesMerged) {
+		if (initialized) {
 			return;
 		}
 		properties.putAll(declaredModelProperties);
@@ -239,7 +233,7 @@ public class ModelEntity<I> {
 		for (ModelProperty<? super I> p : properties.values()) {
 			p.validate();
 		}
-		propertiesMerged = true;
+		initialized = true;
 		// TODO: maybe it would be better to be closer to what constructors do, ie, if there are super-initializer,
 		// And none of them are without arguments, then this entity should define an initializer with the same
 		// method signature (this is to enforce the developer to be aware of what the parameters do):
