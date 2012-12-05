@@ -26,7 +26,9 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.DeserializationPolicy;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.IProgress;
 
 public class UserResourceCenter implements FlexoResourceCenter {
@@ -44,24 +46,10 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			e1.printStackTrace();
 		}
 		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile()) {
-			FileInputStream fis = null;
 			try {
-				fis = new FileInputStream(userResourceCenterStorageFile);
-				storage = (Storage) modelFactory.deserialize(fis);
+				update();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ModelDefinitionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				IOUtils.closeQuietly(fis);
 			}
 		}
 		if (storage == null) {
@@ -173,7 +161,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		}
 		FileOutputStream fos = new FileOutputStream(userResourceCenterStorageFile);
 		try {
-			modelFactory.serialize(storage, fos);
+			modelFactory.serialize(storage, fos, SerializationPolicy.EXTENSIVE);
 		} finally {
 			IOUtils.closeQuietly(fos);
 		}
@@ -184,7 +172,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
 		try {
 			try {
-				storage = (Storage) modelFactory.deserialize(fis);
+				storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
 			} catch (JDOMException e) {
 				e.printStackTrace();
 				throw new IOException("Parsing XML data failed: " + e.getMessage(), e);

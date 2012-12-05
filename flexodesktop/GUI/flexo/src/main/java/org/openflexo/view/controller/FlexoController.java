@@ -1855,7 +1855,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 			return iconForObject;
 		} else if (object instanceof WKFObject) {
-			return WKFIconLibrary.iconForObject((WKFObject) object);
+			ImageIcon iconForObject = WKFIconLibrary.iconForObject((WKFObject) object);
+			if (iconForObject != null && ((WKFObject) object).getProject() != getProject()) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			}
+			return iconForObject;
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
 		} else if (object instanceof DMObject) {
