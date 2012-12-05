@@ -8,40 +8,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.IOUtils;
 import org.flexo.model.AbstractNode;
 import org.flexo.model.ActivityNode;
 import org.flexo.model.Edge;
 import org.flexo.model.EndNode;
-import org.flexo.model.FlexoModelObject;
 import org.flexo.model.FlexoProcess;
 import org.flexo.model.StartNode;
 import org.flexo.model.TokenEdge;
 import org.flexo.model.WKFAnnotation;
-import org.flexo.model.WKFObject;
-import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.openflexo.model.exceptions.InvalidXMLDataException;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
 import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.model.factory.ModelContext;
-import org.openflexo.model.factory.ModelEntity;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
-public class BasicTests extends TestCase {
+public class BasicTests extends AbstractPAMELATest {
 
 	private ModelFactory factory;
-	private ModelContext mapping;
+	private ModelContext modelContext;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -56,8 +50,8 @@ public class BasicTests extends TestCase {
 	@Before
 	public void setUp() throws Exception {
 		new File("/tmp").mkdirs();
-		mapping = new ModelContext(FlexoProcess.class);
-		factory = new ModelFactory(mapping);
+		modelContext = new ModelContext(FlexoProcess.class);
+		factory = new ModelFactory(modelContext);
 	}
 
 	@Override
@@ -72,38 +66,14 @@ public class BasicTests extends TestCase {
 	 */
 	public void test1() throws Exception {
 
-		System.out.println(mapping.debug());
+		System.out.println(modelContext.debug());
 
-		assertEquals(11, mapping.getEntityCount());
+		assertEquals(11, modelContext.getEntityCount());
 
-		ModelEntity<FlexoModelObject> modelObjectEntity = mapping.getModelEntity(FlexoModelObject.class);
-		ModelEntity<FlexoProcess> processEntity = mapping.getModelEntity(FlexoProcess.class);
-		ModelEntity<AbstractNode> abstractNodeEntity = mapping.getModelEntity(AbstractNode.class);
-		ModelEntity<StartNode> startNodeEntity = mapping.getModelEntity(StartNode.class);
-		ModelEntity<TokenEdge> tokenEdgeEntity = mapping.getModelEntity(TokenEdge.class);
-		ModelEntity<WKFObject> wkfObjectEntity = mapping.getModelEntity(WKFObject.class);
-
-		assertNotNull(processEntity);
-		assertNotNull(abstractNodeEntity);
-		assertNotNull(startNodeEntity);
-		assertNotNull(tokenEdgeEntity);
-		assertNotNull(wkfObjectEntity);
-
-		assertNotNull(processEntity.getModelProperty(FlexoProcess.NODES));
-		assertNotNull(processEntity.getModelProperty(FlexoProcess.FOO));
-		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
-
-		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
-		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
-		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
-		assertTrue(modelObjectEntity.getAllDescendants().contains(processEntity));
+		validateBasicModelContext(modelContext);
 	}
 
 	public void test2() throws Exception {
-		Document doc;
 
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		assertTrue(process instanceof FlexoProcess);
@@ -311,7 +281,7 @@ public class BasicTests extends TestCase {
 			fail(e.getMessage());
 		} catch (JDOMException e) {
 			fail(e.getMessage());
-		} catch (InvalidXMLDataException e) {
+		} catch (InvalidDataException e) {
 			fail(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(fos);

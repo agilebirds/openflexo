@@ -20,11 +20,10 @@ import javassist.util.proxy.ProxyObject;
 
 import org.jdom2.JDOMException;
 import org.openflexo.model.annotations.PastingPoint;
-import org.openflexo.model.exceptions.InvalidXMLDataException;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.factory.ModelContext.Converter;
-import org.openflexo.model.xml.StringEncoder;
+import org.openflexo.model.factory.StringConverterLibrary.Converter;
 
 public class ModelFactory {
 
@@ -245,10 +244,6 @@ public class ModelFactory {
 		this.mapImplementationClass = mapImplementationClass;
 	}
 
-	public boolean isStringConvertable(Class<?> c) {
-		return getStringEncoder().isConvertable(c);
-	}
-
 	public boolean isProxyObject(Object object) {
 		return object instanceof ProxyObject;
 	}
@@ -268,10 +263,13 @@ public class ModelFactory {
 		return null;
 	}
 
-	void importClass(Class<?> klass) throws ModelDefinitionException {
-		if (modelContext.getModelEntity(klass) == null) {
+	<I> ModelEntity<I> importClass(Class<I> klass) throws ModelDefinitionException {
+		ModelEntity<I> modelEntity = modelContext.getModelEntity(klass);
+		if (modelEntity == null) {
 			modelContext = new ModelContext(klass, modelContext);
+			modelEntity = modelContext.getModelEntity(klass);
 		}
+		return modelEntity;
 	}
 
 	public StringEncoder getStringEncoder() {
@@ -488,21 +486,21 @@ public class ModelFactory {
 		serializer.serializeDocument(object, os);
 	}
 
-	public Object deserialize(InputStream is) throws IOException, JDOMException, InvalidXMLDataException, ModelDefinitionException {
+	public Object deserialize(InputStream is) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
 		return deserialize(is, DeserializationPolicy.PERMISSIVE);
 	}
 
-	public Object deserialize(InputStream is, DeserializationPolicy policy) throws IOException, JDOMException, InvalidXMLDataException,
+	public Object deserialize(InputStream is, DeserializationPolicy policy) throws IOException, JDOMException, InvalidDataException,
 			ModelDefinitionException {
 		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
 		return deserializer.deserializeDocument(is);
 	}
 
-	public Object deserialize(String input) throws IOException, JDOMException, InvalidXMLDataException, ModelDefinitionException {
+	public Object deserialize(String input) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
 		return deserialize(input, DeserializationPolicy.PERMISSIVE);
 	}
 
-	public Object deserialize(String input, DeserializationPolicy policy) throws IOException, JDOMException, InvalidXMLDataException,
+	public Object deserialize(String input, DeserializationPolicy policy) throws IOException, JDOMException, InvalidDataException,
 			ModelDefinitionException {
 		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
 		return deserializer.deserializeDocument(input);

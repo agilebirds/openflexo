@@ -21,10 +21,9 @@ import org.openflexo.model.annotations.ReturnedValue;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelContext.Converter;
-import org.openflexo.model.xml.InvalidDataException;
-import org.openflexo.model.xml.StringEncoder;
+import org.openflexo.model.factory.StringConverterLibrary.Converter;
 
 public class ModelProperty<I> {
 
@@ -182,11 +181,6 @@ public class ModelProperty<I> {
 		}
 	}
 
-	protected ModelProperty<I> init() throws ModelDefinitionException {
-		findInverseProperty();
-		return this;
-	}
-
 	public void validate() throws ModelDefinitionException {
 		if (propertyIdentifier == null || propertyIdentifier.equals("")) {
 			throw new ModelDefinitionException("No property identifier defined!");
@@ -205,7 +199,7 @@ public class ModelProperty<I> {
 		}
 		if (!Getter.UNDEFINED.equals(getter.defaultValue())) {
 			try {
-				Converter<?> converter = StringEncoder.converterForClass(getType(), getModelMapping().getConverters());
+				Converter<?> converter = StringConverterLibrary.getInstance().getConverter(getType());
 				if (converter != null) {
 					defaultValue = converter.convertFromString(getter.defaultValue(), null);
 				} else {
@@ -717,10 +711,6 @@ public class ModelProperty<I> {
 				adderMethod, removerMethod);
 	}
 
-	public ModelContext getModelMapping() {
-		return getModelEntity().getModelContext();
-	}
-
 	public ModelEntity<I> getModelEntity() {
 		return modelEntity;
 	}
@@ -757,11 +747,19 @@ public class ModelProperty<I> {
 		return xmlElement;
 	}
 
+	public String getXMLContext() {
+		if (xmlElement != null) {
+			return xmlElement.context();
+		} else {
+			return "";
+		}
+	}
+
 	public String getXMLTag() {
-		if (xmlTag == null) {
+		if (xmlTag == null && xmlAttribute != null) {
 			xmlTag = xmlAttribute.xmlTag();
 			if (xmlTag.equals(XMLAttribute.DEFAULT_XML_TAG)) {
-				xmlTag = getGetter().value();
+				xmlTag = propertyIdentifier;
 			}
 		}
 		return xmlTag;
@@ -813,23 +811,23 @@ public class ModelProperty<I> {
 	private ModelProperty<?> inverseProperty = null;
 	private Cardinality cardinality;
 
-	public ModelProperty getInverseProperty() {
+	public ModelProperty getInverseProperty() throws ModelDefinitionException {
+		if (inverseProperty == null) {
+			findInverseProperty();
+		}
 		return inverseProperty;
 	}
 
-	// TODO: optimize this (for the case of inverse is incorrectly defined)
 	private void findInverseProperty() throws ModelDefinitionException {
 		if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-			if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-				ModelEntity<?> oppositeEntity = getModelMapping().getModelEntity(getType(), true);
-				if (oppositeEntity == null) {
-					throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
-				}
-				inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse(), true);
-				if (inverseProperty == null) {
-					throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse()
-							+ " for " + oppositeEntity.getImplementedInterface().getSimpleName());
-				}
+			ModelEntity<?> oppositeEntity = getAccessedEntity();
+			if (oppositeEntity == null) {
+				throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
+			}
+			inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse());
+			if (inverseProperty == null) {
+				throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse() + " for "
+						+ oppositeEntity.getImplementedInterface().getSimpleName());
 			}
 		}
 	}
@@ -840,7 +838,7 @@ public class ModelProperty<I> {
 	}
 
 	public ModelEntity<?> getAccessedEntity() throws ModelDefinitionException {
-		return getModelMapping().getModelEntity(getType());
+		return ModelEntityLibrary.get(getType());
 	}
 
 	public ReturnedValue getReturnedValue() {
@@ -861,7 +859,7 @@ public class ModelProperty<I> {
 
 	public StrategyType getCloningStrategy() {
 		if (cloningStrategy == null) {
-			if (getModelMapping().isModelEntity(getType())) {
+			if (ModelEntityLibrary.has(getType())) {
 				return StrategyType.REFERENCE;
 			} else {
 				return StrategyType.CLONE;

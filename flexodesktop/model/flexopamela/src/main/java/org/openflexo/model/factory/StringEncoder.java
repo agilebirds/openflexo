@@ -1,14 +1,15 @@
 /**
  * 
  */
-package org.openflexo.model.xml;
+package org.openflexo.model.factory;
 
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.ModelContext.Converter;
-import org.openflexo.model.factory.ProxyMethodHandler;
+import org.openflexo.model.exceptions.InvalidDataException;
+import org.openflexo.model.factory.StringConverterLibrary.Converter;
+
+import com.google.common.primitives.Primitives;
 
 public class StringEncoder {
 	private Map<Class<?>, Converter<?>> converters = new Hashtable<Class<?>, Converter<?>>();
@@ -67,6 +68,9 @@ public class StringEncoder {
 
 	public <T> Converter<T> addConverter(Converter<T> converter) {
 		converters.put(converter.getConverterClass(), converter);
+		if (Primitives.isWrapperType(converter.getConverterClass())) {
+			converters.put(Primitives.unwrap(converter.getConverterClass()), converter);
+		}
 		return converter;
 	}
 
@@ -82,38 +86,12 @@ public class StringEncoder {
 		Converter<T> converterForClass = converterForClass(objectType, converters);
 		if (converterForClass == null) {
 			// 2. We try with model-defined converters
-			converterForClass = converterForClass(objectType, modelFactory.getModelContext().getConverters());
+			converterForClass = converterForClass(objectType, StringConverterLibrary.getInstance().getConverters());
 		}
 		return converterForClass;
 	}
 
 	public static <T> Converter<T> converterForClass(Class<T> objectType, Map<Class<?>, Converter<?>> convertersMap) {
-		if (objectType.isPrimitive()) {
-			if (objectType.equals(Integer.TYPE)) {
-				return (Converter<T>) converterForClass(Integer.class, convertersMap);
-			}
-			if (objectType.equals(Long.TYPE)) {
-				return (Converter<T>) converterForClass(Long.class, convertersMap);
-			}
-			if (objectType.equals(Short.TYPE)) {
-				return (Converter<T>) converterForClass(Short.class, convertersMap);
-			}
-			if (objectType.equals(Byte.TYPE)) {
-				return (Converter<T>) converterForClass(Byte.class, convertersMap);
-			}
-			if (objectType.equals(Double.TYPE)) {
-				return (Converter<T>) converterForClass(Double.class, convertersMap);
-			}
-			if (objectType.equals(Float.TYPE)) {
-				return (Converter<T>) converterForClass(Float.class, convertersMap);
-			}
-			if (objectType.equals(Boolean.TYPE)) {
-				return (Converter<T>) converterForClass(Boolean.class, convertersMap);
-			}
-			if (objectType.equals(Character.TYPE)) {
-				return (Converter<T>) converterForClass(Character.class, convertersMap);
-			}
-		}
 		Converter<?> returned;
 		Class<?> candidate = objectType;
 		do {

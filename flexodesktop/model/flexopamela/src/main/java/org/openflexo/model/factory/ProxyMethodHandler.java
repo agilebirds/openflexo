@@ -33,12 +33,12 @@ import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.NoSuchEntityException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.ModelFactory.PAMELAProxyFactory;
-import org.openflexo.model.xml.InvalidDataException;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 import com.google.common.base.Predicate;
@@ -1194,7 +1194,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						Object singleValue = invokeGetter(p);
 						switch (p.getCloningStrategy()) {
 						case CLONE:
-							if (getModelMapping().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+							if (ModelEntity.isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
 								if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 									// Don't do it, outside of context
 								} else {
@@ -1215,7 +1215,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						for (Object value : values) {
 							switch (p.getCloningStrategy()) {
 							case CLONE:
-								if (getModelMapping().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+								if (ModelEntity.isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
 									if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
 										// Don't do it, outside of context
 									} else {
@@ -1282,7 +1282,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 								throw new ModelExecutionException(e);
 							}
 							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
-						} else if (getModelMapping().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+						} else if (ModelEntity.isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
 							Object clonedValue = clonedObjects.get(singleValue);
 							if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 								clonedValue = null;
@@ -1326,7 +1326,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 								}
 								List<?> l = (List<?>) clonedObjectHandler.invokeGetter(p);
 								clonedObjectHandler.invokeAdder(p, clonedValue);
-							} else if (getModelMapping().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+							} else if (ModelEntity.isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
 								Object clonedValue = clonedObjects.get(value);
 								if (!isPartOfContext(value, EmbeddingType.CLOSURE, context)) {
 									clonedValue = null;

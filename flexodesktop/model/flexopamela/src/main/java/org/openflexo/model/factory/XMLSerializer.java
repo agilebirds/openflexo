@@ -18,11 +18,10 @@ import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.RestrictiveSerializationException;
-import org.openflexo.model.xml.InvalidDataException;
-import org.openflexo.model.xml.StringEncoder;
 
 class XMLSerializer {
 
@@ -117,7 +116,7 @@ class XMLSerializer {
 			ModelEntity<I> modelEntity = handler.getModelEntity();
 			Class<I> implementedInterface = modelEntity.getImplementedInterface();
 			boolean serializeModelEntityName = false;
-			if (!modelMapping.isModelEntity(implementedInterface)) {
+			if (modelMapping.getModelEntity(implementedInterface) == null) {
 				serializeModelEntityName = true;
 				switch (policy) {
 				case EXTENSIVE:
