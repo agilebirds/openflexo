@@ -125,7 +125,9 @@ import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -1847,7 +1849,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public ImageIcon iconForObject(Object object) {
 		if (object instanceof WorkflowModelObject) {
-			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
+			ImageIcon iconForObject = WKFIconLibrary.iconForObject((WorkflowModelObject) object);
+			if (iconForObject != null && ((WorkflowModelObject) object).getProject() != getProject()) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			}
+			return iconForObject;
 		} else if (object instanceof WKFObject) {
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
@@ -1876,5 +1882,4 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
-
 }
