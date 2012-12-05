@@ -10,21 +10,12 @@ public class SubClassOfClass implements CustomType {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		if (anOntologyClass.getOntologyLibrary() != null) {
-			if (anOntologyClass.getOntologyLibrary().subclassesOfClass.get(anOntologyClass) != null) {
-				return anOntologyClass.getOntologyLibrary().subclassesOfClass.get(anOntologyClass);
-			} else {
-				SubClassOfClass returned = new SubClassOfClass(anOntologyClass);
-				anOntologyClass.getOntologyLibrary().subclassesOfClass.put(anOntologyClass, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyClass.getTechnologyAdapter().getTechnologyContextManager().getSubClassOfClass(anOntologyClass);
 	}
 
 	private IFlexoOntologyClass ontologyClass;
 
-	private SubClassOfClass(IFlexoOntologyClass anOntologyClass) {
+	public SubClassOfClass(IFlexoOntologyClass anOntologyClass) {
 		this.ontologyClass = anOntologyClass;
 	}
 

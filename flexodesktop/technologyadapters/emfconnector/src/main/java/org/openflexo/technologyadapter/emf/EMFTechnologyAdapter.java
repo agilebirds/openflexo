@@ -20,16 +20,20 @@
 package org.openflexo.technologyadapter.emf;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -40,6 +44,7 @@ import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
+import org.openflexo.technologyadapter.emf.model.EMFTechnologyContextManager;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
@@ -66,7 +71,9 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstanc
 @DeclareEditionAction(AddEMFClass.class),
 /** Add class */
 @DeclareEditionAction(DeleteAction.class) })
-public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel, EMFModelSlot> {
+public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel> {
+
+	protected static final Logger logger = Logger.getLogger(EMFTechnologyAdapter.class.getPackage().getName());
 
 	public EMFTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
@@ -77,7 +84,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	@Override
-	protected EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new EMFModelSlot(viewPoint, this);
 	}
 
@@ -88,7 +95,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XSD schema
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".ecore");
 	}
@@ -100,8 +107,22 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
+	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO implement this
+		return null;
+	}
+
+	/**
+	 * Retrieve and return URI for supplied model file
+	 * 
+	 * @param aModelFile
+	 * @param rc
+	 *            TODO
+	 * @return
+	 */
+	@Override
+	public String retrieveModelURI(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -123,7 +144,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 *      org.openflexo.foundation.technologyadapter.FlexoMetaModel)
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, FlexoResourceCenter rc) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		// TODO implement this
 		return false;
@@ -136,21 +158,31 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile, FlexoResourceCenter rc) {
-		// TODO to be implemented
-		return null;
+	public EMFMetaModelResource retrieveMetaModelResource(File aMetaModelFile,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		logger.warning("Not implemented yet");
+		EMFMetaModelResource emfModelResource = null;
+
+		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+		emfContextManager.registerMetaModel(emfModelResource);
+		return emfModelResource;
 	}
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
+	 * 
 	 * @param aMetaModelFile
 	 * 
 	 * @return
 	 */
 	@Override
-	public EMFModelResource retrieveModelResource(File aModelFile, FlexoResourceCenter rc) {
-		// TODO to be implemented
-		return null;
+	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		logger.warning("Not implemented yet");
+		EMFModelResource emfModelResource = new EMFModelResource((FlexoProjectBuilder) null);
+
+		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+		emfContextManager.registerModel(emfModelResource);
+		return emfModelResource;
 	}
 
 	/**
@@ -161,9 +193,16 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @return
 	 */
 	@Override
-	public EMFModel createEmptyModel(FlexoProject project, EMFMetaModel metaModel) {
+	public EMFModel createEmptyModel(FlexoProject project, EMFMetaModel metaModel,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO implement this
 		// See code in XSD/XML connector
+		return null;
+	}
+
+	@Override
+	public TechnologyContextManager<EMFModel, EMFMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

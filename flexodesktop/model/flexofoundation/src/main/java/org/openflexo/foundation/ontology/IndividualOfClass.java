@@ -10,21 +10,12 @@ public class IndividualOfClass implements CustomType {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		if (anOntologyClass.getOntologyLibrary() != null) {
-			if (anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass) != null) {
-				return anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass);
-			} else {
-				IndividualOfClass returned = new IndividualOfClass(anOntologyClass);
-				anOntologyClass.getOntologyLibrary().individualsOfClass.put(anOntologyClass, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyClass.getTechnologyAdapter().getTechnologyContextManager().getIndividualOfClass(anOntologyClass);
 	}
 
 	private IFlexoOntologyClass ontologyClass;
 
-	private IndividualOfClass(IFlexoOntologyClass anOntologyClass) {
+	public IndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		this.ontologyClass = anOntologyClass;
 	}
 

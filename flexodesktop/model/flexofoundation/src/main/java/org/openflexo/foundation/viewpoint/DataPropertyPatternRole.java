@@ -5,7 +5,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class DataPropertyPatternRole extends PropertyPatternRole {
+public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataProperty> {
 
 	private OntologicDataType dataType;
 
@@ -27,7 +27,7 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<IFlexoOntologyObjectProperty> getAccessedClass() {
 		return IFlexoOntologyObjectProperty.class;
 	}
 
@@ -48,4 +48,8 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 		this.dataType = dataType;
 	}
 
+	@Override
+	public ActorReference<OntologyDataProperty> makeActorReference(OntologyDataProperty object, EditionPatternReference epRef) {
+		return new ConceptActorReference<OntologyDataProperty>(object, this, epRef);
+	}
 }

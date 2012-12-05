@@ -30,6 +30,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,8 +41,8 @@ public class XSOntIndividual extends AbstractXSOntObject implements IFlexoOntolo
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
 
-	protected XSOntIndividual(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
+	protected XSOntIndividual(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
 	}
 
 	public XSOntClass getType() {

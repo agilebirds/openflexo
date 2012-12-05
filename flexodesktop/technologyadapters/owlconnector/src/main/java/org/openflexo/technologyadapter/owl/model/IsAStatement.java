@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -32,8 +33,8 @@ public abstract class IsAStatement extends OWLStatement {
 
 	private OWLObject<?> parentObject;
 
-	public IsAStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public IsAStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			parentObject = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		}

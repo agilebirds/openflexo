@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -33,8 +35,8 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	private OWLObject<?> statementObject;
 	private Literal literal;
 
-	public ObjectPropertyStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public ObjectPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 		property = getOntology().getObjectProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Resource) {
 			statementObject = getOntology().retrieveOntologyObject((Resource) s.getObject());

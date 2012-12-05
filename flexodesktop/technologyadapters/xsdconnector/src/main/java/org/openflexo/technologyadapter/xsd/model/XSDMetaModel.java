@@ -22,17 +22,17 @@ package org.openflexo.technologyadapter.xsd.model;
 import java.io.File;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSDMetaModel.class.getPackage()
 			.getName());
 
-	public XSDMetaModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
-		super(ontologyURI, xsdFile, library);
+	public XSDMetaModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
+		super(ontologyURI, xsdFile, adapter);
 	}
 
 	@Override

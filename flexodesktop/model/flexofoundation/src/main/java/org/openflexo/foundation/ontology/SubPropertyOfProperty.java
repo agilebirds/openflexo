@@ -10,21 +10,12 @@ public class SubPropertyOfProperty implements CustomType {
 		if (anOntologyProperty == null) {
 			return null;
 		}
-		if (anOntologyProperty.getOntologyLibrary() != null) {
-			if (anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.get(anOntologyProperty) != null) {
-				return anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.get(anOntologyProperty);
-			} else {
-				SubPropertyOfProperty returned = new SubPropertyOfProperty(anOntologyProperty);
-				anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.put(anOntologyProperty, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyProperty.getTechnologyAdapter().getTechnologyContextManager().getSubPropertyOfProperty(anOntologyProperty);
 	}
 
 	private IFlexoOntologyStructuralProperty ontologyProperty;
 
-	private SubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
+	public SubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
 		this.ontologyProperty = anOntologyProperty;
 	}
 

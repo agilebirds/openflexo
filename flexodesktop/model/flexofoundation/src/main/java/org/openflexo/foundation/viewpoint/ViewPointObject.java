@@ -49,13 +49,13 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
 
-	private ImportedOntology viewPointOntology = null;
+	// private ImportedOntology viewPointOntology = null;
 
 	public ViewPointObject(ViewPointBuilder builder) {
 		if (builder != null) {
 			// System.out.println("BEGIN deserialisation for " + getClass().getSimpleName());
 			initializeDeserialization(builder);
-			viewPointOntology = builder.getViewPointOntology();
+			// viewPointOntology = builder.getViewPointOntology();
 		}
 	}
 
@@ -126,13 +126,6 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	public abstract ViewPoint getViewPoint();
 
-	public IFlexoOntology getViewpointOntology() {
-		if (isDeserializing() || getViewPoint() == null) {
-			return viewPointOntology;
-		} else {
-			return getViewPoint().getViewpointOntology();
-		}
-	}
 
 	@Deprecated
 	public ViewPoint getCalc() {

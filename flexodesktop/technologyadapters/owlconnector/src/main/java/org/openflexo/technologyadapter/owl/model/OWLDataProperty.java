@@ -28,6 +28,7 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 
@@ -35,8 +36,8 @@ public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataPr
 
 	static final Logger logger = Logger.getLogger(IFlexoOntologyDataProperty.class.getPackage().getName());
 
-	protected OWLDataProperty(OntProperty aDataProperty, OWLOntology ontology) {
-		super(aDataProperty, ontology);
+	protected OWLDataProperty(OntProperty aDataProperty, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(aDataProperty, ontology, adapter);
 	}
 
 	@Override

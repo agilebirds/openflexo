@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.ontology.ComplementClass;
 
 public class OWLComplementClass extends OWLOperatorClass {
@@ -29,8 +31,8 @@ public class OWLComplementClass extends OWLOperatorClass {
 
 	private final ComplementClass ontClass;
 
-	protected OWLComplementClass(ComplementClass anOntClass, OWLOntology ontology) {
-		super(anOntClass, ontology);
+	protected OWLComplementClass(ComplementClass anOntClass, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anOntClass, ontology, adapter);
 		this.ontClass = anOntClass;
 		init();
 	}

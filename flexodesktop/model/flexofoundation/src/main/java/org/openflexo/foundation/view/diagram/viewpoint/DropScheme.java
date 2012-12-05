@@ -161,8 +161,8 @@ public class DropScheme extends AbstractCreationScheme {
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<MS, M, MM, ?>, MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, MS modelSlot) {
+	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
+			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {

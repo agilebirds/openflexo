@@ -1,6 +1,5 @@
 package org.openflexo.technologyadapter.owl.controller;
 
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -8,8 +7,8 @@ import org.openflexo.view.controller.TechnologyAdapterController;
 public class OWLAdapterController extends TechnologyAdapterController<OWLTechnologyAdapter> {
 
 	@Override
-	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return TechnologyAdapter.getTechnologyAdapter(OWLTechnologyAdapter.class);
+	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
+		return OWLTechnologyAdapter.class;
 	}
 
 	@Override

@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
 import com.sun.xml.xsom.XSAttributeUse;
@@ -28,8 +29,8 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	private final XSOntDataProperty attributeProperty;
 	private final XSAttributeUse attributeUse;
 
-	protected XSOntAttributeRestriction(XSOntology ontology, XSAttributeUse attributeUse) {
-		super(ontology);
+	protected XSOntAttributeRestriction(XSOntology ontology, XSAttributeUse attributeUse, XSDTechnologyAdapter adapter) {
+		super(ontology, adapter);
 		String propertyURI = ontology.getFetcher().getUri(attributeUse.getDecl());
 		this.attributeProperty = ontology.getDataProperty(propertyURI);
 		this.attributeUse = attributeUse;

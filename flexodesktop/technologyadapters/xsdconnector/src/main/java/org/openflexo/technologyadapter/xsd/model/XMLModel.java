@@ -23,12 +23,12 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 
 public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMetaModel> {
@@ -38,8 +38,8 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 	private XMLModelResource modelResource;
 	private FlexoProject project;
 
-	public XMLModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
-		super(ontologyURI, xsdFile, library);
+	public XMLModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
+		super(ontologyURI, xsdFile, adapter);
 	}
 
 	@Override

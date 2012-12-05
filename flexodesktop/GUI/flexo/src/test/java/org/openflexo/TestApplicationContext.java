@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -32,9 +32,7 @@ public class TestApplicationContext extends ApplicationContext {
 
 	public TestApplicationContext(File resourceCenterDirectory) {
 		this.resourceCenterDirectory = resourceCenterDirectory;
-		FlexoResourceCenter testResourceCenter = new UserResourceCenter(resourceCenterDirectory);
-		getResourceCenterService().addToResourceCenters(testResourceCenter);
-		getResourceCenterService().registerTechnologyAdapterService(getTechnologyAdapterService());
+		getResourceCenterService().addToResourceCenters(new UserResourceCenter(resourceCenterDirectory));
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class TestApplicationContext extends ApplicationContext {
 
 	@Override
 	protected FlexoResourceCenterService createResourceCenterService() {
-		return TestResourceCenterService.getNewInstance();
+		return DefaultResourceCenterService.getNewInstance();
 	}
 
 	@Override

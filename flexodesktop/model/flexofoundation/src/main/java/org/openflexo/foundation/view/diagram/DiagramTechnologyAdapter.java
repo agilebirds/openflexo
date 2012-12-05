@@ -22,9 +22,9 @@ package org.openflexo.foundation.view.diagram;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -34,6 +34,7 @@ import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
@@ -72,7 +73,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 @DeclareEditionAction(GraphicalAction.class),
 /** Add class */
 @DeclareEditionAction(DeleteAction.class) })
-public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMetaModel, DiagramModelSlot> {
+public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(DiagramTechnologyAdapter.class.getPackage().getName());
 
@@ -85,7 +86,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	}
 
 	@Override
-	protected DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new DiagramModelSlot(viewPoint, this);
 	}
 
@@ -96,7 +97,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile, FlexoResourceCenter rc) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		return false;
 	}
 
@@ -107,7 +108,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile, FlexoResourceCenter rc) {
+	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		return DiagramMetaModel.INSTANCE.getURI();
 	}
 
@@ -119,20 +120,9 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, DiagramMetaModel metaModel) {
-		// TODO: also check that file is valid and maps a valid diagram
-		return true;
-	}
-
-	/**
-	 * Instantiate new meta model stored in supplied meta model file
-	 * 
-	 * @param aMetaModelFile
-	 * @return
-	 */
-	@Override
-	public DiagramMetaModel loadMetaModel(File aMetaModelFile, OntologyLibrary library) {
-		return DiagramMetaModel.INSTANCE;
+	public boolean isValidModelFile(File aModelFile, FlexoResource<DiagramMetaModel> metaModelResource,
+			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
+		return false;
 	}
 
 	/**
@@ -143,7 +133,8 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public View createEmptyModel(FlexoProject project, DiagramMetaModel metaModel) {
+	public View createEmptyModel(FlexoProject project, DiagramMetaModel metaModel,
+			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		logger.info("Add shema");
 		logger.warning("Not implemented yet");
 		return null;
@@ -180,15 +171,41 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends View>> ModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel, DiagramModelSlot>> createModelRepository(
+	public FlexoResource<DiagramMetaModel> retrieveMetaModelResource(File aMetaModelFile,
+			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String retrieveModelURI(File aModelFile, TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FlexoResource<View> retrieveModelResource(File aModelFile,
+			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <R extends FlexoResource<? extends View>> ModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel>> createModelRepository(
 			FlexoResourceCenter resourceCenter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends DiagramMetaModel>> MetaModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel, DiagramModelSlot>> createMetaModelRepository(
+	public <R extends FlexoResource<? extends DiagramMetaModel>> MetaModelRepository<R, View, DiagramMetaModel, ? extends TechnologyAdapter<View, DiagramMetaModel>> createMetaModelRepository(
 			FlexoResourceCenter resourceCenter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TechnologyContextManager<View, DiagramMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
 		// TODO Auto-generated method stub
 		return null;
 	}

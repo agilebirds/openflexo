@@ -41,15 +41,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
-import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
-import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
-import org.openflexo.toolbox.StringUtils;
 
 /**
- * Model supporting browsing inside ontologies<br>
+ * Model supporting browsing through models or metamodels conform to {@link FlexoOntology} API<br>
  * 
  * Developers note: this model is shared by many widgets. Please modify it with caution.
  * 
@@ -68,7 +62,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	private boolean strictMode = false;
 	private IFlexoOntologyClass rootClass;
 	private boolean displayPropertiesInClasses = true;
-	private boolean showOWLAndRDFConcepts = false;
 	private IFlexoOntologyClass domain = null;
 	private IFlexoOntologyClass range = null;
 	private OntologicDataType dataType = null;
@@ -202,14 +195,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		this.showIndividuals = showIndividuals;
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-	}
-
 	public IFlexoOntologyClass getDomain() {
 		return domain;
 	}
@@ -235,21 +220,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	}
 
 	public boolean isDisplayable(IFlexoOntologyConcept object) {
-
-		if (object instanceof IFlexoOntology) {
-			if ((object == object.getOntologyLibrary().getRDFOntology() || object == object.getOntologyLibrary().getRDFSOntology() || object == object
-					.getOntologyLibrary().getOWLOntology()) && object != getContext()) {
-				return getShowOWLAndRDFConcepts();
-			}
-			return true;
-		}
-		if (!getShowOWLAndRDFConcepts() && StringUtils.isNotEmpty(object.getURI()) && object.getFlexoOntology() != getContext()) {
-			if (object.getURI().startsWith(RDFURIDefinitions.RDF_ONTOLOGY_URI)
-					|| object.getURI().startsWith(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)
-					|| object.getURI().startsWith(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
-				return false;
-			}
-		}
 
 		boolean returned = false;
 		if (object instanceof IFlexoOntologyClass && showClasses) {
@@ -624,19 +594,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			}
 		}
 
-		for (IFlexoOntologyClass c : getContext().getAccessibleClasses()) {
-			if (c.isNamedClass()) {
-				for (IFlexoOntologyClass superClass : c.getSuperClasses()) {
-					if (superClass instanceof OntologyRestrictionClass
-							&& ((OntologyRestrictionClass) superClass).getProperty().equalsToConcept(p)) {
-						if (searchedOntology == null || c.getFlexoOntology() == searchedOntology) {
-							potentialStorageClasses.add(c);
-						}
-					}
-				}
-			}
-		}
-
 		return potentialStorageClasses;
 
 		/*if (potentialStorageClasses.size() > 0) {
@@ -749,9 +706,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	 */
 	private void removeOriginalFromRedefinedObjects(List<? extends IFlexoOntologyConcept> list) {
 		for (IFlexoOntologyConcept c : new ArrayList<IFlexoOntologyConcept>(list)) {
-			if (c instanceof OWLObject<?> && ((OWLObject<?>) c).redefinesOriginalDefinition()) {
-				list.remove(((OWLObject<?>) c).getOriginalDefinition());
-			}
 			if (c instanceof IFlexoOntologyClass && ((IFlexoOntologyClass) c).isThing() && c.getFlexoOntology() != getContext()
 					&& list.contains(getContext().getThingConcept())) {
 				list.remove(c);

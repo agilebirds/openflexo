@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -23,7 +27,10 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	private FlexoResourceCenterService flexoResourceCenterService;
 
-	private Map<Class, TechnologyAdapter<?, ?, ?>> loadedAdapters;
+	private Map<Class, TechnologyAdapter<?, ?>> loadedAdapters;
+	private Map<TechnologyAdapter<?, ?>, TechnologyContextManager<?, ?>> technologyContextManagers;
+
+	private FlexoServiceManager serviceManager;
 
 	public static TechnologyAdapterService getNewInstance() {
 		try {
@@ -46,13 +53,16 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	@Override
 	public void loadAvailableTechnologyAdapters() {
 		if (loadedAdapters == null) {
-			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?, ?>>();
+			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?>>();
+			technologyContextManagers = new Hashtable<TechnologyAdapter<?, ?>, TechnologyContextManager<?, ?>>();
 			logger.info("Loading available technology adapters...");
 			ServiceLoader<TechnologyAdapter> loader = ServiceLoader.load(TechnologyAdapter.class);
 			Iterator<TechnologyAdapter> iterator = loader.iterator();
 			while (iterator.hasNext()) {
 				TechnologyAdapter technologyAdapter = iterator.next();
 				technologyAdapter.setTechnologyAdapterService(this);
+				TechnologyContextManager tcm = technologyAdapter.createTechnologyContextManager(getFlexoResourceCenterService());
+				technologyContextManagers.put(technologyAdapter, tcm);
 				addToTechnologyAdapters(technologyAdapter);
 
 				logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
@@ -76,7 +86,8 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * @param technologyAdapterClass
 	 * @return
 	 */
-	public <TA extends TechnologyAdapter<?, ?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
+	@Override
+	public <TA extends TechnologyAdapter<?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass) {
 		return (TA) loadedAdapters.get(technologyAdapterClass);
 	}
 
@@ -85,8 +96,49 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * 
 	 * @return
 	 */
-	public Collection<TechnologyAdapter<?, ?, ?>> getLoadedAdapters() {
+	public Collection<TechnologyAdapter<?, ?>> getLoadedAdapters() {
 		return loadedAdapters.values();
+	}
+
+	/**
+	 * Return the {@link TechnologyContextManager} for this technology for this technology shared by all {@link FlexoResourceCenter}
+	 * declared in the scope of {@link FlexoResourceCenterService}
+	 * 
+	 * @return
+	 */
+	@Override
+	public TechnologyContextManager<?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?> technologyAdapter) {
+		return technologyContextManagers.get(technologyAdapter);
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (caller instanceof FlexoResourceCenterService) {
+			if (notification instanceof ResourceCenterAdded) {
+				FlexoResourceCenter rc = ((ResourceCenterAdded) notification).getAddedResourceCenter();
+				rc.initialize(this);
+				for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
+					ta.resourceCenterAdded(rc);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void register(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
+	@Override
+	public FlexoServiceManager getFlexoServiceManager() {
+		return serviceManager;
+	}
+
+	@Override
+	public void initialize() {
+		for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
+			ta.initialize();
+		}
 	}
 
 }

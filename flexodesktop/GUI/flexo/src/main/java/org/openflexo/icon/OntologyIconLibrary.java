@@ -30,7 +30,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.owl.OWLStatement;
 import org.openflexo.toolbox.ImageIconResource;
 
 public class OntologyIconLibrary {
@@ -61,9 +60,9 @@ public class OntologyIconLibrary {
 			return ONTOLOGY_OBJECT_PROPERTY_ICON;
 		} else if (object instanceof IFlexoOntologyDataProperty) {
 			return ONTOLOGY_DATA_PROPERTY_ICON;
-		} else if (object instanceof OWLStatement) {
+		}/* else if (object instanceof OWLStatement) {
 			return ONTOLOGY_STATEMENT_ICON;
-		}
+			}*/
 		logger.warning("No icon for " + object.getClass());
 		return null;
 	}

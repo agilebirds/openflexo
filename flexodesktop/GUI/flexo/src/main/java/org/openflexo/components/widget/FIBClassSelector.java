@@ -54,9 +54,8 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 	private IFlexoOntologyClass rootClass;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
-	private boolean showOWLAndRDFConcepts = false;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	public FIBClassSelector(IFlexoOntologyClass editedObject) {
 		super(editedObject);
@@ -97,8 +96,7 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			IFlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
-					.getOntology(ontologyURI);
+			IFlexoOntology context = getProject().getFlexoOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}
@@ -163,16 +161,6 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getContext()) {
@@ -196,7 +184,6 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 			model.setShowObjectProperties(false);
 			model.setShowDataProperties(false);
 			model.setShowAnnotationProperties(false);
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
 		}
 		return model;

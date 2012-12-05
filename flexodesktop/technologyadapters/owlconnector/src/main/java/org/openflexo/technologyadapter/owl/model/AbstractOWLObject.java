@@ -22,13 +22,17 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 public abstract class AbstractOWLObject extends AbstractOntologyObject implements OWL2URIDefinitions, RDFURIDefinitions, RDFSURIDefinitions {
 
 	private static final Logger logger = Logger.getLogger(AbstractOWLObject.class.getPackage().getName());
 
-	public AbstractOWLObject() {
+	private OWLTechnologyAdapter technologyAdapter;
+
+	public AbstractOWLObject(OWLTechnologyAdapter adapter) {
 		super();
+		technologyAdapter = adapter;
 	}
 
 	@Override
@@ -62,6 +66,10 @@ public abstract class AbstractOWLObject extends AbstractOntologyObject implement
 	@Override
 	public boolean isOntologyDataProperty() {
 		return false;
+	}
+
+	public OWLTechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
 	}
 
 }

@@ -27,6 +27,7 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
 public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyClass, XSOntologyURIDefinitions {
@@ -36,8 +37,8 @@ public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyCla
 
 	private final List<XSOntClass> superClasses = new ArrayList<XSOntClass>();
 
-	protected XSOntClass(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
+	protected XSOntClass(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
 	}
 
 	@Override

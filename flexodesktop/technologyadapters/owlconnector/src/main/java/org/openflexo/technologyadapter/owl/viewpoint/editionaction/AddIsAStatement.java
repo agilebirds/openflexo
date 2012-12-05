@@ -47,8 +47,8 @@ public class AddIsAStatement extends AddStatement<IsAStatement> {
 	}
 
 	/*@Override
-	public List<IsAStatementPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(IsAStatementPatternRole.class);
+	public List<SubClassStatementPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(SubClassStatementPatternRole.class);
 	}*/
 
 	public IFlexoOntologyConcept getPropertyFather(EditionSchemeAction action) {

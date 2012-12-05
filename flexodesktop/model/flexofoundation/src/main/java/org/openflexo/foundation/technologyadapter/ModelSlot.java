@@ -1,7 +1,10 @@
 package org.openflexo.foundation.technologyadapter;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.PatternRole;
 
 /**
  * <p>
@@ -23,7 +26,7 @@ public interface ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaMode
 
 	public String getName();
 
-	public TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>> getTechnologyAdapter();
+	public TechnologyAdapter<M, MM> getTechnologyAdapter();
 
 	public MM getMetaModel();
 
@@ -55,6 +58,8 @@ public interface ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaMode
 	 * @param actionClass
 	 * @return
 	 */
-	public <A extends EditionAction<? extends ModelSlot<M, MM>, M, MM, ?>> A createAction(Class<A> actionClass);
+	public <A extends EditionAction<M, MM, ?>> A createAction(Class<A> actionClass);
+
+	public abstract BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container);
 
 }

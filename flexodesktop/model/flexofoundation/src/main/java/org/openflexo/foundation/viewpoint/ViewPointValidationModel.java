@@ -25,11 +25,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnecto
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
-import org.openflexo.technologyadapter.owl.viewpoint.AddDataPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddObjectPropertyStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 
 /**
  * Please comment this class
@@ -49,8 +44,8 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new PatternRole.PatternRoleMustHaveAName());
 		registerRule(new ClassPatternRole.ClassPatternRoleMustDefineAValidConceptClass());
 		registerRule(new IndividualPatternRole.IndividualPatternRoleMustDefineAValidConceptClass());
-		registerRule(new DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleMustDefineAValidProperty());
-		registerRule(new ObjectPropertyStatementPatternRole.ObjectPropertyStatementPatternRoleMustDefineAValidProperty());
+		// registerRule(new DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleMustDefineAValidProperty());
+		// registerRule(new ObjectPropertyStatementPatternRole.ObjectPropertyStatementPatternRoleMustDefineAValidProperty());
 
 		registerRule(new InspectorEntry.DataBindingIsRequiredAndMustBeValid());
 
@@ -65,11 +60,11 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new AddClass.AddClassActionMustDefineAnOntologyClass());
 		registerRule(new AddClass.URIBindingIsRequiredAndMustBeValid());
 
-		registerRule(new AddStatement.SubjectIsRequiredAndMustBeValid());
-		registerRule(new AddObjectPropertyStatement.AddObjectPropertyStatementActionMustDefineAnObjectProperty());
-		registerRule(new AddObjectPropertyStatement.ObjectIsRequiredAndMustBeValid());
-		registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
-		registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
+		// registerRule(new AddStatement.SubjectIsRequiredAndMustBeValid());
+		// registerRule(new AddObjectPropertyStatement.AddObjectPropertyStatementActionMustDefineAnObjectProperty());
+		// registerRule(new AddObjectPropertyStatement.ObjectIsRequiredAndMustBeValid());
+		// registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
+		// registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
 
 		registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
 		registerRule(new AddShape.AddShapeActionMustHaveAValidContainer());

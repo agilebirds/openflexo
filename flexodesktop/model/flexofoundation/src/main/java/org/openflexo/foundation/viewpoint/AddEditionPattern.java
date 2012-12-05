@@ -27,14 +27,13 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -42,8 +41,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		AssignableAction<MS, M, MM, EditionPatternInstance> {
+public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
+		AssignableAction<M, MM, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
@@ -406,15 +405,16 @@ public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel
 	}
 
 	public static class AddEditionPatternParametersMustBeValid extends
-			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPattern> {
+			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>> {
 		public AddEditionPatternParametersMustBeValid() {
 			super(AddEditionPattern.class, "add_edition_pattern_parameters_must_be_valid");
 		}
 
 		@Override
-		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern> applyValidation(AddEditionPattern action) {
+		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>> applyValidation(
+				AddEditionPattern<?, ?> action) {
 			if (action.getCreationScheme() != null) {
-				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>>();
+				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>>();
 				for (AddEditionPatternParameter p : action.getParameters()) {
 					if (p.getParam().getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
@@ -437,7 +437,8 @@ public class AddEditionPattern<MS extends ModelSlot<M, MM>, M extends FlexoModel
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<AddEditionPattern.AddEditionPatternParametersMustBeValid, AddEditionPattern>(action, issues);
+					return new CompoundIssue<AddEditionPattern.AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>(action,
+							issues);
 				}
 			}
 			return null;

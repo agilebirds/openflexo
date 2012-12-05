@@ -23,4 +23,6 @@ public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*Storage
 
 	public void setIsReadOnly(boolean b);
 
+	public Object getObject(String objectURI);
+
 }

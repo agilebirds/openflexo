@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -37,8 +38,8 @@ public class RangeStatement extends OWLStatement {
 		return dataType;
 	}
 
-	public RangeStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public RangeStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			range = getOntology().retrieveOntologyObject((Resource) s.getObject());
 			if (((Resource) s.getObject()).getURI() != null) {

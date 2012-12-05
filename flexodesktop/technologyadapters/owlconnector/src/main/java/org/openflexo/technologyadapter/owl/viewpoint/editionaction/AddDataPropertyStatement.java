@@ -88,9 +88,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(dataPropertyURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getDataProperty(dataPropertyURI);
-			}
+			return getViewPoint().getOntologyDataProperty(dataPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getDataProperty();

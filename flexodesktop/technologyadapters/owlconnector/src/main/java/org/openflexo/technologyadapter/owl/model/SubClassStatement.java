@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
@@ -30,8 +32,8 @@ public class SubClassStatement extends OWLStatement {
 
 	private OWLObject<?> parent;
 
-	public SubClassStatement(OWLObject<?> subject, Statement s) {
-		super(subject, s);
+	public SubClassStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(subject, s, adapter);
 		// System.out.println("s.getObject() is a " + s.getObject().getClass().getName() + " : " + s.getObject());
 		if (s.getObject() instanceof Resource) {
 			parent = getOntology().retrieveOntologyObject((Resource) s.getObject());
