@@ -15,6 +15,10 @@
 			<artifactId>flexofoundation</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexo</artifactId>
+		</dependency>
+		<dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>common</artifactId>
 		</dependency>

@@ -361,19 +361,11 @@ public enum BrowserElementType {
 	/*ONTOLOGY("ontology", OWLModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	IMPORTED_ONTOLOGY("imported_ontology", OWLMetaModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),*/
-<<<<<<< HEAD
-	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
+	ONTOLOGY_FOLDER("ontology_folder", RepositoryFolder.class, IconLibrary.FOLDER_ICON),
 	/*	ONTOLOGY_CLASS("ontology_class", IFlexoOntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
 		ONTOLOGY_INDIVIDUAL("ontology_individual", IFlexoOntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
 		ONTOLOGY_DATA_PROPERTY("ontology_data_property", IFlexoOntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
 		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", IFlexoOntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
-=======
-	ONTOLOGY_FOLDER("ontology_folder", RepositoryFolder.class, IconLibrary.FOLDER_ICON),
-	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
-		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
-		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
-		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
->>>>>>> model_slot
 		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
 	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
 	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),

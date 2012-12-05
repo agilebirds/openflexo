@@ -447,7 +447,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 */
 	@Override
-	public OWLClass getThingConcept() {
+	public OWLClass getRootConcept() {
 		return THING_CONCEPT;
 	}
 
@@ -457,7 +457,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 */
 	public OWLClass getRootClass() {
-		return getThingConcept();
+		return getRootConcept();
 	}
 
 	@Override

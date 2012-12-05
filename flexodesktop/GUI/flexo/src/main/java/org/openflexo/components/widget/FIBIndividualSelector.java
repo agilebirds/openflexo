@@ -255,7 +255,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	public void setContext(IFlexoOntology context) {
 		this.context = context;
 		update();
-		setRepresentationForIndividualOfClass("defaultIndividual", "defaultIndividual.uriName", context.getThingConcept());
+		setRepresentationForIndividualOfClass("defaultIndividual", "defaultIndividual.uriName", context.getRootConcept());
 	}
 
 	public IFlexoOntologyClass getType() {

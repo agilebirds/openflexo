@@ -37,7 +37,7 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 
 	protected XSOntObjectProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
-		range = ontology.getThingConcept();
+		range = ontology.getRootConcept();
 		superProperties = new ArrayList<XSOntObjectProperty>();
 	}
 
@@ -74,12 +74,12 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 			this.range = range;
 			noRangeFoundYet = false;
 		} else {
-			this.range = getOntology().getThingConcept();
+			this.range = getOntology().getRootConcept();
 		}
 	}
 
 	public void resetRange() {
-		this.range = getOntology().getThingConcept();
+		this.range = getOntology().getRootConcept();
 		noRangeFoundYet = true;
 	}
 
