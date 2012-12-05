@@ -29,6 +29,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
@@ -204,14 +205,14 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 
 	public void convertFolder(ViewFolder inputFolder, ViewFolder outputFolder) {
 		for (ViewFolder f : inputFolder.getSubFolders()) {
-			System.out.println("On cree un folder " + f.getName());
+			logger.info("Creating folder " + f.getName());
 			AddViewFolder addViewFolderAction = AddViewFolder.actionType.makeNewAction(outputFolder, null, outputPrjEditor);
 			addViewFolderAction.setNewFolderName(f.getName());
 			addViewFolderAction.doAction();
 			convertFolder(f, addViewFolderAction.getNewFolder());
 		}
 		for (ViewDefinition v : inputFolder.getViews()) {
-			System.out.println("On cree une vue " + v.getName() + " title=" + v.getTitle() + " for viewpoint " + v.getViewPoint());
+			logger.info("Creating view " + v.getName() + " title=" + v.getTitle() + " for viewpoint " + v.getViewPoint());
 			AddView addViewAction = AddView.actionType.makeNewAction(outputFolder, null, outputPrjEditor);
 			addViewAction.useViewPoint = (v.getViewPoint() != null);
 			addViewAction.newViewName = v.getName();
@@ -244,12 +245,12 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 		View diagram = (View) inputEPI.getPatternActor(pr);
 		if (diagram != null) {
 			outputEPI.setObjectForPatternRole(grObjectsMapping.get(diagram), pr);
-			System.out.println(" > role " + pr + " reference diagram " + diagram);
+			logger.info(" > role " + pr + " reference diagram " + diagram);
 		}
 	}
 
 	public void convertView(View inputView, View outputView) {
-		System.out.println("On convertit une view");
+		logger.info("Converting view... " + inputView);
 		if (inputView.getViewPoint().getURI().equals("http://www.thalesgroup.com/ViewPoints/sepel-ng/MappingSpecification.owl")) {
 			(new ViewConverter(inputView, outputView)).convert();
 		}
@@ -312,10 +313,11 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 			this.inputView = inputView;
 			this.outputView = outputView;
 
-			viewPoint = inputView.getViewPoint();
+			DrawingGraphicalRepresentation<?> outputGR = new DrawingGraphicalRepresentation();
+			outputGR.setsWith(inputView.getGraphicalRepresentation());
+			outputView.setGraphicalRepresentation(outputGR);
 
-			System.out.println("Converting view " + inputView);
-			System.out.println("Progress=" + progress);
+			viewPoint = inputView.getViewPoint();
 
 			progress.setProgress("Converting view " + inputView.getName());
 			progress.resetSecondaryProgress(viewPoint.getEditionPatterns().size() * 2);
@@ -469,7 +471,7 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 		private void convertEPI(EditionPattern ep) {
 			progress.setSecondaryProgress("Converting " + ep.getName());
 			for (EditionPatternInstance inputEPI : inputView.getEPInstances(ep)) {
-				System.out.println("EPI: " + inputEPI + " of " + ep);
+				logger.info("EPI: " + inputEPI + " of " + ep);
 				EditionPatternInstance outputEPI = outputPrj.makeNewEditionPatternInstance(ep);
 				for (ShapePatternRole pr : sortedShapePatternRoles(ep)) {
 					duplicateShape(pr, inputEPI, outputEPI);
@@ -516,14 +518,14 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 					return 0;
 				}
 			});
-			System.out.println("EditionPattern " + ep + " shapes=" + returned);
+			logger.info("EditionPattern " + ep + " shapes=" + returned);
 			return returned;
 		}
 
 		private void restoreReferences(EditionPattern ep) {
 			progress.setSecondaryProgress("Restoring references for " + ep.getName());
 			for (EditionPatternInstance inputEPI : inputView.getEPInstances(ep)) {
-				System.out.println("restoreReferences for EPI: " + inputEPI + " of " + ep);
+				logger.info("restoreReferences for EPI: " + inputEPI + " of " + ep);
 				EditionPatternInstance outputEPI = epiMapping.get(inputEPI);
 				if (ep == genericMappingCaseEP) {
 					restoreDefaultReferences(ep, inputEPI, outputEPI);
@@ -826,7 +828,7 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 
 			outputIndividual.updateOntologyStatements();
 
-			System.out.println(" > role " + pr + " restore references for " + outputIndividual.getURI());
+			logger.info(" > role " + pr + " restore references for " + outputIndividual.getURI());
 
 		}
 
@@ -843,8 +845,8 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 			outputContainer.addToChilds(outputShape);
 			outputEPI.setObjectForPatternRole(outputShape, pr);
 			grObjectsMapping.put(inputShape, outputShape);
-			System.out.println(" > role " + pr + " add shape " + outputShape + " under " + outputContainer + " (" + inputShape
-					+ " was under " + inputContainer + ")");
+			logger.info(" > role " + pr + " add shape " + outputShape + " under " + outputContainer + " (" + inputShape + " was under "
+					+ inputContainer + ")");
 		}
 
 		private void duplicateConnector(ConnectorPatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
@@ -868,20 +870,20 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 
 			outputEPI.setObjectForPatternRole(outputConnector, pr);
 			grObjectsMapping.put(inputConnector, outputConnector);
-			System.out.println(" > role " + pr + " add connector " + outputConnector + " under " + parent + " ( connect " + outputStart
-					+ " to " + outputEnd + ")");
+			logger.info(" > role " + pr + " add connector " + outputConnector + " under " + parent + " ( connect " + outputStart + " to "
+					+ outputEnd + ")");
 		}
 
 		private void referenceClass(ClassPatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
 			OntologyClass ontologyClass = (OntologyClass) inputEPI.getPatternActor(pr);
 			outputEPI.setObjectForPatternRole(ontologyClass, pr);
-			System.out.println(" > role " + pr + " reference class " + ontologyClass);
+			logger.info(" > role " + pr + " reference class " + ontologyClass);
 		}
 
 		private void referenceProperty(PropertyPatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
 			OntologyProperty ontologyProperty = (OntologyProperty) inputEPI.getPatternActor(pr);
 			outputEPI.setObjectForPatternRole(ontologyProperty, pr);
-			System.out.println(" > role " + pr + " reference property " + ontologyProperty);
+			logger.info(" > role " + pr + " reference property " + ontologyProperty);
 		}
 
 		private void duplicateIndividual(IndividualPatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
@@ -928,7 +930,7 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 
 			outputEPI.setObjectForPatternRole(outputIndividual, pr);
 			storeIndividual(inputIndividual, outputIndividual, inputEPI);
-			System.out.println(" > role " + pr + " add individual " + outputIndividual.getURI());
+			logger.info(" > role " + pr + " add individual " + outputIndividual.getURI());
 
 		}
 	}
