@@ -166,6 +166,11 @@ public class TypeUtils {
 	public static boolean isPrimitive(@Nullable Type type) {
 		return type != null && Primitives.allPrimitiveTypes().contains(type);
 	}
+
+	public static boolean isWrapperClass(@Nullable Class<?> klass) {
+		return klass != null && Primitives.isWrapperType(klass);
+	}
+
 	public static boolean isDouble(Type type) {
 		if (type == null) {
 			return false;
