@@ -2,9 +2,9 @@ package org.openflexo.foundation.xml;
 
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.rm.ProjectData;
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.ModelContext;
 
 public class TestPAMELAResourceData extends FlexoTestCase {
 

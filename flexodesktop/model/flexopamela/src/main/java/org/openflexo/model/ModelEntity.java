@@ -1,4 +1,4 @@
-package org.openflexo.model.factory;
+package org.openflexo.model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
@@ -29,7 +30,6 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.PropertyClashException;
-import org.openflexo.model.factory.StringConverterLibrary.Converter;
 
 /**
  * This class represents an instance of the {@link org.openflexo.model.annotations.ModelEntity} annotation declared on an interface.
@@ -111,6 +111,8 @@ public class ModelEntity<I> {
 	private Map<Method, ModelInitializer> initializers;
 
 	private boolean initialized;
+
+	private boolean propertiesMerged;
 
 	private HashMap<String, ModelProperty<I>> declaredModelProperties;
 
@@ -201,7 +203,7 @@ public class ModelEntity<I> {
 		for (ModelProperty<? super I> property : declaredModelProperties.values()) {
 			if (property.getType() != null && !StringConverterLibrary.getInstance().hasConverter(property.getType())
 					&& !property.isStringConvertable() && !property.ignoreType()) {
-				embeddedEntities.add(ModelEntityLibrary.importEntity(property.getType()));
+				embeddedEntities.add(ModelEntityLibrary.get(property.getType(), true));
 			}
 		}
 
@@ -209,31 +211,35 @@ public class ModelEntity<I> {
 		Imports imports = implementedInterface.getAnnotation(Imports.class);
 		if (imports != null) {
 			for (Import imp : imports.value()) {
-				embeddedEntities.add(ModelEntityLibrary.importEntity(imp.value()));
+				embeddedEntities.add(ModelEntityLibrary.get(imp.value(), true));
 			}
 		}
 
 		embeddedEntities = Collections.unmodifiableSet(embeddedEntities);
+		initialized = true;
+	}
 
+	void mergeProperties() throws ModelDefinitionException {
+		if (propertiesMerged) {
+			return;
+		}
 		properties.putAll(declaredModelProperties);
 
 		// Resolve inherited properties (we only scan direct parent properties, since themselves will scan for their inherited parents)
 		if (getDirectSuperEntities() != null) {
 			for (ModelEntity<? super I> parentEntity : getDirectSuperEntities()) {
-				parentEntity.init();
+				parentEntity.mergeProperties();
 				for (ModelProperty<? super I> property : parentEntity.properties.values()) {
 					createMergedProperty(property.getPropertyIdentifier(), true);
 				}
 			}
 		}
 
-		initialized = true;
-
 		// Validate properties now (they should all have a getter and a return type, etc...
 		for (ModelProperty<? super I> p : properties.values()) {
 			p.validate();
 		}
-
+		propertiesMerged = true;
 		// TODO: maybe it would be better to be closer to what constructors do, ie, if there are super-initializer,
 		// And none of them are without arguments, then this entity should define an initializer with the same
 		// method signature (this is to enforce the developer to be aware of what the parameters do):
@@ -301,7 +307,7 @@ public class ModelEntity<I> {
 		if (directSuperEntities == null && superImplementedInterfaces != null) {
 			directSuperEntities = new ArrayList<ModelEntity<? super I>>(superImplementedInterfaces.size());
 			for (Class<? super I> superInterface : superImplementedInterfaces) {
-				ModelEntity<? super I> superEntity = ModelEntityLibrary.importEntity(superInterface);
+				ModelEntity<? super I> superEntity = ModelEntityLibrary.get(superInterface, true);
 				directSuperEntities.add(superEntity);
 			}
 		}

@@ -14,11 +14,14 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelProperty;
+import org.openflexo.model.StringEncoder;
+import org.openflexo.model.ModelContext.ModelPropertyXMLTag;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.RestrictiveDeserializationException;
-import org.openflexo.model.factory.ModelContext.ModelPropertyXMLTag;
 
 class XMLDeserializer {
 

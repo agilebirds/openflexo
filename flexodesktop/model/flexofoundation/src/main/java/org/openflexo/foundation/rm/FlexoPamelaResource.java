@@ -12,11 +12,11 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.StringConverterLibrary;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelContextLibrary;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.StringConverterLibrary;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {

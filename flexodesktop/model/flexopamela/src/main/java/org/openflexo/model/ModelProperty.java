@@ -1,4 +1,4 @@
-package org.openflexo.model.factory;
+package org.openflexo.model;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
@@ -23,7 +24,7 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.StringConverterLibrary.Converter;
+import org.openflexo.model.factory.PAMELAConstants;
 
 public class ModelProperty<I> {
 

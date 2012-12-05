@@ -6,8 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.openflexo.model.StringEncoder;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.StringEncoder;
 
 /**
  * Annotation for a getter

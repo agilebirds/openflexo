@@ -25,10 +25,10 @@ import java.util.List;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelContext;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation;

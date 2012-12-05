@@ -1,4 +1,4 @@
-package org.flexo.test;
+package org.openflexo.model;
 
 import junit.framework.TestCase;
 
@@ -9,11 +9,15 @@ import org.flexo.model.StartNode;
 import org.flexo.model.TokenEdge;
 import org.flexo.model.WKFObject;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelContext;
-import org.openflexo.model.factory.ModelEntity;
-import org.openflexo.model.factory.ModelProperty;
 
 public abstract class AbstractPAMELATest extends TestCase {
+
+	/**
+	 * Little hack to access the library clear() method. This is only for testing purposes.
+	 */
+	protected void clearModelEntityLibrary() {
+		ModelEntityLibrary.clear();
+	}
 
 	protected void validateBasicModelContext(ModelContext modelContext) throws ModelDefinitionException {
 		ModelEntity<FlexoModelObject> modelObjectEntity = modelContext.getModelEntity(FlexoModelObject.class);

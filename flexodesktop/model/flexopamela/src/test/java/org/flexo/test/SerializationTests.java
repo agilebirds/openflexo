@@ -13,6 +13,7 @@ import org.jdom2.JDOMException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openflexo.model.AbstractPAMELATest;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.RestrictiveDeserializationException;
@@ -32,9 +33,10 @@ public class SerializationTests extends AbstractPAMELATest {
 	@Override
 	@Before
 	public void setUp() throws IOException, ModelDefinitionException {
+		clearModelEntityLibrary();
 		file = File.createTempFile("PAMELA-TestSerialization", ".xml");
-		factory = new ModelFactory(FlexoProcess.class);
 		factory2 = new ModelFactory(MyNode.class);
+		factory = new ModelFactory(FlexoProcess.class);
 	}
 
 	@Override

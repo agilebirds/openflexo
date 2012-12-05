@@ -1,4 +1,4 @@
-package org.openflexo.model.factory;
+package org.openflexo.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package org.openflexo.model.factory;
+package org.openflexo.model;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.openflexo.model.exceptions.InvalidDataException;
+import org.openflexo.model.factory.ModelFactory;
 
 import com.google.common.primitives.Primitives;
 

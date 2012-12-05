@@ -22,13 +22,14 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.openflexo.model.AbstractPAMELATest;
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
 import org.openflexo.model.factory.EmbeddingType;
-import org.openflexo.model.factory.ModelContext;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 

@@ -1,13 +1,15 @@
 /**
  * 
  */
-package org.openflexo.model.factory;
+package org.openflexo.model;
 
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.exceptions.InvalidDataException;
-import org.openflexo.model.factory.StringConverterLibrary.Converter;
+import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.ProxyMethodHandler;
 
 import com.google.common.primitives.Primitives;
 

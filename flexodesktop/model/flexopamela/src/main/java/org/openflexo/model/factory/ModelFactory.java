@@ -19,11 +19,17 @@ import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
 import org.jdom2.JDOMException;
+import org.openflexo.model.ModelContext;
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelInitializer;
+import org.openflexo.model.ModelProperty;
+import org.openflexo.model.StringEncoder;
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.factory.StringConverterLibrary.Converter;
 
 public class ModelFactory {
 

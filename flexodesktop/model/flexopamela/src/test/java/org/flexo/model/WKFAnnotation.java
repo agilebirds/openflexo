@@ -1,5 +1,6 @@
 package org.flexo.model;
 
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.ModelEntity;
@@ -8,7 +9,6 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.StringConverter;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.StringConverterLibrary.Converter;
 
 @ModelEntity
 public interface WKFAnnotation extends FlexoModelObject {

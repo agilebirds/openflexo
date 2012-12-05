@@ -19,9 +19,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.ModelContext;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

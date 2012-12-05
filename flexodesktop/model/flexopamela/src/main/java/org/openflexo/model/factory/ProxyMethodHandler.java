@@ -26,6 +26,9 @@ import javassist.util.proxy.ProxyObject;
 
 import javax.annotation.Nonnull;
 
+import org.openflexo.model.ModelContext;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelProperty;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
@@ -300,7 +303,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return propertyChangeSupport;
 	}
 
-	private void internallyInvokeInitializer(org.openflexo.model.factory.ModelInitializer in, Object[] args)
+	private void internallyInvokeInitializer(org.openflexo.model.ModelInitializer in, Object[] args)
 			throws ModelDefinitionException {
 		initializing = true;
 		try {

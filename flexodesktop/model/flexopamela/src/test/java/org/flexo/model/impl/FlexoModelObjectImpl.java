@@ -3,7 +3,7 @@ package org.flexo.model.impl;
 import javassist.util.proxy.ProxyObject;
 
 import org.flexo.model.FlexoModelObject;
-import org.openflexo.model.factory.ModelEntity;
+import org.openflexo.model.ModelEntity;
 import org.openflexo.model.factory.ProxyMethodHandler;
 
 public abstract class FlexoModelObjectImpl implements FlexoModelObject {
