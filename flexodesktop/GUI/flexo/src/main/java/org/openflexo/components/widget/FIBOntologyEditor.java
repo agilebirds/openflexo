@@ -88,7 +88,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntology(IFlexoOntology context) {
 		this.ontology = context;
-		ontology.loadWhenUnloaded();
+		// ontology.loadWhenUnloaded();
 		update();
 	}
 

@@ -121,7 +121,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	@Override
-	public XSOntClass getThingConcept() {
+	public XSOntClass getRootConcept() {
 		return thingClass;
 	}
 
@@ -148,7 +148,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		addClass(thingClass);
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
 			XSOntClass xsClass = loadClass(complexType);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addSuperClass(getRootConcept());
 		}
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
@@ -164,11 +164,11 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
 			XSOntClass xsClass = loadClass(attGroup);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addSuperClass(getRootConcept());
 		}
 		for (XSModelGroupDecl modelGroup : fetcher.getModelGroupDecls()) {
 			XSOntClass xsClass = loadClass(modelGroup);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addSuperClass(getRootConcept());
 		}
 	}
 

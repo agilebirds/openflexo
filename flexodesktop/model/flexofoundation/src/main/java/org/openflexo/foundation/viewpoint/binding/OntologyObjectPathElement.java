@@ -154,7 +154,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 	public IFlexoOntologyClass getOntologicType() {
 		if (getViewpointOntology() != null) {
-			return getViewpointOntology().getThingConcept();
+			return getViewpointOntology().getRootConcept();
 		}
 		return null;
 	}
@@ -227,7 +227,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 		private IFlexoOntologyClass ontologyType;
 
 		public OntologyClassPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			this(name, viewpointOntology.getThingConcept(), aParentElement);
+			this(name, viewpointOntology.getRootConcept(), aParentElement);
 		}
 
 		public OntologyClassPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement) {
@@ -270,7 +270,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 				return ontologyType;
 			}
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getThingConcept();
+				return getViewpointOntology().getRootConcept();
 			}
 			return null;
 		}
@@ -316,7 +316,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 				return ontologyType;
 			}
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getThingConcept();
+				return getViewpointOntology().getRootConcept();
 			}
 			return null;
 		}

@@ -86,9 +86,10 @@ public interface IFlexoOntology extends IFlexoOntologyObject, IFlexoOntologyConc
 	public List<? extends IFlexoOntologyDataProperty> getAccessibleDataProperties();
 
 	/**
-	 * Return the root concept accessible from the scope defined by this ontology
+	 * Return the root concept accessible from the scope defined by this ontology (for example in OWL technology this is the owl:Thing
+	 * concept, in Java this is java.lang.object, etc...)
 	 * 
 	 * @return
 	 */
-	public IFlexoOntologyClass getThingConcept();
+	public IFlexoOntologyClass getRootConcept();
 }

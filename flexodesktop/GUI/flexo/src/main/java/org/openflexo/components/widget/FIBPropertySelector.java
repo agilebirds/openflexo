@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -64,7 +64,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 	private IFlexoOntologyClass rootClass;
 	private IFlexoOntologyClass domain;
 	private IFlexoOntologyClass range;
-	private OntologicDataType dataType;
+	private BuiltInDataType dataType;
 	private boolean hierarchicalMode = true;
 	private boolean selectObjectProperties = true;
 	private boolean selectDataProperties = true;
@@ -213,12 +213,12 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		}
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
 	@CustomComponentParameter(name = "dataType", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 	}
 

@@ -125,7 +125,7 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 				list.remove(((OWLObject<?>) c).getOriginalDefinition());
 			}
 			if (c instanceof OntologyClass && ((OntologyClass) c).isThing() && c.getFlexoOntology() != getContext()
-					&& list.contains(getContext().getThingConcept())) {
+					&& list.contains(getContext().getRootConcept())) {
 				list.remove(c);
 			}
 		}

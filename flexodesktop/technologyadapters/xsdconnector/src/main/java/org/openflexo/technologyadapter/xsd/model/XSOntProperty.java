@@ -30,7 +30,7 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements IFlex
 
 	protected XSOntProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
-		domain = ontology.getThingConcept();
+		domain = ontology.getRootConcept();
 	}
 
 	@Override
@@ -48,12 +48,12 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements IFlex
 			this.domain = domain;
 			noDomainFoundYet = false;
 		} else {
-			this.domain = getOntology().getThingConcept();
+			this.domain = getOntology().getRootConcept();
 		}
 	}
 
 	public void resetDomain() {
-		this.domain = getOntology().getThingConcept();
+		this.domain = getOntology().getRootConcept();
 		noDomainFoundYet = true;
 	}
 

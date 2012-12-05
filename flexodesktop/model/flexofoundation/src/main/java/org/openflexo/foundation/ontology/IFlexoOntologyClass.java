@@ -35,14 +35,14 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSuperClasses();
+	public List<IFlexoOntologyClass> getSuperClasses();
 
 	/**
-	 * Sub Classes of Class.
+	 * Return a list of classes, accessible from scope defined by supplied ontology, which are declared to be sub-classes of this property
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getSubClasses();
+	public List<IFlexoOntologyClass> getSubClasses(IFlexoOntology context);
 
 	/**
 	 * Is this a Super Class of aClass.
@@ -53,10 +53,25 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	boolean isSuperClassOf(IFlexoOntologyClass aClass);
 
 	/**
-	 * Is this a Sub Class of Class.
+	 * Is this a Super Concept of anObject.
+	 * 
 	 * 
 	 * @return
 	 */
-	boolean isSubClassOf(IFlexoOntologyClass aClass);
+	@Override
+	boolean isSuperConceptOf(IFlexoOntologyConcept aConcept);
 
+	/**
+	 * Return flag indicating if this class is a named class (that may happen in some technologies)
+	 * 
+	 * @return
+	 */
+	public boolean isNamedClass();
+
+	/**
+	 * Return flag indicating if this class is the root concept
+	 * 
+	 * @return
+	 */
+	public boolean isRootConcept();
 }
