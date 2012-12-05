@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.technologyadapter.owl;
 
 import java.io.File;
 import java.util.logging.Logger;

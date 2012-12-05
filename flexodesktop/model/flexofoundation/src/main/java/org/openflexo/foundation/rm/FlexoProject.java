@@ -117,6 +117,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -4406,6 +4407,25 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			return mm.getObject(modelURI + "#" + conceptURI) != null;
 		}
 		return false;
+	}
+
+	/**
+	 * Retrieve model or metamodel conform to {@link FlexoOntology} and referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoOntology getFlexoOntology(String modelURI) {
+		FlexoModel<?, ?> m = getModel(modelURI);
+		if (m instanceof FlexoOntology) {
+			return (FlexoOntology) m;
+		}
+		FlexoMetaModel<?> mm = getMetaModel(modelURI);
+		if (mm instanceof FlexoOntology) {
+			return (FlexoOntology) mm;
+		}
+		return null;
 	}
 
 	/**

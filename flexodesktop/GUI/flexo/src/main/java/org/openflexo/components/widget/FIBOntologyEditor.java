@@ -64,12 +64,10 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
-	private boolean showOWLAndRDFConcepts = false;
-
 	private boolean allowsSearch = true;
 	private boolean displayOptions = true;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	private boolean isSearching = false;
 	private String filteredName;
@@ -202,16 +200,6 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getOntology()) {
@@ -235,7 +223,6 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.setShowObjectProperties(getShowObjectProperties());
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
 		}
 		return model;

@@ -26,14 +26,15 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSOntDataProperty extends XSOntProperty implements OntologyDataProperty {
 
 	private OntologicDataType dataType;
 	private boolean isFromAttribute = false;
 
-	protected XSOntDataProperty(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
+	protected XSOntDataProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
 	}
 
 	@Override

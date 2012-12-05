@@ -26,6 +26,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSOntObjectProperty extends XSOntProperty implements OntologyObjectProperty {
 
@@ -34,14 +35,14 @@ public class XSOntObjectProperty extends XSOntProperty implements OntologyObject
 
 	private List<XSOntObjectProperty> superProperties;
 
-	protected XSOntObjectProperty(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
+	protected XSOntObjectProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
 		range = ontology.getThingConcept();
 		superProperties = new ArrayList<XSOntObjectProperty>();
 	}
 
-	protected XSOntObjectProperty(XSOntology ontology, String name) {
-		this(ontology, name, XS_ONTOLOGY_URI + "#" + name);
+	protected XSOntObjectProperty(XSOntology ontology, String name, XSDTechnologyAdapter adapter) {
+		this(ontology, name, XS_ONTOLOGY_URI + "#" + name, adapter);
 	}
 
 	public void addSuperProperty(XSOntObjectProperty parent) {

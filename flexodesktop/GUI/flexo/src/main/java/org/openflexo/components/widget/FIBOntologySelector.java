@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -42,11 +41,11 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 		super(editedObject);
 	}
 
-	@Override
+	/*@Override
 	public void delete() {
 		super.delete();
 		ontologyLibrary = null;
-	}
+	}*/
 
 	@Override
 	public File getFIBFile() {
@@ -66,7 +65,7 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 		return "";
 	}
 
-	private OntologyLibrary ontologyLibrary;
+	/*private OntologyLibrary ontologyLibrary;
 
 	public OntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
@@ -75,7 +74,7 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	@CustomComponentParameter(name = "ontologyLibrary", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
-	}
+	}*/
 
 	/**
 	 * This method must be implemented if we want to implement completion<br>

@@ -25,7 +25,6 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
@@ -34,6 +33,7 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.xmlcode.StringConvertable;
 
 public abstract class AbstractXSOntObject extends AbstractOntologyObject implements OntologyObject, XSOntologyURIDefinitions,
@@ -49,9 +49,12 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
 	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
 
-	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
+	private XSDTechnologyAdapter technologyAdapter;
+
+	protected AbstractXSOntObject(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super();
 
+		technologyAdapter = adapter;
 		this.name = name;
 		this.uri = uri;
 		this.ontology = ontology;
@@ -59,8 +62,13 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
 	}
 
-	protected AbstractXSOntObject() {
-		this(null, null, null);
+	protected AbstractXSOntObject(XSDTechnologyAdapter adapter) {
+		this(null, null, null, adapter);
+	}
+
+	@Override
+	public XSDTechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
 	}
 
 	@Override
@@ -93,9 +101,9 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 
 	@Override
 	public OntologyObjectConverter getConverter() {
-		if (getOntologyLibrary() != null) {
+		/*if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getOntologyObjectConverter();
-		}
+		}*/
 		return null;
 	}
 
@@ -136,17 +144,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	@Override
 	public XSOntology getOntology() {
 		return ontology;
-	}
-
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
-		if (isOntology() == false) {
-			return getOntology().getOntologyLibrary();
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Ontology " + getName() + " is missing a library");
-		}
-		return null;
 	}
 
 	@Override

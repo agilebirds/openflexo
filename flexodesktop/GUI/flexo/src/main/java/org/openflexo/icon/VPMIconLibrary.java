@@ -72,8 +72,6 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.technologyadapter.owl.viewpoint.AddStatement;
-import org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -165,9 +163,9 @@ public class VPMIconLibrary extends IconLibrary {
 				return IconFactory.getImageIcon(CALC_CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
 				return CALC_CONNECTOR_ICON;
-			} else if (object instanceof AddStatement) {
+			} /*else if (object instanceof AddStatement) {
 				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-			} else if (object instanceof DeclarePatternRole) {
+				}*/else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;
@@ -249,9 +247,9 @@ public class VPMIconLibrary extends IconLibrary {
 			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 		} else if (object instanceof PropertyPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_PROPERTY_ICON;
-		} else if (object instanceof StatementPatternRole) {
+		} /*else if (object instanceof StatementPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-		} else if (object instanceof LocalizedDictionary) {
+			}*/else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());

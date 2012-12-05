@@ -26,7 +26,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
@@ -34,6 +33,7 @@ import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.gui.FIBOntologyLibraryBrowser;
 import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.ve.view.OntologyView;
 import org.openflexo.view.ModuleView;

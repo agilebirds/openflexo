@@ -19,10 +19,12 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+
 public abstract class XSOntRestriction extends XSOntClass {
 
-	protected XSOntRestriction(XSOntology ontology) {
-		super(ontology, null, null);
+	protected XSOntRestriction(XSOntology ontology, XSDTechnologyAdapter adapter) {
+		super(ontology, null, null, adapter);
 	}
 
 	public boolean isAttributeRestriction() {

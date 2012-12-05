@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.technologyadapter.owl;
 
 import java.util.logging.Logger;
 
@@ -25,6 +25,8 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
+import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;

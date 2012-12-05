@@ -71,9 +71,8 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	private boolean selectAnnotationProperties = false;
 	private boolean strictMode = false;
 	private boolean displayPropertiesInClasses = true;
-	private boolean showOWLAndRDFConcepts = false;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	public FIBPropertySelector(OntologyProperty editedObject) {
 		super(editedObject);
@@ -126,8 +125,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
-					.getOntology(ontologyURI);
+			FlexoOntology context = getProject().getFlexoOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}
@@ -279,16 +277,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getContext()) {
@@ -315,7 +303,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 			model.setShowObjectProperties(getSelectObjectProperties());
 			model.setShowDataProperties(getSelectDataProperties());
 			model.setShowAnnotationProperties(getSelectAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(getShowOWLAndRDFConcepts());
 			/*System.out.println("Recomputing...");
 			System.out.println("context=" + getContext());
 			System.out.println("getStrictMode()=" + getStrictMode());

@@ -86,7 +86,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	}
 
 	@Override
-	protected XSDModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public XSDModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new XSDModelSlot(viewPoint, this);
 	}
 

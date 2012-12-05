@@ -17,11 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.components.widget;
+package org.openflexo.technologyadapter.owl.gui;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
@@ -32,12 +32,12 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class FIBOntologyLibraryBrowser extends FIBBrowserView<OntologyLibrary> {
-	static final Logger logger = Logger.getLogger(FIBOntologyLibraryBrowser.class.getPackage().getName());
+public class FIBOWLOntologyLibraryBrowser extends FIBBrowserView<OWLOntologyLibrary> {
+	static final Logger logger = Logger.getLogger(FIBOWLOntologyLibraryBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyLibraryBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOWLOntologyLibraryBrowser.fib");
 
-	public FIBOntologyLibraryBrowser(OntologyLibrary ontologyLibrary, FlexoController controller) {
+	public FIBOWLOntologyLibraryBrowser(OWLOntologyLibrary ontologyLibrary, FlexoController controller) {
 		super(ontologyLibrary, controller, FIB_FILE);
 	}
 
