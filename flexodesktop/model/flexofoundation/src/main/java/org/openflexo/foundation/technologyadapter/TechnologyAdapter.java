@@ -197,4 +197,12 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	public void initialize() {
 	}
 
+	/**
+	 * Provides a hook to detect when a new resource center was added or discovered
+	 * 
+	 * @param newResourceCenter
+	 */
+	public void resourceCenterAdded(FlexoResourceCenter newResourceCenter) {
+	}
+
 }

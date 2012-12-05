@@ -28,7 +28,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
@@ -126,31 +125,35 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	public boolean isValidModelFile(File aModelFile, FlexoResource<OWLOntology> metaModelResource,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
-		return aModelFile.getName().endsWith(".owl");
+		// return aModelFile.getName().endsWith(".owl");
+		return false;
 	}
 
 	@Override
 	public FlexoResource<OWLOntology> retrieveMetaModelResource(File aMetaModelFile,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
-		logger.warning("Not implemened yet");
 
-		OWLOntologyResource ontologyResource = new OWLOntologyResource((FlexoProjectBuilder) null);
+		// logger.info("Retrieving OWL MetaModelResource for " + aMetaModelFile.getAbsolutePath());
 
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
-		ontologyLibrary.registerOntology(ontologyResource);
+		OWLOntologyResource ontologyResource = new OWLOntologyResource(aMetaModelFile, ontologyLibrary);
+		logger.info("Found OWL ontology " + ontologyResource.getURI() + " file:" + aMetaModelFile.getAbsolutePath());
 		return ontologyResource;
+
 	}
 
 	@Override
 	public OWLOntologyResource retrieveModelResource(File aModelFile,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 
-		logger.warning("Not implemented yet");
-		OWLOntologyResource ontologyResource = new OWLOntologyResource((FlexoProjectBuilder) null);
+		// logger.info("Retrieving OWL ModelResource for " + aModelFile.getAbsolutePath());
 
-		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
-		ontologyLibrary.registerOntology(ontologyResource);
-		return ontologyResource;
+		/*OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
+		OWLOntologyResource ontologyResource = new OWLOntologyResource(retrieveModelURI(aModelFile, technologyContextManager),
+				ontologyLibrary);
+		logger.info("Found OWL ontology " + ontologyResource.getURI() + " file:" + aModelFile.getAbsolutePath());
+		return ontologyResource;*/
+		return null;
 	}
 
 	@Override
@@ -228,8 +231,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	@Override
 	public String retrieveModelURI(File aModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
+		return OWLOntology.findOntologyURI(aModelFile);
 	}
 
 	/**
@@ -242,6 +244,16 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public void initialize() {
+		((OWLOntologyLibrary) getTechnologyContextManager()).init();
+	}
+
+	/**
+	 * Provides a hook to detect when a new resource center was added or discovered
+	 * 
+	 * @param newResourceCenter
+	 */
+	@Override
+	public void resourceCenterAdded(FlexoResourceCenter newResourceCenter) {
 		((OWLOntologyLibrary) getTechnologyContextManager()).init();
 	}
 

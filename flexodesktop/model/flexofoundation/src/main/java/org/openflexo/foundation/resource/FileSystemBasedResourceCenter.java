@@ -88,7 +88,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void exploreDirectoryLookingForMetaModels(
 			File directory, RepositoryFolder folder, TA technologyAdapter, TechnologyContextManager technologyContextManager,
 			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
-		System.out.println("Exploring " + directory);
+		logger.info("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
@@ -106,6 +106,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM> technologyAdapter,
 			TechnologyContextManager technologyContextManager, MetaModelRepository<MMR, ?, ?, ?> mmRepository,
 			ModelRepository<MR, ?, ?, ?> modelRepository) {
+		logger.info("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {

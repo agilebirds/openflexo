@@ -2,6 +2,7 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.List;
 
+import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.annotations.Adder;
@@ -22,7 +23,7 @@ import org.openflexo.model.annotations.Setter;
  */
 @ModelEntity
 @ImplementationClass(DefaultTechnologyAdapterService.class)
-public interface TechnologyAdapterService {
+public interface TechnologyAdapterService extends FlexoService {
 	public static final String TECHNOLOGY_ADAPTERS = "technologyAdapters";
 	public static final String RESOURCE_CENTER_SERVICE = "flexoResourceCenterService";
 

@@ -85,16 +85,35 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
 	}
 
+	private boolean defaultOntologiesLoaded = false;
+
 	public void init() {
-		logger.fine("Instantiating OWLOntologyLibrary Done. Loading some ontologies...");
-		// baseOntologyLibrary.debug();
-		getRDFSOntology().loadWhenUnloaded();
-		getRDFOntology().loadWhenUnloaded();
-		getOWLOntology().loadWhenUnloaded();
-		getRDFSOntology().updateConceptsAndProperties();
-		getRDFOntology().updateConceptsAndProperties();
-		getOWLOntology().updateConceptsAndProperties();
-		getFlexoConceptOntology().loadWhenUnloaded();
+		if (defaultOntologiesLoaded) {
+			return;
+		}
+		logger.info("Instantiating OWLOntologyLibrary Done. Trying to load some ontologies...");
+
+		logger.info("ontologies=" + ontologies);
+
+		logger.info("getRDFSOntology()=" + getRDFSOntology());
+		logger.info("getRDFOntology()=" + getRDFOntology());
+		logger.info("getOWLOntology()=" + getOWLOntology());
+		logger.info("getFlexoConceptOntology()=" + getFlexoConceptOntology());
+
+		FlexoResource<OWLOntology> rdfsOntologyResource = ontologies.get(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+		logger.info("rdfsOntologyResource=" + rdfsOntologyResource);
+
+		if (getRDFSOntology() != null && getRDFOntology() != null && getOWLOntology() != null && getFlexoConceptOntology() != null) {
+			logger.info("Loading some ontologies...");
+			getRDFSOntology().loadWhenUnloaded();
+			getRDFOntology().loadWhenUnloaded();
+			getOWLOntology().loadWhenUnloaded();
+			getRDFSOntology().updateConceptsAndProperties();
+			getRDFOntology().updateConceptsAndProperties();
+			getOWLOntology().updateConceptsAndProperties();
+			getFlexoConceptOntology().loadWhenUnloaded();
+			defaultOntologiesLoaded = true;
+		}
 	}
 
 	public OntologyObjectConverter getOntologyObjectConverter() {

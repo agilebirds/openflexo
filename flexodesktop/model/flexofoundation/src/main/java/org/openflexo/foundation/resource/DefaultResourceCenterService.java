@@ -3,6 +3,10 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceManager.ServiceRegistered;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
@@ -11,6 +15,8 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 
 	private LocalResourceCenterImplementation openFlexoResourceCenter;
 	private UserResourceCenter userResourceCenter;
+
+	private FlexoServiceManager serviceManager;
 
 	public static FlexoResourceCenterService getNewInstance() {
 		try {
@@ -79,4 +85,46 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 	public FlexoResourceCenter getUserResourceCenter() {
 		return userResourceCenter;
 	}
+
+	@Override
+	public void addToResourceCenters(FlexoResourceCenter resourceCenter) {
+		performSuperAdder(RESOURCE_CENTERS, resourceCenter);
+		if (serviceManager != null) {
+			serviceManager.notify(this, new ResourceCenterAdded(resourceCenter));
+		}
+	}
+
+	public class ResourceCenterAdded implements ServiceNotification {
+		private FlexoResourceCenter addedResourceCenter;
+
+		public ResourceCenterAdded(FlexoResourceCenter addedResourceCenter) {
+			this.addedResourceCenter = addedResourceCenter;
+		}
+
+		public FlexoResourceCenter getAddedResourceCenter() {
+			return addedResourceCenter;
+		}
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (caller instanceof TechnologyAdapterService) {
+			if (notification instanceof ServiceRegistered) {
+				for (FlexoResourceCenter rc : getResourceCenters()) {
+					rc.initialize((TechnologyAdapterService) caller);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void register(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
+	@Override
+	public FlexoServiceManager getFlexoServiceManager() {
+		return serviceManager;
+	}
+
 }
