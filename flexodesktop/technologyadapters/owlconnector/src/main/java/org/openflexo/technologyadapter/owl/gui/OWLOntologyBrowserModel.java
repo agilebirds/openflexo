@@ -23,14 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.components.widget.FIBClassSelector;
-import org.openflexo.components.widget.FIBIndividualSelector;
-import org.openflexo.components.widget.FIBPropertySelector;
 import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;

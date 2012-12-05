@@ -42,8 +42,12 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -95,7 +99,7 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
-	private List<ModelSlot<?,?>> modelSlots;
+	private List<ModelSlot<?, ?>> modelSlots;
 
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
@@ -259,7 +263,7 @@ public class ViewPoint extends ViewPointObject {
 			/*if (viewPoint != null) {
 				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
 			}*/
-			}
+		}
 
 		public ViewPointBuilder() {
 		}
@@ -522,6 +526,7 @@ public class ViewPoint extends ViewPointObject {
 		}
 	}
 
+	@Override
 	public ViewPointLibrary getViewPointLibrary() {
 		return _library;
 	}
@@ -765,25 +770,25 @@ public class ViewPoint extends ViewPointObject {
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot<?,?>> modelSlots) {
+	public void setModelSlots(List<ModelSlot<?, ?>> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot<?,?>> getModelSlots() {
+	public List<ModelSlot<?, ?>> getModelSlots() {
 		return modelSlots;
 	}
 
-	public void addToModelSlots(ModelSlot<?,?> modelSlot) {
+	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
 	}
 
-	public void removeFromModelSlots(ModelSlot<?,?> modelSlot) {
+	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.remove(modelSlot);
 	}
 
-	public List<ModelSlot<?,?>> getRequiredModelSlots() {
-		List<ModelSlot<?,?>> requiredModelSlots = new ArrayList<ModelSlot<?,?>>();
-		for (ModelSlot<?,?> modelSlot : getModelSlots()) {
+	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
+		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
 			if (modelSlot.getIsRequired()) {
 				requiredModelSlots.add(modelSlot);
 			}
@@ -791,18 +796,17 @@ public class ViewPoint extends ViewPointObject {
 		return modelSlots;
 	}
 
-
 	@Override
 	public String getLanguageRepresentation() {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
 		StringBuffer sb = new StringBuffer();
-		System.out.println("loaded: " + getViewpointOntology().isLoaded());
+		/*System.out.println("loaded: " + getViewpointOntology().isLoaded());
 		for (IFlexoOntology o : getViewpointOntology().getImportedOntologies()) {
 			if (o != getOntologyLibrary().getOWLOntology()) {
 				String modelName = JavaUtils.getVariableName(o.getName());
 				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
-			}*/
-		// }
+			}
+		}*/
 		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
 		sb.append(" {" + StringUtils.LINE_SEPARATOR);
 		// TODO iterate on slots here
@@ -839,10 +843,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyObject getOntologyObject(String uri) {
+	public IFlexoOntologyObject getOntologyObject(String uri) {
 		Object returned = getObject(uri);
-		if (returned instanceof OntologyObject) {
-			return (OntologyObject) returned;
+		if (returned instanceof IFlexoOntologyObject) {
+			return (IFlexoOntologyObject) returned;
 		}
 		return null;
 	}
@@ -854,10 +858,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyClass getOntologyClass(String uri) {
+	public IFlexoOntologyClass getOntologyClass(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyClass) {
-			return (OntologyClass) returned;
+		if (returned instanceof IFlexoOntologyClass) {
+			return (IFlexoOntologyClass) returned;
 		}
 		return null;
 	}
@@ -869,10 +873,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyIndividual getOntologyIndividual(String uri) {
+	public IFlexoOntologyIndividual getOntologyIndividual(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyIndividual) {
-			return (OntologyIndividual) returned;
+		if (returned instanceof IFlexoOntologyIndividual) {
+			return (IFlexoOntologyIndividual) returned;
 		}
 		return null;
 	}
@@ -884,10 +888,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyProperty getOntologyProperty(String uri) {
+	public IFlexoOntologyStructuralProperty getOntologyProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyProperty) {
-			return (OntologyProperty) returned;
+		if (returned instanceof IFlexoOntologyStructuralProperty) {
+			return (IFlexoOntologyStructuralProperty) returned;
 		}
 		return null;
 	}
@@ -899,10 +903,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyObjectProperty getOntologyObjectProperty(String uri) {
+	public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyObjectProperty) {
-			return (OntologyObjectProperty) returned;
+		if (returned instanceof IFlexoOntologyObjectProperty) {
+			return (IFlexoOntologyObjectProperty) returned;
 		}
 		return null;
 	}
@@ -914,10 +918,10 @@ public class ViewPoint extends ViewPointObject {
 	 * @param uri
 	 * @return
 	 */
-	public OntologyDataProperty getOntologyDataProperty(String uri) {
+	public IFlexoOntologyDataProperty getOntologyDataProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyDataProperty) {
-			return (OntologyDataProperty) returned;
+		if (returned instanceof IFlexoOntologyDataProperty) {
+			return (IFlexoOntologyDataProperty) returned;
 		}
 		return null;
 	}

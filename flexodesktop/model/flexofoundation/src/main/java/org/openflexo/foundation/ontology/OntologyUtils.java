@@ -42,9 +42,9 @@ public class OntologyUtils {
 
 	public static <C extends IFlexoOntologyClass> IFlexoOntologyClass getFirstCommonAncestor(C c1, C c2) {
 		Set<C> commonAncestors = new HashSet<C>();
-		Set<C> ancestors1 = (Set<C>) c1.getAllSuperClasses();
+		Set<C> ancestors1 = (Set<C>) getAllSuperClasses(c1);
 		ancestors1.add(c1);
-		Set<C> ancestors2 = (Set<C>) c2.getAllSuperClasses();
+		Set<C> ancestors2 = (Set<C>) getAllSuperClasses(c2);
 		ancestors2.add(c2);
 		for (C cl1 : ancestors1) {
 			for (C cl2 : ancestors2) {
@@ -54,6 +54,35 @@ public class OntologyUtils {
 			}
 		}
 		return getMostSpecializedClass(commonAncestors);
+	}
+
+	/**
+	 * Return all direct and inferred super classes of supplied class
+	 * 
+	 * @return
+	 */
+	public static Set<IFlexoOntologyClass> getAllSuperClasses(IFlexoOntologyClass aClass) {
+		Set<IFlexoOntologyClass> returned = new HashSet<IFlexoOntologyClass>();
+		for (IFlexoOntologyClass c : aClass.getSuperClasses()) {
+			returned.add(c);
+			returned.addAll(getAllSuperClasses(c));
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all direct and inferred imported ontology, including supplied ontology
+	 * 
+	 * @return
+	 */
+	public static Set<IFlexoOntology> getAllImportedOntologies(IFlexoOntology ontology) {
+		Set<IFlexoOntology> returned = new HashSet<IFlexoOntology>();
+		returned.add(ontology);
+		for (IFlexoOntology i : ontology.getImportedOntologies()) {
+			returned.add(i);
+			returned.addAll(getAllImportedOntologies(i));
+		}
+		return returned;
 	}
 
 }

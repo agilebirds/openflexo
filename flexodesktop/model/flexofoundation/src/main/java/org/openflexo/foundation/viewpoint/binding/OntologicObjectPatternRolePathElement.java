@@ -10,13 +10,14 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
@@ -123,9 +124,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends IFlexoOnto
 					if (array[i].getName().equals(array[j].getName())) {
 						// Detected name based shadowing between array[i] and array[j]
 						// System.out.println("Detected name based shadowing between " + array[i] + " and " + array[j]);
-						if (array[i].getFlexoOntology().getAllImportedOntologies().contains(array[j].getFlexoOntology())) {
+						if (OntologyUtils.getAllImportedOntologies(array[i].getOntology()).contains(array[j].getOntology())) {
 							// array[i] appears to be the most specialized, don't do anything
-						} else if (array[j].getFlexoOntology().getAllImportedOntologies().contains(array[i].getFlexoOntology())) {
+						} else if (OntologyUtils.getAllImportedOntologies(array[j].getOntology()).contains(array[i].getOntology())) {
 							// array[j] appears to be the most specialized, we need to swap
 							i1.add(i);
 							i2.add(j);
@@ -141,7 +142,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends IFlexoOnto
 				// Swapping p1 and p2
 			}
 
-			for (final IFlexoOntologyStructuralProperty property : array) {
+			/*for (final IFlexoOntologyStructuralProperty property : array) {
 				StatementPathElement<?> propertyPathElement = null;
 				if (property instanceof IFlexoOntologyObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
@@ -245,7 +246,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends IFlexoOnto
 			}
 			// Little hack to be refactored
 			return getPatternRole().getViewPoint().getOntologyClass("http://www.w3.org/2002/07/owl#Thing");
-			}
+		}
 
 	}
 
@@ -272,7 +273,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends IFlexoOnto
 		}
 	}
 
-	public static class OntologicDataPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement<IFlexoOntologyDataProperty> {
+	public static class OntologicDataPropertyPatternRolePathElement extends
+			OntologicPropertyPatternRolePathElement<IFlexoOntologyDataProperty> {
 		public OntologicDataPropertyPatternRolePathElement(DataPropertyPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 		}
@@ -313,11 +315,10 @@ public abstract class OntologicObjectPatternRolePathElement<T extends IFlexoOnto
 		public IFlexoOntologyClass getOntologicType() {
 			/*if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
 				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OWL2URIDefinitions.OWL_OBJECT_PROPERTY_URI);
-			}
+			}*/
 			return null;
 		}
 
 	}
-
 
 }

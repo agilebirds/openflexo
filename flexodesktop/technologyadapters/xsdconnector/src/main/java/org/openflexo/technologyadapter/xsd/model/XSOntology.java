@@ -34,12 +34,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.localization.Language;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;

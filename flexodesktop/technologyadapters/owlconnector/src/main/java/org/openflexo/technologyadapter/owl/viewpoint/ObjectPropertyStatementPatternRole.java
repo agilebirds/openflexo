@@ -3,8 +3,6 @@ package org.openflexo.technologyadapter.owl.viewpoint;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;

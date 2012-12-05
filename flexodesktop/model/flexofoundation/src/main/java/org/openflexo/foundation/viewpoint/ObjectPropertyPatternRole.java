@@ -7,7 +7,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjectProperty> {
+public class ObjectPropertyPatternRole extends PropertyPatternRole<IFlexoOntologyObjectProperty> {
 
 	private String rangeURI;
 
@@ -29,7 +29,7 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjec
 	}
 
 	@Override
-	public Class<OntologyObjectProperty> getAccessedClass() {
+	public Class<IFlexoOntologyObjectProperty> getAccessedClass() {
 		return IFlexoOntologyObjectProperty.class;
 	}
 
@@ -60,8 +60,9 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<OntologyObjec
 	}
 
 	@Override
-	public ActorReference<OntologyObjectProperty> makeActorReference(OntologyObjectProperty object, EditionPatternReference epRef) {
-		return new ConceptActorReference<OntologyObjectProperty>(object, this, epRef);
+	public ActorReference<IFlexoOntologyObjectProperty> makeActorReference(IFlexoOntologyObjectProperty object,
+			EditionPatternReference epRef) {
+		return new ConceptActorReference<IFlexoOntologyObjectProperty>(object, this, epRef);
 	}
 
 }

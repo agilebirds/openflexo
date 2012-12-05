@@ -1,13 +1,15 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataProperty> {
+public class DataPropertyPatternRole extends PropertyPatternRole<IFlexoOntologyDataProperty> {
 
-	private OntologicDataType dataType;
+	private BuiltInDataType dataType;
 
 	public DataPropertyPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -27,8 +29,8 @@ public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataPro
 	}
 
 	@Override
-	public Class<IFlexoOntologyObjectProperty> getAccessedClass() {
-		return IFlexoOntologyObjectProperty.class;
+	public Class<IFlexoOntologyDataProperty> getAccessedClass() {
+		return IFlexoOntologyDataProperty.class;
 	}
 
 	@Override
@@ -40,16 +42,16 @@ public class DataPropertyPatternRole extends PropertyPatternRole<OntologyDataPro
 		super.setParentProperty(ontologyProperty);
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 	}
 
 	@Override
-	public ActorReference<OntologyDataProperty> makeActorReference(OntologyDataProperty object, EditionPatternReference epRef) {
-		return new ConceptActorReference<OntologyDataProperty>(object, this, epRef);
+	public ActorReference<IFlexoOntologyDataProperty> makeActorReference(IFlexoOntologyDataProperty object, EditionPatternReference epRef) {
+		return new ConceptActorReference<IFlexoOntologyDataProperty>(object, this, epRef);
 	}
 }

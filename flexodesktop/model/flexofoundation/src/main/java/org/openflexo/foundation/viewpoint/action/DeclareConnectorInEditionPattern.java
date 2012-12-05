@@ -26,11 +26,12 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -212,7 +213,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 						if (e.selectEntry) {
 							EditionSchemeParameter newParameter = null;
 							if (e.property instanceof IFlexoOntologyDataProperty) {
-								switch (((IFlexoOntologyDataProperty) e.property).getDataType()) {
+								switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
 								case Boolean:
 									newParameter = new CheckboxParameter(builder);
 									newParameter.setName(e.property.getName());
@@ -329,7 +330,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								}
 							} else if (e.property instanceof IFlexoOntologyDataProperty) {
 								InspectorEntry newInspectorEntry = null;
-								switch (((IFlexoOntologyDataProperty) e.property).getDataType()) {
+								switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
 								case Boolean:
 									newInspectorEntry = new CheckboxInspectorEntry(builder);
 									break;
@@ -347,7 +348,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 									newInspectorEntry = new TextFieldInspectorEntry(builder);
 									break;
 								default:
-									logger.warning("Not handled: " + ((IFlexoOntologyDataProperty) e.property).getDataType());
+									logger.warning("Not handled: " + ((IFlexoOntologyDataProperty) e.property).getRange());
 								}
 								if (newInspectorEntry != null) {
 									newInspectorEntry.setName(e.property.getName());
@@ -428,10 +429,10 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 	public void setConcept(IFlexoOntologyClass concept) {
 		this.concept = concept;
 		propertyEntries.clear();
-		IFlexoOntology ownerOntology = concept.getFlexoOntology();
-		for (IFlexoOntologyStructuralProperty p : concept.getPropertiesTakingMySelfAsDomain()) {
-			if (p.getFlexoOntology() == ownerOntology) {
-				PropertyEntry newEntry = new PropertyEntry(p);
+		IFlexoOntology ownerOntology = concept.getOntology();
+		for (IFlexoOntologyFeature p : concept.getPropertiesTakingMySelfAsDomain()) {
+			if (p.getOntology() == ownerOntology && p instanceof IFlexoOntologyStructuralProperty) {
+				PropertyEntry newEntry = new PropertyEntry((IFlexoOntologyStructuralProperty) p);
 				propertyEntries.add(newEntry);
 			}
 		}
@@ -517,13 +518,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		}
 
 		public String getRange() {
-			if (property instanceof IFlexoOntologyDataProperty && ((IFlexoOntologyDataProperty) property).getDataType() != null) {
-				return ((IFlexoOntologyDataProperty) property).getDataType().name();
-			}
-			if (property instanceof IFlexoOntologyObjectProperty && ((IFlexoOntologyObjectProperty) property).getRange() != null) {
-				return ((IFlexoOntologyObjectProperty) property).getRange().getName();
-			}
-			return "";
+			return property.getRange().getName();
 		}
 	}
 
@@ -531,7 +526,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 		for (PropertyEntry e : propertyEntries) {
 			if (e.selectEntry && e.property instanceof IFlexoOntologyDataProperty
-					&& ((IFlexoOntologyDataProperty) e.property).getDataType() == OntologicDataType.String) {
+					&& ((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType() == BuiltInDataType.String) {
 				candidates.add(e);
 			}
 		}

@@ -26,11 +26,12 @@ import java.util.List;
 /**
  * Flexo Ontology.
  * 
- * Reified interface for handling multi-technological implementation of Ontologies.
+ * Reified interface for handling multi-technological implementation of ontology-like modelling technologies
  * 
  * @author gbesancon
  */
 public interface IFlexoOntology extends IFlexoOntologyObject, IFlexoOntologyConceptContainer {
+
 	/**
 	 * Version of Ontology.
 	 * 
@@ -51,4 +52,43 @@ public interface IFlexoOntology extends IFlexoOntologyObject, IFlexoOntologyConc
 	 * @return
 	 */
 	List<IFlexoOntologyAnnotation> getAnnotations();
+
+	/**
+	 * Return all classes accessible in the context of this ontology.<br>
+	 * This means that classes are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyClass> getAccessibleClasses();
+
+	/**
+	 * Return all individuals accessible in the context of this ontology.<br>
+	 * This means that individuals are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyIndividual> getAccessibleIndividuals();
+
+	/**
+	 * Return all object properties accessible in the context of this ontology.<br>
+	 * This means that properties are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyObjectProperty> getAccessibleObjectProperties();
+
+	/**
+	 * Return all data properties accessible in the context of this ontology.<br>
+	 * This means that properties are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyDataProperty> getAccessibleDataProperties();
+
+	/**
+	 * Return the root concept accessible from the scope defined by this ontology
+	 * 
+	 * @return
+	 */
+	public IFlexoOntologyClass getThingConcept();
 }

@@ -3,7 +3,6 @@ package org.openflexo.technologyadapter.owl.viewpoint;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;

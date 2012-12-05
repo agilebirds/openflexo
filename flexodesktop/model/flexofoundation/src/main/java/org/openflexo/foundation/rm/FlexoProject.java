@@ -117,13 +117,13 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
@@ -4163,7 +4163,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, List<ConceptActorReference>>();
 
-	public void _retrievePendingEditionPatternReferences(OntologyObject object) {
+	public void _retrievePendingEditionPatternReferences(IFlexoOntologyObject object) {
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
 		if (values == null) {
 			// No pending EditionPattern references for object
@@ -4292,10 +4292,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyObject getOntologyObject(String uri) {
+	public IFlexoOntologyObject getOntologyObject(String uri) {
 		Object returned = getObject(uri);
-		if (returned instanceof OntologyObject) {
-			return (OntologyObject) returned;
+		if (returned instanceof IFlexoOntologyObject) {
+			return (IFlexoOntologyObject) returned;
 		}
 		return null;
 	}
@@ -4307,10 +4307,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyClass getOntologyClass(String uri) {
+	public IFlexoOntologyClass getOntologyClass(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyClass) {
-			return (OntologyClass) returned;
+		if (returned instanceof IFlexoOntologyClass) {
+			return (IFlexoOntologyClass) returned;
 		}
 		return null;
 	}
@@ -4322,10 +4322,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyIndividual getOntologyIndividual(String uri) {
+	public IFlexoOntologyIndividual getOntologyIndividual(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyIndividual) {
-			return (OntologyIndividual) returned;
+		if (returned instanceof IFlexoOntologyIndividual) {
+			return (IFlexoOntologyIndividual) returned;
 		}
 		return null;
 	}
@@ -4337,10 +4337,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyProperty getOntologyProperty(String uri) {
+	public IFlexoOntologyStructuralProperty getOntologyProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyProperty) {
-			return (OntologyProperty) returned;
+		if (returned instanceof IFlexoOntologyStructuralProperty) {
+			return (IFlexoOntologyStructuralProperty) returned;
 		}
 		return null;
 	}
@@ -4352,10 +4352,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyObjectProperty getOntologyObjectProperty(String uri) {
+	public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyObjectProperty) {
-			return (OntologyObjectProperty) returned;
+		if (returned instanceof IFlexoOntologyObjectProperty) {
+			return (IFlexoOntologyObjectProperty) returned;
 		}
 		return null;
 	}
@@ -4367,10 +4367,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param uri
 	 * @return
 	 */
-	public OntologyDataProperty getOntologyDataProperty(String uri) {
+	public IFlexoOntologyDataProperty getOntologyDataProperty(String uri) {
 		Object returned = getOntologyObject(uri);
-		if (returned instanceof OntologyDataProperty) {
-			return (OntologyDataProperty) returned;
+		if (returned instanceof IFlexoOntologyDataProperty) {
+			return (IFlexoOntologyDataProperty) returned;
 		}
 		return null;
 	}
@@ -4410,20 +4410,20 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/**
-	 * Retrieve model or metamodel conform to {@link FlexoOntology} and referenced by its URI<br>
+	 * Retrieve model or metamodel conform to {@link IFlexoOntology} and referenced by its URI<br>
 	 * Note that search is performed in the scope of current project only
 	 * 
 	 * @param modelURI
 	 * @return
 	 */
-	public FlexoOntology getFlexoOntology(String modelURI) {
+	public IFlexoOntology getFlexoOntology(String modelURI) {
 		FlexoModel<?, ?> m = getModel(modelURI);
-		if (m instanceof FlexoOntology) {
-			return (FlexoOntology) m;
+		if (m instanceof IFlexoOntology) {
+			return (IFlexoOntology) m;
 		}
 		FlexoMetaModel<?> mm = getMetaModel(modelURI);
-		if (mm instanceof FlexoOntology) {
-			return (FlexoOntology) mm;
+		if (mm instanceof IFlexoOntology) {
+			return (IFlexoOntology) mm;
 		}
 		return null;
 	}

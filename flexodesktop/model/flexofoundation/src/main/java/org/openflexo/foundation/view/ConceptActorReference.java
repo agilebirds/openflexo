@@ -69,7 +69,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 		this.objectURI = objectURI;
 	}
 
-	public OntologyObject getObject() {
+	public IFlexoOntologyObject getObject() {
 		return object;
 	}
 }

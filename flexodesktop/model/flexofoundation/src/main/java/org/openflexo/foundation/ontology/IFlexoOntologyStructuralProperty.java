@@ -30,4 +30,11 @@ package org.openflexo.foundation.ontology;
  */
 public interface IFlexoOntologyStructuralProperty extends IFlexoOntologyFeature {
 
+	/**
+	 * Range of property.
+	 * 
+	 * @return
+	 */
+	IFlexoOntologyObject getRange();
+
 }

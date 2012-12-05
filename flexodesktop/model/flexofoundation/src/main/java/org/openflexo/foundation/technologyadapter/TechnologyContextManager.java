@@ -23,9 +23,9 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -48,11 +48,11 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
 
-	protected Hashtable<OntologyClass, IndividualOfClass> individualsOfClass;
-	protected Hashtable<OntologyClass, SubClassOfClass> subclassesOfClass;
-	protected Hashtable<OntologyProperty, SubPropertyOfProperty> subpropertiesOfProperty;
+	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
+	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
+	protected Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty> subpropertiesOfProperty;
 
-	public IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass) {
+	public IndividualOfClass getIndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (individualsOfClass.get(anOntologyClass) != null) {
 			return individualsOfClass.get(anOntologyClass);
 		} else {
@@ -62,7 +62,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		}
 	}
 
-	public SubClassOfClass getSubClassOfClass(OntologyClass anOntologyClass) {
+	public SubClassOfClass getSubClassOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (subclassesOfClass.get(anOntologyClass) != null) {
 			return subclassesOfClass.get(anOntologyClass);
 		} else {
@@ -72,7 +72,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		}
 	}
 
-	public SubPropertyOfProperty getSubPropertyOfProperty(OntologyProperty anOntologyProperty) {
+	public SubPropertyOfProperty getSubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
 		if (subpropertiesOfProperty.get(anOntologyProperty) != null) {
 			return subpropertiesOfProperty.get(anOntologyProperty);
 		} else {
@@ -83,9 +83,9 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	}
 
 	public TechnologyContextManager() {
-		individualsOfClass = new Hashtable<OntologyClass, IndividualOfClass>();
-		subclassesOfClass = new Hashtable<OntologyClass, SubClassOfClass>();
-		subpropertiesOfProperty = new Hashtable<OntologyProperty, SubPropertyOfProperty>();
+		individualsOfClass = new Hashtable<IFlexoOntologyClass, IndividualOfClass>();
+		subclassesOfClass = new Hashtable<IFlexoOntologyClass, SubClassOfClass>();
+		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
 	}
 
 	/**

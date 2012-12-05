@@ -40,11 +40,12 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.technologyadapter.emf.model.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFMetaModelRepository;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFTechnologyContextManager;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFInstance;
@@ -122,17 +123,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public String retrieveModelURI(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveMetaModelResource(java.io.File)
-	 */
-	@Override
-	public FlexoResource<EMFMetaModel> retrieveMetaModelResource(File aMetaModelFile) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -24,11 +24,11 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.OntologyObjectConverter;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.inspector.InspectableObject;

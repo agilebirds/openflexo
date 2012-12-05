@@ -3,7 +3,8 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 

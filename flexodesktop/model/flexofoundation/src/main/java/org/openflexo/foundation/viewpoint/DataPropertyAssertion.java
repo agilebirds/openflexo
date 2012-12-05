@@ -74,8 +74,8 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
-				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType() != null) {
-					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
+				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
+					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
 				}
 			}
 			return Object.class;

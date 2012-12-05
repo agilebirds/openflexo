@@ -21,6 +21,12 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.Set;
+
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.PatternRole;
+
 /**
  * Flexo Ontology Object.
  * 
@@ -33,19 +39,55 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	String getName();
+	public String getName();
+
+	/**
+	 * Sets name of object
+	 * 
+	 * @param name
+	 * @throws Exception
+	 */
+	public void setName(String name) throws Exception;
 
 	/**
 	 * Uri of Object.
 	 * 
 	 * @return
 	 */
-	String getURI();
+	public String getURI();
 
 	/**
 	 * Description of Object.
 	 * 
 	 * @return
 	 */
-	String getDescription();
+	public String getDescription();
+
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where related FlexoOntology exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+
+	/**
+	 * Return all properties accessible in the scope of this ontology object, where declared range is this object
+	 * 
+	 * @return
+	 */
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
+
+	/**
+	 * Return all properties accessible in the scope of this ontology object, where declared domain is this object
+	 * 
+	 * @return
+	 */
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
+
+	// NB: implemented in FlexoModelObject
+	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
+
+	// NB: implemented in FlexoModelObject
+	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
+
 }

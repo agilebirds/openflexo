@@ -23,7 +23,6 @@ package org.openflexo.foundation.ontology;
 
 import java.util.List;
 
-
 /**
  * Common interface for concepts of Ontology.
  * 
@@ -91,4 +90,16 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * @pattern visitor
 	 */
 	<T> T accept(IFlexoOntologyConceptVisitor<T> visitor);
+
+	/**
+	 * This equals has a particular semantics (differs from {@link #equals(Object)} method) in the way that it returns true only and only if
+	 * compared objects are representing same concept regarding URI. This does not guarantee that both objects will respond the same way to
+	 * some methods.<br>
+	 * This method returns true if and only if objects are same, or if one of both object redefine the other one (with eventual many levels)
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public boolean equalsToConcept(IFlexoOntologyConcept o);
+
 }

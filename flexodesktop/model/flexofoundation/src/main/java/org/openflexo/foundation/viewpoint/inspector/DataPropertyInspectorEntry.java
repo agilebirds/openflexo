@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
@@ -31,7 +31,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 
-	private OntologicDataType dataType;
+	private BuiltInDataType dataType;
 
 	public DataPropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -47,11 +47,11 @@ public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 		return "DataPropertySelector";
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 	}
 

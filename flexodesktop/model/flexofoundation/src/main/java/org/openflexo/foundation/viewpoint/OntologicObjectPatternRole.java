@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public abstract class OntologicObjectPatternRole<T extends OntologyObject> extends PatternRole<T> {
+public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
 	public OntologicObjectPatternRole(ViewPointBuilder builder) {
 		super(builder);

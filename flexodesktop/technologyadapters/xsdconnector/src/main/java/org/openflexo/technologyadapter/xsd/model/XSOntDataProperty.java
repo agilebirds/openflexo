@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDataProperty {
