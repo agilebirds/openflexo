@@ -238,7 +238,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 			}
 		});
 		if (recursive) {
-			for (T object : new ArrayList<T>(objects)) {
+			for (ViewObject object : childs) {
 				objects.addAll(object.getChildrenOfType(type, true));
 			}
 		}
