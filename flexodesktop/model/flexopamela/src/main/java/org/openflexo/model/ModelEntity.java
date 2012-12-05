@@ -197,7 +197,7 @@ public class ModelEntity<I> {
 		}
 		for (ModelProperty<? super I> property : declaredModelProperties.values()) {
 			if (property.getType() != null && !StringConverterLibrary.getInstance().hasConverter(property.getType())
-					&& !property.isStringConvertable() && !property.ignoreType()) {
+					&& !property.getType().isEnum() && !property.isStringConvertable() && !property.ignoreType()) {
 				embeddedEntities.add(ModelEntityLibrary.get(property.getType(), true));
 			}
 		}
