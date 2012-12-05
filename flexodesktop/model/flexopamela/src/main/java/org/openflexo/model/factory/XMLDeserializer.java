@@ -14,10 +14,10 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
+import org.openflexo.model.ModelContext.ModelPropertyXMLTag;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
 import org.openflexo.model.StringEncoder;
-import org.openflexo.model.ModelContext.ModelPropertyXMLTag;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
@@ -171,68 +171,80 @@ class XMLDeserializer {
 						child.getName());
 				ModelProperty<? super I> property = null;
 				ModelEntity<?> entity = null;
-				if (modelPropertyXMLTag == null) {
+				if (modelPropertyXMLTag != null) {
+					property = modelPropertyXMLTag.getProperty();
+					entity = modelPropertyXMLTag.getAccessedEntity();
+				} else if (policy == DeserializationPolicy.RESTRICTIVE) {
+					throw new RestrictiveDeserializationException("Element with name does not fit any properties within entity "
+							+ modelEntity);
+				}
+				Class<?> implementedInterface = null;
+				Class<?> implementingClass = null;
+				String entityName = child.getAttributeValue(PAMELAConstants.MODEL_ENTITY_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+				String className = child.getAttributeValue(PAMELAConstants.CLASS_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+				if (entityName != null) {
+					try {
+						implementedInterface = Class.forName(entityName);
+					} catch (ClassNotFoundException e) {
+						// TODO: log something here
+					}
 					switch (policy) {
 					case PERMISSIVE:
-						continue;
+						break;
 					case RESTRICTIVE:
-						throw new RestrictiveDeserializationException("No entity found for the tag: " + child.getName());
+						break;
 					case EXTENSIVE:
-						Class<?> implementedInterface = null;
-						Class<?> implementingClass = null;
-						String entityName = child.getAttributeValue(PAMELAConstants.MODEL_ENTITY_ATTRIBUTE, PAMELAConstants.NAMESPACE);
-						String className = child.getAttributeValue(PAMELAConstants.CLASS_ATTRIBUTE, PAMELAConstants.NAMESPACE);
 						if (entityName != null) {
-							try {
-								implementedInterface = Class.forName(entityName);
-								modelFactory.importClass(implementedInterface);
-								modelPropertyXMLTag = modelFactory.getModelContext().getPropertyForXMLTag(modelEntity, child.getName());
-								if (className != null) {
-									try {
-										implementingClass = Class.forName(className);
-										if (implementedInterface.isAssignableFrom(implementingClass)) {
-											modelFactory.setImplementingClassForInterface((Class) implementingClass, implementedInterface);
-										} else {
-											throw new ModelExecutionException(className + " does not implement " + implementedInterface
-													+ " for node " + child.getName());
-										}
-									} catch (ClassNotFoundException e) {
-										// TODO: log something here
+							modelFactory.importClass(implementedInterface);
+							if (className != null) {
+								try {
+									implementingClass = Class.forName(className);
+									if (implementedInterface.isAssignableFrom(implementingClass)) {
+										modelFactory.setImplementingClassForInterface((Class) implementingClass, implementedInterface);
+									} else {
+										throw new ModelExecutionException(className + " does not implement " + implementedInterface
+												+ " for node " + child.getName());
 									}
+								} catch (ClassNotFoundException e) {
+									// TODO: log something here
 								}
-							} catch (ClassNotFoundException e) {
-								// TODO: log something here
 							}
 						}
 						break;
 					}
-				}
-				if (modelPropertyXMLTag != null) {
-					property = modelPropertyXMLTag.getProperty();
-					entity = modelPropertyXMLTag.getAccessedEntity();
-					if (property != null) {
-						Object value = null;
-						if (entity != null && !getStringEncoder().isConvertable(property.getType())) {
-							value = buildObjectFromNodeAndModelEntity(child, entity);
-						} else if (getStringEncoder().isConvertable(property.getType())) {
-							value = getStringEncoder().fromString(property.getType(), child.getText());
+					if (implementedInterface != null) {
+						entity = modelFactory.getModelContext().getModelEntity(implementedInterface);
+					}
+					if (entity == null && policy == DeserializationPolicy.RESTRICTIVE) {
+						if (entityName != null) {
+							throw new RestrictiveDeserializationException("Entity " + entityName + " is not part of this model context");
 						} else {
-							// Should not happen
-							throw new ModelExecutionException("Found property " + property
-									+ " but was unable to deserialize the content of node " + child);
+							throw new RestrictiveDeserializationException("No entity found for tag " + child.getName());
 						}
-						switch (property.getCardinality()) {
-						case SINGLE:
-							handler.invokeSetterForDeserialization(property, value);
-							break;
-						case LIST:
-							handler.invokeAdderForDeserialization(property, value);
-							break;
-						case MAP:
-							throw new UnsupportedOperationException("Cannot deserialize maps for now");
-						default:
-							break;
-						}
+					}
+				}
+				if (property != null) {
+					Object value = null;
+					if (entity != null && !getStringEncoder().isConvertable(property.getType())) {
+						value = buildObjectFromNodeAndModelEntity(child, entity);
+					} else if (getStringEncoder().isConvertable(property.getType())) {
+						value = getStringEncoder().fromString(property.getType(), child.getText());
+					} else {
+						// Should not happen
+						throw new ModelExecutionException("Found property " + property
+								+ " but was unable to deserialize the content of node " + child);
+					}
+					switch (property.getCardinality()) {
+					case SINGLE:
+						handler.invokeSetterForDeserialization(property, value);
+						break;
+					case LIST:
+						handler.invokeAdderForDeserialization(property, value);
+						break;
+					case MAP:
+						throw new UnsupportedOperationException("Cannot deserialize maps for now");
+					default:
+						break;
 					}
 				}
 

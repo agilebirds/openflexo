@@ -17,7 +17,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openflexo.model.ModelContext;
+import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
 import org.openflexo.model.StringEncoder;
@@ -48,7 +48,6 @@ class XMLSerializer {
 
 	private int id = 0;
 	private final ModelFactory modelFactory;
-	private ModelContext modelMapping;
 	private final SerializationPolicy policy;
 
 	public XMLSerializer(ModelFactory modelFactory) {
@@ -58,7 +57,6 @@ class XMLSerializer {
 	public XMLSerializer(ModelFactory modelFactory, SerializationPolicy policy) {
 		this.modelFactory = modelFactory;
 		this.policy = policy;
-		this.modelMapping = modelFactory.getModelContext();
 	}
 
 	private StringEncoder getStringEncoder() {
@@ -120,14 +118,26 @@ class XMLSerializer {
 			ModelEntity<I> modelEntity = handler.getModelEntity();
 			Class<I> implementedInterface = modelEntity.getImplementedInterface();
 			boolean serializeModelEntityName = false;
-			if (modelMapping.getModelEntity(implementedInterface) == null) {
+			XMLElement xmlElement = modelEntity.getXMLElement();
+			String xmlTag = modelEntity.getXMLTag();
+			if (modelFactory.getModelContext().getModelEntity(implementedInterface) == null) {
 				serializeModelEntityName = true;
 				switch (policy) {
 				case EXTENSIVE:
-					modelMapping = new ModelContext(modelEntity.getImplementedInterface(), modelMapping);
+					List<ModelEntity<?>> upperEntities = modelFactory.getModelContext().getUpperEntities(object);
+					if (upperEntities.size() == 0) {
+						throw new ModelDefinitionException("Cannot serialize object of type: " + object.getClass().getName()
+								+ " in context " + context.xmlTag() + ". No model entity could be found in the model mapping");
+					} else if (upperEntities.size() > 1) {
+						throw new ModelDefinitionException("Ambiguous entity for object " + object.getClass().getName()
+								+ ". More than one entities are known in this model mapping.");
+					}
+					ModelEntity e = upperEntities.get(0);
+					xmlTag = e.getXMLTag();
+					modelEntity = ModelContextLibrary.getModelContext(implementedInterface).getModelEntity(implementedInterface);
 					break;
 				case PERMISSIVE:
-					List<ModelEntity<?>> upperEntities = modelMapping.getUpperEntities(object);
+					upperEntities = modelFactory.getModelContext().getUpperEntities(object);
 					if (upperEntities.size() == 0) {
 						throw new ModelDefinitionException("Cannot serialize object of type: " + object.getClass().getName()
 								+ " in context " + context.xmlTag() + ". No model entity could be found in the model mapping");
@@ -142,8 +152,6 @@ class XMLSerializer {
 							+ " cannot be serialized in this model context");
 				}
 			}
-			XMLElement xmlElement = modelEntity.getXMLElement();
-			String xmlTag = modelEntity.getXMLTag();
 			String contextString = context != null ? context.context() : "";
 			String elementName = contextString + xmlTag;
 			String namespace = null;
