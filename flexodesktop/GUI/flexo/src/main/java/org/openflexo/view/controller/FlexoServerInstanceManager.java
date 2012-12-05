@@ -10,7 +10,7 @@ import java.util.List;
 import org.jdom2.JDOMException;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.model.exceptions.InvalidXMLDataException;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.UserType;
@@ -104,7 +104,7 @@ public class FlexoServerInstanceManager {
 				} catch (JDOMException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (InvalidXMLDataException e) {
+				} catch (InvalidDataException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ModelDefinitionException e) {

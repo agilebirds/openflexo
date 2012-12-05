@@ -12,12 +12,11 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.model.exceptions.InvalidXMLDataException;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelContext;
 import org.openflexo.model.factory.ModelContextLibrary;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.xml.InvalidDataException;
+import org.openflexo.model.factory.StringConverterLibrary;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {
@@ -31,7 +30,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		}
 	}
 
-	public static final class ConverterAdapter<T> extends ModelContext.Converter<T> {
+	public static final class ConverterAdapter<T> extends StringConverterLibrary.Converter<T> {
 
 		private final Converter<T> converter;
 
@@ -42,6 +41,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 
 		@Override
 		public T convertFromString(String value, ModelFactory factory) throws InvalidDataException {
+			// Watch out here: converter is of the old type of XMLCode converter, but 'this' is an instance of a PAMELA converter
 			return converter.convertFromString(value);
 		}
 
@@ -186,7 +186,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			throw new PAMELALoadResourceException(this, "XML exception (JDOM): " + e.getMessage());
-		} catch (InvalidXMLDataException e) {
+		} catch (InvalidDataException e) {
 			e.printStackTrace();
 			throw new PAMELALoadResourceException(this, "XML exception (Invalid XML): " + e.getMessage());
 		} catch (ModelDefinitionException e) {

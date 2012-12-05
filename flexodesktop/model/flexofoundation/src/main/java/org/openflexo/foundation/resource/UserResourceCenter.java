@@ -24,7 +24,7 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.exceptions.InvalidXMLDataException;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
@@ -54,7 +54,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			} catch (JDOMException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (InvalidXMLDataException e) {
+			} catch (InvalidDataException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ModelDefinitionException e) {
@@ -188,7 +188,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			} catch (JDOMException e) {
 				e.printStackTrace();
 				throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
-			} catch (InvalidXMLDataException e) {
+			} catch (InvalidDataException e) {
 				e.printStackTrace();
 				throw new IOException("Invalid XML data: " + e.getMessage(), e);
 			} catch (ModelDefinitionException e) {
