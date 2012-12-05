@@ -6,16 +6,21 @@ import java.util.Set;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
 
 // This is a stub, please replace this class
 public class EMFClass implements OntologyClass {
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return null;
+	}
 
 	@Override
 	public String getURI() {
@@ -79,12 +84,6 @@ public class EMFClass implements OntologyClass {
 
 	@Override
 	public String getHTMLDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
 		// TODO Auto-generated method stub
 		return null;
 	}

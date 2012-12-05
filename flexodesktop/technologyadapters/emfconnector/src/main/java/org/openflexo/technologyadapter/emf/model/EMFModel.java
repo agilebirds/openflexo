@@ -12,7 +12,6 @@ import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
@@ -21,7 +20,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFModel, EMFMetaModel>, FlexoOntology {
@@ -31,8 +32,19 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	private EMFModelResource modelResource;
 	private FlexoProject project;
 
-	public EMFModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
+	public EMFModel(String ontologyURI, File xsdFile, EMFTechnologyAdapter adapter) {
 		super();
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return null;
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -177,12 +189,6 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 
 	@Override
 	public String getOntologyURI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
 		// TODO Auto-generated method stub
 		return null;
 	}

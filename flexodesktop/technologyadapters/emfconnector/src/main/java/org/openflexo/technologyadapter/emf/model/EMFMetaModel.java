@@ -11,21 +11,32 @@ import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 
 public class EMFMetaModel extends TemporaryFlexoModelObject implements FlexoMetaModel<EMFMetaModel>, FlexoOntology {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFMetaModel.class.getPackage()
 			.getName());
 
-	public EMFMetaModel(String ontologyURI, File xsdFile, OntologyLibrary library) {
+	public EMFMetaModel(String ontologyURI, File xsdFile, EMFTechnologyAdapter adapter) {
 		super();
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return null;
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		return null;
 	}
 
 	@Override
@@ -152,12 +163,6 @@ public class EMFMetaModel extends TemporaryFlexoModelObject implements FlexoMeta
 
 	@Override
 	public String getOntologyURI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
 		// TODO Auto-generated method stub
 		return null;
 	}

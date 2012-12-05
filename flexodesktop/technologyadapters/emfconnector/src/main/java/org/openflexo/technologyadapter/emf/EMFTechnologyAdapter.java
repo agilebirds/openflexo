@@ -85,7 +85,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	@Override
-	protected EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
+	public EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new EMFModelSlot(viewPoint, this);
 	}
 
