@@ -1,5 +1,8 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -10,7 +13,7 @@ import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.localization.FlexoLocalization;
 
-public class FlexoModelObjectPatternRole extends PatternRole {
+public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoObjectInspectorEntry
 	public static enum FlexoModelObjectType {
@@ -62,7 +65,7 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<? extends FlexoModelObject> getAccessedClass() {
 		if (flexoModelObjectType == null) {
 			return null;
 		}
@@ -94,6 +97,16 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
+	}
+
+	@Override
+	public ModelObjectActorReference<FlexoModelObject> makeActorReference(FlexoModelObject object, EditionPatternReference epRef) {
+		return new ModelObjectActorReference<FlexoModelObject>(object, this, epRef);
 	}
 
 }

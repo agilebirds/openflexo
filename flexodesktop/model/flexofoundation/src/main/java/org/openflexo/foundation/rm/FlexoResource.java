@@ -404,7 +404,9 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	@Override
 	public void setChanged() {
-		getProject().notifyResourceChanged(this);
+		if (getProject() != null) {
+			getProject().notifyResourceChanged(this);
+		}
 	}
 
 	// ==========================================================================
@@ -652,8 +654,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
-				.hasMoreElements();) {
+		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false,
+				getProject() != null ? getProject().getDependancyScheme() : DependencyAlgorithmScheme.Pessimistic); e.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
 				throw new ResourceDependencyLoopException(resource);

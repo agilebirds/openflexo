@@ -102,12 +102,12 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 		builder.append("\n");
 		for (IFlexoOntologyPropertyValue propertyValue : aIndividual.getPropertyValues()) {
 			if (propertyValue instanceof IFlexoOntologyDataPropertyValue) {
-				if (((IFlexoOntologyDataPropertyValue) propertyValue).getValue() != null
-						&& ((IFlexoOntologyDataPropertyValue) propertyValue).getValue().size() != 0) {
+				if (((IFlexoOntologyDataPropertyValue) propertyValue).getValues() != null
+						&& ((IFlexoOntologyDataPropertyValue) propertyValue).getValues().size() != 0) {
 					builder.append("\t PropertyValue - (");
 					builder.append(((IFlexoOntologyDataPropertyValue) propertyValue).getDataProperty().getName());
 					builder.append(" = ");
-					for (Object object : ((IFlexoOntologyDataPropertyValue) propertyValue).getValue()) {
+					for (Object object : ((IFlexoOntologyDataPropertyValue) propertyValue).getValues()) {
 						builder.append(object);
 						builder.append(", ");
 					}
@@ -115,12 +115,12 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 					builder.append(")\n");
 				}
 			} else if (propertyValue instanceof IFlexoOntologyObjectPropertyValue) {
-				if (((IFlexoOntologyObjectPropertyValue) propertyValue).getValue() != null
-						&& ((IFlexoOntologyObjectPropertyValue) propertyValue).getValue().size() != 0) {
+				if (((IFlexoOntologyObjectPropertyValue) propertyValue).getValues() != null
+						&& ((IFlexoOntologyObjectPropertyValue) propertyValue).getValues().size() != 0) {
 					builder.append("\t PropertyValue - (");
 					builder.append(((IFlexoOntologyObjectPropertyValue) propertyValue).getObjectProperty().getName());
 					builder.append(" = ");
-					for (IFlexoOntologyConcept concept : ((IFlexoOntologyObjectPropertyValue) propertyValue).getValue()) {
+					for (IFlexoOntologyConcept concept : ((IFlexoOntologyObjectPropertyValue) propertyValue).getValues()) {
 						builder.append(concept.getName());
 						builder.append(", ");
 					}

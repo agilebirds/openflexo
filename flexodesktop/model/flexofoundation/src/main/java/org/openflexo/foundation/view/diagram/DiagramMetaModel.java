@@ -20,5 +20,9 @@ public interface DiagramMetaModel extends FlexoMetaModel<DiagramMetaModel> {
 			return "http://www.openflexo.org/metamodels/diagrammetamodel";
 		}
 
+		@Override
+		public Object getObject(String objectURI) {
+			return null;
+		}
 	};
 }

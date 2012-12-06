@@ -36,11 +36,11 @@
 			type="unmappedAttributes"
 			description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)" />
 		<property name="editionPatternReferences" type="vector"
-			contains="org.openflexo.foundation.ontology.EditionPatternReference"
+			contains="org.openflexo.foundation.view.EditionPatternReference"
 			primary="yes" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.ontology.EditionPatternReference"
+	<entity name="org.openflexo.foundation.view.EditionPatternReference"
 		xmlTag="EditionPatternReference">
 		<description>EditionPattern references in which this object is
 			involved</description>
@@ -51,26 +51,26 @@
 		<property name="patternRoleName" xmlTag="patternRole"
 			attribute="YES" description="" />
 		<property name="actors"
-			contains="org.openflexo.foundation.ontology.EditionPatternReference$ActorReference"
+			contains="org.openflexo.foundation.view.ActorReference"
 			primary="yes" type="hashtable" key="patternRole" description="" />
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$ActorReference"
+		name="org.openflexo.foundation.view.ActorReference"
 		abstract="yes">
 		<property name="patternRole" xmlTag="patternRole" attribute="YES"
 			description="" />
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$ConceptActorReference"
+		name="org.openflexo.foundation.view.ConceptActorReference"
 		xmlTag="ConceptActorReference">
 		<property name="objectURI" xmlTag="objectURI" attribute="YES"
 			description="" />
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$ObjectPropertyStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementActorReference"
 		xmlTag="ObjectPropertyStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -81,7 +81,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$DataPropertyStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementActorReference"
 		xmlTag="DataPropertyStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -92,7 +92,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$SubClassStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementActorReference"
 		xmlTag="SubClassStatementActorReference">
 		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
 			description="" />
@@ -101,7 +101,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference"
+		name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementActorReference"
 		xmlTag="RestrictionStatementActorReference">
 		<!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
 		<property name="propertyURI" xmlTag="propertyURI" attribute="YES"
@@ -111,7 +111,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.ontology.EditionPatternReference$ModelObjectActorReference"
+		name="org.openflexo.foundation.view.ModelObjectActorReference"
 		xmlTag="ModelObjectActorReference">
 		<property name="objectReference" xmlTag="objectReference"
 			attribute="YES" description="" />

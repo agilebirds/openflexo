@@ -27,6 +27,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 
@@ -34,8 +35,8 @@ public class OWLObjectProperty extends OWLProperty implements IFlexoOntologyObje
 
 	static final Logger logger = Logger.getLogger(IFlexoOntologyObjectProperty.class.getPackage().getName());
 
-	protected OWLObjectProperty(OntProperty anObjectProperty, OWLOntology ontology) {
-		super(anObjectProperty, ontology);
+	protected OWLObjectProperty(OntProperty anObjectProperty, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anObjectProperty, ontology, adapter);
 	}
 
 	@Override

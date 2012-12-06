@@ -52,10 +52,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public IFlexoOntologyStructuralProperty getOntologyProperty() {
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getProperty(_getDataPropertyURI());
-		}
-		return null;
+		return getViewPoint().getOntologyProperty(_getDataPropertyURI());
 	}
 
 	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
@@ -77,8 +74,8 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
-				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType() != null) {
-					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
+				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
+					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
 				}
 			}
 			return Object.class;

@@ -21,6 +21,8 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.List;
+
 /**
  * Concept of structural property.
  * 
@@ -29,5 +31,42 @@ package org.openflexo.foundation.ontology;
  * 
  */
 public interface IFlexoOntologyStructuralProperty extends IFlexoOntologyFeature {
+
+	/**
+	 * Range of property.
+	 * 
+	 * @return
+	 */
+	IFlexoOntologyConcept getDomain();
+
+	/**
+	 * Range of property.
+	 * 
+	 * @return
+	 */
+	IFlexoOntologyObject getRange();
+
+	/**
+	 * Return flag indicating if this property is an annotation property
+	 * 
+	 * @return
+	 */
+	public boolean isAnnotationProperty();
+
+	/**
+	 * Super properties of this property.
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyStructuralProperty> getSuperProperties();
+
+	/**
+	 * Return a vector of properties, accessible from scope defined by supplied ontology, which are declared to be sub-properties of this
+	 * property
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyStructuralProperty> getSubProperties(IFlexoOntology context);
 
 }

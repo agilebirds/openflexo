@@ -10,16 +10,18 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.ModelObjectActorReference;
+import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
-public abstract class GraphicalElementPatternRole extends PatternRole implements Bindable {
+public abstract class GraphicalElementPatternRole<T extends ViewElement> extends PatternRole<T> implements Bindable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
@@ -293,5 +295,10 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	};
 
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE };
+
+	@Override
+	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternReference epRef) {
+		return new ModelObjectActorReference<T>(object, this, epRef);
+	}
 
 }

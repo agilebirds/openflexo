@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
@@ -46,7 +45,6 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	// public static final File CALC_LIBRARY_DIR = new FileResource("Calcs");
 
-	private final OntologyLibrary ontologyLibrary;
 	private final Vector<ViewPoint> calcs;
 	private final Hashtable<String, ViewPoint> map;
 
@@ -56,14 +54,13 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	private final ViewPointFolder rootFolder;
 
-	public ViewPointLibrary(FlexoResourceCenter resourceCenterService, OntologyLibrary anOntologyLibrary) {
+	public ViewPointLibrary(FlexoResourceCenter resourceCenterService) {
 		super();
 
 		editionPatternConverter = new EditionPatternConverter(resourceCenterService);
 		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
 
 		this.resourceCenter = resourceCenterService;
-		ontologyLibrary = anOntologyLibrary;
 		calcs = new Vector<ViewPoint>();
 		map = new Hashtable<String, ViewPoint>();
 		// findCalcs(CALC_LIBRARY_DIR);
@@ -74,7 +71,7 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		rootFolder = new ViewPointFolder("root", null, this);
 
 		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
-		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
+		// StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
 
@@ -134,11 +131,6 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 			ep.finalizeParentEditionPatternDeserialization();
 		}
 		return vp;
-	}
-
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
-		return ontologyLibrary;
 	}
 
 	private XMLMapping VIEW_POINT_MODEL;

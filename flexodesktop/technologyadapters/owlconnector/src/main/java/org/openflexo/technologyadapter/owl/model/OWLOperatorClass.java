@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.ontology.BooleanClassDescription;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -35,8 +37,8 @@ public abstract class OWLOperatorClass extends OWLClass {
 
 	private final BooleanClassDescription booleanClassDescription;
 
-	protected OWLOperatorClass(BooleanClassDescription anOntClass, OWLOntology ontology) {
-		super(anOntClass, ontology);
+	protected OWLOperatorClass(BooleanClassDescription anOntClass, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anOntClass, ontology, adapter);
 		this.booleanClassDescription = anOntClass;
 		operands = new ArrayList<OWLClass>();
 	}

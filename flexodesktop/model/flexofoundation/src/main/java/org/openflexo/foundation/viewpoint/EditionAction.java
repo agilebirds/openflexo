@@ -43,8 +43,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
-		EditionSchemeObject {
+public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -91,7 +90,7 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 		iteration
 	}
 
-	private MS modelSlot;
+	private ModelSlot<M, MM> modelSlot;
 
 	// private EditionScheme _scheme;
 	private String description;
@@ -143,15 +142,15 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 		return null;
 	}
 
-	public final MS getModelSlot() {
+	public final ModelSlot<M, MM> getModelSlot() {
 		return modelSlot;
 	}
 
-	public final void setModelSlot(MS modelSlot) {
+	public final void setModelSlot(ModelSlot<M, MM> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
-	public ModelSlotInstance<MS, M, MM> getModelSlotInstance(EditionSchemeAction action) {
+	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {
 		return action.getView().getModelSlotInstance(getModelSlot());
 	}
 
@@ -170,7 +169,7 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 	 * @param action
 	 * @return
 	 */
-	public static void performBatchOfActions(Collection<EditionAction<?, ?, ?, ?>> actions, EditionSchemeAction contextAction) {
+	public static void performBatchOfActions(Collection<EditionAction<?, ?, ?>> actions, EditionSchemeAction contextAction) {
 
 		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
 
@@ -415,7 +414,7 @@ public abstract class EditionAction<MS extends ModelSlot<M, MM>, M extends Flexo
 	 * 
 	 * @return newly created {@link EditionAction}
 	 */
-	public <A extends EditionAction<MS, M, MM, ?>> A createActionAtCurrentIndex(Class<A> actionClass, MS modelSlot) {
+	public <A extends EditionAction<M, MM, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		insertActionAtCurrentIndex(newAction);
 		return null;

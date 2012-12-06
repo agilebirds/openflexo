@@ -576,7 +576,7 @@ public class TestRM extends FlexoTestCase {
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		resetVariables();
 		_bsHook = null;

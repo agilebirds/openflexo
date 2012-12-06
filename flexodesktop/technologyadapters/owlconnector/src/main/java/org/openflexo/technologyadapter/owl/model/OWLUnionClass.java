@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+
 import com.hp.hpl.jena.ontology.UnionClass;
 
 public class OWLUnionClass extends OWLOperatorClass {
@@ -29,8 +31,8 @@ public class OWLUnionClass extends OWLOperatorClass {
 
 	private final UnionClass ontClass;
 
-	protected OWLUnionClass(UnionClass anOntClass, OWLOntology ontology) {
-		super(anOntClass, ontology);
+	protected OWLUnionClass(UnionClass anOntClass, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(anOntClass, ontology, adapter);
 		this.ontClass = anOntClass;
 		init();
 	}

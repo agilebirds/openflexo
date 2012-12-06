@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.CardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -43,14 +44,14 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 	private OntologicDataType dataRange;
 
 	@Deprecated
-	protected CardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology) {
-		super(aRestriction, ontology);
+	protected CardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(aRestriction, ontology, adapter);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
 	}
 
-	protected CardinalityRestrictionClass(CardinalityRestriction aRestriction, OWLOntology ontology) {
-		super(aRestriction, ontology);
+	protected CardinalityRestrictionClass(CardinalityRestriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(aRestriction, ontology, adapter);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
 	}

@@ -34,8 +34,6 @@ import java.util.logging.Logger;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
@@ -47,6 +45,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.diagram.DiagramMetaModel;
@@ -104,13 +104,18 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		try {
+		/*try {
 			if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
 				logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
 			}
 		} catch (OntologyNotFoundException e) {
 			logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
-		}
+		}*/
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		return null;
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
@@ -326,8 +331,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	 * @param modelSlot
 	 * @return
 	 */
-	public <MS extends ModelSlot<M, MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<MS, M, MM> getModelSlotInstance(
-			MS modelSlot) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> getModelSlotInstance(
+			ModelSlot<M, MM> modelSlot) {
 		// TODO
 		logger.warning("Please implement me");
 		return null;
@@ -369,7 +374,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 				return;
 			}
 		}
-		ModelSlotInstance<ModelSlot<M, MM>, M, MM> instance = new ModelSlotInstance<ModelSlot<M, MM>, M, MM>(this, modelSlot);
+		ModelSlotInstance<M, MM> instance = new ModelSlotInstance<M, MM>(this, modelSlot);
 		instance.setModel(model);
 		modelSlotInstances.add(instance);
 	}

@@ -70,6 +70,7 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
@@ -90,6 +91,7 @@ import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.ontology.UnionClass;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -142,8 +144,20 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	private OWLClass THING_CONCEPT;
 
-	public OWLOntology(String anURI, File owlFile, OWLOntologyLibrary library) {
-		super(null, null);
+	public static OWLOntology createOWLEmptyOntology(String anURI, File owlFile, OWLOntologyLibrary ontologyLibrary,
+			OWLTechnologyAdapter adapter) {
+		OWLOntology returned = new OWLOntology(anURI, owlFile, ontologyLibrary, adapter);
+
+		Model base = ModelFactory.createDefaultModel();
+		returned.ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, ontologyLibrary, base);
+		returned.ontModel.createOntology(anURI);
+		returned.ontModel.setDynamicImports(true);
+		returned.isLoaded = true;
+		return returned;
+	}
+
+	public OWLOntology(String anURI, File owlFile, OWLOntologyLibrary library, OWLTechnologyAdapter adapter) {
+		super(null, null, adapter);
 
 		logger.info("Register ontology " + anURI + " file: " + owlFile);
 
@@ -433,7 +447,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 */
 	@Override
-	public OWLClass getThingConcept() {
+	public OWLClass getRootConcept() {
 		return THING_CONCEPT;
 	}
 
@@ -443,7 +457,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 */
 	public OWLClass getRootClass() {
-		return getThingConcept();
+		return getRootConcept();
 	}
 
 	@Override
@@ -803,7 +817,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	protected OWLClass makeNewClass(OntClass ontClass) {
 		if (StringUtils.isNotEmpty(ontClass.getURI())) {
-			OWLClass aClass = new OWLClass(ontClass, this);
+			OWLClass aClass = new OWLClass(ontClass, this, getTechnologyAdapter());
 			classes.put(ontClass.getURI(), aClass);
 			_classes.put(ontClass, aClass);
 			if (logger.isLoggable(Level.FINE)) {
@@ -860,7 +874,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	protected OWLIndividual makeNewIndividual(Individual individual) {
 		if (StringUtils.isNotEmpty(individual.getURI())) {
-			OWLIndividual anIndividual = new OWLIndividual(individual, this);
+			OWLIndividual anIndividual = new OWLIndividual(individual, this, getTechnologyAdapter());
 			individuals.put(individual.getURI(), anIndividual);
 			_individuals.put(individual, anIndividual);
 			logger.fine("Made new individual for " + anIndividual.getName() + " in " + getOntologyURI());
@@ -914,7 +928,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	protected OWLDataProperty makeNewDataProperty(OntProperty ontProperty) {
 		if (StringUtils.isNotEmpty(ontProperty.getURI())) {
-			OWLDataProperty property = new OWLDataProperty(ontProperty, this);
+			OWLDataProperty property = new OWLDataProperty(ontProperty, this, getTechnologyAdapter());
 			dataProperties.put(ontProperty.getURI(), property);
 			_dataProperties.put(ontProperty, property);
 			logger.fine("Made new data property for " + property.getName() + " in " + getOntologyURI());
@@ -968,7 +982,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	protected OWLObjectProperty makeNewObjectProperty(OntProperty ontProperty) {
 		if (StringUtils.isNotEmpty(ontProperty.getURI())) {
-			OWLObjectProperty property = new OWLObjectProperty(ontProperty, this);
+			OWLObjectProperty property = new OWLObjectProperty(ontProperty, this, getTechnologyAdapter());
 			objectProperties.put(ontProperty.getURI(), property);
 			_objectProperties.put(ontProperty, property);
 			logger.fine("Made new object property for " + property.getName() + " in " + getOntologyURI());
@@ -1139,11 +1153,11 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 
 		else if (resource.canAs(ComplementClass.class)) {
-			returned = new OWLComplementClass(resource.asComplementClass(), getOntology());
+			returned = new OWLComplementClass(resource.asComplementClass(), getOntology(), getTechnologyAdapter());
 		} else if (resource.canAs(UnionClass.class)) {
-			returned = new OWLUnionClass(resource.asUnionClass(), getOntology());
+			returned = new OWLUnionClass(resource.asUnionClass(), getOntology(), getTechnologyAdapter());
 		} else if (resource.canAs(IntersectionClass.class)) {
-			returned = new OWLIntersectionClass(resource.asIntersectionClass(), getOntology());
+			returned = new OWLIntersectionClass(resource.asIntersectionClass(), getOntology(), getTechnologyAdapter());
 		} else {
 			// logger.warning("Unexpected class: " + resource);
 			return null;
@@ -1169,24 +1183,24 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.MAX_QUALIFIED_CARDINALITY);
 
 		if (restriction.isSomeValuesFromRestriction()) {
-			returned = new SomeValuesFromRestrictionClass(restriction.asSomeValuesFromRestriction(), getOntology());
+			returned = new SomeValuesFromRestrictionClass(restriction.asSomeValuesFromRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.isAllValuesFromRestriction()) {
-			returned = new AllValuesFromRestrictionClass(restriction.asAllValuesFromRestriction(), getOntology());
+			returned = new AllValuesFromRestrictionClass(restriction.asAllValuesFromRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.isHasValueRestriction()) {
-			returned = new HasValueRestrictionClass(restriction.asHasValueRestriction(), getOntology());
+			returned = new HasValueRestrictionClass(restriction.asHasValueRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.isCardinalityRestriction()) {
-			returned = new CardinalityRestrictionClass(restriction.asCardinalityRestriction(), getOntology());
+			returned = new CardinalityRestrictionClass(restriction.asCardinalityRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.isMinCardinalityRestriction()) {
-			returned = new MinCardinalityRestrictionClass(restriction.asMinCardinalityRestriction(), getOntology());
+			returned = new MinCardinalityRestrictionClass(restriction.asMinCardinalityRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.isMaxCardinalityRestriction()) {
-			returned = new MaxCardinalityRestrictionClass(restriction.asMaxCardinalityRestriction(), getOntology());
+			returned = new MaxCardinalityRestrictionClass(restriction.asMaxCardinalityRestriction(), getOntology(), getTechnologyAdapter());
 		} else if (restriction.getProperty(ON_CLASS) != null || restriction.getProperty(ON_DATA_RANGE) != null) {
 			if (restriction.getProperty(QUALIFIED_CARDINALITY) != null) {
-				returned = new CardinalityRestrictionClass(restriction, getOntology());
+				returned = new CardinalityRestrictionClass(restriction, getOntology(), getTechnologyAdapter());
 			} else if (restriction.getProperty(MIN_QUALIFIED_CARDINALITY) != null) {
-				returned = new MinCardinalityRestrictionClass(restriction, getOntology());
+				returned = new MinCardinalityRestrictionClass(restriction, getOntology(), getTechnologyAdapter());
 			} else if (restriction.getProperty(MAX_QUALIFIED_CARDINALITY) != null) {
-				returned = new MaxCardinalityRestrictionClass(restriction, getOntology());
+				returned = new MaxCardinalityRestrictionClass(restriction, getOntology(), getTechnologyAdapter());
 			}
 		}
 
@@ -1432,7 +1446,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		isLoaded = true;
 
 		for (Object o : ontModel.listImportedOntologyURIs()) {
-			OWLOntology importedOnt = (OWLOntology) _library.getOntology((String) o);
+			OWLOntology importedOnt = _library.getOntology((String) o);
 			logger.info("importedOnt= " + importedOnt);
 			if (importedOnt != null) {
 				importedOnt.loadWhenUnloaded();
@@ -1857,7 +1871,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 		if (objectURI.endsWith("#")) {
 			String potentialOntologyURI = objectURI.substring(0, objectURI.lastIndexOf("#"));
-			OWLOntology returned = (OWLOntology) getOntologyLibrary().getOntology(ontologyURI);
+			OWLOntology returned = getOntologyLibrary().getOntology(ontologyURI);
 			if (returned != null) {
 				return returned;
 			}
@@ -2019,7 +2033,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		System.out.println("uri: " + findOntologyName(f));
 		FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new File(
 				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
-		resourceCenter.retrieveBaseOntologyLibrary();
+		// resourceCenter.retrieveBaseOntologyLibrary();
 		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());
 		// o.load();
 		/*try {
@@ -2115,6 +2129,11 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	public String getDisplayableDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		return getOntologyObject(objectURI);
 	}
 
 }

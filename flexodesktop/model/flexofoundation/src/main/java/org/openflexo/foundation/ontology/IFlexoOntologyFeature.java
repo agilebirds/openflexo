@@ -36,5 +36,5 @@ public interface IFlexoOntologyFeature extends IFlexoOntologyConcept {
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyFeatureAssociation> getReferencingFeatureAssociations();
+	List<? extends IFlexoOntologyFeatureAssociation> getReferencingFeatureAssociations();
 }

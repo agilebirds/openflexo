@@ -26,11 +26,11 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -88,9 +88,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(objectPropertyURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getObjectProperty(objectPropertyURI);
-			}
+			return getViewPoint().getOntologyObjectProperty(objectPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getObjectProperty();

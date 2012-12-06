@@ -73,9 +73,8 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	private IFlexoOntologyClass type;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
-	private boolean showOWLAndRDFConcepts = false;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	private BindingModel bindingModel;
 
@@ -157,8 +156,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 			if (renderers.get(type) != null) {
 				logger.info("Was " + renderers.get(type).toString() + " now " + expression);
 			}
-			OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null,
-					type.getFlexoOntology());
+			OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null);
 			if (bindingModel.bindingVariableNamed(variableName) != null) {
 				logger.warning("Duplicated binding variable " + variableName);
 				bindingModel.removeFromBindingVariables(bindingModel.bindingVariableNamed(variableName));
@@ -242,8 +240,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			IFlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
-					.getOntology(ontologyURI);
+			IFlexoOntology context = getProject().getFlexoOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}
@@ -258,7 +255,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	public void setContext(IFlexoOntology context) {
 		this.context = context;
 		update();
-		setRepresentationForIndividualOfClass("defaultIndividual", "defaultIndividual.uriName", context.getThingConcept());
+		setRepresentationForIndividualOfClass("defaultIndividual", "defaultIndividual.uriName", context.getRootConcept());
 	}
 
 	public IFlexoOntologyClass getType() {
@@ -310,16 +307,6 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getContext()) {
@@ -343,7 +330,6 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 			model.setShowObjectProperties(false);
 			model.setShowDataProperties(false);
 			model.setShowAnnotationProperties(false);
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
 		}
 		return model;

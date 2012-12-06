@@ -20,13 +20,12 @@
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
 import org.openflexo.foundation.view.diagram.DiagramMetaModel;
-import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public abstract class DiagramAction<T extends ViewObject> extends AssignableAction<DiagramModelSlot, View, DiagramMetaModel, T> {
+public abstract class DiagramAction<T extends ViewObject> extends AssignableAction<View, DiagramMetaModel, T> {
 
 	public DiagramAction(ViewPointBuilder builder) {
 		super(builder);

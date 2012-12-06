@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.MaxCardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -42,14 +43,14 @@ public class MaxCardinalityRestrictionClass extends OntologyRestrictionClass {
 	private int maxCardinality = -1;
 	private OntologicDataType dataRange;
 
-	protected MaxCardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology) {
-		super(aRestriction, ontology);
+	protected MaxCardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(aRestriction, ontology, adapter);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
 	}
 
-	protected MaxCardinalityRestrictionClass(MaxCardinalityRestriction aRestriction, OWLOntology ontology) {
-		super(aRestriction, ontology);
+	protected MaxCardinalityRestrictionClass(MaxCardinalityRestriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+		super(aRestriction, ontology, adapter);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
 	}

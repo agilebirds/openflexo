@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.owl.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,6 +40,7 @@ import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 
@@ -53,6 +55,8 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	private static final Logger logger = Logger.getLogger(OWLOntologyResource.class.getPackage().getName());
 
 	private OWLOntologyLibrary ontologyLibrary = null;
+	private String ontologyURI;
+	private File absoluteFile;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -68,12 +72,30 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		super(aProject);
 	}
 
+	public OWLOntologyResource(File owlFile, OWLOntologyLibrary ontologyLibrary) {
+		super((FlexoProject) null);
+		this.ontologyURI = OWLOntology.findOntologyURI(owlFile);
+		absoluteFile = owlFile;
+		setOntologyLibrary(ontologyLibrary);
+	}
+
+	@Override
+	public String getURI() {
+		return ontologyURI;
+	}
+
+	@Override
+	public File getFile() {
+		return absoluteFile;
+	}
+
 	public OWLOntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
 	}
 
 	public void setOntologyLibrary(OWLOntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
+		ontologyLibrary.registerOntology(this);
 	}
 
 	/*public OWLOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
@@ -101,7 +123,10 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 
 	@Override
 	public String getName() {
-		return getProject().getProjectName();
+		if (getProject() != null) {
+			return getProject().getProjectName();
+		}
+		return getURI();
 	}
 
 	@Override
@@ -114,11 +139,14 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		// Not allowed
 	}
 
+	public OWLTechnologyAdapter getTechnologyAdapter() {
+		return null;
+	}
+
 	@Override
 	public OWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
 
-		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary());
-		getOntologyLibrary().registerOntology(ontology);
+		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
 		setChanged();
 		notifyObservers(new OntologyImported(ontology));
 
@@ -182,6 +210,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		}
 
 		logger.info("Wrote " + getFile());
+
 	}
 
 }

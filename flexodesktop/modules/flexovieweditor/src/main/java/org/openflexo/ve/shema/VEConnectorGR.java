@@ -29,7 +29,7 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.model.ElementUpdated;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;

@@ -33,8 +33,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
@@ -97,7 +97,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
-		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 

@@ -34,16 +34,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.localization.Language;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -62,7 +59,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			.getName());
 
 	private final File originalXsdFile;
-	private final OntologyLibrary library;
 	private XSSchemaSet schemaSet;
 	private XSDeclarationsFetcher fetcher;
 
@@ -76,25 +72,28 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	private final Map<String, XSOntDataProperty> dataProperties = new HashMap<String, XSOntDataProperty>();
 	private final Map<String, XSOntObjectProperty> objectProperties = new HashMap<String, XSOntObjectProperty>();
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
+	private final Map<XSSimpleType, XSDDataType> dataTypes = new HashMap<XSSimpleType, XSDDataType>();
 
-	public XSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
-		super(null, computeName(xsdFile), ontologyURI);
+	public XSOntology(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
+		super(null, computeName(xsdFile), ontologyURI, adapter);
 		this.originalXsdFile = xsdFile;
-		this.library = library;
 	}
 
 	private static String computeName(File xsdFile) {
 		return xsdFile.getName();
 	}
 
-	@Override
 	public String getOntologyURI() {
 		return getURI();
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return getOntologyLibrary().getProject();
+	public List<XSOntology> getImportedOntologies() {
+		return null;
+	}
+
+	public Set<XSOntology> getAllImportedOntologies() {
+		return OntologyUtils.getAllImportedOntologies(this);
 	}
 
 	@Override
@@ -120,11 +119,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return fetcher;
 	}
 
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
-		return library;
-	}
-
 	private boolean addClass(XSOntClass c) {
 		if (classes.containsKey(c.getURI()) == false) {
 			classes.put(c.getURI(), c);
@@ -134,7 +128,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	@Override
-	public XSOntClass getThingConcept() {
+	public XSOntClass getRootConcept() {
 		return thingClass;
 	}
 
@@ -149,7 +143,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	private XSOntClass loadClass(XSDeclaration declaration) {
 		String name = declaration.getName();
 		String uri = fetcher.getUri(declaration);
-		XSOntClass xsClass = new XSOntClass(this, name, uri);
+		XSOntClass xsClass = new XSOntClass(this, name, uri, getTechnologyAdapter());
 		classes.put(uri, xsClass);
 		return xsClass;
 	}
@@ -157,18 +151,18 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	private void loadClasses() {
 		// TODO if a declaration (base) type is derived, get the correct superclass
 		classes.clear();
-		thingClass = new XSOntClass(this, "Thing", XS_THING_URI);
+		thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
 		addClass(thingClass);
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
 			XSOntClass xsClass = loadClass(complexType);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addToSuperClasses(getRootConcept());
 		}
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
 				try {
 					XSOntClass superClass = classes.get(fetcher.getUri(element.getType()));
-					xsClass.addSuperClass(superClass);
+					xsClass.addToSuperClasses(superClass);
 				} catch (Exception e) {
 
 				}
@@ -177,33 +171,21 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
 			XSOntClass xsClass = loadClass(attGroup);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addToSuperClasses(getRootConcept());
 		}
 		for (XSModelGroupDecl modelGroup : fetcher.getModelGroupDecls()) {
 			XSOntClass xsClass = loadClass(modelGroup);
-			xsClass.addSuperClass(getThingConcept());
+			xsClass.addToSuperClasses(getRootConcept());
 		}
 	}
 
-	public static boolean isFromW3(XSDeclaration decl) {
-		return decl.getTargetNamespace().equals(W3_NAMESPACE);
-	}
-
-	private static OntologicDataType computeDataType(XSSimpleType simpleType) {
-		String dataTypeURI = null;
-		if (isFromW3(simpleType)) {
-			dataTypeURI = W3_URI + "#" + simpleType.getName();
-		} else {
-			dataTypeURI = W3_URI + "#" + simpleType.getBaseType().getName();
+	private XSDDataType computeDataType(XSSimpleType simpleType) {
+		XSDDataType returned = dataTypes.get(simpleType);
+		if (returned == null) {
+			returned = new XSDDataType(simpleType, this, getTechnologyAdapter());
+			dataTypes.put(simpleType, returned);
 		}
-		OntologicDataType result = OntologicDataType.fromURI(dataTypeURI);
-		if (result == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not map a data type: " + dataTypeURI + ", String will be used instead.");
-			}
-			return OntologicDataType.String;
-		}
-		return result;
+		return returned;
 	}
 
 	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
@@ -220,7 +202,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
 		String name = declaration.getName();
 		String uri = fetcher.getUri(declaration);
-		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri);
+		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri, getTechnologyAdapter());
 		dataProperties.put(uri, xsDataProperty);
 		addDomainIfPossible(xsDataProperty, uri);
 		return xsDataProperty;
@@ -249,7 +231,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		String prefix = parent.getName();
 		String name = prefix + declaration.getName();
 		String uri = fetcher.getNamespace(declaration) + "#" + name;
-		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri);
+		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri, getTechnologyAdapter());
 		property.addSuperProperty(parent);
 		objectProperties.put(property.getURI(), property);
 		return property;
@@ -257,9 +239,9 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 	private void loadObjectProperties() {
 		objectProperties.clear();
-		XSOntObjectProperty hasChild = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME);
+		XSOntObjectProperty hasChild = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME, getTechnologyAdapter());
 		objectProperties.put(hasChild.getURI(), hasChild);
-		XSOntObjectProperty hasParent = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME);
+		XSOntObjectProperty hasParent = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME, getTechnologyAdapter());
 		objectProperties.put(hasParent.getURI(), hasParent);
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
@@ -302,8 +284,9 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			XSDeclaration declaration = fetcher.getDeclaration(xsClass.getURI());
 			if (fetcher.getAttributeUses(declaration) != null) {
 				for (XSAttributeUse attributeUse : fetcher.getAttributeUses(declaration)) {
-					XSOntAttributeRestriction restriction = new XSOntAttributeRestriction(this, attributeUse);
-					xsClass.addSuperClass(restriction);
+					XSOntAttributeRestriction restriction = new XSOntAttributeRestriction(this, xsClass, attributeUse,
+							getTechnologyAdapter());
+					xsClass.addToSuperClasses(restriction);
 				}
 			}
 		}
@@ -316,8 +299,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	private void clearAllRangeAndDomain() {
-		clearPropertiesTakingMyselfAsRangeOrDomain();
-		for (AbstractXSOntObject o : classes.values()) {
+		for (XSOntClass o : classes.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
 		for (XSOntDataProperty o : dataProperties.values()) {
@@ -330,7 +312,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			o.resetRange();
 			o.clearSuperProperties();
 		}
-		for (AbstractXSOntObject o : individuals.values()) {
+		for (XSOntIndividual o : individuals.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
 	}
@@ -359,7 +341,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return isLoaded;
 	}
 
-	@Override
 	public boolean loadWhenUnloaded() {
 		if (isLoaded() == false) {
 			return load();
@@ -367,12 +348,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return false;
 	}
 
-	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
 
-	@Override
 	public boolean isLoading() {
 		return isLoading;
 	}
@@ -400,20 +379,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	@Override
-	public List<XSOntology> getAllImportedOntologies() {
-		List<XSOntology> result = new ArrayList<XSOntology>(1);
-		result.add(this);
-		return result;
-	}
-
-	@Override
-	public List<XSOntology> getImportedOntologies() {
-		List<XSOntology> result = new ArrayList<XSOntology>(1);
-		result.add(this);
-		return result;
-	}
-
-	@Override
 	public List<XSOntClass> getClasses() {
 		return new ArrayList<XSOntClass>(classes.values());
 	}
@@ -422,7 +387,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntClass getClass(String classURI) {
 		XSOntClass result = classes.get(classURI);
 		if (result == null) {
-			for (XSOntology o : getAllImportedOntologies()) {
+			for (XSOntology o : getImportedOntologies()) {
 				if (o != this) {
 					result = o.getClass(classURI);
 					if (result != null) {
@@ -440,7 +405,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public List<XSOntClass> getAccessibleClasses() {
 		Map<String, XSOntClass> result = new HashMap<String, XSOntClass>();
-		for (XSOntology o : getAllImportedOntologies()) {
+		for (XSOntology o : OntologyUtils.getAllImportedOntologies(this)) {
 			for (XSOntClass c : o.getClasses()) {
 				result.put(c.getURI(), c);
 			}
@@ -520,8 +485,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return new ArrayList<XSOntIndividual>(result.values());
 	}
 
-	@Override
-	public XSOntIndividual createOntologyIndividual(String name, IFlexoOntologyClass type) throws DuplicateURIException {
+	public XSOntIndividual createOntologyIndividual(String name, XSOntClass type) throws DuplicateURIException {
 		String uri = getURI() + "#" + name;
 		if (getOntologyObject(uri) != null) {
 			throw new DuplicateURIException(uri);
@@ -532,8 +496,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			}
 			return null;
 		}
-		XSOntIndividual individual = new XSOntIndividual(this, name, uri);
-		individual.addType(type);
+		XSOntIndividual individual = new XSOntIndividual(this, name, uri, getTechnologyAdapter());
+		individual.setType(type);
 		individuals.put(individual.getURI(), individual);
 		return individual;
 	}
@@ -550,45 +514,21 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
-	@Override
-	public IFlexoOntologyClass createOntologyClass(String name) throws DuplicateURIException {
+	public XSOntClass createOntologyClass(String name) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public IFlexoOntologyDataProperty createDataProperty(String name, IFlexoOntologyDataProperty superProperty, IFlexoOntologyClass domain,
-			OntologicDataType dataType) throws DuplicateURIException {
+	public XSOntClass createOntologyClass(String name, XSOntClass superClass) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty, IFlexoOntologyClass domain,
-			IFlexoOntologyClass range) throws DuplicateURIException {
+	public XSOntDataProperty createDataProperty(String name, XSOntDataProperty superProperty, XSOntClass domain, XSDDataType dataType)
+			throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public IFlexoOntologyClass createOntologyClass(String name, IFlexoOntologyClass superClass) throws DuplicateURIException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language) {
+	public XSOntObjectProperty createObjectProperty(String name, XSOntObjectProperty superProperty, XSOntClass domain, XSOntClass range)
+			throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -605,6 +545,91 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public String getDisplayableDescription() {
 		return "Ontology " + getName();
+	}
+
+	public Object getObject(String objectURI) {
+		return getOntologyObject(objectURI);
+	}
+
+	@Override
+	public List<IFlexoOntologyContainer> getSubContainers() {
+		// TODO implement this
+		return null;
+	}
+
+	@Override
+	public List<AbstractXSOntConcept> getConcepts() {
+		ArrayList<AbstractXSOntConcept> returned = new ArrayList<AbstractXSOntConcept>();
+		returned.addAll(classes.values());
+		returned.addAll(individuals.values());
+		returned.addAll(objectProperties.values());
+		returned.addAll(dataProperties.values());
+		return returned;
+	}
+
+	@Override
+	public List<XSDDataType> getDataTypes() {
+		ArrayList<XSDDataType> returned = new ArrayList<XSDDataType>();
+		return returned;
+	}
+
+	@Override
+	public String getVersion() {
+		// TODO implement this
+		return null;
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyAnnotation> getAnnotations() {
+		// TODO implement this
+		return null;
+	}
+
+	@Override
+	public AbstractXSOntConcept getDeclaredOntologyObject(String objectURI) {
+		AbstractXSOntConcept result = getDeclaredClass(objectURI);
+		if (result == null) {
+			result = getDeclaredProperty(objectURI);
+		}
+		if (result == null) {
+			result = getDeclaredIndividual(objectURI);
+		}
+		return result;
+	}
+
+	@Override
+	public XSOntClass getDeclaredClass(String classURI) {
+		return classes.get(classURI);
+	}
+
+	@Override
+	public XSOntIndividual getDeclaredIndividual(String individualURI) {
+		return individuals.get(individualURI);
+	}
+
+	@Override
+	public XSOntObjectProperty getDeclaredObjectProperty(String propertyURI) {
+		return objectProperties.get(propertyURI);
+	}
+
+	@Override
+	public XSOntDataProperty getDeclaredDataProperty(String propertyURI) {
+		return dataProperties.get(propertyURI);
+	}
+
+	@Override
+	public XSOntProperty getDeclaredProperty(String objectURI) {
+		XSOntProperty result = getDeclaredObjectProperty(objectURI);
+		if (result == null) {
+			result = getDeclaredDataProperty(objectURI);
+		}
+		return result;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

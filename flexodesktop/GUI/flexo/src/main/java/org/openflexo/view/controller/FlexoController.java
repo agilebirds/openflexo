@@ -103,7 +103,6 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -1857,9 +1856,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
-		} else if (object instanceof OntologyLibrary) {
+		} /*else if (object instanceof OntologyLibrary) {
 			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
-		} else if (object instanceof RepositoryFolder) {
+			}*/else if (object instanceof RepositoryFolder) {
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);

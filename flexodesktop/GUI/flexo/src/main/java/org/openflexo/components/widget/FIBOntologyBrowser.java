@@ -32,8 +32,8 @@ import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -76,14 +76,12 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 
 	private IFlexoOntologyClass domain = null;
 	private IFlexoOntologyClass range = null;
-	private OntologicDataType dataType = null;
-
-	private boolean showOWLAndRDFConcepts = false;
+	private BuiltInDataType dataType = null;
 
 	private boolean allowsSearch = true;
 	private boolean displayOptions = true;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	private boolean isSearching = false;
 	private String filteredName;
@@ -104,7 +102,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntology(IFlexoOntology context) {
 		this.ontology = context;
-		ontology.loadWhenUnloaded();
+		// ontology.loadWhenUnloaded();
 		update();
 	}
 
@@ -216,16 +214,6 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public IFlexoOntologyClass getDomain() {
 		return domain;
 	}
@@ -246,12 +234,12 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
 	@CustomComponentParameter(name = "dataType", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 		update();
 	}
@@ -279,7 +267,6 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.setShowObjectProperties(getShowObjectProperties());
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.setDomain(getDomain());
 			model.setRange(getRange());
 			model.setDataType(getDataType());

@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Statement;
 
@@ -35,8 +36,8 @@ public abstract class OWLStatement extends AbstractOWLObject implements Inspecta
 
 	private final Statement _statement;
 
-	public OWLStatement(OWLObject<?> subject, Statement s) {
-		super();
+	public OWLStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+		super(adapter);
 		_subject = subject;
 		_statement = s;
 

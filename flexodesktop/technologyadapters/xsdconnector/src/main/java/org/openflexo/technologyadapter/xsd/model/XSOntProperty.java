@@ -19,17 +19,23 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
-public abstract class XSOntProperty extends AbstractXSOntObject implements IFlexoOntologyStructuralProperty, XSOntologyURIDefinitions {
+public abstract class XSOntProperty extends AbstractXSOntConcept implements IFlexoOntologyStructuralProperty, XSOntologyURIDefinitions {
 
-	private AbstractXSOntObject domain;
+	private XSOntClass domain;
 	private boolean noDomainFoundYet = true;
+	private List<XSOntRestriction> referencingRestrictions;
 
-	protected XSOntProperty(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
-		domain = ontology.getThingConcept();
+	protected XSOntProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
+		domain = ontology.getRootConcept();
+		referencingRestrictions = new ArrayList<XSOntRestriction>();
 	}
 
 	@Override
@@ -38,22 +44,48 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements IFlex
 	}
 
 	@Override
-	public IFlexoOntologyConcept getDomain() {
+	public XSOntClass getDomain() {
 		return domain;
 	}
 
-	public void newDomainFound(AbstractXSOntObject domain) {
+	public void newDomainFound(XSOntClass domain) {
 		if (noDomainFoundYet) {
 			this.domain = domain;
 			noDomainFoundYet = false;
 		} else {
-			this.domain = getOntology().getThingConcept();
+			this.domain = getOntology().getRootConcept();
 		}
 	}
 
 	public void resetDomain() {
-		this.domain = getOntology().getThingConcept();
+		this.domain = getOntology().getRootConcept();
 		noDomainFoundYet = true;
 	}
 
+	@Override
+	public XSOntology getContainer() {
+		return getOntology();
+	}
+
+	@Override
+	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+		return null;
+	}
+
+	public List<XSOntRestriction> getReferencingRestrictions() {
+		return referencingRestrictions;
+	}
+
+	public void addToReferencingRestriction(XSOntRestriction aRestriction) {
+		referencingRestrictions.add(aRestriction);
+	}
+
+	public void removeFromReferencingRestriction(XSOntRestriction aRestriction) {
+		referencingRestrictions.remove(aRestriction);
+	}
+
+	@Override
+	public List<XSOntRestriction> getReferencingFeatureAssociations() {
+		return getReferencingRestrictions();
+	}
 }

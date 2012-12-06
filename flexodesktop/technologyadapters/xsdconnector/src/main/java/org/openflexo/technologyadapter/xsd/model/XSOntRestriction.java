@@ -19,10 +19,16 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
-public abstract class XSOntRestriction extends XSOntClass {
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
-	protected XSOntRestriction(XSOntology ontology) {
-		super(ontology, null, null);
+public abstract class XSOntRestriction extends XSOntClass implements IFlexoOntologyFeatureAssociation {
+
+	private final XSOntClass domainClass;
+
+	protected XSOntRestriction(XSOntology ontology, XSOntClass domainClass, XSDTechnologyAdapter adapter) {
+		super(ontology, null, null, adapter);
+		this.domainClass = domainClass;
 	}
 
 	public boolean isAttributeRestriction() {
@@ -36,4 +42,10 @@ public abstract class XSOntRestriction extends XSOntClass {
 		return null;
 	}
 
+	@Override
+	public XSOntClass getDomain() {
+		return domainClass;
+	}
+
+	public abstract XSOntProperty getProperty();
 }

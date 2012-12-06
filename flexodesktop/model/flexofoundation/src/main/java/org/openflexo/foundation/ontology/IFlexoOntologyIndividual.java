@@ -31,11 +31,25 @@ import java.util.List;
  */
 public interface IFlexoOntologyIndividual extends IFlexoOntologyConcept {
 	/**
-	 * Types of Individual.
+	 * Return types of Individual.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyClass> getTypes();
+	public List<? extends IFlexoOntologyClass> getTypes();
+
+	/**
+	 * Add supplied type to the list of types implemented by this individual
+	 * 
+	 * @param aType
+	 */
+	public void addToTypes(IFlexoOntologyClass aType);
+
+	/**
+	 * Remove supplied type from the list of types implemented by this individual
+	 * 
+	 * @param aType
+	 */
+	public void removeFromTypes(IFlexoOntologyClass aType);
 
 	/**
 	 * Is this an Individual of aClass.
@@ -43,12 +57,42 @@ public interface IFlexoOntologyIndividual extends IFlexoOntologyConcept {
 	 * @param aClass
 	 * @return
 	 */
-	boolean isIndividualOf(IFlexoOntologyClass aClass);
+	public boolean isIndividualOf(IFlexoOntologyClass aClass);
 
 	/**
 	 * Property Values.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyPropertyValue> getPropertyValues();
+	public List<? extends IFlexoOntologyPropertyValue> getPropertyValues();
+
+	/**
+	 * Return the {@link IFlexoOntologyPropertyValue} matching supplied property and defined for this individual<br>
+	 * If no values were defined for supplied property, return null
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property);
+
+	/**
+	 * Add newValue as a value for supplied property<br>
+	 * Return the {@link IFlexoOntologyPropertyValue} matching supplied property and defined for this individual<br>
+	 * 
+	 * @param property
+	 * @param newValue
+	 * @return
+	 */
+	public IFlexoOntologyPropertyValue addToPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue);
+
+	/**
+	 * Remove valueToRemove from list of values for supplied property<br>
+	 * Return the {@link IFlexoOntologyPropertyValue} matching supplied property and defined for this individual<br>
+	 * If the supplied valueToRemove parameter was the only value defined for supplied property for this individual, return null
+	 * 
+	 * @param property
+	 * @param valueToRemove
+	 * @return
+	 */
+	public IFlexoOntologyPropertyValue removeFromPropertyValue(IFlexoOntologyStructuralProperty property, Object valueToRemove);
 }

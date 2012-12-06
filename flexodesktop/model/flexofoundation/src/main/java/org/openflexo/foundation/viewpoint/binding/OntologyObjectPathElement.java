@@ -13,17 +13,17 @@ import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
-import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.localization.FlexoLocalization;
 
 public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implements SimplePathElement<T>, BindingVariable<T> {
@@ -36,19 +36,19 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 	private SimpleBindingPathElementImpl uriProperty;
 
 	protected List<BindingPathElement> allProperties;
-	private Vector<StatementPathElement> accessibleStatements;
+	// private Vector<StatementPathElement> accessibleStatements;
 
 	private IFlexoOntology viewpointOntology;
 
 	public static final int MAX_LEVELS = 3;
 
-	public OntologyObjectPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
+	public OntologyObjectPathElement(String name, BindingPathElement aParentElement) {
 		super();
 		this.name = name;
 		parentElement = aParentElement;
 		this.viewpointOntology = viewpointOntology;
 		allProperties = new Vector<BindingPathElement>();
-		accessibleStatements = new Vector<StatementPathElement>();
+		// accessibleStatements = new Vector<StatementPathElement>();
 		uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY, TypeUtils.getBaseClass(getType()),
 				String.class, true, "uri_name_as_supplied_in_ontology") {
 			@Override
@@ -116,9 +116,9 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 					if (array[i].getName().equals(array[j].getName())) {
 						// Detected name based shadowing between array[i] and array[j]
 						// System.out.println("Detected name based shadowing between " + array[i] + " and " + array[j]);
-						if (array[i].getFlexoOntology().getAllImportedOntologies().contains(array[j].getFlexoOntology())) {
+						if (OntologyUtils.getAllImportedOntologies(array[i].getOntology()).contains(array[j].getOntology())) {
 							// array[i] appears to be the most specialized, don't do anything
-						} else if (array[j].getFlexoOntology().getAllImportedOntologies().contains(array[i].getFlexoOntology())) {
+						} else if (OntologyUtils.getAllImportedOntologies(array[j].getOntology()).contains(array[i].getOntology())) {
 							// array[j] appears to be the most specialized, we need to swap
 							i1.add(i);
 							i2.add(j);
@@ -134,7 +134,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 				// Swapping p1 and p2
 			}
 
-			for (final IFlexoOntologyStructuralProperty property : array) {
+			/*for (final IFlexoOntologyStructuralProperty property : array) {
 				StatementPathElement<?> propertyPathElement = null;
 				if (property instanceof IFlexoOntologyObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
@@ -147,14 +147,14 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 					accessibleStatements.add(propertyPathElement);
 					allProperties.add(propertyPathElement);
 				}
-			}
+			}*/
 			propertiesFound = true;
 		}
 	}
 
 	public IFlexoOntologyClass getOntologicType() {
 		if (getViewpointOntology() != null) {
-			return getViewpointOntology().getThingConcept();
+			return getViewpointOntology().getRootConcept();
 		}
 		return null;
 	}
@@ -227,12 +227,11 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 		private IFlexoOntologyClass ontologyType;
 
 		public OntologyClassPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			this(name, viewpointOntology.getThingConcept(), aParentElement, viewpointOntology);
+			this(name, viewpointOntology.getRootConcept(), aParentElement);
 		}
 
-		public OntologyClassPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement,
-				IFlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyClassPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 			this.ontologyType = ontologyType;
 			/*accessibleStatements = new Vector<StatementPathElement>();
 			if (ontologyType != null) {
@@ -271,7 +270,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 				return ontologyType;
 			}
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getThingConcept();
+				return getViewpointOntology().getRootConcept();
 			}
 			return null;
 		}
@@ -282,12 +281,11 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 		private IFlexoOntologyClass ontologyType;
 
 		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			this(name, null, aParentElement, viewpointOntology);
+			this(name, null, aParentElement);
 		}
 
-		public OntologyIndividualPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement,
-				IFlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyIndividualPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 			this.ontologyType = ontologyType;
 			/*accessibleStatements = new Vector<StatementPathElement>();
 			if (ontologyType != null) {
@@ -318,16 +316,17 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 				return ontologyType;
 			}
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getThingConcept();
+				return getViewpointOntology().getRootConcept();
 			}
 			return null;
 		}
 
 	}
 
-	public static abstract class OntologyPropertyPathElement<T extends IFlexoOntologyStructuralProperty> extends OntologyObjectPathElement<T> {
-		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+	public static abstract class OntologyPropertyPathElement<T extends IFlexoOntologyStructuralProperty> extends
+			OntologyObjectPathElement<T> {
+		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -338,8 +337,8 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 	}
 
 	public static class OntologyDataPropertyPathElement extends OntologyPropertyPathElement<IFlexoOntologyDataProperty> {
-		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -349,17 +348,17 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 		@Override
 		public IFlexoOntologyClass getOntologicType() {
-			if (getViewpointOntology() != null) {
+			/*if (getViewpointOntology() != null) {
 				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_DATA_PROPERTY_URI);
-			}
+			}*/
 			return null;
 		}
 
 	}
 
 	public static class OntologyObjectPropertyPathElement extends OntologyPropertyPathElement<IFlexoOntologyObjectProperty> {
-		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			super(name, aParentElement, viewpointOntology);
+		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement) {
+			super(name, aParentElement);
 		}
 
 		@Override
@@ -369,9 +368,9 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 		@Override
 		public IFlexoOntologyClass getOntologicType() {
-			if (getViewpointOntology() != null) {
+			/*if (getViewpointOntology() != null) {
 				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_OBJECT_PROPERTY_URI);
-			}
+			}*/
 			return null;
 		}
 

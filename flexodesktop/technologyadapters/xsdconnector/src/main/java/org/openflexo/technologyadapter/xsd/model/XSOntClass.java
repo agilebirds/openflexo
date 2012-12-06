@@ -20,24 +20,27 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
-public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyClass, XSOntologyURIDefinitions {
+public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyClass, XSOntologyURIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntClass.class.getPackage()
 			.getName());
 
 	private final List<XSOntClass> superClasses = new ArrayList<XSOntClass>();
+	private final List<XSOntRestriction> restrictions = new ArrayList<XSOntRestriction>();
 
-	protected XSOntClass(XSOntology ontology, String name, String uri) {
-		super(ontology, name, uri);
+	protected XSOntClass(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
+		super(ontology, name, uri, adapter);
 	}
 
 	@Override
@@ -62,24 +65,27 @@ public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyCla
 	}
 
 	@Override
-	public Set<XSOntClass> getAllSuperClasses() {
-		Set<XSOntClass> result = new HashSet<XSOntClass>();
-		result.addAll(getSuperClasses());
-		for (XSOntClass c : getSuperClasses()) {
-			result.addAll(c.getAllSuperClasses());
-		}
-		return result;
-	}
-
-	@Override
-	public Object addSuperClass(IFlexoOntologyClass aClass) {
-		if (aClass instanceof XSOntClass == false) {
+	public void addToSuperClasses(IFlexoOntologyClass aClass) {
+		if (!(aClass instanceof XSOntClass)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Class " + aClass + " is not a XSOntClass");
 			}
-			return null;
+			return;
+		}
+		if (aClass instanceof XSOntRestriction) {
+			restrictions.add((XSOntRestriction) aClass);
 		}
 		superClasses.add((XSOntClass) aClass);
+	}
+
+	@Override
+	public void removeFromSuperClasses(IFlexoOntologyClass aClass) {
+		superClasses.remove(aClass);
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -89,7 +95,7 @@ public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyCla
 	}
 
 	@Override
-	public boolean isThing() {
+	public boolean isRootConcept() {
 		return isNamedClass() && getURI().equals(XS_THING_URI);
 	}
 
@@ -118,4 +124,18 @@ public class XSOntClass extends AbstractXSOntObject implements IFlexoOntologyCla
 		}
 	}
 
+	@Override
+	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public XSOntology getContainer() {
+		return getOntology();
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+		return restrictions;
+	}
 }

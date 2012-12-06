@@ -5,15 +5,12 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationModified;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ShapePatternRole extends GraphicalElementPatternRole {
+public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ShapeGraphicalRepresentation.
@@ -85,7 +82,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Class<ViewShape> getAccessedClass() {
 		return ViewShape.class;
 	}
 

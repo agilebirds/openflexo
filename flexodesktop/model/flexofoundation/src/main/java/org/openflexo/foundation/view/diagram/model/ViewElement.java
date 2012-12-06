@@ -35,8 +35,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -167,7 +167,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		return null;
 	}
 
-	public GraphicalElementPatternRole getPatternRole() {
+	public GraphicalElementPatternRole<?> getPatternRole() {
 		EditionPatternReference ref = getEditionPatternReference();
 		if (ref != null && ref.getPatternRole() instanceof GraphicalElementPatternRole) {
 			return (GraphicalElementPatternRole) ref.getPatternRole();

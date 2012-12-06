@@ -27,9 +27,9 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 
 /**
  * An abstract implementation of a {@link FlexoResourceCenter} based on a file system.
@@ -45,8 +45,8 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	private File rootDirectory;
 
-	private HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, ModelRepository<?, ?, ?, ?>>();
-	private HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?, ?>, MetaModelRepository<?, ?, ?, ?>>();
+	private HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>>();
+	private HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>>();
 
 	public FileSystemBasedResourceCenter(File rootDirectory) {
 		super();
@@ -58,54 +58,66 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	}
 
 	@Override
+	public String toString() {
+		return super.toString() + " directory=" + getRootDirectory().getAbsolutePath();
+	}
+
+	@Override
 	public void initialize(TechnologyAdapterService technologyAdapterService) {
 		logger.info("Initializing " + technologyAdapterService);
-		for (TechnologyAdapter<?, ?, ?> adapter : technologyAdapterService.getTechnologyAdapters()) {
+		for (TechnologyAdapter<?, ?> adapter : technologyAdapterService.getTechnologyAdapters()) {
 			logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
-			initializeForTechnology(adapter);
+			TechnologyContextManager<?, ?> technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
+			initializeForTechnology(adapter, technologyContextManager);
 		}
 	}
 
-	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>, TA extends TechnologyAdapter<M, MM, MS>> void initializeForTechnology(
-			TA technologyAdapter) {
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void initializeForTechnology(
+			TA technologyAdapter, TechnologyContextManager<?, ?> technologyContextManager) {
 		MetaModelRepository<MMR, M, MM, TA> mmRepository = (MetaModelRepository<MMR, M, MM, TA>) technologyAdapter
 				.createMetaModelRepository(this);
 		metaModelRepositories.put(technologyAdapter, mmRepository);
 		ModelRepository<MR, M, MM, TA> modelRepository = (ModelRepository<MR, M, MM, TA>) technologyAdapter.createModelRepository(this);
 		modelRepositories.put(technologyAdapter, modelRepository);
-		exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, mmRepository);
-		exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, mmRepository, modelRepository);
+		exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+				mmRepository);
+		exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+				mmRepository, modelRepository);
 	}
 
-	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>, TA extends TechnologyAdapter<M, MM, MS>> void exploreDirectoryLookingForMetaModels(
-			File directory, RepositoryFolder folder, TA technologyAdapter, MetaModelRepository<MMR, M, MM, TA> mmRepository) {
-		System.out.println("Exploring " + directory);
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void exploreDirectoryLookingForMetaModels(
+			File directory, RepositoryFolder folder, TA technologyAdapter, TechnologyContextManager technologyContextManager,
+			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
+		logger.info("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
-				if (technologyAdapter.isValidMetaModelFile(f, this)) {
-					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f, this), folder);
+				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
+					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager), folder);
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, mmRepository);
+					exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository);
 				}
 			}
 		}
 	}
 
-	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, MS extends ModelSlot<M, MM>, TA extends TechnologyAdapter<M, MM, MS>> void exploreDirectoryLookingForModels(
-			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM, ?> technologyAdapter,
-			MetaModelRepository<MMR, ?, ?, ?> mmRepository, ModelRepository<MR, ?, ?, ?> modelRepository) {
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void exploreDirectoryLookingForModels(
+			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM> technologyAdapter,
+			TechnologyContextManager technologyContextManager, MetaModelRepository<MMR, ?, ?, ?> mmRepository,
+			ModelRepository<MR, ?, ?, ?> modelRepository) {
+		logger.info("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
-					if (technologyAdapter.isValidModelFile(f, metaModelResource, this)) {
-						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f, this), folder);
+					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
+						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f, technologyContextManager), folder);
 					}
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, mmRepository, modelRepository);
+					exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository,
+							modelRepository);
 				}
 			}
 		}
@@ -118,7 +130,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @return
 	 */
 	@Override
-	public final <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> ModelRepository<R, M, MM, TA> getModelRepository(
+	public final <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
 			TA technologyAdapter) {
 		return (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
 	}
@@ -130,7 +142,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @return
 	 */
 	@Override
-	public final <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM, ? extends ModelSlot<M, MM>>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
+	public final <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter) {
 		return (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
 	}

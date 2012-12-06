@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -64,16 +64,15 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 	private IFlexoOntologyClass rootClass;
 	private IFlexoOntologyClass domain;
 	private IFlexoOntologyClass range;
-	private OntologicDataType dataType;
+	private BuiltInDataType dataType;
 	private boolean hierarchicalMode = true;
 	private boolean selectObjectProperties = true;
 	private boolean selectDataProperties = true;
 	private boolean selectAnnotationProperties = false;
 	private boolean strictMode = false;
 	private boolean displayPropertiesInClasses = true;
-	private boolean showOWLAndRDFConcepts = false;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	public FIBPropertySelector(IFlexoOntologyStructuralProperty editedObject) {
 		super(editedObject);
@@ -126,8 +125,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getProject() != null) {
-			IFlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
-					.getOntology(ontologyURI);
+			IFlexoOntology context = getProject().getFlexoOntology(ontologyURI);
 			if (context != null) {
 				setContext(context);
 			}
@@ -215,12 +213,12 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		}
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
 	@CustomComponentParameter(name = "dataType", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 	}
 
@@ -279,16 +277,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getContext()) {
@@ -315,7 +303,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 			model.setShowObjectProperties(getSelectObjectProperties());
 			model.setShowDataProperties(getSelectDataProperties());
 			model.setShowAnnotationProperties(getSelectAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(getShowOWLAndRDFConcepts());
 			/*System.out.println("Recomputing...");
 			System.out.println("context=" + getContext());
 			System.out.println("getStrictMode()=" + getStrictMode());

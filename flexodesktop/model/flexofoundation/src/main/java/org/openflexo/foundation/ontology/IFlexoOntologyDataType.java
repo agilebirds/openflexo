@@ -34,4 +34,8 @@ public interface IFlexoOntologyDataType extends IFlexoOntologyObject {
 	 * @return
 	 */
 	IFlexoOntology getOntology();
+
+	public Class<?> getAccessedType();
+
+	public BuiltInDataType getBuiltInDataType();
 }

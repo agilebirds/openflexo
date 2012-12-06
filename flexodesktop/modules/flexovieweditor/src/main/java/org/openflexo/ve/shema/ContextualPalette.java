@@ -38,7 +38,7 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.model.ViewObject;

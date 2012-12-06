@@ -21,10 +21,27 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.List;
+
 /**
  * Property value.
  * 
  * @author gbesancon
  */
 public interface IFlexoOntologyPropertyValue {
+
+	/**
+	 * Property.
+	 * 
+	 * @return
+	 */
+	public IFlexoOntologyStructuralProperty getProperty();
+
+	/**
+	 * Values of Property Value
+	 * 
+	 * @return
+	 */
+	public List<? extends Object> getValues();
+
 }

@@ -1,10 +1,10 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
-public abstract class StatementPatternRole extends OntologicObjectPatternRole {
+public abstract class StatementPatternRole<T extends OWLStatement> extends PatternRole<T> {
 
 	public StatementPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -16,8 +16,12 @@ public abstract class StatementPatternRole extends OntologicObjectPatternRole {
 	}
 
 	@Override
-	public Class<? extends OWLStatement> getAccessedClass() {
-		return OWLStatement.class;
+	public boolean getIsPrimaryRole() {
+		return false;
+	}
+
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary) {
 	}
 
 }

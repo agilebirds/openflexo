@@ -21,6 +21,8 @@
  */
 package org.openflexo.foundation.ontology;
 
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+
 /**
  * Flexo Ontology Object.
  * 
@@ -33,19 +35,35 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	String getName();
+	public String getName();
+
+	/**
+	 * Sets name of object
+	 * 
+	 * @param name
+	 * @throws Exception
+	 */
+	public void setName(String name) throws Exception;
 
 	/**
 	 * Uri of Object.
 	 * 
 	 * @return
 	 */
-	String getURI();
+	public String getURI();
 
 	/**
 	 * Description of Object.
 	 * 
 	 * @return
 	 */
-	String getDescription();
+	public String getDescription();
+
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where related FlexoOntology exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+
 }
