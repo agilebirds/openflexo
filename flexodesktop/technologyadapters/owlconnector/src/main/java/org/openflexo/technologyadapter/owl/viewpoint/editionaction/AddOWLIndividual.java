@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
@@ -84,7 +84,7 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 							Object value = objectPropertyAssertion.getValue(action);
 							newIndividual.addPropertyStatement(property, value);
 						} else {
-							OWLObject<?> assertionObject = (OWLObject<?>) objectPropertyAssertion.getAssertionObject(action);
+							OWLConcept<?> assertionObject = (OWLConcept<?>) objectPropertyAssertion.getAssertionObject(action);
 							if (assertionObject != null) {
 								newIndividual.getOntResource().addProperty(((OWLObjectProperty) property).getOntProperty(),
 										assertionObject.getOntResource());
@@ -94,9 +94,9 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 					IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(action);
 					// logger.info("assertionObject="+assertionObject);
 					if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
-							&& assertionObject instanceof OWLObject) {
+							&& assertionObject instanceof OWLConcept) {
 						newIndividual.getOntResource().addProperty(property.getOntProperty(),
-								((OWLObject) assertionObject).getOntResource());
+								((OWLConcept) assertionObject).getOntResource());
 					} else {
 						// logger.info("assertion object is null");
 					}

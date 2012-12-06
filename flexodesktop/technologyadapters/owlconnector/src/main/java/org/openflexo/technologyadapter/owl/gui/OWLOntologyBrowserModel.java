@@ -31,9 +31,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
-import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass;
+import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
 import org.openflexo.toolbox.StringUtils;
@@ -97,8 +97,8 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 		for (IFlexoOntologyClass c : getContext().getAccessibleClasses()) {
 			if (c.isNamedClass()) {
 				for (IFlexoOntologyClass superClass : c.getSuperClasses()) {
-					if (superClass instanceof OntologyRestrictionClass
-							&& ((OntologyRestrictionClass) superClass).getProperty().equalsToConcept(p)) {
+					if (superClass instanceof OWLRestriction
+							&& ((OWLRestriction) superClass).getProperty().equalsToConcept(p)) {
 						if (searchedOntology == null || c.getOntology() == searchedOntology) {
 							potentialStorageClasses.add(c);
 						}
@@ -128,8 +128,8 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 	@Override
 	protected void removeOriginalFromRedefinedObjects(List<? extends IFlexoOntologyConcept> list) {
 		for (IFlexoOntologyConcept c : new ArrayList<IFlexoOntologyConcept>(list)) {
-			if (c instanceof OWLObject<?> && ((OWLObject<?>) c).redefinesOriginalDefinition()) {
-				list.remove(((OWLObject<?>) c).getOriginalDefinition());
+			if (c instanceof OWLConcept<?> && ((OWLConcept<?>) c).redefinesOriginalDefinition()) {
+				list.remove(((OWLConcept<?>) c).getOriginalDefinition());
 			}
 			if (c instanceof OWLClass && ((OWLClass) c).isThing() && c.getOntology() != getContext()
 					&& list.contains(getContext().getRootConcept())) {

@@ -46,12 +46,14 @@ import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -111,7 +113,7 @@ import com.hp.hpl.jena.util.ResourceUtils;
  * @author sylvain
  * 
  */
-public abstract class OWLOntology extends OWLObject implements IFlexoOntology, ResourceData<OWLOntology>, FlexoMetaModel<OWLOntology>,
+public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceData<OWLOntology>, FlexoMetaModel<OWLOntology>,
 		FlexoModel<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntology.class.getPackage().getName());
@@ -157,7 +159,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	}
 
 	public OWLOntology(String anURI, File owlFile, OWLOntologyLibrary library, OWLTechnologyAdapter adapter) {
-		super(null, null, adapter);
+		super(adapter);
 
 		logger.info("Register ontology " + anURI + " file: " + owlFile);
 
@@ -332,7 +334,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return getOntologyURI();
 	}
 
-	@Override
 	public String getOntologyURI() {
 		return ontologyURI;
 	}
@@ -351,11 +352,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 			newURI = aName;
 		}
 		logger.warning("Rename ontology " + getURI() + " to " + newURI + " not implemented yet");
-	}
-
-	@Override
-	protected void _setOntResource(OntResource r) {
-		// not relevant
 	}
 
 	public OntModel getOntModel() {
@@ -377,20 +373,8 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * 
 	 * @return
 	 */
-	@Override
-	public Vector<OWLOntology> getAllImportedOntologies() {
-		Vector<OWLOntology> returned = new Vector<OWLOntology>();
-		appendToAllImportedOntologies(this, returned);
-		return returned;
-	}
-
-	private static void appendToAllImportedOntologies(OWLOntology o, Vector<OWLOntology> v) {
-		if (!v.contains(o)) {
-			v.add(o);
-			for (OWLOntology importedOntology : o.getImportedOntologies()) {
-				appendToAllImportedOntologies(importedOntology, v);
-			}
-		}
+	public Set<OWLOntology> getAllImportedOntologies() {
+		return OntologyUtils.getAllImportedOntologies(this);
 	}
 
 	/**
@@ -486,7 +470,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws OntologyNotFoundException
 	 */
-	public boolean importOntology(IFlexoOntology anOntology) throws OntologyNotFoundException {
+	public boolean importOntology(OWLOntology anOntology) throws OntologyNotFoundException {
 		if (anOntology instanceof OWLOntology == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Tried to import a non-owl ontology to an owl ontology, this is not yet supported.");
@@ -513,7 +497,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		logger.fine(SOURCE);
 		ontModel.read(new StringReader(SOURCE), getOntologyURI(), "N3");
 
-		importedOntologies.add((OWLOntology) anOntology);
+		importedOntologies.add(anOntology);
 
 		setChanged();
 
@@ -783,7 +767,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 	}
 
-	@Override
 	protected void update() {
 		updateConceptsAndProperties();
 	}
@@ -1034,7 +1017,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
 
-	protected void renameObject(OWLObject<?> object, String oldURI, String newURI) {
+	protected void renameObject(OWLConcept<?> object, String oldURI, String newURI) {
 		if (object instanceof OWLIndividual) {
 			renameIndividual((OWLIndividual) object, oldURI, newURI);
 		} else if (object instanceof OWLClass) {
@@ -1048,10 +1031,10 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 	}
 
-	protected OWLObject<?> retrieveOntologyObject(Resource resource) {
+	protected OWLConcept<?> retrieveOntologyObject(Resource resource) {
 		// First try to lookup with resource URI
 		if (StringUtils.isNotEmpty(resource.getURI())) {
-			OWLObject<?> returned = getOntologyObject(resource.getURI());
+			OWLConcept<?> returned = getOntologyObject(resource.getURI());
 			if (returned != null) {
 				return returned;
 			}
@@ -1168,19 +1151,19 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 
 	}
 
-	private OntologyRestrictionClass retrieveRestriction(Restriction restriction) {
+	private OWLRestriction retrieveRestriction(Restriction restriction) {
 
-		OntologyRestrictionClass returned = (OntologyRestrictionClass) _classes.get(restriction);
+		OWLRestriction returned = (OWLRestriction) _classes.get(restriction);
 		if (returned != null) {
 			return returned;
 		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_CLASS = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_CLASS);
-		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_DATA_RANGE);
-		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.QUALIFIED_CARDINALITY);
-		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.MIN_QUALIFIED_CARDINALITY);
-		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.MAX_QUALIFIED_CARDINALITY);
+		Property ON_CLASS = ResourceFactory.createProperty(OWL + OWLRestriction.ON_CLASS);
+		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + OWLRestriction.ON_DATA_RANGE);
+		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OWLRestriction.QUALIFIED_CARDINALITY);
+		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OWLRestriction.MIN_QUALIFIED_CARDINALITY);
+		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OWLRestriction.MAX_QUALIFIED_CARDINALITY);
 
 		if (restriction.isSomeValuesFromRestriction()) {
 			returned = new SomeValuesFromRestrictionClass(restriction.asSomeValuesFromRestriction(), getOntology(), getTechnologyAdapter());
@@ -1284,10 +1267,10 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * 
 	 * @param list
 	 */
-	private void removeOriginalFromRedefinedObjects(List<? extends OWLObject<?>> list) {
-		for (OWLObject c : new ArrayList<OWLObject>(list)) {
+	private void removeOriginalFromRedefinedObjects(List<? extends OWLConcept<?>> list) {
+		for (OWLConcept c : new ArrayList<OWLConcept>(list)) {
 			if (c.redefinesOriginalDefinition()) {
-				if (c instanceof OWLClass && ((OWLClass) c).isThing()) {
+				if (c instanceof OWLClass && ((OWLClass) c).isRootConcept()) {
 					list.remove(c);
 				} else {
 					list.remove(c.getOriginalDefinition());
@@ -1362,7 +1345,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		needsReordering = false;
 	}
 
-	@Override
 	public boolean loadWhenUnloaded() {
 		if (!isLoaded && !isLoading) {
 			isLoading = true;
@@ -1376,18 +1358,10 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntology#isLoaded()
-	 */
-	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntology#isLoading()
-	 */
-	@Override
 	public boolean isLoading() {
 		return isLoading;
 	}
@@ -1498,17 +1472,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	}
 
 	@Override
-	public OntResource getOntResource() {
-		return null;
-		// return ontModel.createTypedLiteral(this, XSDDatatype.XSDanyURI);
-	}
-
-	@Override
-	public Resource getResource() {
-		return getOntModel().createResource(getURI());
-	}
-
-	@Override
 	public void saveToFile(File aFile) {
 		FileOutputStream out = null;
 		try {
@@ -1538,16 +1501,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	@Override
 	public void save() throws SaveResourceException {
 		saveToFile(getAlternativeLocalFile());
-	}
-
-	@Override
-	public OWLOntologyLibrary getOntologyLibrary() {
-		return _library;
-	}
-
-	@Override
-	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
-		return false;
 	}
 
 	/**
@@ -1624,7 +1577,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		}
 	}
 
-	@Override
 	public boolean getIsReadOnly() {
 		return readOnly;
 	}
@@ -1648,7 +1600,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return getURI() + "#" + name;
 	}
 
-	public void assumeOntologyImportForReference(OWLObject<?> object) {
+	public void assumeOntologyImportForReference(OWLConcept<?> object) {
 		if (!getImportedOntologies().contains(object.getFlexoOntology())) {
 			logger.info("Import ontology:" + object.getFlexoOntology());
 			try {
@@ -1668,14 +1620,13 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	@Override
-	public OWLIndividual createOntologyIndividual(String name, IFlexoOntologyClass type) throws DuplicateURIException {
+	public OWLIndividual createOntologyIndividual(String name, OWLClass type) throws DuplicateURIException {
 		if (type instanceof OWLClass) {
-			assumeOntologyImportForReference((OWLClass) type);
+			assumeOntologyImportForReference(type);
 			OntModel ontModel = getOntModel();
 			String uri = makeURI(name);
 			if (testValidURI(name)) {
-				Individual individual = ontModel.createIndividual(uri, ((OWLClass) type).getOntResource());
+				Individual individual = ontModel.createIndividual(uri, type.getOntResource());
 				OWLIndividual returned = makeNewIndividual(individual);
 				returned.init();
 				return returned;
@@ -1695,7 +1646,6 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	@Override
 	public OWLClass createOntologyClass(String name) throws DuplicateURIException {
 		return createOntologyClass(name, null);
 	}
@@ -1708,16 +1658,15 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	@Override
-	public OWLClass createOntologyClass(String name, IFlexoOntologyClass father) throws DuplicateURIException {
+	public OWLClass createOntologyClass(String name, OWLClass father) throws DuplicateURIException {
 		if (father instanceof OWLClass) {
-			assumeOntologyImportForReference((OWLClass) father);
+			assumeOntologyImportForReference(father);
 			OntModel ontModel = getOntModel();
 			String uri = makeURI(name);
 			if (testValidURI(name)) {
 				OntClass aClass = ontModel.createClass(uri);
 				if (father != null) {
-					aClass.addSuperClass(((OWLClass) father).getOntResource());
+					aClass.addSuperClass(father.getOntResource());
 				}
 				OWLClass returned = makeNewClass(aClass);
 				returned.init();
@@ -1738,9 +1687,8 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	@Override
-	public IFlexoOntologyObjectProperty createObjectProperty(String name, IFlexoOntologyObjectProperty superProperty,
-			IFlexoOntologyClass domain, IFlexoOntologyClass range) throws DuplicateURIException {
+	public OWLObjectProperty createObjectProperty(String name, OWLObjectProperty superProperty, OWLClass domain, OWLClass range)
+			throws DuplicateURIException {
 		// TODO implement this
 		logger.warning("createObjectProperty() not implemented yet");
 		return null;
@@ -1754,16 +1702,15 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 * @throws DuplicateURIException
 	 */
-	@Override
-	public IFlexoOntologyDataProperty createDataProperty(String name, IFlexoOntologyDataProperty superProperty, IFlexoOntologyClass domain,
-			OntologicDataType dataType) throws DuplicateURIException {
+	public OWLDataProperty createDataProperty(String name, OWLDataProperty superProperty, OWLClass domain, OWLDataType dataType)
+			throws DuplicateURIException {
 		// TODO implement this
 		logger.warning("createDataProperty() not implemented yet");
 		return null;
 	}
 
-	public OntologyRestrictionClass createRestriction(OWLClass subjectClass, OWLProperty property,
-			OntologyRestrictionClass.RestrictionType type, int cardinality, OWLClass objectClass) {
+	public OWLRestriction createRestriction(OWLClass subjectClass, OWLProperty property, OWLRestriction.RestrictionType type,
+			int cardinality, OWLClass objectClass) {
 		if (subjectClass != null) {
 			assumeOntologyImportForReference(subjectClass);
 		}
@@ -1840,7 +1787,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return action.getNewProperty();
 	}
 
-	public OWLObject<?> deleteOntologyObject(OWLObject<?> o, FlexoEditor editor) {
+	public OWLConcept<?> deleteOntologyObject(OWLConcept<?> o, FlexoEditor editor) {
 		DeleteOntologyObjects.actionType.makeNewAction(o, null, editor).doAction();
 		return o;
 	}
@@ -1859,7 +1806,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	 * @return
 	 */
 	@Override
-	public OWLObject<?> getOntologyObject(String objectURI) {
+	public OWLConcept<?> getOntologyObject(String objectURI) {
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("retrieve IFlexoOntologyConcept " + objectURI);
@@ -1869,19 +1816,19 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 			return null;
 		}
 
-		if (objectURI.endsWith("#")) {
+		/*if (objectURI.endsWith("#")) {
 			String potentialOntologyURI = objectURI.substring(0, objectURI.lastIndexOf("#"));
 			OWLOntology returned = getOntologyLibrary().getOntology(ontologyURI);
 			if (returned != null) {
 				return returned;
 			}
-		}
+		}*/
 
-		if (objectURI.equals(getURI())) {
+		/*if (objectURI.equals(getURI())) {
 			return this;
-		}
+		}*/
 
-		OWLObject<?> returned = null;
+		OWLConcept<?> returned = null;
 
 		returned = getClass(objectURI);
 		if (returned != null) {
@@ -1923,6 +1870,30 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return null;
 	}
 
+	@Override
+	public IFlexoOntologyConcept getDeclaredOntologyObject(String objectURI) {
+		OWLConcept<?> returned = null;
+
+		returned = getDeclaredClass(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDeclaredIndividual(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDeclaredObjectProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDeclaredDataProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		return returned;
+	}
+
+	@Override
 	public OWLClass getDeclaredClass(String classURI) {
 		if (classURI == null) {
 			return null;
@@ -1948,6 +1919,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return null;
 	}
 
+	@Override
 	public OWLIndividual getDeclaredIndividual(String individualURI) {
 		if (individualURI == null) {
 			return null;
@@ -1973,6 +1945,7 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return null;
 	}
 
+	@Override
 	public OWLObjectProperty getDeclaredObjectProperty(String propertyURI) {
 		if (propertyURI == null) {
 			return null;
@@ -2006,11 +1979,25 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 		return null;
 	}
 
+	@Override
 	public OWLDataProperty getDeclaredDataProperty(String propertyURI) {
 		if (propertyURI == null) {
 			return null;
 		}
 		return dataProperties.get(propertyURI);
+	}
+
+	@Override
+	public OWLProperty getDeclaredProperty(String objectURI) {
+		OWLProperty returned = getDeclaredObjectProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDeclaredDataProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		return null;
 	}
 
 	@Override
@@ -2134,6 +2121,39 @@ public abstract class OWLOntology extends OWLObject implements IFlexoOntology, R
 	@Override
 	public Object getObject(String objectURI) {
 		return getOntologyObject(objectURI);
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyContainer> getSubContainers() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public List<OWLConcept<?>> getConcepts() {
+		ArrayList<OWLConcept<?>> returned = new ArrayList<OWLConcept<?>>();
+		returned.addAll(classes.values());
+		returned.addAll(individuals.values());
+		returned.addAll(objectProperties.values());
+		returned.addAll(dataProperties.values());
+		return returned;
+	}
+
+	@Override
+	public List<OWLDataType> getDataTypes() {
+		return getTechnologyAdapter().getTechnologyContextManager().getDataTypes();
+	}
+
+	@Override
+	public String getVersion() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyAnnotation> getAnnotations() {
+		// TODO return annotation statements here
+		return null;
 	}
 
 }

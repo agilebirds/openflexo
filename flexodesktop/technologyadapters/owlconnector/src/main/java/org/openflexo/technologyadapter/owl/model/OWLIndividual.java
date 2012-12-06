@@ -29,14 +29,17 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class OWLIndividual extends OWLObject<Individual> implements IFlexoOntologyIndividual, Comparable<IFlexoOntologyIndividual> {
+public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntologyIndividual, Comparable<IFlexoOntologyIndividual> {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntologyIndividual.class.getPackage().getName());
 
@@ -159,14 +162,21 @@ public class OWLIndividual extends OWLObject<Individual> implements IFlexoOntolo
 	 * @param type
 	 */
 	@Override
-	public SubClassStatement addType(IFlexoOntologyClass type) {
-		if (type instanceof OWLClass) {
-			getOntResource().addOntClass(((OWLClass) type).getOntResource());
+	public void addToTypes(IFlexoOntologyClass aType) {
+		if (aType instanceof OWLClass) {
+			getOntResource().addOntClass(((OWLClass) aType).getOntResource());
 			updateOntologyStatements();
-			return getSubClassStatement(type);
 		}
-		logger.warning("Type " + type + " is not a OWLClass");
-		return null;
+		logger.warning("Type " + aType + " is not a OWLClass");
+	}
+
+	@Override
+	public void removeFromTypes(IFlexoOntologyClass aType) {
+		if (aType instanceof OWLClass) {
+			getOntResource().removeOntClass(((OWLClass) aType).getOntResource());
+			updateOntologyStatements();
+		}
+		logger.warning("Type " + aType + " is not a OWLClass");
 	}
 
 	@Override
@@ -324,5 +334,40 @@ public class OWLIndividual extends OWLObject<Individual> implements IFlexoOntolo
 	@Override
 	public void setUserManualDescription(String userManualDescription) {
 		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+		// No feature associations for this kind of concept
+		return null;
+	}
+
+	@Override
+	public boolean isIndividualOf(IFlexoOntologyClass aClass) {
+		return aClass.isSuperConceptOf(this);
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyPropertyValue> getPropertyValues() {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property) {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public IFlexoOntologyPropertyValue addToPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public IFlexoOntologyPropertyValue removeFromPropertyValue(IFlexoOntologyStructuralProperty property, Object valueToRemove) {
+		logger.warning("Not implemented yet");
+		return null;
 	}
 }

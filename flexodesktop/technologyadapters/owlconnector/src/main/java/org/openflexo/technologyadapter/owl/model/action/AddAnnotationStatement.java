@@ -26,40 +26,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 
-public class AddAnnotationStatement extends FlexoAction<AddAnnotationStatement, OWLObject, OWLObject> {
+public class AddAnnotationStatement extends FlexoAction<AddAnnotationStatement, OWLConcept, OWLConcept> {
 
 	private static final Logger logger = Logger.getLogger(AddAnnotationStatement.class.getPackage().getName());
 
-	public static FlexoActionType<AddAnnotationStatement, OWLObject, OWLObject> actionType = new FlexoActionType<AddAnnotationStatement, OWLObject, OWLObject>(
+	public static FlexoActionType<AddAnnotationStatement, OWLConcept, OWLConcept> actionType = new FlexoActionType<AddAnnotationStatement, OWLConcept, OWLConcept>(
 			"add_annotation", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddAnnotationStatement makeNewAction(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+		public AddAnnotationStatement makeNewAction(OWLConcept focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 			return new AddAnnotationStatement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
+		public boolean isVisibleForSelection(OWLConcept object, Vector<OWLConcept> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 		@Override
-		public boolean isEnabledForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
+		public boolean isEnabledForSelection(OWLConcept object, Vector<OWLConcept> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddAnnotationStatement.actionType, OWLObject.class);
+		FlexoModelObject.addActionForClass(AddAnnotationStatement.actionType, OWLConcept.class);
 	}
 
-	AddAnnotationStatement(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+	AddAnnotationStatement(OWLConcept focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -21,15 +21,15 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.Restriction;
 
-public abstract class OntologyRestrictionClass extends OWLClass {
+public abstract class OWLRestriction extends OWLClass implements IFlexoOntologyFeatureAssociation {
 
-	private static final Logger logger = Logger.getLogger(OntologyRestrictionClass.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OWLRestriction.class.getPackage().getName());
 
 	static final String ON_CLASS = "onClass";
 	static final String ON_DATA_RANGE = "onDataRange";
@@ -47,10 +47,10 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 	}
 
 	private final Restriction restriction;
+	private OWLProperty property;
+	private OWLClass domain;
 
-	private IFlexoOntologyStructuralProperty property;
-
-	protected OntologyRestrictionClass(Restriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
+	protected OWLRestriction(Restriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
 		super(aRestriction, ontology, adapter);
 		this.restriction = aRestriction;
 	}
@@ -67,11 +67,16 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 		retrieveRestrictionInformations();
 	}
 
+	private boolean addedToReferencingRestriction = false;
+
 	protected void retrieveRestrictionInformations() {
 		property = getOntology().retrieveOntologyProperty(restriction.getOnProperty());
+		if (!addedToReferencingRestriction) {
+			property.addToReferencingRestriction(this);
+		}
 	}
 
-	public IFlexoOntologyStructuralProperty getProperty() {
+	public OWLProperty getProperty() {
 		return property;
 	}
 
@@ -97,7 +102,7 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 		return getDisplayableDescription();
 	}
 
-	public abstract OWLObject<?> getObject();
+	public abstract OWLConcept<?> getObject();
 
 	public abstract OWLDataType getDataRange();
 
@@ -106,4 +111,17 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 		return false;
 	}
 
+	@Override
+	public OWLClass getDomain() {
+		return domain;
+	}
+
+	public void setDomain(OWLClass domain) {
+		this.domain = domain;
+	}
+
+	@Override
+	public OWLProperty getFeature() {
+		return getProperty();
+	}
 }

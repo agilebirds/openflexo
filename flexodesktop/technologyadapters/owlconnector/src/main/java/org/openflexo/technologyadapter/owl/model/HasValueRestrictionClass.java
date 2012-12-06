@@ -26,12 +26,12 @@ import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import com.hp.hpl.jena.ontology.HasValueRestriction;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-public class HasValueRestrictionClass extends OntologyRestrictionClass {
+public class HasValueRestrictionClass extends OWLRestriction {
 
 	private static final Logger logger = Logger.getLogger(HasValueRestrictionClass.class.getPackage().getName());
 
 	private final HasValueRestriction restriction;
-	private OWLObject<?> object;
+	private OWLConcept<?> object;
 
 	protected HasValueRestrictionClass(HasValueRestriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
 		super(aRestriction, ontology, adapter);
@@ -71,12 +71,22 @@ public class HasValueRestrictionClass extends OntologyRestrictionClass {
 	}
 
 	@Override
-	public OWLObject<?> getObject() {
+	public OWLConcept<?> getObject() {
 		return object;
 	}
 
 	@Override
 	public OWLDataType getDataRange() {
+		return null;
+	}
+
+	@Override
+	public Integer getLowerBound() {
+		return 1;
+	}
+
+	@Override
+	public Integer getUpperBound() {
 		return null;
 	}
 

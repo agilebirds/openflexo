@@ -33,7 +33,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public class MinCardinalityRestrictionClass extends OntologyRestrictionClass {
+public class MinCardinalityRestrictionClass extends OWLRestriction {
 
 	private static final Logger logger = Logger.getLogger(MinCardinalityRestrictionClass.class.getPackage().getName());
 
@@ -128,4 +128,15 @@ public class MinCardinalityRestrictionClass extends OntologyRestrictionClass {
 	public OWLDataType getDataRange() {
 		return dataRange;
 	}
+
+	@Override
+	public Integer getLowerBound() {
+		return getMinCardinality();
+	}
+
+	@Override
+	public Integer getUpperBound() {
+		return null;
+	}
+
 }

@@ -29,7 +29,7 @@ public class IsObjectPropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsObjectPropertyStatement.class.getPackage().getName());
 
-	public IsObjectPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public IsObjectPropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 	}
 

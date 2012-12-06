@@ -29,7 +29,7 @@ public class InverseFunctionalPropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(InverseFunctionalPropertyStatement.class.getPackage().getName());
 
-	public InverseFunctionalPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public InverseFunctionalPropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 	}
 

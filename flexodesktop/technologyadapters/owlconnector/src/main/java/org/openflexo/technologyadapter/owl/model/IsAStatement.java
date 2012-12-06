@@ -31,9 +31,9 @@ public abstract class IsAStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(IsAStatement.class.getPackage().getName());
 
-	private OWLObject<?> parentObject;
+	private OWLConcept<?> parentObject;
 
-	public IsAStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public IsAStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			parentObject = getOntology().retrieveOntologyObject((Resource) s.getObject());

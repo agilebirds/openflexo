@@ -13,7 +13,7 @@ import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
@@ -198,17 +198,17 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
-			if (target instanceof OWLIndividual && getOntologyProperty() instanceof OWLProperty && value instanceof OWLObject) {
+			if (target instanceof OWLIndividual && getOntologyProperty() instanceof OWLProperty && value instanceof OWLConcept) {
 				OWLIndividual individual = (OWLIndividual) target;
 				OWLProperty property = (OWLProperty) getOntologyProperty();
 				PropertyStatement statement = individual.getPropertyStatement(property);
 				if (statement == null) {
-					individual.getOntResource().addProperty(property.getOntProperty(), ((OWLObject) value).getOntResource());
+					individual.getOntResource().addProperty(property.getOntProperty(), ((OWLConcept) value).getOntResource());
 					individual.updateOntologyStatements();
 					individual.getPropertyChangeSupport().firePropertyChange(property.getName(), null, value);
 				} else if (statement instanceof ObjectPropertyStatement) {
 					Object oldValue = ((ObjectPropertyStatement) statement).getStatementObject();
-					((ObjectPropertyStatement) statement).setStatementObject((OWLObject) value);
+					((ObjectPropertyStatement) statement).setStatementObject((OWLConcept) value);
 					individual.getPropertyChangeSupport().firePropertyChange(property.getName(), oldValue, value);
 				} else {
 					logger.warning("Unexpected statement " + statement + " while evaluating setBindingValue()");
@@ -445,8 +445,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Object getBindingValue(Object target, BindingEvaluationContext context) {
-			if (target instanceof OWLObject<?>) {
-				OWLObject<?> object = (OWLObject<?>) target;
+			if (target instanceof OWLConcept<?>) {
+				OWLConcept<?> object = (OWLConcept<?>) target;
 				System.out.println("Return statement " + object.getPropertyStatement(getOntologyProperty()));
 				return object.getPropertyStatement(getOntologyProperty());
 			} else {

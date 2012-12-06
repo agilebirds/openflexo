@@ -28,15 +28,15 @@ import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public abstract class OWLStatement extends AbstractOWLObject implements InspectableObject {
+public abstract class OWLStatement extends OWLObject implements InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(OWLStatement.class.getPackage().getName());
 
-	private final OWLObject<?> _subject;
+	private final OWLConcept<?> _subject;
 
 	private final Statement _statement;
 
-	public OWLStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public OWLStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(adapter);
 		_subject = subject;
 		_statement = s;
@@ -76,7 +76,7 @@ public abstract class OWLStatement extends AbstractOWLObject implements Inspecta
 		return null;
 	}
 
-	public OWLObject<?> getSubject() {
+	public OWLConcept<?> getSubject() {
 		return _subject;
 	}
 

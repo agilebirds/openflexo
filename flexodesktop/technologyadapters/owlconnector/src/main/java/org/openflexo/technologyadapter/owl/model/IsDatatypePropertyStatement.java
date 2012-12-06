@@ -29,7 +29,7 @@ public class IsDatatypePropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsDatatypePropertyStatement.class.getPackage().getName());
 
-	public IsDatatypePropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public IsDatatypePropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 	}
 

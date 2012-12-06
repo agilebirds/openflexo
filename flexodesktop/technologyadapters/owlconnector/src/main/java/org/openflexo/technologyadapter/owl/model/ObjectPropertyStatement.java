@@ -32,10 +32,10 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatement.class.getPackage().getName());
 
 	private OWLObjectProperty property;
-	private OWLObject<?> statementObject;
+	private OWLConcept<?> statementObject;
 	private Literal literal;
 
-	public ObjectPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public ObjectPropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		property = getOntology().getObjectProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Resource) {
@@ -80,7 +80,7 @@ public class ObjectPropertyStatement extends PropertyStatement {
 		return property;
 	}
 
-	public OWLObject<?> getStatementObject() {
+	public OWLConcept<?> getStatementObject() {
 		return statementObject;
 	}
 
@@ -89,7 +89,7 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	 * 
 	 * @param anObject
 	 */
-	public final void setStatementObject(OWLObject<?> anObject) {
+	public final void setStatementObject(OWLConcept<?> anObject) {
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 

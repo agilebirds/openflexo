@@ -33,8 +33,8 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
-import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass;
-import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass.RestrictionType;
+import org.openflexo.technologyadapter.owl.model.OWLRestriction;
+import org.openflexo.technologyadapter.owl.model.OWLRestriction.RestrictionType;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 // No more applicable
@@ -193,7 +193,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
 			RestrictionType restrictionType = getRestrictionType(action);
 			int cardinality = getCardinality(action);
-			OntologyRestrictionClass restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject,
+			OWLRestriction restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject,
 					(OWLProperty) property, restrictionType, cardinality, (OWLClass) object);
 
 			if (subject instanceof OWLClass) {

@@ -9,7 +9,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 
 public class DataPropertyStatementPathElement extends StatementPathElement<Object> {
@@ -268,8 +268,8 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target instanceof OWLObject<?>) {
-			OWLObject<?> object = (OWLObject<?>) target;
+		if (target instanceof OWLConcept<?>) {
+			OWLConcept<?> object = (OWLConcept<?>) target;
 			if (ontologyProperty != null && (ontologyProperty.isAnnotationProperty() || ontologyProperty.getDataType() != null)) {
 				return object.getPropertyValue(ontologyProperty);
 			} else {

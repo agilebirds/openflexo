@@ -20,7 +20,9 @@
 package org.openflexo.technologyadapter.owl.model;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -133,6 +135,14 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	}
 
+	public List<OWLDataType> getDataTypes() {
+		ArrayList<OWLDataType> returned = new ArrayList<OWLDataType>();
+		for (OWLDataType dt : dataTypes.values()) {
+			returned.add(dt);
+		}
+		return returned;
+	}
+
 	public OntologyObjectConverter getOntologyObjectConverter() {
 		return ontologyObjectConverter;
 	}
@@ -223,10 +233,10 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	@Override
 	public OntModel openModel(String name, boolean strict) {
 		getGraphMaker().openGraph(name, strict);
-		FlexoOntology ont = getOntology(name);
-		if (ont instanceof OWLOntology) {
+		OWLOntology ont = getOntology(name);
+		if (ont != null) {
 			ont.loadWhenUnloaded();
-			return ((OWLOntology) ont).getOntModel();
+			return ont.getOntModel();
 		}
 		if (!strict) {
 			/*OWLMetaModel newOntology = new OWLMetaModel(name, null, this);
@@ -250,7 +260,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	@Override
 	public OntModel createModel(String name, boolean strict) {
 		getGraphMaker().createGraph(name, strict);
-		FlexoOntology ont = getOntology(name);
+		OWLOntology ont = getOntology(name);
 		if (ont != null) {
 			if (strict) {
 				throw new AlreadyExistsException(name);
@@ -342,7 +352,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	 * @return
 	 */
 	public boolean isDuplicatedURI(String ontologyURI, String conceptURI) {
-		FlexoOntology o = getOntology(ontologyURI);
+		OWLOntology o = getOntology(ontologyURI);
 		if (o != null) {
 			return o.getOntologyObject(ontologyURI + "#" + conceptURI) != null;
 		}

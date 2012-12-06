@@ -41,7 +41,7 @@ public abstract class PropertyStatement extends OWLStatement {
 	public static final String AS_FLOAT = "asFloat";
 	public static final String AS_DOUBLE = "asDouble";
 
-	public PropertyStatement(OWLObject subject, Statement s, OWLTechnologyAdapter adapter) {
+	public PropertyStatement(OWLConcept subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 	}
 

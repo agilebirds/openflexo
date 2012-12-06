@@ -29,7 +29,7 @@ public class IsClassStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsClassStatement.class.getPackage().getName());
 
-	public IsClassStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public IsClassStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 	}
 

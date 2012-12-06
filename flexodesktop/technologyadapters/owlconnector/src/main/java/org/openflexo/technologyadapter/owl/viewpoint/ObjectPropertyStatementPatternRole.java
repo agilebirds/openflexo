@@ -14,7 +14,7 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 
 public class ObjectPropertyStatementPatternRole extends StatementPatternRole<ObjectPropertyStatement> {
@@ -143,7 +143,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 					}
 					return null;
 				}
-				if (subject instanceof OWLObject == false) {
+				if (subject instanceof OWLConcept == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
@@ -161,7 +161,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 				OntologyObjectProperty property = (OntologyObjectProperty) getProject().getObject(objectPropertyURI);
 				if (property != null) {
 					// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
-					statement = ((OWLObject) subject).getObjectPropertyStatement(property, object);
+					statement = ((OWLConcept) subject).getObjectPropertyStatement(property, object);
 					// logger.info("Found statement: "+statement);
 				}
 			}

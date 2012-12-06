@@ -28,14 +28,14 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
 
-public abstract class OWLProperty extends OWLObject<OntProperty> implements IFlexoOntologyStructuralProperty {
+public abstract class OWLProperty extends OWLConcept<OntProperty> implements IFlexoOntologyStructuralProperty {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntologyStructuralProperty.class.getPackage().getName());
 
@@ -45,13 +45,15 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 	private RangeStatement rangeStatement;
 	private List<DomainStatement> domainStatementList;
 	private List<RangeStatement> rangeStatementList;
-	private List<OWLObject<?>> domainList;
-	private List<OWLObject<?>> rangeList;
+	private List<OWLConcept<?>> domainList;
+	private List<OWLConcept<?>> rangeList;
 
 	private boolean superDomainStatementWereAppened = false;
 	private boolean superRangeStatementWereAppened = false;
 
 	private final Vector<OWLProperty> superProperties;
+
+	private List<OWLRestriction> referencingRestrictions;
 
 	protected OWLProperty(OntProperty anOntProperty, OWLOntology ontology, OWLTechnologyAdapter adapter) {
 		super(anOntProperty, ontology, adapter);
@@ -268,7 +270,7 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 	 * @return
 	 */
 	@Override
-	public IFlexoOntologyObject getRange() {
+	public OWLObject getRange() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 					System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
 				}*/
@@ -303,9 +305,9 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 		return rangeStatementList;
 	}
 
-	public List<OWLObject<?>> getDomainList() {
+	public List<OWLConcept<?>> getDomainList() {
 		if (domainList == null) {
-			domainList = new ArrayList<OWLObject<?>>();
+			domainList = new ArrayList<OWLConcept<?>>();
 			for (DomainStatement s : getDomainStatementList()) {
 				if (s.getDomain() != null) {
 					domainList.add(s.getDomain());
@@ -315,9 +317,9 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 		return domainList;
 	}
 
-	public List<OWLObject<?>> getRangeList() {
+	public List<OWLConcept<?>> getRangeList() {
 		if (rangeList == null) {
-			rangeList = new ArrayList<OWLObject<?>>();
+			rangeList = new ArrayList<OWLConcept<?>>();
 			for (RangeStatement s : getRangeStatementList()) {
 				if (s.getRange() != null) {
 					rangeList.add(s.getRange());
@@ -325,6 +327,29 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 			}
 		}
 		return rangeList;
+	}
+
+	public List<OWLRestriction> getReferencingRestrictions() {
+		return referencingRestrictions;
+	}
+
+	public void addToReferencingRestriction(OWLRestriction aRestriction) {
+		referencingRestrictions.add(aRestriction);
+	}
+
+	public void removeFromReferencingRestriction(OWLRestriction aRestriction) {
+		referencingRestrictions.remove(aRestriction);
+	}
+
+	@Override
+	public List<OWLRestriction> getReferencingFeatureAssociations() {
+		return getReferencingRestrictions();
+	}
+
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+		// No feature associations for this kind of concept
+		return null;
 	}
 
 }

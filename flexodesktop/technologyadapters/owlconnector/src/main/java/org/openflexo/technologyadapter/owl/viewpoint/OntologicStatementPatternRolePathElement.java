@@ -22,7 +22,7 @@ import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
-import org.openflexo.technologyadapter.owl.model.OntologyRestrictionClass.RestrictionType;
+import org.openflexo.technologyadapter.owl.model.OWLRestriction.RestrictionType;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 public class OntologicStatementPatternRolePathElement<T extends OWLStatement> extends PatternRolePathElement<T> {

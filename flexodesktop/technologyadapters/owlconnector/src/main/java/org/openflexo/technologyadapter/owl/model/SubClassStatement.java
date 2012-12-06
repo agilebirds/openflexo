@@ -30,9 +30,9 @@ public class SubClassStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(SubClassStatement.class.getPackage().getName());
 
-	private OWLObject<?> parent;
+	private OWLConcept<?> parent;
 
-	public SubClassStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public SubClassStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		// System.out.println("s.getObject() is a " + s.getObject().getClass().getName() + " : " + s.getObject());
 		if (s.getObject() instanceof Resource) {
@@ -52,7 +52,7 @@ public class SubClassStatement extends OWLStatement {
 		return "SubClassStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getParent() {
+	public OWLConcept<?> getParent() {
 		return parent;
 	}
 

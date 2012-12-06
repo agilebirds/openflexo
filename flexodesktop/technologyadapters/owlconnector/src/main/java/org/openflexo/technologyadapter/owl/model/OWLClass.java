@@ -22,31 +22,33 @@ package org.openflexo.technologyadapter.owl.model;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass, Comparable<IFlexoOntologyClass> {
+public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClass, Comparable<IFlexoOntologyClass> {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntologyClass.class.getPackage().getName());
 
 	private OntClass ontClass;
 
 	private final Vector<OWLClass> superClasses;
+
+	private final List<OWLRestriction> restrictions = new ArrayList<OWLRestriction>();
 
 	protected OWLClass(OntClass anOntClass, OWLOntology ontology, OWLTechnologyAdapter adapter) {
 		super(anOntClass, ontology, adapter);
@@ -129,7 +131,7 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 		superClasses.clear();
 		if (redefinesOriginalDefinition()) {
 			for (OWLClass c : getOriginalDefinition().getSuperClasses()) {
-				if (!c.isThing()) {
+				if (!c.isRootConcept()) {
 					appendToSuperClasses(c);
 				}
 			}
@@ -157,7 +159,7 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 		// If computed ontology is either not RDF, nor RDFS, nor OWL
 		// add OWL Thing as parent
 		if (getFlexoOntology() != getOntologyLibrary().getRDFOntology() && getFlexoOntology() != getOntologyLibrary().getRDFSOntology()) {
-			if (isNamedClass() && !isThing()) {
+			if (isNamedClass() && !isRootConcept()) {
 				OWLClass THING_CLASS = getOntology().getRootClass();
 				appendToSuperClasses(THING_CLASS);
 			}
@@ -301,14 +303,14 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 	 * 
 	 * @return
 	 */
-	@Override
-	public Set<OWLClass> getAllSuperClasses() {
-		Set<OWLClass> returned = new HashSet<OWLClass>();
-		for (OWLClass c : getSuperClasses()) {
-			returned.add(c);
-			returned.addAll(c.getAllSuperClasses());
+	public List<OWLClass> getAllSuperClasses() {
+		ArrayList<OWLClass> allSuperClasses = new ArrayList<OWLClass>();
+		for (IFlexoOntologyClass cl : OntologyUtils.getAllSuperClasses(this)) {
+			if (cl instanceof OWLClass) {
+				allSuperClasses.add((OWLClass) cl);
+			}
 		}
-		return returned;
+		return allSuperClasses;
 	}
 
 	/**
@@ -317,14 +319,22 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 	 * @param aClass
 	 */
 	@Override
-	public SubClassStatement addSuperClass(IFlexoOntologyClass father) {
+	public void addToSuperClasses(IFlexoOntologyClass father) {
 		if (father instanceof OWLClass) {
 			getOntResource().addSuperClass(((OWLClass) father).getOntResource());
 			updateOntologyStatements();
-			return getSubClassStatement(father);
+			return;
+		}
+		if (father instanceof OWLRestriction) {
+			restrictions.add((OWLRestriction) father);
 		}
 		logger.warning("Class " + father + " is not a OWLClass");
-		return null;
+		return;
+	}
+
+	@Override
+	public void removeFromSuperClasses(IFlexoOntologyClass aClass) {
+		logger.warning("Not implemented");
 	}
 
 	/**
@@ -334,16 +344,15 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 	 * @param context
 	 * @return
 	 */
-	@Deprecated
-	public Vector<IFlexoOntologyClass> getSubClasses(OWLOntology context) {
-		/*Vector<OWLClass> returned = new Vector<OWLClass>();
-		for (OWLClass aClass : getSubClasses()) {
-			if (isRequired(aClass, context)) {
-				returned.add(aClass);
+	@Override
+	public List<OWLClass> getSubClasses(IFlexoOntology context) {
+		ArrayList<OWLClass> returned = new ArrayList<OWLClass>();
+		for (IFlexoOntologyClass aClass : context.getAccessibleClasses()) {
+			if (aClass instanceof OWLClass && isSuperClassOf(aClass)) {
+				returned.add((OWLClass) aClass);
 			}
 		}
-		return returned;*/
-		return null;
+		return returned;
 	}
 
 	/*private boolean isRequired(IFlexoOntologyClass aClass, IFlexoOntology context) {
@@ -455,11 +464,11 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 	 * @param property
 	 * @return
 	 */
-	public List<OntologyRestrictionClass> getRestrictions(IFlexoOntologyStructuralProperty property) {
-		List<OntologyRestrictionClass> returned = new ArrayList<OntologyRestrictionClass>();
+	public List<OWLRestriction> getRestrictions(IFlexoOntologyStructuralProperty property) {
+		List<OWLRestriction> returned = new ArrayList<OWLRestriction>();
 		for (IFlexoOntologyClass c : getSuperClasses()) {
-			if (c instanceof OntologyRestrictionClass) {
-				OntologyRestrictionClass r = (OntologyRestrictionClass) c;
+			if (c instanceof OWLRestriction) {
+				OWLRestriction r = (OWLRestriction) c;
 				if (r.getProperty() == property) {
 					returned.add(r);
 				}
@@ -498,8 +507,17 @@ public class OWLClass extends OWLObject<OntClass> implements IFlexoOntologyClass
 	 * Indicates if this class represents the Thing root concept
 	 */
 	@Override
-	public boolean isThing() {
+	public boolean isRootConcept() {
 		return isNamedClass() && getURI().equals(OWL2URIDefinitions.OWL_THING_URI);
+	}
+
+	@Override
+	public List<OWLRestriction> getFeatureAssociations() {
+		return getRestrictions();
+	}
+
+	public List<OWLRestriction> getRestrictions() {
+		return restrictions;
 	}
 
 }

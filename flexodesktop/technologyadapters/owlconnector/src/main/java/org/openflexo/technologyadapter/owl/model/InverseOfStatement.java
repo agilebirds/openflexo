@@ -30,9 +30,9 @@ public class InverseOfStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(InverseOfStatement.class.getPackage().getName());
 
-	private OWLObject<?> inverseProperty;
+	private OWLConcept<?> inverseProperty;
 
-	public InverseOfStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public InverseOfStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			inverseProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -51,7 +51,7 @@ public class InverseOfStatement extends OWLStatement {
 		return "InverseOfStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getInverseProperty() {
+	public OWLConcept<?> getInverseProperty() {
 		return inverseProperty;
 	}
 

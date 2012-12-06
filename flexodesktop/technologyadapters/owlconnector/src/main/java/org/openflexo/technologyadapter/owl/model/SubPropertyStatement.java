@@ -30,9 +30,9 @@ public class SubPropertyStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(SubPropertyStatement.class.getPackage().getName());
 
-	private OWLObject<?> superProperty;
+	private OWLConcept<?> superProperty;
 
-	public SubPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public SubPropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			superProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -51,7 +51,7 @@ public class SubPropertyStatement extends OWLStatement {
 		return "SubPropertyStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getSuperProperty() {
+	public OWLConcept<?> getSuperProperty() {
 		return superProperty;
 	}
 

@@ -86,6 +86,11 @@ public class OWLObjectProperty extends OWLProperty implements IFlexoOntologyObje
 		return false;
 	}
 
+	@Override
+	public OWLClass getRange() {
+		return (OWLClass) super.getRange();
+	}
+
 	/**
 	 * Return a vector of Ontology property, as a subset of getSubProperties(), which correspond to all properties necessary to see all
 	 * properties belonging to supplied context, which is an ontology
@@ -122,7 +127,6 @@ public class OWLObjectProperty extends OWLProperty implements IFlexoOntologyObje
 		return true;
 	}
 
-	@Override
 	public boolean isLiteralRange() {
 		return getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI);
 	}

@@ -33,7 +33,7 @@ public class DataPropertyStatement extends PropertyStatement {
 	private OWLDataProperty property;
 	private Literal literal;
 
-	public DataPropertyStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public DataPropertyStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		property = getOntology().getDataProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Literal) {

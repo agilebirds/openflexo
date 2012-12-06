@@ -28,7 +28,7 @@ import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 
-public class OWLDataType extends AbstractOWLObject implements IFlexoOntologyDataType, W3URIDefinitions {
+public class OWLDataType extends OWLObject implements IFlexoOntologyDataType, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(OWLDataType.class.getPackage()
 			.getName());

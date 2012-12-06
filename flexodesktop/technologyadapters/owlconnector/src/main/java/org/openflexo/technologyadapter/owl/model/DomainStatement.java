@@ -30,9 +30,9 @@ public class DomainStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(DomainStatement.class.getPackage().getName());
 
-	private OWLObject<?> domain;
+	private OWLConcept<?> domain;
 
-	public DomainStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public DomainStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			domain = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -51,7 +51,7 @@ public class DomainStatement extends OWLStatement {
 		return "DomainStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getDomain() {
+	public OWLConcept<?> getDomain() {
 		return domain;
 	}
 

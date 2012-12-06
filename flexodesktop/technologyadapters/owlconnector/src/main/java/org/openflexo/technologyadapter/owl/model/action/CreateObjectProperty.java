@@ -30,33 +30,34 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateObjectProperty extends FlexoAction<CreateObjectProperty, OWLObject, OWLObject> {
+public class CreateObjectProperty extends FlexoAction<CreateObjectProperty, OWLObject, OWLConcept> {
 
 	private static final Logger logger = Logger.getLogger(CreateObjectProperty.class.getPackage().getName());
 
-	public static FlexoActionType<CreateObjectProperty, OWLObject, OWLObject> actionType = new FlexoActionType<CreateObjectProperty, OWLObject, OWLObject>(
+	public static FlexoActionType<CreateObjectProperty, OWLObject, OWLConcept> actionType = new FlexoActionType<CreateObjectProperty, OWLObject, OWLConcept>(
 			"create_object_property", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateObjectProperty makeNewAction(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+		public CreateObjectProperty makeNewAction(OWLObject focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 			return new CreateObjectProperty(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
+		public boolean isVisibleForSelection(OWLObject object, Vector<OWLConcept> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
-			return object != null && !object.getIsReadOnly();
+		public boolean isEnabledForSelection(OWLObject object, Vector<OWLConcept> globalSelection) {
+			return object != null && !object.getOntology().getIsReadOnly();
 		}
 
 	};
@@ -78,7 +79,7 @@ public class CreateObjectProperty extends FlexoAction<CreateObjectProperty, OWLO
 	private static final String VALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_well_formed_and_valid_regarding_its_unicity");
 	private static final String INVALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_not_valid_please_choose_another_class_name");
 
-	CreateObjectProperty(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+	CreateObjectProperty(OWLObject focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		newPropertyName = "newProperty";
 		parentProperty = null;

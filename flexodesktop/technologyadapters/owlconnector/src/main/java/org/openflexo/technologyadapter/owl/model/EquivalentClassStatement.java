@@ -30,9 +30,9 @@ public class EquivalentClassStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(EquivalentClassStatement.class.getPackage().getName());
 
-	private OWLObject<?> equivalentObject;
+	private OWLConcept<?> equivalentObject;
 
-	public EquivalentClassStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public EquivalentClassStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			equivalentObject = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -51,7 +51,7 @@ public class EquivalentClassStatement extends OWLStatement {
 		return "EquivalentClassStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getEquivalentObject() {
+	public OWLConcept<?> getEquivalentObject() {
 		return equivalentObject;
 	}
 

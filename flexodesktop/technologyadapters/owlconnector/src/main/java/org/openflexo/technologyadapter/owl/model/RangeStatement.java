@@ -30,14 +30,14 @@ public class RangeStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(RangeStatement.class.getPackage().getName());
 
-	private OWLObject<?> range;
+	private OWLConcept<?> range;
 	private OWLDataType dataType;
 
 	public OWLDataType getDataType() {
 		return dataType;
 	}
 
-	public RangeStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public RangeStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			range = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -59,7 +59,7 @@ public class RangeStatement extends OWLStatement {
 		return "RangeStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getRange() {
+	public OWLConcept<?> getRange() {
 		return range;
 	}
 

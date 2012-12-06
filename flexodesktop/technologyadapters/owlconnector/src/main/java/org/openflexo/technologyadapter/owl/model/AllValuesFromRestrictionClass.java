@@ -26,7 +26,7 @@ import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
+public class AllValuesFromRestrictionClass extends OWLRestriction {
 
 	private static final Logger logger = Logger.getLogger(AllValuesFromRestrictionClass.class.getPackage().getName());
 
@@ -80,6 +80,16 @@ public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
 	@Override
 	public OWLDataType getDataRange() {
 		return dataRange;
+	}
+
+	@Override
+	public Integer getLowerBound() {
+		return 0;
+	}
+
+	@Override
+	public Integer getUpperBound() {
+		return -1;
 	}
 
 }

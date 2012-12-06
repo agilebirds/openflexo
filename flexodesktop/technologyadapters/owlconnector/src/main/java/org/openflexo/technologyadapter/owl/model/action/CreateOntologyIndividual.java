@@ -29,34 +29,35 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateOntologyIndividual extends FlexoAction<CreateOntologyIndividual, OWLObject, OWLObject> {
+public class CreateOntologyIndividual extends FlexoAction<CreateOntologyIndividual, OWLObject, OWLConcept> {
 
 	private static final Logger logger = Logger.getLogger(CreateOntologyIndividual.class.getPackage().getName());
 
-	public static FlexoActionType<CreateOntologyIndividual, OWLObject, OWLObject> actionType = new FlexoActionType<CreateOntologyIndividual, OWLObject, OWLObject>(
+	public static FlexoActionType<CreateOntologyIndividual, OWLObject, OWLConcept> actionType = new FlexoActionType<CreateOntologyIndividual, OWLObject, OWLConcept>(
 			"create_individual", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateOntologyIndividual makeNewAction(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+		public CreateOntologyIndividual makeNewAction(OWLObject focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 			return new CreateOntologyIndividual(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
+		public boolean isVisibleForSelection(OWLObject object, Vector<OWLConcept> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(OWLObject object, Vector<OWLObject> globalSelection) {
-			return object != null && !object.getIsReadOnly();
+		public boolean isEnabledForSelection(OWLObject object, Vector<OWLConcept> globalSelection) {
+			return object != null && !object.getOntology().getIsReadOnly();
 		}
 
 	};
@@ -77,11 +78,11 @@ public class CreateOntologyIndividual extends FlexoAction<CreateOntologyIndividu
 	private static final String VALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_well_formed_and_valid_regarding_its_unicity");
 	private static final String INVALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_not_valid_please_choose_another_class_name");
 
-	CreateOntologyIndividual(OWLObject focusedObject, Vector<OWLObject> globalSelection, FlexoEditor editor) {
+	CreateOntologyIndividual(OWLObject focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		newOntologyIndividualName = "NewIndividual";
-		fatherClass = focusedObject instanceof OWLClass ? (OWLClass) focusedObject : ((OWLOntology) focusedObject.getOntologyLibrary()
-				.getOWLOntology()).getRootClass();
+		fatherClass = focusedObject instanceof OWLClass ? (OWLClass) focusedObject : focusedObject.getOntologyLibrary().getOWLOntology()
+				.getRootClass();
 		isValid();
 	}
 

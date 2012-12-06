@@ -30,9 +30,9 @@ public class TypeStatement extends OWLStatement {
 
 	private static final Logger logger = Logger.getLogger(TypeStatement.class.getPackage().getName());
 
-	private OWLObject<?> type;
+	private OWLConcept<?> type;
 
-	public TypeStatement(OWLObject<?> subject, Statement s, OWLTechnologyAdapter adapter) {
+	public TypeStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
 			type = getOntology().retrieveOntologyObject((Resource) s.getObject());
@@ -51,7 +51,7 @@ public class TypeStatement extends OWLStatement {
 		return "TypeStatement: " + getStatement();
 	}
 
-	public OWLObject<?> getType() {
+	public OWLConcept<?> getType() {
 		return type;
 	}
 
