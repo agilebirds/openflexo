@@ -37,7 +37,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObj
  * 
  * @author gbesancon
  */
-public class EMFModelBuilder implements IFlexoOntologyBuilder<EMFModel> {
+public class EMFModelBuilder {
 	/**
 	 * Build Model.
 	 * 

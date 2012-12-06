@@ -1,3 +1,22 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.FileNotFoundException;
@@ -18,28 +37,58 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
+/**
+ * EMF Model Resource.
+ * 
+ * @author gbesancon
+ */
 public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class
-			.getPackage().getName());
+	/** Logger. */
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class.getPackage()
+			.getName());
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param builder
+	 */
 	public EMFModelResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param aProject
+	 */
 	public EMFModelResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
-	public EMFModelResource(FlexoProject project, EMFModel newEMFModel, FlexoProjectFile ontologyFile)
-			throws InvalidFileNameException, DuplicateResourceException {
+	/**
+	 * Constructor.
+	 * 
+	 * @param project
+	 * @param newEMFModel
+	 * @param ontologyFile
+	 * @throws InvalidFileNameException
+	 * @throws DuplicateResourceException
+	 */
+	public EMFModelResource(FlexoProject project, EMFModel newEMFModel, FlexoProjectFile ontologyFile) throws InvalidFileNameException,
+			DuplicateResourceException {
 		super(project);
 		_resourceData = newEMFModel;
 		newEMFModel.setFlexoResource(this);
 		this.setResourceFile(ontologyFile);
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoStorageResource#saveResourceData(boolean)
+	 */
 	@Override
 	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
 		if (!hasWritePermission()) {
@@ -62,6 +111,11 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 		}
 	}
 
+	/**
+	 * Write file.
+	 * 
+	 * @throws SaveResourceException
+	 */
 	private void writeToFile() throws SaveResourceException {
 
 		// Here comes the code to write EMF model on disk
@@ -69,16 +123,32 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 		// logger.info("Wrote " + getFile());
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
 	@Override
 	public ResourceType getResourceType() {
 		return ResourceType.EMF;
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getName()
+	 */
 	@Override
 	public String getName() {
 		return getProject().getProjectName();
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoStorageResource#performLoadResourceData(org.openflexo.foundation.utils.FlexoProgress,
+	 *      org.openflexo.foundation.utils.ProjectLoadingHandler)
+	 */
 	@Override
 	protected EMFModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
@@ -88,6 +158,12 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 		return null;
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.resource.FlexoResource#getResourceDataClass()
+	 */
 	@Override
 	public Class<EMFModel> getResourceDataClass() {
 		return EMFModel.class;

@@ -47,7 +47,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
  * 
  * @author gbesancon
  */
-public class EMFMetaModelBuilder implements IFlexoOntologyBuilder<EMFMetaModel> {
+public class EMFMetaModelBuilder {
 	/**
 	 * Constructor.
 	 */

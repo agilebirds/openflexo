@@ -36,27 +36,50 @@ import org.openflexo.foundation.resource.ResourceRepository;
  */
 public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>>
 		extends ResourceRepository<R> {
-
+	/** Logger. */
 	private static final Logger logger = Logger.getLogger(MetaModelRepository.class.getPackage().getName());
 
+	/** Technological Adapter. */
 	private TA technologyAdapter;
+	/** Flexo Resource Center. */
 	private FlexoResourceCenter resourceCenter;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param technologyAdapter
+	 * @param resourceCenter
+	 */
 	public MetaModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
 		this.technologyAdapter = technologyAdapter;
 		this.resourceCenter = resourceCenter;
 	}
 
+	/**
+	 * Getter of technologyAdapter.
+	 * 
+	 * @return the technologyAdapter value
+	 */
 	public TA getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
+	/**
+	 * Getter of resourceCenter.
+	 * 
+	 * @return the resourceCenter value
+	 */
 	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
 	}
 
+	/**
+	 * Setter of resourceCenter.
+	 * 
+	 * @param resourceCenter
+	 *            the resourceCenter to set
+	 */
 	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
 		this.resourceCenter = resourceCenter;
 	}
-
 }

@@ -44,7 +44,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObj
  * 
  * @author gbesancon
  */
-public class EMFModelConverter implements IFlexoOntologyConverter<EMFModel, EMFModelBuilder> {
+public class EMFModelConverter {
 
 	/** Builder. */
 	protected EMFModelBuilder builder = new EMFModelBuilder();
