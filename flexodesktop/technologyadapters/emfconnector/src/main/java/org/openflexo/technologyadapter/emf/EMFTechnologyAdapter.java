@@ -40,6 +40,8 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -192,8 +194,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 
 	@Override
 	public TechnologyContextManager<EMFModel, EMFMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EMFTechnologyContextManager();
 	}
 
 	@Override
@@ -204,6 +205,26 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	@Override
 	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
 		return new EMFMetaModelRepository(this, resourceCenter);
+	}
+
+	@Override
+	public EMFTechnologyContextManager getTechnologyContextManager() {
+		return (EMFTechnologyContextManager) super.getTechnologyContextManager();
+	}
+
+	protected EMFMetaModelResource makeEMFMetaModelResource(File emfMetaModelFile, String uri) {
+		try {
+			ModelFactory factory = new ModelFactory().importClass(EMFMetaModelResource.class);
+			EMFMetaModelResource returned = factory.newInstance(EMFMetaModelResource.class);
+			returned.setTechnologyAdapter(this);
+			returned.setURI(uri);
+			returned.setName("Unnamed");
+			returned.setFile(emfMetaModelFile);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

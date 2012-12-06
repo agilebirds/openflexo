@@ -49,6 +49,10 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 
 	private static final Logger logger = Logger.getLogger(FlexoStorageResource.class.getPackage().getName());
 
+	private String uri;
+	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
+	private Date lastKnownMemoryUpdate;
+
 	private static final class StorageResourceLoadResourceException extends LoadResourceException {
 		private final Exception cause;
 
@@ -68,10 +72,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 
 		public void notifyResourceHasBeenLoaded(FlexoStorageResource resource);
 	}
-
-	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
-
-	private Date lastKnownMemoryUpdate;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -511,8 +511,12 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 
 	@Override
 	public String getURI() {
-		logger.warning("Retrieving URI for resource: not implemented yet");
-		return null;
+		return uri;
+	}
+
+	@Override
+	public void setURI(String uri) {
+		this.uri = uri;
 	}
 
 	@Override

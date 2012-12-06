@@ -15,6 +15,7 @@ import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.IProgress;
@@ -52,6 +53,14 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public String getName();
 
 	/**
+	 * Sets the name of this resource
+	 * 
+	 * @param aName
+	 */
+	@Setter(NAME)
+	public void setName(String aName);
+
+	/**
 	 * Returns the unique resource identifier of this resource. A URI is unique in the whole universe and clearly and uniquely identifies
 	 * this resource.
 	 * 
@@ -60,6 +69,14 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(URI)
 	@XMLAttribute()
 	public String getURI();
+
+	/**
+	 * Sets the unique resource identifier of this resource.
+	 * 
+	 * @param anURI
+	 */
+	@Setter(URI)
+	public void setURI(String anURI);
 
 	/**
 	 * Returns a displayable version that the end-user will understand.

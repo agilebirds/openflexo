@@ -92,7 +92,19 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
-					mmRepository.registerResource((MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager), folder);
+					MMR mmRes = (MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager);
+					if (mmRes != null) {
+						logger.info("TechnologyAdapter "
+								+ technologyAdapter.getName()
+								+ ": found and register metamodel "
+								+ mmRes.getURI()
+								+ (mmRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) mmRes).getFile().getAbsolutePath()
+										: ""));
+						mmRepository.registerResource(mmRes, folder);
+					} else {
+						logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for metamodel "
+								+ f.getAbsolutePath());
+					}
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
@@ -111,7 +123,19 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
 					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
-						modelRepository.registerResource((MR) technologyAdapter.retrieveModelResource(f, technologyContextManager), folder);
+						MR modelRes = (MR) technologyAdapter.retrieveModelResource(f, technologyContextManager);
+						if (modelRes != null) {
+							logger.info("TechnologyAdapter "
+									+ technologyAdapter.getName()
+									+ ": found and register model "
+									+ modelRes.getURI()
+									+ (modelRes instanceof FlexoFileResource ? " file="
+											+ ((FlexoFileResource) modelRes).getFile().getAbsolutePath() : ""));
+							modelRepository.registerResource(modelRes, folder);
+						} else {
+							logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for model "
+									+ f.getAbsolutePath());
+						}
 					}
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {

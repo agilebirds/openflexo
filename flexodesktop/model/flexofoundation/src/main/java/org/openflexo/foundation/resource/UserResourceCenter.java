@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
@@ -90,19 +89,6 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 
 		@Remover(RESOURCES)
 		public void removeFromResources(FlexoResource<?> resource);
-	}
-
-	@ModelEntity
-	@XMLElement
-	public static interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoResource<RD> {
-		public static final String FILE = "file";
-
-		@Getter(FILE)
-		@XmlAttribute
-		public File getFile();
-
-		@Setter(FILE)
-		public void setFile(File file);
 	}
 
 	@Override

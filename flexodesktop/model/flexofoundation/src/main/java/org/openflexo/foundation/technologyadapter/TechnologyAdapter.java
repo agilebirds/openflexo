@@ -182,7 +182,7 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public final TechnologyContextManager<M, MM> getTechnologyContextManager() {
+	public TechnologyContextManager<M, MM> getTechnologyContextManager() {
 		return (TechnologyContextManager<M, MM>) getTechnologyAdapterService().getTechnologyContextManager(this);
 	}
 
