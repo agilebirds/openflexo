@@ -71,16 +71,30 @@ public class OntologyUtils {
 	}
 
 	/**
+	 * Return all direct and inferred super classes of supplied individual
+	 * 
+	 * @return
+	 */
+	public static Set<IFlexoOntologyClass> getAllSuperClasses(IFlexoOntologyIndividual anIndividual) {
+		Set<IFlexoOntologyClass> returned = new HashSet<IFlexoOntologyClass>();
+		for (IFlexoOntologyClass c : anIndividual.getTypes()) {
+			returned.add(c);
+			returned.addAll(getAllSuperClasses(c));
+		}
+		return returned;
+	}
+
+	/**
 	 * Return all direct and inferred imported ontology, including supplied ontology
 	 * 
 	 * @return
 	 */
-	public static Set<IFlexoOntology> getAllImportedOntologies(IFlexoOntology ontology) {
-		Set<IFlexoOntology> returned = new HashSet<IFlexoOntology>();
+	public static <O extends IFlexoOntology> Set<O> getAllImportedOntologies(O ontology) {
+		Set<O> returned = new HashSet<O>();
 		returned.add(ontology);
 		for (IFlexoOntology i : ontology.getImportedOntologies()) {
-			returned.add(i);
-			returned.addAll(getAllImportedOntologies(i));
+			returned.add((O) i);
+			returned.addAll((Set<O>) getAllImportedOntologies(i));
 		}
 		return returned;
 	}

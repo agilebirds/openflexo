@@ -35,12 +35,13 @@ public interface IFlexoOntologyDataPropertyValue extends IFlexoOntologyPropertyV
 	 * 
 	 * @return
 	 */
-	IFlexoOntologyDataProperty getDataProperty();
+	public IFlexoOntologyDataProperty getDataProperty();
 
 	/**
 	 * Value of Data Property.
 	 * 
 	 * @return
 	 */
-	List<Object> getValue();
+	@Override
+	public List<Object> getValues();
 }

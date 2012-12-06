@@ -44,9 +44,8 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 	public void setIsReadOnly(boolean b) {
 	}
 
-	@Override
 	public void save() throws SaveResourceException {
-		logger.warning("Imported ontologies are not supposed to be saved !!!");
+		logger.warning("XSDMetaModels are not supposed to be saved !!!");
 	}
 
 	@Deprecated

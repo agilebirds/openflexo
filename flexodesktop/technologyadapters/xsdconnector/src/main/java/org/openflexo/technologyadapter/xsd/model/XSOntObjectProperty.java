@@ -24,13 +24,13 @@ import java.util.List;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntologyObjectProperty {
 
-	private AbstractXSOntObject range;
+	private XSOntClass range;
 	private boolean noRangeFoundYet = true;
 
 	private List<XSOntObjectProperty> superProperties;
@@ -65,11 +65,11 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 	}
 
 	@Override
-	public IFlexoOntologyConcept getRange() {
+	public XSOntClass getRange() {
 		return range;
 	}
 
-	public void newRangeFound(AbstractXSOntObject range) {
+	public void newRangeFound(XSOntClass range) {
 		if (noRangeFoundYet) {
 			this.range = range;
 			noRangeFoundYet = false;
@@ -81,12 +81,6 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 	public void resetRange() {
 		this.range = getOntology().getRootConcept();
 		noRangeFoundYet = true;
-	}
-
-	@Override
-	public boolean isLiteralRange() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -111,6 +105,11 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 		} else {
 			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_INSPECTOR;
 		}
+	}
+
+	@Override
+	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

@@ -29,17 +29,19 @@ import java.util.List;
  * @author gbesancon
  */
 public interface IFlexoOntologyObjectPropertyValue extends IFlexoOntologyPropertyValue {
+
 	/**
 	 * Object Property.
 	 * 
 	 * @return
 	 */
-	IFlexoOntologyObjectProperty getObjectProperty();
+	public IFlexoOntologyObjectProperty getObjectProperty();
 
 	/**
-	 * Value of Object Property.
+	 * Value of Object Property Value
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyConcept> getValue();
+	@Override
+	public List<? extends IFlexoOntologyConcept> getValues();
 }

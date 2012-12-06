@@ -42,14 +42,14 @@ public interface IFlexoOntologyFeatureAssociation {
 	IFlexoOntologyFeature getFeature();
 
 	/**
-	 * Min cardinality of association.
+	 * Min cardinality of association, null when undefined, -1 when Infinite
 	 * 
 	 * @return
 	 */
 	Integer getLowerBound();
 
 	/**
-	 * Max cardinality of association.
+	 * Max cardinality of association, null when undefined, -1 when Infinite
 	 * 
 	 * @return
 	 */

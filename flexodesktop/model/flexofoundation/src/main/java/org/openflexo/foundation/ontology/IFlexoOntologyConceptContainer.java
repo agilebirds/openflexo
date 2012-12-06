@@ -35,24 +35,25 @@ public interface IFlexoOntologyConceptContainer {
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyContainer> getSubContainers();
+	public List<? extends IFlexoOntologyContainer> getSubContainers();
 
 	/**
 	 * Concepts defined by Ontology.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyConcept> getConcepts();
+	public List<? extends IFlexoOntologyConcept> getConcepts();
 
 	/**
 	 * DataTypes defined by Ontology.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyDataType> getDataTypes();
+	public List<? extends IFlexoOntologyDataType> getDataTypes();
 
 	/**
-	 * Retrieve an ontology object from its URI, in the context of this container.<br>
+	 * Retrieve an ontology object from its URI, in the context of this container (if this container is an ontology, will lookup in ontology
+	 * and recursively on imported ontologies)<br>
 	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
 	 * scope ontologies.
 	 * 
@@ -62,9 +63,10 @@ public interface IFlexoOntologyConceptContainer {
 	public abstract IFlexoOntologyConcept getOntologyObject(String objectURI);
 
 	/**
-	 * Retrieve an class from its URI, in the context of current ontology.<br>
-	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * Retrieve an class from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
+	 * recursively on imported ontologies)<br>
+	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
+	 * scope ontologies.
 	 * 
 	 * @param objectURI
 	 * @return
@@ -72,9 +74,11 @@ public interface IFlexoOntologyConceptContainer {
 	public abstract IFlexoOntologyClass getClass(String classURI);
 
 	/**
-	 * Retrieve an individual from its URI, in the context of current ontology.<br>
-	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies.
+	 * Retrieve an individual from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
+	 * recursively on imported ontologies)<br>
+	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
+	 * scope ontologies.
+	 * 
 	 * 
 	 * @param objectURI
 	 * @return
@@ -82,9 +86,10 @@ public interface IFlexoOntologyConceptContainer {
 	public abstract IFlexoOntologyIndividual getIndividual(String individualURI);
 
 	/**
-	 * Retrieve an object property from its URI, in the context of current ontology.<br>
-	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies.
+	 * Retrieve an object property from its URI, in the context of this container (if this container is an ontology, will lookup in ontology
+	 * and recursively on imported ontologies)<br>
+	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
+	 * scope ontologies.
 	 * 
 	 * @param objectURI
 	 * @return
@@ -92,9 +97,11 @@ public interface IFlexoOntologyConceptContainer {
 	public abstract IFlexoOntologyObjectProperty getObjectProperty(String propertyURI);
 
 	/**
-	 * Retrieve an datatype property from its URI, in the context of current ontology.<br>
-	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies.
+	 * Retrieve an datatype property from its URI, in the context of this container (if this container is an ontology, will lookup in
+	 * ontology and recursively on imported ontologies)<br>
+	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
+	 * scope ontologies.
+	 * 
 	 * 
 	 * @param objectURI
 	 * @return
@@ -102,9 +109,11 @@ public interface IFlexoOntologyConceptContainer {
 	public abstract IFlexoOntologyDataProperty getDataProperty(String propertyURI);
 
 	/**
-	 * Retrieve a property from its URI, in the context of current ontology.<br>
-	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
-	 * ontologies.
+	 * Retrieve a property from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
+	 * recursively on imported ontologies)<br>
+	 * The current container defines the scope, in which to lookup returned object. This method does NOT try to lookup object from outer
+	 * scope ontologies.
+	 * 
 	 * 
 	 * @param objectURI
 	 * @return

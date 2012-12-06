@@ -24,13 +24,13 @@ import java.util.List;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDataProperty {
 
-	private OntologicDataType dataType;
+	private XSDDataType dataType;
 	private boolean isFromAttribute = false;
 
 	protected XSOntDataProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
@@ -49,13 +49,17 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		return new ArrayList<XSOntDataProperty>();
 	}
 
-	public void setDataType(OntologicDataType dataType) {
-		this.dataType = dataType;
+	@Override
+	public XSDDataType getRange() {
+		return getDataType();
 	}
 
-	@Override
-	public OntologicDataType getDataType() {
+	public XSDDataType getDataType() {
 		return dataType;
+	}
+
+	public void setDataType(XSDDataType dataType) {
+		this.dataType = dataType;
 	}
 
 	public void setIsFromAttribute(boolean isFromAttribute) {
@@ -92,6 +96,11 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		} else {
 			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_INSPECTOR;
 		}
+	}
+
+	@Override
+	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 }

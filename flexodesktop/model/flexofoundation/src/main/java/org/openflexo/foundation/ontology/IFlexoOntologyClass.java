@@ -35,14 +35,28 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	 * 
 	 * @return
 	 */
-	public List<IFlexoOntologyClass> getSuperClasses();
+	public List<? extends IFlexoOntologyClass> getSuperClasses();
+
+	/**
+	 * Add supplied class to the list of super classes of this class
+	 * 
+	 * @param aType
+	 */
+	public void addToSuperClasses(IFlexoOntologyClass aClass);
+
+	/**
+	 * Remove supplied type from the list of super classes of this class
+	 * 
+	 * @param aType
+	 */
+	public void removeFromSuperClasses(IFlexoOntologyClass aClass);
 
 	/**
 	 * Return a list of classes, accessible from scope defined by supplied ontology, which are declared to be sub-classes of this property
 	 * 
 	 * @return
 	 */
-	public List<IFlexoOntologyClass> getSubClasses(IFlexoOntology context);
+	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context);
 
 	/**
 	 * Is this a Super Class of aClass.

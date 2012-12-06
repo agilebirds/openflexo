@@ -19,24 +19,17 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.localization.Language;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.xmlcode.StringConvertable;
 
-public abstract class AbstractXSOntObject extends AbstractOntologyObject implements IFlexoOntologyConcept, XSOntologyURIDefinitions,
+public abstract class AbstractXSOntObject extends AbstractOntologyObject implements IFlexoOntologyObject, XSOntologyURIDefinitions,
 		InspectableObject, StringConvertable<IFlexoOntologyConcept> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
@@ -45,9 +38,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	private String uri;
 	private String name;
 	private XSOntology ontology;
-
-	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
-	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
 
 	private XSDTechnologyAdapter technologyAdapter;
 
@@ -58,8 +48,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 		this.name = name;
 		this.uri = uri;
 		this.ontology = ontology;
-		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
-		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
 	}
 
 	protected AbstractXSOntObject(XSDTechnologyAdapter adapter) {
@@ -89,7 +77,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 		}
 	}
 
-	@Override
 	public boolean getIsReadOnly() {
 		return getFlexoOntology().getIsReadOnly();
 	}
@@ -108,140 +95,13 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	}
 
 	@Override
-	public Object getPropertyValue(IFlexoOntologyStructuralProperty property) {
-		// Stub
-		return null;
-	}
-
-	@Override
-	public void setPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
-		// Stub
-	}
-
-	@Override
-	public String getHTMLDescription() {
-		return getDisplayableDescription();
-	}
-
-	@Override
-	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
-		// TODO Ask Sylvain
-		return false;
-	}
-
-	@Override
-	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
-		// TODO Ask Sylvain
-		return false;
-	}
-
-	@Override
-	public boolean equalsToConcept(IFlexoOntologyConcept o) {
-		// TODO Ask Sylvain
-		return false;
-	}
-
-	@Override
 	public XSOntology getOntology() {
 		return ontology;
 	}
 
 	@Override
-	public Object getAnnotationValue(IFlexoOntologyDataProperty property, Language language) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Annotations not yet supported by XSOntologies");
-		}
-		return null;
-	}
-
-	@Override
-	public void setAnnotationValue(Object value, IFlexoOntologyDataProperty property, Language language) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Annotations not yet supported by XSOntologies");
-		}
-	}
-
-	@Override
-	public Object getAnnotationObjectValue(IFlexoOntologyObjectProperty property) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Annotations not yet supported by XSOntologies");
-		}
-		return null;
-	}
-
-	@Override
-	public void setAnnotationObjectValue(Object value, IFlexoOntologyObjectProperty property, Language language) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Annotations not yet supported by XSOntologies");
-		}
-	}
-
-	public void clearPropertiesTakingMyselfAsRangeOrDomain() {
-		propertiesTakingMySelfAsRange.clear();
-		propertiesTakingMySelfAsDomain.clear();
-	}
-
-	public void addPropertyTakingMyselfAsRange(XSOntProperty property) {
-		propertiesTakingMySelfAsRange.add(property);
-	}
-
-	public void addPropertyTakingMyselfAsDomain(XSOntProperty property) {
-		propertiesTakingMySelfAsDomain.add(property);
-	}
-
-	@Override
-	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
-		return propertiesTakingMySelfAsRange;
-	}
-
-	@Override
-	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
-		// TODO Auto-generated method stub
-		return propertiesTakingMySelfAsDomain;
-	}
-
-	@Override
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Statements aren't supported by XSOntology objects");
-		}
-		return null;
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, Object value) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Statements aren't supported by XSOntology objects");
-		}
-		return null;
-	}
-
-	@Override
-	public Object addPropertyStatement(IFlexoOntologyStructuralProperty property, String value, Language language) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Statements aren't supported by XSOntology objects");
-		}
-		return null;
-	}
-
-	@Override
-	public Object addDataPropertyStatement(IFlexoOntologyDataProperty property, Object value) {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Statements aren't supported by XSOntology objects");
-		}
-		return null;
+		return getURI();
 	}
 
 	@Override
@@ -267,6 +127,16 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	@Override
 	public boolean isOntologyDataProperty() {
 		return false;
+	}
+
+	@Override
+	@Deprecated
+	public abstract String getClassNameKey();
+
+	@Override
+	@Deprecated
+	public String getInspectorName() {
+		return null;
 	}
 
 }

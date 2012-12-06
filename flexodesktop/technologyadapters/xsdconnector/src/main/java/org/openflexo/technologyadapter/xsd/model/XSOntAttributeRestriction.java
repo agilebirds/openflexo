@@ -29,11 +29,17 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	private final XSOntDataProperty attributeProperty;
 	private final XSAttributeUse attributeUse;
 
-	protected XSOntAttributeRestriction(XSOntology ontology, XSAttributeUse attributeUse, XSDTechnologyAdapter adapter) {
-		super(ontology, adapter);
+	protected XSOntAttributeRestriction(XSOntology ontology, XSOntClass domainClass, XSAttributeUse attributeUse,
+			XSDTechnologyAdapter adapter) {
+		super(ontology, domainClass, adapter);
 		String propertyURI = ontology.getFetcher().getUri(attributeUse.getDecl());
 		this.attributeProperty = ontology.getDataProperty(propertyURI);
 		this.attributeUse = attributeUse;
+	}
+
+	@Override
+	public XSOntDataProperty getProperty() {
+		return getAttributeProperty();
 	}
 
 	@Override
@@ -79,7 +85,7 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	public String getDisplayableDescription() {
 		StringBuffer buffer = new StringBuffer("Attribute ");
 		buffer.append(attributeUse.getDecl().getName());
-		buffer.append(" (").append(attributeProperty.getDataType().toString()).append(") is ");
+		buffer.append(" (").append(attributeProperty.getRange().toString()).append(") is ");
 		if (isRequired()) {
 			buffer.append("required");
 		} else {
@@ -98,4 +104,23 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	public String getClassNameKey() {
 		return "XSD_ontology_attribute_restriction";
 	}
+
+	@Override
+	public XSOntDataProperty getFeature() {
+		return attributeProperty;
+	}
+
+	@Override
+	public Integer getLowerBound() {
+		if (isRequired())
+			return 1;
+		else
+			return 0;
+	}
+
+	@Override
+	public Integer getUpperBound() {
+		return 1;
+	}
+
 }

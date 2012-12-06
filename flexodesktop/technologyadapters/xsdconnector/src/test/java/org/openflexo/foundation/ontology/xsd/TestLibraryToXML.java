@@ -38,9 +38,9 @@ public class TestLibraryToXML extends FlexoTestCase {
 		} else {
 			XSOntIndividual library = lib.createOntologyIndividual("myLibrary", lib.getClass(LIBRARY_URI));
 			XSOntIndividual book1 = lib.createOntologyIndividual("book1", lib.getClass(BOOK_URI));
-			book1.setPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My First Book");
+			book1.addToPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My First Book");
 			XSOntIndividual book2 = lib.createOntologyIndividual("book2", lib.getClass(BOOK_URI));
-			book2.setPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My Second Book");
+			book2.addToPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My Second Book");
 			library.addChild(book1);
 			library.addChild(book2);
 

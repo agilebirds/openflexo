@@ -22,6 +22,10 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.List;
+import java.util.Set;
+
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.PatternRole;
 
 /**
  * Common interface for concepts of Ontology.
@@ -34,28 +38,28 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	IFlexoOntology getOntology();
+	public IFlexoOntology getOntology();
 
 	/**
 	 * Annotation upon Concept.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyAnnotation> getAnnotations();
+	public List<? extends IFlexoOntologyAnnotation> getAnnotations();
 
 	/**
 	 * Container of Concept.
 	 * 
 	 * @return
 	 */
-	IFlexoOntologyConceptContainer getContainer();
+	public IFlexoOntologyConceptContainer getContainer();
 
 	/**
 	 * Association with features for Concept.
 	 * 
 	 * @return
 	 */
-	List<IFlexoOntologyFeatureAssociation> getFeatureAssociations();
+	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations();
 
 	/**
 	 * 
@@ -63,15 +67,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	boolean isSuperConceptOf(IFlexoOntologyConcept concept);
-
-	/**
-	 * 
-	 * Is this a equal to concept.
-	 * 
-	 * @return
-	 */
-	boolean isEqualToConcept(IFlexoOntologyConcept concept);
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept);
 
 	/**
 	 * 
@@ -79,7 +75,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	boolean isSubConceptOf(IFlexoOntologyConcept concept);
+	public boolean isSubConceptOf(IFlexoOntologyConcept concept);
 
 	/**
 	 * Visitor access.
@@ -89,7 +85,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @pattern visitor
 	 */
-	<T> T accept(IFlexoOntologyConceptVisitor<T> visitor);
+	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor);
 
 	/**
 	 * This equals has a particular semantics (differs from {@link #equals(Object)} method) in the way that it returns true only and only if
@@ -101,5 +97,25 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * @return
 	 */
 	public boolean equalsToConcept(IFlexoOntologyConcept o);
+
+	/**
+	 * Return all properties accessible in the scope of this ontology object, where declared range is this object
+	 * 
+	 * @return
+	 */
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
+
+	/**
+	 * Return all properties accessible in the scope of this ontology object, where declared domain is this object
+	 * 
+	 * @return
+	 */
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
+
+	// NB: implemented in FlexoModelObject
+	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
+
+	// NB: implemented in FlexoModelObject
+	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
 
 }

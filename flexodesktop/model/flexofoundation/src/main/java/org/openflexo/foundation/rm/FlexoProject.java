@@ -119,6 +119,7 @@ import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
@@ -4163,7 +4164,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, List<ConceptActorReference>>();
 
-	public void _retrievePendingEditionPatternReferences(IFlexoOntologyObject object) {
+	public void _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
 		if (values == null) {
 			// No pending EditionPattern references for object

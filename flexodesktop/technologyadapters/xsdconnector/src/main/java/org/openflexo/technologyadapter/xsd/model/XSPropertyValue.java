@@ -1,5 +1,5 @@
-/** Copyright (c) 2012, THALES SYSTEMES AEROPORTES - All Rights Reserved
- * Author : Gilles Besançon
+/*
+ * (c) Copyright 2010-2011 AgileBirds
  *
  * This file is part of OpenFlexo.
  *
@@ -16,25 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
- * Contributors :
- *
  */
-package org.openflexo.foundation.ontology;
+package org.openflexo.technologyadapter.xsd.model;
 
-import java.util.List;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 
 /**
- * Concept of feature.
+ * Implementation of a Property value in XSD/XML technology
  * 
- * @author gbesancon
- * 
+ * @author sylvain
  */
-public interface IFlexoOntologyFeature extends IFlexoOntologyConcept {
+public abstract class XSPropertyValue implements IFlexoOntologyPropertyValue {
 
-	/**
-	 * Feature Associations referencing this Feature.
-	 * 
-	 * @return
-	 */
-	List<? extends IFlexoOntologyFeatureAssociation> getReferencingFeatureAssociations();
+	@Override
+	public abstract XSOntProperty getProperty();
+
 }
