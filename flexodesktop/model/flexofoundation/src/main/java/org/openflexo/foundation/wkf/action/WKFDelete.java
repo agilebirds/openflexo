@@ -63,9 +63,6 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 			for (WKFObject next : globalSelection) {
 				if (next instanceof FlexoProcess) {
 					FlexoProcess p = (FlexoProcess) next;
-					if (p.isRootProcess()) {
-						return false;
-					}
 					if (p.isImported()) {
 						if (!p.isTopLevelProcess()) {
 							return false;

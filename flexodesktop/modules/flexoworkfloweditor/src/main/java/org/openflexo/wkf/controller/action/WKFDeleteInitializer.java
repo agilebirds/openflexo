@@ -98,10 +98,6 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					}
 
 					FlexoProcess process = (FlexoProcess) v.firstElement();
-					if (process.isRootProcess()) {
-						FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
-						return false;
-					}
 					if (action.isNoConfirmation()) {
 						return true;
 					}

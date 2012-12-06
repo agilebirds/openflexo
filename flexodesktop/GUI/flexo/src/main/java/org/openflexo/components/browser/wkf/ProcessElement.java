@@ -224,7 +224,7 @@ public class ProcessElement extends BrowserElement {
 	@Override
 	public String getSuffixName() {
 		if (getFlexoProcess().isRootProcess()) {
-			return "[ROOT]";
+			return "[MAIN]";
 		} else {
 			return super.getSuffixName();
 		}
