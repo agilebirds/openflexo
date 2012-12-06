@@ -213,6 +213,10 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentEditor(FlexoEditor projectEditor) {
+		setCurrentEditor(projectEditor, true);
+	}
+
+	private void setCurrentEditor(FlexoEditor projectEditor, boolean switchObject) {
 		if (this.currentEditor == projectEditor) {
 			return;
 		}
@@ -222,12 +226,16 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		FlexoEditor old = currentEditor;
 		currentEditor = projectEditor;
-		if (currentEditor != null) {
+		if (currentEditor != null && switchObject) {
 			HistoryLocation hl = getLastHistoryLocationForProject(currentEditor.getProject());
 			if (hl != null) {
 				setCurrentObjectAndPerspective(hl.getObject(), hl.getPerspective());
 			} else {
-				setCurrentObject(null);
+				if (getCurrentPerspective() != null && getCurrentPerspective().getDefaultObject(projectEditor.getProject()) != null) {
+					setCurrentObject(getCurrentPerspective().getDefaultObject(projectEditor.getProject()));
+				} else {
+					setCurrentObject(null);
+				}
 			}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
@@ -254,7 +262,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentProject(FlexoProject project) {
-		setCurrentEditor(context.getProjectLoader().getEditorForProject(project));
+		setCurrentProject(project, true);
+	}
+
+	private void setCurrentProject(FlexoProject project, boolean switchObject) {
+		setCurrentEditor(context.getProjectLoader().getEditorForProject(project), switchObject);
 	}
 
 	public void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
@@ -300,12 +312,14 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					objects.add(currentObject);
 					HistoryLocation old = currentLocation;
 					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
+					setCurrentProject(currentLocation.getObject().getProject(), false);
 					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 					getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentObject);
 				} else if (currentLocation.getPerspective() != currentPerspective) {
 					previousHistory.push(currentLocation);
 					HistoryLocation old = currentLocation;
 					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
+					setCurrentProject(currentLocation.getObject().getProject(), false);
 					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 				}
 			}
@@ -313,9 +327,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			currentLocation = null;
 			getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, null, currentLocation);
 			getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, null, currentObject);
-		}
-		if (currentLocation != null) {
-			setCurrentProject(currentLocation.getObject().getProject());
 		}
 	}
 
