@@ -1526,7 +1526,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			mainInspectorController.delete();
 		}
 		for (ModuleView<?> view : getAllLoadedViews()) {
-			view.deleteModuleView();
+			try {
+				view.deleteModuleView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		if (rmWindow != null) {
