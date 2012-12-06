@@ -164,6 +164,11 @@ public class TabbedPane<J> {
 			}
 
 			@Override
+			public String toString() {
+				return title.getText() + " visible=" + isVisible() + " bounds=" + getBounds();
+			}
+
+			@Override
 			public boolean isVisible() {
 				return (tabHeaderRenderer == null || tabHeaderRenderer.isTabHeaderVisible(tab)) && super.isVisible();
 			}
@@ -178,7 +183,6 @@ public class TabbedPane<J> {
 					title.setText(((JComponent) tab).getName());
 					title.setToolTipText(((JComponent) tab).getToolTipText());
 				}
-				// setSize(getPreferredSize());
 				TabHeaders.this.revalidate();
 			}
 
@@ -248,6 +252,11 @@ public class TabbedPane<J> {
 				if (e.getSource() != close) {
 					dropHoveringEffect();
 					TabHeaders.this.hidePopup();
+					if (getParent() != TabHeaders.this) {
+						// Move the tab at the beginning
+						tabs.remove(tab);
+						tabs.add(0, tab);
+					}
 					TabbedPane.this.selectTab(tab);
 				}
 			}
