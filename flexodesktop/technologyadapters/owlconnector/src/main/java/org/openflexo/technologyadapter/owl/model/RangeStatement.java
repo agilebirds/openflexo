@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -32,9 +31,9 @@ public class RangeStatement extends OWLStatement {
 	private static final Logger logger = Logger.getLogger(RangeStatement.class.getPackage().getName());
 
 	private OWLObject<?> range;
-	private OntologicDataType dataType;
+	private OWLDataType dataType;
 
-	public OntologicDataType getDataType() {
+	public OWLDataType getDataType() {
 		return dataType;
 	}
 
@@ -43,7 +42,7 @@ public class RangeStatement extends OWLStatement {
 		if (s.getObject() instanceof Resource) {
 			range = getOntology().retrieveOntologyObject((Resource) s.getObject());
 			if (((Resource) s.getObject()).getURI() != null) {
-				dataType = OntologicDataType.fromURI(((Resource) s.getObject()).getURI());
+				dataType = getTechnologyAdapter().getOntologyLibrary().getDataType(((Resource) s.getObject()).getURI());
 			}
 		} else {
 			logger.warning("RangeStatement: object is not a Resource !");

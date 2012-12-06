@@ -22,7 +22,6 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -100,7 +99,7 @@ public abstract class OntologyRestrictionClass extends OWLClass {
 
 	public abstract OWLObject<?> getObject();
 
-	public abstract OntologicDataType getDataRange();
+	public abstract OWLDataType getDataRange();
 
 	@Override
 	public boolean isNamedClass() {

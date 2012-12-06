@@ -28,6 +28,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
@@ -266,7 +267,8 @@ public abstract class OWLProperty extends OWLObject<OntProperty> implements IFle
 	 * 
 	 * @return
 	 */
-	public IFlexoOntologyConcept getRange() {
+	@Override
+	public IFlexoOntologyObject getRange() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 					System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
 				}*/

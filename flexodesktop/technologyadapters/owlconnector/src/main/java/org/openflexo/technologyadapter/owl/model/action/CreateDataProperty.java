@@ -29,8 +29,8 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.model.OWLDataType;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.toolbox.StringUtils;
@@ -70,7 +70,7 @@ public class CreateDataProperty extends FlexoAction<CreateDataProperty, OWLObjec
 	public String description;
 	public IFlexoOntologyDataProperty parentProperty;
 	public IFlexoOntologyClass domainClass;
-	public OntologicDataType dataType;
+	public OWLDataType dataType;
 
 	public String validURILabel;
 

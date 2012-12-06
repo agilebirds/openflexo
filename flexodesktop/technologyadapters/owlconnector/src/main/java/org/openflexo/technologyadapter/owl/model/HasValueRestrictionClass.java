@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.HasValueRestriction;
@@ -77,7 +76,7 @@ public class HasValueRestrictionClass extends OntologyRestrictionClass {
 	}
 
 	@Override
-	public OntologicDataType getDataRange() {
+	public OWLDataType getDataRange() {
 		return null;
 	}
 

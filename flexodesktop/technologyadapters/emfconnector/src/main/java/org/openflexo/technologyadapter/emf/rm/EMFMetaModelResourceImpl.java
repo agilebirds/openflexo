@@ -19,9 +19,14 @@
  */
 package org.openflexo.technologyadapter.emf.rm;
 
+import java.io.FileNotFoundException;
+
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.toolbox.IProgress;
 
@@ -31,6 +36,23 @@ import org.openflexo.toolbox.IProgress;
  * @author gbesancon
  */
 public abstract class EMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMetaModel> implements EMFMetaModelResource {
+
+	@Override
+	public EMFMetaModel getMetaModel() {
+		try {
+			return getResourceData(null);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ResourceLoadingCancelledException e) {
+			e.printStackTrace();
+		} catch (ResourceDependencyLoopException e) {
+			e.printStackTrace();
+		} catch (FlexoException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * Follow the link.
 	 * 
@@ -38,7 +60,8 @@ public abstract class EMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMeta
 	 */
 	@Override
 	public EMFMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
-		return null;
+		EMFMetaModel returned = new EMFMetaModel(getURI(), getFile(), (EMFTechnologyAdapter) getTechnologyAdapter());
+		return returned;
 	}
 
 	/**
@@ -60,4 +83,5 @@ public abstract class EMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMeta
 	public FlexoResourceTree update() {
 		return null;
 	}
+
 }

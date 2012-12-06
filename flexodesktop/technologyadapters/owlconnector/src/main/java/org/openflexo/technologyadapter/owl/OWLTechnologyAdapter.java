@@ -244,7 +244,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public void initialize() {
-		((OWLOntologyLibrary) getTechnologyContextManager()).init();
+		getTechnologyContextManager().init();
 	}
 
 	/**
@@ -254,7 +254,15 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public void resourceCenterAdded(FlexoResourceCenter newResourceCenter) {
-		((OWLOntologyLibrary) getTechnologyContextManager()).init();
+		getTechnologyContextManager().init();
 	}
 
+	@Override
+	public OWLOntologyLibrary getTechnologyContextManager() {
+		return (OWLOntologyLibrary) super.getTechnologyContextManager();
+	}
+
+	public OWLOntologyLibrary getOntologyLibrary() {
+		return getTechnologyContextManager();
+	}
 }

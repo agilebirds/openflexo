@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -59,7 +58,7 @@ public class DataPropertyStatement extends PropertyStatement {
 		return property;
 	}
 
-	public OntologicDataType getDataType() {
+	public OWLDataType getDataType() {
 		if (getProperty() != null) {
 			return property.getDataType();
 		}

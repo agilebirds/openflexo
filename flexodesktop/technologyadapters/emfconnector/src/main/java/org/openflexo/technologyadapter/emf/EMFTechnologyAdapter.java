@@ -185,7 +185,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 									if (extension != null && ePackage != null && resourceFactory != null) {
 										ModelFactory factory = new ModelFactory().importClass(EMFMetaModelResource.class);
 										metaModelResource = factory.newInstance(EMFMetaModelResource.class);
-										metaModelResource.setFolder(aMetaModelFile);
+										metaModelResource.setFile(aMetaModelFile);
 										metaModelResource.setModelFileExtension(extension);
 										metaModelResource.setPackage(ePackage);
 										metaModelResource.setResourceFactory(resourceFactory);
@@ -300,8 +300,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public TechnologyContextManager<EMFModel, EMFMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EMFTechnologyContextManager();
 	}
 
 	/**
@@ -314,4 +313,25 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new EMFModelSlot(viewPoint, this);
 	}
+
+	@Override
+	public EMFTechnologyContextManager getTechnologyContextManager() {
+		return (EMFTechnologyContextManager) super.getTechnologyContextManager();
+	}
+
+	protected EMFMetaModelResource makeEMFMetaModelResource(File emfMetaModelFile, String uri) {
+		try {
+			ModelFactory factory = new ModelFactory().importClass(EMFMetaModelResource.class);
+			EMFMetaModelResource returned = factory.newInstance(EMFMetaModelResource.class);
+			returned.setTechnologyAdapter(this);
+			returned.setURI(uri);
+			returned.setName("Unnamed");
+			returned.setFile(emfMetaModelFile);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

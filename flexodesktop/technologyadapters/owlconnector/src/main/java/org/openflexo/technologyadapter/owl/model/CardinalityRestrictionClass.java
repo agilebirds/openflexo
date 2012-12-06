@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.CardinalityRestriction;
@@ -41,7 +40,7 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 	private final Restriction restriction;
 	private OWLClass object;
 	private int cardinality = -1;
-	private OntologicDataType dataRange;
+	private OWLDataType dataRange;
 
 	@Deprecated
 	protected CardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
@@ -82,7 +81,7 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 
 		if (onDataRangeStmt != null) {
 			RDFNode onDataRangeStmtValue = onDataRangeStmt.getObject();
-			dataRange = OntologicDataType.fromURI(((Resource) onDataRangeStmtValue).getURI());
+			dataRange = getTechnologyAdapter().getOntologyLibrary().getDataType(((Resource) onDataRangeStmtValue).getURI());
 		}
 
 		if (cardinalityStmt != null) {
@@ -126,7 +125,7 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 	}
 
 	@Override
-	public OntologicDataType getDataRange() {
+	public OWLDataType getDataRange() {
 		return dataRange;
 	}
 }

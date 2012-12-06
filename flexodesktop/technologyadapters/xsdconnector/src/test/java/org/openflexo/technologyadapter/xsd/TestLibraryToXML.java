@@ -1,5 +1,6 @@
-package org.openflexo.foundation.ontology.xsd;
+package org.openflexo.technologyadapter.xsd;
 
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,7 +28,12 @@ public class TestLibraryToXML extends FlexoTestCase {
 
 	public void testLibraryToXML() throws DuplicateURIException, ParserConfigurationException, TransformerException {
 		// StringBuffer buffer = new StringBuffer();
-		XSOntology lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", TestLibrary.openTestXSD(FILE_NAME), null);
+		XSOntology lib = null;
+		try {
+			lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", TestLibrary.openTestXSD(FILE_NAME), null);
+		} catch (FileNotFoundException e) {
+			fail(e.getMessage());
+		}
 		assertNotNull(lib);
 		lib.loadWhenUnloaded();
 		assertTrue(lib.isLoaded());

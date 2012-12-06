@@ -1,6 +1,7 @@
-package org.openflexo.foundation.ontology.xsd;
+package org.openflexo.technologyadapter.xsd;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -21,7 +22,7 @@ public class TestLibrary extends FlexoTestCase {
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibrary.class.getPackage()
 			.getName());
 
-	public static File openTestXSD(String filename) {
+	public static File openTestXSD(String filename) throws FileNotFoundException {
 		// TODO Use resource manager?
 		// tip to do it, look at: LocalResourceCenterImpl.findOntologies
 		File result = null;
@@ -29,13 +30,15 @@ public class TestLibrary extends FlexoTestCase {
 		if (result.exists() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to load file " + filename + ".xsd");
+				throw new FileNotFoundException(result.getAbsolutePath());
 			}
 		}
 		return result;
 	}
 
 	public static void xsoObject(AbstractXSOntObject obj, StringBuffer buffer) {
-		buffer.append("Name: ").append(obj.getName());
+		buffer.append(obj.getClass().getSimpleName());
+		buffer.append(" Name: ").append(obj.getName());
 		buffer.append(" URI: ").append(obj.getURI()).append("\n");
 	}
 
@@ -96,13 +99,19 @@ public class TestLibrary extends FlexoTestCase {
 
 	public void testLibrary() {
 		StringBuffer buffer = new StringBuffer();
-		XSOntology lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
+		XSOntology lib = null;
+		try {
+			lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
+		} catch (FileNotFoundException e) {
+			fail(e.getMessage());
+		}
 		assertNotNull(lib);
 		lib.loadWhenUnloaded();
 		assertTrue(lib.isLoaded());
 		if (lib.isLoaded() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to load.");
+				fail();
 			}
 		} else {
 			generalInfos(lib, buffer);

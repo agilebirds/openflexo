@@ -42,6 +42,8 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
@@ -150,9 +152,8 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public XSDMetaModelResource retrieveMetaModelResource(File aMetaModelFile,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		logger.warning("Not implemented yet");
-		XSDMetaModelResource xmlModelResource = null;
-
+		XSDMetaModelResource xmlModelResource = makeXSDMetaModelResource(aMetaModelFile,
+				retrieveMetaModelURI(aMetaModelFile, technologyContextManager));
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerMetaModel(xmlModelResource);
 		return xmlModelResource;
@@ -239,7 +240,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 	@Override
 	public TechnologyContextManager<XMLModel, XSDMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
-		return null;
+		return new XSDTechnologyContextManager();
 	}
 
 	@Override
@@ -250,5 +251,25 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public XSDMetaModelRepository createMetaModelRepository(FlexoResourceCenter resourceCenter) {
 		return new XSDMetaModelRepository(this, resourceCenter);
+	}
+
+	@Override
+	public XSDTechnologyContextManager getTechnologyContextManager() {
+		return (XSDTechnologyContextManager) super.getTechnologyContextManager();
+	}
+
+	protected XSDMetaModelResource makeXSDMetaModelResource(File xsdMetaModelFile, String uri) {
+		try {
+			ModelFactory factory = new ModelFactory().importClass(XSDMetaModelResource.class);
+			XSDMetaModelResource returned = factory.newInstance(XSDMetaModelResource.class);
+			returned.setTechnologyAdapter(this);
+			returned.setURI(uri);
+			returned.setName("Unnamed");
+			returned.setFile(xsdMetaModelFile);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -1,66 +1,25 @@
-/*
- * (c) Copyright 2010-2011 AgileBirds
- *
- * This file is part of OpenFlexo.
- *
- * OpenFlexo is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OpenFlexo is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
- *
- */
 package org.openflexo.technologyadapter.emf.rm;
-
-import java.io.File;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
 
-/**
- * EMF MetaModel Resource.
- * 
- * @author gbesancon
- */
 @ModelEntity
 @ImplementationClass(EMFMetaModelResourceImpl.class)
 @XMLElement
-public interface EMFMetaModelResource extends FlexoResource<EMFMetaModel> {
+public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, FlexoMetaModelResource<EMFModel, EMFMetaModel> {
 
-	public static final String FOLDER = "folder";
 	public static final String EXTENSION = "extension";
 	public static final String PACKAGE = "package";
 	public static final String RESOURCE_FACTORY = "resourcefactory";
-
-	/**
-	 * Setter of MetaModel folder.
-	 * 
-	 * @param folder
-	 */
-	@Setter(value = FOLDER)
-	void setFolder(File folder);
-
-	/**
-	 * Getter of MetaModel folder.
-	 * 
-	 * @return
-	 */
-	@Getter(value = FOLDER, ignoreType = true)
-	File getFolder();
 
 	/**
 	 * Setter of extension for model files related to this MtaModel.
@@ -109,4 +68,6 @@ public interface EMFMetaModelResource extends FlexoResource<EMFMetaModel> {
 	 */
 	@Getter(value = RESOURCE_FACTORY, ignoreType = true)
 	Resource.Factory getResourceFactory();
+
+	public EMFMetaModel getMetaModel();
 }

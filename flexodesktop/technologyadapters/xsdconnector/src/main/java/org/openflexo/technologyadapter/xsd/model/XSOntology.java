@@ -538,8 +538,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	public static String findOntologyURI(File f) {
-		// TODO Auto-generated method stub
-		return null;
+		return "http://www.openflexo.org/test/" + f.getName();
 	}
 
 	@Override

@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
@@ -33,7 +32,7 @@ public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
 
 	private final AllValuesFromRestriction restriction;
 	private OWLClass object;
-	private OntologicDataType dataRange;
+	private OWLDataType dataRange;
 
 	protected AllValuesFromRestrictionClass(AllValuesFromRestriction aRestriction, OWLOntology ontology, OWLTechnologyAdapter adapter) {
 		super(aRestriction, ontology, adapter);
@@ -48,7 +47,7 @@ public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
 			if (restriction.getAllValuesFrom().canAs(OntClass.class)) {
 				object = getOntology().retrieveOntologyClass(restriction.getAllValuesFrom().as(OntClass.class));
 			} else {
-				dataRange = OntologicDataType.fromURI(restriction.getAllValuesFrom().getURI());
+				dataRange = getTechnologyAdapter().getOntologyLibrary().getDataType(restriction.getAllValuesFrom().getURI());
 			}
 		}
 	}
@@ -79,7 +78,7 @@ public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
 	}
 
 	@Override
-	public OntologicDataType getDataRange() {
+	public OWLDataType getDataRange() {
 		return dataRange;
 	}
 

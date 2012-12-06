@@ -27,7 +27,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.ontology.OntProperty;
@@ -111,8 +110,12 @@ public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataPr
 		return null;
 	}
 
+	public OWLDataType getDataType() {
+		return getRange();
+	}
+
 	@Override
-	public OntologicDataType getDataType() {
+	public OWLDataType getRange() {
 		if (getRangeStatement() != null) {
 			return getRangeStatement().getDataType();
 		}
@@ -123,7 +126,7 @@ public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataPr
 	public String getDisplayableDescription() {
 		return "<html>Datatype property <b>" + getName() + "</b><br>" + "<i>" + getURI() + "</i><br>" + "Domain: "
 				+ (getDomain() != null ? getDomain().getURI() : "?") + "<br>" + "Range: "
-				+ (getDataType() != null ? getDataType().toString() : "?") + "<br>" + "</html>";
+				+ (getRange() != null ? getRange().toString() : "?") + "<br>" + "</html>";
 	}
 
 	@Override

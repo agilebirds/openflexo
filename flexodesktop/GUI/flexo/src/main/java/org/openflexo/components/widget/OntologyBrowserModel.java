@@ -583,7 +583,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	 * @param searchedOntology
 	 * @return
 	 */
-	private List<IFlexoOntologyClass> getPreferredStorageLocations(IFlexoOntologyStructuralProperty p, IFlexoOntology searchedOntology) {
+	protected List<IFlexoOntologyClass> getPreferredStorageLocations(IFlexoOntologyStructuralProperty p, IFlexoOntology searchedOntology) {
 		List<IFlexoOntologyClass> potentialStorageClasses = new ArrayList<IFlexoOntologyClass>();
 
 		// First we look if property has a defined domain
@@ -707,7 +707,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	 * 
 	 * @param list
 	 */
-	private void removeOriginalFromRedefinedObjects(List<? extends IFlexoOntologyConcept> list) {
+	protected void removeOriginalFromRedefinedObjects(List<? extends IFlexoOntologyConcept> list) {
 		for (IFlexoOntologyConcept c : new ArrayList<IFlexoOntologyConcept>(list)) {
 			if (c instanceof IFlexoOntologyClass && ((IFlexoOntologyClass) c).isRootConcept() && c.getOntology() != getContext()
 					&& list.contains(getContext().getRootConcept())) {

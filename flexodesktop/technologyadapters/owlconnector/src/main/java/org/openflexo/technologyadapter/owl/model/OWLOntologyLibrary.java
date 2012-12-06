@@ -71,6 +71,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	private SimpleGraphMaker graphMaker;
 
+	private Map<String, FlexoResource<OWLOntology>> ontologies;
+	private final Map<String, OWLDataType> dataTypes;
+
 	private OntologyObjectConverter ontologyObjectConverter;
 
 	public OWLOntologyLibrary(OWLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
@@ -82,6 +85,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		graphMaker = new SimpleGraphMaker();
 
 		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
+		dataTypes = new HashMap<String, OWLDataType>();
 	}
 
 	private boolean defaultOntologiesLoaded = false;
@@ -115,11 +119,23 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		}
 	}
 
+	public OWLTechnologyAdapter getTechnologyAdapter() {
+		return adapter;
+	}
+
+	public OWLDataType getDataType(String dataTypeURI) {
+		OWLDataType returned = dataTypes.get(dataTypeURI);
+		if (returned == null) {
+			returned = new OWLDataType(dataTypeURI, getTechnologyAdapter());
+			dataTypes.put(dataTypeURI, returned);
+		}
+		return returned;
+
+	}
+
 	public OntologyObjectConverter getOntologyObjectConverter() {
 		return ontologyObjectConverter;
 	}
-
-	private Map<String, FlexoResource<OWLOntology>> ontologies;
 
 	public void registerOntology(FlexoResource<OWLOntology> ontologyResource) {
 		ontologies.put(ontologyResource.getURI(), ontologyResource);
