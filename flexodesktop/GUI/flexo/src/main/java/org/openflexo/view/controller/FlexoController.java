@@ -1852,18 +1852,18 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public ImageIcon iconForObject(Object object) {
+		ImageIcon iconForObject = statelessIconForObject(object);
+		if (iconForObject != null && object instanceof FlexoModelObject && ((FlexoModelObject) object).getProject() != getProject()) {
+			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+		}
+		return iconForObject;
+	}
+
+	public static ImageIcon statelessIconForObject(Object object) {
 		if (object instanceof WorkflowModelObject) {
-			ImageIcon iconForObject = WKFIconLibrary.iconForObject((WorkflowModelObject) object);
-			if (iconForObject != null && ((WorkflowModelObject) object).getProject() != getProject()) {
-				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
-			}
-			return iconForObject;
+			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {
-			ImageIcon iconForObject = WKFIconLibrary.iconForObject((WKFObject) object);
-			if (iconForObject != null && ((WKFObject) object).getProject() != getProject()) {
-				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
-			}
-			return iconForObject;
+			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
 		} else if (object instanceof DMObject) {
