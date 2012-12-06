@@ -59,6 +59,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.swing.ImageButton;
+import org.openflexo.toolbox.EmptyVector;
 
 public class BrowserFooter extends JPanel implements MouseListener, WindowListener {
 
@@ -453,7 +454,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			logger.fine("Pressed on plus");
 		}
 		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithDeleteType(getFocusedObject(),
-				(Vector<FlexoModelObject>) null).get(0);
+				EmptyVector.EMPTY_VECTOR(FlexoModelObject.class)).get(0);
 		if (getEditor() != null) {
 			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
 		} else if (logger.isLoggable(Level.WARNING)) {
