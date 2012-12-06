@@ -406,9 +406,11 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 
 	@Override
 	public void delete() {
-		getFlexoProcess().getWorkflow().deleteObserver(this);
-		getFlexoProcess().deleteObserver(this);
-		getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+		if (getFlexoProcess() != null) {
+			getFlexoProcess().getWorkflow().deleteObserver(this);
+			getFlexoProcess().deleteObserver(this);
+			getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+		}
 		super.delete();
 	}
 
