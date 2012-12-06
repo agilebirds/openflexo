@@ -230,7 +230,7 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(FlexoProject.RESOURCES)) {
-			if (((FlexoProject) evt.getSource()).getProjectDataResource() == evt.getNewValue()) {
+			if (evt.getNewValue() != null && ((FlexoProject) evt.getSource()).getProjectDataResource() == evt.getNewValue()) {
 				((FlexoProject) evt.getSource()).getProjectData().getPropertyChangeSupport()
 						.addPropertyChangeListener(ProjectData.IMPORTED_PROJECTS, this);
 			}
