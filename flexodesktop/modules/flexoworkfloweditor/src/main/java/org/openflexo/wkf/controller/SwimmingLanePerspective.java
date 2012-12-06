@@ -108,8 +108,8 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (_controller.getProject() != null) {
-			return _controller.getProject().getRootFlexoProcess();
+		} else if (proposedObject != null) {
+			return proposedObject.getProject().getRootFlexoProcess();
 		} else {
 			return null;
 		}
