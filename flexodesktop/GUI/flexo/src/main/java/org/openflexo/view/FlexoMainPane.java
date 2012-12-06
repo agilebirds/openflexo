@@ -37,6 +37,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.AdvancedPrefs;
@@ -61,6 +62,8 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * @author sguerin
  */
 public class FlexoMainPane extends JPanel implements PropertyChangeListener {
+
+	private static final MatteBorder MODULE_VIEW_BORDER = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY);
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 
@@ -279,7 +282,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				}
 			}
 			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
-			newCenterView.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
+			newCenterView.setBorder(MODULE_VIEW_BORDER);
 		} else {
 			newCenterView = new JPanel();
 		}
