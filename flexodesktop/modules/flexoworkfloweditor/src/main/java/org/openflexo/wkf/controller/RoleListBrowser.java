@@ -21,6 +21,7 @@ package org.openflexo.wkf.controller;
 
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -35,21 +36,16 @@ public class RoleListBrowser extends ProjectBrowser {
 
 	private static final Logger logger = Logger.getLogger(RoleListBrowser.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
 	protected WKFController _controller;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public RoleListBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getSelectionManager());
+		super(controller);
 		_controller = controller;
+	}
+
+	@Override
+	protected boolean activateBrowsingFor(BrowserElement newElement) {
+		return newElement.getObject().getProject() == getRootObject().getProject() && super.activateBrowsingFor(newElement);
 	}
 
 	@Override
@@ -66,7 +62,6 @@ public class RoleListBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE, true);
-		setRoleViewMode(RoleViewMode.TOP_DOWN);
 	}
 
 	@Override

@@ -182,6 +182,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
 		_roleListBrowser.setRootObject(to != null && to.getProject() != null ? to.getProject().getWorkflow().getRoleList() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
+		ROLE_EDITOR_PERSPECTIVE.setProject(getProject());
 	}
 
 	@Override
@@ -530,7 +531,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getName();
 		} else if (object instanceof RoleList) {
-			return FlexoLocalization.localizedForKeyWithParams("roles_defined_for_project_($0)", getProject().getName());
+			return FlexoLocalization.localizedForKeyWithParams("roles");
 		}
 		return null;
 	}

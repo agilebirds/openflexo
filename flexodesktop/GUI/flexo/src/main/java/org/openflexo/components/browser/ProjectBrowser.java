@@ -30,7 +30,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -43,9 +42,6 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.view.controller.FlexoController;
@@ -1250,36 +1246,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_showOnlyAnnotationProperties = showOnlyAnnotationProperties;
 	}
 
-	// TODO: should NOT be handled at this level
-	private RoleViewMode roleViewMode = RoleViewMode.TOP_DOWN;
-
-	// TODO: should NOT be handled at this level
-	public enum RoleViewMode {
-		TOP_DOWN {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_DOWN;
-			}
-		},
-		BOTTOM_UP {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_UP;
-			}
-		},
-		FLAT {
-			@Override
-			public ImageIcon getIcon() {
-				return WKFIconLibrary.FLAT_ICON;
-			}
-		};
-		public abstract ImageIcon getIcon();
-
-		public String getLocalizedName() {
-			return FlexoLocalization.localizedForKey(name().toLowerCase());
-		}
-	}
-
 	@Override
 	public void reload(TreeNode node) {
 		if (node instanceof BrowserElement && ((BrowserElement) node).isDeleted()) {
@@ -1288,17 +1254,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		setHoldStructure();
 		super.reload(node);
 		resetHoldStructure();
-	}
-
-	// TODO: should NOT be handled at this level
-	public RoleViewMode getRoleViewMode() {
-		return roleViewMode;
-	}
-
-	// TODO: should NOT be handled at this level
-	public void setRoleViewMode(RoleViewMode viewMode) {
-		this.roleViewMode = viewMode;
-		update();
 	}
 
 	public boolean isRebuildingStructure() {

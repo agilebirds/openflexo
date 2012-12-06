@@ -36,7 +36,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.Role;
-import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -58,23 +57,7 @@ public class RoleElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		switch (getProjectBrowser().getRoleViewMode()) {
-		case TOP_DOWN:
-			for (Role role : getRole().getRolesSpecializingMyself()) {
-				if (role != getRole()) {
-					addToChilds(role);
-				}
-			}
-			break;
-		case BOTTOM_UP:
-			for (RoleSpecialization rSpec : getRole().getRoleSpecializations()) {
-				addToChilds(rSpec.getParentRole());
-			}
-			break;
-		case FLAT:
-			// No children in FLAT mode
-			break;
-		}
+
 	}
 
 	@Override

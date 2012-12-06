@@ -19,19 +19,9 @@
  */
 package org.openflexo.wkf.view;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import org.openflexo.ch.FCH;
-import org.openflexo.components.browser.ProjectBrowser.RoleViewMode;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.wkf.controller.RoleListBrowser;
@@ -56,16 +46,11 @@ public class RoleListBrowserView extends BrowserView {
 
 	public RoleListBrowserView(RoleListBrowser roleListBrowser, WKFController controller) {
 		super(roleListBrowser, controller);
-		JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
-		for (int i = 0; i < RoleViewMode.values().length; i++) {
-			RoleViewMode viewMode = RoleViewMode.values()[i];
-			north.add(new RoleViewModeButton(viewMode));
-		}
-		add(north, BorderLayout.NORTH);
 		_controller = controller;
 		FCH.setHelpItem(this, "rolelist-browser");
 	}
 
+	/*
 	private class RoleViewModeButton extends JButton implements ActionListener {
 		private RoleViewMode viewMode;
 
@@ -90,7 +75,7 @@ public class RoleListBrowserView extends BrowserView {
 			RoleListBrowserView.this.getBrowser().setRoleViewMode(viewMode);
 		}
 	}
-
+	*/
 	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 	}

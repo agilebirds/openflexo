@@ -64,11 +64,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	public static FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject> addRoleActionizer;
 	public static FlexoActionizer<DeleteRole, Role, WorkflowModelObject> deleteRoleActionizer;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public Role importRole(PPMRole role) throws RoleAlreadyImportedException {
 		Role fir = getImportedObjectWithURI(role.getUri());
 		if (fir != null) {

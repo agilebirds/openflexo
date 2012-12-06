@@ -24,22 +24,32 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.roleeditor.RoleEditorController;
 import org.openflexo.wkf.roleeditor.RoleEditorView;
 
 public class RolePerspective extends FlexoPerspective {
 
-	private final JLabel infoLabel = new JLabel("CTRL-drag to create role specialization");
+	private final JLabel infoLabel = new JLabel();
 
 	private final WKFController _controller;
 
 	private JPanel topRightDummy;
+
+	private FIBView<?, ?> importedRoleView;
 
 	/**
 	 * @param controller
@@ -50,9 +60,13 @@ public class RolePerspective extends FlexoPerspective {
 		super("role_editor");
 		_controller = controller;
 		topRightDummy = new JPanel();
+		infoLabel.setText(FlexoLocalization.localizedForKey("CTRL-drag to create role specialization", infoLabel));
 		setTopLeftView(_controller.getRoleListBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		setFooter(infoLabel);
+		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedRole.fib"));
+		importedRoleView = FIBController.makeView(comp, new FlexoFIBController(comp, _controller));
+		importedRoleView.getController().setDataObject(controller.getControllerModel());
 	}
 
 	public RoleEditorView getCurrentRoleListView() {
@@ -95,7 +109,7 @@ public class RolePerspective extends FlexoPerspective {
 		if (proposedObject != null) {
 			return proposedObject.getProject().getWorkflow().getRoleList();
 		}
-		return _controller.getProject().getWorkflow().getRoleList();
+		return null;
 	}
 
 	@Override
@@ -123,6 +137,18 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getFooter() {
 		return infoLabel;
+	}
+
+	private void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedRoleView.getResultingJComponent());
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }

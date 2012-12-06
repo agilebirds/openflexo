@@ -19,11 +19,6 @@
  */
 package org.openflexo.components.browser.wkf;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Vector;
-
 import javax.swing.Icon;
 import javax.swing.tree.TreePath;
 
@@ -31,7 +26,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.IconFactory;
@@ -46,8 +40,6 @@ import org.openflexo.localization.FlexoLocalization;
  * 
  */
 public class RoleListElement extends BrowserElement implements ExpansionSynchronizedElement {
-
-	private HashSet<Role> observedRole;
 
 	public RoleListElement(RoleList roleList, ProjectBrowser browser, BrowserElement parent) {
 		super(roleList, BrowserElementType.ROLE_LIST, browser, parent);
@@ -73,7 +65,6 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 
 	@Override
 	protected void buildChildrenVector() {
-		clearObserving();
 		/*if (getRoleList().getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getRoleList().getProject().getProjectData().getImportedProjects()) {
 				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
@@ -83,67 +74,14 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 			}
 		}*/
 		// We add the roles
-		if (!getRoleList().isImportedRoleList()) {
-			switch (getProjectBrowser().getRoleViewMode()) {
-			case TOP_DOWN:
-				for (Enumeration<Role> e = getRoleList().getSortedRoles(); e.hasMoreElements();) {
-					Role r = e.nextElement();
-					if (r.getRoleSpecializations().size() == 0) {
-						observeRole(r);
-						addToChilds(r);
-					}
-				}
-				break;
-			case BOTTOM_UP:
-				for (Enumeration<Role> e = getRoleList().getSortedRoles(); e.hasMoreElements();) {
-					Role r = e.nextElement();
-					Vector<Role> v = r.getRolesSpecializingMyself();
-					if (v.size() == 0 || v.size() == 1 && v.firstElement() == r) {
-						observeRole(r);
-						addToChilds(r);
-					}
-				}
-				break;
-			case FLAT:
-				for (Enumeration<Role> e = getRoleList().getSortedRoles(); e.hasMoreElements();) {
-					Role r = e.nextElement();
-					addToChilds(r);
-				}
-				break;
-			}
-		} else {
-			Vector<FlexoModelObject> roles = new Vector<FlexoModelObject>(getRoleList().getRoles());
-			Collections.sort(roles, FlexoModelObject.NAME_COMPARATOR);
-			for (FlexoModelObject role : roles) {
-				addToChilds(role);
-			}
-		}
-	}
-
-	private void clearObserving() {
-		if (observedRole != null) {
-			for (Role r : observedRole) {
-				r.deleteObserver(this);
-			}
-			observedRole.clear();
-		}
-	}
-
-	private void observeRole(Role role) {
-		if (observedRole == null) {
-			observedRole = new HashSet<Role>();
-		}
-		if (!observedRole.contains(role)) {
-			role.addObserver(this);
-			observedRole.add(role);
+		for (Role role : getRoleList().getRoles()) {
+			addToChilds(role);
 		}
 	}
 
 	@Override
 	public void delete() {
 		super.delete();
-		clearObserving();
-		observedRole = null;
 	}
 
 	protected RoleList getRoleList() {
