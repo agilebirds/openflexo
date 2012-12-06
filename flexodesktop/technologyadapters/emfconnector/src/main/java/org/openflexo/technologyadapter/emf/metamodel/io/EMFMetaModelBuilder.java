@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.openflexo.foundation.ontology.io.IFlexoOntologyBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAnnotationAnnotation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
@@ -48,7 +47,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
  * 
  * @author gbesancon
  */
-public class EMFMetaModelBuilder implements IFlexoOntologyBuilder<EMFMetaModel> {
+public class EMFMetaModelBuilder {
 	/**
 	 * Constructor.
 	 */

@@ -38,7 +38,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.io.IFlexoOntologyConverter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAnnotationAnnotation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
@@ -57,7 +56,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
  * 
  * @author gbesancon
  */
-public class EMFMetaModelConverter implements IFlexoOntologyConverter<EMFMetaModel, EMFMetaModelBuilder> {
+public class EMFMetaModelConverter {
 
 	/** Builder. */
 	protected EMFMetaModelBuilder builder = new EMFMetaModelBuilder();
