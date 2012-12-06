@@ -548,9 +548,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				perspective = next;
 				restoreLayout();
 				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView());
-				if (moduleView != null) {
-					tabbedPane.selectTab(moduleView);
-				}
+				tabbedPane.selectTab(moduleView);
 				updatePropertyChangeListener(previous, next);
 				updateLayoutForPerspective();
 			} else if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {

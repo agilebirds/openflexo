@@ -158,11 +158,12 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			}
 
 			if (newEditedObject == null || switchCurrentObjectIfNeeded) {
-				HistoryLocation lastHistoryLocationForPerspective = getLastHistoryLocationForPerspective(currentPerspective);
+				HistoryLocation lastHistoryLocationForPerspective = getLastHistoryLocation(currentPerspective, getCurrentProject());
 				if (lastHistoryLocationForPerspective != null) {
 					newEditedObject = lastHistoryLocationForPerspective.getObject();
 				} else {
-					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
+					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject() != null ? getCurrentObject()
+							: getCurrentProject());
 				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -227,7 +228,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		FlexoEditor old = currentEditor;
 		currentEditor = projectEditor;
 		if (currentEditor != null && switchObject) {
-			HistoryLocation hl = getLastHistoryLocationForProject(currentEditor.getProject());
+			HistoryLocation hl = getLastHistoryLocation(getCurrentPerspective(), currentEditor.getProject());
 			if (hl != null) {
 				setCurrentObjectAndPerspective(hl.getObject(), hl.getPerspective());
 			} else {
@@ -419,20 +420,10 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 	}
 
-	private HistoryLocation getLastHistoryLocationForProject(FlexoProject project) {
+	private HistoryLocation getLastHistoryLocation(FlexoPerspective perspective, FlexoProject project) {
 		for (int i = previousHistory.size() - 1; i > -1; i--) {
 			HistoryLocation location = previousHistory.get(i);
-			if (location.getObject().getProject() == project) {
-				return location;
-			}
-		}
-		return null;
-	}
-
-	private HistoryLocation getLastHistoryLocationForPerspective(FlexoPerspective perspective) {
-		for (int i = previousHistory.size() - 1; i > -1; i--) {
-			HistoryLocation location = previousHistory.get(i);
-			if (location.getPerspective() == perspective) {
+			if (location.getPerspective() == perspective && location.getObject().getProject() == project) {
 				return location;
 			}
 		}

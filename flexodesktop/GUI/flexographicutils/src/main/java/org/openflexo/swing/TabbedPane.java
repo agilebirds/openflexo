@@ -361,9 +361,9 @@ public class TabbedPane<J> {
 			extraTabsPopup.removeAll();
 			boolean moveToPopup = false;
 			if (tabs.size() > 0) {
-				TabHeader selectedHeader = headerComponents.get(selectedTab);
+				TabHeader selectedHeader = selectedTab != null ? headerComponents.get(selectedTab) : null;
 
-				boolean selectedHeaderDone = false;
+				boolean selectedHeaderDone = selectedTab == null;
 				int x = 0;
 				int availableWidth = getWidth();
 				for (int i = 0; i < tabs.size(); i++) {
@@ -488,16 +488,16 @@ public class TabbedPane<J> {
 
 	}
 
-	private TabHeaderRenderer<J> tabHeaderRenderer;
+	protected TabHeaderRenderer<J> tabHeaderRenderer;
 	private List<TabListener<J>> tabListeners;
 
-	private TabHeaders tabHeaders;
+	protected TabHeaders tabHeaders;
 	private JPanel tabBody;
 
 	private boolean useTabBody = true;
 
-	private List<J> tabs;
-	private J selectedTab;
+	protected List<J> tabs;
+	protected J selectedTab;
 
 	public TabbedPane() {
 		tabs = new ArrayList<J>();
@@ -593,9 +593,6 @@ public class TabbedPane<J> {
 		if (selectedTab == tab) {
 			return;
 		}
-		if (tab == null && tabs.size() > 0) {
-			throw new NullPointerException("Cannot select null tab");
-		}
 		if (tab != null && !tabs.contains(tab)) {
 			throw new IllegalArgumentException("Tab must be added to the content pane first.");
 		}
@@ -604,7 +601,11 @@ public class TabbedPane<J> {
 		}
 		selectedTab = tab;
 		if (useTabBody) {
-			tabBody.add((JComponent) tab, 0);
+			if (tab != null) {
+				tabBody.add((JComponent) tab, 0);
+			} else {
+				tabBody.add(new JPanel(), 0);
+			}
 			tabBody.revalidate();
 			tabBody.repaint();
 		}
