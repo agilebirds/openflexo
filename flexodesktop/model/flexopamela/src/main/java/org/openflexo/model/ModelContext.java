@@ -83,7 +83,7 @@ public class ModelContext {
 			modelEntities.putAll(context.modelEntities);
 		}
 		if (baseClass != null) {
-			ModelEntity<?> modelEntity = ModelEntityLibrary.get(baseClass);
+			ModelEntity<?> modelEntity = ModelEntityLibrary.importEntity(baseClass);
 			appendEntity(modelEntity, new HashSet<ModelEntity<?>>());
 		}
 		modelEntities = Collections.unmodifiableMap(modelEntities);
