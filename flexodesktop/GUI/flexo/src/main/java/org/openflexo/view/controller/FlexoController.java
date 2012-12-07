@@ -1135,6 +1135,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						}
 						representedObject = object;
 					}
+					manager.new PropertyChangeListenerRegistration(representedObject.getDeletedProperty(), this, representedObject);
 					projectViews.put(representedObject, moduleView);
 					moduleViews.add(moduleView);
 					propertyChangeSupport.firePropertyChange(MODULE_VIEWS, null, moduleView);
@@ -1808,16 +1809,33 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				}
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
+			FlexoProject project = (FlexoProject) evt.getSource();
 			for (Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map : new ArrayList<Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>(
 					loadedViews.values())) {
-				Map<FlexoModelObject, ModuleView<?>> map2 = map.get(evt.getSource());
-				if (map2 != null) {
-					for (ModuleView<?> view : new ArrayList<ModuleView<?>>(map2.values())) {
+				Map<FlexoModelObject, ModuleView<?>> projectViews = map.get(project);
+				if (projectViews != null) {
+					for (ModuleView<?> view : new ArrayList<ModuleView<?>>(projectViews.values())) {
 						view.deleteModuleView();
 					}
 					loadedViews.remove(evt.getSource());
 				}
 			}
+			manager.removeListener(ProjectClosedNotification.CLOSE, this, project);
+		} else if (evt.getSource() instanceof FlexoModelObject
+				&& evt.getPropertyName().equals(((FlexoModelObject) evt.getSource()).getDeletedProperty())) {
+			FlexoModelObject object = (FlexoModelObject) evt.getSource();
+			for (Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map : loadedViews.values()) {
+				Map<FlexoModelObject, ModuleView<?>> projectViews = map.get(object.getProject());
+				if (projectViews != null) {
+					ModuleView<?> moduleView = projectViews.get(object);
+					if (moduleView != null) {
+						moduleView.deleteModuleView();
+						// just to be sure
+						projectViews.remove(object);
+					}
+				}
+			}
+			manager.new PropertyChangeListenerRegistration(object.getDeletedProperty(), this, object);
 		}
 	}
 
