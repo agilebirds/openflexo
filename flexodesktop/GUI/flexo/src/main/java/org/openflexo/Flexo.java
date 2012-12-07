@@ -49,14 +49,23 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
+import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
@@ -67,7 +76,10 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -197,6 +209,45 @@ public class Flexo {
 		FlexoProperties.load();
 		initializeLoggingManager();
 		final ApplicationContext applicationContext = new InteractiveApplicationContext();
+		/*final ApplicationContext applicationContext = new ApplicationContext() {
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new InteractiveFlexoEditor(this, project);
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return new InteractiveFlexoProjectReferenceLoader(this);
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return new InteractiveFlexoEditor(this, null);
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
+					return new BasicInteractiveProjectLoadingHandler(projectDirectory);
+				} else {
+					return new FullInteractiveProjectLoadingHandler(projectDirectory);
+				}
+			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
+				returned.setFlexoResourceCenterService(resourceCenterService);
+				returned.loadAvailableTechnologyAdapters();
+				return returned;
+			}
+		};*/
 		FlexoApplication.installEventQueue();
 		// Before starting the UI, we need to initialize localization
 		FlexoApplication.initialize(applicationContext.getModuleLoader());

@@ -90,50 +90,50 @@ public class JarClassLoader extends ClassLoader {
 	private Class<?> lookupClass(String className, JarFile jarFile, JarEntry entry, boolean useClassForNameOnly) {
 		boolean addedJarToList = jarFile != null && jarFiles.add(jarFile);
 		try {
-			// Put the class name in right format
-			className = parseClassName(className);
-			// Look in this class loader
-			Class<?> class1 = getClassForClassName().get(className);
-			if (class1 != null) {
-				return class1;
+		// Put the class name in right format
+		className = parseClassName(className);
+		// Look in this class loader
+		Class<?> class1 = getClassForClassName().get(className);
+		if (class1 != null) {
+			return class1;
+		}
+		// Look in the application class loader
+		try {
+			Class<?> forName = Class.forName(className);
+			if (forName != null) {
+				classForClassName.put(className, forName);
 			}
-			// Look in the application class loader
-			try {
-				Class<?> forName = Class.forName(className);
-				if (forName != null) {
-					classForClassName.put(className, forName);
-				}
-				return forName;
-			} catch (ClassNotFoundException e) {
-			} catch (NoClassDefFoundError e) {
-			} catch (ExceptionInInitializerError e) {
-			} catch (LinkageError e) {
-			}
-			if (useClassForNameOnly) {
-				return null;
-			}
-
-			if (jarFile != null && entry != null) {
-				return loadClass(jarFile, entry, className);
-			}
-			class1 = findInJars(className);
-			if (class1 != null) {
-				return class1;
-			}
-			if (className.indexOf('.') == -1) {
-				class1 = lookupClass("java.lang." + className, null, null, true);
-			}
-			classForClassName.put(className, class1);
-			if (class1 == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Looked everywhere but I could not find " + className);
-				}
-			}
+			return forName;
+		} catch (ClassNotFoundException e) {
+		} catch (NoClassDefFoundError e) {
+		} catch (ExceptionInInitializerError e) {
+		} catch (LinkageError e) {
+		}
+		if (useClassForNameOnly) {
 			return null;
+		}
+
+		if (jarFile != null && entry != null) {
+			return loadClass(jarFile, entry, className);
+		}
+		class1 = findInJars(className);
+		if (class1 != null) {
+			return class1;
+		}
+		if (className.indexOf('.') == -1) {
+			class1 = lookupClass("java.lang." + className, null, null, true);
+		}
+		classForClassName.put(className, class1);
+		if (class1 == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Looked everywhere but I could not find " + className);
+			}
+		}
+		return null;
 		} finally {
 			if (addedJarToList) {
 				jarFiles.remove(jarFile);
-			}
+	}
 		}
 	}
 
@@ -164,13 +164,13 @@ public class JarClassLoader extends ClassLoader {
 	}
 
 	public Class<?> lookupClassInJarFile(JarFile jarFile, String jarEntryName, String className) {
-		JarEntry e = jarFile.getJarEntry(jarEntryName);
-		if (e != null) {
-			Class<?> klass = loadClass(jarFile, e, className);
-			if (klass != null) {
-				return klass;
-			}
-		}
+				JarEntry e = jarFile.getJarEntry(jarEntryName);
+				if (e != null) {
+					Class<?> klass = loadClass(jarFile, e, className);
+					if (klass != null) {
+						return klass;
+					}
+				}
 		return null;
 	}
 

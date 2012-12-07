@@ -19,20 +19,22 @@
  */
 package org.openflexo.ve.controller;
 
+import java.util.Set;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.gui.FIBOntologyLibraryBrowser;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.ve.view.OntologyView;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -82,15 +84,20 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject instanceof FlexoOntology) {
+		if (proposedObject instanceof IFlexoOntology) {
 			return proposedObject;
+		} else {
+			Set<ProjectOntology> allModels = _controller.getProject().getAllModels();
+			if (allModels.isEmpty() == false) {
+				return (FlexoModelObject) allModels.iterator().next();
+			}
 		}
-		return (FlexoModelObject) _controller.getProject().getProjectOntology();
+		return null;
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof FlexoOntology;
+		return object instanceof IFlexoOntology;
 	}
 
 	@Override
@@ -111,8 +118,8 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOWLOntology) {
-			return ((ImportedOWLOntology) object).getName();
+		if (object instanceof OWLMetaModel) {
+			return ((OWLMetaModel) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

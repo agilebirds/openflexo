@@ -19,7 +19,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {
+public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends FlexoStorageResource<SRD> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoPamelaResource.class
 			.getPackage().getName());
@@ -102,6 +102,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoS
 		return modelFactory;
 	}
 
+	@Override
 	public Class<SRD> getResourceDataClass() {
 		return resourceDataClass;
 	}

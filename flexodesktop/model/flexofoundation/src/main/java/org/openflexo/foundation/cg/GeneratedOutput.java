@@ -41,7 +41,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  */
 
-public abstract class GeneratedOutput extends CGObject implements XMLStorageResourceData {
+public abstract class GeneratedOutput<RD extends GeneratedOutput<RD>> extends CGObject implements XMLStorageResourceData<RD> {
 
 	public static interface GeneratorFactory {
 

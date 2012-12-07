@@ -6,35 +6,26 @@ import org.openflexo.antar.binding.CustomType;
 
 public class SubPropertyOfProperty implements CustomType {
 
-	public static SubPropertyOfProperty getSubPropertyOfProperty(OntologyProperty anOntologyProperty) {
+	public static SubPropertyOfProperty getSubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
 		if (anOntologyProperty == null) {
 			return null;
 		}
-		if (anOntologyProperty.getOntologyLibrary() != null) {
-			if (anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.get(anOntologyProperty) != null) {
-				return anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.get(anOntologyProperty);
-			} else {
-				SubPropertyOfProperty returned = new SubPropertyOfProperty(anOntologyProperty);
-				anOntologyProperty.getOntologyLibrary().subpropertiesOfProperty.put(anOntologyProperty, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyProperty.getTechnologyAdapter().getTechnologyContextManager().getSubPropertyOfProperty(anOntologyProperty);
 	}
 
-	private OntologyProperty ontologyProperty;
+	private IFlexoOntologyStructuralProperty ontologyProperty;
 
-	private SubPropertyOfProperty(OntologyProperty anOntologyProperty) {
+	public SubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
 		this.ontologyProperty = anOntologyProperty;
 	}
 
-	public OntologyProperty getOntologyProperty() {
+	public IFlexoOntologyStructuralProperty getOntologyProperty() {
 		return ontologyProperty;
 	}
 
 	@Override
 	public Class getBaseClass() {
-		return OntologyProperty.class;
+		return IFlexoOntologyStructuralProperty.class;
 	}
 
 	@Override
@@ -58,18 +49,18 @@ public class SubPropertyOfProperty implements CustomType {
 
 	public static class SubDataPropertyOfProperty extends SubPropertyOfProperty {
 
-		private SubDataPropertyOfProperty(OntologyDataProperty anOntologyProperty) {
+		private SubDataPropertyOfProperty(IFlexoOntologyDataProperty anOntologyProperty) {
 			super(anOntologyProperty);
 		}
 
 		@Override
-		public OntologyDataProperty getOntologyProperty() {
-			return (OntologyDataProperty) super.getOntologyProperty();
+		public IFlexoOntologyDataProperty getOntologyProperty() {
+			return (IFlexoOntologyDataProperty) super.getOntologyProperty();
 		}
 
 		@Override
 		public Class getBaseClass() {
-			return OntologyDataProperty.class;
+			return IFlexoOntologyDataProperty.class;
 		}
 
 		@Override
@@ -86,18 +77,18 @@ public class SubPropertyOfProperty implements CustomType {
 
 	public static class SubObjectPropertyOfProperty extends SubPropertyOfProperty {
 
-		private SubObjectPropertyOfProperty(OntologyObjectProperty anOntologyProperty) {
+		private SubObjectPropertyOfProperty(IFlexoOntologyObjectProperty anOntologyProperty) {
 			super(anOntologyProperty);
 		}
 
 		@Override
-		public OntologyObjectProperty getOntologyProperty() {
-			return (OntologyObjectProperty) super.getOntologyProperty();
+		public IFlexoOntologyObjectProperty getOntologyProperty() {
+			return (IFlexoOntologyObjectProperty) super.getOntologyProperty();
 		}
 
 		@Override
 		public Class getBaseClass() {
-			return OntologyObjectProperty.class;
+			return IFlexoOntologyObjectProperty.class;
 		}
 
 		@Override

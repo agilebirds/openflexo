@@ -20,7 +20,7 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
 @XMLElement
-public interface ProjectData extends StorageResourceData, AccessibleProxyObject {
+public interface ProjectData extends StorageResourceData<ProjectData>, AccessibleProxyObject {
 
 	public static final String FLEXO_RESOURCE = "flexoResource";
 	public static final String PROJECT = "project";
@@ -28,10 +28,10 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	@Override
 	@Getter(value = FLEXO_RESOURCE, ignoreType = true)
-	public FlexoStorageResource getFlexoResource();
+	public FlexoStorageResource<ProjectData> getFlexoResource();
 
 	@Setter(FLEXO_RESOURCE)
-	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
+	public void setFlexoStorageResource(FlexoStorageResource<ProjectData> resource) throws DuplicateResourceException;
 
 	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.URI, isMultiValued = false)
 	public FlexoProjectReference getProjectReferenceWithURI(String uri);

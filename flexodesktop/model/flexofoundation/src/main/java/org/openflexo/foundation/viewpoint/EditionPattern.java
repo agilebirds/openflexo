@@ -36,6 +36,12 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -208,14 +214,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return getPatternRoles(ClassPatternRole.class);
 	}
 
-	public List<ObjectPropertyStatementPatternRole> getObjectPropertyStatementPatternRoles() {
-		return getPatternRoles(ObjectPropertyStatementPatternRole.class);
-	}
-
-	public List<DataPropertyStatementPatternRole> getDataPropertyStatementPatternRoles() {
-		return getPatternRoles(DataPropertyStatementPatternRole.class);
-	}
-
 	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
 		return getPatternRoles(GraphicalElementPatternRole.class);
 	}
@@ -336,7 +334,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
-	public IsAStatementPatternRole createIsAStatementPatternRole() {
+	/*public IsAStatementPatternRole createIsAStatementPatternRole() {
 		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
@@ -362,7 +360,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
-	}
+	}*/
 
 	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
@@ -567,7 +565,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
-			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole /*|| pr instanceof StatementPatternRole*/) {
 				rolesToDelete.add(pr);
 			}
 		}

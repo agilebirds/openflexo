@@ -27,31 +27,29 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddShape;
+import org.openflexo.foundation.ontology.BuiltInDataType;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
-import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.FloatParameter;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
-import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -104,7 +102,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	public NewEditionPatternChoices patternChoice = NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL;
 
 	private String editionPatternName;
-	private OntologyClass concept;
+	private IFlexoOntologyClass concept;
 	private String individualPatternRoleName;
 
 	public boolean isTopLevel = true;
@@ -199,12 +197,12 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
-									if (range instanceof OntologyClass) {
+								if (e.property instanceof IFlexoOntologyObjectProperty) {
+									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+									if (range instanceof IFlexoOntologyClass) {
 										IndividualPatternRole newPatternRole = new IndividualPatternRole(builder);
 										newPatternRole.setPatternRoleName(e.property.getName());
-										newPatternRole.setOntologicType((OntologyClass) range);
+										newPatternRole.setOntologicType((IFlexoOntologyClass) range);
 										newEditionPattern.addToPatternRoles(newPatternRole);
 										otherRoles.add(newPatternRole);
 									}
@@ -227,8 +225,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						for (PropertyEntry e : propertyEntries) {
 							if (e != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
-								if (e.property instanceof OntologyDataProperty) {
-									switch (((OntologyDataProperty) e.property).getDataType()) {
+								if (e.property instanceof IFlexoOntologyDataProperty) {
+									switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
 									case Boolean:
 										newParameter = new CheckboxParameter(builder);
 										newParameter.setName(e.property.getName());
@@ -256,13 +254,13 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									default:
 										break;
 									}
-								} else if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
-									if (range instanceof OntologyClass) {
+								} else if (e.property instanceof IFlexoOntologyObjectProperty) {
+									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+									if (range instanceof IFlexoOntologyClass) {
 										newParameter = new IndividualParameter(builder);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
-										((IndividualParameter) newParameter).setConcept((OntologyClass) range);
+										((IndividualParameter) newParameter).setConcept((IFlexoOntologyClass) range);
 									}
 								}
 								if (newParameter != null) {
@@ -288,20 +286,20 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						}
 
 						// Add individual action
-						AddIndividual newAddIndividual = new AddIndividual(builder);
+						/*AddIndividual newAddIndividual = new AddIndividual(builder);
 						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
-									if (range instanceof OntologyClass) {
+								if (e.property instanceof IFlexoOntologyObjectProperty) {
+									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+									if (range instanceof IFlexoOntologyClass) {
 										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(builder);
 										propertyAssertion.setOntologyProperty(e.property);
 										propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
 										newAddIndividual.addToObjectAssertions(propertyAssertion);
 									}
-								} else if (e.property instanceof OntologyDataProperty) {
+								} else if (e.property instanceof IFlexoOntologyDataProperty) {
 									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(builder);
 									propertyAssertion.setOntologyProperty(e.property);
 									propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
@@ -309,7 +307,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}
 						}
-						newDropScheme.addToActions(newAddIndividual);
+						newDropScheme.addToActions(newAddIndividual);*/
 					}
 
 					// Add shape/connector actions
@@ -341,9 +339,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = ((OntologyObjectProperty) e.property).getRange();
-									if (range instanceof OntologyClass) {
+								if (e.property instanceof IFlexoOntologyObjectProperty) {
+									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+									if (range instanceof IFlexoOntologyClass) {
 										InspectorEntry newInspectorEntry = null;
 										newInspectorEntry = new TextFieldInspectorEntry(builder);
 										newInspectorEntry.setName(e.property.getName());
@@ -352,9 +350,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 										newInspectorEntry.setData(new ViewPointDataBinding(e.property.getName() + ".uriName"));
 										inspector.addToEntries(newInspectorEntry);
 									}
-								} else if (e.property instanceof OntologyDataProperty) {
+								} else if (e.property instanceof IFlexoOntologyDataProperty) {
 									InspectorEntry newInspectorEntry = null;
-									switch (((OntologyDataProperty) e.property).getDataType()) {
+									switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
 									case Boolean:
 										newInspectorEntry = new CheckboxInspectorEntry(builder);
 										break;
@@ -372,7 +370,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 										newInspectorEntry = new TextFieldInspectorEntry(builder);
 										break;
 									default:
-										logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());
+										logger.warning("Not handled: " + ((IFlexoOntologyDataProperty) e.property).getRange());
 									}
 									if (newInspectorEntry != null) {
 										newInspectorEntry.setName(e.property.getName());
@@ -441,17 +439,17 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		this.patternRole = null;
 	}
 
-	public OntologyClass getConcept() {
+	public IFlexoOntologyClass getConcept() {
 		return concept;
 	}
 
-	public void setConcept(OntologyClass concept) {
+	public void setConcept(IFlexoOntologyClass concept) {
 		this.concept = concept;
 		propertyEntries.clear();
-		FlexoOntology ownerOntology = concept.getFlexoOntology();
-		for (OntologyProperty p : concept.getPropertiesTakingMySelfAsDomain()) {
-			if (p.getFlexoOntology() == ownerOntology) {
-				PropertyEntry newEntry = new PropertyEntry(p);
+		IFlexoOntology ownerOntology = concept.getOntology();
+		for (IFlexoOntologyFeature p : concept.getPropertiesTakingMySelfAsDomain()) {
+			if (p.getOntology() == ownerOntology && p instanceof IFlexoOntologyStructuralProperty) {
+				PropertyEntry newEntry = new PropertyEntry((IFlexoOntologyStructuralProperty) p);
 				propertyEntries.add(newEntry);
 			}
 		}
@@ -504,11 +502,11 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public class PropertyEntry {
 
-		public OntologyProperty property;
+		public IFlexoOntologyStructuralProperty property;
 		public String label;
 		public boolean selectEntry = false;
 
-		public PropertyEntry(OntologyProperty property) {
+		public PropertyEntry(IFlexoOntologyStructuralProperty property) {
 			this.property = property;
 			if (StringUtils.isNotEmpty(property.getDescription())) {
 				label = property.getDescription();
@@ -518,24 +516,15 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		}
 
 		public String getRange() {
-			if (property instanceof OntologyDataProperty) {
-				if (((OntologyDataProperty) property).getDataType() != null) {
-					return ((OntologyDataProperty) property).getDataType().name();
-				}
-				return "";
-			}
-			if (property instanceof OntologyObjectProperty && ((OntologyObjectProperty) property).getRange() != null) {
-				return ((OntologyObjectProperty) property).getRange().getName();
-			}
-			return "";
+			return property.getRange().getName();
 		}
 	}
 
 	private PropertyEntry selectBestEntryForURIBaseName() {
 		Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 		for (PropertyEntry e : propertyEntries) {
-			if (e.selectEntry && e.property instanceof OntologyDataProperty
-					&& ((OntologyDataProperty) e.property).getDataType() == OntologicDataType.String) {
+			if (e.selectEntry && e.property instanceof IFlexoOntologyDataProperty
+					&& ((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType() == BuiltInDataType.String) {
 				candidates.add(e);
 			}
 		}

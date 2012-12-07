@@ -22,21 +22,21 @@ package org.openflexo.vpm.controller;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 
 @Deprecated
 public class OntologyBrowser extends VPMBrowser {
-	private FlexoOntology representedOntology = null;
+	private IFlexoOntology representedOntology = null;
 
 	public OntologyBrowser(VPMController controller) {
 		super(controller);
 	}
 
-	public FlexoOntology getRepresentedOntology() {
+	public IFlexoOntology getRepresentedOntology() {
 		return representedOntology;
 	}
 
-	public void setRepresentedOntology(FlexoOntology representedOntology) {
+	public void setRepresentedOntology(IFlexoOntology representedOntology) {
 		this.representedOntology = representedOntology;
 	}
 

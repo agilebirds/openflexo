@@ -19,11 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -32,20 +38,59 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
  * 
+ * An edition action adresses a {@link ModelSlot}
+ * 
  * @author sylvain
  * 
  */
-public abstract class EditionAction extends EditionSchemeObject {
+public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
 	public static enum EditionActionType {
-		AddClass, AddIndividual, AddObjectPropertyStatement, AddDataPropertyStatement, AddIsAStatement, AddRestrictionStatement, AddConnector, AddShape, AddDiagram, AddEditionPattern, CloneShape, CloneConnector, CloneIndividual, DeclarePatternRole, DeleteAction, GraphicalAction, GoToObject, Iteration, Conditional
+		AddClass,
+		AddIndividual,
+		AddObjectPropertyStatement,
+		AddDataPropertyStatement,
+		AddIsAStatement,
+		AddRestrictionStatement,
+		AddConnector,
+		AddShape,
+		AddDiagram,
+		AddEditionPattern,
+		CloneShape,
+		CloneConnector,
+		CloneIndividual,
+		DeclarePatternRole,
+		DeleteAction,
+		GraphicalAction,
+		GoToObject,
+		Iteration,
+		Conditional
 	}
 
 	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
-		conditional, assignation, individualName, className, container, fromShape, toShape, object, subject, father, value, restrictionType, cardinality, target, diagramName, view, condition, iteration
+		conditional,
+		assignation,
+		individualName,
+		className,
+		container,
+		fromShape,
+		toShape,
+		object,
+		subject,
+		father,
+		value,
+		restrictionType,
+		cardinality,
+		target,
+		diagramName,
+		view,
+		condition,
+		iteration
 	}
+
+	private ModelSlot<M, MM> modelSlot;
 
 	// private EditionScheme _scheme;
 	private String description;
@@ -97,12 +142,69 @@ public abstract class EditionAction extends EditionSchemeObject {
 		return null;
 	}
 
+	public final ModelSlot<M, MM> getModelSlot() {
+		return modelSlot;
+	}
+
+	public final void setModelSlot(ModelSlot<M, MM> modelSlot) {
+		this.modelSlot = modelSlot;
+	}
+
+	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {
+		return action.getView().getModelSlotInstance(getModelSlot());
+	}
+
 	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid()) {
 			return (Boolean) getConditional().getBindingValue(action);
 		}
 		return true;
 	}
+
+	/**
+	 * Perform batch of actions, in the context provided by supplied {@link EditionSchemeAction}<br>
+	 * An action is performed if and only if the condition evaluation returns true. All finalizers of actions are invoked in a second step
+	 * when all actions are performed.
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public static void performBatchOfActions(Collection<EditionAction<?, ?, ?>> actions, EditionSchemeAction contextAction) {
+
+		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+
+		for (EditionAction editionAction : actions) {
+			if (editionAction.evaluateCondition(contextAction)) {
+				Object returned = editionAction.performAction(contextAction);
+				if (returned != null) {
+					performedActions.put(editionAction, returned);
+				}
+			}
+		}
+
+		for (EditionAction editionAction : performedActions.keySet()) {
+			editionAction.finalizePerformAction(contextAction, performedActions.get(editionAction));
+		}
+	}
+
+	/**
+	 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
+	 * Note than returned object will be used to be further reinjected in finalizer
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public abstract T performAction(EditionSchemeAction action);
+
+	/**
+	 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
+	 * 
+	 * @param action
+	 * @param initialContext
+	 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
+	 * @return
+	 */
+	public abstract void finalizePerformAction(EditionSchemeAction action, T initialContext);
 
 	@Override
 	public EditionPattern getEditionPattern() {
@@ -191,7 +293,7 @@ public abstract class EditionAction extends EditionSchemeObject {
 		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
 	}
 
-	public AddShape createAddShapeAction() {
+	/*public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape(null);
 		if (getEditionPattern().getDefaultShapePatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
@@ -303,6 +405,19 @@ public abstract class EditionAction extends EditionSchemeObject {
 		CloneIndividual newAction = new CloneIndividual(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
+	}*/
+
+	/**
+	 * Creates a new {@link EditionAction} of supplied class, and add it to parent container at the index where this action is itself
+	 * registered<br>
+	 * Delegates creation to model slot
+	 * 
+	 * @return newly created {@link EditionAction}
+	 */
+	public <A extends EditionAction<M, MM, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+		A newAction = modelSlot.createAction(actionClass);
+		insertActionAtCurrentIndex(newAction);
+		return null;
 	}
 
 	public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {

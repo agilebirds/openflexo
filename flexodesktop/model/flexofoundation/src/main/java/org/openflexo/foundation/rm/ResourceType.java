@@ -246,6 +246,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType WEBSERVER = new WebServerResourceType();
 	public static final ResourceType BPEL = new BPELResourceType();
 	public static final ResourceType XSD = new XSDResourceType();
+	public static final ResourceType EMF = new EMFResourceType();
 
 	public static final ResourceType WS_LIBRARY = new WSLibraryResourceType();
 
@@ -1309,6 +1310,38 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		@Override
 		public Color getMainColor() {
 			return Color.ORANGE.brighter();
+		}
+
+	}
+
+	private static class EMFResourceType extends ResourceType {
+		EMFResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "EMF";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return FileFormat.UNKNOWN;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return false;
+		}
+
+		@Override
+		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+			return null;
+		}
+
+		@Override
+		public Color getMainColor() {
+			return Color.MAGENTA.brighter();
 		}
 
 	}

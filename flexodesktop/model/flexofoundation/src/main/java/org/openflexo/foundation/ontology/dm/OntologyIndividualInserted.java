@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 
 public class OntologyIndividualInserted extends OEDataModification {
-	public OntologyIndividualInserted(OntologyIndividual individual) {
+	public OntologyIndividualInserted(IFlexoOntologyIndividual individual) {
 		super(null, individual);
 	}
 }

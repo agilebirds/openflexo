@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -22,7 +21,6 @@ import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -31,14 +29,13 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter implements FlexoResourceCenter {
+public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	private ModelFactory modelFactory;
-	private File userResourceCenterStorageFile;
 	private Storage storage;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		super(userResourceCenterStorageFile);
 		try {
 			this.modelFactory = new ModelFactory(Storage.class);
 		} catch (ModelDefinitionException e1) {
@@ -58,11 +55,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	}
 
 	public File getUserResourceCenterStorageFile() {
-		return userResourceCenterStorageFile;
-	}
-
-	public void setUserResourceCenterStorageFile(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
+		return getRootDirectory();
 	}
 
 	@ModelEntity
@@ -83,19 +76,6 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 		@Remover(RESOURCES)
 		public void removeFromResources(FlexoResource<?> resource);
-	}
-
-	@ModelEntity
-	@XMLElement
-	public static interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoResource<RD> {
-		public static final String FILE = "file";
-
-		@Getter(FILE)
-		@XMLAttribute
-		public File getFile();
-
-		@Setter(FILE)
-		public void setFile(File file);
 	}
 
 	@Override
@@ -156,10 +136,10 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	}
 
 	private void saveStorage() throws IOException {
-		if (!userResourceCenterStorageFile.exists()) {
-			userResourceCenterStorageFile.getParentFile().mkdirs();
+		if (!getUserResourceCenterStorageFile().exists()) {
+			getUserResourceCenterStorageFile().getParentFile().mkdirs();
 		}
-		FileOutputStream fos = new FileOutputStream(userResourceCenterStorageFile);
+		FileOutputStream fos = new FileOutputStream(getUserResourceCenterStorageFile());
 		try {
 			modelFactory.serialize(storage, fos, SerializationPolicy.EXTENSIVE);
 		} finally {
@@ -169,7 +149,7 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	@Override
 	public void update() throws IOException {
-		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
+		FileInputStream fis = new FileInputStream(getRootDirectory());
 		try {
 			try {
 				storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
@@ -201,24 +181,22 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		}
 	}
 
-	@Override
-	public OntologyLibrary retrieveBaseOntologyLibrary() {
-		return null;
-	}
-
+	@Deprecated
 	@Override
 	public ViewPointLibrary retrieveViewPointLibrary() {
 		return null;
 	}
 
+	@Deprecated
 	@Override
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return null;
 	}
 
+	@Deprecated
 	@Override
 	public File getNewCalcSandboxDirectory() {
-		return new File(userResourceCenterStorageFile.getParentFile(), "ViewPoints");
+		return new File(getRootDirectory().getParentFile(), "ViewPoints");
 	}
 
 }

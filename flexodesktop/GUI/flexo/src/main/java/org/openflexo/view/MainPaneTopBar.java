@@ -174,7 +174,7 @@ public class MainPaneTopBar extends JMenuBar {
 			@Override
 			public void fireApplyPerformed() {
 				model.setCurrentProject(projectSelector.getEditedObject());
-			}
+	}
 
 			@Override
 			public void fireCancelPerformed() {
@@ -187,7 +187,7 @@ public class MainPaneTopBar extends JMenuBar {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				projectSelector.setEditedObject(model.getCurrentProject());
-			}
+		}
 		}, model);
 		projectSelector.setShowReset(false);
 		projectSelector.setFlexoController(controller);

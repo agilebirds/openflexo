@@ -24,7 +24,7 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.localization.LocalizedDelegate;
 

@@ -45,8 +45,8 @@ import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
@@ -365,7 +365,7 @@ public class FIBInspector extends FIBPanel {
 						}
 					}, true));*/
 			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
-			OntologyClass conceptClass = null;
+			IFlexoOntologyClass conceptClass = null;
 			if (individualEntry.getIsDynamicConceptValue()) {
 				// conceptClass = classEntry.evaluateConceptValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -410,7 +410,7 @@ public class FIBInspector extends FIBPanel {
 						}
 					}, true));*/
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
-			OntologyClass conceptClass = null;
+			IFlexoOntologyClass conceptClass = null;
 			if (classEntry.getIsDynamicConceptValue()) {
 				// conceptClass = classEntry.evaluateConceptValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -446,7 +446,7 @@ public class FIBInspector extends FIBPanel {
 					}, true));*/
 
 			// Quick and dirty hack to configure FIBPropertySelector: refactor this when new binding model will be in use
-			OntologyClass domainClass = null;
+			IFlexoOntologyClass domainClass = null;
 			if (propertyEntry.getIsDynamicDomainValue()) {
 				// domainClass = propertyEntry.evaluateDomainValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -464,7 +464,7 @@ public class FIBInspector extends FIBPanel {
 						}, true));
 			}
 			if (propertyEntry instanceof ObjectPropertyInspectorEntry) {
-				OntologyClass rangeClass = null;
+				IFlexoOntologyClass rangeClass = null;
 				if (propertyEntry.getIsDynamicDomainValue()) {
 					// domainClass = propertyEntry.evaluateDomainValue(action);
 					// TODO: implement proper scheme with new binding support

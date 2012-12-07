@@ -1,9 +1,10 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class EditionPatternPatternRole extends PatternRole {
+public class EditionPatternPatternRole extends PatternRole<EditionPatternReference> {
 
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
@@ -27,8 +28,8 @@ public class EditionPatternPatternRole extends PatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
-		return View.class;
+	public Class<EditionPatternReference> getAccessedClass() {
+		return EditionPatternReference.class;
 	}
 
 	@Override
@@ -89,6 +90,17 @@ public class EditionPatternPatternRole extends PatternRole {
 		if (creationScheme != null) {
 			_creationSchemeURI = creationScheme.getURI();
 		}
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
+	}
+
+	@Override
+	public ModelObjectActorReference<EditionPatternReference> makeActorReference(EditionPatternReference object,
+			EditionPatternReference epRef) {
+		return new ModelObjectActorReference<EditionPatternReference>(object, this, epRef);
 	}
 
 }

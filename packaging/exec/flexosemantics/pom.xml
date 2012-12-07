@@ -34,5 +34,20 @@
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>emfconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xsdconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>owlconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
     </dependencies>
 </project>

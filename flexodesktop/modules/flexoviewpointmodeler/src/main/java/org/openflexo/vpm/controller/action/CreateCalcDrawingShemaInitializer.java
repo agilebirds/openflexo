@@ -41,13 +41,13 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateCalcDrawingShemaInitializer(CEDControllerActionInitializer actionInitializer) {
+	CreateCalcDrawingShemaInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(CreateExampleDrawing.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

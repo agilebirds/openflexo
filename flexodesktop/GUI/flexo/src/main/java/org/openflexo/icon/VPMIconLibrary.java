@@ -23,29 +23,31 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
+import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.AddConnector;
-import org.openflexo.foundation.viewpoint.AddDiagram;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddShape;
-import org.openflexo.foundation.viewpoint.AddStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.CloneConnector;
 import org.openflexo.foundation.viewpoint.CloneIndividual;
-import org.openflexo.foundation.viewpoint.CloneShape;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
-import org.openflexo.foundation.viewpoint.DiagramPatternRole;
-import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
@@ -54,10 +56,8 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
-import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
-import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
@@ -66,8 +66,6 @@ import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.PropertyPatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -165,9 +163,9 @@ public class VPMIconLibrary extends IconLibrary {
 				return IconFactory.getImageIcon(CALC_CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
 				return CALC_CONNECTOR_ICON;
-			} else if (object instanceof AddStatement) {
+			} /*else if (object instanceof AddStatement) {
 				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-			} else if (object instanceof DeclarePatternRole) {
+				}*/else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;
@@ -249,9 +247,9 @@ public class VPMIconLibrary extends IconLibrary {
 			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 		} else if (object instanceof PropertyPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_PROPERTY_ICON;
-		} else if (object instanceof StatementPatternRole) {
+		} /*else if (object instanceof StatementPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-		} else if (object instanceof LocalizedDictionary) {
+			}*/else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());

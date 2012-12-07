@@ -22,7 +22,7 @@ package org.openflexo.foundation.viewpoint.inspector;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -38,7 +38,7 @@ public class ClassInspectorEntry extends InspectorEntry {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
 
 	public ClassInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -46,7 +46,7 @@ public class ClassInspectorEntry extends InspectorEntry {
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyClass.class;
+		return IFlexoOntologyClass.class;
 	}
 
 	@Override
@@ -62,14 +62,14 @@ public class ClassInspectorEntry extends InspectorEntry {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getConcept() {
+	public IFlexoOntologyClass getConcept() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
-	public void setConcept(OntologyClass c) {
+	public void setConcept(IFlexoOntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
 
@@ -108,9 +108,9 @@ public class ClassInspectorEntry extends InspectorEntry {
 		}
 	}
 
-	public OntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
 		if (getConceptValue().isValid()) {
-			return (OntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+			return (IFlexoOntologyClass) getConceptValue().getBindingValue(parameterRetriever);
 		}
 		return null;
 	}

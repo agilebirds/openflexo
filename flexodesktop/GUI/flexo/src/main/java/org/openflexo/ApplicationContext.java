@@ -4,14 +4,16 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 
-public abstract class ApplicationContext implements FlexoEditorFactory {
+public abstract class ApplicationContext extends FlexoServiceManager implements FlexoEditorFactory {
 
 	private ModuleLoader moduleLoader;
 
@@ -22,6 +24,8 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private FlexoResourceCenterService resourceCenterService;
+
+	private TechnologyAdapterService technologyAdapterService;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -34,6 +38,18 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		moduleLoader = new ModuleLoader(this);
 		projectReferenceLoader = createProjectReferenceLoader();
 		resourceCenterService = createResourceCenterService();
+		registerService(resourceCenterService);
+		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
+		registerService(technologyAdapterService);
+
+		// At this point, the resource center service is initialized, and so is the technology adapter service
+		/*for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
+			rc.initialize(technologyAdapterService);
+		}
+		for (TechnologyAdapter<?, ?> ta : technologyAdapterService.getTechnologyAdapters()) {
+			ta.initialize();
+		}*/
+
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -52,6 +68,10 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 		return resourceCenterService;
 	}
 
+	public final TechnologyAdapterService getTechnologyAdapterService() {
+		return technologyAdapterService;
+	}
+
 	public final FlexoEditor getApplicationEditor() {
 		return applicationEditor;
 	}
@@ -67,5 +87,7 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
 
 	protected abstract FlexoResourceCenterService createResourceCenterService();
+
+	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService);
 
 }

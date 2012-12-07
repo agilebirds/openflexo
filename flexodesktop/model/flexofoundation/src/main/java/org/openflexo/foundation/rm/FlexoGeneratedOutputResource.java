@@ -30,7 +30,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> extends FlexoXMLStorageResource<GO> {
+public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput<GO>> extends FlexoXMLStorageResource<GO> {
 
 	private static final Logger logger = Logger.getLogger(FlexoGeneratedOutputResource.class.getPackage().getName());
 

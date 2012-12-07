@@ -28,10 +28,10 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.VESelectAll;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 

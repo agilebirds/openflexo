@@ -695,6 +695,24 @@
 				<type>zip</type>
 			</dependency>
 
+			<!--  Technology adaptors -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
 			<!-- packaging -->
 			<dependency>
 				<groupId>org.openflexo.packaging</groupId>
@@ -990,6 +1008,21 @@
     			<groupId>sablecc</groupId>
     			<artifactId>sablecc</artifactId>
     			<version>3.2-1</version>
+			</dependency>
+			<dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>common</artifactId>
+      <version>[2.3.0,3.0.0)</version>
+			</dependency>
+			<dependency>
+  <groupId>org.eclipse.emf</groupId>
+  <artifactId>ecore</artifactId>
+  <version>2.3.0-v200706262000</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.emf</groupId>
+				<artifactId>ecore-xmi</artifactId>
+    			<version>2.2.3</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

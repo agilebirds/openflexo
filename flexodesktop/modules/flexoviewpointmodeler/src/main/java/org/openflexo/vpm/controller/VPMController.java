@@ -34,7 +34,6 @@ import javax.swing.Icon;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -54,13 +53,14 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
+import org.openflexo.vpm.controller.action.VPMControllerActionInitializer;
 import org.openflexo.vpm.view.CEDMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
@@ -116,7 +116,7 @@ public class VPMController extends FlexoController {
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {
-		return new CEDControllerActionInitializer(this);
+		return new VPMControllerActionInitializer(this);
 	}
 
 	/**
@@ -172,8 +172,8 @@ public class VPMController extends FlexoController {
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
 				}
-			} else if (object instanceof ImportedOWLOntology) {
-				ImportedOWLOntology ontology = (ImportedOWLOntology) object;
+			} else if (object instanceof OWLMetaModel) {
+				OWLMetaModel ontology = (OWLMetaModel) object;
 				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size() > 0) {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
@@ -328,7 +328,7 @@ public class VPMController extends FlexoController {
 		}
 
 		public Icon getIcon() {
-			if (resource instanceof ImportedOWLOntology) {
+			if (resource instanceof OWLMetaModel) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
 			} else if (resource instanceof ViewPoint) {
 				return VPMIconLibrary.CALC_ICON;
@@ -367,8 +367,8 @@ public class VPMController extends FlexoController {
 		public void saveModified() {
 			if (saveThisResource) {
 				try {
-					if (resource instanceof ImportedOWLOntology) {
-						((ImportedOWLOntology) resource).save();
+					if (resource instanceof OWLMetaModel) {
+						((OWLMetaModel) resource).save();
 					} else if (resource instanceof ViewPoint) {
 						((ViewPoint) resource).save();
 					} else if (resource instanceof ViewPointPalette) {

@@ -22,7 +22,7 @@ package org.openflexo.ve.fib;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -34,13 +34,13 @@ public class OntologyViewEDITOR extends FIBAbstractEditor {
 	public Object[] getData() {
 		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		FlexoOntology ontology1 = ontologyLibrary.getFlexoConceptOntology();
+		IFlexoOntology ontology1 = ontologyLibrary.getFlexoConceptOntology();
 		ontology1.loadWhenUnloaded();
-		FlexoOntology ontology2 = ontologyLibrary.getOntology("http://www.w3.org/2004/02/skos/core");
+		IFlexoOntology ontology2 = ontologyLibrary.getOntology("http://www.w3.org/2004/02/skos/core");
 		ontology2.loadWhenUnloaded();
-		FlexoOntology ontology3 = ontologyLibrary.getOntology("http://www.w3.org/2002/07/owl");
+		IFlexoOntology ontology3 = ontologyLibrary.getOntology("http://www.w3.org/2002/07/owl");
 		ontology3.loadWhenUnloaded();
-		FlexoOntology ontology4 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
+		IFlexoOntology ontology4 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 		ontology4.loadWhenUnloaded();
 		return makeArray(ontology2, ontology3, ontology4);
 	}

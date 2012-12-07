@@ -164,7 +164,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				} else {
 					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject() != null ? getCurrentObject()
 							: getCurrentProject());
-				}
+			}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
@@ -203,10 +203,10 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public FlexoEditor getCurrentEditor() {
 		if (requiresProject()) {
-			return currentEditor;
+		return currentEditor;
 		} else {
 			return context.getApplicationEditor();
-		}
+	}
 	}
 
 	public boolean requiresProject() {
@@ -235,9 +235,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				if (getCurrentPerspective() != null && getCurrentPerspective().getDefaultObject(projectEditor.getProject()) != null) {
 					setCurrentObject(getCurrentPerspective().getDefaultObject(projectEditor.getProject()));
 				} else {
-					setCurrentObject(null);
-				}
+				setCurrentObject(null);
 			}
+		}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
 		getPropertyChangeSupport().firePropertyChange(CURRENT_PROJECT, old != null ? old.getProject() : null,
@@ -499,6 +499,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (gsonLayout == null) {
 			GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(new MultiSplitLayoutTypeAdapterFactory());
 			gsonLayout = builder.create();
+
 		}
 		return gsonLayout;
 	}
@@ -528,5 +529,4 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
-
 }

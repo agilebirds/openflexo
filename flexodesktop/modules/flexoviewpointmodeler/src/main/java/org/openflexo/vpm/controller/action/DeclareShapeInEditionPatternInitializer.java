@@ -41,13 +41,13 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareShapeInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeclareShapeInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeclareShapeInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

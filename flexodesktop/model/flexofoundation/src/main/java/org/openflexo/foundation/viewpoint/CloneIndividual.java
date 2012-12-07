@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
-public class CloneIndividual extends AddIndividual {
+public abstract class CloneIndividual extends AddIndividual {
 
 	private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
 

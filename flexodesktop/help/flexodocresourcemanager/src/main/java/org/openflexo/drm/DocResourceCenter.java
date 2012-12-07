@@ -34,7 +34,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
-public class DocResourceCenter extends DRMObject implements XMLStorageResourceData {
+public class DocResourceCenter extends DRMObject implements XMLStorageResourceData<DocResourceCenter> {
 
 	// Vector of Language objects
 	private Vector<Language> languages;

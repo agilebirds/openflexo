@@ -40,7 +40,7 @@ public class DuplicateEditionPatternInitializer extends ActionInitializer<Duplic
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DuplicateEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+	DuplicateEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DuplicateEditionPattern.actionType, actionInitializer);
 	}
 

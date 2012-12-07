@@ -42,13 +42,13 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateCalcPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+	CreateCalcPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(CreateViewPointPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

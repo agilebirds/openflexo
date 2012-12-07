@@ -15723,8 +15723,8 @@ forward to the next nodes.</description>
             <description />
           </EmbeddingChildDocItem>
           <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
+          <description />
+        </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15781,3 +15781,4 @@ forward to the next nodes.</description>
     </DocItem>
   </DocItemFolder>
 </DocResourceCenter>
+

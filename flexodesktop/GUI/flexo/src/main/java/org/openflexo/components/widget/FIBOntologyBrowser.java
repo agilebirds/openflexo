@@ -32,10 +32,10 @@ import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.BuiltInDataType;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
@@ -62,10 +62,10 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyBrowser.fib");
 
-	private FlexoOntology ontology;
+	private IFlexoOntology ontology;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
-	private OntologyClass rootClass;
+	private IFlexoOntologyClass rootClass;
 	private boolean displayPropertiesInClasses = true;
 
 	private boolean showObjectProperties = true;
@@ -74,37 +74,35 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
-	private OntologyClass domain = null;
-	private OntologyClass range = null;
-	private OntologicDataType dataType = null;
-
-	private boolean showOWLAndRDFConcepts = false;
+	private IFlexoOntologyClass domain = null;
+	private IFlexoOntologyClass range = null;
+	private BuiltInDataType dataType = null;
 
 	private boolean allowsSearch = true;
 	private boolean displayOptions = true;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
 
 	private boolean isSearching = false;
 	private String filteredName;
-	private List<OntologyObject> matchingValues;
-	private OntologyObject selectedValue;
+	private List<IFlexoOntologyConcept> matchingValues;
+	private IFlexoOntologyConcept selectedValue;
 
-	public FIBOntologyBrowser(FlexoOntology ontology) {
+	public FIBOntologyBrowser(IFlexoOntology ontology) {
 		super(FIB_FILE, null, FlexoLocalization.getMainLocalizer());
-		matchingValues = new ArrayList<OntologyObject>();
+		matchingValues = new ArrayList<IFlexoOntologyConcept>();
 		setOntology(ontology);
 		setEditedObject(this);
 	}
 
-	public FlexoOntology getOntology() {
+	public IFlexoOntology getOntology() {
 		return ontology;
 	}
 
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
-	public void setOntology(FlexoOntology context) {
+	public void setOntology(IFlexoOntology context) {
 		this.ontology = context;
-		ontology.loadWhenUnloaded();
+		// ontology.loadWhenUnloaded();
 		update();
 	}
 
@@ -138,12 +136,12 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
-	public OntologyClass getRootClass() {
+	public IFlexoOntologyClass getRootClass() {
 		return rootClass;
 	}
 
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRootClass(OntologyClass rootClass) {
+	public void setRootClass(IFlexoOntologyClass rootClass) {
 		this.rootClass = rootClass;
 		update();
 	}
@@ -216,42 +214,32 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
-	}
-
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
-	}
-
-	public OntologyClass getDomain() {
+	public IFlexoOntologyClass getDomain() {
 		return domain;
 	}
 
 	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDomain(OntologyClass domain) {
+	public void setDomain(IFlexoOntologyClass domain) {
 		this.domain = domain;
 		update();
 	}
 
-	public OntologyClass getRange() {
+	public IFlexoOntologyClass getRange() {
 		return range;
 	}
 
 	@CustomComponentParameter(name = "range", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRange(OntologyClass range) {
+	public void setRange(IFlexoOntologyClass range) {
 		this.range = range;
 		update();
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
 	@CustomComponentParameter(name = "dataType", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 		update();
 	}
@@ -279,7 +267,6 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.setShowObjectProperties(getShowObjectProperties());
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.setDomain(getDomain());
 			model.setRange(getRange());
 			model.setDataType(getDataType());
@@ -310,7 +297,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		this.filteredName = filteredName;
 	}
 
-	public List<OntologyObject> getMatchingValues() {
+	public List<IFlexoOntologyConcept> getMatchingValues() {
 		return matchingValues;
 	}
 
@@ -318,7 +305,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		if (StringUtils.isNotEmpty(getFilteredName())) {
 			logger.info("Searching " + getFilteredName());
 			matchingValues.clear();
-			for (OntologyObject o : getAllSelectableValues()) {
+			for (IFlexoOntologyConcept o : getAllSelectableValues()) {
 				if (o.getName().indexOf(getFilteredName()) > -1) {
 					if (!matchingValues.contains(o)) {
 						matchingValues.add(o);
@@ -376,8 +363,8 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	 * 
 	 * Override when required
 	 */
-	protected Vector<OntologyObject> getAllSelectableValues() {
-		Vector<OntologyObject> returned = new Vector<OntologyObject>();
+	protected Vector<IFlexoOntologyConcept> getAllSelectableValues() {
+		Vector<IFlexoOntologyConcept> returned = new Vector<IFlexoOntologyConcept>();
 		FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
 		if (browserWidget == null) {
 			return null;
@@ -385,8 +372,8 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
 		while (it.hasNext()) {
 			Object o = it.next();
-			if (o instanceof OntologyObject) {
-				returned.add((OntologyObject) o);
+			if (o instanceof IFlexoOntologyConcept) {
+				returned.add((IFlexoOntologyConcept) o);
 			}
 		}
 		return returned;
@@ -412,17 +399,17 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		return null;
 	}
 
-	public OntologyObject getSelectedValue() {
+	public IFlexoOntologyConcept getSelectedValue() {
 		return selectedValue;
 	}
 
-	public void setSelectedValue(OntologyObject selectedValue) {
-		OntologyObject oldSelected = this.selectedValue;
+	public void setSelectedValue(IFlexoOntologyConcept selectedValue) {
+		IFlexoOntologyConcept oldSelected = this.selectedValue;
 		this.selectedValue = selectedValue;
 		getPropertyChangeSupport().firePropertyChange("selectedValue", oldSelected, selectedValue);
 	}
 
-	public void selectValue(OntologyObject selectedValue) {
+	public void selectValue(IFlexoOntologyConcept selectedValue) {
 		getController().selectionCleared();
 		getController().objectAddedToSelection(selectedValue);
 	}

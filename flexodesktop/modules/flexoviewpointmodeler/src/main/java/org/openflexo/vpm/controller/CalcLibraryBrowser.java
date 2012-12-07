@@ -31,9 +31,9 @@ class CalcLibraryBrowser extends VPMBrowser {
 	@Override
 	public void configure() {
 		super.configure();
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+		/*setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE);*/
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.CALC_FOLDER, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.SHOW);

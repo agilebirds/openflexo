@@ -24,12 +24,12 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**

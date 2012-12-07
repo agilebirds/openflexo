@@ -26,14 +26,33 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.toolbox.IProgress;
 
+/**
+ * A {@link FlexoResourceCenter} is a symbolic repository storing {@link FlexoResource}
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
 public interface FlexoResourceCenter {
+
+	/**
+	 * Initialize the FlexoResourceCenter by matching contents of this {@link FlexoResourceCenter} with all available technologies.<br>
+	 * Before this initialization operation is performed, any call on a {@link FlexoResourceCenter} will fail.
+	 * 
+	 * @param technologyAdapterService
+	 */
+	public void initialize(TechnologyAdapterService technologyAdapterService);
 
 	/**
 	 * Returns all resources available in this resource center
@@ -101,8 +120,23 @@ public interface FlexoResourceCenter {
 	 */
 	public void update() throws IOException;
 
-	@Deprecated
-	public OntologyLibrary retrieveBaseOntologyLibrary();
+	/**
+	 * Retrieve model repository for a given {@link TechnologyAdapter}
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
+			TA technologyAdapter);
+
+	/**
+	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
+			TA technologyAdapter);
 
 	@Deprecated
 	public ViewPointLibrary retrieveViewPointLibrary();

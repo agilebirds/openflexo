@@ -35,7 +35,6 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
-import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
@@ -80,7 +79,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(paletteFile.getParentFile());
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
-				ViewPointBuilder builder = new ViewPointBuilder((ImportedOntology) calc.getViewpointOntology());
+				ViewPointBuilder builder = new ViewPointBuilder(/*(ImportedOntology) calc.getViewpointOntology()*/);
 				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
 						.get_VIEW_POINT_PALETTE_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));

@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 
 /**
  * Browser element representing the ontology library

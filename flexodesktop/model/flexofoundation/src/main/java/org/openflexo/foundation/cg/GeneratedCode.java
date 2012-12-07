@@ -41,7 +41,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class GeneratedCode extends GeneratedOutput {
+public class GeneratedCode extends GeneratedOutput<GeneratedCode> {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeneratedCode.class.getPackage().getName());
 	private CGCodeTemplates _templates;

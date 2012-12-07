@@ -21,9 +21,12 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.toolbox.StringUtils;
 
@@ -33,18 +36,42 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class PatternRole extends EditionPatternObject {
+public abstract class PatternRole<T> extends EditionPatternObject {
 
 	public static enum PatternRoleType {
-		Shape, Connector, Individual, Class, Property, ObjectProperty, DataProperty, IsAStatement, ObjectPropertyStatement, DataPropertyStatement, RestrictionStatement, FlexoModelObject, Diagram, EditionPattern, Primitive
+		Shape,
+		Connector,
+		Individual,
+		Class,
+		Property,
+		ObjectProperty,
+		DataProperty,
+		SubClassStatement,
+		ObjectPropertyStatement,
+		DataPropertyStatement,
+		RestrictionStatement,
+		FlexoModelObject,
+		Diagram,
+		EditionPattern,
+		Primitive
 	}
 
 	private EditionPattern _pattern;
 	private String patternRoleName;
 	private String description;
 
+	private ModelSlot<?, ?> modelSlot;
+
 	public PatternRole(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	public final ModelSlot<?, ?> getModelSlot() {
+		return modelSlot;
+	}
+
+	public final void setModelSlot(ModelSlot<?, ?> modelSlot) {
+		this.modelSlot = modelSlot;
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {
@@ -116,7 +143,7 @@ public abstract class PatternRole extends EditionPatternObject {
 	public void finalizePatternRoleDeserialization() {
 	}
 
-	public abstract Class<?> getAccessedClass();
+	public abstract Class<? extends T> getAccessedClass();
 
 	@Override
 	public final BindingModel getBindingModel() {
@@ -126,6 +153,10 @@ public abstract class PatternRole extends EditionPatternObject {
 	public abstract boolean getIsPrimaryRole();
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
+
+	public abstract boolean defaultBehaviourIsToBeDeleted();
+
+	public abstract ActorReference<T> makeActorReference(T object, EditionPatternReference epRef);
 
 	// @Override
 	// public abstract String getLanguageRepresentation();

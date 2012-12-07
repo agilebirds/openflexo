@@ -19,12 +19,12 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class OntologyPropertyParameter extends ParameterDefinition<OntologyProperty> {
+public class OntologyPropertyParameter extends ParameterDefinition<IFlexoOntologyStructuralProperty> {
 
-	public OntologyPropertyParameter(String name, String label, OntologyProperty defaultValue) {
+	public OntologyPropertyParameter(String name, String label, IFlexoOntologyStructuralProperty defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("className", "org.openflexo.components.widget.OntologyPropertyInspectorWidget");
 	}

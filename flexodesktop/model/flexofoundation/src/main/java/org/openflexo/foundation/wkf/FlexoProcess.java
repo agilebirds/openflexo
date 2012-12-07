@@ -187,8 +187,8 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint, XMLStorageResourceData,
-		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint,
+		XMLStorageResourceData<FlexoProcess>, InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	static final Logger logger = Logger.getLogger(FlexoProcess.class.getPackage().getName());
 

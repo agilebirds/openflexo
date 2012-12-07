@@ -22,7 +22,6 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -42,7 +41,7 @@ public class OntologyCalcElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		addToChilds((FlexoModelObject) getCalc().getViewpointOntology());
+		// addToChilds((FlexoModelObject) getCalc().getViewpointOntology());
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
 			if (ep.getParentEditionPattern() == null) {
 				addToChilds(ep);

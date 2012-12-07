@@ -20,7 +20,6 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
@@ -32,13 +31,6 @@ public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject i
 	public static final ViewPointValidationModel VALIDATION_MODEL = new ViewPointValidationModel();
 
 	public abstract ViewPointLibrary getViewPointLibrary();
-
-	public OntologyLibrary getOntologyLibrary() {
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getOntologyLibrary();
-		}
-		return null;
-	}
 
 	@Override
 	public XMLMapping getXMLMapping() {

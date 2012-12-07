@@ -23,8 +23,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

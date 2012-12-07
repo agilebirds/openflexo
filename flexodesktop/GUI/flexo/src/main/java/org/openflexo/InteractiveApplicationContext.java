@@ -7,6 +7,8 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.UserType;
@@ -42,5 +44,13 @@ public class InteractiveApplicationContext extends ApplicationContext {
 		} else {
 			return new FullInteractiveProjectLoadingHandler(projectDirectory);
 		}
+	}
+
+	@Override
+	protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+		TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
+		returned.setFlexoResourceCenterService(resourceCenterService);
+		returned.loadAvailableTechnologyAdapters();
+		return returned;
 	}
 }

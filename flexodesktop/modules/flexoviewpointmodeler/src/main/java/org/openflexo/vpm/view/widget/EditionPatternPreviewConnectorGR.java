@@ -30,8 +30,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
+import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 
 public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements
 		GraphicalFlexoObserver, EditionPatternPreviewConstants {

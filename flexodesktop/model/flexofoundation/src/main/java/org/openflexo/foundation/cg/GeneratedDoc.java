@@ -43,7 +43,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class GeneratedDoc extends GeneratedOutput {
+public class GeneratedDoc extends GeneratedOutput<GeneratedDoc> {
 	private static final Logger logger = FlexoLogger.getLogger(GeneratedDoc.class.getPackage().getName());
 
 	private CGDocTemplates _templates;

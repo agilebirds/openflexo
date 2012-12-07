@@ -2,15 +2,17 @@ package org.openflexo.foundation.resource;
 
 import java.util.List;
 
+import org.openflexo.foundation.FlexoService;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.factory.AccessibleProxyObject;
 
 @ModelEntity
-public interface FlexoResourceCenterService {
+public interface FlexoResourceCenterService extends FlexoService, AccessibleProxyObject {
 	public static final String RESOURCE_CENTERS = "resourceCenters";
 
 	@Getter(value = RESOURCE_CENTERS, cardinality = Cardinality.LIST)
@@ -28,4 +30,6 @@ public interface FlexoResourceCenterService {
 	public FlexoResourceCenter getUserResourceCenter();
 
 	public FlexoResourceCenter getOpenFlexoResourceCenter();
+
+	// public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService);
 }

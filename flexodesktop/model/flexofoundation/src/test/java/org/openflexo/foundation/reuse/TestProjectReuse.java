@@ -63,7 +63,7 @@ public class TestProjectReuse extends FlexoTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		if (rootProject != null) {
 			rootProject.close();

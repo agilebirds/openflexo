@@ -53,7 +53,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author gpolet
  * 
  */
-public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
+public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData<FlexoWSLibrary> {
 
 	private FlexoWSLibraryResource _resource;
 

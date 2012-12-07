@@ -1,4 +1,4 @@
-<inspector title = "Abstract ontology" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.FlexoOntology">
+<inspector title = "Abstract ontology" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.IFlexoOntology">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="10">

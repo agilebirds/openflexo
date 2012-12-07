@@ -1,6 +1,6 @@
 package org.openflexo.foundation.rm;
 
-import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;

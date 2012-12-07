@@ -1,12 +1,21 @@
 package org.openflexo.foundation.resource;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.rm.FlexoResourceTree;
+import org.openflexo.foundation.rm.LoadResourceException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.IProgress;
@@ -20,6 +29,7 @@ import org.openflexo.toolbox.IProgress;
  * 
  */
 @ModelEntity
+@ImplementationClass(FlexoResourceImpl.class)
 @XMLElement
 public interface FlexoResource<RD extends ResourceData<RD>> {
 
@@ -43,6 +53,14 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public String getName();
 
 	/**
+	 * Sets the name of this resource
+	 * 
+	 * @param aName
+	 */
+	@Setter(NAME)
+	public void setName(String aName);
+
+	/**
 	 * Returns the unique resource identifier of this resource. A URI is unique in the whole universe and clearly and uniquely identifies
 	 * this resource.
 	 * 
@@ -51,6 +69,14 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(URI)
 	@XMLAttribute()
 	public String getURI();
+
+	/**
+	 * Sets the unique resource identifier of this resource.
+	 * 
+	 * @param anURI
+	 */
+	@Setter(URI)
+	public void setURI(String anURI);
 
 	/**
 	 * Returns a displayable version that the end-user will understand.
@@ -148,6 +174,13 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public void removeFromDependencies(FlexoResource<?> resource);
 
 	/**
+	 * Return flag indicating if this resource is loaded
+	 * 
+	 * @return
+	 */
+	public boolean isLoaded();
+
+	/**
 	 * Returns the &quot;real&quot; resource data of this resource. This may cause the loading of the resource data.
 	 * 
 	 * @param progress
@@ -155,10 +188,34 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * @return the resource data.
 	 * @throws ResourceLoadingCancelledException
 	 */
-	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException;
+	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException;
+
+	/**
+	 * Load the &quot;real&quot; load resource data of this resource.
+	 * 
+	 * @param progress
+	 *            a progress monitor in case the resource data is not immediately available.
+	 * @return the resource data.
+	 * @throws ResourceLoadingCancelledException
+	 * @throws ResourceDependencyLoopException
+	 * @throws FileNotFoundException
+	 * @throws FlexoException
+	 */
+	public RD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException;
+
+	/**
+	 * Save the &quot;real&quot; resource data of this resource.
+	 * 
+	 * @throws SaveResourceException
+	 */
+	public void save(IProgress progress) throws SaveResourceException;
 
 	/**
 	 * This method updates the resource.
 	 */
-	public void update();
+	public FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
+			ProjectLoadingCancelledException, FlexoException;
+
 }

@@ -29,17 +29,17 @@ import org.openflexo.vpm.CEDCst;
 
 public class CalcLibraryViewEDITOR extends FIBAbstractEditor {
 
-	@Override
-	public Object[] getData() {
+			@Override
+			public Object[] getData() {
 		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-		return makeArray(calcLibrary);
-	}
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+				return makeArray(calcLibrary);
+			}
 
-	@Override
-	public File getFIBFile() {
-		return CEDCst.CALC_LIBRARY_VIEW_FIB;
-	}
+			@Override
+			public File getFIBFile() {
+				return CEDCst.CALC_LIBRARY_VIEW_FIB;
+			}
 
 	public static void main(String[] args) {
 		main(CalcLibraryViewEDITOR.class);

@@ -27,6 +27,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationReport;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
 import org.openflexo.toolbox.FileResource;
 
@@ -81,7 +82,7 @@ public class TestViewpoints extends FlexoTestCase {
 		/*System.out.println("basicOntologyEditor=" + basicOntologyEditor);
 		System.out.println("ontology=" + basicOntologyEditor.getViewpointOntology());
 		System.out.println("loaded=" + basicOntologyEditor.getViewpointOntology().isLoaded());
-		for (OntologyClass c : basicOntologyEditor.getViewpointOntology().getClasses()) {
+		for (IFlexoOntologyClass c : basicOntologyEditor.getViewpointOntology().getClasses()) {
 			System.out.println("> Class " + c);
 		}*/
 

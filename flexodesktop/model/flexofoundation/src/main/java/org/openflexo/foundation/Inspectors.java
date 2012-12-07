@@ -881,11 +881,11 @@ public class Inspectors {
 		public String ONTOLOGY_LIBRARY_INSPECTOR = "OntologyLibrary.inspector";
 		public String IMPORTED_ONTOLOGY_INSPECTOR = "ImportedOntology.inspector";
 
-		public String ONTOLOGY_OBJECT_INSPECTOR = "OntologyObject.inspector";
-		public String ONTOLOGY_CLASS_INSPECTOR = "OntologyClass.inspector";
-		public String ONTOLOGY_INDIVIDUAL_INSPECTOR = "OntologyIndividual.inspector";
-		public String ONTOLOGY_DATA_PROPERTY_INSPECTOR = "OntologyDataProperty.inspector";
-		public String ONTOLOGY_OBJECT_PROPERTY_INSPECTOR = "OntologyObjectProperty.inspector";
+		public String ONTOLOGY_OBJECT_INSPECTOR = "IFlexoOntologyConcept.inspector";
+		public String ONTOLOGY_CLASS_INSPECTOR = "IFlexoOntologyClass.inspector";
+		public String ONTOLOGY_INDIVIDUAL_INSPECTOR = "IFlexoOntologyIndividual.inspector";
+		public String ONTOLOGY_DATA_PROPERTY_INSPECTOR = "IFlexoOntologyDataProperty.inspector";
+		public String ONTOLOGY_OBJECT_PROPERTY_INSPECTOR = "IFlexoOntologyObjectProperty.inspector";
 		public String ONTOLOGY_CLASS_READ_ONLY_INSPECTOR = "OntologyClassRO.inspector";
 		public String ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR = "OntologyIndividualRO.inspector";
 		public String ONTOLOGY_DATA_PROPERTY_READ_ONLY_INSPECTOR = "OntologyDataPropertyRO.inspector";

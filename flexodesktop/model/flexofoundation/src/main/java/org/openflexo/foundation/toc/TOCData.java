@@ -36,7 +36,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class TOCData extends TOCObject implements XMLStorageResourceData {
+public class TOCData extends TOCObject implements XMLStorageResourceData<TOCData> {
 
 	private FlexoTOCResource resource;
 

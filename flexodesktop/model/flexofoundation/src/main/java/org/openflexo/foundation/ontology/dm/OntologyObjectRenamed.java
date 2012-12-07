@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 
 public class OntologyObjectRenamed extends OEDataModification {
-	public OntologyObjectRenamed(OntologyObject object, String oldURI, String newURI) {
+	public OntologyObjectRenamed(IFlexoOntologyConcept object, String oldURI, String newURI) {
 		super(oldURI, newURI);
 	}
 }

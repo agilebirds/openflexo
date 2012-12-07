@@ -13,6 +13,7 @@ import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.StringUtils;
 
 public class RoundedBorder implements Border {
+
 	private String title;
 	private int top = 2;
 	private int bottom = 2;

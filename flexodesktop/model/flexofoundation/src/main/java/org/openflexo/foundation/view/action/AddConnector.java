@@ -27,9 +27,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 
 public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObject> {
 

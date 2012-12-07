@@ -24,13 +24,13 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.gui.FIBOntologyLibraryBrowser;
+import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -88,14 +88,14 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof FlexoOntology || object == _controller.getBaseOntologyLibrary();
+		return object instanceof IFlexoOntology || object == _controller.getBaseOntologyLibrary();
 	}
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
-		if (object instanceof FlexoOntology) {
-			((FlexoOntology) object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology) object, (VPMController) controller, this);
+		if (object instanceof IFlexoOntology) {
+			((IFlexoOntology) object).loadWhenUnloaded();
+			return new OntologyView((IFlexoOntology) object, (VPMController) controller, this);
 		}
 		return new EmptyPanel<FlexoModelObject>(controller, this, object);
 	}
@@ -109,8 +109,8 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
-		if (object instanceof ImportedOWLOntology) {
-			return ((ImportedOWLOntology) object).getName();
+		if (object instanceof OWLMetaModel) {
+			return ((OWLMetaModel) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

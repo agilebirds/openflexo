@@ -22,8 +22,9 @@ package org.openflexo.foundation.rm;
 import java.util.Date;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.resource.ResourceData;
 
-public interface StorageResourceData extends FlexoResourceData {
+public interface StorageResourceData<RD extends StorageResourceData<RD>> extends FlexoResourceData, ResourceData<RD> {
 
 	/**
 	 * Return the resource related to this object
@@ -31,7 +32,7 @@ public interface StorageResourceData extends FlexoResourceData {
 	 * @return a FlexoResource instance
 	 */
 	@Override
-	public FlexoStorageResource getFlexoResource();
+	public FlexoStorageResource<RD> getFlexoResource();
 
 	/**
 	 * Save the resource related to this object (save the object) using RM scheme

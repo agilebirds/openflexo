@@ -25,9 +25,9 @@ import java.util.List;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -65,11 +65,11 @@ public class ListParameter extends EditionSchemeParameter {
 		case String:
 			return new ParameterizedTypeImpl(List.class, String.class);
 		case Property:
-			return new ParameterizedTypeImpl(List.class, OntologyProperty.class);
+			return new ParameterizedTypeImpl(List.class, IFlexoOntologyStructuralProperty.class);
 		case ObjectProperty:
-			return new ParameterizedTypeImpl(List.class, OntologyObjectProperty.class);
+			return new ParameterizedTypeImpl(List.class, IFlexoOntologyObjectProperty.class);
 		case DataProperty:
-			return new ParameterizedTypeImpl(List.class, OntologyDataProperty.class);
+			return new ParameterizedTypeImpl(List.class, IFlexoOntologyDataProperty.class);
 		default:
 			return List.class;
 		}

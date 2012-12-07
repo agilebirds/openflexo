@@ -24,8 +24,8 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -35,7 +35,7 @@ public class ObjectPropertyParameter extends PropertyParameter {
 
 	private ViewPointDataBinding rangeValue;
 
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", OntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
 
 	public ObjectPropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -43,7 +43,7 @@ public class ObjectPropertyParameter extends PropertyParameter {
 
 	@Override
 	public Type getType() {
-		return OntologyObjectProperty.class;
+		return IFlexoOntologyObjectProperty.class;
 	};
 
 	@Override
@@ -59,12 +59,12 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		this.rangeURI = rangeURI;
 	}
 
-	public OntologyClass getRange() {
+	public IFlexoOntologyClass getRange() {
 		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
+		return getViewPoint().getOntologyClass(_getRangeURI());
 	}
 
-	public void setRange(OntologyClass c) {
+	public void setRange(IFlexoOntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
@@ -103,9 +103,9 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		}
 	}
 
-	public OntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
 		if (getRangeValue().isValid()) {
-			return (OntologyClass) getRangeValue().getBindingValue(parameterRetriever);
+			return (IFlexoOntologyClass) getRangeValue().getBindingValue(parameterRetriever);
 		}
 		return null;
 	}

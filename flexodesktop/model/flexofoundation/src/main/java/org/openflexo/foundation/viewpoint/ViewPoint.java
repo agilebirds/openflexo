@@ -23,11 +23,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -37,11 +42,17 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -49,9 +60,9 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
@@ -77,18 +88,18 @@ public class ViewPoint extends ViewPointObject {
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
-	private ImportedOntology viewpointOntology;
-
 	private Vector<ViewPointPalette> palettes;
 	private Vector<ExampleDrawingShema> shemas;
 
 	private File viewPointDirectory;
-	private File owlFile;
+	// private File owlFile;
 	private File xmlFile;
 	private ViewPointLibrary _library;
 	private boolean isLoaded = false;
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
+
+	private List<ModelSlot<?, ?>> modelSlots;
 
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
@@ -97,11 +108,11 @@ public class ViewPoint extends ViewPointObject {
 
 		if (xmlFile.exists()) {
 
-			ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+			// ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
 
 			FileInputStream inputStream = null;
 			try {
-				ViewPointBuilder builder = new ViewPointBuilder(viewPointOntology);
+				ViewPointBuilder builder = new ViewPointBuilder();
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewpointDirectory);
 				inputStream = new FileInputStream(xmlFile);
 				if (logger.isLoggable(Level.FINE)) {
@@ -112,7 +123,7 @@ public class ViewPoint extends ViewPointObject {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
 				}
-				returned.init(baseName, viewpointDirectory, xmlFile, library, viewPointOntology, folder);
+				returned.init(baseName, viewpointDirectory, xmlFile, library, folder);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -139,14 +150,7 @@ public class ViewPoint extends ViewPointObject {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				IOUtils.closeQuietly(inputStream);
 			}
 			return null;
 		} else {
@@ -156,21 +160,22 @@ public class ViewPoint extends ViewPointObject {
 		}
 	}
 
-	public static ViewPoint newViewPoint(String baseName, String viewpointURI, File owlFile, File viewpointDir, ViewPointLibrary library,
-			ViewPointFolder folder) {
+	public static ViewPoint newViewPoint(String baseName, String viewpointURI/*, File owlFile*/, File viewpointDir,
+			ViewPointLibrary library, ViewPointFolder folder) {
 		File xmlFile = new File(viewpointDir, baseName + ".xml");
 		ViewPoint viewpoint = new ViewPoint();
-		viewpoint.owlFile = owlFile;
+		// viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
 
-		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+		// ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
+		viewpoint.init(baseName, viewpointDir, xmlFile, library, folder);
+		viewpoint.loadViewpointMetaModels();
 		viewpoint.save();
 		return viewpoint;
 	}
 
-	private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
+	/*private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
 
 		if (viewPointFile == null || !viewPointFile.exists() || viewPointFile.length() == 0) {
 			if (viewPointFile.length() == 0) {
@@ -200,9 +205,13 @@ public class ViewPoint extends ViewPointObject {
 		}
 
 		return null;
+	}*/
+
+	private void loadViewpointMetaModels() {
+		logger.warning("loadViewpointMetaModels() : not implemented yet");
 	}
 
-	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+	/*private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
 
 		ImportedOntology viewpointOntology = null;
 
@@ -212,12 +221,12 @@ public class ViewPoint extends ViewPointObject {
 			if (StringUtils.isEmpty(ontologyURI)) {
 				ontologyURI = viewPointURI;
 			}
-			viewpointOntology = library.getOntologyLibrary().importOntology(ontologyURI, owlFile);
+			viewpointOntology = library.getOntologyLibrary().importMetaModel(ontologyURI, owlFile);
 			viewpointOntology.setIsReadOnly(false);
 		}
 
 		return viewpointOntology;
-	}
+	}*/
 
 	private static Document readXMLFile(File f) throws JDOMException, IOException {
 		FileInputStream fio = new FileInputStream(f);
@@ -246,23 +255,22 @@ public class ViewPoint extends ViewPointObject {
 
 	public static class ViewPointBuilder {
 		private ViewPoint viewPoint;
-		private ImportedOntology viewPointOntology;
+
+		// private ImportedOntology viewPointOntology;
 
 		public ViewPointBuilder(ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
-			if (viewPoint != null) {
+			/*if (viewPoint != null) {
 				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
-			}
+			}*/
 		}
 
-		public ViewPointBuilder(ImportedOntology viewPointOntology) {
-			this.viewPointOntology = viewPointOntology;
-			// viewPointOntology.loadWhenUnloaded();
+		public ViewPointBuilder() {
 		}
 
-		public ImportedOntology getViewPointOntology() {
+		/*	public ImportedOntology getViewPointOntology() {
 			return viewPointOntology;
-		}
+			}*/
 
 		public ViewPoint getViewPoint() {
 			return viewPoint;
@@ -288,8 +296,7 @@ public class ViewPoint extends ViewPointObject {
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOntology ontology,
-			ViewPointFolder folder) {
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
 		name = baseName;
@@ -317,7 +324,9 @@ public class ViewPoint extends ViewPointObject {
 			return;
 		}*/
 
-		viewpointOntology = ontology;
+		loadViewpointMetaModels();
+
+		// viewpointOntology = ontology;
 
 		for (EditionPattern ep : getEditionPatterns()) {
 			for (PatternRole pr : ep.getPatternRoles()) {
@@ -437,7 +446,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public void loadWhenUnloaded() {
-		if (!isLoaded && !isLoading && viewpointOntology != null) {
+		if (!isLoaded && !isLoading) {
 			load();
 		}
 	}
@@ -448,26 +457,11 @@ public class ViewPoint extends ViewPointObject {
 
 		isLoading = true;
 
-		logger.info("viewpointOntology=" + viewpointOntology);
-		if (viewpointOntology != null) {
-			logger.info(viewpointOntology.getURI() + " isLoaded=" + viewpointOntology.isLoaded() + " isLoading="
-					+ viewpointOntology.isLoading());
-			viewpointOntology.loadWhenUnloaded();
-		}
-
-		// Deprecated code
-		/*if (getLocalizedDictionary() != null) {
-			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
-		}*/
-
-		if (viewpointOntology != null) {
-			isLoaded = true;
-		}
 		isLoading = false;
 
 		logger.info("Loaded ViewPoint " + viewPointURI);
 
-		/*for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
+		/*for (IFlexoOntologyClass clazz : getOntologyLibrary().getAllClasses()) {
 			System.out.println("Found: " + clazz);
 		}*/
 
@@ -530,18 +524,6 @@ public class ViewPoint extends ViewPointObject {
 			setChanged();
 			notifyObservers(new OEDataModification("version", old, version));
 		}
-	}
-
-	@Override
-	public FlexoOntology getViewpointOntology() {
-		if (isDeserializing()) {
-			return super.getViewpointOntology();
-		}
-		return viewpointOntology;
-	}
-
-	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
-		this.viewpointOntology = viewpointOntology;
 	}
 
 	@Override
@@ -738,13 +720,13 @@ public class ViewPoint extends ViewPointObject {
 		return returned;
 	}
 
-	public File getOwlFile() {
+	/*public File getOwlFile() {
 		return owlFile;
 	}
 
 	public void setOwlFile(File owlFile) {
 		this.owlFile = owlFile;
-	}
+	}*/
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
@@ -784,17 +766,47 @@ public class ViewPoint extends ViewPointObject {
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
+	// ==========================================================================
+	// ============================== Model Slots ===============================
+	// ==========================================================================
+
+	public void setModelSlots(List<ModelSlot<?, ?>> modelSlots) {
+		this.modelSlots = modelSlots;
+	}
+
+	public List<ModelSlot<?, ?>> getModelSlots() {
+		return modelSlots;
+	}
+
+	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
+		modelSlots.add(modelSlot);
+	}
+
+	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
+		modelSlots.remove(modelSlot);
+	}
+
+	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
+		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+			if (modelSlot.getIsRequired()) {
+				requiredModelSlots.add(modelSlot);
+			}
+		}
+		return modelSlots;
+	}
+
 	@Override
 	public String getLanguageRepresentation() {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
 		StringBuffer sb = new StringBuffer();
-		System.out.println("loaded: " + getViewpointOntology().isLoaded());
-		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
+		/*System.out.println("loaded: " + getViewpointOntology().isLoaded());
+		for (IFlexoOntology o : getViewpointOntology().getImportedOntologies()) {
 			if (o != getOntologyLibrary().getOWLOntology()) {
 				String modelName = JavaUtils.getVariableName(o.getName());
 				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
 			}
-		}
+		}*/
 		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
 		sb.append(" {" + StringUtils.LINE_SEPARATOR);
 		// TODO iterate on slots here
@@ -806,6 +818,171 @@ public class ViewPoint extends ViewPointObject {
 		}
 		sb.append("}" + StringUtils.LINE_SEPARATOR);
 		return sb.toString();
+	}
+
+	/**
+	 * Retrieve object referenced by its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public Object getObject(String uri) {
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			Object o = m.getObject(uri);
+			if (o != null)
+				return o;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObject getOntologyObject(String uri) {
+		Object returned = getObject(uri);
+		if (returned instanceof IFlexoOntologyObject) {
+			return (IFlexoOntologyObject) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology class from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyClass getOntologyClass(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyClass) {
+			return (IFlexoOntologyClass) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology individual from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyIndividual getOntologyIndividual(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyIndividual) {
+			return (IFlexoOntologyIndividual) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyStructuralProperty getOntologyProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyStructuralProperty) {
+			return (IFlexoOntologyStructuralProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyObjectProperty) {
+			return (IFlexoOntologyObjectProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyDataProperty getOntologyDataProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyDataProperty) {
+			return (IFlexoOntologyDataProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean testValidURI(String ontologyURI, String conceptURI) {
+		if (StringUtils.isEmpty(conceptURI)) {
+			return false;
+		}
+		if (StringUtils.isEmpty(conceptURI.trim())) {
+			return false;
+		}
+		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
+	}
+
+	/**
+	 * Return true if URI is duplicated in the context of this project
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean isDuplicatedURI(String modelURI, String conceptURI) {
+		FlexoMetaModel<?> m = getMetaModel(modelURI);
+		if (m != null) {
+			return m.getObject(modelURI + "#" + conceptURI) != null;
+		}
+		return false;
+	}
+
+	/**
+	 * Retrieve metamodel referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			if (m.getURI().equals(metaModelURI))
+				return m;
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all models used in the scope of current project<br>
+	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * 
+	 * @return
+	 */
+	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
+		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+			returned.add(modelSlot.getMetaModel());
+		}
+		return returned;
 	}
 
 }
