@@ -224,8 +224,11 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			}
 			repository.setTocRepository(rep);
 			docType = add.getNewDocType().toString();
-			ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
-			connect.doAction();
+			if (!add.getNewGeneratedCodeRepository().isEnabled()) {
+				ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null,
+						editor);
+				connect.doAction();
+			}
 			List<FlexoAction<?, ?, ?>> actions = new ArrayList<FlexoAction<?, ?, ?>>();
 			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
 					add.getNewGeneratedCodeRepository(), null, editor);
