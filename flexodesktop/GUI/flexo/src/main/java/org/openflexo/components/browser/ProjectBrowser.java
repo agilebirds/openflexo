@@ -19,6 +19,8 @@
  */
 package org.openflexo.components.browser;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -52,7 +54,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent {
+public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent, PropertyChangeListener {
 
 	static final Logger logger = Logger.getLogger(ProjectBrowser.class.getPackage().getName());
 
@@ -355,7 +357,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			}
 		}
 		rebuildTree();
-		update(getRootElement());
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notifying expansions");
 		}
@@ -439,7 +440,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public BrowserElement getRootElement() {
-		if (_rootElement == null) {
+		if (_rootElement == null && this._rootObject != null) {
 			rebuildTree();
 		}
 		return _rootElement;
@@ -472,12 +473,14 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 		setIsRebuildingStructure();
 		try {
+			if (_elements != null) {
+				clearTree();
+			}
 			if (getRootObject() != null) {
-				if (_elements != null) {
-					clearTree();
-				}
 				_elements = new Hashtable<FlexoModelObject, Object>();
-				_rootElement = makeNewElement(getRootObject(), null);
+				setRoot(_rootElement = makeNewElement(getRootObject(), null));
+			} else {
+				setRoot(null);
 			}
 		} finally {
 			resetIsRebuildingStructure();
@@ -488,7 +491,13 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting root object to be " + aRootObject);
 		}
+		if (this._rootObject != null) {
+			this._rootObject.getPropertyChangeSupport().removePropertyChangeListener(this._rootObject.getDeletedProperty(), this);
+		}
 		_rootObject = aRootObject;
+		if (this._rootObject != null) {
+			this._rootObject.getPropertyChangeSupport().addPropertyChangeListener(this._rootObject.getDeletedProperty(), this);
+		}
 		update();
 		if (_rootObject != null && !isRootCollapsable()) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -704,11 +713,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public abstract void configure();
-
-	@Override
-	public Object getRoot() {
-		return getRootElement();
-	}
 
 	@Override
 	public Object getChild(Object parent, int index) {
@@ -1298,5 +1302,12 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public void setRowHeight(int rowHeight) {
 		this.rowHeight = rowHeight;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == this._rootObject && evt.getPropertyName().equals(this._rootObject.getDeletedProperty())) {
+			setRootObject(null);
+		}
 	}
 }
