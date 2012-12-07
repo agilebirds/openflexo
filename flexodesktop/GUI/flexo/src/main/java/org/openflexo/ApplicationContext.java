@@ -31,25 +31,19 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 		applicationEditor = createApplicationEditor();
 		try {
 			projectLoader = new ProjectLoader(this);
+			registerService(projectLoader);
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		moduleLoader = new ModuleLoader(this);
+		registerService(moduleLoader);
 		projectReferenceLoader = createProjectReferenceLoader();
+		registerService(projectReferenceLoader);
 		resourceCenterService = createResourceCenterService();
 		registerService(resourceCenterService);
 		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
 		registerService(technologyAdapterService);
-
-		// At this point, the resource center service is initialized, and so is the technology adapter service
-		/*for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
-			rc.initialize(technologyAdapterService);
-		}
-		for (TechnologyAdapter<?, ?> ta : technologyAdapterService.getTechnologyAdapters()) {
-			ta.initialize();
-		}*/
-
 	}
 
 	public ModuleLoader getModuleLoader() {

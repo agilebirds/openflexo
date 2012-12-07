@@ -41,6 +41,8 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -69,7 +71,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeListener {
+public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeListener, FlexoService {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -92,6 +94,8 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 	private PropertyChangeSupport propertyChangeSupport;
 	private List<FlexoProject> rootProjects;
 	private ModelFactory modelFactory;
+
+	private FlexoServiceManager serviceManager;
 
 	public ProjectLoader(ApplicationContext applicationContext) throws ModelDefinitionException {
 		this.applicationContext = applicationContext;
@@ -532,6 +536,25 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 
 	public boolean someProjectsAreModified() {
 		return false;
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		logger.info("ProjectLoader service received notification " + notification + " from " + caller);
+	}
+
+	@Override
+	public void register(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
+	@Override
+	public FlexoServiceManager getFlexoServiceManager() {
+		return serviceManager;
+	}
+
+	@Override
+	public void initialize() {
 	}
 
 }

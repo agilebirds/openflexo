@@ -36,7 +36,6 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -97,9 +96,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPointPalette) {
 					focusOnPalette((ViewPointPalette) object);
-				} else if (object instanceof OWLMetaModel) {
+				} /*else if (object instanceof OWLMetaModel) {
 					focusOnOntology((OWLMetaModel) object);
-				} else if (object instanceof EditionPattern) {
+					}*/else if (object instanceof EditionPattern) {
 					hideBottomBrowser();
 				}
 			}
@@ -107,7 +106,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			@Override
 			public void treeSingleClick(FlexoModelObject object) {
 				super.treeSingleClick(object);
-				if (!(object instanceof ViewPointPalette) && !(object instanceof OWLMetaModel)) {
+				if (!(object instanceof ViewPointPalette) /*&& !(object instanceof OWLMetaModel)*/) {
 					hideBottomBrowser();
 				}
 			}
@@ -156,13 +155,13 @@ public class ViewPointPerspective extends FlexoPerspective {
 		calcDrawingShemaBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnOntology(OWLMetaModel ontology) {
+	/*public void focusOnOntology(OWLMetaModel ontology) {
 		setBottomLeftView(ontologyBrowserView);
 		ontologyBrowser.deleteBrowserListener(_browserView);
 		ontologyBrowser.setRepresentedOntology(ontology);
 		ontologyBrowser.update();
 		ontologyBrowser.addBrowserListener(_browserView);
-	}
+	}*/
 
 	public void hideBottomBrowser() {
 		setBottomLeftView(null);

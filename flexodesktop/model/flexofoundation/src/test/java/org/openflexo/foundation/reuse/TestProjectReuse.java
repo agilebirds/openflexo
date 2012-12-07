@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -40,6 +42,26 @@ public class TestProjectReuse extends FlexoTestCase {
 				importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
 			}
 			references.get(0).setReferredProject(importedProject);
+		}
+
+		@Override
+		public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		}
+
+		private FlexoServiceManager serviceManager;
+
+		@Override
+		public void register(FlexoServiceManager serviceManager) {
+			this.serviceManager = serviceManager;
+		}
+
+		@Override
+		public FlexoServiceManager getFlexoServiceManager() {
+			return serviceManager;
+		}
+
+		@Override
+		public void initialize() {
 		}
 
 	}

@@ -65,6 +65,7 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
@@ -357,7 +358,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
-	public static interface FlexoProjectReferenceLoader {
+	public static interface FlexoProjectReferenceLoader extends FlexoService {
 
 		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException;
 	}
@@ -4241,11 +4242,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			return getProjectData().canImportProject(project);
 		}
 	}
-	
-		public boolean hasImportedProjects() {
+
+	public boolean hasImportedProjects() {
 		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
 	}
-	
 
 	/*	public Set<FlexoOntology> getAllMetaModels() {
 			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();

@@ -26,11 +26,7 @@ import javax.swing.JLabel;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.owl.gui.FIBOntologyLibraryBrowser;
-import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -41,7 +37,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 
-	private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
+	// private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
 
 	private final JLabel infoLabel;
 
@@ -52,10 +48,10 @@ public class OntologyPerspective extends FlexoPerspective {
 	public OntologyPerspective(VPMController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
+		// ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-		setTopLeftView(ontologyLibraryBrowser);
+		// setTopLeftView(ontologyLibraryBrowser);
 	}
 
 	/**
@@ -83,18 +79,19 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
-		return _controller.getBaseOntologyLibrary();
+		// return _controller.getBaseOntologyLibrary();
+		return null;
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof IFlexoOntology || object == _controller.getBaseOntologyLibrary();
+		return object instanceof IFlexoOntology /*|| object == _controller.getBaseOntologyLibrary()*/;
 	}
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof IFlexoOntology) {
-			((IFlexoOntology) object).loadWhenUnloaded();
+			// ((IFlexoOntology) object).loadWhenUnloaded();
 			return new OntologyView((IFlexoOntology) object, (VPMController) controller, this);
 		}
 		return new EmptyPanel<FlexoModelObject>(controller, this, object);
@@ -106,12 +103,12 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	public String getWindowTitleforObject(FlexoModelObject object) {
-		if (object instanceof OntologyLibrary) {
+		/*if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
 		if (object instanceof OWLMetaModel) {
 			return ((OWLMetaModel) object).getName();
-		}
+		}*/
 		return object.getFullyQualifiedName();
 	}
 

@@ -59,6 +59,15 @@ public class FlexoServiceManager {
 		}
 	}
 
+	public <S extends FlexoService> S getService(Class<S> serviceClass) {
+		for (FlexoService s : registeredServices) {
+			if (serviceClass.isAssignableFrom(s.getClass())) {
+				return (S) s;
+			}
+		}
+		return null;
+	}
+
 	public class ServiceRegistered implements ServiceNotification {
 
 	}

@@ -94,6 +94,12 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		}
 	}
 
+	/**
+	 * Notification of a new ResourceCenter added to the list of referenced resource centers
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	public class ResourceCenterAdded implements ServiceNotification {
 		private FlexoResourceCenter addedResourceCenter;
 

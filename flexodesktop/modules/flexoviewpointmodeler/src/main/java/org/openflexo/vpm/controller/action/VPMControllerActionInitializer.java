@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
@@ -75,11 +74,6 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new AddCalcPaletteElementInitializer(this);
 		new DeleteCalcPaletteElementInitializer(this);
 
-		// To be sure all Technology Adapters are recorded
-		TechnologyAdapterController.loadTechnologyAdapterControllers();
-		for (TechnologyAdapterController adapterController : TechnologyAdapterController.getLoadedAdapterControllers()) {
-			adapterController.initializeActions(this);
-		}
 	}
 
 }
