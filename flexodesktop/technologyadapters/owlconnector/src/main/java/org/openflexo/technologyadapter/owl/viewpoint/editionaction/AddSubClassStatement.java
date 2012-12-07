@@ -30,12 +30,16 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
+import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
-public class AddIsAStatement extends AddStatement<IsAStatement> {
+public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 
-	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddSubClassStatement.class.getPackage().getName());
 
-	public AddIsAStatement(ViewPointBuilder builder) {
+	public AddSubClassStatement(ViewPointBuilder builder) {
 		super(builder);
 	}
 
@@ -49,8 +53,8 @@ public class AddIsAStatement extends AddStatement<IsAStatement> {
 		return getEditionPattern().getPatternRoles(SubClassStatementPatternRole.class);
 	}*/
 
-	public IFlexoOntologyConcept getPropertyFather(EditionSchemeAction action) {
-		return (IFlexoOntologyConcept) getFather().getBindingValue(action);
+	public OWLConcept<?> getPropertyFather(EditionSchemeAction action) {
+		return (OWLConcept<?>) getFather().getBindingValue(action);
 	}
 
 	@Override
@@ -86,21 +90,21 @@ public class AddIsAStatement extends AddStatement<IsAStatement> {
 	}
 
 	@Override
-	public IsAStatement performAction(EditionSchemeAction action) {
-		OntologyObject subject = getPropertySubject(action);
-		OntologyObject father = getPropertyFather(action);
-		if (father instanceof OntologyClass) {
-			if (subject instanceof OntologyClass) {
-				return (IsAStatement) ((OntologyClass) subject).addSuperClass((OntologyClass) father);
-			} else if (subject instanceof OntologyIndividual) {
-				return (IsAStatement) ((OntologyIndividual) subject).addType((OntologyClass) father);
+	public SubClassStatement performAction(EditionSchemeAction action) {
+		OWLConcept<?> subject = getPropertySubject(action);
+		OWLConcept<?> father = getPropertyFather(action);
+		if (father instanceof OWLClass) {
+			if (subject instanceof OWLClass) {
+				return ((OWLClass) subject).addToSuperClasses((OWLClass) father);
+			} else if (subject instanceof OWLIndividual) {
+				return ((OWLIndividual) subject).addToTypes((OWLClass) father);
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, IsAStatement initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, SubClassStatement initialContext) {
 	}
 
 }

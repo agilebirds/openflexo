@@ -10,7 +10,6 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyClassPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyDataPropertyPathElement;
@@ -20,9 +19,16 @@ import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.Onto
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
+import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
+import org.openflexo.technologyadapter.owl.model.OWLDataType;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
+import org.openflexo.technologyadapter.owl.model.OWLRestriction.RestrictionType;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
-import org.openflexo.technologyadapter.owl.model.OWLRestriction.RestrictionType;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 public class OntologicStatementPatternRolePathElement<T extends OWLStatement> extends PatternRolePathElement<T> {
@@ -53,31 +59,31 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				// not relevant because not settable
 			}
 		};
-		OntologyClass subjectType = null;
+		OWLClass subjectType = null;
 		if (aPatternRole instanceof DataPropertyStatementPatternRole
 				&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty() != null
-				&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain() instanceof OntologyClass) {
-			subjectType = (OntologyClass) ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain();
-			subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+				&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain() instanceof OWLClass) {
+			subjectType = (OWLClass) ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain();
+			subject = new OntologyIndividualPathElement<OWLIndividual>("subject", subjectType, this) {
 				@Override
-				public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof OWLStatement) {
-						return (OntologyIndividual) ((OWLStatement) target).getSubject();
+						return (OWLIndividual) ((OWLStatement) target).getSubject();
 					}
 					logger.warning("Unexpected " + target);
 					return null;
 				}
 
 				@Override
-				public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLIndividual value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 
 				@Override
 				public Type getType() {
 					if (((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty() != null
-							&& ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain() instanceof OntologyClass) {
-						return IndividualOfClass.getIndividualOfClass((OntologyClass) ((DataPropertyStatementPatternRole) getPatternRole())
+							&& ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain() instanceof OWLClass) {
+						return IndividualOfClass.getIndividualOfClass((OWLClass) ((DataPropertyStatementPatternRole) getPatternRole())
 								.getDataProperty().getDomain());
 					}
 					return super.getType();
@@ -85,38 +91,37 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 			};
 		} else if (aPatternRole instanceof ObjectPropertyStatementPatternRole
 				&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty() != null
-				&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain() instanceof OntologyClass) {
-			subjectType = (OntologyClass) ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain();
-			subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+				&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain() instanceof OWLClass) {
+			subjectType = (OWLClass) ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain();
+			subject = new OntologyIndividualPathElement<OWLIndividual>("subject", subjectType, this) {
 				@Override
-				public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof OWLStatement) {
-						return (OntologyIndividual) ((OWLStatement) target).getSubject();
+						return (OWLIndividual) ((OWLStatement) target).getSubject();
 					}
 					logger.warning("Unexpected " + target);
 					return null;
 				}
 
 				@Override
-				public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLIndividual value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 
 				@Override
 				public Type getType() {
 					if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
-							&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain() instanceof OntologyClass) {
-						return IndividualOfClass
-								.getIndividualOfClass((OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole())
-										.getObjectProperty().getDomain());
+							&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain() instanceof OWLClass) {
+						return IndividualOfClass.getIndividualOfClass((OWLClass) ((ObjectPropertyStatementPatternRole) getPatternRole())
+								.getObjectProperty().getDomain());
 					}
 					return super.getType();
 				}
 			};
 		} else {
-			subject = new OntologyObjectPathElement("subject", this) {
+			subject = new OntologyObjectPathElement<OWLConcept<?>>("subject", this) {
 				@Override
-				public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLConcept<?> getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof OWLStatement) {
 						return ((OWLStatement) target).getSubject();
 					}
@@ -125,7 +130,7 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLConcept<?> value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};
@@ -144,9 +149,9 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 
 		public IsAStatementPatternRolePathElement(SubClassStatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
-			parent = new OntologyObjectPathElement("parent", this) {
+			parent = new OntologyObjectPathElement<OWLConcept<?>>("parent", this) {
 				@Override
-				public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLConcept<?> getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof IsAStatement) {
 						return ((IsAStatement) target).getParentObject();
 					} else if (target instanceof SubClassStatement) {
@@ -157,7 +162,7 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLConcept<?> value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};
@@ -173,9 +178,9 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 
 		public ObjectPropertyStatementPatternRolePathElement(ObjectPropertyStatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
-			predicate = new OntologyObjectPropertyPathElement("predicate", this) {
+			predicate = new OntologyObjectPropertyPathElement<OWLObjectProperty>("predicate", this) {
 				@Override
-				public OntologyObjectProperty getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLObjectProperty getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof ObjectPropertyStatement) {
 						return ((ObjectPropertyStatement) target).getPredicate();
 					} else {
@@ -185,20 +190,20 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyObjectProperty value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLObjectProperty value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};
-			OntologyClass objectType = null;
-			if (aPatternRole.getObjectProperty() instanceof OntologyObjectProperty
-					&& ((OntologyObjectProperty) aPatternRole.getObjectProperty()).getRange() instanceof OntologyClass) {
-				objectType = (OntologyClass) ((OntologyObjectProperty) aPatternRole.getObjectProperty()).getRange();
+			OWLClass objectType = null;
+			if (aPatternRole.getObjectProperty() instanceof OWLObjectProperty
+					&& ((OWLObjectProperty) aPatternRole.getObjectProperty()).getRange() instanceof OWLClass) {
+				objectType = ((OWLObjectProperty) aPatternRole.getObjectProperty()).getRange();
 			}
-			object = new OntologyIndividualPathElement("object", objectType, this) {
+			object = new OntologyIndividualPathElement<OWLIndividual>("object", objectType, this) {
 				@Override
-				public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof ObjectPropertyStatement) {
-						return (OntologyIndividual) ((ObjectPropertyStatement) target).getStatementObject();
+						return (OWLIndividual) ((ObjectPropertyStatement) target).getStatementObject();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -206,17 +211,16 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLIndividual value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 
 				@Override
 				public Type getType() {
 					if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
-							&& ((OntologyObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty())
-									.getRange() instanceof OntologyClass) {
+							&& ((OWLObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty()).getRange() instanceof OWLClass) {
 						return IndividualOfClass
-								.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole())
+								.getIndividualOfClass(((OWLObjectProperty) ((ObjectPropertyStatementPatternRole) getPatternRole())
 										.getObjectProperty()).getRange());
 					}
 					return super.getType();
@@ -241,9 +245,9 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 
 		public DataPropertyStatementPatternRolePathElement(DataPropertyStatementPatternRole aPatternRole, E container) {
 			super(aPatternRole, container);
-			predicate = new OntologyDataPropertyPathElement("predicate", this) {
+			predicate = new OntologyDataPropertyPathElement<OWLDataProperty>("predicate", this) {
 				@Override
-				public OntologyDataProperty getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLDataProperty getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof DataPropertyStatement) {
 						return ((DataPropertyStatement) target).getPredicate();
 					} else {
@@ -253,14 +257,14 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyDataProperty value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLDataProperty value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};
 			allProperties.add(predicate);
-			if (aPatternRole.getDataProperty() != null && aPatternRole.getDataProperty().getDataType() != null) {
+			if (aPatternRole.getDataProperty() != null && aPatternRole.getDataProperty().getRange() != null) {
 				value = new SimpleBindingPathElementImpl<Object>("value", DataPropertyStatement.class, aPatternRole.getDataProperty()
-						.getDataType().getAccessedType(), false, "object_of_statement") {
+						.getRange().getAccessedType(), false, "object_of_statement") {
 					@Override
 					public Object getBindingValue(Object target, BindingEvaluationContext context) {
 						if (target instanceof DataPropertyStatement) {
@@ -287,7 +291,7 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 		private OntologyClassPathElement object;
 		private SimpleBindingPathElementImpl<RestrictionType> restrictionType;
 		private SimpleBindingPathElementImpl<Integer> cardinality;
-		private SimpleBindingPathElementImpl<OntologicDataType> dataRange;
+		private SimpleBindingPathElementImpl<OWLDataType> dataRange;
 		private SimpleBindingPathElementImpl<String> displayableRestriction;
 
 		public RestrictionStatementPatternRolePathElement(RestrictionStatementPatternRole aPatternRole, Bindable container) {
@@ -311,9 +315,9 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 			};
 
-			property = new OntologyPropertyPathElement("property", this) {
+			property = new OntologyPropertyPathElement<OWLProperty>("property", this) {
 				@Override
-				public OntologyProperty getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLProperty getBindingValue(Object target, BindingEvaluationContext context) {
 					/*if (target instanceof RestrictionStatement) {
 						return ((RestrictionStatement) target).getProperty();
 					} else {
@@ -324,9 +328,9 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 					return null;
 				}
 			};
-			object = new OntologyClassPathElement("object", this) {
+			object = new OntologyClassPathElement<OWLClass>("object", this) {
 				@Override
-				public OntologyClass getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLClass getBindingValue(Object target, BindingEvaluationContext context) {
 					/*if (target instanceof ObjectRestrictionStatement) {
 						return ((ObjectRestrictionStatement) target).getObject();
 					} else if (target instanceof DataRestrictionStatement) {
@@ -341,7 +345,7 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologyClass value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLClass value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};
@@ -381,10 +385,10 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 					// not relevant because not settable
 				}
 			};
-			dataRange = new SimpleBindingPathElementImpl<OntologicDataType>("dataRange", SubClassStatement.class, OntologicDataType.class,
-					true, "data_range_of_restriction") {
+			dataRange = new SimpleBindingPathElementImpl<OWLDataType>("dataRange", SubClassStatement.class, OWLDataType.class, true,
+					"data_range_of_restriction") {
 				@Override
-				public OntologicDataType getBindingValue(Object target, BindingEvaluationContext context) {
+				public OWLDataType getBindingValue(Object target, BindingEvaluationContext context) {
 					/*if (target instanceof ObjectRestrictionStatement) {
 						logger.warning("dataRange unavailable for ObjectRestrictionStatement: " + target);
 						return null;
@@ -399,7 +403,7 @@ public class OntologicStatementPatternRolePathElement<T extends OWLStatement> ex
 				}
 
 				@Override
-				public void setBindingValue(OntologicDataType value, Object target, BindingEvaluationContext context) {
+				public void setBindingValue(OWLDataType value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
 			};

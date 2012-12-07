@@ -8,14 +8,15 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
-import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 
 public class DataPropertyStatementPathElement extends StatementPathElement<Object> {
 	private static final Logger logger = Logger.getLogger(DataPropertyStatementPathElement.class.getPackage().getName());
 
-	private OntologyDataProperty ontologyProperty;
+	private OWLDataProperty ontologyProperty;
 
 	private SimpleBindingPathElementImpl<String> asStringProperty;
 	private SimpleBindingPathElementImpl<Boolean> asBooleanProperty;
@@ -27,7 +28,7 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 	private SimpleBindingPathElementImpl<Float> asFloatProperty;
 	private SimpleBindingPathElementImpl<Double> asDoubleProperty;
 
-	public DataPropertyStatementPathElement(BindingPathElement aParent, OntologyDataProperty anOntologyProperty) {
+	public DataPropertyStatementPathElement(BindingPathElement aParent, OWLDataProperty anOntologyProperty) {
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
 

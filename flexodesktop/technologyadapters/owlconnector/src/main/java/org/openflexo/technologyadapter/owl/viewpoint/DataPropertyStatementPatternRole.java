@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -17,6 +18,7 @@ import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
 
 public class DataPropertyStatementPatternRole extends StatementPatternRole<DataPropertyStatement> {
 
@@ -135,14 +137,14 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 		@Override
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().getOntologyObject(subjectURI);
+				IFlexoOntologyObject subject = getProject().getOntologyObject(subjectURI);
 				if (subject instanceof OWLConcept == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyDataProperty property = (OntologyDataProperty) getProject().getObject(dataPropertyURI);
+				OWLDataProperty property = (OWLDataProperty) getProject().getObject(dataPropertyURI);
 				if (property != null) {
 					statement = ((OWLConcept<?>) subject).getDataPropertyStatement(property);
 					// logger.info("Found statement: "+statement);

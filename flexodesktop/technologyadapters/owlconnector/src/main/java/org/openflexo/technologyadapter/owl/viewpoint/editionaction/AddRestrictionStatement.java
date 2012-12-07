@@ -31,10 +31,11 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
-import org.openflexo.technologyadapter.owl.model.OWLStatement;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction.RestrictionType;
+import org.openflexo.technologyadapter.owl.model.OWLStatement;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 // No more applicable
@@ -67,17 +68,17 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		this.propertyURI = propertyURI;
 	}
 
-	public IFlexoOntologyStructuralProperty getObjectProperty() {
+	public OWLProperty getObjectProperty() {
 		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
 	}
 
 	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {
 		_setPropertyURI(p != null ? p.getURI() : null);
 	}
 
-	public IFlexoOntologyConcept getPropertyObject(EditionSchemeAction action) {
-		return (IFlexoOntologyConcept) getObject().getBindingValue(action);
+	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
+		return (OWLConcept<?>) getObject().getBindingValue(action);
 	}
 
 	@Override
@@ -180,9 +181,9 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	@Override
 	public OWLStatement performAction(EditionSchemeAction action) {
-		OntologyProperty property = getObjectProperty();
-		OntologyObject subject = getPropertySubject(action);
-		OntologyObject object = getPropertyObject(action);
+		OWLProperty property = getObjectProperty();
+		OWLConcept<?> subject = getPropertySubject(action);
+		OWLConcept<?> object = getPropertyObject(action);
 
 		// System.out.println("property="+property+" "+property.getURI());
 		// System.out.println("subject="+subject+" "+subject.getURI());
@@ -193,8 +194,8 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
 			RestrictionType restrictionType = getRestrictionType(action);
 			int cardinality = getCardinality(action);
-			OWLRestriction restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject,
-					(OWLProperty) property, restrictionType, cardinality, (OWLClass) object);
+			OWLRestriction restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject, property,
+					restrictionType, cardinality, (OWLClass) object);
 
 			if (subject instanceof OWLClass) {
 				if (subject instanceof OWLClass) {

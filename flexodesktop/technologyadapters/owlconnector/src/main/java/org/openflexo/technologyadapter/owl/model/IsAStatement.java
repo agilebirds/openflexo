@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -40,7 +39,7 @@ public abstract class IsAStatement extends OWLStatement {
 		}
 	}
 
-	public IFlexoOntologyConcept getParentObject() {
+	public OWLConcept<?> getParentObject() {
 		return parentObject;
 	}
 

@@ -42,14 +42,16 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	 * 
 	 * @param aType
 	 */
-	public void addToSuperClasses(IFlexoOntologyClass aClass);
+	// @Deprecated
+	// public void addToSuperClasses(IFlexoOntologyClass aClass);
 
 	/**
 	 * Remove supplied type from the list of super classes of this class
 	 * 
 	 * @param aType
 	 */
-	public void removeFromSuperClasses(IFlexoOntologyClass aClass);
+	// @Deprecated
+	// public void removeFromSuperClasses(IFlexoOntologyClass aClass);
 
 	/**
 	 * Return a list of classes, accessible from scope defined by supplied ontology, which are declared to be sub-classes of this property
@@ -80,6 +82,8 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	 * 
 	 * @return
 	 */
+	// TODO should be removed from this API
+	@Deprecated
 	public boolean isNamedClass();
 
 	/**
@@ -87,5 +91,7 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	 * 
 	 * @return
 	 */
+	// TODO should be removed from this API
+	@Deprecated
 	public boolean isRootConcept();
 }

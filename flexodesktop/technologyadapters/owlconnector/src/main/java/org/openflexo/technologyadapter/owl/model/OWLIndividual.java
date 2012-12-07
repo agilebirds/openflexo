@@ -161,19 +161,19 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 	 * 
 	 * @param type
 	 */
-	@Override
-	public void addToTypes(IFlexoOntologyClass aType) {
-		if (aType instanceof OWLClass) {
-			getOntResource().addOntClass(((OWLClass) aType).getOntResource());
+	public SubClassStatement addToTypes(OWLClass aType) {
+		if (aType != null) {
+			getOntResource().addOntClass(aType.getOntResource());
 			updateOntologyStatements();
+			return getSubClassStatement(aType);
 		}
-		logger.warning("Type " + aType + " is not a OWLClass");
+		logger.warning("Type " + aType + " is null");
+		return null;
 	}
 
-	@Override
-	public void removeFromTypes(IFlexoOntologyClass aType) {
-		if (aType instanceof OWLClass) {
-			getOntResource().removeOntClass(((OWLClass) aType).getOntResource());
+	public void removeFromTypes(OWLClass aType) {
+		if (aType != null) {
+			getOntResource().removeOntClass(aType.getOntResource());
 			updateOntologyStatements();
 		}
 		logger.warning("Type " + aType + " is not a OWLClass");

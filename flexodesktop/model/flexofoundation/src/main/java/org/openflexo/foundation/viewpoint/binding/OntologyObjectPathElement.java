@@ -223,11 +223,11 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 		return viewpointOntology;
 	}
 
-	public static class OntologyClassPathElement extends OntologyObjectPathElement<IFlexoOntologyClass> {
+	public static class OntologyClassPathElement<T extends IFlexoOntologyClass> extends OntologyObjectPathElement<T> {
 		private IFlexoOntologyClass ontologyType;
 
-		public OntologyClassPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
-			this(name, viewpointOntology.getRootConcept(), aParentElement);
+		public OntologyClassPathElement(String name, BindingPathElement aParentElement) {
+			this(name, null, aParentElement);
 		}
 
 		public OntologyClassPathElement(String name, IFlexoOntologyClass ontologyType, BindingPathElement aParentElement) {
@@ -277,7 +277,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 	}
 
-	public static class OntologyIndividualPathElement extends OntologyObjectPathElement<IFlexoOntologyIndividual> {
+	public static class OntologyIndividualPathElement<T extends IFlexoOntologyIndividual> extends OntologyObjectPathElement<T> {
 		private IFlexoOntologyClass ontologyType;
 
 		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement, IFlexoOntology viewpointOntology) {
@@ -336,7 +336,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 	}
 
-	public static class OntologyDataPropertyPathElement extends OntologyPropertyPathElement<IFlexoOntologyDataProperty> {
+	public static class OntologyDataPropertyPathElement<T extends IFlexoOntologyDataProperty> extends OntologyPropertyPathElement<T> {
 		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement) {
 			super(name, aParentElement);
 		}
@@ -356,7 +356,7 @@ public class OntologyObjectPathElement<T extends IFlexoOntologyConcept> implemen
 
 	}
 
-	public static class OntologyObjectPropertyPathElement extends OntologyPropertyPathElement<IFlexoOntologyObjectProperty> {
+	public static class OntologyObjectPropertyPathElement<T extends IFlexoOntologyObjectProperty> extends OntologyPropertyPathElement<T> {
 		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement) {
 			super(name, aParentElement);
 		}

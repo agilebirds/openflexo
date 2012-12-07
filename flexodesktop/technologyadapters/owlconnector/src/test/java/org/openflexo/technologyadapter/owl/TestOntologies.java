@@ -25,11 +25,8 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
@@ -37,6 +34,7 @@ import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
 import org.openflexo.toolbox.FileResource;
@@ -65,7 +63,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test1AssertRDFOntologyPresentAndLoaded() {
 		log("test1AssertRDFOntologyPresentAndLoaded()");
-		FlexoOntology rdfOntology = ontologyLibrary.getRDFOntology();
+		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
 		assertNotNull(rdfOntology);
 		assertTrue(rdfOntology.isLoaded());
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
@@ -90,39 +88,39 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertNotNull(CONTAINER);
 
-		OntologyProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);
+		OWLProperty DOMAIN = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_DOMAIN_URI);
 		assertNotNull(DOMAIN);
 		assertFalse(DOMAIN.isAnnotationProperty());
 
-		OntologyProperty RANGE = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_RANGE_URI);
+		OWLProperty RANGE = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_RANGE_URI);
 		assertNotNull(RANGE);
 		assertFalse(RANGE.isAnnotationProperty());
 
-		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_CLASS_URI);
+		OWLProperty SUB_CLASS = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_CLASS_URI);
 		assertNotNull(SUB_CLASS);
 		assertFalse(SUB_CLASS.isAnnotationProperty());
 
-		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_PROPERTY_URI);
+		OWLProperty SUB_PROPERTY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SUB_PROPERTY_URI);
 		assertNotNull(SUB_PROPERTY);
 		assertFalse(SUB_PROPERTY.isAnnotationProperty());
 
-		OntologyProperty MEMBER = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_MEMBER_URI);
+		OWLProperty MEMBER = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_MEMBER_URI);
 		assertNotNull(MEMBER);
 		assertFalse(MEMBER.isAnnotationProperty());
 
-		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
+		OWLProperty SEE_ALSO = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 
-		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_IS_DEFINED_BY_URI);
+		OWLProperty IS_DEFINED_BY = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_IS_DEFINED_BY_URI);
 		assertNotNull(IS_DEFINED_BY);
 		assertTrue(IS_DEFINED_BY.isAnnotationProperty());
 
-		OntologyProperty LABEL = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_LABEL_URI);
+		OWLProperty LABEL = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_LABEL_URI);
 		assertNotNull(LABEL);
 		assertTrue(LABEL.isAnnotationProperty());
 
-		OntologyProperty COMMENT = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
+		OWLProperty COMMENT = rdfsOntology.getProperty(RDFSURIDefinitions.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -130,8 +128,8 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test3AssertRDFAndRDFSOntologyCorrectImports() {
 		log("test3AssertRDFAndRDFSOntologyCorrectImports()");
-		FlexoOntology rdfOntology = ontologyLibrary.getRDFOntology();
-		FlexoOntology rdfsOntology = ontologyLibrary.getRDFSOntology();
+		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
+		OWLOntology rdfsOntology = ontologyLibrary.getRDFSOntology();
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
 		assertTrue(rdfOntology.getImportedOntologies().get(0) == rdfsOntology);
 		assertTrue(rdfsOntology.getImportedOntologies().size() == 1);
@@ -140,13 +138,13 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test4AssertOWLOntologyPresentAndLoaded() {
 		log("test4AssertOWLOntologyPresentAndLoaded()");
-		FlexoOntology owlOntology = ontologyLibrary.getOWLOntology();
+		OWLOntology owlOntology = ontologyLibrary.getOWLOntology();
 		assertNotNull(owlOntology);
 		assertTrue(owlOntology.isLoaded());
 		assertTrue(owlOntology.getImportedOntologies().size() == 2);
 		assertTrue(owlOntology.getImportedOntologies().contains(ontologyLibrary.getRDFOntology()));
 		assertTrue(owlOntology.getImportedOntologies().contains(ontologyLibrary.getRDFSOntology()));
-		assertNotNull(owlOntology.getThingConcept());
+		assertNotNull(owlOntology.getRootConcept());
 	}
 
 	public void test5AssertFlexoConceptsOntologyIsCorrect() {
@@ -156,7 +154,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(flexoConceptsOntology.isLoaded());
 		assertEquals(10, flexoConceptsOntology.getClasses().size());
 
-		assertNotNull(flexoConceptsOntology.getThingConcept());
+		assertNotNull(flexoConceptsOntology.getRootConcept());
 
 		OWLClass flexoConcept = flexoConceptsOntology.getClass(OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
 		assertNotNull(flexoConcept);
@@ -196,24 +194,24 @@ public class TestOntologies extends FlexoTestCase {
 		assertFalse(flexoModelObject.redefinesOriginalDefinition());
 
 		assertTrue(flexoConcept.getSuperClasses().size() == 1);
-		assertSameList(flexoConcept.getSuperClasses(), flexoConceptsOntology.getThingConcept());
+		assertSameList(flexoConcept.getSuperClasses(), flexoConceptsOntology.getRootConcept());
 
 		assertTrue(flexoModelObject.getSuperClasses().size() == 1);
-		assertSameList(flexoModelObject.getSuperClasses(), flexoConceptsOntology.getThingConcept());
+		assertSameList(flexoModelObject.getSuperClasses(), flexoConceptsOntology.getRootConcept());
 
-		assertSameList(flexoProcess.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+		assertSameList(flexoProcess.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoModelObject);
 
-		assertSameList(flexoProcessFolder.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+		assertSameList(flexoProcessFolder.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoModelObject);
 
-		assertSameList(flexoRole.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+		assertSameList(flexoRole.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoModelObject);
 
-		assertSameList(flexoProcessElement.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+		assertSameList(flexoProcessElement.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoModelObject);
 
-		assertSameList(flexoActivity.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+		assertSameList(flexoActivity.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoProcessElement);
 
-		assertSameList(flexoEvent.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+		assertSameList(flexoEvent.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoProcessElement);
 
-		assertSameList(flexoOperation.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+		assertSameList(flexoOperation.getSuperClasses(), flexoConceptsOntology.getRootConcept(), flexoProcessElement);
 
 		OWLObjectProperty inRelationWithProperty = flexoConceptsOntology.getObjectProperty(ontologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "inRelationWith");
@@ -260,8 +258,8 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(o2.isLoaded());
 
 		assertEquals(1, o3.getClasses().size());
-		assertSameList(o3.getClasses(), o3.getThingConcept());
-		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
+		assertSameList(o3.getClasses(), o3.getRootConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getRootConcept(), o3.getRootConcept().getOriginalDefinition());
 
 		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
@@ -270,7 +268,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
-		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
+		assertSameList(o2.getClasses(), o2.getRootConcept(), a2, b2, c2);
 
 		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
@@ -279,7 +277,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
-		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertSameList(o1.getClasses(), o1.getRootConcept(), a1, b1, c1);
 		assertTrue(b1.isSuperConceptOf(c1));
 
 	}
@@ -301,8 +299,8 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(o2.isLoaded());
 
 		assertEquals(1, o3.getClasses().size());
-		assertSameList(o3.getClasses(), o3.getThingConcept());
-		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
+		assertSameList(o3.getClasses(), o3.getRootConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getRootConcept(), o3.getRootConcept().getOriginalDefinition());
 
 		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
@@ -311,7 +309,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
-		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
+		assertSameList(o2.getClasses(), o2.getRootConcept(), a2, b2, c2);
 
 		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
@@ -320,7 +318,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
-		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertSameList(o1.getClasses(), o1.getRootConcept(), a1, b1, c1);
 		assertTrue(b1.isSuperConceptOf(c1));
 
 		o5.loadWhenUnloaded();
@@ -335,7 +333,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertEquals(a2, a2fromO4.getOriginalDefinition());
 
 		assertEquals(3, o5.getClasses().size());
-		assertSameList(o5.getClasses(), o5.getThingConcept(), a1fromO4, a2fromO4);
+		assertSameList(o5.getClasses(), o5.getRootConcept(), a1fromO4, a2fromO4);
 
 		assertTrue(a1fromO4.isSuperConceptOf(a2fromO4));
 
@@ -358,8 +356,8 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(o2.isLoaded());
 
 		assertEquals(1, o3.getClasses().size());
-		assertSameList(o3.getClasses(), o3.getThingConcept());
-		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
+		assertSameList(o3.getClasses(), o3.getRootConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getRootConcept(), o3.getRootConcept().getOriginalDefinition());
 
 		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
@@ -368,7 +366,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
-		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
+		assertSameList(o2.getClasses(), o2.getRootConcept(), a2, b2, c2);
 
 		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
@@ -377,7 +375,7 @@ public class TestOntologies extends FlexoTestCase {
 		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
-		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertSameList(o1.getClasses(), o1.getRootConcept(), a1, b1, c1);
 		assertTrue(b1.isSuperConceptOf(c1));
 
 		o5.loadWhenUnloaded();
@@ -392,7 +390,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertEquals(a2, a2fromO5.getOriginalDefinition());
 
 		assertEquals(3, o5.getClasses().size());
-		assertSameList(o5.getClasses(), o5.getThingConcept(), a1fromO5, a2fromO5);
+		assertSameList(o5.getClasses(), o5.getRootConcept(), a1fromO5, a2fromO5);
 
 		assertTrue(a2fromO5.isSuperConceptOf(a1fromO5));
 
@@ -431,8 +429,8 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(redefinedFlexoActivity.isSuperConceptOf(activity2));
 		assertTrue(redefinedFlexoActivity.isSuperConceptOf(activity3));
 
-		assertTrue(ontology.getThingConcept().isSuperConceptOf(untypedIndividual));
-		assertTrue(ontology.getThingConcept().getOriginalDefinition().isSuperConceptOf(untypedIndividual));
+		assertTrue(ontology.getRootConcept().isSuperConceptOf(untypedIndividual));
+		assertTrue(ontology.getRootConcept().getOriginalDefinition().isSuperConceptOf(untypedIndividual));
 
 		OWLDataProperty resourceNameProperty = ontology.getOntologyLibrary().getFlexoConceptOntology()
 				.getDataProperty(ontologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "resourceName");
@@ -496,7 +494,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test11TestLoadArchimateOntology() {
 		log("test11TestLoadArchimateOntology()");
-		FlexoOntology ontology = ontologyLibrary.getOntology("http://www.bolton.ac.uk/archimate");
+		OWLOntology ontology = ontologyLibrary.getOntology("http://www.bolton.ac.uk/archimate");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -505,7 +503,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test12TestLoadCPMFInstanceOntology() {
 		log("test12TestLoadCPMFInstanceOntology()");
-		FlexoOntology ontology = ontologyLibrary.getOntology("http://www.cpmf.org/ontologies/cpmfInstance");
+		OWLOntology ontology = ontologyLibrary.getOntology("http://www.cpmf.org/ontologies/cpmfInstance");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -514,7 +512,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test13TestLoadBPMNOntology() {
 		log("test13TestLoadBPMNOntology()");
-		FlexoOntology ontology = ontologyLibrary.getOntology("http://dkm.fbk.eu/index.php/BPMN_Ontology");
+		OWLOntology ontology = ontologyLibrary.getOntology("http://dkm.fbk.eu/index.php/BPMN_Ontology");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -523,7 +521,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test14TestBasicOntologEditor() {
 		log("test14TestBasicOntologEditor()");
-		FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl");
+		OWLOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl");
 		assertNotNull(ontology);
 
 		ontology.loadWhenUnloaded();
@@ -752,10 +750,10 @@ public class TestOntologies extends FlexoTestCase {
 				hasKeyProperty, complementOfProperty, seeAlsoProperty, memberProperty, disjointUnionOfProperty, disjointWithProperty,
 				subClassOfProperty, valueProperty, typeProperty, commentProperty, isDefinedByProperty, labelProperty);
 
-		OWLClass thingFromOWL = owlOntology.getThingConcept();
+		OWLClass thingFromOWL = owlOntology.getRootConcept();
 		System.out.println("thingFromOWL = " + thingFromOWL.getPropertiesTakingMySelfAsDomain());
 
-		OWLClass thingFromSKOS = skosOntology.getThingConcept();
+		OWLClass thingFromSKOS = skosOntology.getRootConcept();
 		System.out.println("thingFromSKOS = " + thingFromSKOS.getPropertiesTakingMySelfAsDomain());
 
 	}
@@ -793,7 +791,7 @@ public class TestOntologies extends FlexoTestCase {
 			isLoaded = true;
 
 			for (Object o : ontModel.listImportedOntologyURIs()) {
-				FlexoOntology importedOnt = _library.getOntology((String) o);
+				OWLOntology importedOnt = _library.getOntology((String) o);
 				logger.info("importedOnt= " + importedOnt);
 				if (importedOnt != null) {
 					importedOnt.loadWhenUnloaded();
@@ -805,7 +803,7 @@ public class TestOntologies extends FlexoTestCase {
 
 			logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
-			for (FlexoOntology o : getImportedOntologies()) {
+			for (OWLOntology o : getImportedOntologies()) {
 				logger.info("Imported ontology: " + o);
 			}
 
@@ -826,7 +824,7 @@ public class TestOntologies extends FlexoTestCase {
 				"TestResourceCenter"));
 
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, ontologyLibrary, null);
-		for (FlexoOntology o : ontologyLibrary.getAllOntologies()) {
+		for (OWLOntology o : ontologyLibrary.getAllOntologies()) {
 			try {
 				System.out.println("Onto: " + o.getURI() + " file " + o.getAlternativeLocalFile().toURL().toString());
 				ontModel.getDocumentManager().addAltEntry(o.getURI(), o.getAlternativeLocalFile().toURL().toString());

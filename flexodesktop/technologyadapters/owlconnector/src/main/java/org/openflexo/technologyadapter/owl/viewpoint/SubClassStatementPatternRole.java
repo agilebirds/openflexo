@@ -12,6 +12,7 @@ import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 public class SubClassStatementPatternRole extends StatementPatternRole<SubClassStatement> {
@@ -89,14 +90,14 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		@Override
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().getOntologyObject(subjectURI);
+				OWLObject subject = (OWLObject) getProject().getOntologyObject(subjectURI);
 				if (subject instanceof OWLConcept == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyObject parent = getProject().getOntologyObject(parentURI);
+				OWLConcept<?> parent = (OWLConcept<?>) getProject().getOntologyObject(parentURI);
 				if (subject != null && parent != null) {
 					statement = ((OWLConcept<?>) subject).getSubClassStatement(parent);
 				}

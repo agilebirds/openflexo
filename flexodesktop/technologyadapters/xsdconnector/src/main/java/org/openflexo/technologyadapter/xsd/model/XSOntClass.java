@@ -64,7 +64,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 		return superClasses;
 	}
 
-	@Override
 	public void addToSuperClasses(IFlexoOntologyClass aClass) {
 		if (!(aClass instanceof XSOntClass)) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -78,7 +77,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 		superClasses.add((XSOntClass) aClass);
 	}
 
-	@Override
 	public void removeFromSuperClasses(IFlexoOntologyClass aClass) {
 		superClasses.remove(aClass);
 	}

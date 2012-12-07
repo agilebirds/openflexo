@@ -318,22 +318,20 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 	 * 
 	 * @param aClass
 	 */
-	@Override
-	public void addToSuperClasses(IFlexoOntologyClass father) {
-		if (father instanceof OWLClass) {
-			getOntResource().addSuperClass(((OWLClass) father).getOntResource());
-			updateOntologyStatements();
-			return;
-		}
+	public SubClassStatement addToSuperClasses(OWLClass father) {
 		if (father instanceof OWLRestriction) {
 			restrictions.add((OWLRestriction) father);
 		}
-		logger.warning("Class " + father + " is not a OWLClass");
-		return;
+		if (father != null) {
+			getOntResource().addSuperClass(father.getOntResource());
+			updateOntologyStatements();
+			return getSubClassStatement(father);
+		}
+		logger.warning("Class " + father + " is null");
+		return null;
 	}
 
-	@Override
-	public void removeFromSuperClasses(IFlexoOntologyClass aClass) {
+	public void removeFromSuperClasses(OWLClass aClass) {
 		logger.warning("Not implemented");
 	}
 

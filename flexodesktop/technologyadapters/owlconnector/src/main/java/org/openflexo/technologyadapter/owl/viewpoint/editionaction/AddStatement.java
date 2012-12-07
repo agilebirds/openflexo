@@ -29,6 +29,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
@@ -40,8 +41,8 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		super(builder);
 	}
 
-	public IFlexoOntologyConcept getPropertySubject(EditionSchemeAction action) {
-		return (IFlexoOntologyConcept) getSubject().getBindingValue(action);
+	public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {
+		return (OWLConcept<?>) getSubject().getBindingValue(action);
 	}
 
 	/*@Override

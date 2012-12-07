@@ -103,6 +103,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
 
 	/**
@@ -110,12 +111,15 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
 
 	// NB: implemented in FlexoModelObject
+	@Deprecated
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
 
 	// NB: implemented in FlexoModelObject
+	@Deprecated
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
 
 }

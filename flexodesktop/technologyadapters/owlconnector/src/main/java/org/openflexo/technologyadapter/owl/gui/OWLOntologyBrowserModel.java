@@ -97,8 +97,7 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 		for (IFlexoOntologyClass c : getContext().getAccessibleClasses()) {
 			if (c.isNamedClass()) {
 				for (IFlexoOntologyClass superClass : c.getSuperClasses()) {
-					if (superClass instanceof OWLRestriction
-							&& ((OWLRestriction) superClass).getProperty().equalsToConcept(p)) {
+					if (superClass instanceof OWLRestriction && ((OWLRestriction) superClass).getProperty().equalsToConcept(p)) {
 						if (searchedOntology == null || c.getOntology() == searchedOntology) {
 							potentialStorageClasses.add(c);
 						}
@@ -131,7 +130,7 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 			if (c instanceof OWLConcept<?> && ((OWLConcept<?>) c).redefinesOriginalDefinition()) {
 				list.remove(((OWLConcept<?>) c).getOriginalDefinition());
 			}
-			if (c instanceof OWLClass && ((OWLClass) c).isThing() && c.getOntology() != getContext()
+			if (c instanceof OWLClass && ((OWLClass) c).isRootConcept() && c.getOntology() != getContext()
 					&& list.contains(getContext().getRootConcept())) {
 				list.remove(c);
 			}

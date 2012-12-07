@@ -27,7 +27,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
@@ -40,6 +39,8 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
@@ -143,7 +144,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getDataProperty() != null) {
-				return ((IFlexoOntologyDataProperty) getDataProperty()).getDataType().getAccessedType();
+				return ((IFlexoOntologyDataProperty) getDataProperty()).getRange().getAccessedType();
 			}
 			return Object.class;
 		};
@@ -182,8 +183,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	@Override
 	public DataPropertyStatement performAction(EditionSchemeAction action) {
-		IFlexoOntologyDataProperty property = (IFlexoOntologyDataProperty) getDataProperty();
-		IFlexoOntologyConcept subject = getPropertySubject(action);
+		OWLDataProperty property = (OWLDataProperty) getDataProperty();
+		OWLConcept<?> subject = getPropertySubject(action);
 		Object value = getValue(action);
 		if (property == null) {
 			return null;
@@ -194,7 +195,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		if (value == null) {
 			return null;
 		}
-		return (DataPropertyStatement) subject.addDataPropertyStatement(property, value);
+		return subject.addDataPropertyStatement(property, value);
 	}
 
 	@Override

@@ -15,6 +15,8 @@ import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 
 public class ObjectPropertyStatementPatternRole extends StatementPatternRole<ObjectPropertyStatement> {
@@ -136,7 +138,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		@Override
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
-				OntologyObject subject = getProject().getOntologyObject(subjectURI);
+				OWLObject subject = (OWLObject) getProject().getOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
@@ -150,7 +152,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 					return null;
 				}
 
-				OntologyObject object = getProject().getOntologyObject(objectURI);
+				OWLConcept<?> object = (OWLConcept<?>) getProject().getOntologyObject(objectURI);
 				if (object == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find object with URI " + objectURI);
@@ -158,10 +160,10 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 					return null;
 				}
 
-				OntologyObjectProperty property = (OntologyObjectProperty) getProject().getObject(objectPropertyURI);
+				OWLObjectProperty property = (OWLObjectProperty) getProject().getObject(objectPropertyURI);
 				if (property != null) {
 					// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
-					statement = ((OWLConcept) subject).getObjectPropertyStatement(property, object);
+					statement = ((OWLConcept<?>) subject).getObjectPropertyStatement(property, object);
 					// logger.info("Found statement: "+statement);
 				}
 			}

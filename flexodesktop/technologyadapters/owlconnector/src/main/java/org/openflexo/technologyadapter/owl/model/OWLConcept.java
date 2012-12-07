@@ -533,7 +533,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	 * @param property
 	 * @return
 	 */
-	public ObjectPropertyStatement getObjectPropertyStatement(IFlexoOntologyObjectProperty property, IFlexoOntologyConcept object) {
+	public ObjectPropertyStatement getObjectPropertyStatement(OWLObjectProperty property, OWLConcept<?> object) {
 		for (OWLStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property
 					&& ((ObjectPropertyStatement) statement).getStatementObject() == object) {
@@ -1026,7 +1026,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		if (this instanceof OWLClass) {
 			for (OWLClass superClass : ((OWLClass) this).getSuperClasses()) {
 				if (superClass instanceof OWLRestriction) {
-					OWLProperty p = (OWLProperty) ((OWLRestriction) superClass).getProperty();
+					OWLProperty p = ((OWLRestriction) superClass).getProperty();
 					domainProperties.add(p);
 				}
 			}

@@ -71,7 +71,6 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		return result;
 	}
 
-	@Override
 	public void addToTypes(IFlexoOntologyClass type) {
 		// Can only have one type.
 		if (type instanceof XSOntClass) {
@@ -79,7 +78,6 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		}
 	}
 
-	@Override
 	public void removeFromTypes(IFlexoOntologyClass aType) {
 		if (getType().equalsToConcept(aType)) {
 			setType(null);

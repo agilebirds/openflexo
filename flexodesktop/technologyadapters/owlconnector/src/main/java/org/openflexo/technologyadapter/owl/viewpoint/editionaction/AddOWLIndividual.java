@@ -22,17 +22,15 @@ package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
-import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
@@ -54,7 +52,7 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 
 	@Override
 	public OWLIndividual performAction(EditionSchemeAction action) {
-		IFlexoOntologyClass father = getOntologyClass();
+		OWLClass father = getOntologyClass();
 		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
 		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
 		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
@@ -68,7 +66,7 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
 					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-					IFlexoOntologyStructuralProperty property = dataPropertyAssertion.getOntologyProperty();
+					OWLProperty property = (OWLProperty) dataPropertyAssertion.getOntologyProperty();
 					logger.info("Property=" + property);
 					Object value = dataPropertyAssertion.getValue(action);
 					newIndividual.addPropertyStatement(property, value);

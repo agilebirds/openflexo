@@ -12,8 +12,12 @@ import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement;
-import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
@@ -21,10 +25,10 @@ import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 public abstract class ObjectPropertyStatementPathElement<T> extends StatementPathElement<T> {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
 
-	private OntologyObjectProperty ontologyProperty;
+	private OWLObjectProperty ontologyProperty;
 
 	public static ObjectPropertyStatementPathElement makeObjectPropertyStatementPathElement(BindingPathElement aParent,
-			OntologyObjectProperty anOntologyProperty, boolean recursive, int levels) {
+			OWLObjectProperty anOntologyProperty, boolean recursive, int levels) {
 		if (anOntologyProperty.isLiteralRange()) {
 			return new ObjectPropertyStatementAccessingLiteralPathElement(aParent, anOntologyProperty);
 		} else {
@@ -32,7 +36,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 	}
 
-	private ObjectPropertyStatementPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
+	private ObjectPropertyStatementPathElement(BindingPathElement aParent, OWLObjectProperty anOntologyProperty) {
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
 
@@ -53,16 +57,16 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		return true;
 	}
 
-	public OntologyObjectProperty getOntologyProperty() {
+	public OWLObjectProperty getOntologyProperty() {
 		return ontologyProperty;
 	}
 
-	public static class ObjectPropertyStatementAccessingObjectPathElement extends ObjectPropertyStatementPathElement<OntologyObject> {
+	public static class ObjectPropertyStatementAccessingObjectPathElement extends ObjectPropertyStatementPathElement<OWLObject> {
 
 		private SimpleBindingPathElementImpl<String> uriNameProperty;
 		private SimpleBindingPathElementImpl<String> uriProperty;
 
-		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty,
+		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OWLObjectProperty anOntologyProperty,
 				boolean recursive, int levels) {
 			super(aParent, anOntologyProperty);
 
@@ -70,8 +74,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 					String.class, true, "uri_name_as_supplied_in_ontology") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
-						return ((OntologyObject) target).getName();
+					if (target instanceof OWLObject) {
+						return ((OWLObject) target).getName();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -80,10 +84,10 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(String value, Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
+					if (target instanceof OWLObject) {
 						try {
 							logger.info("Rename URI of object " + target + " with " + value);
-							((OntologyObject) target).setName(value);
+							((OWLObject) target).setName(value);
 						} catch (Exception e) {
 							logger.warning("Unhandled exception: " + e);
 							e.printStackTrace();
@@ -98,8 +102,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 					false, "uri_as_supplied_in_ontology") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyObject) {
-						return ((OntologyObject) target).getURI();
+					if (target instanceof OWLObject) {
+						return ((OWLObject) target).getURI();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -135,23 +139,23 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public List<BindingPathElement> getAllProperties() {
-			if (!propertiesFound && getOntologyProperty().getRange() instanceof OntologyClass) {
-				searchProperties((OntologyClass) getOntologyProperty().getRange());
+			if (!propertiesFound && getOntologyProperty().getRange() instanceof OWLClass) {
+				searchProperties(getOntologyProperty().getRange());
 			}
 			return allProperties;
 		}
 
 		boolean propertiesFound = false;
 
-		private void searchProperties(OntologyClass rangeClass) {
+		private void searchProperties(OWLClass rangeClass) {
 
-			for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
+			for (final OWLProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
 				StatementPathElement propertyPathElement = null;
-				if (property instanceof OntologyObjectProperty) {
+				if (property instanceof OWLObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-							(OntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
-				} else if (property instanceof OntologyDataProperty) {
-					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+							(OWLObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
+				} else if (property instanceof OWLDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OWLDataProperty) property);
 				}
 				if (propertyPathElement != null) {
 					allProperties.add(propertyPathElement);
@@ -170,14 +174,14 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Type getType() {
-			if (getOntologyProperty().getRange() instanceof OntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((OntologyClass) getOntologyProperty().getRange());
+			if (getOntologyProperty().getRange() instanceof OWLClass) {
+				return IndividualOfClass.getIndividualOfClass(getOntologyProperty().getRange());
 			}
-			return OntologyIndividual.class;
+			return OWLIndividual.class;
 		}
 
 		@Override
-		public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
+		public OWLObject getBindingValue(Object target, BindingEvaluationContext context) {
 			if (target instanceof OWLIndividual) {
 				OWLIndividual individual = (OWLIndividual) target;
 				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
@@ -197,10 +201,10 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 
 		@Override
-		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
+		public void setBindingValue(OWLObject value, Object target, BindingEvaluationContext context) {
 			if (target instanceof OWLIndividual && getOntologyProperty() instanceof OWLProperty && value instanceof OWLConcept) {
 				OWLIndividual individual = (OWLIndividual) target;
-				OWLProperty property = (OWLProperty) getOntologyProperty();
+				OWLProperty property = getOntologyProperty();
 				PropertyStatement statement = individual.getPropertyStatement(property);
 				if (statement == null) {
 					individual.getOntResource().addProperty(property.getOntProperty(), ((OWLConcept) value).getOntResource());
@@ -231,7 +235,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		private SimpleBindingPathElementImpl<Float> asFloatProperty;
 		private SimpleBindingPathElementImpl<Double> asDoubleProperty;
 
-		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
+		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, OWLObjectProperty anOntologyProperty) {
 			super(aParent, anOntologyProperty);
 
 			asStringProperty = new SimpleBindingPathElementImpl<String>(PropertyStatement.AS_STRING, Object.class, String.class, true,

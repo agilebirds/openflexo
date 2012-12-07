@@ -42,15 +42,15 @@ public interface IFlexoOntologyIndividual extends IFlexoOntologyConcept {
 	 * 
 	 * @param aType
 	 */
-	public void addToTypes(IFlexoOntologyClass aType);
-
+	// @Deprecated
+	// public void addToTypes(IFlexoOntologyClass aType);
 	/**
 	 * Remove supplied type from the list of types implemented by this individual
 	 * 
 	 * @param aType
 	 */
-	public void removeFromTypes(IFlexoOntologyClass aType);
-
+	// @Deprecated
+	// public void removeFromTypes(IFlexoOntologyClass aType);
 	/**
 	 * Is this an Individual of aClass.
 	 * 

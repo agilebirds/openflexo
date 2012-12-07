@@ -39,6 +39,8 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
@@ -128,8 +130,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		this.objectPropertyURI = objectPropertyURI;
 	}
 
-	public IFlexoOntologyConcept getPropertyObject(EditionSchemeAction action) {
-		return (IFlexoOntologyConcept) getObject().getBindingValue(action);
+	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
+		return (OWLConcept<?>) getObject().getBindingValue(action);
 	}
 
 	@Override
@@ -152,7 +154,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		public Type getType() {
 			if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
 					&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange());
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty())
+						.getRange());
 			}
 			return IFlexoOntologyConcept.class;
 		}
@@ -191,9 +194,9 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	@Override
 	public ObjectPropertyStatement performAction(EditionSchemeAction action) {
-		IFlexoOntologyObjectProperty property = (IFlexoOntologyObjectProperty) getObjectProperty();
-		IFlexoOntologyConcept subject = getPropertySubject(action);
-		IFlexoOntologyConcept object = getPropertyObject(action);
+		OWLObjectProperty property = (OWLObjectProperty) getObjectProperty();
+		OWLConcept<?> subject = getPropertySubject(action);
+		OWLConcept<?> object = getPropertyObject(action);
 		if (property == null) {
 			return null;
 		}
@@ -203,7 +206,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		if (object == null) {
 			return null;
 		}
-		return (ObjectPropertyStatement) subject.addPropertyStatement(property, object);
+		return subject.addPropertyStatement(property, object);
 	}
 
 	@Override

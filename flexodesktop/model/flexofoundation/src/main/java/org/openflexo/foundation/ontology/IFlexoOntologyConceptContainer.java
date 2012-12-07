@@ -60,7 +60,7 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyConcept getOntologyObject(String objectURI);
+	public IFlexoOntologyConcept getOntologyObject(String objectURI);
 
 	/**
 	 * Retrieve an class from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
@@ -71,7 +71,7 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyClass getClass(String classURI);
+	public IFlexoOntologyClass getClass(String classURI);
 
 	/**
 	 * Retrieve an individual from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
@@ -83,7 +83,7 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyIndividual getIndividual(String individualURI);
+	public IFlexoOntologyIndividual getIndividual(String individualURI);
 
 	/**
 	 * Retrieve an object property from its URI, in the context of this container (if this container is an ontology, will lookup in ontology
@@ -94,7 +94,7 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyObjectProperty getObjectProperty(String propertyURI);
+	public IFlexoOntologyObjectProperty getObjectProperty(String propertyURI);
 
 	/**
 	 * Retrieve an datatype property from its URI, in the context of this container (if this container is an ontology, will lookup in
@@ -106,7 +106,7 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyDataProperty getDataProperty(String propertyURI);
+	public IFlexoOntologyDataProperty getDataProperty(String propertyURI);
 
 	/**
 	 * Retrieve a property from its URI, in the context of this container (if this container is an ontology, will lookup in ontology and
@@ -118,34 +118,34 @@ public interface IFlexoOntologyConceptContainer {
 	 * @param objectURI
 	 * @return
 	 */
-	public abstract IFlexoOntologyStructuralProperty getProperty(String objectURI);
+	public IFlexoOntologyStructuralProperty getProperty(String objectURI);
 
 	/**
 	 * Return all classes explicitely defined in this container (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends IFlexoOntologyClass> getClasses();
+	public List<? extends IFlexoOntologyClass> getClasses();
 
 	/**
 	 * Return all individuals explicitely defined in this container (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends IFlexoOntologyIndividual> getIndividuals();
+	public List<? extends IFlexoOntologyIndividual> getIndividuals();
 
 	/**
 	 * Return all datatype properties explicitely defined in this container (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends IFlexoOntologyDataProperty> getDataProperties();
+	public List<? extends IFlexoOntologyDataProperty> getDataProperties();
 
 	/**
 	 * Return all object properties explicitely defined in this container (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract List<? extends IFlexoOntologyObjectProperty> getObjectProperties();
+	public List<? extends IFlexoOntologyObjectProperty> getObjectProperties();
 
 }

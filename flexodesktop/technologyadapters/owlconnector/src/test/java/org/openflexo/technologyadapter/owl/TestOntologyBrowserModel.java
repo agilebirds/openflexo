@@ -1366,11 +1366,11 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertEquals(obm.getRoots().get(0), flexoConceptsOntology);
 
 		assertEquals(4, obm.getChildren(flexoConceptsOntology).size());
-		assertSameList(obm.getChildren(flexoConceptsOntology), flexoConceptsOntology.getThingConcept(), owlOntology, rdfOntology,
+		assertSameList(obm.getChildren(flexoConceptsOntology), flexoConceptsOntology.getRootConcept(), owlOntology, rdfOntology,
 				rdfsOntology);
 
-		assertEquals(2, obm.getChildren(flexoConceptsOntology.getThingConcept()).size());
-		assertSameList(obm.getChildren(flexoConceptsOntology.getThingConcept()), flexoConcept, flexoModelObject);
+		assertEquals(2, obm.getChildren(flexoConceptsOntology.getRootConcept()).size());
+		assertSameList(obm.getChildren(flexoConceptsOntology.getRootConcept()), flexoConcept, flexoModelObject);
 
 		assertEquals(2, obm.getChildren(flexoConcept).size());
 		assertSameList(obm.getChildren(flexoConcept), inRelationWithProperty, linkedToModelProperty);
@@ -1626,7 +1626,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		obm.setShowOWLAndRDFConcepts(true);
 		obm.recomputeStructure();
 
-		OWLClass thingConceptSeenFromFlexoConceptOntology = flexoConceptsOntology.getThingConcept();
+		OWLClass thingConceptSeenFromFlexoConceptOntology = flexoConceptsOntology.getRootConcept();
 
 		assertEquals(1, obm.getRoots().size());
 		assertEquals(obm.getRoots().get(0), thingConceptSeenFromFlexoConceptOntology);
@@ -1676,8 +1676,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(nothingConcept);
 
 		assertEquals(1, o3.getClasses().size());
-		assertSameList(o3.getClasses(), o3.getThingConcept());
-		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
+		assertSameList(o3.getClasses(), o3.getRootConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getRootConcept(), o3.getRootConcept().getOriginalDefinition());
 
 		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
@@ -1686,7 +1686,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
-		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
+		assertSameList(o2.getClasses(), o2.getRootConcept(), a2, b2, c2);
 
 		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
@@ -1695,7 +1695,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
-		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertSameList(o1.getClasses(), o1.getRootConcept(), a1, b1, c1);
 		assertTrue(b1.isSuperConceptOf(c1));
 
 		o5.loadWhenUnloaded();
@@ -1710,7 +1710,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertEquals(a2, a2fromO5.getOriginalDefinition());
 
 		assertEquals(3, o5.getClasses().size());
-		assertSameList(o5.getClasses(), o5.getThingConcept(), a1fromO5, a2fromO5);
+		assertSameList(o5.getClasses(), o5.getRootConcept(), a1fromO5, a2fromO5);
 
 		assertTrue(a2fromO5.isSuperConceptOf(a1fromO5));
 
@@ -1727,18 +1727,18 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		obm.recomputeStructure();
 
 		assertEquals(1, obm.getRoots().size());
-		assertEquals(obm.getRoots().get(0), o5.getThingConcept());
+		assertEquals(obm.getRoots().get(0), o5.getRootConcept());
 
-		assertSameList(obm.getChildren(o5.getThingConcept()), a2fromO5, b2, c2, b1);
+		assertSameList(obm.getChildren(o5.getRootConcept()), a2fromO5, b2, c2, b1);
 
 		// Showing OWL, RDF and RDFS concepts should not change hierarchy
 		obm.setShowOWLAndRDFConcepts(true);
 		obm.recomputeStructure();
 
 		assertEquals(1, obm.getRoots().size());
-		assertEquals(obm.getRoots().get(0), o5.getThingConcept());
+		assertEquals(obm.getRoots().get(0), o5.getRootConcept());
 
-		assertSameList(obm.getChildren(o5.getThingConcept()), a2fromO5, b2, c2, b1, namedIndividualConcept, nothingConcept, resourceConcept);
+		assertSameList(obm.getChildren(o5.getRootConcept()), a2fromO5, b2, c2, b1, namedIndividualConcept, nothingConcept, resourceConcept);
 
 	}
 
@@ -1784,7 +1784,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertEquals(conceptA, OntologyUtils.getFirstCommonAncestor(conceptF, conceptG));
 		assertEquals(conceptA, OntologyUtils.getFirstCommonAncestor(conceptC, conceptE));
 		assertEquals(conceptC, OntologyUtils.getFirstCommonAncestor(conceptC, conceptH));
-		assertEquals(ontology.getThingConcept(), OntologyUtils.getFirstCommonAncestor(conceptA, conceptX));
+		assertEquals(ontology.getRootConcept(), OntologyUtils.getFirstCommonAncestor(conceptA, conceptX));
 
 		OWLOntologyBrowserModel obm = new OWLOntologyBrowserModel(ontology);
 		obm.setStrictMode(true);
@@ -1910,14 +1910,14 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		obm.setShowAnnotationProperties(true);
 		obm.recomputeStructure();
 
-		assertSameList(obm.getChildren(ontology.getThingConcept()), inputModelObject, outputModelObject, mappingSpecificationObject);
+		assertSameList(obm.getChildren(ontology.getRootConcept()), inputModelObject, outputModelObject, mappingSpecificationObject);
 
 		// We want now to see only properties, lets look at the infered class hierarchy
 		obm.setShowClasses(false);
 		obm.recomputeStructure();
 
-		assertSameList(obm.getRoots(), ontology.getThingConcept());
-		assertSameList(obm.getChildren(ontology.getThingConcept()), rootClassForInputModel1, rootClassForOutputModel1,
+		assertSameList(obm.getRoots(), ontology.getRootConcept());
+		assertSameList(obm.getChildren(ontology.getRootConcept()), rootClassForInputModel1, rootClassForOutputModel1,
 				mappingSpecificationObject);
 
 		// Now we want to see only properties below rootClass
