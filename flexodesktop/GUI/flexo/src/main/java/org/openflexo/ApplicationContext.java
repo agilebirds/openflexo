@@ -12,20 +12,17 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class ApplicationContext extends FlexoServiceManager implements FlexoEditorFactory {
 
 	private ModuleLoader moduleLoader;
-
 	private ProjectLoader projectLoader;
-
 	private FlexoEditor applicationEditor;
-
 	private FlexoProjectReferenceLoader projectReferenceLoader;
-
 	private FlexoResourceCenterService resourceCenterService;
-
 	private TechnologyAdapterService technologyAdapterService;
+	private TechnologyAdapterControllerService technologyAdapterControllerService;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -39,11 +36,15 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 		moduleLoader = new ModuleLoader(this);
 		registerService(moduleLoader);
 		projectReferenceLoader = createProjectReferenceLoader();
-		registerService(projectReferenceLoader);
+		if (projectReferenceLoader != null) {
+			registerService(projectReferenceLoader);
+		}
 		resourceCenterService = createResourceCenterService();
 		registerService(resourceCenterService);
 		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
 		registerService(technologyAdapterService);
+		technologyAdapterControllerService = createTechnologyAdapterControllerService();
+		registerService(technologyAdapterControllerService);
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -82,6 +83,8 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 
 	protected abstract FlexoResourceCenterService createResourceCenterService();
 
-	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService);
+	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService flexoResourceCenterService);
+
+	protected abstract TechnologyAdapterControllerService createTechnologyAdapterControllerService();
 
 }

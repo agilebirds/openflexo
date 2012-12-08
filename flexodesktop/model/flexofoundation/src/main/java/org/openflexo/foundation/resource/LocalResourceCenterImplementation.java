@@ -27,8 +27,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
@@ -38,10 +36,8 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
-	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
 
-	private ViewPointLibrary viewPointLibrary;
 	private File newViewPointSandboxDirectory;
 
 	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
@@ -52,7 +48,11 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
 		logger.info("Instanciate ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
 		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
-		localResourceCenterImplementation.update();
+		try {
+			localResourceCenterImplementation.update();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return localResourceCenterImplementation;
 	}
 
@@ -71,35 +71,6 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	@Override
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return retrieveViewPointLibrary().getOntologyCalc(ontologyCalcUri);
-	}
-
-	@Deprecated
-	@Override
-	public ViewPointLibrary retrieveViewPointLibrary() {
-		if (viewPointLibrary == null) {
-			viewPointLibrary = new ViewPointLibrary(this);
-			findViewPoints(new File(getRootDirectory(), "ViewPoints"), viewPointLibrary.getRootFolder());
-		}
-		return viewPointLibrary;
-	}
-
-	private void findViewPoints(File dir, ViewPointFolder folder) {
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		if (dir.listFiles().length == 0) {
-			copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE);
-		}
-		for (File f : dir.listFiles()) {
-			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-				if (f.listFiles().length > 0) {
-					viewPointLibrary.importViewPoint(f, folder);
-				}
-			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
-				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder, viewPointLibrary);
-				findViewPoints(f, newFolder);
-			}
-		}
 	}
 
 	@Deprecated
@@ -129,9 +100,9 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	}
 
 	@Override
-	public void update() {
+	public void update() throws IOException {
+		super.update();
 		copyOntologies(ONTOLOGIES_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
-		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
 	}
 
 	private static void copyOntologies(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
@@ -140,18 +111,6 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		}
 		try {
 			FileUtils.copyDirToDir(initialDirectory, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
-		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-
-		try {
-			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

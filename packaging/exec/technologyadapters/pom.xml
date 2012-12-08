@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>Executable :: Packaging for all technology adapters released with openflexo</name>
+	<parent>
+		<groupId>org.openflexo.packaging</groupId>
+		<artifactId>exec</artifactId>
+		<version>1.5-SNAPSHOT</version>
+	</parent>
+	<artifactId>technologyadapters</artifactId>
+	<!-- <packaging>pom</packaging> -->
+	<properties>
+		<userType>maintainer_release</userType>
+		<vm.args>-Xmx1G -XX:MaxPermSize=256M</vm.args>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>emfconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xsdconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>owlconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+</project>

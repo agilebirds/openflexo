@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -179,12 +178,6 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 				saveStorage();
 			}
 		}
-	}
-
-	@Deprecated
-	@Override
-	public ViewPointLibrary retrieveViewPointLibrary() {
-		return null;
 	}
 
 	@Deprecated

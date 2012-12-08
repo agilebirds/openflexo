@@ -33,6 +33,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public class WelcomePanelEDITOR extends FIBAbstractEditor {
 
@@ -67,6 +68,11 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 
 			@Override
 			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				return null;
+			}
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
 				return null;
 			}
 		});

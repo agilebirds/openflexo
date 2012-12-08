@@ -26,9 +26,9 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -44,7 +44,8 @@ public class IndividualInspectorEntry extends InspectorEntry {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	private String renderer;
 
@@ -81,8 +82,9 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	public IFlexoOntologyClass getConcept() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
+			return getViewPoint().getOntologyClass(_getConceptURI());
 		}
-		return getViewPoint().getOntologyClass(_getConceptURI());
+		return null;
 	}
 
 	public void setConcept(IFlexoOntologyClass c) {

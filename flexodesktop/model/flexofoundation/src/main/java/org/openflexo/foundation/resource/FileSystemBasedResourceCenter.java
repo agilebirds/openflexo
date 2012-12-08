@@ -20,6 +20,7 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -30,6 +31,11 @@ import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 /**
  * An abstract implementation of a {@link FlexoResourceCenter} based on a file system.
@@ -43,10 +49,14 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
 
+	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
+
 	private File rootDirectory;
 
 	private HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>>();
 	private HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>>();
+
+	private ViewPointLibrary viewPointLibrary;
 
 	public FileSystemBasedResourceCenter(File rootDirectory) {
 		super();
@@ -169,6 +179,51 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	public final <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter) {
 		return (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
+	}
+
+	@Override
+	public void update() throws IOException {
+		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
+	}
+
+	@Override
+	public ViewPointLibrary retrieveViewPointLibrary() {
+		if (viewPointLibrary == null) {
+			viewPointLibrary = new ViewPointLibrary(this);
+			findViewPoints(new File(getRootDirectory(), "ViewPoints"), viewPointLibrary.getRootFolder());
+		}
+		return viewPointLibrary;
+	}
+
+	private void findViewPoints(File dir, ViewPointFolder folder) {
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		if (dir.listFiles().length == 0) {
+			copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE);
+		}
+		for (File f : dir.listFiles()) {
+			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
+				if (f.listFiles().length > 0) {
+					viewPointLibrary.importViewPoint(f, folder);
+				}
+			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
+				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder, viewPointLibrary);
+				findViewPoints(f, newFolder);
+			}
+		}
+	}
+
+	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
+
+		try {
+			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

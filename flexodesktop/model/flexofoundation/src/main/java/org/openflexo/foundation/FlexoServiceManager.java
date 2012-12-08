@@ -20,6 +20,7 @@
 package org.openflexo.foundation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 
@@ -66,6 +67,10 @@ public class FlexoServiceManager {
 			}
 		}
 		return null;
+	}
+
+	public List<FlexoService> getRegisteredServices() {
+		return registeredServices;
 	}
 
 	public class ServiceRegistered implements ServiceNotification {

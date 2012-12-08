@@ -32,11 +32,14 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	private FlexoServiceManager serviceManager;
 
-	public static TechnologyAdapterService getNewInstance() {
+	public static TechnologyAdapterService getNewInstance(FlexoResourceCenterService resourceCenterService) {
 		try {
 			ModelFactory factory = new ModelFactory(TechnologyAdapterService.class);
 			factory.setImplementingClassForInterface(DefaultTechnologyAdapterService.class, TechnologyAdapterService.class);
-			return factory.newInstance(TechnologyAdapterService.class);
+			TechnologyAdapterService returned = factory.newInstance(TechnologyAdapterService.class);
+			returned.setFlexoResourceCenterService(resourceCenterService);
+			// returned.loadAvailableTechnologyAdapters();
+			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}
@@ -50,8 +53,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	 * 
 	 * @return the retrieved TechnologyModuleDefinition map.
 	 */
-	@Override
-	public void loadAvailableTechnologyAdapters() {
+	private void loadAvailableTechnologyAdapters() {
 		if (loadedAdapters == null) {
 			loadedAdapters = new Hashtable<Class, TechnologyAdapter<?, ?>>();
 			technologyContextManagers = new Hashtable<TechnologyAdapter<?, ?>, TechnologyContextManager<?, ?>>();
@@ -136,6 +138,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	@Override
 	public void initialize() {
+		loadAvailableTechnologyAdapters();
 		for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
 			ta.initialize();
 		}

@@ -12,6 +12,8 @@ import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Test purposes: implements an ApplicationContext with a unique ResourceCenter
@@ -68,10 +70,11 @@ public class TestApplicationContext extends ApplicationContext {
 
 	@Override
 	protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
-		TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
-		returned.setFlexoResourceCenterService(resourceCenterService);
-		returned.loadAvailableTechnologyAdapters();
-		return returned;
+		return DefaultTechnologyAdapterService.getNewInstance(resourceCenterService);
 	}
 
+	@Override
+	protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+		return DefaultTechnologyAdapterControllerService.getNewInstance();
+	}
 }

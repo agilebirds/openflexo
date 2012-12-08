@@ -30,7 +30,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	/**
 	 * Load all available technology adapters
 	 */
-	public void loadAvailableTechnologyAdapters();
+	// public void loadAvailableTechnologyAdapters();
 
 	@Getter(value = TECHNOLOGY_ADAPTERS, cardinality = Cardinality.LIST, ignoreType = true)
 	public List<TechnologyAdapter<?, ?>> getTechnologyAdapters();

@@ -13,8 +13,10 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
+import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public class InteractiveApplicationContext extends ApplicationContext {
 	@Override
@@ -48,9 +50,11 @@ public class InteractiveApplicationContext extends ApplicationContext {
 
 	@Override
 	protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
-		TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
-		returned.setFlexoResourceCenterService(resourceCenterService);
-		returned.loadAvailableTechnologyAdapters();
-		return returned;
+		return DefaultTechnologyAdapterService.getNewInstance(resourceCenterService);
+	}
+
+	@Override
+	protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+		return DefaultTechnologyAdapterControllerService.getNewInstance();
 	}
 }
