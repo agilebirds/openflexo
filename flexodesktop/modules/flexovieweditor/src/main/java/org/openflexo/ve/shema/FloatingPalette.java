@@ -270,7 +270,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);

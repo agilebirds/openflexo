@@ -278,7 +278,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				WKFNode to = null;

@@ -279,7 +279,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);

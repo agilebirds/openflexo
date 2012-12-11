@@ -58,7 +58,7 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		// TODO Auto-generated method stub
 	}
 
