@@ -104,6 +104,7 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -1887,7 +1888,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
-		if (object instanceof WorkflowModelObject) {
+		if (object instanceof FlexoServiceManager) {
+			return IconLibrary.INFORMATION_SPACE_ICON;
+		} else if (object instanceof FlexoResourceCenter) {
+			return IconLibrary.RESOURCE_CENTER_ICON;
+		} else if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {
 			return WKFIconLibrary.iconForObject((WKFObject) object);
