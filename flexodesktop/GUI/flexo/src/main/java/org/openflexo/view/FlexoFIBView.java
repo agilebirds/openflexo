@@ -42,6 +42,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -290,9 +291,11 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	// test purposes
 	public static FlexoEditor loadProject(File prjDir) {
 		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
+		FlexoServiceManager sm = new FlexoServiceManager();
+		sm.registerService(resourceCenter);
 		FlexoEditor editor = null;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, sm);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

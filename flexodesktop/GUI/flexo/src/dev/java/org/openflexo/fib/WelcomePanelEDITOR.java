@@ -32,6 +32,7 @@ import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -73,6 +74,11 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 
 			@Override
 			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+				return null;
+			}
+
+			@Override
+			protected ViewPointLibrary createViewPointLibraryService() {
 				return null;
 			}
 		});

@@ -28,10 +28,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -634,16 +634,16 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {
-		private final FlexoResourceCenter _resourceCenter;
+		private final ViewPointLibrary viewPointLibrary;
 
-		public EditionPatternConverter(FlexoResourceCenter resourceCenter) {
+		public EditionPatternConverter(ViewPointLibrary viewPointLibrary) {
 			super(EditionPattern.class);
-			_resourceCenter = resourceCenter;
+			this.viewPointLibrary = viewPointLibrary;
 		}
 
 		@Override
 		public EditionPattern convertFromString(String value) {
-			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
+			return viewPointLibrary.getEditionPattern(value);
 		}
 
 		@Override
@@ -743,7 +743,10 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, this));
+			BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
+			if (bv != null) {
+				_bindingModel.addToBindingVariables(bv);
+			}
 		}
 		notifyBindingModelChanged();
 	}

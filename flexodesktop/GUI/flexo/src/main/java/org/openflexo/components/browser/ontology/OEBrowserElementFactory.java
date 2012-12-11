@@ -36,8 +36,6 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
@@ -51,11 +49,11 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 	@Override
 	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 
-		if (object instanceof ViewPointLibrary) {
+		/*if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryElement((ViewPointLibrary) object, browser, parent);
-		} else if (object instanceof ViewPointFolder) {
+		}*//*else if (object instanceof ViewPointFolder) {
 			return new CalcFolderElement((ViewPointFolder) object, browser, parent);
-		} else if (object instanceof ViewPoint) {
+			}else*/if (object instanceof ViewPoint) {
 			return new OntologyCalcElement((ViewPoint) object, browser, parent);
 		} else if (object instanceof EditionPattern) {
 			return new EditionPatternElement((EditionPattern) object, browser, parent);

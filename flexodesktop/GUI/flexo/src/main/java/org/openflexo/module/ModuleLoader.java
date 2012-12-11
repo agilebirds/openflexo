@@ -257,11 +257,11 @@ public class ModuleLoader implements FlexoService, IModuleLoader, HasPropertyCha
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Loading module " + module.getName());
 			}
-			FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
+			FlexoModule flexoModule = null;
+			flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
 			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
 			return flexoModule;
 		}
-
 	}
 
 	private FlexoModule doInternalLoadModule(Module module) throws Exception {

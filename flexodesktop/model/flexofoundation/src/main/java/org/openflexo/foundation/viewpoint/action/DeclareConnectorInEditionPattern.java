@@ -134,7 +134,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				break;
 			case CREATES_EDITION_PATTERN:
 
-				ViewPointBuilder builder = new ViewPointBuilder(getFocusedObject().getViewPoint());
+				ViewPointBuilder builder = new ViewPointBuilder(getFocusedObject().getViewPointLibrary(), getFocusedObject().getViewPoint());
 
 				// Create new edition pattern
 				newEditionPattern = new EditionPattern(builder);

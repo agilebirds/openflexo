@@ -25,7 +25,9 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -130,10 +132,18 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
 			@Override
 			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
-				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance();
-				returned.setFlexoResourceCenterService(resourceCenterService);
-				returned.loadAvailableTechnologyAdapters();
+				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance(resourceCenterService);
 				return returned;
+			}
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+				return null;
+			}
+
+			@Override
+			protected ViewPointLibrary createViewPointLibraryService() {
+				return new ViewPointLibrary();
 			}
 
 		};
@@ -225,8 +235,8 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
-		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, applicationContext,
-				getResourceCenterService());
+		return (FlexoBuilderEditor) FlexoResourceManager
+				.initializeExistingProject(projectDirectory, applicationContext, applicationContext);
 	}
 
 }

@@ -33,6 +33,7 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -499,6 +500,11 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
+	public void setResourceData(SRD resourceData) {
+		_resourceData = resourceData;
+	}
+
+	@Override
 	public SRD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
 		return loadResourceData();
@@ -520,9 +526,14 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
-	public String getVersion() {
+	public FlexoVersion getVersion() {
 		logger.warning("Retrieving version for resource: not implemented yet");
 		return null;
+	}
+
+	@Override
+	public void setVersion(FlexoVersion aVersion) {
+		logger.warning("Sets version for resource: not implemented yet");
 	}
 
 	@Override

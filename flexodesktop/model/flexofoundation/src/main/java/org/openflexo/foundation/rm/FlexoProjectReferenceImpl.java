@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FlexoVersion;
 
 public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference {
 
@@ -74,11 +75,11 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectVersion()
 	 */
 	@Override
-	public String getVersion() {
+	public FlexoVersion getVersion() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getVersion();
 		} else {
-			return (String) performSuperGetter(VERSION);
+			return (FlexoVersion) performSuperGetter(VERSION);
 		}
 	}
 

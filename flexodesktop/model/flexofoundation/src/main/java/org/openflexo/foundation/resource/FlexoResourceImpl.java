@@ -47,4 +47,13 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> implements 
 		return resourceData;
 	}
 
+	/**
+	 * Sets {@link ResourceData} for this resource
+	 * 
+	 * @param resourceData
+	 */
+	@Override
+	public void setResourceData(RD resourceData) {
+		this.resourceData = resourceData;
+	}
 }

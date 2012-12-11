@@ -14,7 +14,7 @@ import org.openflexo.foundation.TemporaryFlexoModelObject;
 public class RepositoryFolder<R extends FlexoResource<?>> extends TemporaryFlexoModelObject {
 
 	private final ResourceRepository<R> resourceRepository;
-	private final String name;
+	private String name;
 	private final RepositoryFolder<R> parent;
 	private final ArrayList<RepositoryFolder<R>> children;
 	private final ArrayList<R> resources;
@@ -33,6 +33,11 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends TemporaryFlexo
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<RepositoryFolder<R>> getChildren() {

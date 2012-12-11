@@ -129,7 +129,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
-				ViewPointBuilder builder = new ViewPointBuilder(getFocusedObject().getViewPoint());
+				ViewPointBuilder builder = new ViewPointBuilder(getFocusedObject().getViewPointLibrary(), getFocusedObject().getViewPoint());
 				switch (patternChoice) {
 				case MAP_SINGLE_INDIVIDUAL:
 				case BLANK_EDITION_PATTERN:

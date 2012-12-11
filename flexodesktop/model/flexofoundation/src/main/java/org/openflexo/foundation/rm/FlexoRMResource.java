@@ -36,8 +36,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -237,15 +237,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	private boolean isInitializingProject = false;
 
-	private FlexoResourceCenterService resourceCenterService;
+	private FlexoServiceManager serviceManager;
 
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
-	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler,
-			FlexoResourceCenterService resourceCenterService) throws RuntimeException, ProjectLoadingCancelledException {
-		this.resourceCenterService = resourceCenterService;
+	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoServiceManager serviceManager)
+			throws RuntimeException, ProjectLoadingCancelledException {
+		this.serviceManager = serviceManager;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -607,7 +607,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
-		returned.resourceCenterService = resourceCenterService;
+		returned.serviceManager = serviceManager;
 		return returned;
 	}
 

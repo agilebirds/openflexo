@@ -66,6 +66,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
@@ -126,7 +127,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
@@ -166,6 +166,7 @@ import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -234,7 +235,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private FlexoXMLMappings xmlMappings;
 
-	private FlexoResourceCenterService resourceCenterService;
+	// private FlexoResourceCenterService resourceCenterService;
+	private FlexoServiceManager serviceManager;
 
 	private FlexoObjectIDManager objectIDManager;
 
@@ -288,7 +290,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private ProjectStatistics statistics = null;
 
-	private String version = "1.0";
+	private FlexoVersion version = new FlexoVersion("1.0");
 
 	private long revision = 0;
 
@@ -435,7 +437,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
-		setResourceCenter(builder.resourceCenterService);
+		setServiceManager(builder.serviceManager);
 		setProjectDirectory(builder.projectDirectory);
 		loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
@@ -992,7 +994,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		getDataModel().close();
 		_resource = null;
 		resources = null;
-		resourceCenterService = null;
+		serviceManager = null;
 		allRegisteredObjects.clear();
 		globalStatus.clear();
 		// resources.clear();
@@ -1833,10 +1835,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	// ==========================================================================
 
 	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
-			FlexoResourceCenterService resourceCenterService) {
+			FlexoServiceManager serviceManager) {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory);
-		project.setResourceCenter(resourceCenterService);
+		project.setServiceManager(serviceManager);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
 		if (logger.isLoggable(Level.INFO)) {
@@ -4109,16 +4111,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return objectIDManager;
 	}
 
-	public FlexoResourceCenterService getResourceCenter() {
-		if (resourceCenterService == null) {
-
-		}
-		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-		return resourceCenterService;
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
 	}
 
-	public void setResourceCenter(FlexoResourceCenterService resourceCenterService) {
-		if (resourceCenterService != null) {
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		/*if (resourceCenterService != null) {
 			if (resourceCenterService == this.resourceCenterService) {
 				logger.warning("Resource center is already set and the same as this new attempt. I will simply ignore the call.");
 				return;
@@ -4136,7 +4134,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.warning("#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
 					+ "I will try to find one.");
 			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
-		}
+		}*/
+
+		this.serviceManager = serviceManager;
+		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(serviceManager.getService(ViewPointLibrary.class));
+		getStringEncoder()._addConverter(editionPatternConverter);
 	}
 
 	public boolean isComputeDiff() {
@@ -4210,15 +4212,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		this.moduleLoader = moduleLoader;
 	}
 
-	public String getVersion() {
+	public FlexoVersion getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(FlexoVersion version) {
 		if (version != null) {
-			version = version.replace("~", "");
+			version = new FlexoVersion(version.toString().replace("~", ""));
 		}
-		String old = this.version;
+		FlexoVersion old = this.version;
 		this.version = version;
 		setChanged();
 		notifyObservers(new DataModification(VERSION, old, version));

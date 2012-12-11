@@ -171,7 +171,7 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 			}
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
 					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
-					applicationContext.getResourceCenterService());
+					applicationContext);
 			newEditor(editor);
 		} finally {
 			ProgressWindow.hideProgressWindow();
@@ -198,7 +198,7 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 
 			preInitialization(projectDirectory);
 			FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-					applicationContext.getProjectReferenceLoader(), applicationContext.getResourceCenterService());
+					applicationContext.getProjectReferenceLoader(), applicationContext);
 			newEditor(editor);
 			return editor;
 		} finally {

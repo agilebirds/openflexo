@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 
 /**
@@ -128,8 +129,7 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
 		}
-		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().getOpenFlexoResourceCenter()
-				.retrieveViewPointLibrary());
+		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getServiceManager().getService(ViewPointLibrary.class));
 		builder.shemaLibrary = _resourceData;
 		return builder;
 	}

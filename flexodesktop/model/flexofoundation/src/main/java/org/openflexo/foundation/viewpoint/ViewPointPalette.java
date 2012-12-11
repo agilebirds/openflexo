@@ -72,19 +72,19 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentation.
 	private Object graphicalRepresentation;
 
-	public static ViewPointPalette instanciateCalcPalette(ViewPoint calc, File paletteFile) {
+	public static ViewPointPalette instanciateCalcPalette(ViewPoint viewPoint, File paletteFile) {
 		if (paletteFile.exists()) {
 			FileInputStream inputStream = null;
 			try {
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(paletteFile.getParentFile());
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
-				ViewPointBuilder builder = new ViewPointBuilder(/*(ImportedOntology) calc.getViewpointOntology()*/);
-				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
+				ViewPointBuilder builder = new ViewPointBuilder(viewPoint.getViewPointLibrary(), viewPoint);
+				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, viewPoint.getViewPointLibrary()
 						.get_VIEW_POINT_PALETTE_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));
 				logger.info("Loaded file " + paletteFile.getAbsolutePath());
-				returned.init(calc, paletteFile);
+				returned.init(viewPoint, paletteFile);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

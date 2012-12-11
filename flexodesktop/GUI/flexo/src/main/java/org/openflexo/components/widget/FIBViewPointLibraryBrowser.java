@@ -19,12 +19,24 @@
  */
 package org.openflexo.components.widget;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Browser allowing to browse through viewpoint library<br>
@@ -45,7 +57,7 @@ public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary>
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
@@ -57,13 +69,22 @@ public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary>
 			e.printStackTrace();
 		}
 
-		final FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-				.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
+		final ViewPointLibrary viewPointLibrary;
+
+		FlexoServiceManager sm = new FlexoServiceManager();
+		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
+		rcService.addToResourceCenters(new UserResourceCenter(new FileResource("TestResourceCenter")));
+		sm.registerService(rcService);
+		viewPointLibrary = new ViewPointLibrary();
+		sm.registerService(viewPointLibrary);
+
+		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
+		// System.exit(-1);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(testResourceCenter.retrieveViewPointLibrary());
+				return makeArray(viewPointLibrary);
 			}
 
 			@Override
@@ -72,11 +93,12 @@ public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary>
 			}
 
 			@Override
-			public FIBController<ViewPointLibrary> makeNewController(FIBComponent component) {
-				return new FlexoFIBController<ViewPointLibrary>(component);
+			public FIBController makeNewController(FIBComponent component) {
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();
-	}*/
+
+	}
 
 }

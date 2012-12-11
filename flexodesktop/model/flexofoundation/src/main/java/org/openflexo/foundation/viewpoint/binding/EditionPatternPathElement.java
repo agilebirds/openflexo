@@ -38,8 +38,10 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 			for (PatternRole pr : editionPattern.getPatternRoles()) {
 				BindingPathElement<?> newPathElement = null;
 				newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, anEditionPattern);
-				elements.put(pr, newPathElement);
-				allElements.add(newPathElement);
+				if (newPathElement != null) {
+					elements.put(pr, newPathElement);
+					allElements.add(newPathElement);
+				}
 			}
 		}
 	}

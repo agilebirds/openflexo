@@ -21,7 +21,6 @@ package org.openflexo.components.widget;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,76 +29,38 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
-import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.FIBBrowserView;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- * Widget allowing to select a ViewPoint while browsing in ViewPoint library
+ * Browser allowing to browse through information space<br>
+ * The information space is obtained through two services from the {@link FlexoServiceManager}, and results from the merging of the
+ * {@link FlexoResourceCenterService} and the {@link TechnologyAdapterService}.<br>
+ * For each {@link FlexoResourceCenter} and for each {@link TechnologyAdapter}, a repository of {@link FlexoModel} and
+ * {@link FlexoMetaModel} are managed.
  * 
  * @author sguerin
  * 
  */
-public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPointResource> {
-	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBViewPointSelector.class.getPackage().getName());
+@SuppressWarnings("serial")
+public class FIBInformationSpaceBrowser extends FIBBrowserView<ViewPointLibrary> {
+	static final Logger logger = Logger.getLogger(FIBInformationSpaceBrowser.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ViewPointSelector.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBViewPointLibraryBrowser.fib");
 
-	public FIBViewPointSelector(ViewPointResource editedObject) {
-		super(editedObject);
-	}
-
-	@Override
-	public void delete() {
-		super.delete();
-		viewPointLibrary = null;
-	}
-
-	@Override
-	public File getFIBFile() {
-		return FIB_FILE;
-	}
-
-	@Override
-	public Class<ViewPointResource> getRepresentedType() {
-		return ViewPointResource.class;
-	}
-
-	@Override
-	public String renderedString(ViewPointResource editedObject) {
-		if (editedObject != null) {
-			return editedObject.getName();
-		}
-		return "";
-	}
-
-	private ViewPointLibrary viewPointLibrary;
-
-	public ViewPointLibrary getViewPointLibrary() {
-		return viewPointLibrary;
-	}
-
-	@CustomComponentParameter(name = "viewPointLibrary", type = CustomComponentParameter.Type.MANDATORY)
-	public void setViewPointLibrary(ViewPointLibrary viewPointLibrary) {
-		this.viewPointLibrary = viewPointLibrary;
-	}
-
-	/**
-	 * This method must be implemented if we want to implement completion<br>
-	 * Completion will be performed on that selectable values<br>
-	 * Return all viewpoints of this library
-	 */
-	@Override
-	protected Collection<ViewPointResource> getAllSelectableValues() {
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getViewPoints();
-		}
-		return null;
+	public FIBInformationSpaceBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
+		super(viewPointLibrary, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -119,19 +80,20 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPointResour
 
 		final ViewPointLibrary viewPointLibrary;
 
-		FlexoServiceManager sm = new FlexoServiceManager();
+		final FlexoServiceManager serviceManager = new FlexoServiceManager();
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
 		rcService.addToResourceCenters(new UserResourceCenter(new FileResource("TestResourceCenter")));
-		sm.registerService(rcService);
+		serviceManager.registerService(rcService);
 		viewPointLibrary = new ViewPointLibrary();
-		sm.registerService(viewPointLibrary);
+		serviceManager.registerService(viewPointLibrary);
+
+		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
+		// System.exit(-1);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FIBViewPointSelector selector = new FIBViewPointSelector(null);
-				selector.setViewPointLibrary(viewPointLibrary);
-				return makeArray(selector);
+				return makeArray(serviceManager);
 			}
 
 			@Override
@@ -145,6 +107,7 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPointResour
 			}
 		};
 		editor.launch();
+
 	}
 
 }

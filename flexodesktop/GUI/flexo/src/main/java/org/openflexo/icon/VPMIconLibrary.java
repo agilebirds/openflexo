@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -67,7 +68,6 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
@@ -126,9 +126,9 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
 
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
-		if (object instanceof ViewPointFolder) {
+		/*if (object instanceof ViewPointFolder) {
 			return FOLDER_ICON;
-		} else if (object instanceof ViewPointLibrary) {
+		} else*/if (object instanceof ViewPointLibrary) {
 			return CALC_LIBRARY_ICON;
 		} else if (object instanceof ViewPointPalette) {
 			return CALC_PALETTE_ICON;
@@ -254,6 +254,10 @@ public class VPMIconLibrary extends IconLibrary {
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;
+	}
+
+	public static ImageIcon iconForObject(ViewPointResource object) {
+		return CALC_ICON;
 	}
 
 }

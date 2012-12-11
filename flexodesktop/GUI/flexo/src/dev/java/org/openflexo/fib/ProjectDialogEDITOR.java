@@ -25,6 +25,7 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -43,9 +44,11 @@ public abstract class ProjectDialogEDITOR extends FIBAbstractEditor {
 
 	public static FlexoEditor loadProject(File prjDir) {
 		resourceCenter = DefaultResourceCenterService.getNewInstance();
+		FlexoServiceManager sm = new FlexoServiceManager();
+		sm.registerService(resourceCenter);
 		FlexoEditor editor = null;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, getResourceCenter());
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, sm);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

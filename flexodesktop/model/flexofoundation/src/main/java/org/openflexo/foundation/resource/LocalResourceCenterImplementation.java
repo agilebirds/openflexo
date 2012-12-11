@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 public class LocalResourceCenterImplementation extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
@@ -38,11 +38,11 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 
 	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
 
-	private File newViewPointSandboxDirectory;
+	// private File newViewPointSandboxDirectory;
 
 	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
 		super(resourceCenterDirectory);
-		newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
+		// newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
 	}
 
 	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
@@ -67,18 +67,6 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		super.initialize(technologyAdapterService);
 	}
 
-	@Deprecated
-	@Override
-	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
-		return retrieveViewPointLibrary().getOntologyCalc(ontologyCalcUri);
-	}
-
-	@Deprecated
-	@Override
-	public File getNewCalcSandboxDirectory() {
-		return newViewPointSandboxDirectory;
-	}
-
 	@Override
 	public List<FlexoResource<?>> getAllResources(IProgress progress) {
 		return Collections.emptyList();
@@ -90,12 +78,12 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	}
 
 	@Override
-	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
+	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, FlexoVersion version, Class<T> type, IProgress progress) {
 		return null;
 	}
 
 	@Override
-	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
+	public void publishResource(FlexoResource<?> resource, FlexoVersion newVersion, IProgress progress) throws Exception {
 		// TODO Auto-generated method stub
 	}
 

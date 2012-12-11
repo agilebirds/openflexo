@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.resource;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,9 +31,10 @@ import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -47,8 +47,14 @@ import org.openflexo.toolbox.IProgress;
 public interface FlexoResourceCenter {
 
 	/**
+	 * Initialize the FlexoResourceCenter by retrieving viewpoints defined in this {@link FlexoResourceCenter}<br>
+	 * 
+	 * @param technologyAdapterService
+	 */
+	public void initialize(ViewPointLibrary viewPointLibrary);
+
+	/**
 	 * Initialize the FlexoResourceCenter by matching contents of this {@link FlexoResourceCenter} with all available technologies.<br>
-	 * Before this initialization operation is performed, any call on a {@link FlexoResourceCenter} will fail.
 	 * 
 	 * @param technologyAdapterService
 	 */
@@ -79,8 +85,8 @@ public interface FlexoResourceCenter {
 	 * @return the resource with the given <code>uri</code> and the provided <code>version</code>, or null if it cannot be found.
 	 */
 	public @Nullable
-	<T extends ResourceData<T>> FlexoResource<T> retrieveResource(@Nonnull String uri, @Nonnull String version, @Nonnull Class<T> type,
-			@Nullable IProgress progress);
+	<T extends ResourceData<T>> FlexoResource<T> retrieveResource(@Nonnull String uri, @Nonnull FlexoVersion version,
+			@Nonnull Class<T> type, @Nullable IProgress progress);
 
 	/**
 	 * Returns all available versions of the resource identified by the given <code>uri</code>
@@ -112,13 +118,20 @@ public interface FlexoResourceCenter {
 	 * @throws Exception
 	 *             in case the publication of this resource failed.
 	 */
-	public void publishResource(@Nonnull FlexoResource<?> resource, @Nullable String newVersion, @Nullable IProgress progress)
+	public void publishResource(@Nonnull FlexoResource<?> resource, @Nullable FlexoVersion newVersion, @Nullable IProgress progress)
 			throws Exception;
 
 	/**
 	 * Refreshes this resource center. This can be particularly useful for caching implementations.
 	 */
 	public void update() throws IOException;
+
+	/**
+	 * Retrieve ViewPoint repository (containing all resources storing a ViewPoint) for this {@link FlexoResourceCenter}
+	 * 
+	 * @return
+	 */
+	public ViewPointRepository getViewPointRepository();
 
 	/**
 	 * Retrieve model repository for a given {@link TechnologyAdapter}
@@ -129,6 +142,8 @@ public interface FlexoResourceCenter {
 	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
 			TA technologyAdapter);
 
+	// public ViewPointLibrary getViewPointLibrary();
+
 	/**
 	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
 	 * 
@@ -138,13 +153,19 @@ public interface FlexoResourceCenter {
 	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter);
 
-	@Deprecated
+	/*@Deprecated
 	public ViewPointLibrary retrieveViewPointLibrary();
 
 	@Deprecated
 	public ViewPoint getOntologyCalc(String ontologyCalcUri);
 
 	@Deprecated
-	public File getNewCalcSandboxDirectory();
+	public File getNewCalcSandboxDirectory();*/
 
+	/**
+	 * Return a uer-friendly named identifier for this resource center
+	 * 
+	 * @return
+	 */
+	public String getName();
 }

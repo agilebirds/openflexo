@@ -54,7 +54,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 
 	private static final Logger logger = Logger.getLogger(ExampleDrawingShema.class.getPackage().getName());
 
-	public static ExampleDrawingShema instanciateShema(ViewPoint calc, File shemaFile) {
+	public static ExampleDrawingShema instanciateShema(ViewPoint viewPoint, File shemaFile) {
 		if (shemaFile.exists()) {
 			FileInputStream inputStream = null;
 			try {
@@ -62,11 +62,11 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(shemaFile);
 				logger.info("Loading file " + shemaFile.getAbsolutePath());
-				ViewPointBuilder builder = new ViewPointBuilder(/*(ImportedOntology) calc.getViewpointOntology()*/);
-				ExampleDrawingShema returned = (ExampleDrawingShema) XMLDecoder.decodeObjectWithMapping(inputStream, calc
+				ViewPointBuilder builder = new ViewPointBuilder(viewPoint.getViewPointLibrary(), viewPoint);
+				ExampleDrawingShema returned = (ExampleDrawingShema) XMLDecoder.decodeObjectWithMapping(inputStream, viewPoint
 						.getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));
-				returned.init(calc, shemaFile);
+				returned.init(viewPoint, shemaFile);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

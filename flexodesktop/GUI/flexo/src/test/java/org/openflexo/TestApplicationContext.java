@@ -12,6 +12,7 @@ import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -76,5 +77,10 @@ public class TestApplicationContext extends ApplicationContext {
 	@Override
 	protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
 		return DefaultTechnologyAdapterControllerService.getNewInstance();
+	}
+
+	@Override
+	protected ViewPointLibrary createViewPointLibraryService() {
+		return new ViewPointLibrary();
 	}
 }

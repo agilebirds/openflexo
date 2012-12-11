@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -40,6 +41,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
@@ -49,8 +51,13 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.view.diagram.DiagramModelSlot;
+import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -60,6 +67,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -71,7 +79,7 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class ViewPoint extends ViewPointObject {
+public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint> {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
@@ -101,7 +109,69 @@ public class ViewPoint extends ViewPointObject {
 
 	private List<ModelSlot<?, ?>> modelSlots;
 
-	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
+	public static class ViewPointInfo {
+		public String uri;
+		public String version;
+		public String name;
+		public String openflexoVersion;
+	}
+
+	public static ViewPointInfo findViewPointInfo(File viewpointDirectory) {
+		Document document;
+		try {
+			logger.info("Try to find URI for " + viewpointDirectory);
+
+			String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
+			File xmlFile = new File(viewpointDirectory, baseName + ".xml");
+
+			if (xmlFile.exists()) {
+
+				document = readXMLFile(xmlFile);
+				Element root = getElement(document, "ViewPoint");
+				if (root != null) {
+					ViewPointInfo returned = new ViewPointInfo();
+					Iterator<Attribute> it = root.getAttributes().iterator();
+					while (it.hasNext()) {
+						Attribute at = it.next();
+						if (at.getName().equals("uri")) {
+							logger.fine("Returned " + at.getValue());
+							returned.uri = at.getValue();
+						} else if (at.getName().equals("name")) {
+							logger.fine("Returned " + at.getValue());
+							returned.name = at.getValue();
+						} else if (at.getName().equals("version")) {
+							logger.fine("Returned " + at.getValue());
+							returned.version = at.getValue();
+						} else if (at.getName().equals("openflexoVersion")) {
+							logger.fine("Returned " + at.getValue());
+							returned.openflexoVersion = at.getValue();
+						}
+					}
+					if (StringUtils.isEmpty(returned.name)) {
+						if (StringUtils.isNotEmpty(returned.uri)) {
+							if (returned.uri.indexOf("/") > -1) {
+								returned.name = returned.uri.substring(returned.uri.lastIndexOf("/") + 1);
+							} else if (returned.uri.indexOf("\\") > -1) {
+								returned.name = returned.uri.substring(returned.uri.lastIndexOf("\\") + 1);
+							} else {
+								returned.name = returned.uri;
+							}
+						}
+					}
+					return returned;
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
+		return null;
+	}
+
+	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, FlexoVersion openflexoVersion)
+			throws Exception {
 
 		String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
 		File xmlFile = new File(viewpointDirectory, baseName + ".xml");
@@ -112,7 +182,7 @@ public class ViewPoint extends ViewPointObject {
 
 			FileInputStream inputStream = null;
 			try {
-				ViewPointBuilder builder = new ViewPointBuilder();
+				ViewPointBuilder builder = new ViewPointBuilder(library, openflexoVersion);
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewpointDirectory);
 				inputStream = new FileInputStream(xmlFile);
 				if (logger.isLoggable(Level.FINE)) {
@@ -123,36 +193,35 @@ public class ViewPoint extends ViewPointObject {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
 				}
-				returned.init(baseName, viewpointDirectory, xmlFile, library, folder);
+				returned.init(baseName, viewpointDirectory, xmlFile, library /*,folder*/);
 				return returned;
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (InvalidXMLDataException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (InvalidObjectSpecificationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (AccessorInvocationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (InvalidModelException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw e;
 			} finally {
 				IOUtils.closeQuietly(inputStream);
 			}
-			return null;
 		} else {
 			logger.severe("Not found: " + xmlFile);
 			// TODO: implement a search here (find the good XML file)
@@ -161,7 +230,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public static ViewPoint newViewPoint(String baseName, String viewpointURI/*, File owlFile*/, File viewpointDir,
-			ViewPointLibrary library, ViewPointFolder folder) {
+			ViewPointLibrary library/*, ViewPointFolder folder*/) {
 		File xmlFile = new File(viewpointDir, baseName + ".xml");
 		ViewPoint viewpoint = new ViewPoint();
 		// viewpoint.owlFile = owlFile;
@@ -169,7 +238,7 @@ public class ViewPoint extends ViewPointObject {
 
 		// ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, folder);
+		viewpoint.init(baseName, viewpointDir, xmlFile, library/*, folder*/);
 		viewpoint.loadViewpointMetaModels();
 		viewpoint.save();
 		return viewpoint;
@@ -255,22 +324,35 @@ public class ViewPoint extends ViewPointObject {
 
 	public static class ViewPointBuilder {
 		private ViewPoint viewPoint;
+		private FlexoVersion openflexoVersion;
+		private ViewPointLibrary viewPointLibrary;
 
 		// private ImportedOntology viewPointOntology;
 
-		public ViewPointBuilder(ViewPoint viewPoint) {
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
+			this.viewPointLibrary = vpLibrary;
 			/*if (viewPoint != null) {
 				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
 			}*/
 		}
 
-		public ViewPointBuilder() {
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, FlexoVersion openflexoVersion) {
+			this.openflexoVersion = openflexoVersion;
+			this.viewPointLibrary = vpLibrary;
+		}
+
+		public ViewPointLibrary getViewPointLibrary() {
+			return viewPointLibrary;
 		}
 
 		/*	public ImportedOntology getViewPointOntology() {
 			return viewPointOntology;
 			}*/
+
+		public FlexoVersion getOpenflexoVersion() {
+			return openflexoVersion;
+		}
 
 		public ViewPoint getViewPoint() {
 			return viewPoint;
@@ -296,14 +378,12 @@ public class ViewPoint extends ViewPointObject {
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library/*, ViewPointFolder folder*/) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
 		name = baseName;
 		viewPointDirectory = viewpointDir;
 		_library = library;
-
-		folder.addToViewPoints(this);
 
 		relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 
@@ -728,8 +808,45 @@ public class ViewPoint extends ViewPointObject {
 		this.owlFile = owlFile;
 	}*/
 
+	@Deprecated
+	private void convertFrom_1_4_5(ViewPointLibrary viewPointLibrary) {
+		logger.info("Converting viewpoint from Openflexo 1.4.5 version");
+		// For all "old" viewpoints, we consider a OWL model slot
+		try {
+			TechnologyAdapter<?, ?> OWL = (TechnologyAdapter<?, ?>) Class.forName(
+					"org.openflexo.technologyadapter.owl.OWLTechnologyAdapter").newInstance();
+			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
+			ms.setName("owl");
+			ms.setMetaModel(null);
+			addToModelSlots(ms);
+			DiagramTechnologyAdapter diagramTA = null;
+			if (viewPointLibrary.getFlexoServiceManager() != null
+					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
+				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
+						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
+			} else {
+				diagramTA = new DiagramTechnologyAdapter();
+			}
+			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
+			diagramMS.setName("diagram");
+			addToModelSlots(diagramMS);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public final void finalizeDeserialization(Object builder) {
+		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getOpenflexoVersion().equals(new FlexoVersion("1.4.5"))) {
+			convertFrom_1_4_5(((ViewPointBuilder) builder).getViewPointLibrary());
+		}
 		for (EditionPattern ep : getEditionPatterns()) {
 			ep.finalizeEditionPatternDeserialization();
 		}
@@ -786,6 +903,16 @@ public class ViewPoint extends ViewPointObject {
 		modelSlots.remove(modelSlot);
 	}
 
+	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
+		List<MS> returned = new ArrayList<MS>();
+		for (ModelSlot<?, ?> ms : getModelSlots()) {
+			if (TypeUtils.isTypeAssignableFrom(msType, ms.getClass())) {
+				returned.add((MS) ms);
+			}
+		}
+		return returned;
+	}
+
 	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
 		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
@@ -828,10 +955,12 @@ public class ViewPoint extends ViewPointObject {
 	 * @return
 	 */
 	public Object getObject(String uri) {
-		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
-			Object o = m.getObject(uri);
-			if (o != null)
-				return o;
+		for (FlexoMetaModel<?> mm : getAllReferencedMetaModels()) {
+			if (mm != null) {
+				Object o = mm.getObject(uri);
+				if (o != null)
+					return o;
+			}
 		}
 		return null;
 	}

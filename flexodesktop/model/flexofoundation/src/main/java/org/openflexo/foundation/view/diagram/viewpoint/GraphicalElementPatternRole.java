@@ -12,6 +12,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
+import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -299,6 +300,17 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	@Override
 	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternReference epRef) {
 		return new ModelObjectActorReference<T>(object, this, epRef);
+	}
+
+	@Override
+	public DiagramModelSlot getModelSlot() {
+		DiagramModelSlot returned = (DiagramModelSlot) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(DiagramModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(DiagramModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

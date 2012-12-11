@@ -125,8 +125,6 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
@@ -367,8 +365,8 @@ public enum BrowserElementType {
 		ONTOLOGY_DATA_PROPERTY("ontology_data_property", IFlexoOntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
 		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", IFlexoOntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
 		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
-	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
-	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
+	// CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
+	// CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
 	ONTOLOGY_CALC("calc", ViewPoint.class, VPMIconLibrary.CALC_ICON),
 	EDITION_PATTERN("edition_pattern", EditionPattern.class, VPMIconLibrary.EDITION_PATTERN_ICON),
 	ONTOLOGY_CALC_PALETTE("palette", ViewPointPalette.class, VPMIconLibrary.CALC_PALETTE_ICON),

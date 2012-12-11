@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -26,6 +25,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.DeserializationPolicy;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.factory.SerializationPolicy;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
@@ -83,7 +83,7 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 	}
 
 	@Override
-	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
+	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, FlexoVersion version, Class<T> type, IProgress progress) {
 		List<FlexoResource<?>> resources = storage.getResources();
 		if (progress != null) {
 			progress.resetSecondaryProgress(resources.size());
@@ -125,7 +125,7 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 	}
 
 	@Override
-	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
+	public void publishResource(FlexoResource<?> resource, FlexoVersion newVersion, IProgress progress) throws Exception {
 		FlexoResource<?> oldResource = retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
 		if (oldResource != null) {
 			storage.removeFromResources(oldResource);
@@ -178,18 +178,6 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 				saveStorage();
 			}
 		}
-	}
-
-	@Deprecated
-	@Override
-	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public File getNewCalcSandboxDirectory() {
-		return new File(getRootDirectory().getParentFile(), "ViewPoints");
 	}
 
 }

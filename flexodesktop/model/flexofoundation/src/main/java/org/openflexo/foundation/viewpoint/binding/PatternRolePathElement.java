@@ -12,6 +12,8 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
 public class PatternRolePathElement<T extends Object> implements SimplePathElement<T>, BindingVariable<T> {
@@ -20,7 +22,16 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	public static BindingVariable<?> makePatternRolePathElement(PatternRole pr, Bindable container) {
-		return pr.getModelSlot().makePatternRolePathElement(pr, container);
+		if (pr.getModelSlot() != null) {
+			return pr.getModelSlot().makePatternRolePathElement(pr, container);
+		}
+		if (pr instanceof FlexoModelObjectPatternRole) {
+			logger.warning("Not implemented");
+			return null;
+		} else if (pr instanceof EditionPatternPatternRole) {
+			return new EditionPatternPathElement<Bindable>(((EditionPatternPatternRole) pr).getEditionPatternType(), null);
+		}
+		return null;
 	}
 
 	private PatternRole patternRole;

@@ -23,10 +23,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoService.ServiceNotification;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 
 /**
  * Default implementation of a manager of {@link FlexoService}<br>
- * All {@link FlexoService} are registered in the FlexoServiceManager which broadcast all service events to all services
+ * All {@link FlexoService} are registered in the {@link FlexoServiceManager} which broadcast all service events to all services<br>
+ * 
+ * Please note that this class provides the basic support for Information Space<br>
+ * The Information Space is obtained through two services from the {@link FlexoServiceManager}, and results from the merging of the
+ * {@link FlexoResourceCenterService} and the {@link TechnologyAdapterService}.<br>
+ * For each {@link FlexoResourceCenter} and for each {@link TechnologyAdapter}, a repository of {@link FlexoModel} and
+ * {@link FlexoMetaModel} are managed.
+ * 
  * 
  * @author sylvain
  * 

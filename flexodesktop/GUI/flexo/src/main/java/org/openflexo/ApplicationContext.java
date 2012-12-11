@@ -9,6 +9,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
@@ -23,6 +24,7 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 	private FlexoResourceCenterService resourceCenterService;
 	private TechnologyAdapterService technologyAdapterService;
 	private TechnologyAdapterControllerService technologyAdapterControllerService;
+	private ViewPointLibrary viewPointLibrary;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -45,6 +47,8 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 		registerService(technologyAdapterService);
 		technologyAdapterControllerService = createTechnologyAdapterControllerService();
 		registerService(technologyAdapterControllerService);
+		viewPointLibrary = createViewPointLibraryService();
+		registerService(viewPointLibrary);
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -86,5 +90,7 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService flexoResourceCenterService);
 
 	protected abstract TechnologyAdapterControllerService createTechnologyAdapterControllerService();
+
+	protected abstract ViewPointLibrary createViewPointLibraryService();
 
 }

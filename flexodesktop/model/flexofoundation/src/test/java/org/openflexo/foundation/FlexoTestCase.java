@@ -214,7 +214,7 @@ public abstract class FlexoTestCase extends TestCase {
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
 		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
-				getResourceCenterService(resourceCenterService));
+				getResourceCenterService(resourceCenterService).getFlexoServiceManager());
 		if (createRootProcess) {
 			// Added this line to make all previous tests still work
 			createSubProcess(_projectIdentifier, null, reply);
@@ -262,7 +262,8 @@ public abstract class FlexoTestCase extends TestCase {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
-					new DefaultProjectLoadingHandler(), projectReferenceLoader, getResourceCenterService(resourceCenterService)));
+					new DefaultProjectLoadingHandler(), projectReferenceLoader, getResourceCenterService(resourceCenterService)
+							.getFlexoServiceManager()));
 			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {

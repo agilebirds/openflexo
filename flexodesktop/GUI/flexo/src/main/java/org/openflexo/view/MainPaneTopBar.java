@@ -87,7 +87,7 @@ public class MainPaneTopBar extends JMenuBar {
 			final JButton button = new BarButton(module.getMediumIcon());
 			button.setEnabled(true);
 			button.setFocusable(false);
-			if (forcePreferredSize) {
+			if (forcePreferredSize && button.getIcon() != null) {
 				button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
 			}
 			button.addActionListener(new ActionListener() {
@@ -174,7 +174,7 @@ public class MainPaneTopBar extends JMenuBar {
 			@Override
 			public void fireApplyPerformed() {
 				model.setCurrentProject(projectSelector.getEditedObject());
-	}
+			}
 
 			@Override
 			public void fireCancelPerformed() {
@@ -187,7 +187,7 @@ public class MainPaneTopBar extends JMenuBar {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				projectSelector.setEditedObject(model.getCurrentProject());
-		}
+			}
 		}, model);
 		projectSelector.setShowReset(false);
 		projectSelector.setFlexoController(controller);

@@ -213,7 +213,8 @@ public class TestRM extends FlexoTestCase {
 		assertDepends(_rootProcessResource, _subProcessResource);
 		saveProject();
 		try {
-			_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, getResourceCenterService(null));
+			_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, getResourceCenterService(null)
+					.getFlexoServiceManager());
 		} catch (ProjectLoadingCancelledException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -617,7 +618,7 @@ public class TestRM extends FlexoTestCase {
 
 		try {
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY,
-					getResourceCenterService(null)));
+					getResourceCenterService(null).getFlexoServiceManager()));
 			_project = _editor.getProject();
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();

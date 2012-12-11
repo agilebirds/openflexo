@@ -107,6 +107,7 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
+import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
@@ -1732,20 +1733,23 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public void objectWasClicked(FlexoModelObject object) {
+	public void objectWasClicked(Object object) {
 		logger.info("Object was clicked: " + object);
 	}
 
-	public void objectWasRightClicked(FlexoModelObject object, MouseEvent e) {
+	public void objectWasRightClicked(Object object, MouseEvent e) {
 		logger.info("Object was right-clicked: " + object + "event=" + e);
-		getSelectionManager().getContextualMenuManager().showPopupMenuForObject(object, (Component) e.getSource(), e.getPoint());
+		if (object instanceof FlexoModelObject) {
+			getSelectionManager().getContextualMenuManager().showPopupMenuForObject((FlexoModelObject) object, (Component) e.getSource(),
+					e.getPoint());
+		}
 	}
 
-	public void objectWasDoubleClicked(FlexoModelObject object) {
+	public void objectWasDoubleClicked(Object object) {
 		logger.info("Object was double-clicked: " + object);
-		if (getCurrentPerspective().hasModuleViewForObject(object)) {
+		if (object instanceof FlexoModelObject && getCurrentPerspective().hasModuleViewForObject((FlexoModelObject) object)) {
 			// Try to display object in view
-			selectAndFocusObject(object);
+			selectAndFocusObject((FlexoModelObject) object);
 		}
 	}
 
@@ -1869,6 +1873,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
+		} else if (object instanceof ViewPointResource) {
+			return VPMIconLibrary.iconForObject((ViewPointResource) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
 		} /*else if (object instanceof OntologyLibrary) {

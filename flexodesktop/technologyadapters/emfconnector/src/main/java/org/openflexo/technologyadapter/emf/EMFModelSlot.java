@@ -1,6 +1,6 @@
 package org.openflexo.technologyadapter.emf;
 
-import org.openflexo.foundation.technologyadapter.ModelSlotImpl;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -12,7 +12,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
  * @author sylvain
  * 
  */
-public class EMFModelSlot extends ModelSlotImpl<EMFModel, EMFMetaModel> {
+public class EMFModelSlot extends FlexoOntologyModelSlotImpl<EMFModel, EMFMetaModel> {
 
 	/**
 	 * 

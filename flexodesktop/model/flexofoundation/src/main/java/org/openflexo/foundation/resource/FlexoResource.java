@@ -18,6 +18,7 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -83,9 +84,17 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return a displayable version that the end-user will understand.
 	 */
-	@Getter(VERSION)
+	@Getter(value = VERSION, isStringConvertable = true)
 	@XMLAttribute
-	public String getVersion();
+	public FlexoVersion getVersion();
+
+	/**
+	 * Sets version for this resource.
+	 * 
+	 * @param anURI
+	 */
+	@Setter(VERSION)
+	public void setVersion(FlexoVersion aVersion);
 
 	/**
 	 * Returns the revision of this resource. Each resource should ensure that upon each time it is edited, the revision number is
@@ -190,6 +199,13 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 */
 	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException;
+
+	/**
+	 * Sets {@link ResourceData} for this resource
+	 * 
+	 * @param resourceData
+	 */
+	public void setResourceData(RD resourceData);
 
 	/**
 	 * Load the &quot;real&quot; load resource data of this resource.

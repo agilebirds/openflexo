@@ -66,11 +66,11 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		super(builder);
 	}
 
-	public final ModelSlot<?, ?> getModelSlot() {
+	public ModelSlot<?, ?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public final void setModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 

@@ -29,8 +29,6 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -61,7 +59,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	@Override
 	public final Object instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPoint());
+		return new ViewPointBuilder(getViewPointLibrary(), getViewPoint());
 	}
 
 	/*@Override
@@ -125,7 +123,6 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public abstract ViewPoint getViewPoint();
-
 
 	@Deprecated
 	public ViewPoint getCalc() {
