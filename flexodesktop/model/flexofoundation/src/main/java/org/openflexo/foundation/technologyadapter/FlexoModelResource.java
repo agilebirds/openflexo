@@ -20,9 +20,9 @@ public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends Flex
 	public static final String META_MODEL = "metaModel";
 
 	@Getter(value = META_MODEL, ignoreType = true)
-	public FlexoMetaModel<MM> getMetaModel();
+	public MM getMetaModel();
 
 	@Setter(META_MODEL)
-	public void setMetaModel(FlexoMetaModel<MM> aMetaModel);
+	public void setMetaModel(MM aMetaModel);
 
 }

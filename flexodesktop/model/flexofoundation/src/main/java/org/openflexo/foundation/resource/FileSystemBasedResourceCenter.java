@@ -148,10 +148,21 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 				mmRepository, modelRepository);
 	}
 
-	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void exploreDirectoryLookingForMetaModels(
+	/**
+	 * Explore a given directory, deeply searching about {@link FlexoMetaModel} conform to supplied technology
+	 * 
+	 * @param directory
+	 * @param folder
+	 * @param technologyAdapter
+	 * @param technologyContextManager
+	 * @param mmRepository
+	 * @return a flag indicating if some metamodels were found
+	 */
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> boolean exploreDirectoryLookingForMetaModels(
 			File directory, RepositoryFolder folder, TA technologyAdapter, TechnologyContextManager technologyContextManager,
 			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
 		logger.info("Exploring " + directory);
+		boolean returned = false;
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
@@ -164,6 +175,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 								+ (mmRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) mmRes).getFile().getAbsolutePath()
 										: ""));
 						mmRepository.registerResource(mmRes, folder);
+						returned = true;
 					} else {
 						logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for metamodel "
 								+ f.getAbsolutePath());
@@ -171,17 +183,34 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository);
+					if (exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository)) {
+						returned = true;
+					} else {
+						folder.removeFromChildren(newFolder);
+					}
 				}
 			}
 		}
+		return returned;
 	}
 
-	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void exploreDirectoryLookingForModels(
+	/**
+	 * Explore a given directory, deeply searching about {@link FlexoModel} conform to a given FlexoMetaModel in supplied technology
+	 * 
+	 * @param directory
+	 * @param folder
+	 * @param technologyAdapter
+	 * @param technologyContextManager
+	 * @param mmRepository
+	 * @param modelRepository
+	 * @return a flag indicating if some metamodels were found
+	 */
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> boolean exploreDirectoryLookingForModels(
 			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM> technologyAdapter,
 			TechnologyContextManager technologyContextManager, MetaModelRepository<MMR, ?, ?, ?> mmRepository,
 			ModelRepository<MR, ?, ?, ?> modelRepository) {
 		logger.info("Exploring " + directory);
+		boolean returned = false;
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
@@ -195,6 +224,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 									+ (modelRes instanceof FlexoFileResource ? " file="
 											+ ((FlexoFileResource) modelRes).getFile().getAbsolutePath() : ""));
 							modelRepository.registerResource(modelRes, folder);
+							returned = true;
 						} else {
 							logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for model "
 									+ f.getAbsolutePath());
@@ -203,11 +233,17 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository,
-							modelRepository);
+					if (exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository,
+							modelRepository)) {
+						returned = true;
+					} else {
+						folder.removeFromChildren(newFolder);
+					}
+
 				}
 			}
 		}
+		return returned;
 	}
 
 	/**

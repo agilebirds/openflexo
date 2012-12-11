@@ -85,6 +85,24 @@ public abstract class DefaultTechnologyAdapterControllerService implements Techn
 	}
 
 	/**
+	 * Return loaded technology adapter controller mapping supplied technology adapter<br>
+	 * If adapter is not loaded, return null
+	 * 
+	 * @param technologyAdapterClass
+	 * @return
+	 */
+	@Override
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+			TA technologyAdapter) {
+		for (TechnologyAdapterController<?> tac : loadedAdapters.values()) {
+			if (tac.getTechnologyAdapter() == technologyAdapter) {
+				return (TAC) tac;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Iterates over loaded technology adapters
 	 * 
 	 * @return

@@ -29,8 +29,8 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
@@ -71,7 +71,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer<CreateDataP
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+		return OWLIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 	}
 
 }

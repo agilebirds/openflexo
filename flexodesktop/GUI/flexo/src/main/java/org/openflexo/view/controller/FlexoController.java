@@ -92,6 +92,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -102,12 +103,17 @@ import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
@@ -128,7 +134,6 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
-import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
@@ -1854,6 +1859,25 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return getControllerModel().getCurrentEditor();
 	}
 
+	/**
+	 * Return the technology-specific controller for supplied technology adapter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+		if (technologyAdapter != null) {
+			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+			if (sm != null) {
+				TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+				if (service != null) {
+					return service.getTechnologyAdapterController(technologyAdapter);
+				}
+			}
+		}
+		return null;
+	}
+
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null && object instanceof FlexoModelObject && ((FlexoModelObject) object).getProject() != getProject()) {
@@ -1881,8 +1905,37 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
 			}*/else if (object instanceof RepositoryFolder) {
 			return IconLibrary.FOLDER_ICON;
-		} else if (object instanceof AbstractOntologyObject) {
-			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
+		} else if (object instanceof TechnologyAdapter<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter<?, ?>) object);
+			if (tac != null) {
+				return tac.getTechnologyIcon();
+			}
+		} else if (object instanceof FlexoModel<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModel<?, ?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getModelIcon();
+			}
+		} else if (object instanceof FlexoModelResource<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModelResource<?, ?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getModelIcon();
+			}
+		} else if (object instanceof FlexoMetaModel<?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModel<?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getMetaModelIcon();
+			}
+		} else if (object instanceof FlexoMetaModelResource<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModelResource<?, ?>) object)
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getMetaModelIcon();
+			}
+		} else if (object instanceof IFlexoOntologyObject) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyObject) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForOntologyObject(((IFlexoOntologyObject) object).getClass());
+			}
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
 		} else if (object instanceof CGTemplateObject) {

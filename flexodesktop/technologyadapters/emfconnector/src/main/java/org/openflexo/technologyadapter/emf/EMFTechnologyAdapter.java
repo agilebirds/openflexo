@@ -183,7 +183,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 								if (resourceFactoryClass != null) {
 									resourceFactory = (Resource.Factory) resourceFactoryClass.newInstance();
 									if (extension != null && ePackage != null && resourceFactory != null) {
-										ModelFactory factory = new ModelFactory().importClass(EMFMetaModelResource.class);
+										ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
 										metaModelResource = factory.newInstance(EMFMetaModelResource.class);
 										metaModelResource.setFile(aMetaModelFile);
 										metaModelResource.setModelFileExtension(extension);
@@ -321,7 +321,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 
 	protected EMFMetaModelResource makeEMFMetaModelResource(File emfMetaModelFile, String uri) {
 		try {
-			ModelFactory factory = new ModelFactory().importClass(EMFMetaModelResource.class);
+			ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
 			EMFMetaModelResource returned = factory.newInstance(EMFMetaModelResource.class);
 			returned.setTechnologyAdapter(this);
 			returned.setURI(uri);

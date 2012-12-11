@@ -1,6 +1,7 @@
 package org.openflexo.foundation.view.diagram;
 
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 public interface DiagramMetaModel extends FlexoMetaModel<DiagramMetaModel> {
 
@@ -22,6 +23,12 @@ public interface DiagramMetaModel extends FlexoMetaModel<DiagramMetaModel> {
 
 		@Override
 		public Object getObject(String objectURI) {
+			return null;
+		}
+
+		@Override
+		public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+			// TODO
 			return null;
 		}
 	};

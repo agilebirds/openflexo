@@ -45,6 +45,7 @@ public abstract class ModelRepository<R extends FlexoResource<? extends M>, M ex
 	public ModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
 		this.technologyAdapter = technologyAdapter;
 		this.resourceCenter = resourceCenter;
+		getRootFolder().setName(resourceCenter.getName());
 	}
 
 	public TA getTechnologyAdapter() {

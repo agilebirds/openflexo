@@ -1,8 +1,10 @@
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -142,6 +144,61 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 		for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
 			ta.initialize();
 		}
+		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
+			rc.initialize(this);
+		}
+	}
+
+	/**
+	 * Return the list of all non-empty {@link ModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	/*@Override
+	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<ModelRepository<R, M, MM, TA>> getAllModelRepositories(
+			TA technologyAdapter) {
+		List<ModelRepository<R, M, MM, TA>> returned = new ArrayList<ModelRepository<R, M, MM, TA>>();
+		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
+			returned.add((ModelRepository<R, M, MM, TA>) rc.getModelRepository(technologyAdapter));
+		}
+		return returned;
+	}*/
+	@Override
+	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+		List<ModelRepository<?, ?, ?, ?>> returned = new ArrayList<ModelRepository<?, ?, ?, ?>>();
+		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
+			if (rc.getModelRepository(technologyAdapter).getSize() > 0)
+				returned.add(rc.getModelRepository(technologyAdapter));
+		}
+		return returned;
+	}
+
+	/**
+	 * Return the list of all non-empty {@link MetaModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	/*@Override
+	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<MetaModelRepository<R, M, MM, TA>> getAllMetaModelRepositories(
+			TA technologyAdapter) {
+		List<MetaModelRepository<R, M, MM, TA>> returned = new ArrayList<MetaModelRepository<R, M, MM, TA>>();
+		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
+			returned.add((MetaModelRepository<R, M, MM, TA>) rc.getMetaModelRepository(technologyAdapter));
+		}
+		return returned;
+	}*/
+	@Override
+	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+		List<MetaModelRepository<?, ?, ?, ?>> returned = new ArrayList<MetaModelRepository<?, ?, ?, ?>>();
+		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
+			if (rc.getMetaModelRepository(technologyAdapter).getSize() > 0)
+				returned.add(rc.getMetaModelRepository(technologyAdapter));
+		}
+		return returned;
 	}
 
 }

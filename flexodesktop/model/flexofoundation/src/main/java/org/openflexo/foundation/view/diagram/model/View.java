@@ -45,6 +45,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -85,6 +86,12 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	@Override
 	public DiagramMetaModel getMetaModel() {
 		return DiagramMetaModel.INSTANCE;
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		// TODO
+		return null;
 	}
 
 	/**

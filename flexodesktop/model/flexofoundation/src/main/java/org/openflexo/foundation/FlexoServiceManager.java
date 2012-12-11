@@ -86,6 +86,14 @@ public class FlexoServiceManager {
 		return registeredServices;
 	}
 
+	public TechnologyAdapterService getTechnologyAdapterService() {
+		return getService(TechnologyAdapterService.class);
+	}
+
+	public FlexoResourceCenterService getResourceCenterService() {
+		return getService(FlexoResourceCenterService.class);
+	}
+
 	public class ServiceRegistered implements ServiceNotification {
 
 	}

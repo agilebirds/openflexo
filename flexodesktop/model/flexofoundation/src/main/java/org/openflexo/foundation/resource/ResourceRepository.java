@@ -127,6 +127,15 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 	public void update(FlexoObservable observable, DataModification dataModification) {
 	}
 
+	/**
+	 * Returns the number of resources registed in this repository
+	 * 
+	 * @return
+	 */
+	public int getSize() {
+		return resources.size();
+	}
+
 	@Deprecated
 	@Override
 	public String getInspectorName() {

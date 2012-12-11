@@ -33,4 +33,14 @@ public interface TechnologyAdapterControllerService extends FlexoService {
 	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
 			Class<TAC> technologyAdapterControllerClass);
 
+	/**
+	 * Return loaded technology adapter controller mapping supplied technology adapter<br>
+	 * If adapter is not loaded, return null
+	 * 
+	 * @param technologyAdapterClass
+	 * @return
+	 */
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+			TA technologyAdapter);
+
 }

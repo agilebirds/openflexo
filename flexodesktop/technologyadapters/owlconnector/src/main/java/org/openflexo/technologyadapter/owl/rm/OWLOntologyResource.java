@@ -37,6 +37,9 @@ import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -50,13 +53,16 @@ import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
  * @author sguerin
  * 
  */
-public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> implements FlexoResource<OWLOntology> {
+public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> implements FlexoResource<OWLOntology>,
+		FlexoModelResource<OWLOntology, OWLOntology>, FlexoMetaModelResource<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyResource.class.getPackage().getName());
 
+	private OWLTechnologyAdapter technologyAdapter;
 	private OWLOntologyLibrary ontologyLibrary = null;
 	private String ontologyURI;
 	private File absoluteFile;
+	private OWLOntology metaModel;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -64,12 +70,13 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	 * @param builder
 	 */
 	public OWLOntologyResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, null);
 		builder.notifyResourceLoading(this);
 	}
 
-	public OWLOntologyResource(FlexoProject aProject) {
+	public OWLOntologyResource(FlexoProject aProject, OWLTechnologyAdapter technologyAdapter) {
 		super(aProject);
+		this.technologyAdapter = technologyAdapter;
 	}
 
 	public OWLOntologyResource(File owlFile, OWLOntologyLibrary ontologyLibrary) {
@@ -77,6 +84,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		this.ontologyURI = OWLOntology.findOntologyURI(owlFile);
 		absoluteFile = owlFile;
 		setOntologyLibrary(ontologyLibrary);
+		this.technologyAdapter = ontologyLibrary.getTechnologyAdapter();
 	}
 
 	@Override
@@ -110,7 +118,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 
 	public OWLOntologyResource(FlexoProject aProject, OWLOntology anOntology, FlexoProjectFile ontologyFile)
 			throws InvalidFileNameException, DuplicateResourceException {
-		this(aProject);
+		this(aProject, anOntology.getTechnologyAdapter());
 		_resourceData = anOntology;
 		anOntology.setFlexoResource(this);
 		setResourceFile(ontologyFile);
@@ -139,8 +147,14 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		// Not allowed
 	}
 
+	@Override
 	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return null;
+		return technologyAdapter;
+	}
+
+	@Override
+	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+		this.technologyAdapter = (OWLTechnologyAdapter) technologyAdapter;
 	}
 
 	@Override
@@ -211,6 +225,16 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 
 		logger.info("Wrote " + getFile());
 
+	}
+
+	@Override
+	public OWLOntology getMetaModel() {
+		return metaModel;
+	}
+
+	@Override
+	public void setMetaModel(OWLOntology aMetaModel) {
+		metaModel = aMetaModel;
 	}
 
 }

@@ -21,11 +21,14 @@ package org.openflexo.view.controller;
 
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
+
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 
 /**
- * This class represents a technology adapter controller<br>
+ * This class represents a technology-specific controller provided by a {@link TechnologyAdapter}<br>
  * A {@link TechnologyAdapterController} works above conceptual layer provided by a {@link TechnologyAdapter}, and manages all tooling
  * dedicated to technology-specific management of a {@link TechnologyAdapter}<br>
  * This controller makes the bindings between Openflexo controllers/editors layer and the {@link TechnologyAdapter}
@@ -79,4 +82,34 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	public void initialize() {
 
 	}
+
+	/**
+	 * Return icon representing underlying technology
+	 * 
+	 * @return
+	 */
+	public abstract ImageIcon getTechnologyIcon();
+
+	/**
+	 * Return icon representing a model of underlying technology
+	 * 
+	 * @return
+	 */
+	public abstract ImageIcon getModelIcon();
+
+	/**
+	 * Return icon representing a model of underlying technology
+	 * 
+	 * @return
+	 */
+	public abstract ImageIcon getMetaModelIcon();
+
+	/**
+	 * Return icon representating supplied ontology object
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public abstract ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass);
+
 }

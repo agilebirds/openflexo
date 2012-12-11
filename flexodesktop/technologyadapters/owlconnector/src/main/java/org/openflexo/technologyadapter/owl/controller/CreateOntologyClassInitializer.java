@@ -28,8 +28,8 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
@@ -70,7 +70,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer<CreateOnto
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+		return OWLIconLibrary.ONTOLOGY_CLASS_ICON;
 	}
 
 }

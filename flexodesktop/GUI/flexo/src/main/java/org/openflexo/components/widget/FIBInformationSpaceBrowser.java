@@ -32,6 +32,7 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -40,8 +41,10 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
+import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Browser allowing to browse through information space<br>
@@ -57,7 +60,7 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class FIBInformationSpaceBrowser extends FIBBrowserView<ViewPointLibrary> {
 	static final Logger logger = Logger.getLogger(FIBInformationSpaceBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/FIBViewPointLibraryBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBInformationSpaceBrowser.fib");
 
 	public FIBInformationSpaceBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
 		super(viewPointLibrary, controller, FIB_FILE);
@@ -86,6 +89,10 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<ViewPointLibrary>
 		serviceManager.registerService(rcService);
 		viewPointLibrary = new ViewPointLibrary();
 		serviceManager.registerService(viewPointLibrary);
+		TechnologyAdapterService taService = DefaultTechnologyAdapterService.getNewInstance(rcService);
+		serviceManager.registerService(taService);
+		TechnologyAdapterControllerService tacService = DefaultTechnologyAdapterControllerService.getNewInstance();
+		serviceManager.registerService(tacService);
 
 		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
 		// System.exit(-1);

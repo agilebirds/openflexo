@@ -26,7 +26,7 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
 import org.openflexo.technologyadapter.owl.model.action.AddAnnotationStatement;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -63,7 +63,7 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
+		return OWLIconLibrary.ONTOLOGY_STATEMENT_ICON;
 	}
 
 }

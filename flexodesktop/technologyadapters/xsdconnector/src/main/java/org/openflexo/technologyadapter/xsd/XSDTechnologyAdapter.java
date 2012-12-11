@@ -140,7 +140,8 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	public boolean isValidModelFile(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
-		return aModelFile.getName().endsWith(".xml");
+		// return aModelFile.getName().endsWith(".xml");
+		return false;
 	}
 
 	/**
@@ -272,4 +273,5 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 		}
 		return null;
 	}
+
 }

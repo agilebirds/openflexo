@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -39,13 +41,11 @@ import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.CloneIndividual;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
@@ -57,22 +57,22 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
-import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.toolbox.ImageIconResource;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Utility class containing all icons used in context of VPMModule
@@ -125,6 +125,25 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
 	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
 
+	/**
+	 * Return the technology-specific controller for supplied technology adapter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+		if (technologyAdapter != null) {
+			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+			if (sm != null) {
+				TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+				if (service != null) {
+					return service.getTechnologyAdapterController(technologyAdapter);
+				}
+			}
+		}
+		return null;
+	}
+
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
 		/*if (object instanceof ViewPointFolder) {
 			return FOLDER_ICON;
@@ -135,9 +154,19 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ViewPointPaletteElement) {
 			return CALC_SHAPE_ICON;
 		} else if (object instanceof DataPropertyAssertion) {
-			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForOntologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
+			}
+			return null;
 		} else if (object instanceof ObjectPropertyAssertion) {
-			return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ObjectPropertyAssertion) object).getAction()
+					.getModelSlot().getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
+			}
+			return null;
 		} else if (object instanceof ExampleDrawingConnector) {
 			return CALC_CONNECTOR_ICON;
 		} else if (object instanceof ExampleDrawingShape) {
@@ -146,11 +175,27 @@ public class VPMIconLibrary extends IconLibrary {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
 			if (object instanceof AddClass) {
-				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddClass) object).getModelSlot()
+						.getTechnologyAdapter());
+				if (tac != null) {
+					return tac.getIconForOntologyObject(((AddClass) object).getOntologyClass().getClass());
+				}
+				return null;
 			} else if (object instanceof CloneIndividual) {
-				return IconFactory.getImageIcon(OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON, DUPLICATE);
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
+						.getTechnologyAdapter());
+				if (tac != null) {
+					return IconFactory.getImageIcon(tac.getIconForOntologyObject(((AddIndividual) object).getOntologyClass().getClass()),
+							DUPLICATE);
+				}
+				return null;
 			} else if (object instanceof AddIndividual) {
-				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
+						.getTechnologyAdapter());
+				if (tac != null) {
+					return tac.getIconForOntologyObject(((AddIndividual) object).getOntologyClass().getClass());
+				}
+				return null;
 			} else if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPattern) {
@@ -237,19 +282,13 @@ public class VPMIconLibrary extends IconLibrary {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
-		} else if (object instanceof ClassPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
-		} else if (object instanceof IndividualPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
-		} else if (object instanceof ObjectPropertyPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-		} else if (object instanceof DataPropertyPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
-		} else if (object instanceof PropertyPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_PROPERTY_ICON;
-		} /*else if (object instanceof StatementPatternRole) {
-			return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-			}*/else if (object instanceof LocalizedDictionary) {
+		} else if (object instanceof OntologicObjectPatternRole) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForOntologyObject(((OntologicObjectPatternRole<?>) object).getAccessedClass());
+			}
+		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());

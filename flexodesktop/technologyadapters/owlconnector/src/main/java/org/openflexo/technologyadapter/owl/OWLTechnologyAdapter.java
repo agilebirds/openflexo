@@ -265,4 +265,5 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	public OWLOntologyLibrary getOntologyLibrary() {
 		return getTechnologyContextManager();
 	}
+
 }

@@ -25,4 +25,11 @@ public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*Storage
 
 	public Object getObject(String objectURI);
 
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where related FlexoOntology exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+
 }
