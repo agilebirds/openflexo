@@ -24,6 +24,7 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.factory.PAMELAConstants;
 
 public class ModelProperty<I> {
@@ -199,16 +200,22 @@ public class ModelProperty<I> {
 			throw new ModelDefinitionException("No default value defined for primitive property " + this);
 		}
 		if (!Getter.UNDEFINED.equals(getter.defaultValue())) {
-			try {
-				Converter<?> converter = StringConverterLibrary.getInstance().getConverter(getType());
-				if (converter != null) {
-					defaultValue = converter.convertFromString(getter.defaultValue(), null);
-				} else {
-					throw new ModelDefinitionException("No converter for type '" + getType() + "'. Cannot convert default value "
-							+ getter.defaultValue());
+			if (!getType().isEnum()) {
+				if (getType().isPrimitive()) {
+					Converter<?> converter = StringConverterLibrary.getInstance().getConverter(getType());
+					if (converter == null) {
+						throw new ModelDefinitionException("No converter for type '" + getType() + "'. Cannot convert default value "
+								+ getter.defaultValue());
+					} else {
+						try {
+							defaultValue = converter.convertFromString(getter.defaultValue(), null);
+						} catch (InvalidDataException e) {
+							e.printStackTrace();
+							throw new ModelDefinitionException("String value '" + getter.defaultValue() + "' cannot be converted to a "
+									+ getType().getName(), e);
+						}
+					}
 				}
-			} catch (InvalidDataException e) {
-				throw new ModelDefinitionException("Invalid default value for property " + this + " : " + e.getMessage());
 			}
 		}
 
@@ -782,10 +789,16 @@ public class ModelProperty<I> {
 		return removerMethod;
 	}
 
-	private Object defaultValue = null;
+	private Object defaultValue;
 
-	public Object getDefaultValue() {
-		return defaultValue;
+	public Object getDefaultValue(ModelFactory factory) throws InvalidDataException {
+		if (defaultValue != null) {
+			return defaultValue;
+		} else if (getGetter().defaultValue() != null) {
+			return factory.getStringEncoder().fromString(getType(), getGetter().defaultValue());
+		} else {
+			return null;
+		}
 	}
 
 	public boolean isStringConvertable() {

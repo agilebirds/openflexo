@@ -303,8 +303,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return propertyChangeSupport;
 	}
 
-	private void internallyInvokeInitializer(org.openflexo.model.ModelInitializer in, Object[] args)
-			throws ModelDefinitionException {
+	private void internallyInvokeInitializer(org.openflexo.model.ModelInitializer in, Object[] args) throws ModelDefinitionException {
 		initializing = true;
 		try {
 			List<String> parameters = in.getParameters();
@@ -541,7 +540,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (returned != null) {
 			return returned;
 		} else {
-			Object defaultValue = property.getDefaultValue();
+			Object defaultValue;
+			try {
+				defaultValue = property.getDefaultValue(getModelFactory());
+			} catch (InvalidDataException e) {
+				throw new ModelExecutionException("Invalid default value '" + property.getGetter().defaultValue() + "' for property "
+						+ property + " with type " + property.getType(), e);
+			}
 			if (defaultValue != null) {
 				values.put(property.getPropertyIdentifier(), defaultValue);
 				return defaultValue;
