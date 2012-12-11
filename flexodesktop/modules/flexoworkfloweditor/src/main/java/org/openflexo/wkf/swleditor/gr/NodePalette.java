@@ -123,7 +123,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	@Override
 	public boolean isDraggable() {
-		return true;
+		return nodeGR.getDrawing().isEditable();
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -467,6 +467,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	@Override
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		if (!nodeGR.getIsSelected() || nodeGR.isResizing() || nodeGR.isMoving()) {
+			return null;
+		}
+		if (!nodeGR.getDrawing().isEditable()) {
 			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(nodeGR, drawingGraphics.getGraphicalRepresentation());
