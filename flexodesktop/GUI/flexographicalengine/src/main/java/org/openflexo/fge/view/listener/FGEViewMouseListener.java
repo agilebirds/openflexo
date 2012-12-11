@@ -248,7 +248,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					e);
 		}
 
-		private void stopDragging(GraphicalRepresentation focusedGR) {
+		private void stopDragging(GraphicalRepresentation<?> focusedGR) {
 			controlArea.stopDragging(getController(), focusedGR);
 		}
 	}
@@ -416,7 +416,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if (currentControlAreaDrag != null) {
-			GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+			GraphicalRepresentation<?> focusedGR = getFocusRetriever().getFocusedObject(e);
 			// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
 			currentControlAreaDrag.stopDragging(focusedGR);
 			currentControlAreaDrag = null;
@@ -541,6 +541,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	 * @return
 	 */
 	private boolean handleEventForEditedLabel(MouseEvent e, GraphicalRepresentation<?> focusedObject) {
+		if (focusedObject == null || !focusedObject.getDrawing().isEditable()) {
+			return false;
+		}
 		LabelView<?> labelView = getController().getEditedLabel();
 		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
 		if (labelView.getGraphicalRepresentation() == focusedObject) {

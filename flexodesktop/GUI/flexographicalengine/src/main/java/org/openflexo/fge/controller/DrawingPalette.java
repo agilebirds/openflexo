@@ -204,6 +204,11 @@ public class DrawingPalette {
 			return DrawingPalette.this;
 		}
 
+		@Override
+		public boolean isEditable() {
+			return false;
+		}
+
 	}
 
 	// Bout de code a rajouter dans les vues

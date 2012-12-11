@@ -601,7 +601,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	public void startEdition() {
-		if (!getGraphicalRepresentation().getIsLabelEditable()) {
+		if (!getGraphicalRepresentation().getDrawing().isEditable() || !getGraphicalRepresentation().getIsLabelEditable()) {
 			return;
 		}
 		if (logger.isLoggable(Level.INFO)) {

@@ -317,6 +317,11 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 					return ForegroundStylePreviewPanel.this;
 				}
 
+				@Override
+				public boolean isEditable() {
+					return false;
+				}
+
 			};
 			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
