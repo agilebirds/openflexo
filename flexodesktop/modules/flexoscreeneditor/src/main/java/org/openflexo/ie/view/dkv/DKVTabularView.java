@@ -22,6 +22,7 @@ package org.openflexo.ie.view.dkv;
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.ie.view.controller.IEController;
 
@@ -36,7 +37,7 @@ public class DKVTabularView extends TabularView {
 	}
 
 	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+	protected FlexoModelObject getParentObject(FlexoObject object) {
 		if (object instanceof DKVObject) {
 			return ((DKVObject) object).getParent();
 		}

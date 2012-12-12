@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.ExternalWSService;
@@ -90,7 +90,7 @@ public class WSEServiceView extends WSEView<WSService> {
 
 	public ServiceInterface getSelectedServiceInterface() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
@@ -99,7 +99,7 @@ public class WSEServiceView extends WSEView<WSService> {
 
 	public WSDLRepository getSelectedWSDLRepository() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof WSDLRepository) {
 			return (WSDLRepository) selection.firstElement();
 		}

@@ -37,6 +37,7 @@ import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.widget.MultipleObjectSelector.TabularBrowserConfiguration;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMSet;
 import org.openflexo.foundation.dm.DMSet.PackageReference;
@@ -127,7 +128,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
 		class UpdateClassesBrowserElementFactory implements BrowserElementFactory {
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 				if (object instanceof DMSet) {
 					return new ClassSetElement((DMSet) object, browser, parent);
 				} else if (object instanceof PackageReference) {
@@ -362,7 +363,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 		}
 
 		@Override
-		public boolean isSelectable(FlexoModelObject object) {
+		public boolean isSelectable(FlexoObject object) {
 			if (object instanceof PropertyReference) {
 				return ((PropertyReference) object).isResolvable();
 			} else if (object instanceof MethodReference) {

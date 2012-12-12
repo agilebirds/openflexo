@@ -47,10 +47,4 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 		return "XSDModelSlot";
 	}
 
-	@Deprecated
-	@Override
-	public String getClassNameKey() {
-		return "xsd_model_slot";
-	}
-
 }

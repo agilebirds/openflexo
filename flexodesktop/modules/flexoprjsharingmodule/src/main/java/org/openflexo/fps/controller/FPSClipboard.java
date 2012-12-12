@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
@@ -71,7 +71,7 @@ public class FPSClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+	protected void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext) {
 		JComponent targetContainer = graphicalContext.targetContainer;
 		if (isTargetValidForPasting(targetContainer)) {
 			if (logger.isLoggable(Level.FINE)) {

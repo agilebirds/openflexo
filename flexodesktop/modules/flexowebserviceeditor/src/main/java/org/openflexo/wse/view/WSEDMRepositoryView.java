@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
@@ -109,7 +109,7 @@ public class WSEDMRepositoryView extends WSEView<DMRepository> {
 
 	public DMPackage getSelectedDMPackage() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMPackage) {
 			return (DMPackage) selection.firstElement();
 		}
@@ -121,7 +121,7 @@ public class WSEDMRepositoryView extends WSEView<DMRepository> {
 
 	public DMEntity getSelectedDMEntity() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}

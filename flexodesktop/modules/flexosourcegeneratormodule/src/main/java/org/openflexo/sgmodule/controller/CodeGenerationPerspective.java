@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.templates.CGTemplate;
@@ -69,7 +70,7 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		} else {
@@ -78,13 +79,13 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof GeneratedSources || object instanceof SourceRepository || object instanceof CGFile
 				|| object instanceof CGTemplate || object instanceof ImplementationModel || object instanceof TechnologyModelObject;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof GeneratedSources) {
 			return new GeneratedSourcesModuleView((GeneratedOutput) object, (SGController) controller);
 		} else if (object instanceof SourceRepository) {
@@ -110,7 +111,7 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 			return new ImplementationModelView(((TechnologyModelObject) object).getImplementationModel(), (SGController) controller, this);
 		}
 
-		return new EmptyPanel<FlexoModelObject>(controller, this, object);
+		return new EmptyPanel<FlexoObject>(controller, this, object);
 
 	}
 

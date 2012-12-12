@@ -46,14 +46,4 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 		return "EMFModelSlot";
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.TemporaryFlexoModelObject#getClassNameKey()
-	 */
-	@Override
-	public String getClassNameKey() {
-		return "emf_model_slot";
-	}
 }

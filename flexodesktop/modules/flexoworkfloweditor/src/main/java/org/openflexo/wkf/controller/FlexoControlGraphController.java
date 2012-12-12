@@ -39,7 +39,7 @@ import javax.swing.SwingConstants;
 
 import org.openflexo.ch.DefaultInspectorHelpDelegate;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement.ControlGraphFactory;
@@ -291,7 +291,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 			return _header;
 		}
 
-		private FlexoModelObject getFocusedObject() {
+		private FlexoObject getFocusedObject() {
 			return _controller.getSelectionManager().getFocusedObject();
 		}
 

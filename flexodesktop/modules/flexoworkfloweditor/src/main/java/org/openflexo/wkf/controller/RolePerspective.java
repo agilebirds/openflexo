@@ -28,7 +28,8 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
@@ -105,20 +106,20 @@ public class RolePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public RoleList getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject != null) {
-			return proposedObject.getProject().getWorkflow().getRoleList();
+	public RoleList getDefaultObject(FlexoObject proposedObject) {
+		if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getWorkflow().getRoleList();
 		}
 		return null;
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof RoleList && !((RoleList) object).isImportedRoleList();
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject roleList, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject roleList, FlexoController controller) {
 		if (roleList instanceof RoleList) {
 			return new RoleEditorController((RoleList) roleList, _controller).getDrawingView();
 		} else {

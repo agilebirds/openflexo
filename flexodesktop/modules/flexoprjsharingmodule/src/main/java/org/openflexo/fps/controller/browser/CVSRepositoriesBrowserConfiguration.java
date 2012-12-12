@@ -24,6 +24,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.fps.CVSDirectory;
 import org.openflexo.fps.CVSExplorer;
@@ -69,7 +70,7 @@ class CVSRepositoriesBrowserConfiguration implements BrowserConfiguration {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof CVSRepositoryList) {
 				return new CVSRepositoryListElement((CVSRepositoryList) object, browser, parent);
 			} else if (object instanceof CVSRepository) {

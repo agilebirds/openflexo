@@ -23,7 +23,7 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.MenuTreeDropTarget;
@@ -41,14 +41,14 @@ public class MenuEditorBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 		if (object instanceof FlexoItemMenu) {
 			getController().selectAndFocusObject(object);
 		}
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (object instanceof FlexoItemMenu) {
 			getController().selectAndFocusObject(object);
 		}

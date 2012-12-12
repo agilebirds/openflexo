@@ -29,7 +29,8 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -98,23 +99,23 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoProcess getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (proposedObject != null) {
-			return proposedObject.getProject().getRootFlexoProcess();
+		} else if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess();
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 		if (process instanceof FlexoProcess) {
 			return new ProcessEditorController(_controller, (FlexoProcess) process).getDrawingView();
 		} else {

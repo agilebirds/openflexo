@@ -22,7 +22,7 @@ package org.openflexo.wkf.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.ContextualMenuManager;
 
 public class WKFContextualMenuManager extends ContextualMenuManager {
@@ -35,7 +35,7 @@ public class WKFContextualMenuManager extends ContextualMenuManager {
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		return super.getFocusedObject(focusedComponent, e);
 	}
 

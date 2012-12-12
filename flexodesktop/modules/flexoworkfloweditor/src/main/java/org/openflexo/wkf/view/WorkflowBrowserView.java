@@ -25,7 +25,7 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -58,12 +58,12 @@ public class WorkflowBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (object instanceof WKFObject) {
 			FlexoProcess objectProcess = ((WKFObject) object).getProcess();
 			getController().selectAndFocusObject(objectProcess);

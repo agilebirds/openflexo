@@ -34,6 +34,7 @@ import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -275,7 +276,7 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof IEOperator && ((IEOperator) object).getOperatedSequence() != null) {
 			setSelectedComponent(((IEWidget) object).getWOComponent().getComponentDefinition().getDummyComponentInstance());
 			getSelectionManager().setSelectedObject(((IEOperator) object).getOperatedSequence());
@@ -480,7 +481,7 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof ComponentInstance) {
 			ComponentInstance ci = (ComponentInstance) object;
 			if (ci.getComponentDefinition() == null) {

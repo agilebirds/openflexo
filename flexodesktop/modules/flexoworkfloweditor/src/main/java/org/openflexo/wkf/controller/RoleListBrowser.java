@@ -25,6 +25,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoProjectObject;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -45,7 +46,9 @@ public class RoleListBrowser extends ProjectBrowser {
 
 	@Override
 	protected boolean activateBrowsingFor(BrowserElement newElement) {
-		return newElement.getObject().getProject() == getRootObject().getProject() && super.activateBrowsingFor(newElement);
+		return newElement.getObject() instanceof FlexoProjectObject && getRootObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
+				&& super.activateBrowsingFor(newElement);
 	}
 
 	@Override
