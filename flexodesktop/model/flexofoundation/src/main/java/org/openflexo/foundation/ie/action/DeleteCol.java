@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
@@ -39,21 +40,21 @@ public class DeleteCol extends FlexoAction {
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public FlexoAction makeNewAction(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 			return new DeleteCol(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
-			Enumeration<FlexoModelObject> en = v.elements();
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
+			Vector<FlexoObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
+			Enumeration<FlexoObject> en = v.elements();
 			while (en.hasMoreElements()) {
-				FlexoModelObject o = en.nextElement();
+				FlexoObject o = en.nextElement();
 				if (!(o instanceof IETDWidget) && !(o instanceof IESequenceWidget && ((IESequenceWidget) o).isInTD())) {
 					return false;
 				}
@@ -68,7 +69,7 @@ public class DeleteCol extends FlexoAction {
 		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
 	}
 
-	DeleteCol(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	DeleteCol(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -23,7 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMModel;
@@ -46,7 +46,7 @@ import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 
 public class DMBrowserElementFactory implements BrowserElementFactory {
 	@Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+	public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 		if (object instanceof DMModel) {
 			return new DMModelElement((DMModel) object, browser, parent);
 		} else if (object instanceof DMRepositoryFolder) {

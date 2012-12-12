@@ -20,10 +20,13 @@
 package org.openflexo.foundation.validation;
 
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -93,6 +96,22 @@ public abstract class ValidationModel extends FlexoListModel {
 		return returned;
 	}
 
+	public Collection<Validable> retrieveAllEmbeddedValidableObjects(Validable o) {
+		List<Validable> returned = new ArrayList<Validable>();
+		appendAllEmbeddedValidableObjects(o, returned);
+		return returned;
+	}
+
+	private void appendAllEmbeddedValidableObjects(Validable o, Collection<Validable> c) {
+		c.add(o);
+		Collection<? extends Validable> embeddedObjects = o.getEmbeddedValidableObjects();
+		if (embeddedObjects != null) {
+			for (Validable o2 : embeddedObjects) {
+				appendAllEmbeddedValidableObjects(o2, c);
+			}
+		}
+	}
+
 	/**
 	 * Validate supplied Validable object by appending ValidationIssues object to supplied ValidationReport. Return true if no validation
 	 * issues were found, false otherwise
@@ -104,12 +123,11 @@ public abstract class ValidationModel extends FlexoListModel {
 		int addedIssues = 0;
 
 		// Get all the objects to validate
-		Vector<? extends Validable> allEmbeddedValidableObjects = object.getAllEmbeddedValidableObjects();
+		Collection<Validable> allEmbeddedValidableObjects = retrieveAllEmbeddedValidableObjects(object);
 
 		// Remove duplicated objects
 		Vector<Validable> objectsToValidate = new Vector<Validable>();
-		for (Enumeration<? extends Validable> en = allEmbeddedValidableObjects.elements(); en.hasMoreElements();) {
-			Validable next = en.nextElement();
+		for (Validable next : allEmbeddedValidableObjects) {
 			if (!objectsToValidate.contains(next)) {
 				objectsToValidate.add(next);
 			}

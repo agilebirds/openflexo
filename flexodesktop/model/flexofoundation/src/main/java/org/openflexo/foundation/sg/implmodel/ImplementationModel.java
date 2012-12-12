@@ -101,6 +101,20 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	}
 
 	@Override
+	public org.openflexo.foundation.resource.FlexoResource<ImplementationModel> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<ImplementationModel> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
 	}

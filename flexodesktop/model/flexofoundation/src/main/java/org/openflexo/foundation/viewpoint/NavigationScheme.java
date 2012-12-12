@@ -22,7 +22,6 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -43,11 +42,6 @@ public class NavigationScheme extends AbstractActionScheme {
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.NavigationScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.NAVIGATION_SCHEME_INSPECTOR;
 	}
 
 	private BindingDefinition TARGET_OBJECT = new BindingDefinition("targetObject", FlexoModelObject.class, BindingDefinitionType.GET,

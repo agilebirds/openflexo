@@ -17,7 +17,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.logging.FlexoLogger;
@@ -126,7 +126,7 @@ public abstract class FlexoExternalMain implements Runnable {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
-		FlexoObject.initialize(false);
+		KVCFlexoObject.initialize(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching " + getName() + "...");
 		}

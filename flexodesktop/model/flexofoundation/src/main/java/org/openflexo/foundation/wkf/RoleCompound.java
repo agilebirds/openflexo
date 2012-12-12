@@ -20,6 +20,7 @@
 package org.openflexo.foundation.wkf;
 
 import java.awt.geom.Point2D;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -223,4 +224,10 @@ public final class RoleCompound extends WorkflowModelObject {
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		return null;
 	}
+
+	@Override
+	public Collection<Role> getEmbeddedValidableObjects() {
+		return getRoles();
+	}
+
 }

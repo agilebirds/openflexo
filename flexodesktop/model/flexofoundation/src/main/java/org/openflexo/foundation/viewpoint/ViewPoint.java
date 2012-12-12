@@ -22,8 +22,10 @@ package org.openflexo.foundation.viewpoint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +45,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.DataBinding;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
@@ -51,7 +52,11 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -62,10 +67,11 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -76,10 +82,11 @@ import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint> {
+public class ViewPoint extends NamedViewPointObject implements XMLStorageResourceData<ViewPoint> {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
@@ -88,16 +95,14 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 	}
 
-	private String name;
 	private String viewPointURI;
-	private String description;
 	private String version;
 
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
-	private Vector<ViewPointPalette> palettes;
-	private Vector<ExampleDrawingShema> shemas;
+	private Vector<DiagramPalette> palettes;
+	private Vector<ExampleDiagram> exampleDiagrams;
 
 	private File viewPointDirectory;
 	// private File owlFile;
@@ -108,6 +113,13 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 	private RelativePathFileConverter relativePathFileConverter;
 
 	private List<ModelSlot<?, ?>> modelSlots;
+
+	private ViewPointResource resource;
+
+	/**
+	 * Stores a chained collections of objects which are involved in validation
+	 */
+	private ChainedCollection<ViewPointObject> validableObjects = null;
 
 	public static class ViewPointInfo {
 		public String uri;
@@ -160,6 +172,9 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 					}
 					return returned;
 				}
+			} else {
+				logger.warning("While analysing viewpoint candidate: " + viewpointDirectory.getAbsolutePath() + " cannot find file "
+						+ xmlFile.getAbsolutePath());
 			}
 		} catch (JDOMException e) {
 			e.printStackTrace();
@@ -327,14 +342,13 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		private FlexoVersion openflexoVersion;
 		private ViewPointLibrary viewPointLibrary;
 
-		// private ImportedOntology viewPointOntology;
+		public ViewPointBuilder(ViewPointLibrary vpLibrary) {
+			this.viewPointLibrary = vpLibrary;
+		}
 
 		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
 			this.viewPointLibrary = vpLibrary;
-			/*if (viewPoint != null) {
-				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
-			}*/
 		}
 
 		public ViewPointBuilder(ViewPointLibrary vpLibrary, FlexoVersion openflexoVersion) {
@@ -345,10 +359,6 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		public ViewPointLibrary getViewPointLibrary() {
 			return viewPointLibrary;
 		}
-
-		/*	public ImportedOntology getViewPointOntology() {
-			return viewPointOntology;
-			}*/
 
 		public FlexoVersion getOpenflexoVersion() {
 			return openflexoVersion;
@@ -381,7 +391,7 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library/*, ViewPointFolder folder*/) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
-		name = baseName;
+		setName(baseName);
 		viewPointDirectory = viewpointDir;
 		_library = library;
 
@@ -427,81 +437,17 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		return encoder;
 	}
 
-	@Override
-	public void saveToFile(File aFile) {
-		super.saveToFile(aFile);
-		clearIsModified(true);
-	}
-
-	public void save() {
-		logger.info("Saving ViewPoint to " + xmlFile.getAbsolutePath() + "...");
-
-		// Following was used to debug (display purpose only)
-		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-		try {
-			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
-		} catch (InvalidObjectSpecificationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AccessorInvocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DuplicateSerializationIdentifierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
-		 */
-
-		File dir = xmlFile.getParentFile();
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		File temporaryFile = null;
-		try {
-			makeLocalCopy();
-			temporaryFile = File.createTempFile("temp", ".xml", dir);
-			saveToFile(temporaryFile);
-			FileUtils.rename(temporaryFile, xmlFile);
-			clearIsModified(true);
-			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
-			if (temporaryFile != null) {
-				temporaryFile.delete();
-			}
-		}
-	}
-
-	private void makeLocalCopy() throws IOException {
-		if (xmlFile != null && xmlFile.exists()) {
-			String localCopyName = xmlFile.getName() + "~";
-			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
-			FileUtils.copyFileToFile(xmlFile, localCopy);
-		}
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "view_point";
-	}
-
 	private void findPalettes(File dir) {
 		if (dir == null) {
 			return;
 		}
 		if (palettes == null) {
-			palettes = new Vector<ViewPointPalette>();
+			palettes = new Vector<DiagramPalette>();
 		}
 		for (File f : dir.listFiles()) {
 			if (!f.isDirectory() && f.getName().endsWith(".palette")) {
-				ViewPointPalette palette = ViewPointPalette.instanciateCalcPalette(this, f);
-				addToCalcPalettes(palette);
+				DiagramPalette palette = DiagramPalette.instanciateDiagramPalette(this, f);
+				addToPalettes(palette);
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				findPalettes(f);
 			}
@@ -512,13 +458,13 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		if (dir == null) {
 			return;
 		}
-		if (shemas == null) {
-			shemas = new Vector<ExampleDrawingShema>();
+		if (exampleDiagrams == null) {
+			exampleDiagrams = new Vector<ExampleDiagram>();
 		}
 		for (File f : dir.listFiles()) {
 			if (!f.isDirectory() && f.getName().endsWith(".shema")) {
-				ExampleDrawingShema palette = ExampleDrawingShema.instanciateShema(this, f);
-				addToCalcShemas(palette);
+				ExampleDiagram palette = ExampleDiagram.instanciateExampleDiagram(this, f);
+				addToExampleDiagrams(palette);
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				findShemas(f);
 			}
@@ -578,21 +524,6 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		return "ViewPoint:" + getViewPointURI();
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getVersion() {
 		return version;
 	}
@@ -611,23 +542,18 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		return _library;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ONTOLOGY_CALC_INSPECTOR;
-	}
-
-	public Vector<ViewPointPalette> getPalettes() {
+	public Vector<DiagramPalette> getPalettes() {
 		if (palettes == null) {
 			findPalettes(viewPointDirectory);
 		}
 		return palettes;
 	}
 
-	public ViewPointPalette getPalette(String paletteName) {
+	public DiagramPalette getPalette(String paletteName) {
 		if (paletteName == null) {
 			return null;
 		}
-		for (ViewPointPalette p : getPalettes()) {
+		for (DiagramPalette p : getPalettes()) {
 			if (paletteName.equals(p.getName())) {
 				return p;
 			}
@@ -635,30 +561,30 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		return null;
 	}
 
-	public void addToCalcPalettes(ViewPointPalette aPalette) {
+	public void addToPalettes(DiagramPalette aPalette) {
 		palettes.add(aPalette);
 		setChanged();
-		notifyObservers(new CalcPaletteInserted(aPalette, this));
+		notifyObservers(new DiagramPaletteInserted(aPalette, this));
 	}
 
-	public void removeFromCalcPalettes(ViewPointPalette aPalette) {
+	public void removeFromPalettes(DiagramPalette aPalette) {
 		palettes.remove(aPalette);
 		setChanged();
-		notifyObservers(new CalcPaletteRemoved(aPalette, this));
+		notifyObservers(new DiagramPaletteRemoved(aPalette, this));
 	}
 
-	public Vector<ExampleDrawingShema> getShemas() {
-		if (shemas == null) {
+	public Vector<ExampleDiagram> getExampleDiagrams() {
+		if (exampleDiagrams == null) {
 			findShemas(viewPointDirectory);
 		}
-		return shemas;
+		return exampleDiagrams;
 	}
 
-	public ExampleDrawingShema getShema(String shemaName) {
+	public ExampleDiagram getExampleDiagram(String shemaName) {
 		if (shemaName == null) {
 			return null;
 		}
-		for (ExampleDrawingShema s : getShemas()) {
+		for (ExampleDiagram s : getExampleDiagrams()) {
 			if (shemaName.equals(s.getName())) {
 				return s;
 			}
@@ -666,16 +592,16 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 		return null;
 	}
 
-	public void addToCalcShemas(ExampleDrawingShema aShema) {
-		shemas.add(aShema);
+	public void addToExampleDiagrams(ExampleDiagram aShema) {
+		exampleDiagrams.add(aShema);
 		setChanged();
-		notifyObservers(new CalcDrawingShemaInserted(aShema, this));
+		notifyObservers(new ExampleDiagramInserted(aShema, this));
 	}
 
-	public void removeFromCalcShemas(ExampleDrawingShema aShema) {
-		shemas.remove(aShema);
+	public void removeFromExampleDiagrams(ExampleDiagram aShema) {
+		exampleDiagrams.remove(aShema);
 		setChanged();
-		notifyObservers(new CalcDrawingShemaRemoved(aShema, this));
+		notifyObservers(new ExampleDiagramRemoved(aShema, this));
 	}
 
 	@Override
@@ -1112,6 +1038,125 @@ public class ViewPoint extends ViewPointObject implements ResourceData<ViewPoint
 			returned.add(modelSlot.getMetaModel());
 		}
 		return returned;
+	}
+
+	@Override
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getEditionPatterns(), getModelSlots(), getPalettes(),
+					getExampleDiagrams());
+		}
+		return validableObjects;
+	}
+
+	// Implementation of XMLStorageResourceData
+
+	@Override
+	public FlexoStorageResource<ViewPoint> getFlexoResource() {
+		return (FlexoStorageResource<ViewPoint>) getResource();
+	}
+
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		setResource((ViewPointResource) resource);
+	}
+
+	@Override
+	public ViewPointResource getResource() {
+		return resource;
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<ViewPoint> resource) {
+		this.resource = (ViewPointResource) resource;
+	}
+
+	@Override
+	public ViewPointResource getFlexoXMLFileResource() {
+		return getResource();
+	}
+
+	@Override
+	public void saveToFile(File aFile) {
+		FileOutputStream out = null;
+		try {
+			if (!aFile.getParentFile().exists()) {
+				aFile.getParentFile().mkdirs();
+			}
+			out = new FileOutputStream(aFile);
+			XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), out, getStringEncoder());
+			out.flush();
+		} catch (Exception e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		clearIsModified(true);
+	}
+
+	@Override
+	public void save() {
+		logger.info("Saving ViewPoint to " + xmlFile.getAbsolutePath() + "...");
+
+		// Following was used to debug (display purpose only)
+		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
+		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
+		try {
+			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
+		} catch (InvalidObjectSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateSerializationIdentifierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
+		 */
+
+		File dir = xmlFile.getParentFile();
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		File temporaryFile = null;
+		try {
+			makeLocalCopy();
+			temporaryFile = File.createTempFile("temp", ".xml", dir);
+			saveToFile(temporaryFile);
+			FileUtils.rename(temporaryFile, xmlFile);
+			clearIsModified(true);
+			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
+			if (temporaryFile != null) {
+				temporaryFile.delete();
+			}
+		}
+		clearIsModified(false);
+	}
+
+	private void makeLocalCopy() throws IOException {
+		if (xmlFile != null && xmlFile.exists()) {
+			String localCopyName = xmlFile.getName() + "~";
+			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
+			FileUtils.copyFileToFile(xmlFile, localCopy);
+		}
 	}
 
 }

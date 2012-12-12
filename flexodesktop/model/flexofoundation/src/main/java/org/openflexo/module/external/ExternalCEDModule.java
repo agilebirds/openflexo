@@ -21,8 +21,8 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 
 /**
  * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
@@ -31,9 +31,9 @@ import org.openflexo.foundation.viewpoint.ViewPointPalette;
  * @author yourname
  */
 public interface ExternalCEDModule extends ExternalModule {
-	public JComponent createScreenshotForShema(ExampleDrawingShema shema);
+	public JComponent createScreenshotForShema(ExampleDiagram shema);
 
-	public JComponent createScreenshotForPalette(ViewPointPalette palette);
+	public JComponent createScreenshotForPalette(DiagramPalette palette);
 
 	public float getScreenshotQuality();
 

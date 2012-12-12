@@ -21,25 +21,25 @@ package org.openflexo.vpm.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 
 class CalcDrawingShemaBrowser extends VPMBrowser {
-	private ExampleDrawingShema representedShema = null;
+	private ExampleDiagram representedShema = null;
 
 	protected CalcDrawingShemaBrowser(VPMController controller) {
 		super(controller);
 	}
 
-	protected ExampleDrawingShema getRepresentedShema() {
+	protected ExampleDiagram getRepresentedShema() {
 		return representedShema;
 	}
 
-	protected void setRepresentedShema(ExampleDrawingShema representedShema) {
+	protected void setRepresentedShema(ExampleDiagram representedShema) {
 		this.representedShema = representedShema;
 	}
 
 	@Override
-	public ExampleDrawingShema getDefaultRootObject() {
+	public ExampleDiagram getDefaultRootObject() {
 		return representedShema;
 	}
 

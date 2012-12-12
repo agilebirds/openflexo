@@ -45,17 +45,6 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return EditionActionType.DeclarePatternRole;
 	}
 
-	/*@Override
-	public List<PatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles();
-	}*/
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public boolean isAssignationRequired() {
 		return true;

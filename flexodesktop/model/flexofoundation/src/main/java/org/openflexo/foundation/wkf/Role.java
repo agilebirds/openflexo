@@ -22,6 +22,7 @@ package org.openflexo.foundation.wkf;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -732,5 +733,10 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 				return ((Role) o1).getIndex() - ((Role) o2).getIndex();
 			}
 		});
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 }

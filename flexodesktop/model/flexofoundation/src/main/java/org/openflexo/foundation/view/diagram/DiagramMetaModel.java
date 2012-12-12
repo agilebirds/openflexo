@@ -1,5 +1,6 @@
 package org.openflexo.foundation.view.diagram;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
@@ -30,6 +31,19 @@ public interface DiagramMetaModel extends FlexoMetaModel<DiagramMetaModel> {
 		public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 			// TODO
 			return null;
+		}
+
+		@Override
+		public FlexoResource<DiagramMetaModel> getResource() {
+			return null;
+		}
+
+		@Override
+		public void setResource(FlexoResource<DiagramMetaModel> resource) {
+		}
+
+		@Override
+		public void setIsModified() {
 		}
 	};
 }

@@ -24,9 +24,9 @@ import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
@@ -60,7 +60,7 @@ public class CalcView extends FIBModuleView<ViewPoint> implements FIBMouseClickL
 	public void mouseClicked(FIBComponentDynamicModel data, int clickCount) {
 		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).selected instanceof FlexoModelObject && clickCount == 2) {
 			FlexoModelObject o = (FlexoModelObject) ((FIBTableDynamicModel) data).selected;
-			if (o instanceof ViewPoint || o instanceof EditionPattern || o instanceof ExampleDrawingShema || o instanceof ViewPointPalette) {
+			if (o instanceof ViewPoint || o instanceof EditionPattern || o instanceof ExampleDiagram || o instanceof DiagramPalette) {
 				getFlexoController().selectAndFocusObject(o);
 			}
 		}

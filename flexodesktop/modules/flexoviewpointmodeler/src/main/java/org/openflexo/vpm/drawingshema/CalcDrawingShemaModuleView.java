@@ -26,11 +26,11 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDrawingShema> {
+public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDiagram> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
@@ -66,7 +66,7 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 	}
 
 	@Override
-	public ExampleDrawingShema getRepresentedObject() {
+	public ExampleDiagram getRepresentedObject() {
 		return _controller.getShema();
 	}
 

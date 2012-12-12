@@ -21,25 +21,25 @@ package org.openflexo.vpm.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 
 class CalcPaletteBrowser extends VPMBrowser {
-	private ViewPointPalette representedPalette = null;
+	private DiagramPalette representedPalette = null;
 
 	protected CalcPaletteBrowser(VPMController controller) {
 		super(controller);
 	}
 
-	protected ViewPointPalette getRepresentedPalette() {
+	protected DiagramPalette getRepresentedPalette() {
 		return representedPalette;
 	}
 
-	protected void setRepresentedPalette(ViewPointPalette representedPalette) {
+	protected void setRepresentedPalette(DiagramPalette representedPalette) {
 		this.representedPalette = representedPalette;
 	}
 
 	@Override
-	public ViewPointPalette getDefaultRootObject() {
+	public DiagramPalette getDefaultRootObject() {
 		return representedPalette;
 	}
 

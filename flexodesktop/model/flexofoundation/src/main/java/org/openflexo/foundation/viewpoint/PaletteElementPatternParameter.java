@@ -19,14 +19,16 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class PaletteElementPatternParameter extends ViewPointObject {
+public class PaletteElementPatternParameter extends NamedViewPointObject {
 
 	private EditionSchemeParameter _parameter;
-	private ViewPointPaletteElement _element;
-	private String name;
+	private DiagramPaletteElement _element;
 	private String value;
 
 	public PaletteElementPatternParameter(ViewPointBuilder builder) {
@@ -41,13 +43,13 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getURI() {
+		return null;
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public String getValue() {
@@ -66,12 +68,6 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 		this.value = value;
 	}
 
-	@Override
-	public String getInspectorName() {
-		// never inspected alone
-		return null;
-	}
-
 	public boolean isEditable() {
 		if (getParameter() != null) {
 			return !(getParameter() instanceof URIParameter) && !getParameter().getUsePaletteLabelAsDefaultValue();
@@ -87,11 +83,11 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 		return null;
 	}
 
-	public void setElement(ViewPointPaletteElement element) {
+	public void setElement(DiagramPaletteElement element) {
 		_element = element;
 	}
 
-	public ViewPointPaletteElement getElement() {
+	public DiagramPaletteElement getElement() {
 		return _element;
 	}
 

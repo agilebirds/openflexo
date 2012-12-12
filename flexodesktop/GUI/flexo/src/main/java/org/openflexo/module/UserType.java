@@ -29,9 +29,9 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -43,7 +43,7 @@ import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
  * 
  * @author sguerin
  */
-public abstract class UserType extends FlexoObject {
+public abstract class UserType extends KVCFlexoObject {
 
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
@@ -462,7 +462,6 @@ public abstract class UserType extends FlexoObject {
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.VE);
-			addModelItems(Inspectors.VPM);
 		}
 
 		@Override

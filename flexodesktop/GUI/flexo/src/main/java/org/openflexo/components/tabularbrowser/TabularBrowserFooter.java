@@ -45,7 +45,7 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ElementTypeBrowserFilter;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.icon.IconLibrary;
@@ -77,7 +77,7 @@ public class TabularBrowserFooter extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!hasMultiplePlusActions()) {
-					TabularBrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> plusPressed(e);
+					TabularBrowserFooter.this.<FlexoAction, FlexoObject, FlexoObject> plusPressed(e);
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
 				}
 			}
@@ -247,25 +247,25 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	protected void handleSelectionChanged() {
-		FlexoModelObject focusedObject = getFocusedObject();
-		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
+		FlexoObject focusedObject = getFocusedObject();
+		Vector<FlexoObject> globalSelection = buildGlobalSelection();
 		if (_tabularBrowserView.getEditor() == null) {
 			plusButton.setEnabled(false);
 			minusButton.setEnabled(false);
 		} else {
 			plusButton.setEnabled(focusedObject != null
-					&& this.<FlexoAction, FlexoModelObject, FlexoModelObject> getActionTypesWithAddType(focusedObject, globalSelection)
-							.size() > 0);
-			minusButton.setEnabled(focusedObject != null
-					&& this.<FlexoAction, FlexoModelObject, FlexoModelObject> getActionTypesWithDeleteType(focusedObject, globalSelection)
-							.size() > 0);
+					&& this.<FlexoAction, FlexoObject, FlexoObject> getActionTypesWithAddType(focusedObject, globalSelection).size() > 0);
+			minusButton
+					.setEnabled(focusedObject != null
+							&& this.<FlexoAction, FlexoObject, FlexoObject> getActionTypesWithDeleteType(focusedObject, globalSelection)
+									.size() > 0);
 		}
 		plusActionMenuNeedsRecomputed = true;
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
 		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
 			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
@@ -284,8 +284,8 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
 		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
 			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
@@ -311,12 +311,12 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void plusPressed(ActionEvent e) {
+	protected <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void plusPressed(ActionEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on plus");
 		}
-		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(),
-				(Vector<FlexoModelObject>) null).get(0);
+		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(), (Vector<FlexoObject>) null)
+				.get(0);
 		if (getEditor() != null) {
 			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
 		} else if (logger.isLoggable(Level.WARNING)) {
@@ -340,7 +340,7 @@ public class TabularBrowserFooter extends JPanel {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build plus menu");
 			}
-			for (final FlexoActionType<?, FlexoModelObject, FlexoModelObject> actionType : (List<FlexoActionType<?, FlexoModelObject, FlexoModelObject>>) getActionTypesWithAddType(
+			for (final FlexoActionType<?, FlexoObject, FlexoObject> actionType : (List<FlexoActionType<?, FlexoObject, FlexoObject>>) getActionTypesWithAddType(
 					getFocusedObject(), (Vector) null)) {
 				JMenuItem menuItem = new JMenuItem(actionType.getLocalizedName());
 				menuItem.addActionListener(new ActionListener() {
@@ -362,7 +362,7 @@ public class TabularBrowserFooter extends JPanel {
 		}
 		Vector globalSelection = buildGlobalSelection();
 
-		FlexoActionType<?, FlexoModelObject, FlexoModelObject> actionType = (FlexoActionType<?, FlexoModelObject, FlexoModelObject>) getActionTypesWithDeleteType(
+		FlexoActionType<?, FlexoObject, FlexoObject> actionType = (FlexoActionType<?, FlexoObject, FlexoObject>) getActionTypesWithDeleteType(
 				getFocusedObject(), globalSelection).get(0);
 		if (getEditor() != null) {
 			getEditor().performActionType(actionType, getFocusedObject(), globalSelection, e);
@@ -380,16 +380,16 @@ public class TabularBrowserFooter extends JPanel {
 	/**
 	 * Returns focused object, considering focused object is the last selected object. If none object are selected, return null.
 	 */
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return _tabularBrowserView.getSelectedObject();
 	}
 
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return buildGlobalSelection();
 	}
 
-	private Vector<FlexoModelObject> buildGlobalSelection() {
-		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+	private Vector<FlexoObject> buildGlobalSelection() {
+		Vector<FlexoObject> returned = new Vector<FlexoObject>();
 		returned.addAll(_tabularBrowserView.getSelectedObjects());
 		return returned;
 	}

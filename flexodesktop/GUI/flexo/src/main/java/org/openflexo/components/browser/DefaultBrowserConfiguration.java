@@ -20,7 +20,8 @@
 package org.openflexo.components.browser;
 
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
 public class DefaultBrowserConfiguration implements BrowserConfiguration {
@@ -29,10 +30,10 @@ public class DefaultBrowserConfiguration implements BrowserConfiguration {
 		public BrowserFilterStatus getVisibility(BrowserElementType elementType);
 	}
 
-	private FlexoModelObject _rootObject;
+	private FlexoObject _rootObject;
 	private ObjectVisibilityDelegate _visibilityDelegate;
 
-	public DefaultBrowserConfiguration(FlexoModelObject rootObject, ObjectVisibilityDelegate visibilityDelegate) {
+	public DefaultBrowserConfiguration(FlexoObject rootObject, ObjectVisibilityDelegate visibilityDelegate) {
 		_rootObject = rootObject;
 		_visibilityDelegate = visibilityDelegate;
 	}
@@ -50,18 +51,18 @@ public class DefaultBrowserConfiguration implements BrowserConfiguration {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		return _rootObject;
 	}
 
-	public void setDefaultRootObject(FlexoModelObject rootObject) {
+	public void setDefaultRootObject(FlexoObject rootObject) {
 		_rootObject = rootObject;
 	}
 
 	@Override
 	public FlexoProject getProject() {
-		if (_rootObject != null) {
-			return _rootObject.getProject();
+		if (_rootObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) _rootObject).getProject();
 		}
 		return null;
 	}

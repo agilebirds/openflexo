@@ -56,4 +56,5 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> implements 
 	public void setResourceData(RD resourceData) {
 		this.resourceData = resourceData;
 	}
+
 }

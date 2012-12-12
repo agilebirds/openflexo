@@ -162,7 +162,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	public FlexoTestCase(String name) {
 		super(name);
-		FlexoObject.initialize(false);
+		KVCFlexoObject.initialize(false);
 	}
 
 	public File getResource(String resourceRelativeName) {

@@ -28,6 +28,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
@@ -87,7 +88,7 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 	 * @param object
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (ignoreFiredSelectionEvents) {
 			return;
 		}
@@ -101,7 +102,7 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 	 * @param object
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (ignoreFiredSelectionEvents) {
 			return;
 		}

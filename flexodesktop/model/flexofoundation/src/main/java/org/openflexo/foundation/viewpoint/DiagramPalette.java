@@ -23,8 +23,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -32,9 +35,14 @@ import javax.swing.JComponent;
 import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
+import org.openflexo.foundation.rm.DiagramPaletteResource;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
@@ -50,29 +58,30 @@ import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class ViewPointPalette extends ViewPointObject implements Comparable<ViewPointPalette> {
+public class DiagramPalette extends NamedViewPointObject implements XMLStorageResourceData<DiagramPalette>, Comparable<DiagramPalette> {
 
-	static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(DiagramPalette.class.getPackage().getName());
 
 	private int index;
 
-	private String name;
-	private String description;
-	private Vector<ViewPointPaletteElement> _elements;
+	private Vector<DiagramPaletteElement> _elements;
 
 	private ViewPoint _viewPoint;
 
-	private File _paletteFile;
+	private File xmlFile;
 	private RelativePathFileConverter relativePathFileConverter;
+
+	private DiagramPaletteResource resource;
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentation.
 	private Object graphicalRepresentation;
 
-	public static ViewPointPalette instanciateCalcPalette(ViewPoint viewPoint, File paletteFile) {
+	public static DiagramPalette instanciateDiagramPalette(ViewPoint viewPoint, File paletteFile) {
 		if (paletteFile.exists()) {
 			FileInputStream inputStream = null;
 			try {
@@ -80,7 +89,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
 				ViewPointBuilder builder = new ViewPointBuilder(viewPoint.getViewPointLibrary(), viewPoint);
-				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, viewPoint.getViewPointLibrary()
+				DiagramPalette returned = (DiagramPalette) XMLDecoder.decodeObjectWithMapping(inputStream, viewPoint.getViewPointLibrary()
 						.get_VIEW_POINT_PALETTE_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));
 				logger.info("Loaded file " + paletteFile.getAbsolutePath());
@@ -130,8 +139,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		}
 	}
 
-	public static ViewPointPalette newCalcPalette(ViewPoint calc, File paletteFile, Object graphicalRepresentation) {
-		ViewPointPalette palette = new ViewPointPalette(null);
+	public static DiagramPalette newCalcPalette(ViewPoint calc, File paletteFile, Object graphicalRepresentation) {
+		DiagramPalette palette = new DiagramPalette(null);
 		palette.setIndex(calc.getPalettes().size());
 		palette.setGraphicalRepresentation(graphicalRepresentation);
 		palette.init(calc, paletteFile);
@@ -139,9 +148,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	// Used during deserialization, do not use it
-	public ViewPointPalette(ViewPointBuilder builder) {
+	public DiagramPalette(ViewPointBuilder builder) {
 		super(builder);
-		_elements = new Vector<ViewPointPaletteElement>();
+		_elements = new Vector<DiagramPaletteElement>();
 		if (builder != null) {
 			_viewPoint = builder.getViewPoint();
 		}
@@ -150,11 +159,11 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private boolean initialized = false;
 
 	private void init(ViewPoint calc, File paletteFile) {
-		if (StringUtils.isEmpty(name)) {
-			name = paletteFile.getName().substring(0, paletteFile.getName().length() - 8);
+		if (StringUtils.isEmpty(getName())) {
+			setName(paletteFile.getName().substring(0, paletteFile.getName().length() - 8));
 		}
 		_viewPoint = calc;
-		_paletteFile = paletteFile;
+		xmlFile = paletteFile;
 		logger.info("Registering calc palette for calc " + calc.getName());
 		relativePathFileConverter = new RelativePathFileConverter(calc.getViewPointDirectory());
 		tryToLoadScreenshotImage();
@@ -164,17 +173,22 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	@Override
 	public void delete() {
 		if (getViewPoint() != null) {
-			getViewPoint().removeFromCalcPalettes(this);
+			getViewPoint().removeFromPalettes(this);
 		}
-		logger.info("Deleting file " + _paletteFile);
-		_paletteFile.delete();
+		logger.info("Deleting file " + xmlFile);
+		xmlFile.delete();
 		super.delete();
 		deleteObservers();
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "calc_palette";
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return getElements();
 	}
 
 	@Override
@@ -191,26 +205,15 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) throws Exception {
+	public void setName(String name) {
 		super.setName(name);
-		if (_paletteFile != null && !_paletteFile.getName().startsWith(name)) {
-			FileUtils.rename(_paletteFile, new File(_paletteFile.getParentFile(), name + ".palette"));
+		if (xmlFile != null && !xmlFile.getName().startsWith(name)) {
+			try {
+				FileUtils.rename(xmlFile, new File(xmlFile.getParentFile(), name + ".palette"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	@Override
@@ -223,27 +226,22 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		return getViewPoint().getViewPointLibrary();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_PALETTE_INSPECTOR;
-	}
-
-	public Vector<ViewPointPaletteElement> getElements() {
+	public Vector<DiagramPaletteElement> getElements() {
 		return _elements;
 	}
 
-	public void setElements(Vector<ViewPointPaletteElement> elements) {
+	public void setElements(Vector<DiagramPaletteElement> elements) {
 		_elements = elements;
 	}
 
-	public void addToElements(ViewPointPaletteElement obj) {
+	public void addToElements(DiagramPaletteElement obj) {
 		obj.setPalette(this);
 		_elements.add(obj);
 		setChanged();
 		notifyObservers(new CalcPaletteElementInserted(obj, this));
 	}
 
-	public boolean removeFromElements(ViewPointPaletteElement obj) {
+	public boolean removeFromElements(DiagramPaletteElement obj) {
 		obj.setPalette(null);
 		boolean returned = _elements.remove(obj);
 		setChanged();
@@ -274,47 +272,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		return encoder;
 	}
 
-	@Override
-	public void saveToFile(File aFile) {
-		super.saveToFile(aFile);
-		clearIsModified(true);
-	}
-
-	public void save() {
-		logger.info("Saving palette to " + _paletteFile.getAbsolutePath() + "...");
-
-		File dir = _paletteFile.getParentFile();
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		File temporaryFile = null;
-		try {
-			makeLocalCopy();
-			temporaryFile = File.createTempFile("temp", ".xml", dir);
-			saveToFile(temporaryFile);
-			FileUtils.rename(temporaryFile, _paletteFile);
-			clearIsModified(true);
-			buildAndSaveScreenshotImage();
-			logger.info("Saved palette to " + _paletteFile.getAbsolutePath() + ". Done.");
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.severe("Could not save palette to " + _paletteFile.getAbsolutePath());
-			if (temporaryFile != null) {
-				temporaryFile.delete();
-			}
-		}
-	}
-
-	private void makeLocalCopy() throws IOException {
-		if (_paletteFile != null && _paletteFile.exists()) {
-			String localCopyName = _paletteFile.getName() + "~";
-			File localCopy = new File(_paletteFile.getParentFile(), localCopyName);
-			FileUtils.copyFileToFile(_paletteFile, localCopy);
-		}
-	}
-
-	public ViewPointPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
-		ViewPointPaletteElement newElement = new ViewPointPaletteElement(null);
+	public DiagramPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
+		DiagramPaletteElement newElement = new DiagramPaletteElement(null);
 		newElement.setName(name);
 		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation<?>) graphicalRepresentation);
 		addToElements(newElement);
@@ -322,12 +281,12 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	@Override
-	public int compareTo(ViewPointPalette o) {
+	public int compareTo(DiagramPalette o) {
 		return index - o.index;
 	}
 
 	public File getPaletteFile() {
-		return _paletteFile;
+		return xmlFile;
 	}
 
 	private ScreenshotImage screenshotImage;
@@ -421,6 +380,117 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	@Override
 	public String getLanguageRepresentation() {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
+	// Implementation of XMLStorageResourceData
+
+	@Override
+	public FlexoStorageResource<DiagramPalette> getFlexoResource() {
+		return (FlexoStorageResource<DiagramPalette>) getResource();
+	}
+
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		setResource((DiagramPaletteResource) resource);
+	}
+
+	@Override
+	public DiagramPaletteResource getResource() {
+		return resource;
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<DiagramPalette> resource) {
+		this.resource = (DiagramPaletteResource) resource;
+	}
+
+	@Override
+	public DiagramPaletteResource getFlexoXMLFileResource() {
+		return getResource();
+	}
+
+	@Override
+	public void saveToFile(File aFile) {
+		FileOutputStream out = null;
+		try {
+			if (!aFile.getParentFile().exists()) {
+				aFile.getParentFile().mkdirs();
+			}
+			out = new FileOutputStream(aFile);
+			XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), out, getStringEncoder());
+			out.flush();
+		} catch (Exception e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		clearIsModified(true);
+	}
+
+	@Override
+	public void save() {
+		logger.info("Saving ExampleDiagram to " + xmlFile.getAbsolutePath() + "...");
+
+		// Following was used to debug (display purpose only)
+		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
+		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
+		try {
+			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
+		} catch (InvalidObjectSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateSerializationIdentifierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
+		 */
+
+		File dir = xmlFile.getParentFile();
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		File temporaryFile = null;
+		try {
+			makeLocalCopy();
+			temporaryFile = File.createTempFile("temp", ".xml", dir);
+			saveToFile(temporaryFile);
+			FileUtils.rename(temporaryFile, xmlFile);
+			clearIsModified(true);
+			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
+			if (temporaryFile != null) {
+				temporaryFile.delete();
+			}
+		}
+
+		clearIsModified(false);
+	}
+
+	private void makeLocalCopy() throws IOException {
+		if (xmlFile != null && xmlFile.exists()) {
+			String localCopyName = xmlFile.getName() + "~";
+			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
+			FileUtils.copyFileToFile(xmlFile, localCopy);
+		}
 	}
 
 }

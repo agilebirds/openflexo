@@ -47,7 +47,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 
 	protected String name;
 
-	public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoOEShemaLibraryResource slResource, FlexoProjectFile componentFile)
+	public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoViewLibraryResource slResource, FlexoProjectFile componentFile)
 			throws InvalidFileNameException {
 		this(aProject);
 		setName(aName);

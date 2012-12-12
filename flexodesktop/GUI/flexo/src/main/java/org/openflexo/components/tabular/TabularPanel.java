@@ -42,7 +42,7 @@ import javax.swing.table.TableColumn;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.inspector.InspectableObject;
@@ -65,7 +65,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	private JScrollPane scrollPane;
 
-	protected Vector<FlexoModelObject> _selectedObjects;
+	protected Vector<FlexoObject> _selectedObjects;
 	protected boolean _selectedObjectsNeedsRecomputing;
 
 	public TabularPanel(AbstractModel model, int visibleRowCount) {
@@ -88,7 +88,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		_table = new FlexoJTable(model);
 		// _table.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
 
-		_selectedObjects = new Vector<FlexoModelObject>();
+		_selectedObjects = new Vector<FlexoObject>();
 		_selectedObjectsNeedsRecomputing = false;
 
 		// _table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -230,7 +230,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	}
 
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < _model.getRowCount(); i++) {
@@ -247,7 +247,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		return getSelectedObjects().containsAll(objectList);
 	}
 
-	public boolean isSelected(FlexoModelObject object) {
+	public boolean isSelected(FlexoObject object) {
 		return getSelectedObjects().contains(object);
 	}
 
@@ -255,7 +255,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		return getSelectedObjects();
 	}
 
-	public FlexoModelObject getObject() {
+	public FlexoObject getObject() {
 		return _model.getModel();
 	}
 
@@ -332,7 +332,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	}
 
-	public void selectObject(FlexoModelObject object) {
+	public void selectObject(FlexoObject object) {
 		resetSelection();
 
 		if (isSelected(object) == false) {

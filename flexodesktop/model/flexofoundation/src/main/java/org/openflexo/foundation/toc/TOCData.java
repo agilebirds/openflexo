@@ -93,6 +93,16 @@ public class TOCData extends TOCObject implements XMLStorageResourceData<TOCData
 	}
 
 	@Override
+	public org.openflexo.foundation.resource.FlexoResource<TOCData> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<TOCData> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
+	@Override
 	public String getFullyQualifiedName() {
 		return "TOC-DATA";
 	}

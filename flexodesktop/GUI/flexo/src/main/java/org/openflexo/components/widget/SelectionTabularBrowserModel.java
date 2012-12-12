@@ -30,9 +30,9 @@ import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabular.model.CheckColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.widget.MultipleObjectSelector.ObjectSelectabilityDelegate;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
-class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBrowserModel {
+class SelectionTabularBrowserModel<E extends FlexoObject> extends TabularBrowserModel {
 	public static interface SelectionTabularBrowserModelSelectionListener {
 		public void notifySelectionChanged();
 	}
@@ -108,7 +108,7 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 			_hashSet.clear();
 			_selection.addAll(objects);
 			resetSelection();
-			for (FlexoModelObject o : objects) {
+			for (FlexoObject o : objects) {
 				addToSelected(o);
 				// focusOn(o);
 			}
@@ -183,7 +183,7 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		}
 
 		@Override
-		public boolean isCellEditableFor(FlexoModelObject object) {
+		public boolean isCellEditableFor(FlexoObject object) {
 			logger.info("isCellEditableFor " + object + " return " + isSelectable(object));
 			return isSelectable(object);
 		}
@@ -199,7 +199,7 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		}
 	}
 
-	protected boolean isSelectable(FlexoModelObject object) {
+	protected boolean isSelectable(FlexoObject object) {
 		try {
 			E castedObject = (E) object;
 			return _selectabilityDelegate.isSelectable(castedObject);

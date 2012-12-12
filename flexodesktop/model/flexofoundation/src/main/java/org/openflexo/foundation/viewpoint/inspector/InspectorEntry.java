@@ -20,12 +20,14 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -76,7 +78,6 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	}
 
 	private EditionPatternInspector inspector;
-	private String name;
 	private String label;
 	private boolean readOnly;
 
@@ -87,6 +88,16 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 		super(builder);
 	}
 
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
+
 	public Type getType() {
 		return getDefaultDataClass();
 	}
@@ -94,11 +105,6 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	public abstract Class getDefaultDataClass();
 
 	public abstract String getWidgetName();
-
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
 
 	@Override
 	public ViewPoint getViewPoint() {
@@ -132,7 +138,7 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	}
 
 	public void setLabel(String label) {
-		if (label != null && label.equals(name)) {
+		if (label != null && label.equals(getName())) {
 			return;
 		}
 		this.label = label;
@@ -144,16 +150,6 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	public int getIndex() {
 		return getInspector().getEntries().indexOf(this);
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public boolean getIsReadOnly() {

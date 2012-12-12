@@ -93,7 +93,7 @@ import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabular.model.HeightAdjustableColumn;
 import org.openflexo.components.tabular.model.RowHeightListener;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionListener;
 
 /**
@@ -119,14 +119,14 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	private JTreeTableMouseAdapter _mouseAdapter;
 	protected ListSelectionModel _listSelectionModel;
 
-	protected Vector<FlexoModelObject> _selectedObjects;
+	protected Vector<FlexoObject> _selectedObjects;
 	protected boolean _selectedObjectsNeedsRecomputing = true;
 
 	public JTreeTable(TabularBrowserModel treeTableModel) {
 		super();
 
 		_treeTableModel = treeTableModel;
-		_selectedObjects = new Vector<FlexoModelObject>();
+		_selectedObjects = new Vector<FlexoObject>();
 		// Create the tree. It will be used as a renderer and editor.
 		tree = new TreeTableCellRenderer(this, treeTableModel);
 
@@ -156,7 +156,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 				col.setMaxWidth(treeTableModel.getDefaultColumnSize(i));
 				col.setResizable(false);
 			}
-			((AbstractColumn<FlexoModelObject, FlexoModelObject>) treeTableModel.columnAt(i)).setModel(_modelAdapter);
+			((AbstractColumn<FlexoObject, FlexoObject>) treeTableModel.columnAt(i)).setModel(_modelAdapter);
 			if (treeTableModel.columnAt(i) instanceof TabularBrowserModel.TreeColumn) {
 				col.setCellRenderer(tree);
 				col.setCellEditor(new TreeTableCellEditor());
@@ -235,7 +235,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		return tree.getElementAt(row);
 	}
 
-	public FlexoModelObject getObjectAt(int row) {
+	public FlexoObject getObjectAt(int row) {
 		BrowserElement element = getElementAt(row);
 		if (element != null) {
 			return element.getObject();
@@ -243,7 +243,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		return null;
 	}
 
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < getRowCount(); i++) {
@@ -256,7 +256,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		return _selectedObjects;
 	}
 
-	public boolean isSelected(FlexoModelObject object) {
+	public boolean isSelected(FlexoObject object) {
 		return getSelectedObjects().contains(object);
 	}
 
@@ -269,7 +269,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JTreeTable fireObjectSelected() with " + object);
 		}
@@ -289,7 +289,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JTreeTable fireObjectDeselected() with " + object);
 		}
@@ -316,7 +316,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		_listSelectionModel.clearSelection();
 	}
 
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		// logger.warning("Implements me later !");
 		return true;
 	}

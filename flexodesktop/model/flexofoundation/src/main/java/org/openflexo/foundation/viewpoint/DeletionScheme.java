@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -36,11 +35,6 @@ public class DeletionScheme extends AbstractActionScheme {
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.DeletionScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.DELETION_SCHEME_INSPECTOR;
 	}
 
 }

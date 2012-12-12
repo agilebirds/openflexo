@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
@@ -29,18 +29,18 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class CalcDrawingShemaRemoved extends OEDataModification {
+public class ExampleDiagramRemoved extends OEDataModification {
 
 	private ViewPoint _parent;
 
-	public CalcDrawingShemaRemoved(ExampleDrawingShema shema, ViewPoint parent) {
+	public ExampleDiagramRemoved(ExampleDiagram shema, ViewPoint parent) {
 		super(shema, null);
 		_parent = parent;
 	}
 
 	@Override
-	public ExampleDrawingShema oldValue() {
-		return (ExampleDrawingShema) super.oldValue();
+	public ExampleDiagram oldValue() {
+		return (ExampleDiagram) super.oldValue();
 	}
 
 	public ViewPoint getParent() {

@@ -40,6 +40,10 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<dependency>
     		<groupId>sablecc</groupId>
     		<artifactId>sablecc</artifactId>
 		</dependency>

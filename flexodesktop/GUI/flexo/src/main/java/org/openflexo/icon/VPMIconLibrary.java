@@ -49,13 +49,15 @@ import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
@@ -66,10 +68,7 @@ import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
@@ -102,9 +101,9 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIcon FULL_HIERARCHY_MODE_ICON = new ImageIconResource("Icons/VPM/FullHierarchyViewMode.gif");
 
 	// Model icons
-	public static final ImageIconResource CALC_LIBRARY_ICON = new ImageIconResource("Icons/Model/VPM/ViewPointLibrary.png");
-	public static final ImageIconResource CALC_ICON = new ImageIconResource("Icons/Model/VPM/ViewPoint.png");
-	public static final ImageIconResource CALC_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/ViewPointPalette.png");
+	public static final ImageIconResource VIEWPOINT_LIBRARY_ICON = new ImageIconResource("Icons/Model/VPM/ViewPointLibrary.png");
+	public static final ImageIconResource VIEWPOINT_ICON = new ImageIconResource("Icons/Model/VPM/ViewPoint.png");
+	public static final ImageIconResource DIAGRAM_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/DiagramPalette.png");
 	public static final ImageIconResource EDITION_PATTERN_ICON = new ImageIconResource("Icons/Model/VPM/EditionPattern.png");
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
 	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
@@ -118,8 +117,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.png");
-	public static final ImageIconResource CALC_SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
-	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
+	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
+	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
 	public static final ImageIconResource DECLARE_PATTERN_ROLE_ICON = new ImageIconResource("Icons/Model/VPM/DeclarePatternRoleIcon.png");
 	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
 	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
@@ -144,15 +143,11 @@ public class VPMIconLibrary extends IconLibrary {
 		return null;
 	}
 
-	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
-		/*if (object instanceof ViewPointFolder) {
-			return FOLDER_ICON;
-		} else*/if (object instanceof ViewPointLibrary) {
-			return CALC_LIBRARY_ICON;
-		} else if (object instanceof ViewPointPalette) {
-			return CALC_PALETTE_ICON;
-		} else if (object instanceof ViewPointPaletteElement) {
-			return CALC_SHAPE_ICON;
+	public static ImageIcon iconForObject(ViewPointObject object) {
+		if (object instanceof DiagramPalette) {
+			return DIAGRAM_PALETTE_ICON;
+		} else if (object instanceof DiagramPaletteElement) {
+			return SHAPE_ICON;
 		} else if (object instanceof DataPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
@@ -167,11 +162,11 @@ public class VPMIconLibrary extends IconLibrary {
 				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
-		} else if (object instanceof ExampleDrawingConnector) {
-			return CALC_CONNECTOR_ICON;
-		} else if (object instanceof ExampleDrawingShape) {
-			return CALC_SHAPE_ICON;
-		} else if (object instanceof ExampleDrawingShema) {
+		} else if (object instanceof ExampleDiagramConnector) {
+			return CONNECTOR_ICON;
+		} else if (object instanceof ExampleDiagramShape) {
+			return SHAPE_ICON;
+		} else if (object instanceof ExampleDiagram) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
 			if (object instanceof AddClass) {
@@ -201,13 +196,13 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof AddEditionPattern) {
 				return EDITION_PATTERN_ICON;
 			} else if (object instanceof CloneShape) {
-				return IconFactory.getImageIcon(CALC_SHAPE_ICON, DUPLICATE);
+				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
-				return CALC_SHAPE_ICON;
+				return SHAPE_ICON;
 			} else if (object instanceof CloneConnector) {
-				return IconFactory.getImageIcon(CALC_CONNECTOR_ICON, DUPLICATE);
+				return IconFactory.getImageIcon(CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
-				return CALC_CONNECTOR_ICON;
+				return CONNECTOR_ICON;
 			} /*else if (object instanceof AddStatement) {
 				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
 				}*/else if (object instanceof DeclarePatternRole) {
@@ -246,7 +241,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof DeletionScheme) {
 			return DELETION_SCHEME_ICON;
 		} else if (object instanceof ViewPoint) {
-			return CALC_ICON;
+			return VIEWPOINT_ICON;
 		} else if (object instanceof PaletteElementPatternParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
 		} else if (object instanceof FlexoModelObjectPatternRole) {
@@ -273,9 +268,9 @@ public class VPMIconLibrary extends IconLibrary {
 				return null;
 			}
 		} else if (object instanceof ConnectorPatternRole) {
-			return CALC_CONNECTOR_ICON;
+			return CONNECTOR_ICON;
 		} else if (object instanceof ShapePatternRole) {
-			return CALC_SHAPE_ICON;
+			return SHAPE_ICON;
 		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionPatternPatternRole) {
@@ -296,7 +291,7 @@ public class VPMIconLibrary extends IconLibrary {
 	}
 
 	public static ImageIcon iconForObject(ViewPointResource object) {
-		return CALC_ICON;
+		return VIEWPOINT_ICON;
 	}
 
 }

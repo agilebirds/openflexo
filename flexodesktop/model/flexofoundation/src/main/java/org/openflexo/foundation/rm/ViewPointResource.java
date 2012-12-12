@@ -1,6 +1,6 @@
 package org.openflexo.foundation.rm;
 
-import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.annotations.Getter;
@@ -14,7 +14,7 @@ import org.openflexo.toolbox.FlexoVersion;
 @ModelEntity
 @ImplementationClass(ViewPointResourceImpl.class)
 @XMLElement
-public interface ViewPointResource extends FlexoFileResource<ViewPoint> {
+public interface ViewPointResource extends FlexoXMLFileResource<ViewPoint> {
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 	public static final String OPENFLEXO_VERSION = "openflexoVersion";

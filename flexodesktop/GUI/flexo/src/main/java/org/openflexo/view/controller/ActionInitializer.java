@@ -23,7 +23,7 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -38,7 +38,7 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 
-public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
+public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> {
 	private final ControllerActionInitializer _controllerActionInitializer;
 	private final FlexoActionType<A, T1, T2> _actionType;
 

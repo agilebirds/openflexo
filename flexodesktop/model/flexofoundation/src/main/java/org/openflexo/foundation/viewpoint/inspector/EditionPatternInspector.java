@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -47,8 +48,6 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
 
-	// private BindingModel _bindingModel;
-
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
 		EditionPatternInspector returned = new EditionPatternInspector(null);
 		returned.setInspectorTitle(ep.getName());
@@ -59,6 +58,16 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	public EditionPatternInspector(ViewPointBuilder builder) {
 		super(builder);
 		entries = new Vector<InspectorEntry>();
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<InspectorEntry> getEmbeddedValidableObjects() {
+		return entries;
 	}
 
 	@Override
@@ -82,12 +91,6 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		return getViewPoint().getViewPointLibrary();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
-
-	@Override
 	public String getInspectorTitle() {
 		return inspectorTitle;
 	}

@@ -20,7 +20,6 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -53,11 +52,6 @@ public class LinkScheme extends AbstractCreationScheme {
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.LinkScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.LINK_SCHEME_INSPECTOR;
 	}
 
 	public String _getFromTarget() {

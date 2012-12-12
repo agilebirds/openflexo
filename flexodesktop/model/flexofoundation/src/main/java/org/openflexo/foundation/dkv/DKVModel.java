@@ -20,6 +20,7 @@
 package org.openflexo.foundation.dkv;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -40,9 +41,11 @@ import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -378,6 +381,10 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVMod
 			return reply;
 		}
 
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return getDomains();
+		}
 	}
 
 	public class LanguageList extends DKVObject {
@@ -470,6 +477,10 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVMod
 			return reply;
 		}
 
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return getLanguages();
+		}
 	}
 
 	public static Logger getLogger() {
@@ -532,6 +543,16 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVMod
 		this.resource = (FlexoDKVResource) resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<DKVModel> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<DKVModel> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	/**
 	 * Overrides save
 	 * 
@@ -568,11 +589,8 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData<DKVMod
 	}
 
 	@Override
-	public Vector getAllEmbeddedValidableObjects() {
-		Vector answer = new Vector();
-		answer.addAll(getDomains());
-		answer.addAll(getLanguages());
-		return answer;
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return new ChainedCollection<DKVObject>(getDomains(), getLanguages());
 	}
 
 }

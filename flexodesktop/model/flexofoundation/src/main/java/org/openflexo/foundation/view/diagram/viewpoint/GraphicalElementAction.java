@@ -19,15 +19,18 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
+import org.openflexo.foundation.viewpoint.AbstractActionScheme.ActionSchemeBindingAttribute;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.AbstractActionScheme.ActionSchemeBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -45,6 +48,16 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	public GraphicalElementAction(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public GraphicalElementPatternRole getGraphicalElementPatternRole() {
@@ -90,11 +103,6 @@ public class GraphicalElementAction extends EditionPatternObject {
 	@Override
 	public BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
-	}
-
-	@Override
-	public String getInspectorName() {
-		return null;
 	}
 
 	@Override

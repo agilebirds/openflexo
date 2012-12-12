@@ -22,7 +22,7 @@ package org.openflexo.technologyadapter.emf.rm;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoResourceImpl;
+import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
@@ -35,7 +35,7 @@ import org.openflexo.toolbox.IProgress;
  * 
  * @author gbesancon
  */
-public abstract class EMFMetaModelResourceImpl extends FlexoResourceImpl<EMFMetaModel> implements EMFMetaModelResource {
+public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMFMetaModel> implements EMFMetaModelResource {
 
 	@Override
 	public EMFMetaModel getMetaModel() {

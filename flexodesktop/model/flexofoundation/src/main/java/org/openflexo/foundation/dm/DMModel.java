@@ -249,7 +249,8 @@ public class DMModel extends DMObject implements XMLStorageResourceData<DMModel>
 		dmTypeConverter = new DMTypeStringConverter(this);
 		project.getStringEncoder()._addConverter(dmTypeConverter);
 		cachedEntitiesForTypes = new CachedEntitiesForTypes();
-		_dmModel = this;		_project = project;
+		_dmModel = this;
+		_project = project;
 		entities = new Hashtable<String, DMEntity>();
 		repositories = new Hashtable<String, DMRepository>();
 		projectRepositories = new Vector<ProjectRepository>();
@@ -273,10 +274,10 @@ public class DMModel extends DMObject implements XMLStorageResourceData<DMModel>
 		diagrams = new Vector<ERDiagram>();
 		installEOGenerators();
 	}
-	
+
 	@Override
 	public FlexoProject getProject() {
-		if (getFlexoResource()!=null)
+		if (getFlexoResource() != null)
 			return getFlexoResource().getProject();
 		return _project;
 	}
@@ -580,6 +581,16 @@ public class DMModel extends DMObject implements XMLStorageResourceData<DMModel>
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoDMResource) resource;
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<DMModel> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<DMModel> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**

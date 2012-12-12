@@ -19,9 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -66,6 +68,16 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		super(builder);
 	}
 
+	@Override
+	public String getURI() {
+		return getEditionPattern().getURI() + "." + getPatternRoleName();
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
+
 	public ModelSlot<?, ?> getModelSlot() {
 		return modelSlot;
 	}
@@ -81,16 +93,6 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	@Override
 	public EditionPattern getEditionPattern() {
 		return _pattern;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	@Override
@@ -118,17 +120,6 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 			setChanged();
 			notifyObservers(new NameChanged(oldValue, patternRoleName));
 		}*/
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getType() == PatternRoleType.Shape) {
-			return Inspectors.VPM.SHAPE_PATTERN_ROLE_INSPECTOR;
-		} else if (getType() == PatternRoleType.Connector) {
-			return Inspectors.VPM.CONNECTOR_PATTERN_ROLE_INSPECTOR;
-		} else {
-			return Inspectors.VPM.PATTERN_ROLE_INSPECTOR;
-		}
 	}
 
 	@Override
@@ -174,4 +165,5 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 			return null;
 		}
 	}
+
 }

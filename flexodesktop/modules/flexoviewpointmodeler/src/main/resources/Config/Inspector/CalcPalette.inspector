@@ -1,4 +1,4 @@
-<inspector title = "Palette" inspectedClassName="org.openflexo.foundation.viewpoint.ViewPointPalette">
+<inspector title = "Palette" inspectedClassName="org.openflexo.foundation.viewpoint.DiagramPalette">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="index" label="index" widget="INTEGER" constraint="0"/>

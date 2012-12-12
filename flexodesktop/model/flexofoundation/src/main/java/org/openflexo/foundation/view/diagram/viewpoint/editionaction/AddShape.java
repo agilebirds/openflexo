@@ -29,7 +29,6 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -66,19 +65,6 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 		return EditionActionType.AddShape;
 	}
 
-	/*@Override
-	public List<ShapePatternRole> getAvailablePatternRoles() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getPatternRoles(ShapePatternRole.class);
-		} else
-			return null;
-	}*/
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_SHAPE_INSPECTOR;
-	}
-
 	public ViewObject getContainer(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
@@ -99,24 +85,6 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 		}
 		return null;
 	}
-
-	/*@Override
-	public ShapePatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}*/
-
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(ShapePatternRole patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
 
 	private ViewPointDataBinding container;
 

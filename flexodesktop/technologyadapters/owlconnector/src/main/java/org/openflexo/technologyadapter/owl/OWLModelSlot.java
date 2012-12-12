@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotImpl;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -25,7 +25,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRol
  * @author Luka Le Roux
  * 
  */
-public class OWLModelSlot extends FlexoOntologyModelSlotImpl<OWLOntology, OWLOntology> {
+public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
 

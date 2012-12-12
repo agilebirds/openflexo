@@ -68,8 +68,6 @@ public class Inspectors {
 
 	public static final VEInspectors VE = new VEInspectors();
 
-	public static final VPMInspectors VPM = new VPMInspectors();
-
 	public static final XXXInspectors XXX = new XXXInspectors();
 
 	/**
@@ -898,60 +896,6 @@ public class Inspectors {
 		public String OE_SHEMA_DEFINITION_INSPECTOR = "OEShemaDefinition.inspector";
 		public String OE_SHAPE_INSPECTOR = "OEShape.inspector";
 		public String OE_CONNECTOR_INSPECTOR = "OEConnector.inspector";
-
-	}
-
-	// ==========================================================================
-	// =============================== OE Inspectors ============================
-	// ==========================================================================
-
-	public static class VPMInspectors extends DefaultInspectorGroup {
-		@Override
-		public String getName() {
-			return "CED";
-		}
-
-		@Override
-		protected String getExpectedProjectName() {
-			return "FlexoCalcEditor";
-		}
-
-		public String CALC_LIBRARY_INSPECTOR = "CalcLibrary.inspector";
-
-		public String ONTOLOGY_CALC_INSPECTOR = "OntologyCalc.inspector";
-
-		public String CALC_PALETTE_INSPECTOR = "CalcPalette.inspector";
-		public String CALC_PALETTE_ELEMENT_INSPECTOR = "CalcPaletteElement.inspector";
-
-		public String EDITION_PATTERN_INSPECTOR = "EditionPattern.inspector";
-		public String PATTERN_ROLE_INSPECTOR = "PatternRole.inspector";
-		public String SHAPE_PATTERN_ROLE_INSPECTOR = "ShapePatternRole.inspector";
-		public String CONNECTOR_PATTERN_ROLE_INSPECTOR = "ConnectorPatternRole.inspector";
-
-		public String EDITION_PATTERN_PARAMETER_INSPECTOR = "EditableConceptParameter.inspector";
-
-		public String DROP_SCHEME_INSPECTOR = "DropScheme.inspector";
-		public String LINK_SCHEME_INSPECTOR = "LinkScheme.inspector";
-		public String ACTION_SCHEME_INSPECTOR = "ActionScheme.inspector";
-		public String NAVIGATION_SCHEME_INSPECTOR = "NavigationScheme.inspector";
-		public String DELETION_SCHEME_INSPECTOR = "DeletionScheme.inspector";
-		public String CREATION_SCHEME_INSPECTOR = "CreationScheme.inspector";
-
-		public String ADD_SHAPE_INSPECTOR = "AddShape.inspector";
-		public String ADD_CONNECTOR_INSPECTOR = "AddConnector.inspector";
-		public String ADD_SHEMA_INSPECTOR = "AddShema.inspector";
-		public String ADD_INDIVIDUAL_INSPECTOR = "AddIndividual.inspector";
-		public String ADD_CLASS_INSPECTOR = "AddClass.inspector";
-		public String DATA_PROPERTY_ASSERTION_INSPECTOR = "DataPropertyAssertion.inspector";
-		public String OBJECT_PROPERTY_ASSERTION_INSPECTOR = "ObjectPropertyAssertion.inspector";
-		public String ADD_OBJECT_PROPERTY_INSPECTOR = "AddObjectProperty.inspector";
-		public String ADD_IS_A_PROPERTY_INSPECTOR = "AddIsAProperty.inspector";
-		public String ADD_RESTRICTION_INSPECTOR = "AddRestriction.inspector";
-		public String GO_TO_OBJECT_INSPECTOR = "GoToObject.inspector";
-
-		public String CALC_DRAWING_SHEMA_INSPECTOR = "CalcDrawingShema.inspector";
-		public String CALC_DRAWING_SHAPE_INSPECTOR = "CalcDrawingShape.inspector";
-		public String CALC_DRAWING_CONNECTOR_INSPECTOR = "CalcDrawingConnector.inspector";
 
 	}
 

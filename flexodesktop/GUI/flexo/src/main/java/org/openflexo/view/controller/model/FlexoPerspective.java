@@ -22,7 +22,7 @@ package org.openflexo.view.controller.model;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.view.ModuleView;
@@ -86,11 +86,11 @@ public abstract class FlexoPerspective extends ControllerModelObject {
 
 	public abstract ImageIcon getSelectedIcon();
 
-	public abstract <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+	public abstract <O extends FlexoObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
 
-	public abstract boolean hasModuleViewForObject(FlexoModelObject object);
+	public abstract boolean hasModuleViewForObject(FlexoObject object);
 
-	public abstract FlexoModelObject getDefaultObject(FlexoModelObject proposedObject);
+	public abstract FlexoObject getDefaultObject(FlexoObject proposedObject);
 
 	public JComponent getHeader() {
 		return header;

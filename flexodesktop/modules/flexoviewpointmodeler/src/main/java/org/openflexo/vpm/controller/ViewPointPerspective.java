@@ -28,12 +28,14 @@ import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
+import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
@@ -54,21 +56,23 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 
-	private final CalcLibraryBrowser _browser;
+	// private final CalcLibraryBrowser _browser;
 	private final CalcBrowser calcBrowser;
 	private final CalcPaletteBrowser calcPaletteBrowser;
-	private final OntologyBrowser ontologyBrowser;
+	// private final OntologyBrowser ontologyBrowser;
 	private final CalcDrawingShemaBrowser calcDrawingShemaBrowser;
 
-	private final CEDBrowserView _browserView;
+	// private final CEDBrowserView _browserView;
 	private final CEDBrowserView calcBrowserView;
 	private final CEDBrowserView calcPaletteBrowserView;
-	private final CEDBrowserView ontologyBrowserView;
+	// private final CEDBrowserView ontologyBrowserView;
 	private final CEDBrowserView calcDrawingShemaBrowserView;
 
 	private final JLabel infoLabel;
 
 	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
+
+	private FIBViewPointLibraryBrowser viewPointLibraryBrowser = null;
 
 	/**
 	 * @param controller
@@ -78,7 +82,10 @@ public class ViewPointPerspective extends FlexoPerspective {
 	public ViewPointPerspective(VPMController controller) {
 		super("calc_perspective");
 		_controller = controller;
-		_browser = new CalcLibraryBrowser(controller);
+
+		viewPointLibraryBrowser = new FIBViewPointLibraryBrowser(controller.getViewPointLibrary(), controller);
+
+		/*_browser = new CalcLibraryBrowser(controller);
 		_browserView = new CEDBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
@@ -88,14 +95,21 @@ public class ViewPointPerspective extends FlexoPerspective {
 					// System.out.println(((OntologyCalc)object).getXMLRepresentation());
 				}
 			}
-		};
+		};*/
+		setTopLeftView(viewPointLibraryBrowser);
+
+		System.out.println("Les rc:" + controller.getApplicationContext().getResourceCenterService());
+		for (FlexoResourceCenter rc : controller.getApplicationContext().getResourceCenterService().getResourceCenters()) {
+			System.out.println("> " + rc);
+		}
+
 		calcBrowser = new CalcBrowser(controller);
 		calcBrowserView = new CEDBrowserView(calcBrowser, controller, SelectionPolicy.ForceSelection) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
-				if (object instanceof ViewPointPalette) {
-					focusOnPalette((ViewPointPalette) object);
+				if (object instanceof DiagramPalette) {
+					focusOnPalette((DiagramPalette) object);
 				} /*else if (object instanceof OWLMetaModel) {
 					focusOnOntology((OWLMetaModel) object);
 					}*/else if (object instanceof EditionPattern) {
@@ -106,7 +120,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			@Override
 			public void treeSingleClick(FlexoModelObject object) {
 				super.treeSingleClick(object);
-				if (!(object instanceof ViewPointPalette) /*&& !(object instanceof OWLMetaModel)*/) {
+				if (!(object instanceof DiagramPalette) /*&& !(object instanceof OWLMetaModel)*/) {
 					hideBottomBrowser();
 				}
 			}
@@ -118,11 +132,11 @@ public class ViewPointPerspective extends FlexoPerspective {
 		calcDrawingShemaBrowser = new CalcDrawingShemaBrowser(controller);
 		calcDrawingShemaBrowserView = new CEDBrowserView(calcDrawingShemaBrowser, controller, SelectionPolicy.ForceSelection);
 
-		ontologyBrowser = new OntologyBrowser(controller);
+		/*ontologyBrowser = new OntologyBrowser(controller);
 		ontologyBrowserView = new CEDBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
 		setTopLeftView(_browserView);
-		setMiddleLeftView(calcBrowserView);
-		infoLabel = new JLabel("Calc perspective");
+		setMiddleLeftView(calcBrowserView);*/
+		infoLabel = new JLabel("ViewPoint perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		setFooter(infoLabel);
 	}
@@ -133,26 +147,26 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	public void focusOnViewPoint(ViewPoint viewPoint) {
 		setBottomLeftView(null);
-		calcBrowser.deleteBrowserListener(_browserView);
+		// calcBrowser.deleteBrowserListener(_browserView);
 		calcBrowser.setRepresentedObject(viewPoint);
 		calcBrowser.update();
-		calcBrowser.addBrowserListener(_browserView);
+		// calcBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnPalette(ViewPointPalette palette) {
+	public void focusOnPalette(DiagramPalette palette) {
 		setBottomLeftView(calcPaletteBrowserView);
-		calcPaletteBrowser.deleteBrowserListener(_browserView);
+		// calcPaletteBrowser.deleteBrowserListener(_browserView);
 		calcPaletteBrowser.setRepresentedPalette(palette);
 		calcPaletteBrowser.update();
-		calcPaletteBrowser.addBrowserListener(_browserView);
+		// calcPaletteBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnShema(ExampleDrawingShema shema) {
+	public void focusOnShema(ExampleDiagram shema) {
 		setBottomLeftView(calcDrawingShemaBrowserView);
-		calcDrawingShemaBrowser.deleteBrowserListener(_browserView);
+		// calcDrawingShemaBrowser.deleteBrowserListener(_browserView);
 		calcDrawingShemaBrowser.setRepresentedShema(shema);
 		calcDrawingShemaBrowser.update();
-		calcDrawingShemaBrowser.addBrowserListener(_browserView);
+		// calcDrawingShemaBrowser.addBrowserListener(_browserView);
 	}
 
 	/*public void focusOnOntology(OWLMetaModel ontology) {
@@ -197,8 +211,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof ViewPointLibrary /*|| object instanceof ImportedOWLOntology*/|| object instanceof ViewPointPalette
-				|| object instanceof ExampleDrawingShema || object instanceof ViewPoint || object instanceof EditionPattern;
+		return object instanceof ViewPointLibrary /*|| object instanceof ImportedOWLOntology*/|| object instanceof DiagramPalette
+				|| object instanceof ExampleDiagram || object instanceof ViewPoint || object instanceof EditionPattern;
 	}
 
 	@Override
@@ -218,11 +232,11 @@ public class ViewPointPerspective extends FlexoPerspective {
 			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
-		if (object instanceof ViewPointPalette) {
-			return new CalcPaletteController(_controller, (ViewPointPalette) object, false).getModuleView();
+		if (object instanceof DiagramPalette) {
+			return new CalcPaletteController(_controller, (DiagramPalette) object, false).getModuleView();
 		}
-		if (object instanceof ExampleDrawingShema) {
-			return new CalcDrawingShemaController(_controller, (ExampleDrawingShema) object, false).getModuleView();
+		if (object instanceof ExampleDiagram) {
+			return new CalcDrawingShemaController(_controller, (ExampleDiagram) object, false).getModuleView();
 		}
 		return null;
 	}
@@ -244,11 +258,11 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object instanceof ViewPoint) {
 			return ((ViewPoint) object).getName();
 		}
-		if (object instanceof ViewPointPalette) {
-			return ((ViewPointPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";
+		if (object instanceof DiagramPalette) {
+			return ((DiagramPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";
 		}
-		if (object instanceof ExampleDrawingShema) {
-			return ((ExampleDrawingShema) object).getName() + " (" + FlexoLocalization.localizedForKey("example_diagram") + ")";
+		if (object instanceof ExampleDiagram) {
+			return ((ExampleDiagram) object).getName() + " (" + FlexoLocalization.localizedForKey("example_diagram") + ")";
 		}
 		if (object instanceof ViewPoint) {
 			return ((ViewPoint) object).getName();

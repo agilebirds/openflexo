@@ -22,7 +22,6 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -44,11 +43,6 @@ public class DataPropertyAssertion extends AbstractAssertion {
 
 	public void _setDataPropertyURI(String dataPropertyURI) {
 		this.dataPropertyURI = dataPropertyURI;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.DATA_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
 	public IFlexoOntologyStructuralProperty getOntologyProperty() {

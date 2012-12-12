@@ -22,7 +22,10 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		try {
 			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
 			factory.setImplementingClassForInterface(DefaultResourceCenterService.class, FlexoResourceCenterService.class);
-			return factory.newInstance(FlexoResourceCenterService.class);
+			DefaultResourceCenterService returned = (DefaultResourceCenterService) factory.newInstance(FlexoResourceCenterService.class);
+			returned.addToResourceCenters(returned.openFlexoResourceCenter);
+			returned.addToResourceCenters(returned.userResourceCenter);
+			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}
@@ -68,6 +71,7 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
 		userResourceCenter = new UserResourceCenter(new File(FileUtils.getDocumentDirectory(),
 				"FlexoUserResourceCenter/ResourceCenterData.xml"));
+
 	}
 
 	/*	@Override

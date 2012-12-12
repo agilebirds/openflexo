@@ -37,7 +37,7 @@ import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.ReindexViewElements;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.VEController;
@@ -47,7 +47,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	private VEController _controller;
 	private CommonPalette _commonPalette;
 	private VEShemaModuleView _moduleView;
-	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
+	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
 	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
 		super(new VEShemaRepresentation(shema, screenshotOnly), controller.getSelectionManager());
@@ -58,9 +58,9 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		registerPalette(_commonPalette);
 		activatePalette(_commonPalette);
 
-		_contextualPalettes = new Hashtable<ViewPointPalette, ContextualPalette>();
+		_contextualPalettes = new Hashtable<DiagramPalette, ContextualPalette>();
 		if (shema.getCalc() != null) {
-			for (ViewPointPalette palette : shema.getCalc().getPalettes()) {
+			for (DiagramPalette palette : shema.getCalc().getPalettes()) {
 				ContextualPalette contextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, contextualPalette);
 				registerPalette(contextualPalette);
@@ -129,14 +129,14 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 
 	private JTabbedPane paletteView;
 
-	private Vector<ViewPointPalette> orderedPalettes;
+	private Vector<DiagramPalette> orderedPalettes;
 
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
+			orderedPalettes = new Vector<DiagramPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
-			for (ViewPointPalette palette : orderedPalettes) {
+			for (DiagramPalette palette : orderedPalettes) {
 				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteViewInScrollPane());
 			}
 			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),

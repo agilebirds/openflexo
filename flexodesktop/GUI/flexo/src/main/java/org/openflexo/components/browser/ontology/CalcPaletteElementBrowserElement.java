@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.OverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement.OverridingGraphicalRepresentation;
 
 /**
  * Browser element representing the calc palette element
@@ -33,7 +33,7 @@ import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.OverridingGrap
  */
 public class CalcPaletteElementBrowserElement extends BrowserElement {
 
-	protected CalcPaletteElementBrowserElement(ViewPointPaletteElement element, ProjectBrowser browser, BrowserElement parent) {
+	protected CalcPaletteElementBrowserElement(DiagramPaletteElement element, ProjectBrowser browser, BrowserElement parent) {
 		super(element, BrowserElementType.ONTOLOGY_CALC_PALETTE_ELEMENT, browser, parent);
 	}
 
@@ -49,8 +49,8 @@ public class CalcPaletteElementBrowserElement extends BrowserElement {
 		return getPaletteElement().getName();
 	}
 
-	protected ViewPointPaletteElement getPaletteElement() {
-		return (ViewPointPaletteElement) getObject();
+	protected DiagramPaletteElement getPaletteElement() {
+		return (DiagramPaletteElement) getObject();
 	}
 
 }

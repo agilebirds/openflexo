@@ -60,6 +60,7 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 		}
 	}
 
+	@Override
 	public void setProject(FlexoProject project) {
 		this.project = project;
 	}

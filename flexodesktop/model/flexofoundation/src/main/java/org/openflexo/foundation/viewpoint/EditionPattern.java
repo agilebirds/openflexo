@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +32,6 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -52,6 +52,7 @@ import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -59,8 +60,6 @@ import org.openflexo.xmlcode.StringEncoder;
 public class EditionPattern extends EditionPatternObject implements StringConvertable<EditionPattern>, CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
-
-	private String name;
 
 	private Vector<PatternRole> patternRoles;
 	private Vector<EditionScheme> editionSchemes;
@@ -74,10 +73,18 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private EditionPattern parentEditionPattern = null;
 	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
 
+	/**
+	 * Stores a chained collections of objects which are involved in validation
+	 */
+	private ChainedCollection<ViewPointObject> validableObjects = null;
+
 	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return super.getDescription();
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
+			validableObjects.add(inspector);
+		}
+		return validableObjects;
 	}
 
 	public EditionPattern(ViewPointBuilder builder) {
@@ -114,17 +121,11 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public void setName(String name) {
 		if (name != null) {
 			// We prevent ',' so that we can use it as a delimiter in tags.
-			name = name.replace(",", "");
+			super.setName(name.replace(",", ""));
 		}
-		this.name = name;
 	}
 
 	public EditionScheme getEditionScheme(String editionSchemeName) {
@@ -626,11 +627,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	@Deprecated
 	public void setCalc(ViewPoint viewPoint) {
 		setViewPoint(viewPoint);
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.EDITION_PATTERN_INSPECTOR;
 	}
 
 	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {

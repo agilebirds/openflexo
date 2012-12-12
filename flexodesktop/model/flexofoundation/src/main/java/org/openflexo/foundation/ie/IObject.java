@@ -95,7 +95,6 @@ public interface IObject extends FlexoXMLSerializable, Validable {
 	 */
 	public abstract Vector<IObject> getEmbeddedIEObjects();
 
-	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects();
 
 	public Vector<FlexoModelObjectReference<?>> getReferencers();

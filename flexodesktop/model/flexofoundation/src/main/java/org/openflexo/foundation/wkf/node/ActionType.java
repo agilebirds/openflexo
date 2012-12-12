@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -39,7 +39,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class ActionType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
+public abstract class ActionType extends KVCFlexoObject implements StringConvertable, ChoiceList, Serializable {
 
 	private static final Logger logger = Logger.getLogger(ActionType.class.getPackage().getName());
 

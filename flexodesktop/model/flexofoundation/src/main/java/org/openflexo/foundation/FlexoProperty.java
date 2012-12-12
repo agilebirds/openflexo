@@ -19,15 +19,13 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoBuilder;
-import org.openflexo.inspector.InspectableObject;
 
-public class FlexoProperty extends FlexoModelObject implements InspectableObject {
+public class FlexoProperty extends FlexoObject {
 
-	private FlexoModelObject owner;
+	private FlexoObject owner;
 
 	private String name;
 	private String value;
@@ -40,12 +38,12 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 		this(builder.project);
 	}
 
-	public FlexoProperty(FlexoProject project) {
-		super(project);
+	public FlexoProperty() {
+		super();
 	}
 
-	public FlexoProperty(FlexoProject project, FlexoModelObject owner) {
-		this(project);
+	public FlexoProperty(FlexoObject owner) {
+		this();
 		this.owner = owner;
 	}
 
@@ -57,12 +55,10 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 		super.delete();
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 		setChanged();
@@ -79,17 +75,12 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 		notifyObservers(new DataModification("value", null, value));
 	}
 
-	public FlexoModelObject getOwner() {
+	public FlexoObject getOwner() {
 		return owner;
 	}
 
-	public void setOwner(FlexoModelObject owner) {
+	public void setOwner(FlexoObject owner) {
 		this.owner = owner;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "flexo_property";
 	}
 
 	@Override
@@ -97,17 +88,11 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
 	}
 
-	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner() != null) {
-			return getOwner().getXMLResourceData();
+		if (getOwner() instanceof FlexoModelObject) {
+			return ((FlexoModelObject) getOwner()).getXMLResourceData();
 		}
 		return null;
 	}
 
-	@Override
-	public String getInspectorName() {
-		// Never inspected on its own (always through the inspector of another model object)
-		return null;
-	}
 }

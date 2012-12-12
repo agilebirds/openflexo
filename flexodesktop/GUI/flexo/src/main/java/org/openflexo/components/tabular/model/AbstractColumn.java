@@ -28,7 +28,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.ColorCst;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
@@ -38,7 +38,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class AbstractColumn<D extends FlexoModelObject, T> {
+public abstract class AbstractColumn<D extends FlexoObject, T> {
 
 	private String _title;
 

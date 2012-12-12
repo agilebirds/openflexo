@@ -32,7 +32,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -71,9 +71,9 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 
 	public String newShemaName;
 	public String description;
-	public DrawingGraphicalRepresentation<ExampleDrawingShema> graphicalRepresentation;
+	public DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation;
 
-	private ExampleDrawingShema _newShema;
+	private ExampleDiagram _newShema;
 
 	CreateExampleDrawing(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -83,10 +83,10 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add calc shema");
 
-		_newShema = ExampleDrawingShema.newShema(getFocusedObject(), new File(getFocusedObject().getViewPointDirectory(), newShemaName
+		_newShema = ExampleDiagram.newShema(getFocusedObject(), new File(getFocusedObject().getViewPointDirectory(), newShemaName
 				+ ".shema"), graphicalRepresentation);
 		_newShema.setDescription(description);
-		getFocusedObject().addToCalcShemas(_newShema);
+		getFocusedObject().addToExampleDiagrams(_newShema);
 		_newShema.save();
 
 	}
@@ -98,7 +98,7 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 		return null;
 	}
 
-	public ExampleDrawingShema getNewShema() {
+	public ExampleDiagram getNewShema() {
 		return _newShema;
 	}
 
@@ -116,7 +116,7 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 		if (StringUtils.isEmpty(newShemaName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getShema(newShemaName) != null) {
+		} else if (getFocusedObject().getExampleDiagram(newShemaName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
 		} else {

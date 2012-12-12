@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
@@ -51,17 +52,17 @@ public class SuroundWithRepetition extends IEOperatorAction {
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public FlexoAction makeNewAction(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 			return new SuroundWithRepetition(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return object instanceof ITableRow;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
 			return isSelectionValid(sel(object, globalSelection));
 		}
 
@@ -74,7 +75,7 @@ public class SuroundWithRepetition extends IEOperatorAction {
 
 	private RepetitionOperator newRepetition;
 
-	SuroundWithRepetition(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	SuroundWithRepetition(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -1,5 +1,6 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -8,6 +9,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
@@ -55,6 +57,16 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 				}
 			}
 		};
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public GraphicalFeature<T, GR> getFeature() {
@@ -121,12 +133,6 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	@Override
 	public BindingModel getBindingModel() {
 		return getEditionPattern().getInspector().getBindingModel();
-	}
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

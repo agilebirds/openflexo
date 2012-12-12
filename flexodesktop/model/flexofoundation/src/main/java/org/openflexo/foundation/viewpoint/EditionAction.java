@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -108,6 +109,16 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		super(builder);
 	}
 
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
+
 	public abstract EditionActionType getEditionActionType();
 
 	@Override
@@ -122,16 +133,6 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 			return actionContainer.getEditionScheme();
 		}
 		return null;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	@Override

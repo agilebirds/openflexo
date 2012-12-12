@@ -22,10 +22,10 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -90,7 +90,7 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		this.viewPoint = viewPoint;
 	}
 
-	public ViewPointLibraryObject getRootObject() {
+	public FlexoObject getRootObject() {
 		if (getViewPoint() != null) {
 			return getViewPoint();
 		} else {

@@ -40,7 +40,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.inspector.InspectableObject;
@@ -135,7 +135,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		validate();
 
 	}
-	
+
 	public void delete() {
 		if (getSelectionModel() != null) {
 			getSelectionModel().removeListSelectionListener(this);
@@ -190,7 +190,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		return (BrowserElement) getTreeTable().getTree().getLastSelectedPathComponent();
 	}
 
-	public FlexoModelObject getSelectedObject() {
+	public FlexoObject getSelectedObject() {
 		if (getSelectedElement() != null) {
 			return getSelectedElement().getObject();
 		}
@@ -221,7 +221,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		return _model;
 	}
 
-	public void focusOn(FlexoModelObject object) {
+	public void focusOn(FlexoObject object) {
 		setSelectedObject(object);
 	}
 
@@ -233,15 +233,15 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		_treeTable.setPreferredScrollableViewportSize(new Dimension(_treeTable.getPreferredScrollableViewportSize().width, height));
 	}
 
-	public boolean isSelected(FlexoModelObject object) {
+	public boolean isSelected(FlexoObject object) {
 		return _treeTable.isSelected(object);
 	}
 
-	public Vector<FlexoModelObject> getObjects() {
+	public Vector<FlexoObject> getObjects() {
 		return getSelectedObjects();
 	}
 
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		return _treeTable.getSelectedObjects();
 	}
 
@@ -255,7 +255,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		_isSelected = b;
 	}
 
-	public FlexoModelObject getRootObject() {
+	public FlexoObject getRootObject() {
 		return _model.getRootObject();
 	}
 
@@ -307,11 +307,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	public void tableChanged(TableModelEvent e) {
 	}
 
-	public FlexoModelObject getObject() {
+	public FlexoObject getObject() {
 		return getRootObject();
 	}
 
-	public boolean isSelected(Vector<? extends FlexoModelObject> objectList) {
+	public boolean isSelected(Vector<? extends FlexoObject> objectList) {
 		return getSelectedObjects().containsAll(objectList);
 	}
 
@@ -340,7 +340,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getSelection() {
+	public Vector<FlexoObject> getSelection() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
 		}
@@ -357,7 +357,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void addToSelected(FlexoModelObject object) {
+	public void addToSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().addToSelected(object);
@@ -368,7 +368,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void removeFromSelected(FlexoModelObject object) {
+	public void removeFromSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().removeFromSelected(object);
@@ -379,12 +379,12 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+	public void addToSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().addToSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (FlexoModelObject next : objects) {
+			for (FlexoObject next : objects) {
 				fireObjectSelected(next);
 			}
 			fireEndMultipleSelection();
@@ -392,12 +392,12 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+	public void removeFromSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().removeFromSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (FlexoModelObject next : objects) {
+			for (FlexoObject next : objects) {
 				fireObjectDeselected(next);
 			}
 			fireEndMultipleSelection();
@@ -405,7 +405,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
@@ -414,7 +414,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		}
 	}
 
-	public void setSelectedObject(FlexoModelObject object) {
+	public void setSelectedObject(FlexoObject object) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().setSelectedObject(object);
 		} else {
@@ -424,12 +424,12 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		return _treeTable.mayRepresents(anObject);
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
 		}
@@ -437,7 +437,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			getSelectionModel().removeListSelectionListener(this);
 			_treeTable.fireObjectSelected(object);
@@ -452,7 +452,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			getSelectionModel().removeListSelectionListener(this);
 			_treeTable.fireObjectDeselected(object);
@@ -511,11 +511,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			int beginIndex = e.getFirstIndex();
 			int endIndex = e.getLastIndex();
 
-			Vector<FlexoModelObject> toBeRemovedFromSelection = new Vector<FlexoModelObject>();
-			Vector<FlexoModelObject> toBeAddedToSelection = new Vector<FlexoModelObject>();
+			Vector<FlexoObject> toBeRemovedFromSelection = new Vector<FlexoObject>();
+			Vector<FlexoObject> toBeAddedToSelection = new Vector<FlexoObject>();
 
 			for (int i = beginIndex; i <= endIndex; i++) {
-				FlexoModelObject object = _treeTable.getObjectAt(i);
+				FlexoObject object = _treeTable.getObjectAt(i);
 				if (getSelectionModel().isSelectedIndex(i) != getSelectionManager().selectionContains(object)) {
 					// logger.info("Selection status for object "+object+" at index "+i+" has changed");
 					if (getSelectionModel().isSelectedIndex(i)) {
@@ -528,11 +528,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 				}
 			}
 
-			for (FlexoModelObject next : toBeAddedToSelection) {
+			for (FlexoObject next : toBeAddedToSelection) {
 				getSelectionManager().addToSelected(next);
 			}
 
-			for (FlexoModelObject next : toBeRemovedFromSelection) {
+			for (FlexoObject next : toBeRemovedFromSelection) {
 				getSelectionManager().removeFromSelected(next);
 			}
 

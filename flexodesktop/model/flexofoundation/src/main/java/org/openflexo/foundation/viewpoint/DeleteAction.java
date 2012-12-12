@@ -48,12 +48,6 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 		return getEditionPattern().getPatternRoles();
 	}*/
 
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Object getDeclaredObject(EditionSchemeAction action) {
 		return getObject().getBindingValue(action);
 	}

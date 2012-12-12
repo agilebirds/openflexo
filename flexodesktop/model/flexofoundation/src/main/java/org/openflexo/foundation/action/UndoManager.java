@@ -28,7 +28,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public class UndoManager implements HasPropertyChangeSupport {
@@ -166,8 +166,8 @@ public class UndoManager implements HasPropertyChangeSupport {
 		action.getExecutionContext().saveExecutionContext(allActionsToTakeIntoAccount);
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenPerformed(
-			A action, boolean success) {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenPerformed(A action,
+			boolean success) {
 		if (success) {
 			if (!action.isEmbedded()) {
 				registerDoneAction(action);
@@ -175,12 +175,11 @@ public class UndoManager implements HasPropertyChangeSupport {
 		}
 	}
 
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeUndone(
-			A action) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionWillBeUndone(A action) {
 	}
 
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenUndone(
-			A action, boolean success) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenUndone(A action,
+			boolean success) {
 		List<FlexoAction<?, ?, ?>> allActionsToNotify = new Vector<FlexoAction<?, ?, ?>>();
 		allActionsToNotify.add(action);
 		int indexOfActionCurrentlyUndone = _actionHistory.indexOf(action);
@@ -193,29 +192,28 @@ public class UndoManager implements HasPropertyChangeSupport {
 			logger.fine("******* actionHasBeenUndone() for " + action + " notify actions: " + allActionsToNotify);
 		}
 
-		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().entrySet()) {
+		for (Map.Entry<String, FlexoObject> e : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().entrySet()) {
 			// Actions creating object are normally deleting those while undoing
-			FlexoModelObject deletedObject = e.getValue();
+			FlexoObject deletedObject = e.getValue();
 			for (FlexoAction<?, ?, ?> a : allActionsToNotify) {
 				a.getExecutionContext().notifyExternalObjectDeletedByAction(deletedObject, action, e.getKey(), false);
 			}
 		}
 
-		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().entrySet()) {
+		for (Map.Entry<String, FlexoObject> e : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().entrySet()) {
 			// Actions deleting object are normally recreating those while undoing
-			FlexoModelObject createdObject = e.getValue();
+			FlexoObject createdObject = e.getValue();
 			for (FlexoAction<?, ?, ?> a : allActionsToNotify) {
 				a.getExecutionContext().notifyExternalObjectCreatedByAction(createdObject, action, e.getKey(), false);
 			}
 		}
 	}
 
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeRedone(
-			A action) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionWillBeRedone(A action) {
 	}
 
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenRedone(
-			A action, boolean success) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenRedone(A action,
+			boolean success) {
 		List<FlexoAction<?, ?, ?>> allActionsToNotify = new Vector<FlexoAction<?, ?, ?>>();
 		allActionsToNotify.add(action);
 		int indexOfActionCurrentlyUndone = _actionHistory.indexOf(action);
@@ -224,17 +222,17 @@ public class UndoManager implements HasPropertyChangeSupport {
 			allActionsToNotify.add(actionToNotify);
 		}
 
-		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().entrySet()) {
+		for (Map.Entry<String, FlexoObject> e : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().entrySet()) {
 			// Actions creating object are normally recreated those while redoing
-			FlexoModelObject createdObject = e.getValue();
+			FlexoObject createdObject = e.getValue();
 			for (FlexoAction<?, ?, ?> a : allActionsToNotify) {
 				a.getExecutionContext().notifyExternalObjectCreatedByAction(createdObject, action, e.getKey(), true);
 			}
 		}
 
-		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().entrySet()) {
+		for (Map.Entry<String, FlexoObject> e : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().entrySet()) {
 			// Actions deleting object are normally redeleted those while redoing
-			FlexoModelObject deletedObject = e.getValue();
+			FlexoObject deletedObject = e.getValue();
 			for (FlexoAction<?, ?, ?> a : allActionsToNotify) {
 				a.getExecutionContext().notifyExternalObjectDeletedByAction(deletedObject, action, e.getKey(), true);
 			}

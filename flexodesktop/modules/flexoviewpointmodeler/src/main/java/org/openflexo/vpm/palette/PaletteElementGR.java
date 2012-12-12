@@ -29,12 +29,12 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPaletteElement> implements GraphicalFlexoObserver {
+public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPaletteElement> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PaletteElementGR.class.getPackage().getName());
@@ -46,7 +46,7 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public PaletteElementGR(ViewPointPaletteElement aShape, Drawing<?> aDrawing) {
+	public PaletteElementGR(DiagramPaletteElement aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
@@ -74,7 +74,7 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 		return (CalcPaletteRepresentation) super.getDrawing();
 	}
 
-	public ViewPointPaletteElement getCalcPaletteElement() {
+	public DiagramPaletteElement getCalcPaletteElement() {
 		return getDrawable();
 	}
 

@@ -20,7 +20,6 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -47,11 +46,6 @@ public class DropScheme extends AbstractCreationScheme {
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.DropScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.DROP_SCHEME_INSPECTOR;
 	}
 
 	public String _getTarget() {

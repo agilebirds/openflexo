@@ -125,6 +125,12 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	 */
 	public abstract Vector<? extends WKFObject> getAllEmbeddedWKFObjects();
 
+	@Override
+	public Collection<? extends WKFObject> getEmbeddedValidableObjects() {
+		// TODO : use a non-recursive method instead (or implement getEmbeddedValidableObject in every subclass)
+		return getAllEmbeddedWKFObjects();
+	}
+
 	public Vector<WKFObject> getAllRecursivelyEmbeddedWKFObjects() {
 		HashSet<WKFObject> returned = new HashSet<WKFObject>();
 		processToAdditionOfEmbedded(this, returned);

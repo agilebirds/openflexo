@@ -51,6 +51,7 @@ import org.openflexo.components.tabularbrowser.JTreeTable;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.ActionGroup;
 import org.openflexo.foundation.action.ActionMenu;
 import org.openflexo.foundation.action.FlexoAction;
@@ -103,7 +104,7 @@ public abstract class ContextualMenuManager {
 		if (e.getSource() instanceof Component) {
 			_invoker = (Component) e.getSource();
 			if (_isPopupTriggering) {
-				FlexoModelObject o = getFocusedObject(_invoker, e);
+				FlexoObject o = getFocusedObject(_invoker, e);
 				if (o == null) {
 					return;
 				}
@@ -191,8 +192,8 @@ public abstract class ContextualMenuManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
 		if (getEditor() == null) {
 			return returned;
@@ -214,8 +215,8 @@ public abstract class ContextualMenuManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
 		if (getEditor() == null) {
 			return returned;
@@ -274,7 +275,7 @@ public abstract class ContextualMenuManager {
 		return makePopupMenu(getFocusedObject(invoker, e), ALL);
 	}
 
-	public JPopupMenu makePopupMenu(FlexoModelObject focusedObject, MenuFilter filter) {
+	public JPopupMenu makePopupMenu(FlexoObject focusedObject, MenuFilter filter) {
 		if (focusedObject != null) {
 			ContextualMenu contextualMenu = new ContextualMenu();
 			for (FlexoActionType next : focusedObject.getActionList()) {
@@ -284,18 +285,20 @@ public abstract class ContextualMenuManager {
 					contextualMenu.putAction(next);
 				}
 			}
-			if (focusedObject.getEditionPatternReferences() != null) {
-				for (EditionPatternReference epr : focusedObject.getEditionPatternReferences()) {
-					if (epr != null && epr.getEditionPattern() != null && epr.getEditionPattern().hasActionScheme()) {
-						for (ActionScheme as : epr.getEditionPattern().getActionSchemes()) {
-							contextualMenu.putAction(new ActionSchemeActionType(as, epr));
+			if (focusedObject instanceof FlexoModelObject) {
+				if (((FlexoModelObject) focusedObject).getEditionPatternReferences() != null) {
+					for (EditionPatternReference epr : ((FlexoModelObject) focusedObject).getEditionPatternReferences()) {
+						if (epr != null && epr.getEditionPattern() != null && epr.getEditionPattern().hasActionScheme()) {
+							for (ActionScheme as : epr.getEditionPattern().getActionSchemes()) {
+								contextualMenu.putAction(new ActionSchemeActionType(as, epr));
+							}
 						}
 					}
-				}
-				for (EditionPatternReference epr : focusedObject.getEditionPatternReferences()) {
-					if (epr != null && epr.getEditionPattern() != null && epr.getEditionPattern().hasNavigationScheme()) {
-						for (NavigationScheme ns : epr.getEditionPattern().getNavigationSchemes()) {
-							contextualMenu.putAction(new NavigationSchemeActionType(ns, epr));
+					for (EditionPatternReference epr : ((FlexoModelObject) focusedObject).getEditionPatternReferences()) {
+						if (epr != null && epr.getEditionPattern() != null && epr.getEditionPattern().hasNavigationScheme()) {
+							for (NavigationScheme ns : epr.getEditionPattern().getNavigationSchemes()) {
+								contextualMenu.putAction(new NavigationSchemeActionType(ns, epr));
+							}
 						}
 					}
 				}
@@ -307,7 +310,7 @@ public abstract class ContextualMenuManager {
 		return _popupMenu;
 	}
 
-	public void showPopupMenuForObject(FlexoModelObject focusedObject, Component invoker, Point position) {
+	public void showPopupMenuForObject(FlexoObject focusedObject, Component invoker, Point position) {
 		_invoker = invoker;
 		if (focusedObject != null) {
 			makePopupMenu(focusedObject, ALL);
@@ -374,7 +377,7 @@ public abstract class ContextualMenuManager {
 			contextualMenuGroup.addSubMenu(subMenu);
 		}
 
-		public JPopupMenu makePopupMenu(FlexoModelObject focusedObject) {
+		public JPopupMenu makePopupMenu(FlexoObject focusedObject) {
 
 			boolean addSeparator = false;
 			JPopupMenu returned = new JPopupMenu();
@@ -438,7 +441,7 @@ public abstract class ContextualMenuManager {
 			return _actionMenu;
 		}
 
-		public JMenu makeMenu(FlexoModelObject focusedObject) {
+		public JMenu makeMenu(FlexoObject focusedObject) {
 			boolean addSeparator = false;
 			JMenu returned = new JMenu();
 			returned.setText(getActionMenu().getLocalizedName());
@@ -467,12 +470,12 @@ public abstract class ContextualMenuManager {
 		public boolean acceptActionType(FlexoActionType<?, ?, ?> actionType);
 	}
 
-	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
-			FlexoActionType<A, T1, T2> actionType, FlexoModelObject focusedObject, JPopupMenu menu) {
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> JMenuItem makeMenuItem(
+			FlexoActionType<A, T1, T2> actionType, FlexoObject focusedObject, JPopupMenu menu) {
 		try {
 			Vector<T2> globalSelection = new Vector<T2>();
 			if (_selectionManager != null) {
-				for (FlexoModelObject o : _selectionManager.getSelection()) {
+				for (FlexoObject o : _selectionManager.getSelection()) {
 					try {
 						globalSelection.add((T2) o);
 					} catch (ClassCastException e) {
@@ -501,7 +504,7 @@ public abstract class ContextualMenuManager {
 		}
 	}
 
-	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
+	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> JMenuItem makeMenuItem(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, JMenu menu) {
 		try {
 			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, focusedObject,
@@ -531,7 +534,7 @@ public abstract class ContextualMenuManager {
 		return _isPopupMenuDisplayed;
 	}
 
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		// Try to handle TabularBrowserView
 		if (e.getSource() instanceof JTreeTable) {
 			Component c = (Component) e.getSource();

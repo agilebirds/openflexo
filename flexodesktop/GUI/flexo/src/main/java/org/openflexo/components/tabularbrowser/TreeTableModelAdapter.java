@@ -69,7 +69,7 @@ import javax.swing.tree.TreePath;
 
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.tabular.model.AbstractModel;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.logging.FlexoLogger;
 
@@ -83,13 +83,13 @@ import org.openflexo.logging.FlexoLogger;
  * @author Scott Violet
  * @author Sylvain Guerin
  */
-public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, FlexoModelObject> {
+public class TreeTableModelAdapter extends AbstractModel<FlexoObject, FlexoObject> {
 
 	private static final Logger logger = FlexoLogger.getLogger(TreeTableModelAdapter.class.getPackage().getName());
 	private JTree tree;
 	private TreeTableModel treeTableModel;
 
-	public TreeTableModelAdapter(FlexoModelObject modelObject, FlexoProject project, TreeTableModel treeTableModel, JTree tree) {
+	public TreeTableModelAdapter(FlexoObject modelObject, FlexoProject project, TreeTableModel treeTableModel, JTree tree) {
 		super(modelObject, project);
 		this.tree = tree;
 		this.treeTableModel = treeTableModel;
@@ -161,14 +161,14 @@ public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, Flexo
 	 * @see org.openflexo.components.tabular.model.AbstractModel#elementAt(int)
 	 */
 	@Override
-	public FlexoModelObject elementAt(int row) {
+	public FlexoObject elementAt(int row) {
 		Object o = nodeForRow(row);
 		if (o == null) {
 			return null;
 		} else if (o instanceof BrowserElement) {
 			return ((BrowserElement) o).getObject();
-		} else if (o instanceof FlexoModelObject) {
-			return (FlexoModelObject) o;
+		} else if (o instanceof FlexoObject) {
+			return (FlexoObject) o;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found object of type " + o.getClass().getName() + " while expecting BrowserElement");

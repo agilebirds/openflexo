@@ -1,4 +1,4 @@
-<inspector title = "Connector" inspectedClassName="org.openflexo.foundation.viewpoint.ExampleDrawingConnector">
+<inspector title = "Connector" inspectedClassName="org.openflexo.foundation.viewpoint.ExampleDiagramConnector">
 
 	<tab name="Connector" index="1" layout="DEFAULT">
 		<property name="graphicalRepresentation.text" label="text" widget="TEXT_FIELD" constraint="0">

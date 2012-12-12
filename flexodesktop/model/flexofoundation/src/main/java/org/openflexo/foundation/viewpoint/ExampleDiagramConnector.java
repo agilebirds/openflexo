@@ -22,22 +22,21 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ExampleDrawingConnector extends ExampleDrawingObject {
+public class ExampleDiagramConnector extends ExampleDiagramObject {
 
-	private static final Logger logger = Logger.getLogger(ExampleDrawingConnector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramConnector.class.getPackage().getName());
 
-	private ExampleDrawingShape startShape;
-	private ExampleDrawingShape endShape;
+	private ExampleDiagramShape startShape;
+	private ExampleDiagramShape endShape;
 
 	/**
 	 * Constructor invoked during deserialization
 	 * 
 	 * @param componentDefinition
 	 */
-	public ExampleDrawingConnector(ViewPointBuilder builder) {
+	public ExampleDiagramConnector(ViewPointBuilder builder) {
 		super(builder);
 	}
 
@@ -46,7 +45,7 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 	 * 
 	 * @param shemaDefinition
 	 */
-	public ExampleDrawingConnector(ExampleDrawingShape aStartShape, ExampleDrawingShape anEndShape) {
+	public ExampleDiagramConnector(ExampleDiagramShape aStartShape, ExampleDiagramShape anEndShape) {
 		super(null);
 		setStartShape(aStartShape);
 		setEndShape(anEndShape);
@@ -67,40 +66,30 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "calc_drawing_connector";
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_DRAWING_CONNECTOR_INSPECTOR;
-	}
-
-	public ExampleDrawingShape getEndShape() {
+	public ExampleDiagramShape getEndShape() {
 		return endShape;
 	}
 
-	public void setEndShape(ExampleDrawingShape endShape) {
+	public void setEndShape(ExampleDiagramShape endShape) {
 		this.endShape = endShape;
 		endShape.addToIncomingConnectors(this);
 	}
 
-	public ExampleDrawingShape getStartShape() {
+	public ExampleDiagramShape getStartShape() {
 		return startShape;
 	}
 
-	public void setStartShape(ExampleDrawingShape startShape) {
+	public void setStartShape(ExampleDiagramShape startShape) {
 		this.startShape = startShape;
 		startShape.addToOutgoingConnectors(this);
 	}
 
 	@Override
-	public boolean isContainedIn(ExampleDrawingObject o) {
+	public boolean isContainedIn(ExampleDiagramObject o) {
 		if (o == this) {
 			return true;
 		}

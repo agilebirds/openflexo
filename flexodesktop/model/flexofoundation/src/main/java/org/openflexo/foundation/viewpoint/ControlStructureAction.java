@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -51,11 +52,6 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 		for (EditionAction<?, ?, ?> action : getActions()) {
 			action.rebuildInferedBindingModel();
 		}
-	}
-
-	@Override
-	public String getInspectorName() {
-		return null;
 	}
 
 	@Override
@@ -306,4 +302,10 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	public final void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
 		// Not applicable for ControlStructureAction
 	};
+
+	@Override
+	public Collection<EditionAction<?, ?, ?>> getEmbeddedValidableObjects() {
+		return actions;
+	}
+
 }

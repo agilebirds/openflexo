@@ -19,10 +19,11 @@
  */
 package org.openflexo.foundation.dkv;
 
-import java.util.Vector;
+import java.util.Collection;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.inspector.InspectableObject;
 
@@ -144,7 +145,7 @@ public class Value extends DKVObject implements InspectableObject {
 	}
 
 	@Override
-	public Vector getAllEmbeddedValidableObjects() {
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		return null;
 	}
 

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVObject;
@@ -100,12 +101,12 @@ public class IEDelete extends FlexoUndoableAction<IEDelete, IEObject, IEObject> 
 		logger.info("DELETE on IE");
 		Vector<ComponentDefinition> components = new Vector<ComponentDefinition>();
 		Vector<FlexoComponentFolder> folders = new Vector<FlexoComponentFolder>();
-		Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject();
+		Vector<FlexoObject> v = getGlobalSelectionAndFocusedObject();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("IE Delete with " + v);
 		}
 
-		for (FlexoModelObject object : v) {
+		for (FlexoObject object : v) {
 			if (object instanceof ComponentDefinition) {
 				components.add((ComponentDefinition) object);
 			} else if (object instanceof FlexoComponentFolder) {
@@ -125,7 +126,7 @@ public class IEDelete extends FlexoUndoableAction<IEDelete, IEObject, IEObject> 
 				return;
 			}
 		}
-		for (FlexoModelObject object : v) {
+		for (FlexoObject object : v) {
 			if (object.isDeleted()) {
 				continue;
 			}

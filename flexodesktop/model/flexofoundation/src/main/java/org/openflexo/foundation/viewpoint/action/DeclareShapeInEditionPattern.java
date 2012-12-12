@@ -44,8 +44,8 @@ import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.FloatParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
@@ -63,36 +63,36 @@ import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<DeclareShapeInEditionPattern, ExampleDrawingShape> {
+public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<DeclareShapeInEditionPattern, ExampleDiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(DeclareShapeInEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<DeclareShapeInEditionPattern, ExampleDrawingShape, ExampleDrawingObject> actionType = new FlexoActionType<DeclareShapeInEditionPattern, ExampleDrawingShape, ExampleDrawingObject>(
+	public static FlexoActionType<DeclareShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject> actionType = new FlexoActionType<DeclareShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject>(
 			"declare_in_edition_pattern", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeclareShapeInEditionPattern makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection,
+		public DeclareShapeInEditionPattern makeNewAction(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
 				FlexoEditor editor) {
 			return new DeclareShapeInEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
 			return shape != null && shape.getViewPoint() != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeclareShapeInEditionPattern.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(DeclareShapeInEditionPattern.actionType, ExampleDiagramShape.class);
 	}
 
 	public static enum NewEditionPatternChoices {
@@ -114,7 +114,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
-	DeclareShapeInEditionPattern(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+	DeclareShapeInEditionPattern(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -157,7 +157,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
-							if (entry.graphicalObject instanceof ExampleDrawingShape) {
+							if (entry.graphicalObject instanceof ExampleDiagramShape) {
 								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								if (mainPropertyDescriptor != null && entry.isMainEntry()) {

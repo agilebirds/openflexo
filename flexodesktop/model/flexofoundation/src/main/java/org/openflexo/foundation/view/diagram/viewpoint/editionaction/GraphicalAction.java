@@ -71,17 +71,6 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		return EditionActionType.GraphicalAction;
 	}
 
-	/*@Override
-	public List<GraphicalElementPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(GraphicalElementPatternRole.class);
-	}*/
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Object getValue(EditionSchemeAction action) {
 		return getValue().getBindingValue(action);
 	}

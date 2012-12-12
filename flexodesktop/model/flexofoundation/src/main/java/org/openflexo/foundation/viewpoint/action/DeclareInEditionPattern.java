@@ -27,32 +27,32 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 
-public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1>, T1 extends ExampleDrawingObject> extends
-		FlexoAction<A, T1, ExampleDrawingObject> {
+public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1>, T1 extends ExampleDiagramObject> extends
+		FlexoAction<A, T1, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
 
 	private EditionPattern editionPattern;
 
-	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDrawingObject> actionType, T1 focusedObject,
-			Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
+			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1>.ExampleDrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
-		for (ExampleDrawingObject o : getFocusedObject().getDescendants()) {
-			if (o instanceof ExampleDrawingShape) {
-				ExampleDrawingShape shape = (ExampleDrawingShape) o;
+		for (ExampleDiagramObject o : getFocusedObject().getDescendants()) {
+			if (o instanceof ExampleDiagramShape) {
+				ExampleDiagramShape shape = (ExampleDiagramShape) o;
 				String shapeRoleName = "shape" + (shapeIndex > 1 ? shapeIndex : "");
 				drawingObjectEntries.add(new ExampleDrawingObjectEntry(shape, shapeRoleName));
 				shapeIndex++;
 			}
-			if (o instanceof ExampleDrawingConnector) {
-				ExampleDrawingConnector connector = (ExampleDrawingConnector) o;
+			if (o instanceof ExampleDiagramConnector) {
+				ExampleDiagramConnector connector = (ExampleDiagramConnector) o;
 				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
 				drawingObjectEntries.add(new ExampleDrawingObjectEntry(connector, connectorRoleName));
 				connectorIndex++;
@@ -87,10 +87,10 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public class ExampleDrawingObjectEntry {
 		private boolean selectThis;
-		public ExampleDrawingObject graphicalObject;
+		public ExampleDiagramObject graphicalObject;
 		public String patternRoleName;
 
-		public ExampleDrawingObjectEntry(ExampleDrawingObject graphicalObject, String patternRoleName) {
+		public ExampleDrawingObjectEntry(ExampleDiagramObject graphicalObject, String patternRoleName) {
 			super();
 			this.graphicalObject = graphicalObject;
 			this.patternRoleName = patternRoleName;
@@ -129,7 +129,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return returned;
 	}
 
-	public ExampleDrawingObjectEntry getEntry(ExampleDrawingObject o) {
+	public ExampleDrawingObjectEntry getEntry(ExampleDiagramObject o) {
 		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
 			if (e.graphicalObject == o) {
 				return e;

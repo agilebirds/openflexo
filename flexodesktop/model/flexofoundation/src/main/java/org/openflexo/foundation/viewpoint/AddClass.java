@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -44,6 +43,9 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	private String ontologyClassURI = null;
+
+	private ViewPointDataBinding className;
+	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
 
 	public AddClass(ViewPointBuilder builder) {
 		super(builder);
@@ -117,23 +119,6 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	public void _setOntologyClassURI(String ontologyClassURI) {
 		this.ontologyClassURI = ontologyClassURI;
 	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
-
-	private ViewPointDataBinding className;
-
-	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getClassNameBindingDefinition() {
 		return CLASS_NAME;

@@ -211,6 +211,11 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 	public abstract Vector<? extends DMObject> getEmbeddedDMObjects();
 
 	@Override
+	public Collection<? extends DMObject> getEmbeddedValidableObjects() {
+		return getEmbeddedDMObjects();
+	}
+
+	@Override
 	public void setChanged() {
 		super.setChanged(propagateModified);
 		if (propagateModified) {

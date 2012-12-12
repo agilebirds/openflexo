@@ -458,6 +458,16 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData<F
 		_resource = (FlexoWSLibraryResource) resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoWSLibrary> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoWSLibrary> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	public ExternalWSFolder getExternalWSFolder() {
 		return externalWSServiceList;
 	}

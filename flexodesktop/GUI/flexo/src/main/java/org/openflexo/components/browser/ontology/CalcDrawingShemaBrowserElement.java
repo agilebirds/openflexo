@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 
 /**
  * Browser element representing the calc palette
@@ -33,13 +33,13 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
  */
 public class CalcDrawingShemaBrowserElement extends BrowserElement {
 
-	protected CalcDrawingShemaBrowserElement(ExampleDrawingShema shema, ProjectBrowser browser, BrowserElement parent) {
+	protected CalcDrawingShemaBrowserElement(ExampleDiagram shema, ProjectBrowser browser, BrowserElement parent) {
 		super(shema, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHEMA, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		for (ExampleDrawingObject element : getShema().getChilds()) {
+		for (ExampleDiagramObject element : getShema().getChilds()) {
 			addToChilds(element);
 		}
 	}
@@ -49,8 +49,8 @@ public class CalcDrawingShemaBrowserElement extends BrowserElement {
 		return getShema().getName() + ".shema";
 	}
 
-	protected ExampleDrawingShema getShema() {
-		return (ExampleDrawingShema) getObject();
+	protected ExampleDiagram getShema() {
+		return (ExampleDiagram) getObject();
 	}
 
 }

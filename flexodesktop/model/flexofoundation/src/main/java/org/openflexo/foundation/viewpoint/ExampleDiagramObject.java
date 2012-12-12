@@ -19,13 +19,13 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
@@ -33,15 +33,13 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class ExampleDrawingObject extends ViewPointObject implements Bindable {
+public abstract class ExampleDiagramObject extends NamedViewPointObject implements Bindable {
 
-	private static final Logger logger = Logger.getLogger(ExampleDrawingObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramObject.class.getPackage().getName());
 
-	private String _name;
-	private ExampleDrawingObject parent = null;
-	private Vector<ExampleDrawingObject> childs;
+	private ExampleDiagramObject parent = null;
+	private Vector<ExampleDiagramObject> childs;
 
-	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
 	// For a CalcDrawingSchema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a CalcDrawingShape, graphicalRepresentation is a ShapeGraphicalRepresentation
@@ -56,22 +54,32 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public ExampleDrawingObject(ViewPointBuilder builder) {
+	public ExampleDiagramObject(ViewPointBuilder builder) {
 		super(builder);
-		childs = new Vector<ExampleDrawingObject>();
+		childs = new Vector<ExampleDiagramObject>();
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<ExampleDiagramObject> getEmbeddedValidableObjects() {
+		return getChilds();
 	}
 
 	@Override
 	public void delete() {
-		Vector<ExampleDrawingObject> toRemove = new Vector<ExampleDrawingObject>(childs);
-		for (ExampleDrawingObject o : toRemove) {
+		Vector<ExampleDiagramObject> toRemove = new Vector<ExampleDiagramObject>(childs);
+		for (ExampleDiagramObject o : toRemove) {
 			o.delete();
 		}
 		super.delete();
 		childs.clear();
 	}
 
-	public ExampleDrawingShema getShema() {
+	public ExampleDiagram getShema() {
 		if (getParent() != null) {
 			return getParent().getShema();
 		}
@@ -91,51 +99,36 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		return getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL();
 	}
 
-	@Override
-	public String getName() {
-		return _name;
-	}
-
-	@Override
-	public void setName(String name) {
-		if (requireChange(_name, name)) {
-			String oldName = _name;
-			_name = name;
-			setChanged();
-			notifyObservers(new NameChanged(oldName, name));
-		}
-	}
-
-	public Vector<ExampleDrawingObject> getChilds() {
+	public Vector<ExampleDiagramObject> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<ExampleDrawingObject> someChilds) {
+	public void setChilds(Vector<ExampleDiagramObject> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(ExampleDrawingObject aChild) {
+	public void addToChilds(ExampleDiagramObject aChild) {
 		// logger.info("****** addToChild() put "+aChild+" under "+this);
 		childs.add(aChild);
 		aChild.parent = this;
 		setChanged();
-		if (aChild instanceof ExampleDrawingShape) {
-			notifyObservers(new CalcDrawingShapeInserted((ExampleDrawingShape) aChild, this));
+		if (aChild instanceof ExampleDiagramShape) {
+			notifyObservers(new CalcDrawingShapeInserted((ExampleDiagramShape) aChild, this));
 		}
-		if (aChild instanceof ExampleDrawingConnector) {
-			notifyObservers(new CalcDrawingConnectorInserted((ExampleDrawingConnector) aChild, this));
+		if (aChild instanceof ExampleDiagramConnector) {
+			notifyObservers(new CalcDrawingConnectorInserted((ExampleDiagramConnector) aChild, this));
 		}
 	}
 
-	public void removeFromChilds(ExampleDrawingObject aChild) {
+	public void removeFromChilds(ExampleDiagramObject aChild) {
 		childs.remove(aChild);
 		aChild.parent = null;
 		setChanged();
-		if (aChild instanceof ExampleDrawingShape) {
-			notifyObservers(new CalcDrawingShapeRemoved((ExampleDrawingShape) aChild, this));
+		if (aChild instanceof ExampleDiagramShape) {
+			notifyObservers(new CalcDrawingShapeRemoved((ExampleDiagramShape) aChild, this));
 		}
-		if (aChild instanceof ExampleDrawingConnector) {
-			notifyObservers(new CalcDrawingConnectorRemoved((ExampleDrawingConnector) aChild, this));
+		if (aChild instanceof ExampleDiagramConnector) {
+			notifyObservers(new CalcDrawingConnectorRemoved((ExampleDiagramConnector) aChild, this));
 		}
 	}
 
@@ -148,17 +141,17 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		// setChanged();
 	}
 
-	private Vector<ExampleDrawingObject> ancestors;
-	private Vector<ExampleDrawingObject> descendants;
+	private Vector<ExampleDiagramObject> ancestors;
+	private Vector<ExampleDiagramObject> descendants;
 
-	public ExampleDrawingObject getParent() {
+	public ExampleDiagramObject getParent() {
 		return parent;
 	}
 
-	public Vector<ExampleDrawingObject> getAncestors() {
+	public Vector<ExampleDiagramObject> getAncestors() {
 		if (ancestors == null) {
-			ancestors = new Vector<ExampleDrawingObject>();
-			ExampleDrawingObject current = getParent();
+			ancestors = new Vector<ExampleDiagramObject>();
+			ExampleDiagramObject current = getParent();
 			while (current != null) {
 				ancestors.add(current);
 				current = current.getParent();
@@ -167,28 +160,28 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		return ancestors;
 	}
 
-	public Vector<ExampleDrawingObject> getDescendants() {
+	public Vector<ExampleDiagramObject> getDescendants() {
 		if (descendants == null) {
-			descendants = new Vector<ExampleDrawingObject>();
+			descendants = new Vector<ExampleDiagramObject>();
 			appendDescendants(this, descendants);
 		}
 		return descendants;
 	}
 
-	private void appendDescendants(ExampleDrawingObject current, Vector<ExampleDrawingObject> descendants) {
+	private void appendDescendants(ExampleDiagramObject current, Vector<ExampleDiagramObject> descendants) {
 		descendants.add(current);
-		for (ExampleDrawingObject child : current.getChilds()) {
+		for (ExampleDiagramObject child : current.getChilds()) {
 			if (child != current) {
 				appendDescendants(child, descendants);
 			}
 		}
 	}
 
-	public static ExampleDrawingObject getFirstCommonAncestor(ExampleDrawingObject child1, ExampleDrawingObject child2) {
-		Vector<ExampleDrawingObject> ancestors1 = child1.getAncestors();
-		Vector<ExampleDrawingObject> ancestors2 = child2.getAncestors();
+	public static ExampleDiagramObject getFirstCommonAncestor(ExampleDiagramObject child1, ExampleDiagramObject child2) {
+		Vector<ExampleDiagramObject> ancestors1 = child1.getAncestors();
+		Vector<ExampleDiagramObject> ancestors2 = child2.getAncestors();
 		for (int i = 0; i < ancestors1.size(); i++) {
-			ExampleDrawingObject o1 = ancestors1.elementAt(i);
+			ExampleDiagramObject o1 = ancestors1.elementAt(i);
 			if (ancestors2.contains(o1)) {
 				return o1;
 			}
@@ -204,9 +197,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		}
 	}
 
-	public abstract boolean isContainedIn(ExampleDrawingObject o);
+	public abstract boolean isContainedIn(ExampleDiagramObject o);
 
-	public final boolean contains(ExampleDrawingObject o) {
+	public final boolean contains(ExampleDiagramObject o) {
 		return o.isContainedIn(this);
 	}
 

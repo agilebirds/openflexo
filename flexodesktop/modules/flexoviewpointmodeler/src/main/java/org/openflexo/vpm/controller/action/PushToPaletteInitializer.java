@@ -106,7 +106,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_PALETTE_ICON;
+		return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
 	}
 
 }

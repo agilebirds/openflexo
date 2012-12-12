@@ -84,7 +84,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_ICON;
+		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
 	protected PaletteGR makePaletteGraphicalRepresentation() {

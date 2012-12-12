@@ -34,6 +34,7 @@ import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -61,7 +62,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
-public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceData<XMLRD>> extends FlexoStorageResource<XMLRD> {
+public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceData<XMLRD>> extends FlexoStorageResource<XMLRD> implements
+		FlexoXMLFileResource<XMLRD> {
 
 	private static final Logger logger = Logger.getLogger(FlexoXMLStorageResource.class.getPackage().getName());
 

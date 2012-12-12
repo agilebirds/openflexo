@@ -31,6 +31,7 @@ public interface StorageResourceData<RD extends StorageResourceData<RD>> extends
 	 * 
 	 * @return a FlexoResource instance
 	 */
+	// TODO: replace with getResource()
 	@Override
 	public FlexoStorageResource<RD> getFlexoResource();
 
@@ -44,6 +45,7 @@ public interface StorageResourceData<RD extends StorageResourceData<RD>> extends
 	/**
 	 * Sets the resource to be modified
 	 */
+	@Override
 	public void setIsModified();
 
 	/**

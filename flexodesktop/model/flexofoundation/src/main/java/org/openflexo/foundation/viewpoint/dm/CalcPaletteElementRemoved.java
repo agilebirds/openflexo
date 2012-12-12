@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 
 /**
  * Notify that a new element has been removed from palette
@@ -31,19 +31,19 @@ import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
  */
 public class CalcPaletteElementRemoved extends OEDataModification {
 
-	private ViewPointPalette _parent;
+	private DiagramPalette _parent;
 
-	public CalcPaletteElementRemoved(ViewPointPaletteElement element, ViewPointPalette parent) {
+	public CalcPaletteElementRemoved(DiagramPaletteElement element, DiagramPalette parent) {
 		super(element, null);
 		_parent = parent;
 	}
 
 	@Override
-	public ViewPointPaletteElement oldValue() {
-		return (ViewPointPaletteElement) super.oldValue();
+	public DiagramPaletteElement oldValue() {
+		return (DiagramPaletteElement) super.oldValue();
 	}
 
-	public ViewPointPalette getParent() {
+	public DiagramPalette getParent() {
 		return _parent;
 	}
 

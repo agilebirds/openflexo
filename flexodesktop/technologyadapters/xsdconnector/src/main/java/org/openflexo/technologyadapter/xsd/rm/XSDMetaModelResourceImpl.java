@@ -3,7 +3,7 @@ package org.openflexo.technologyadapter.xsd.rm;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoResourceImpl;
+import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
@@ -11,7 +11,7 @@ import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.toolbox.IProgress;
 
-public abstract class XSDMetaModelResourceImpl extends FlexoResourceImpl<XSDMetaModel> implements XSDMetaModelResource {
+public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSDMetaModel> implements XSDMetaModelResource {
 
 	@Override
 	public XSDMetaModel getMetaModel() {

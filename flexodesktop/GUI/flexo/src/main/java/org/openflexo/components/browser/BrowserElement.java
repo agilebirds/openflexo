@@ -35,9 +35,10 @@ import org.openflexo.AdvancedPrefs;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.SetPropertyAction;
@@ -72,7 +73,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	protected Vector<BrowserElement> _childs;
 
-	protected FlexoModelObject _object;
+	protected FlexoObject _object;
 
 	protected ProjectBrowser _browser;
 
@@ -83,7 +84,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	// ================================
 	// ==========================================================================
 
-	public BrowserElement(FlexoModelObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+	public BrowserElement(FlexoObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
 		super();
 		// System.out.println("build "+_id);
 		if (object == null) {
@@ -120,8 +121,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	protected FlexoProject getProject() {
-		if (_object != null) {
-			return _object.getProject();
+		if (_object instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) _object).getProject();
 		}
 		return null;
 	}
@@ -217,7 +218,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	// ==================================
 	// ==========================================================================
 
-	public FlexoModelObject getObject() {
+	public FlexoObject getObject() {
 		if (isDeleted) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Try to access a deleted BrowserElement !");
@@ -231,7 +232,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		return _object;
 	}
 
-	public FlexoModelObject getSelectableObject() {
+	public FlexoObject getSelectableObject() {
 		return getObject();
 	}
 
@@ -298,7 +299,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		_childs.remove(element);
 	}
 
-	protected void addToChilds(FlexoModelObject modelObject) {
+	protected void addToChilds(FlexoObject modelObject) {
 		// Check if any of declared filters matches element
 		if (!matchAnyCustomFilter(modelObject)) {
 			return;
@@ -329,7 +330,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		}
 	}
 
-	private boolean matchAnyCustomFilter(FlexoModelObject modelObject) {
+	private boolean matchAnyCustomFilter(FlexoObject modelObject) {
 		// If no filters defined, take object
 		if (_browser.getCustomFilters().size() == 0) {
 			return true;
@@ -450,7 +451,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		}
 		_browser.setIsRebuildingStructure();
 		try {
-			Vector<FlexoModelObject> expanded = _browser.getExpandedObjects();
+			Vector<FlexoObject> expanded = _browser.getExpandedObjects();
 			_browser.fireResetSelection();// Clears the selection in the JTree
 			recursiveDeleteChilds();
 			_childs = new Vector<BrowserElement>();
@@ -459,9 +460,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			_browser.updateSelection(); // Resynch this project browser with the Selection manager-->Jtree will then be resynched with this
 										// browser
 
-			Enumeration<FlexoModelObject> en1 = expanded.elements();
+			Enumeration<FlexoObject> en1 = expanded.elements();
 			while (en1.hasMoreElements()) {
-				FlexoModelObject o = en1.nextElement();
+				FlexoObject o = en1.nextElement();
 				_browser.expand(o, false);
 			}
 		} finally {
@@ -512,7 +513,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		return _childs.elements();
 	}
 
-	public boolean contains(FlexoModelObject object) {
+	public boolean contains(FlexoObject object) {
 		for (BrowserElement e : _childs) {
 			if (e.getObject() == object) {
 				return true;

@@ -29,7 +29,6 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -74,11 +73,6 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		}
 		return null;
 	}*/
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_CONNECTOR_INSPECTOR;
-	}
 
 	@Override
 	public ConnectorPatternRole getPatternRole() {

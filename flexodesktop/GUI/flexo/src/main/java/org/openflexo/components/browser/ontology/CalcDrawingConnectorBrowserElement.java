@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -35,13 +35,13 @@ import org.openflexo.toolbox.StringUtils;
  */
 public class CalcDrawingConnectorBrowserElement extends BrowserElement {
 
-	protected CalcDrawingConnectorBrowserElement(ExampleDrawingConnector connector, ProjectBrowser browser, BrowserElement parent) {
+	protected CalcDrawingConnectorBrowserElement(ExampleDiagramConnector connector, ProjectBrowser browser, BrowserElement parent) {
 		super(connector, BrowserElementType.ONTOLOGY_CALC_DRAWING_CONNECTOR, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		for (ExampleDrawingObject element : getConnector().getChilds()) {
+		for (ExampleDiagramObject element : getConnector().getChilds()) {
 			addToChilds(element);
 		}
 	}
@@ -54,8 +54,8 @@ public class CalcDrawingConnectorBrowserElement extends BrowserElement {
 		return getConnector().getName();
 	}
 
-	protected ExampleDrawingConnector getConnector() {
-		return (ExampleDrawingConnector) getObject();
+	protected ExampleDiagramConnector getConnector() {
+		return (ExampleDiagramConnector) getObject();
 	}
 
 }

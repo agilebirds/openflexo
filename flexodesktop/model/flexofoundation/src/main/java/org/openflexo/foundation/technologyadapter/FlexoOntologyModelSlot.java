@@ -1,12 +1,24 @@
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
- * <p>
- * A model slot is a named object providing symbolic access to a model in a technology conform to FlexoOntology layer
+ * Implementation of a ModelSlot in a technology conform to FlexoOntology layer
  * 
- * @author Luka Le Roux, Sylvain Guerin
  */
-public interface FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ModelSlot<M, MM> {
+public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ModelSlot<M, MM> {
+
+	private static final Logger logger = Logger.getLogger(FlexoOntologyModelSlot.class.getPackage().getName());
+
+	protected FlexoOntologyModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
+		super(viewPoint, technologyAdapter);
+	}
+
+	protected FlexoOntologyModelSlot(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 }

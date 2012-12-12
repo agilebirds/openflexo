@@ -20,27 +20,22 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
 
 /**
- * Notify that a new palette has been added
+ * Notify that a new shema has been added
  * 
  * @author sguerin
  * 
  */
-public class CalcPaletteInserted extends OEDataModification {
+public class ExampleDiagramInserted extends OEDataModification {
 
 	private ViewPoint _parent;
 
-	public CalcPaletteInserted(ViewPointPalette palette, ViewPoint parent) {
-		super(null, palette);
+	public ExampleDiagramInserted(ExampleDiagram shema, ViewPoint parent) {
+		super(null, shema);
 		_parent = parent;
-	}
-
-	@Override
-	public ViewPointPalette newValue() {
-		return (ViewPointPalette) super.newValue();
 	}
 
 	public ViewPoint getParent() {

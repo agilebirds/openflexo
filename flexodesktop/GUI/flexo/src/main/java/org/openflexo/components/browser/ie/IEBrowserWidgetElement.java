@@ -22,7 +22,6 @@ package org.openflexo.components.browser.ie;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 
 /**
@@ -35,7 +34,7 @@ public class IEBrowserWidgetElement extends IEElement {
 	 * @param browserElementType
 	 * @param browser
 	 */
-	public IEBrowserWidgetElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser,
+	public IEBrowserWidgetElement(IEBrowserWidget widget, BrowserElementType browserElementType, ProjectBrowser browser,
 			BrowserElement parent) {
 		super(widget, BrowserElementType.BROWSERWIDGET, browser, parent);
 	}

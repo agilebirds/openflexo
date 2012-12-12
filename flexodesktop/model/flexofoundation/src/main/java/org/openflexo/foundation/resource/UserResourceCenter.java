@@ -32,9 +32,11 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 
 	private ModelFactory modelFactory;
 	private Storage storage;
+	private File userResourceCenterStorageFile;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
-		super(userResourceCenterStorageFile);
+		super(userResourceCenterStorageFile.getParentFile());
+		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
 		try {
 			this.modelFactory = new ModelFactory(Storage.class);
 		} catch (ModelDefinitionException e1) {
@@ -54,7 +56,7 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 	}
 
 	public File getUserResourceCenterStorageFile() {
-		return getRootDirectory();
+		return userResourceCenterStorageFile;
 	}
 
 	@ModelEntity

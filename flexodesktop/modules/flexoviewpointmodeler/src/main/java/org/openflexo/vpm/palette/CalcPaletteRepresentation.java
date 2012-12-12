@@ -28,25 +28,25 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 
-public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> implements GraphicalFlexoObserver {
+public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CalcPaletteRepresentation.class.getPackage().getName());
 
 	private PaletteGR paletteGR;
 
-	private Hashtable<ViewPointPaletteElement, PaletteElementGR> paletteElementsGR;
+	private Hashtable<DiagramPaletteElement, PaletteElementGR> paletteElementsGR;
 
 	private Boolean ignoreNotifications = true;
 
 	private boolean readOnly = false;
 
-	public CalcPaletteRepresentation(ViewPointPalette aPalette, boolean readOnly) {
+	public CalcPaletteRepresentation(DiagramPalette aPalette, boolean readOnly) {
 		super(aPalette);
 
-		paletteElementsGR = new Hashtable<ViewPointPaletteElement, PaletteElementGR>();
+		paletteElementsGR = new Hashtable<DiagramPaletteElement, PaletteElementGR>();
 
 		this.readOnly = readOnly;
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
@@ -96,13 +96,13 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 		buildGraphicalObjectsHierarchyFor(getPalette());
 	}
 
-	private void buildGraphicalObjectsHierarchyFor(ViewPointPalette parent) {
-		for (ViewPointPaletteElement child : parent.getElements()) {
+	private void buildGraphicalObjectsHierarchyFor(DiagramPalette parent) {
+		for (DiagramPaletteElement child : parent.getElements()) {
 			addDrawable(child, parent);
 		}
 	}
 
-	public ViewPointPalette getPalette() {
+	public DiagramPalette getPalette() {
 		return getModel();
 	}
 
@@ -117,8 +117,8 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		if (aDrawable instanceof ViewPointPaletteElement) {
-			ViewPointPaletteElement element = (ViewPointPaletteElement) aDrawable;
+		if (aDrawable instanceof DiagramPaletteElement) {
+			DiagramPaletteElement element = (DiagramPaletteElement) aDrawable;
 			PaletteElementGR returned = paletteElementsGR.get(element);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(element);
@@ -131,7 +131,7 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 		return null;
 	}
 
-	private PaletteElementGR buildGraphicalRepresentation(ViewPointPaletteElement element) {
+	private PaletteElementGR buildGraphicalRepresentation(DiagramPaletteElement element) {
 		if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
 			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) element.getGraphicalRepresentation(),

@@ -47,7 +47,7 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.view.BrowserViewCellEditor;
 import org.openflexo.components.browser.view.BrowserViewCellRenderer;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Cell renderer for a JTreeTable
@@ -61,16 +61,16 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	private final JTreeTable _table;
 	protected int visibleRow;
 	protected Hashtable<Integer, BrowserElement> _elementsForRow;
-	protected Hashtable<FlexoModelObject, Integer> _rowForObjects;
-	protected Hashtable<FlexoModelObject, Integer> _heightForObjects;
+	protected Hashtable<FlexoObject, Integer> _rowForObjects;
+	protected Hashtable<FlexoObject, Integer> _heightForObjects;
 	private JTreeMouseEventPreprocessor _mouseEventPreprocessor;
 	protected boolean pointerOnTree = false;
 
 	public TreeTableCellRenderer(JTreeTable table, TreeModel model) {
 		super(model);
 		_elementsForRow = new Hashtable<Integer, BrowserElement>();
-		_rowForObjects = new Hashtable<FlexoModelObject, Integer>();
-		_heightForObjects = new Hashtable<FlexoModelObject, Integer>();
+		_rowForObjects = new Hashtable<FlexoObject, Integer>();
+		_heightForObjects = new Hashtable<FlexoObject, Integer>();
 		_table = table;
 		JTreeCellRenderer renderer = new JTreeCellRenderer();
 		setCellRenderer(renderer);
@@ -234,7 +234,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 		_table.repaint();*/
 	}
 
-	public void setRowHeightForObject(FlexoModelObject obj, int height) {
+	public void setRowHeightForObject(FlexoObject obj, int height) {
 		if (obj != null) {
 			_heightForObjects.put(obj, new Integer(height));
 		}
@@ -248,7 +248,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 		return getRowHeightForObject(getObjectAt(row));
 	}
 
-	public int getRowHeightForObject(FlexoModelObject object) {
+	public int getRowHeightForObject(FlexoObject object) {
 		if (object == null) {
 			return getRowHeight();
 		}
@@ -286,7 +286,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	public Rectangle getPathBounds(TreePath path) {
 		// logger.info("getPathBounds() called");
 		Rectangle returned = super.getPathBounds(path);
-		FlexoModelObject obj = ((BrowserElement) path.getLastPathComponent()).getObject();
+		FlexoObject obj = ((BrowserElement) path.getLastPathComponent()).getObject();
 		if (getRowHeightForObject(obj) != getRowHeight()) {
 			returned.height = getRowHeightForObject(obj);
 		}
@@ -343,7 +343,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 		return _elementsForRow.get(new Integer(row));
 	}
 
-	protected FlexoModelObject getObjectAt(int row) {
+	protected FlexoObject getObjectAt(int row) {
 		if (getElementAt(row) != null) {
 			return getElementAt(row).getObject();
 		}

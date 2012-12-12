@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -40,11 +39,6 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	public ObjectPropertyAssertion(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.OBJECT_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
 	public void _setObjectPropertyURI(String objectPropertyURI) {

@@ -97,6 +97,16 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	}
 
 	@Override
+	public org.openflexo.foundation.resource.FlexoResource<EOModelResourceData> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<EOModelResourceData> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
+	@Override
 	public FlexoProject getProject() {
 		return getFlexoResource().getProject();
 	}

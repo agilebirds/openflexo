@@ -4,15 +4,15 @@
 
 <model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
-  <entity name="org.openflexo.foundation.viewpoint.ViewPointPalette" xmlTag="Palette"> 
+  <entity name="org.openflexo.foundation.viewpoint.DiagramPalette" xmlTag="Palette"> 
     <property name="index" xmlTag="index" attribute="YES"/> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
-    <property name="elements" type="vector" contains="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" primary="yes"/>
+    <property name="elements" type="vector" contains="org.openflexo.foundation.viewpoint.DiagramPaletteElement" primary="yes"/>
    	<property name="graphicalRepresentation" contains="org.openflexo.fge.DrawingGraphicalRepresentation"/>
   </entity>
 
- <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" xmlTag="PaletteElement" contexts="Contained"> 
+ <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement" xmlTag="PaletteElement" contexts="Contained"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="editionPatternId" xmlTag="editionPattern" attribute="YES"/> 

@@ -23,9 +23,9 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 
 /**
  * Browser element representing the calc library
@@ -47,10 +47,10 @@ public class OntologyCalcElement extends BrowserElement {
 				addToChilds(ep);
 			}
 		}
-		for (ExampleDrawingShema shema : getCalc().getShemas()) {
+		for (ExampleDiagram shema : getCalc().getExampleDiagrams()) {
 			addToChilds(shema);
 		}
-		for (ViewPointPalette palette : getCalc().getPalettes()) {
+		for (DiagramPalette palette : getCalc().getPalettes()) {
 			addToChilds(palette);
 		}
 	}

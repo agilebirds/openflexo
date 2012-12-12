@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -36,34 +37,32 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibraryObject, ViewPointObject> {
+public class CreateViewPoint extends FlexoAction<CreateViewPoint, FlexoObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateViewPoint.class.getPackage().getName());
 
-	public static FlexoActionType<CreateViewPoint, ViewPointLibraryObject, ViewPointObject> actionType = new FlexoActionType<CreateViewPoint, ViewPointLibraryObject, ViewPointObject>(
+	public static FlexoActionType<CreateViewPoint, FlexoObject, ViewPointObject> actionType = new FlexoActionType<CreateViewPoint, FlexoObject, ViewPointObject>(
 			"create_view_point", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateViewPoint makeNewAction(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection,
-				FlexoEditor editor) {
+		public CreateViewPoint makeNewAction(FlexoObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new CreateViewPoint(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
@@ -80,6 +79,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 	public OntologicalScopeChoices ontologicalScopeChoice = OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY;
 
+	private ViewPointLibrary viewPointLibrary;
+
 	private String _newViewPointName;
 	private String _newViewPointURI;
 	private String _newViewPointDescription;
@@ -91,7 +92,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 	// private boolean createsOntology = false;
 
-	CreateViewPoint(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateViewPoint(FlexoObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -99,7 +100,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	protected void doAction(Object context) throws IOFlexoException {
 		logger.info("Create new viewpoint");
 
-		ViewPointLibrary viewPointLibrary = getFocusedObject().getViewPointLibrary();
+		ViewPointLibrary viewPointLibrary = getViewPointLibrary();
 
 		File newViewPointDir = getViewPointDir();
 
@@ -283,5 +284,20 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	public void removeFromImportedOntologies(IFlexoOntology ontology) {
 		System.out.println("remove ontology " + ontology);
 		importedOntologies.remove(ontology);
+	}
+
+	public ViewPointLibrary getViewPointLibrary() {
+		if (viewPointLibrary == null) {
+			if (getFocusedObject() instanceof ViewPointLibrary) {
+				return (ViewPointLibrary) getFocusedObject();
+			} else if (getFocusedObject() instanceof ViewPointObject) {
+				return ((ViewPointObject) getFocusedObject()).getViewPointLibrary();
+			}
+		}
+		return viewPointLibrary;
+	}
+
+	public void setViewPointLibrary(ViewPointLibrary viewPointLibrary) {
+		this.viewPointLibrary = viewPointLibrary;
 	}
 }

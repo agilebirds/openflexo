@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 
 /**
  * Notify that a new element has been removed from palette
@@ -31,14 +31,14 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
  */
 public class CalcDrawingShapeRemoved extends OEDataModification {
 
-	private ExampleDrawingObject _parent;
+	private ExampleDiagramObject _parent;
 
-	public CalcDrawingShapeRemoved(ExampleDrawingShape element, ExampleDrawingObject parent) {
+	public CalcDrawingShapeRemoved(ExampleDiagramShape element, ExampleDiagramObject parent) {
 		super(element, null);
 		_parent = parent;
 	}
 
-	public ExampleDrawingObject getParent() {
+	public ExampleDiagramObject getParent() {
 		return _parent;
 	}
 

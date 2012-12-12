@@ -104,6 +104,16 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoComponentLibrary> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoComponentLibrary> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
+	@Override
 	public IEObject getParent() {
 		return null;
 	}

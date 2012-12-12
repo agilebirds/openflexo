@@ -27,7 +27,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
@@ -40,7 +40,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class DMCardinality extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
+public abstract class DMCardinality extends KVCFlexoObject implements StringConvertable, ChoiceList, Serializable {
 
 	private static final Logger logger = Logger.getLogger(DMCardinality.class.getPackage().getName());
 

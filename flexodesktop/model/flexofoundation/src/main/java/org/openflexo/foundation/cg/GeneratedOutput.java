@@ -99,6 +99,16 @@ public abstract class GeneratedOutput<RD extends GeneratedOutput<RD>> extends CG
 		_resource = (FlexoGeneratedOutputResource) resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<RD> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<RD> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	/**
 	 * Save this object using ResourceManager scheme
 	 * 

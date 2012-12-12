@@ -26,13 +26,13 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ExampleDrawingShape extends ExampleDrawingObject {
+public class ExampleDiagramShape extends ExampleDiagramObject {
 
-	private static final Logger logger = Logger.getLogger(ExampleDrawingShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramShape.class.getPackage().getName());
 
 	// private String multilineText;
-	private Vector<ExampleDrawingConnector> incomingConnectors;
-	private Vector<ExampleDrawingConnector> outgoingConnectors;
+	private Vector<ExampleDiagramConnector> incomingConnectors;
+	private Vector<ExampleDiagramConnector> outgoingConnectors;
 
 	// private EditionPatternInstance editionPatternInstance;
 
@@ -41,10 +41,10 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ExampleDrawingShape(ViewPointBuilder builder) {
+	public ExampleDiagramShape(ViewPointBuilder builder) {
 		super(builder);
-		incomingConnectors = new Vector<ExampleDrawingConnector>();
-		outgoingConnectors = new Vector<ExampleDrawingConnector>();
+		incomingConnectors = new Vector<ExampleDiagramConnector>();
+		outgoingConnectors = new Vector<ExampleDiagramConnector>();
 	}
 
 	@Override
@@ -52,10 +52,10 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
-		for (ExampleDrawingConnector c : incomingConnectors) {
+		for (ExampleDiagramConnector c : incomingConnectors) {
 			c.delete();
 		}
-		for (ExampleDrawingConnector c : outgoingConnectors) {
+		for (ExampleDiagramConnector c : outgoingConnectors) {
 			c.delete();
 		}
 		super.delete();
@@ -68,54 +68,44 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "calc_drawing_shape";
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_DRAWING_SHAPE_INSPECTOR;
-	}
-
-	public Vector<ExampleDrawingConnector> getIncomingConnectors() {
+	public Vector<ExampleDiagramConnector> getIncomingConnectors() {
 		return incomingConnectors;
 	}
 
-	public void setIncomingConnectors(Vector<ExampleDrawingConnector> incomingConnectors) {
+	public void setIncomingConnectors(Vector<ExampleDiagramConnector> incomingConnectors) {
 		this.incomingConnectors = incomingConnectors;
 	}
 
-	public void addToIncomingConnectors(ExampleDrawingConnector connector) {
+	public void addToIncomingConnectors(ExampleDiagramConnector connector) {
 		incomingConnectors.add(connector);
 	}
 
-	public void removeFromIncomingConnectors(ExampleDrawingConnector connector) {
+	public void removeFromIncomingConnectors(ExampleDiagramConnector connector) {
 		incomingConnectors.remove(connector);
 	}
 
-	public Vector<ExampleDrawingConnector> getOutgoingConnectors() {
+	public Vector<ExampleDiagramConnector> getOutgoingConnectors() {
 		return outgoingConnectors;
 	}
 
-	public void setOutgoingConnectors(Vector<ExampleDrawingConnector> outgoingConnectors) {
+	public void setOutgoingConnectors(Vector<ExampleDiagramConnector> outgoingConnectors) {
 		this.outgoingConnectors = outgoingConnectors;
 	}
 
-	public void addToOutgoingConnectors(ExampleDrawingConnector connector) {
+	public void addToOutgoingConnectors(ExampleDiagramConnector connector) {
 		outgoingConnectors.add(connector);
 	}
 
-	public void removeFromOutgoingConnectors(ExampleDrawingConnector connector) {
+	public void removeFromOutgoingConnectors(ExampleDiagramConnector connector) {
 		outgoingConnectors.remove(connector);
 	}
 
 	@Override
-	public boolean isContainedIn(ExampleDrawingObject o) {
+	public boolean isContainedIn(ExampleDiagramObject o) {
 		if (o == this) {
 			return true;
 		}

@@ -169,6 +169,14 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		}
 	}
 
+	public void setFile(File file) {
+		try {
+			setResourceFile(new FlexoProjectFile(file, getProject().getProjectDirectory()));
+		} catch (InvalidFileNameException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public boolean isConnected() {
 		return getFile() != null && (resourceFile.getExternalRepository() == null || resourceFile.getExternalRepository().isConnected());
 	}

@@ -29,14 +29,15 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
@@ -53,9 +54,11 @@ import org.xml.sax.SAXException;
  * @author sylvain
  * 
  */
-public class ViewPointLibrary extends ViewPointLibraryObject implements FlexoService {
+public class ViewPointLibrary extends FlexoObject implements FlexoService, Validable {
 
 	private static final Logger logger = Logger.getLogger(ViewPointLibrary.class.getPackage().getName());
+
+	public static final ViewPointValidationModel VALIDATION_MODEL = new ViewPointValidationModel();
 
 	private final Hashtable<String, ViewPointResource> map;
 
@@ -113,6 +116,19 @@ public class ViewPointLibrary extends ViewPointLibraryObject implements FlexoSer
 	 */
 	public Collection<ViewPointResource> getViewPoints() {
 		return map.values();
+	}
+
+	/**
+	 * Return all loaded viewpoint in the current library
+	 */
+	public Collection<ViewPoint> getLoadedViewPoints() {
+		Vector<ViewPoint> returned = new Vector<ViewPoint>();
+		for (ViewPointResource vpRes : getViewPoints()) {
+			if (vpRes.isLoaded()) {
+				returned.add(vpRes.getViewPoint());
+			}
+		}
+		return returned;
 	}
 
 	/**
@@ -237,16 +253,6 @@ public class ViewPointLibrary extends ViewPointLibraryObject implements FlexoSer
 		return EXAMPLE_DRAWING_MODEL;
 	}
 
-	@Override
-	public ViewPointLibrary getViewPointLibrary() {
-		return this;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_LIBRARY_INSPECTOR;
-	}
-
 	public EditionPattern getEditionPattern(String editionPatternURI) {
 		if (editionPatternURI.indexOf("#") > -1) {
 			String viewPointURI = editionPatternURI.substring(0, editionPatternURI.indexOf("#"));
@@ -271,22 +277,9 @@ public class ViewPointLibrary extends ViewPointLibraryObject implements FlexoSer
 		return null;
 	}
 
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		Vector<Validable> returned = new Vector<Validable>();
-		returned.add(this);
-		for (ViewPointResource vpRes : getViewPoints()) {
-			if (vpRes.isLoaded()) {
-				returned.addAll(vpRes.getViewPoint().getAllEmbeddedValidableObjects());
-			}
-		}
-
-		return returned;
+	public Collection<ViewPoint> getEmbeddedValidableObjects() {
+		return getLoadedViewPoints();
 	}
 
 	@Override
@@ -323,4 +316,10 @@ public class ViewPointLibrary extends ViewPointLibraryObject implements FlexoSer
 			}
 		}
 	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		return VALIDATION_MODEL;
+	}
+
 }

@@ -36,9 +36,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.dm.SLShemaCreated;
-import org.openflexo.foundation.rm.FlexoOEShemaLibraryResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoViewLibraryResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
@@ -60,7 +60,7 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 
-	private FlexoOEShemaLibraryResource _resource;
+	private FlexoViewLibraryResource _resource;
 
 	private String name;
 
@@ -84,13 +84,23 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	}
 
 	@Override
-	public FlexoOEShemaLibraryResource getFlexoResource() {
+	public FlexoViewLibraryResource getFlexoResource() {
 		return _resource;
 	}
 
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<ViewLibrary> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<ViewLibrary> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**
@@ -106,15 +116,15 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 		File compFile = ProjectRestructuration.getExpectedShemaLibFile(project);
 		FlexoProjectFile shemaLibFile = new FlexoProjectFile(compFile, project);
-		FlexoOEShemaLibraryResource slRes;
+		FlexoViewLibraryResource slRes;
 		try {
-			slRes = new FlexoOEShemaLibraryResource(project, newLibrary, shemaLibFile);
+			slRes = new FlexoViewLibraryResource(project, newLibrary, shemaLibFile);
 		} catch (InvalidFileNameException e2) {
 			e2.printStackTrace();
 			shemaLibFile = new FlexoProjectFile("ShemaLibrary");
 			shemaLibFile.setProject(project);
 			try {
-				slRes = new FlexoOEShemaLibraryResource(project, newLibrary, shemaLibFile);
+				slRes = new FlexoViewLibraryResource(project, newLibrary, shemaLibFile);
 			} catch (InvalidFileNameException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create shema library.");
@@ -150,7 +160,7 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
-		_resource = (FlexoOEShemaLibraryResource) resource;
+		_resource = (FlexoViewLibraryResource) resource;
 	}
 
 	@Override

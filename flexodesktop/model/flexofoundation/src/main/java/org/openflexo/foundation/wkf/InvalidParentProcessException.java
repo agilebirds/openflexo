@@ -20,7 +20,7 @@
 package org.openflexo.foundation.wkf;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 
 /**
  * Thown when trying to move a process under an invalid parent process (fe if process hierarchy would be inconsistant)
@@ -38,7 +38,7 @@ public class InvalidParentProcessException extends FlexoException {
 		params.newParentProcess = newParentProcess;
 	}
 
-	public class Params extends FlexoObject {
+	public class Params extends KVCFlexoObject {
 		public FlexoProcess movedProcess;
 		public FlexoProcess newParentProcess;
 	}

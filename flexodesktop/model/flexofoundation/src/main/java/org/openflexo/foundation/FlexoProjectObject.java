@@ -17,29 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.dm;
+package org.openflexo.foundation;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.rm.FlexoProject;
 
 /**
- * Notify that a new shema has been added
+ * Super class for any object involved in Openflexo and beeing part of a {@link FlexoProject}<br>
  * 
  * @author sguerin
  * 
  */
-public class CalcDrawingShemaInserted extends OEDataModification {
+public abstract class FlexoProjectObject extends FlexoObject {
 
-	private ViewPoint _parent;
+	private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
 
-	public CalcDrawingShemaInserted(ExampleDrawingShema shema, ViewPoint parent) {
-		super(null, shema);
-		_parent = parent;
+	private FlexoProject project;
+
+	public FlexoProject getProject() {
+		return project;
 	}
 
-	public ViewPoint getParent() {
-		return _parent;
+	public void setProject(FlexoProject project) {
+		this.project = project;
 	}
-
 }

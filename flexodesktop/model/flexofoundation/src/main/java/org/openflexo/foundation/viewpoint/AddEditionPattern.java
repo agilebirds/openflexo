@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,6 +31,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.CompoundIssue;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -63,11 +65,6 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
 	}*/
-
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
 
 	public View getView(EditionSchemeAction action) {
 		return (View) getView().getBindingValue(action);
@@ -329,12 +326,6 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 
 		@Override
-		public String getInspectorName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public BindingModel getBindingModel() {
 			if (getAction() != null) {
 				return getAction().getBindingModel();
@@ -374,6 +365,16 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 		public void _setParamName(String param) {
 			this.paramName = param;
+		}
+
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
+
+		@Override
+		public String getURI() {
+			return null;
 		}
 
 	}

@@ -46,24 +46,24 @@ import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
-	private ViewPointPalette _calcPalette;
+	private DiagramPalette _calcPalette;
 
-	public ContextualPalette(ViewPointPalette viewPointPalette) {
+	public ContextualPalette(DiagramPalette viewPointPalette) {
 		super((int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getWidth(),
 				(int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getHeight(), viewPointPalette
 						.getName());
 
 		_calcPalette = viewPointPalette;
 
-		for (ViewPointPaletteElement element : viewPointPalette.getElements()) {
+		for (DiagramPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
 		}
 
@@ -115,7 +115,7 @@ public class ContextualPalette extends DrawingPalette {
 		return false;
 	}
 
-	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) {
+	private PaletteElement makePaletteElement(final DiagramPaletteElement element) {
 		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(element.getGraphicalRepresentation(),
 				null, getPaletteDrawing()) {
 			@Override

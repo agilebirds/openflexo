@@ -22,7 +22,7 @@ package org.openflexo.selection;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Default implementation for a SelectionSynchronizedComponent
@@ -61,7 +61,7 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public void addToSelected(FlexoModelObject object) {
+	public void addToSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().addToSelected(object);
@@ -72,7 +72,7 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public void removeFromSelected(FlexoModelObject object) {
+	public void removeFromSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().removeFromSelected(object);
@@ -83,13 +83,13 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+	public void addToSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().addToSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
 			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				FlexoObject next = (FlexoObject) en.nextElement();
 				fireObjectSelected(next);
 			}
 			fireEndMultipleSelection();
@@ -97,13 +97,13 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+	public void removeFromSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().removeFromSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
 			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				FlexoObject next = (FlexoObject) en.nextElement();
 				fireObjectDeselected(next);
 			}
 			fireEndMultipleSelection();
@@ -111,7 +111,7 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
@@ -121,7 +121,7 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
 		}
@@ -129,15 +129,15 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 	}
 
 	@Override
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		return true;
 	}
 
 	@Override
-	public abstract void fireObjectSelected(FlexoModelObject object);
+	public abstract void fireObjectSelected(FlexoObject object);
 
 	@Override
-	public abstract void fireObjectDeselected(FlexoModelObject object);
+	public abstract void fireObjectDeselected(FlexoObject object);
 
 	@Override
 	public abstract void fireResetSelection();

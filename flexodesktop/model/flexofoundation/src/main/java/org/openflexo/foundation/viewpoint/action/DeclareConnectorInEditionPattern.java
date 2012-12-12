@@ -42,8 +42,8 @@ import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.FloatParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
@@ -61,36 +61,36 @@ import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<DeclareConnectorInEditionPattern, ExampleDrawingConnector> {
+public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<DeclareConnectorInEditionPattern, ExampleDiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(DeclareConnectorInEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<DeclareConnectorInEditionPattern, ExampleDrawingConnector, ExampleDrawingObject> actionType = new FlexoActionType<DeclareConnectorInEditionPattern, ExampleDrawingConnector, ExampleDrawingObject>(
+	public static FlexoActionType<DeclareConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> actionType = new FlexoActionType<DeclareConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject>(
 			"declare_in_edition_pattern", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeclareConnectorInEditionPattern makeNewAction(ExampleDrawingConnector focusedObject,
-				Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+		public DeclareConnectorInEditionPattern makeNewAction(ExampleDiagramConnector focusedObject,
+				Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 			return new DeclareConnectorInEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDiagramConnector connector, Vector<ExampleDiagramObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDiagramConnector connector, Vector<ExampleDiagramObject> globalSelection) {
 			return connector != null && connector.getViewPoint().getEditionPatterns().size() > 0;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeclareConnectorInEditionPattern.actionType, ExampleDrawingConnector.class);
+		FlexoModelObject.addActionForClass(DeclareConnectorInEditionPattern.actionType, ExampleDiagramConnector.class);
 	}
 
 	public static enum NewEditionPatternChoices {
@@ -116,7 +116,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
-	DeclareConnectorInEditionPattern(ExampleDrawingConnector focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+	DeclareConnectorInEditionPattern(ExampleDiagramConnector focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

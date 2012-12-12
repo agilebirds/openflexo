@@ -659,6 +659,16 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		_resource = (FlexoProcessResource) resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoProcess> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoProcess> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	/**
 	 * Save this object using ResourceManager scheme
 	 * 

@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.rm;
 
+import java.io.File;
+
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -30,7 +33,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 public interface XMLStorageResourceData<RD extends XMLStorageResourceData<RD>> extends StorageResourceData<RD>, XMLSerializable {
 
-	public FlexoXMLStorageResource<RD> getFlexoXMLFileResource();
+	// TODO: replace with getResource()
+	public FlexoXMLFileResource<RD> getFlexoXMLFileResource();
 
 	public boolean isSerializing();
 
@@ -46,4 +50,6 @@ public interface XMLStorageResourceData<RD extends XMLStorageResourceData<RD>> e
 	public void finalizeCloning();
 
 	public boolean isBeingCloned();
+
+	public void saveToFile(File xmlFile);
 }

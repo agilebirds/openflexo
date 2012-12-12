@@ -27,6 +27,7 @@ package org.openflexo.foundation.wkf;
  */
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -197,6 +198,16 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	@Override
 	public XMLMapping getXMLMapping() {
 		return getProject().getXmlMappings().getWorkflowMapping();
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoWorkflow> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoWorkflow> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**
@@ -1954,6 +1965,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		} else if (!alwaysDefined && found != null && found.getValue() == null) {
 			found.delete();
 		}
+	}
+
+	@Override
+	public Collection<FlexoProcess> getEmbeddedValidableObjects() {
+		return getAllFlexoProcesses();
 	}
 
 }

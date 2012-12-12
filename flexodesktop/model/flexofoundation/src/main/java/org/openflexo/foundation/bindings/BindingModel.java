@@ -21,7 +21,7 @@ package org.openflexo.foundation.bindings;
 
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 
 /**
  * A binding model represents a set of BindingVariable, which are variables accessible in the context of which this binding model is
@@ -30,7 +30,7 @@ import org.openflexo.foundation.FlexoObject;
  * @author sguerin
  * 
  */
-public abstract class BindingModel extends FlexoObject {
+public abstract class BindingModel extends KVCFlexoObject {
 
 	private Vector<BindingVariable> _bindingVariables;
 

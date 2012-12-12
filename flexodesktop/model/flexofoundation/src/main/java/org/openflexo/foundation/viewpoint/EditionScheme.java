@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPath
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -70,10 +72,23 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private int width = 800;
 	private int height = 600;
 
+	/**
+	 * Stores a chained collections of objects which are involved in validation
+	 */
+	private ChainedCollection<ViewPointObject> validableObjects = null;
+
 	public EditionScheme(ViewPointBuilder builder) {
 		super(builder);
 		actions = new Vector<EditionAction<?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
+	}
+
+	@Override
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getActions(), getParameters());
+		}
+		return validableObjects;
 	}
 
 	@Override
@@ -92,16 +107,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public abstract EditionSchemeType getEditionSchemeType();
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getLabel() {
 		if (label == null || StringUtils.isEmpty(label) || label.equals(name)) {
@@ -123,25 +128,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		_editionPattern = editionPattern;
 		updateBindingModels();
 	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/*public EditionAction getAction(PatternRole role) {
-		for (EditionAction a : getActions()) {
-			if (a.getPatternRole() == role) {
-				return a;
-			}
-		}
-		return null;
-	}*/
 
 	@Override
 	public Vector<EditionAction<?, ?, ?>> getActions() {

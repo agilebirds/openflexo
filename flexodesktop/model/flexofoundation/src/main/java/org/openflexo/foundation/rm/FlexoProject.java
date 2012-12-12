@@ -63,11 +63,11 @@ import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.AbstractBinding.AbstractBindingStringConverter;
@@ -387,7 +387,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		@Override
 		public void _initialize() {
 			super._initialize();
-			FlexoObject.initialize(this);
+			KVCFlexoObject.initialize(this);
 			_addConverter(bindingValueConverter);
 			_addConverter(bindingExpressionConverter);
 			_addConverter(abstractBindingConverter);
@@ -495,6 +495,20 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_resource = (FlexoRMResource) resource;
 		// registerResource(_resource);
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoProject> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoProject> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -1282,12 +1296,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
-	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource() {
+	public FlexoViewLibraryResource getFlexoShemaLibraryResource() {
 		return getFlexoShemaLibraryResource(true);
 	}
 
-	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
-		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
+	public FlexoViewLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
+		FlexoViewLibraryResource returned = (FlexoViewLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
 		if (returned == null && createIfNotExist) {
 			ViewLibrary.createNewShemaLibrary(this);
 			return getFlexoShemaLibraryResource(false);
@@ -3312,13 +3326,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	/**
-	 * Overrides getAllEmbeddedValidableObjects
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
-	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);
 		for (FlexoStorageResource<? extends StorageResourceData> r : getLoadedStorageResources()) {

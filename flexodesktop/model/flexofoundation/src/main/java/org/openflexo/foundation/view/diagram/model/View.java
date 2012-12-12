@@ -187,6 +187,20 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	}
 
 	@Override
+	public org.openflexo.foundation.resource.FlexoResource<View> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<View> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
 	}

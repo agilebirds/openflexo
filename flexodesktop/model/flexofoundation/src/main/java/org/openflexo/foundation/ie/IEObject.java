@@ -225,6 +225,11 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	public abstract Vector<IObject> getEmbeddedIEObjects();
 
 	@Override
+	public Collection<IObject> getEmbeddedValidableObjects() {
+		return getEmbeddedIEObjects();
+	}
+
+	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		return new Vector<Validable>(getAllEmbeddedIEObjects());
 	}

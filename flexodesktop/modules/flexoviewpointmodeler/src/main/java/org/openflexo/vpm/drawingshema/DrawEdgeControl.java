@@ -43,7 +43,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -133,7 +133,7 @@ public class DrawEdgeControl extends MouseDragControl {
 					((CalcDrawingShemaController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
-			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDrawingConnector>();
+			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDiagramConnector>();
 			connectorGR.setConnectorType(ConnectorType.LINE);
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);

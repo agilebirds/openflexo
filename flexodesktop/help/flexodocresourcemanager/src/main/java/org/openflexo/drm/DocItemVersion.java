@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringConvertable;
@@ -229,7 +229,7 @@ public class DocItemVersion extends DRMObject {
 		return "doc_item_version";
 	}
 
-	public static class Version extends FlexoObject implements StringConvertable<Version> {
+	public static class Version extends KVCFlexoObject implements StringConvertable<Version> {
 		public static StringEncoder.Converter<Version> converter = StringEncoder.getDefaultInstance()._addConverter(
 				new Converter<Version>(Version.class) {
 

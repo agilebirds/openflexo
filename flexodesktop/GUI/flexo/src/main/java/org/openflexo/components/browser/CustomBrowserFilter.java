@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Allows to filter some elements in a browser The semantic of those filters is the OR: if any of declared filter for a browser says that
@@ -40,5 +40,5 @@ public abstract class CustomBrowserFilter extends BrowserFilter {
 		super(name, icon);
 	}
 
-	public abstract boolean accept(FlexoModelObject object);
+	public abstract boolean accept(FlexoObject object);
 }

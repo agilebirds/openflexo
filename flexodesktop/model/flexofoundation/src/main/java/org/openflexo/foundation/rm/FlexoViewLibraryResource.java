@@ -32,21 +32,21 @@ import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
  * 
  * @author sylvain
  */
-public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> {
+public class FlexoViewLibraryResource extends FlexoXMLStorageResource<ViewLibrary> {
 
-	private static final Logger logger = Logger.getLogger(FlexoOEShemaLibraryResource.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoViewLibraryResource.class.getPackage().getName());
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
 	 * 
 	 * @param builder
 	 */
-	public FlexoOEShemaLibraryResource(FlexoProjectBuilder builder) {
+	public FlexoViewLibraryResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoOEShemaLibraryResource(FlexoProject aProject) {
+	public FlexoViewLibraryResource(FlexoProject aProject) {
 		super(aProject);
 		if (aProject != null) {
 			try {
@@ -69,12 +69,12 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		// FlexoProjectFile(ProjectRestructuration.getExpectedComponentLibFile(aProject),aProject));
 	}
 
-	public FlexoOEShemaLibraryResource(FlexoProject aProject, FlexoProjectFile shemaLibraryFile) throws InvalidFileNameException {
+	public FlexoViewLibraryResource(FlexoProject aProject, FlexoProjectFile shemaLibraryFile) throws InvalidFileNameException {
 		super(aProject);
 		setResourceFile(shemaLibraryFile);
 	}
 
-	public FlexoOEShemaLibraryResource(FlexoProject aProject, ViewLibrary lib, FlexoProjectFile shemaLibFile)
+	public FlexoViewLibraryResource(FlexoProject aProject, ViewLibrary lib, FlexoProjectFile shemaLibFile)
 			throws InvalidFileNameException {
 		this(aProject, shemaLibFile);
 		_resourceData = lib;

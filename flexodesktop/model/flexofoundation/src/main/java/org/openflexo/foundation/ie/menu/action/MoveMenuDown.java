@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -45,17 +46,17 @@ public class MoveMenuDown extends FlexoAction {
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public FlexoAction makeNewAction(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 			return new MoveMenuDown(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
 			return object != null && object instanceof FlexoItemMenu && ((FlexoItemMenu) object).getFather() != null
 					&& !((FlexoItemMenu) object).getFather().getSubItems().lastElement().equals(object);
 		}
@@ -73,7 +74,7 @@ public class MoveMenuDown extends FlexoAction {
 	 * @param focusedObject
 	 * @param globalSelection
 	 */
-	protected MoveMenuDown(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	protected MoveMenuDown(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

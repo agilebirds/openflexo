@@ -479,6 +479,16 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		return _resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<IEWOComponent> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<IEWOComponent> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	/**
 	 * Save this object using ResourceManager scheme
 	 * 

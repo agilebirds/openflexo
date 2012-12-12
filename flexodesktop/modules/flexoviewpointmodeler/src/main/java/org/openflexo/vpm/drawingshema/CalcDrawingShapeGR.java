@@ -29,14 +29,14 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDrawingShape> implements GraphicalFlexoObserver,
+public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiagramShape> implements GraphicalFlexoObserver,
 		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
@@ -49,7 +49,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public CalcDrawingShapeGR(ExampleDrawingShape aShape, Drawing<?> aDrawing) {
+	public CalcDrawingShapeGR(ExampleDiagramShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
@@ -77,7 +77,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		return (CalcDrawingShemaRepresentation) super.getDrawing();
 	}
 
-	public ExampleDrawingShape getCalcDrawingShape() {
+	public ExampleDiagramShape getCalcDrawingShape() {
 		return getDrawable();
 	}
 

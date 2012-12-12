@@ -127,7 +127,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return the container of this resource.
 	 */
-	@Getter(CONTAINER)
+	@Getter(value = CONTAINER, inverse = CONTENTS)
 	public FlexoResource<?> getContainer();
 
 	/**
@@ -135,7 +135,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return the list of contained resources.
 	 */
-	@Getter(value = CONTENTS, cardinality = Cardinality.LIST)
+	@Getter(value = CONTENTS, cardinality = Cardinality.LIST, inverse = CONTAINER)
 	public List<FlexoResource<?>> getContents();
 
 	/**

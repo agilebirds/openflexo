@@ -33,8 +33,8 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -112,7 +112,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ExampleDrawingShema target) {
+	public JComponent createScreenshotForShema(ExampleDiagram target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -144,7 +144,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForPalette(ViewPointPalette target) {
+	public JComponent createScreenshotForPalette(DiagramPalette target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");

@@ -77,7 +77,7 @@ public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoin
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_ICON;
+		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
 }

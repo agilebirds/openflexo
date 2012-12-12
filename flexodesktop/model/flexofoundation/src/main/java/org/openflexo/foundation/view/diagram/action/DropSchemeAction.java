@@ -44,7 +44,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
@@ -79,7 +79,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	}
 
 	private ViewObject _parent;
-	private ViewPointPaletteElement _paletteElement;
+	private DiagramPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
 	private ViewShape _primaryShape;
 
@@ -133,11 +133,11 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		return getDropScheme();
 	}
 
-	public ViewPointPaletteElement getPaletteElement() {
+	public DiagramPaletteElement getPaletteElement() {
 		return _paletteElement;
 	}
 
-	public void setPaletteElement(ViewPointPaletteElement paletteElement) {
+	public void setPaletteElement(DiagramPaletteElement paletteElement) {
 		_paletteElement = paletteElement;
 	}
 

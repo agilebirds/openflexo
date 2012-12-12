@@ -31,6 +31,7 @@ import org.openflexo.components.browser.DefaultBrowserConfiguration.ObjectVisibi
 import org.openflexo.components.browser.DefaultBrowserElementFactory;
 import org.openflexo.components.widget.MultipleObjectSelector.ObjectSelectabilityDelegate;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;
@@ -43,7 +44,7 @@ import org.openflexo.inspector.model.PropertyModel;
  * @author sguerin
  * 
  */
-public class MultipleObjectInspectorWidget<E extends FlexoModelObject> extends CustomInspectorWidget<Vector<E>> implements
+public class MultipleObjectInspectorWidget<E extends FlexoObject> extends CustomInspectorWidget<Vector<E>> implements
 		ObjectVisibilityDelegate, ObjectSelectabilityDelegate<E> {
 
 	protected static final Logger logger = Logger.getLogger(MultipleObjectInspectorWidget.class.getPackage().getName());

@@ -24,22 +24,22 @@ import java.util.logging.Level;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 
 public class OEBrowserElementFactory implements BrowserElementFactory {
 
@@ -47,7 +47,7 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			.getPackage().getName());
 
 	@Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+	public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 
 		/*if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryElement((ViewPointLibrary) object, browser, parent);
@@ -57,20 +57,20 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			return new OntologyCalcElement((ViewPoint) object, browser, parent);
 		} else if (object instanceof EditionPattern) {
 			return new EditionPatternElement((EditionPattern) object, browser, parent);
-		} else if (object instanceof ViewPointPalette) {
-			return new CalcPaletteBrowserElement((ViewPointPalette) object, browser, parent);
-		} else if (object instanceof ViewPointPaletteElement) {
-			return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser, parent);
+		} else if (object instanceof DiagramPalette) {
+			return new CalcPaletteBrowserElement((DiagramPalette) object, browser, parent);
+		} else if (object instanceof DiagramPaletteElement) {
+			return new CalcPaletteElementBrowserElement((DiagramPaletteElement) object, browser, parent);
 		} else if (object instanceof ShapeOverridingGraphicalRepresentation) {
 			return new ShapeOverridingGRBrowserElement((ShapeOverridingGraphicalRepresentation) object, browser, parent);
 		} else if (object instanceof ConnectorOverridingGraphicalRepresentation) {
 			return new ConnectorOverridingGRBrowserElement((ConnectorOverridingGraphicalRepresentation) object, browser, parent);
-		} else if (object instanceof ExampleDrawingShema) {
-			return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser, parent);
-		} else if (object instanceof ExampleDrawingShape) {
-			return new CalcDrawingShapeBrowserElement((ExampleDrawingShape) object, browser, parent);
-		} else if (object instanceof ExampleDrawingConnector) {
-			return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser, parent);
+		} else if (object instanceof ExampleDiagram) {
+			return new CalcDrawingShemaBrowserElement((ExampleDiagram) object, browser, parent);
+		} else if (object instanceof ExampleDiagramShape) {
+			return new CalcDrawingShapeBrowserElement((ExampleDiagramShape) object, browser, parent);
+		} else if (object instanceof ExampleDiagramConnector) {
+			return new CalcDrawingConnectorBrowserElement((ExampleDiagramConnector) object, browser, parent);
 		} else if (object instanceof ViewLibrary) {
 			return new ViewLibraryElement((ViewLibrary) object, browser, parent);
 		} else if (object instanceof ViewFolder) {

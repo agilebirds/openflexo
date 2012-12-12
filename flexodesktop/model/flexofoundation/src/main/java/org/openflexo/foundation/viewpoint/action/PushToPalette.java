@@ -44,52 +44,52 @@ import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShape, ExampleDrawingObject> {
+public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(PushToPalette.class.getPackage().getName());
 
-	public static FlexoActionType<PushToPalette, ExampleDrawingShape, ExampleDrawingObject> actionType = new FlexoActionType<PushToPalette, ExampleDrawingShape, ExampleDrawingObject>(
+	public static FlexoActionType<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> actionType = new FlexoActionType<PushToPalette, ExampleDiagramShape, ExampleDiagramObject>(
 			"push_to_palette", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public PushToPalette makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection,
+		public PushToPalette makeNewAction(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
 				FlexoEditor editor) {
 			return new PushToPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
 			return shape != null && shape.getViewPoint().getPalettes().size() > 0;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(PushToPalette.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(PushToPalette.actionType, ExampleDiagramShape.class);
 	}
 
 	public Object graphicalRepresentation;
-	public ViewPointPalette palette;
+	public DiagramPalette palette;
 	private EditionPattern editionPattern;
 	public DropScheme dropScheme;
 	public String newElementName;
@@ -100,9 +100,9 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 	public int imageWidth;
 	public int imageHeight;
 
-	private ViewPointPaletteElement _newPaletteElement;
+	private DiagramPaletteElement _newPaletteElement;
 
-	PushToPalette(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+	PushToPalette(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		drawingObjectEntries = new Vector<ExampleDrawingObjectEntry>();
 		updateDrawingObjectEntries();
@@ -145,10 +145,10 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 			for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
 				if (entry.getSelectThis()) {
-					if (entry.graphicalObject instanceof ExampleDrawingShape) {
+					if (entry.graphicalObject instanceof ExampleDiagramShape) {
 						_newPaletteElement.addToOverridingGraphicalRepresentations(new ShapeOverridingGraphicalRepresentation(
 								entry.patternRole, (ShapeGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
-					} else if (entry.graphicalObject instanceof ExampleDrawingConnector) {
+					} else if (entry.graphicalObject instanceof ExampleDiagramConnector) {
 						_newPaletteElement.addToOverridingGraphicalRepresentations(new ConnectorOverridingGraphicalRepresentation(
 								entry.patternRole, (ConnectorGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
 					}
@@ -160,7 +160,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 		}
 	}
 
-	public ViewPointPaletteElement getNewPaletteElement() {
+	public DiagramPaletteElement getNewPaletteElement() {
 		return _newPaletteElement;
 	}
 
@@ -172,11 +172,11 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 	public class ExampleDrawingObjectEntry {
 		private boolean selectThis;
-		public ExampleDrawingObject graphicalObject;
+		public ExampleDiagramObject graphicalObject;
 		public String elementName;
 		public GraphicalElementPatternRole patternRole;
 
-		public ExampleDrawingObjectEntry(ExampleDrawingObject graphicalObject, String elementName) {
+		public ExampleDrawingObjectEntry(ExampleDiagramObject graphicalObject, String elementName) {
 			super();
 			this.graphicalObject = graphicalObject;
 			this.elementName = elementName;
@@ -199,7 +199,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 		public void setSelectThis(boolean aFlag) {
 			selectThis = aFlag;
-			if (patternRole == null && graphicalObject instanceof ExampleDrawingShape) {
+			if (patternRole == null && graphicalObject instanceof ExampleDiagramShape) {
 				GraphicalElementPatternRole parentEntryPatternRole = getParentEntry().patternRole;
 				for (ShapePatternRole r : editionPattern.getShapePatternRoles()) {
 					if (r.getParentShapePatternRole() == parentEntryPatternRole && patternRole == null) {
@@ -214,9 +214,9 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 		}
 
 		public List<? extends GraphicalElementPatternRole> getAvailablePatternRoles() {
-			if (graphicalObject instanceof ExampleDrawingShape) {
+			if (graphicalObject instanceof ExampleDiagramShape) {
 				return editionPattern.getPatternRoles(ShapePatternRole.class);
-			} else if (graphicalObject instanceof ExampleDrawingConnector) {
+			} else if (graphicalObject instanceof ExampleDiagramConnector) {
 				return editionPattern.getPatternRoles(ConnectorPatternRole.class);
 			}
 			return null;
@@ -233,7 +233,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 		return returned;
 	}
 
-	public ExampleDrawingObjectEntry getEntry(ExampleDrawingObject o) {
+	public ExampleDrawingObjectEntry getEntry(ExampleDiagramObject o) {
 		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
 			if (e.graphicalObject == o) {
 				return e;
@@ -255,16 +255,16 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 		drawingObjectEntries.clear();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
-		for (ExampleDrawingObject o : getFocusedObject().getDescendants()) {
-			if (o instanceof ExampleDrawingShape) {
-				ExampleDrawingShape shape = (ExampleDrawingShape) o;
+		for (ExampleDiagramObject o : getFocusedObject().getDescendants()) {
+			if (o instanceof ExampleDiagramShape) {
+				ExampleDiagramShape shape = (ExampleDiagramShape) o;
 				String shapeRoleName = StringUtils.isEmpty(shape.getName()) ? "shape" + (shapeIndex > 1 ? shapeIndex : "") : shape
 						.getName();
 				drawingObjectEntries.add(new ExampleDrawingObjectEntry(shape, shapeRoleName));
 				shapeIndex++;
 			}
-			if (o instanceof ExampleDrawingConnector) {
-				ExampleDrawingConnector connector = (ExampleDrawingConnector) o;
+			if (o instanceof ExampleDiagramConnector) {
+				ExampleDiagramConnector connector = (ExampleDiagramConnector) o;
 				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
 				drawingObjectEntries.add(new ExampleDrawingObjectEntry(connector, connectorRoleName));
 				connectorIndex++;

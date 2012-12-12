@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.toolbox.FileUtils;
@@ -37,7 +37,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public class FlexoProjectFile extends FlexoObject implements StringConvertable, Cloneable {
+public class FlexoProjectFile extends KVCFlexoObject implements StringConvertable, Cloneable {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectFile.class.getPackage().getName());
 

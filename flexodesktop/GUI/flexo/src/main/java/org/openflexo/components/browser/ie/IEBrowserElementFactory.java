@@ -23,7 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.DKVModel.DomainList;
 import org.openflexo.foundation.dkv.DKVModel.LanguageList;
@@ -70,7 +70,7 @@ import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 
 public class IEBrowserElementFactory implements BrowserElementFactory {
 	@Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+	public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 		if (object instanceof OperationComponentDefinition) {
 			return new OperationComponentElement((OperationComponentDefinition) object, browser, parent);
 		} else if (object instanceof TabComponentDefinition) {
@@ -128,9 +128,9 @@ public class IEBrowserElementFactory implements BrowserElementFactory {
 		} else if (object instanceof TabComponentDefinition) {
 			return new IETabComponentElement((TabComponentDefinition) object, browser, parent);
 		} else if (object instanceof IERadioButtonWidget) {
-			return new IERadioButtonElement(object, null, browser, parent);
+			return new IERadioButtonElement((IERadioButtonWidget) object, null, browser, parent);
 		} else if (object instanceof IEBrowserWidget) {
-			return new IEBrowserWidgetElement(object, null, browser, parent);
+			return new IEBrowserWidgetElement((IEBrowserWidget) object, null, browser, parent);
 		} else if (object instanceof IESequence) {
 			return new IESequenceElement((IESequence) object, BrowserElementType.SEQUENCE, browser, parent);
 		} else if (object instanceof RepetitionOperator) {

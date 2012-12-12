@@ -36,7 +36,7 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoAction.ExecutionStatus;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
@@ -78,8 +78,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	private final UndoManager _undoManager;
 	private ScenarioRecorder _scenarioRecorder;
 
-	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>> _createdAndNotNotifiedObjects;
-	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>> _deletedAndNotNotifiedObjects;
+	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoObject>> _createdAndNotNotifiedObjects;
+	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoObject>> _deletedAndNotNotifiedObjects;
 
 	private Stack<FlexoAction<?, ?, ?>> _currentlyPerformedActionStack = null;
 	private Stack<FlexoAction<?, ?, ?>> _currentlyUndoneActionStack = null;
@@ -99,8 +99,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (ScenarioRecorder.ENABLE) {
 			_scenarioRecorder = new ScenarioRecorder();
 		}
-		_createdAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>>();
-		_deletedAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>>();
+		_createdAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoObject>>();
+		_deletedAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoObject>>();
 		_currentlyPerformedActionStack = new Stack<FlexoAction<?, ?, ?>>();
 		_currentlyUndoneActionStack = new Stack<FlexoAction<?, ?, ?>>();
 		_currentlyRedoneActionStack = new Stack<FlexoAction<?, ?, ?>>();
@@ -128,7 +128,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(
+	public <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performAction(
 			final A action, final EventObject e) {
 		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
 			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
@@ -162,7 +162,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		}
 	}
 
-	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A executeAction(
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A executeAction(
 			A action, EventObject event) {
 		boolean progressIsShowing = ProgressWindow.hasInstance();
 		boolean confirmDoAction = true;
@@ -220,8 +220,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(
-			final A action, final EventObject event) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performUndoAction(final A action,
+			final EventObject event) {
 		boolean confirmUndoAction = true;
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
 		FlexoActionUndoInitializer<A> initializer = null;
@@ -274,8 +274,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(
-			A action, EventObject event) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performRedoAction(A action,
+			EventObject event) {
 		boolean confirmRedoAction = true;
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
 		FlexoActionRedoInitializer<A> initializer = null;
@@ -332,15 +332,15 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		return _undoManager;
 	}
 
-	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBePerformed(
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionWillBePerformed(
 			A action) {
 		_undoManager.actionWillBePerformed(action);
 		_currentlyPerformedActionStack.push(action);
-		_createdAndNotNotifiedObjects.put(action, new Vector<FlexoModelObject>());
-		_deletedAndNotNotifiedObjects.put(action, new Vector<FlexoModelObject>());
+		_createdAndNotNotifiedObjects.put(action, new Vector<FlexoObject>());
+		_deletedAndNotNotifiedObjects.put(action, new Vector<FlexoObject>());
 	}
 
-	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenPerformed(
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenPerformed(
 			A action, boolean success) {
 		_undoManager.actionHasBeenPerformed(action, success);
 		if (success) {
@@ -354,34 +354,33 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
-		for (FlexoModelObject o : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().values()) {
+		for (FlexoObject o : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().values()) {
 			_createdAndNotNotifiedObjects.get(action).remove(o);
 		}
-		for (FlexoModelObject o : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().values()) {
+		for (FlexoObject o : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().values()) {
 			_deletedAndNotNotifiedObjects.get(action).remove(o);
 		}
 		if (WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
-			for (FlexoModelObject o : _createdAndNotNotifiedObjects.get(action)) {
-				logger.warning("FlexoModelObject " + o + " created during action " + action
-						+ " but was not notified (see objectCreated(String,FlexoModelObject))");
+			for (FlexoObject o : _createdAndNotNotifiedObjects.get(action)) {
+				logger.warning("FlexoObject " + o + " created during action " + action
+						+ " but was not notified (see objectCreated(String,FlexoObject))");
 			}
-			for (FlexoModelObject o : _deletedAndNotNotifiedObjects.get(action)) {
-				logger.warning("FlexoModelObject " + o + " deleted during action " + action
-						+ " but was not notified (see objectDeleted(String,FlexoModelObject))");
+			for (FlexoObject o : _deletedAndNotNotifiedObjects.get(action)) {
+				logger.warning("FlexoObject " + o + " deleted during action " + action
+						+ " but was not notified (see objectDeleted(String,FlexoObject))");
 			}
 		}
 		_createdAndNotNotifiedObjects.remove(action);
 		_deletedAndNotNotifiedObjects.remove(action);
 	}
 
-	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeUndone(
-			A action) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionWillBeUndone(A action) {
 		_undoManager.actionWillBeUndone(action);
 		_currentlyUndoneActionStack.push(action);
 	}
 
-	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenUndone(
-			A action, boolean success) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenUndone(A action,
+			boolean success) {
 		_undoManager.actionHasBeenUndone(action, success);
 		FlexoAction<?, ?, ?> popAction = _currentlyUndoneActionStack.pop();
 		if (popAction != action) {
@@ -389,14 +388,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		}
 	}
 
-	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeRedone(
-			A action) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionWillBeRedone(A action) {
 		_undoManager.actionWillBeRedone(action);
 		_currentlyRedoneActionStack.push(action);
 	}
 
-	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenRedone(
-			A action, boolean success) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void actionHasBeenRedone(A action,
+			boolean success) {
 		_undoManager.actionHasBeenRedone(action, success);
 		FlexoAction<?, ?, ?> popAction = _currentlyRedoneActionStack.pop();
 		if (popAction != action) {
@@ -405,13 +403,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public void notifyObjectCreated(FlexoModelObject object) {
+	public void notifyObjectCreated(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyObjectCreated: " + object);
 		}
 		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
 				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
-			logger.warning("FlexoModelObject " + object + " created outside of FlexoAction context !!!");
+			logger.warning("FlexoObject " + object + " created outside of FlexoAction context !!!");
 		} else if (!_currentlyPerformedActionStack.isEmpty()) {
 			_createdAndNotNotifiedObjects.get(_currentlyPerformedActionStack.peek()).add(object);
 		}
@@ -419,20 +417,20 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public void notifyObjectDeleted(FlexoModelObject object) {
+	public void notifyObjectDeleted(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyObjectDeleted: " + object);
 		}
 		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
 				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
-			logger.warning("FlexoModelObject " + object + " deleted outside of FlexoAction context !!!");
+			logger.warning("FlexoObject " + object + " deleted outside of FlexoAction context !!!");
 		} else if (!_currentlyPerformedActionStack.isEmpty()) {
 			_deletedAndNotNotifiedObjects.get(_currentlyPerformedActionStack.peek()).add(object);
 		}
 	}
 
 	@Override
-	public void notifyObjectChanged(FlexoModelObject object) {
+	public void notifyObjectChanged(FlexoObject object) {
 		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
 				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			logger.warning("setChanged() called for " + object + " outside of FlexoAction context !!!");
@@ -454,7 +452,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public void focusOn(FlexoModelObject object) {
+	public void focusOn(FlexoObject object) {
 
 		try {
 			if (object instanceof WKFObject) {
@@ -490,7 +488,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		return actionInitializers.get(getModuleLoader().getActiveModule());
 	}
 
-	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> ActionInitializer<A, T1, T2> getActionInitializer(
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> ActionInitializer<A, T1, T2> getActionInitializer(
 			FlexoActionType<A, T1, T2> actionType) {
 		ControllerActionInitializer currentControllerActionInitializer = getCurrentControllerActionInitializer();
 		if (currentControllerActionInitializer != null) {
@@ -500,7 +498,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionEnabled(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
 		if (actionType instanceof ActionSchemeActionType) {
 			return true;
@@ -522,7 +520,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionVisible(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
 		if (actionType.isVisibleForSelection(focusedObject, globalSelection)) {
 			ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
@@ -541,7 +539,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getEnabledIconFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
 		if (actionInitializer != null) {
@@ -551,7 +549,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getDisabledIconFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
 		if (actionInitializer != null) {
@@ -561,7 +559,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> KeyStroke getKeyStrokeFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
 		if (actionInitializer != null) {

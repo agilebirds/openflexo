@@ -51,12 +51,12 @@ import javax.swing.event.ListSelectionListener;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.SelectionController;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.CustomPopup;
 
-public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends CustomPopup.ResizablePanel {
+public abstract class AbstractSelectorPanel<T extends FlexoObject> extends CustomPopup.ResizablePanel {
 	static final Logger logger = Logger.getLogger(AbstractSelectorPanel.class.getPackage().getName());
 
 	private final AbstractSelectorPanelOwner<T> _owner;
@@ -80,11 +80,11 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 	public static interface AbstractSelectorPanelOwner<T> {
 		public FlexoProject getProject();
 
-		public FlexoModelObject getRootObject();
+		public FlexoObject getRootObject();
 
 		public FlexoEditor getEditor();
 
-		public boolean isSelectable(FlexoModelObject object);
+		public boolean isSelectable(FlexoObject object);
 
 		public T getEditedObject();
 
@@ -134,7 +134,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		return returned;
 	}
 
-	public FlexoModelObject getSelectedObject() {
+	public FlexoObject getSelectedObject() {
 		if (_browserView != null) {
 			return _browserView.getSelectedObject();
 		}
@@ -145,7 +145,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 
 	T _lastBrowsed = null;
 
-	public void setRootObject(FlexoModelObject aRootObject) {
+	public void setRootObject(FlexoObject aRootObject) {
 		if (_browser != null) {
 			_browser.setRootObject(aRootObject);
 		}
@@ -159,26 +159,26 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		_browser.setRootObject(_owner.getRootObject());
 		_browser.setSelectionController(new SelectionController() {
 			@Override
-			public boolean isSelectable(FlexoModelObject o) {
+			public boolean isSelectable(FlexoObject o) {
 				return _owner.isSelectable(o);
 			}
 		});
 		// TODO: grab a hand on the FlexoController here.
 		_browserView = new BrowserChooserView(_browser, null, _owner) {
 			@Override
-			public void objectWasSelected(FlexoModelObject object) {
+			public void objectWasSelected(FlexoObject object) {
 				_owner.setEditedObject((T) object);
 			}
 
 			@Override
-			public void objectWasDefinitelySelected(FlexoModelObject object) {
+			public void objectWasDefinitelySelected(FlexoObject object) {
 				_owner.setEditedObject((T) object);
 				_owner.apply();
 			}
 		};
 
 		sortedObjectList = new Vector<T>();
-		Iterator<FlexoModelObject> en = _browser.getAllObjects();
+		Iterator<FlexoObject> en = _browser.getAllObjects();
 		while (en.hasNext()) {
 			T o = (T) en.next();
 			if (_owner.isSelectable(o)) {

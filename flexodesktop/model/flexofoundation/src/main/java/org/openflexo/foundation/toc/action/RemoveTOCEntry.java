@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -66,7 +67,7 @@ public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEnt
 
 	@Override
 	protected void doAction(Object context) {
-		for (FlexoModelObject e : getGlobalSelectionAndFocusedObject()) {
+		for (FlexoObject e : getGlobalSelectionAndFocusedObject()) {
 			e.delete();
 		}
 	}

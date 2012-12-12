@@ -24,7 +24,7 @@ import java.awt.Dimension;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.widget.AbstractSelectorPanel.AbstractSelectorPanelOwner;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -48,20 +48,20 @@ public abstract class BrowserChooserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 		if (_owner.isSelectable(object)) {
 			objectWasSelected(object);
 		}
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (object != null && _owner.isSelectable(object)) {
 			objectWasDefinitelySelected(object);
 		}
 	}
 
-	public abstract void objectWasSelected(FlexoModelObject object);
+	public abstract void objectWasSelected(FlexoObject object);
 
-	public abstract void objectWasDefinitelySelected(FlexoModelObject object);
+	public abstract void objectWasDefinitelySelected(FlexoObject object);
 }

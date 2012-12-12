@@ -35,11 +35,11 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.VPMController;
@@ -52,9 +52,9 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	private VPMController _controller;
 	private CommonPalette _commonPalette;
 	private CalcDrawingShemaModuleView _moduleView;
-	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
+	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
-	public CalcDrawingShemaController(VPMController controller, ExampleDrawingShema shema, boolean readOnly) {
+	public CalcDrawingShemaController(VPMController controller, ExampleDiagram shema, boolean readOnly) {
 		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller.getSelectionManager());
 
 		_controller = controller;
@@ -66,9 +66,9 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			registerPalette(_commonPalette);
 			activatePalette(_commonPalette);
 
-			_contextualPalettes = new Hashtable<ViewPointPalette, ContextualPalette>();
+			_contextualPalettes = new Hashtable<DiagramPalette, ContextualPalette>();
 			if (shema.getViewPoint() != null) {
-				for (ViewPointPalette palette : shema.getViewPoint().getPalettes()) {
+				for (DiagramPalette palette : shema.getViewPoint().getPalettes()) {
 					ContextualPalette contextualPalette = new ContextualPalette(palette);
 					_contextualPalettes.put(palette, contextualPalette);
 					registerPalette(contextualPalette);
@@ -140,14 +140,14 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 
 	private JTabbedPane paletteView;
 
-	private Vector<ViewPointPalette> orderedPalettes;
+	private Vector<DiagramPalette> orderedPalettes;
 
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
+			orderedPalettes = new Vector<DiagramPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
-			for (ViewPointPalette palette : orderedPalettes) {
+			for (DiagramPalette palette : orderedPalettes) {
 				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteViewInScrollPane());
 			}
 			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
@@ -176,8 +176,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		logger.fine("dataModification=" + dataModification);
 		if (observable == getShema().getViewPoint()) {
-			if (dataModification instanceof CalcPaletteInserted) {
-				ViewPointPalette palette = ((CalcPaletteInserted) dataModification).newValue();
+			if (dataModification instanceof DiagramPaletteInserted) {
+				DiagramPalette palette = ((DiagramPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, newContextualPalette);
 				registerPalette(newContextualPalette);
@@ -185,8 +185,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				paletteView.add(palette.getName(), newContextualPalette.getPaletteView());
 				paletteView.revalidate();
 				paletteView.repaint();
-			} else if (dataModification instanceof CalcPaletteRemoved) {
-				ViewPointPalette palette = ((CalcPaletteRemoved) dataModification).oldValue();
+			} else if (dataModification instanceof DiagramPaletteRemoved) {
+				DiagramPalette palette = ((DiagramPaletteRemoved) dataModification).oldValue();
 				ContextualPalette removedPalette = _contextualPalettes.get(palette);
 				unregisterPalette(removedPalette);
 				_contextualPalettes.remove(palette);
@@ -197,7 +197,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 		}
 	}
 
-	protected void updatePalette(ViewPointPalette palette, DrawingView<?> oldPaletteView) {
+	protected void updatePalette(DiagramPalette palette, DrawingView<?> oldPaletteView) {
 		int index = paletteView.indexOfComponent(oldPaletteView);
 		paletteView.remove(oldPaletteView);
 		ContextualPalette cp = _contextualPalettes.get(palette);
@@ -206,7 +206,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 		paletteView.repaint();
 	}
 
-	public ExampleDrawingShema getShema() {
+	public ExampleDiagram getShema() {
 		return getDrawing().getShema();
 	}
 

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,18 +28,16 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class ViewPointPaletteElement extends ViewPointObject {
+public class DiagramPaletteElement extends NamedViewPointObject {
 
-	private static final Logger logger = Logger.getLogger(ViewPointPaletteElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPaletteElement.class.getPackage().getName());
 
-	private String name;
-	private String description;
 	private String _editionPatternId;
 	private String _dropSchemeName;
 
@@ -55,35 +54,25 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	// Represent graphical representation to be used as overriding representation
 	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
 
-	private ViewPointPaletteElement parent = null;
-	// private Vector<ViewPointPaletteElement> childs;
+	private DiagramPaletteElement parent = null;
+	// private Vector<DiagramPaletteElement> childs;
 
-	private ViewPointPalette _palette;
+	private DiagramPalette _palette;
 
-	public ViewPointPaletteElement(ViewPointBuilder builder) {
+	public DiagramPaletteElement(ViewPointBuilder builder) {
 		super(builder);
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getURI() {
+		return getViewPoint().getURI() + "." + getName();
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return getOverridingGraphicalRepresentations();
 	}
 
 	@Override
@@ -99,11 +88,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return getViewPointLibrary().get_VIEW_POINT_PALETTE_MODEL();
 	}
 
-	public ViewPointPalette getPalette() {
+	public DiagramPalette getPalette() {
 		return _palette;
 	}
 
-	public void setPalette(ViewPointPalette palette) {
+	public void setPalette(DiagramPalette palette) {
 		_palette = palette;
 	}
 
@@ -133,7 +122,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		this._dropSchemeName = _dropSchemeName;
 	}
 
-	public ViewPointPaletteElement getParent() {
+	public DiagramPaletteElement getParent() {
 		return parent;
 	}
 
@@ -284,11 +273,6 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		deleteObservers();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_PALETTE_ELEMENT_INSPECTOR;
-	}
-
 	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
@@ -318,7 +302,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	}
 
 	public static abstract class OverridingGraphicalRepresentation extends ViewPointObject {
-		private ViewPointPaletteElement paletteElement;
+		private DiagramPaletteElement paletteElement;
 		private String patternRoleName;
 
 		// Do not use, required for deserialization
@@ -341,11 +325,6 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		}
 
 		@Override
-		public String getInspectorName() {
-			return null;
-		}
-
-		@Override
 		public ViewPoint getViewPoint() {
 			if (getPaletteElement() != null) {
 				return getPaletteElement().getViewPoint();
@@ -353,7 +332,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			return null;
 		}
 
-		public ViewPointPaletteElement getPaletteElement() {
+		public DiagramPaletteElement getPaletteElement() {
 			return paletteElement;
 		}
 
@@ -397,6 +376,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
+
 	}
 
 	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
@@ -423,6 +407,10 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
 	}
 
 	public boolean getBoundLabelToElementName() {

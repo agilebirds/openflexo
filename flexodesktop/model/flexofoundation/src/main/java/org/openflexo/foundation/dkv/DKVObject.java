@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.dkv;
 
-import java.util.Vector;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -126,14 +124,6 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 	public void validate(ValidationReport report, ValidationModel validationModel) {
 		validationModel.validate(this, report);
 	}
-
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
-	@Override
-	public abstract Vector getAllEmbeddedValidableObjects();
 
 	/**
 	 * Returns fully qualified name for this object

@@ -80,7 +80,7 @@ import org.openflexo.foundation.viewpoint.PropertyParameter;
 import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.ListValueForListParameterPathElement;
 import org.openflexo.localization.FlexoLocalization;
@@ -93,7 +93,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 	private EditionSchemeAction<?> action;
 
-	protected ViewPointPaletteElement paletteElement;
+	protected DiagramPaletteElement paletteElement;
 
 	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible) {
 		boolean successfullyRetrievedDefaultParameters = action.retrieveDefaultParameters();

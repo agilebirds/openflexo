@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -47,11 +46,6 @@ public class AddDiagram extends DiagramAction<View> {
 		return EditionActionType.AddDiagram;
 	}
 
-	/*@Override
-	public List<DiagramPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(DiagramPatternRole.class);
-	}*/
-
 	@Override
 	public DiagramPatternRole getPatternRole() {
 		PatternRole superPatternRole = super.getPatternRole();
@@ -64,32 +58,9 @@ public class AddDiagram extends DiagramAction<View> {
 		return null;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
-	}
-
 	public String getDiagramName(EditionSchemeAction action) {
 		return (String) getDiagramName().getBindingValue(action);
 	}
-
-	/*@Override
-	public DiagramPatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}*/
-
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(DiagramPatternRole patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
 
 	private ViewPointDataBinding diagramName;
 

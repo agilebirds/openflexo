@@ -34,7 +34,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.toolbox.ToolBox;
 
@@ -45,7 +45,7 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @param <D>
  */
-public class SelectionManagingDrawingController<D extends Drawing<? extends FlexoModelObject>> extends DrawingController<D> implements
+public class SelectionManagingDrawingController<D extends Drawing<? extends FlexoObject>> extends DrawingController<D> implements
 		SelectionListener {
 
 	private static final Logger logger = Logger.getLogger(SelectionManagingDrawingController.class.getPackage().getName());
@@ -96,7 +96,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		// logger.info("_selectionManager="+_selectionManager);
 		// logger.info("anObject.getDrawable()="+anObject.getDrawable());
 		if (_selectionManager != null) {
-			for (FlexoModelObject o : new ArrayList<FlexoModelObject>(_selectionManager.getSelection())) {
+			for (FlexoObject o : new ArrayList<FlexoObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
 					_selectionManager.removeFromSelected(o);
 				}
@@ -104,9 +104,9 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 		super.addToSelectedObjects(anObject);
 		if (_selectionManager != null) {
-			if (anObject.getDrawable() instanceof FlexoModelObject) {
+			if (anObject.getDrawable() instanceof FlexoObject) {
 				// logger.info("Je rajoute "+anObject.getDrawable()+" dans le SM");
-				_selectionManager.addToSelected((FlexoModelObject) anObject.getDrawable());
+				_selectionManager.addToSelected((FlexoObject) anObject.getDrawable());
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	@Override
 	public void removeFromSelectedObjects(GraphicalRepresentation<?> anObject) {
 		if (_selectionManager != null) {
-			for (FlexoModelObject o : new ArrayList<FlexoModelObject>(_selectionManager.getSelection())) {
+			for (FlexoObject o : new ArrayList<FlexoObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
 					_selectionManager.removeFromSelected(o);
 				}
@@ -122,8 +122,8 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 		super.removeFromSelectedObjects(anObject);
 		if (_selectionManager != null) {
-			if (anObject.getDrawable() instanceof FlexoModelObject) {
-				_selectionManager.removeFromSelected((FlexoModelObject) anObject.getDrawable());
+			if (anObject.getDrawable() instanceof FlexoObject) {
+				_selectionManager.removeFromSelected((FlexoObject) anObject.getDrawable());
 			}
 		}
 	}
@@ -157,7 +157,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 					Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 					controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 					controller.setLastSelectedGR(graphicalRepresentation);
-					if (!(graphicalRepresentation.getDrawable() instanceof FlexoModelObject)) {
+					if (!(graphicalRepresentation.getDrawable() instanceof FlexoObject)) {
 						return false;
 					}
 					if (!(controller instanceof SelectionManagingDrawingController)) {
@@ -165,7 +165,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 								+ " does not implement SelectionManagingDrawingController");
 						return false;
 					}
-					FlexoModelObject o = (FlexoModelObject) graphicalRepresentation.getDrawable();
+					FlexoObject o = (FlexoObject) graphicalRepresentation.getDrawable();
 					SelectionManager selectionManager = ((SelectionManagingDrawingController<?>) controller).getSelectionManager();
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						if (!selectionManager.selectionContains(o)) {
@@ -207,19 +207,19 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 
 	}
 
-	private boolean mayRepresent(FlexoModelObject o) {
+	private boolean mayRepresent(FlexoObject o) {
 		return getDrawing().getGraphicalRepresentation(o) != null;
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (mayRepresent(object)) {
 			super.removeFromSelectedObjects(getDrawing().getGraphicalRepresentation(object));
 		}
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (mayRepresent(object)) {
 			super.addToSelectedObjects(getDrawing().getGraphicalRepresentation(object));
 		}
@@ -243,8 +243,8 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	public void setLastSelectedGR(GraphicalRepresentation<?> lastSelectedGR) {
 		super.setLastSelectedGR(lastSelectedGR);
 		if (_selectionManager instanceof MouseSelectionManager) {
-			if (lastSelectedGR.getDrawable() instanceof FlexoModelObject) {
-				((MouseSelectionManager) _selectionManager).setLastSelectedObject((FlexoModelObject) lastSelectedGR.getDrawable());
+			if (lastSelectedGR.getDrawable() instanceof FlexoObject) {
+				((MouseSelectionManager) _selectionManager).setLastSelectedObject((FlexoObject) lastSelectedGR.getDrawable());
 			}
 		}
 	}

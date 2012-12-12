@@ -232,6 +232,20 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Return a vector of all embedded objects at this level does NOT include itself
 	 * 

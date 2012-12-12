@@ -14,8 +14,9 @@ import java.util.logging.Level;
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -71,7 +72,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	private List<FlexoEditor> editors;
 
-	private List<FlexoModelObject> objects;
+	private List<FlexoObject> objects;
 
 	private Stack<HistoryLocation> previousHistory;
 	private Stack<HistoryLocation> nextHistory;
@@ -81,7 +82,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	private boolean isGoingBackward = false;
 
-	private Map<FlexoPerspective, FlexoModelObject> lastEditedObjectsForPerspective;
+	private Map<FlexoPerspective, FlexoObject> lastEditedObjectsForPerspective;
 
 	private ApplicationContext context;
 
@@ -97,8 +98,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		rightViewVisible = GeneralPreferences.getShowRightView(module.getShortName());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_ADDED, this, context.getProjectLoader());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_REMOVED, this, context.getProjectLoader());
-		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoModelObject>();
-		objects = new ArrayList<FlexoModelObject>();
+		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoObject>();
+		objects = new ArrayList<FlexoObject>();
 		perspectives = new Vector<FlexoPerspective>();
 		editors = new ArrayList<FlexoEditor>();
 		previousHistory = new Stack<HistoryLocation>();
@@ -151,7 +152,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	private void setCurrentPerspective(FlexoPerspective currentPerspective, boolean switchCurrentObjectIfNeeded) {
 		if (this.currentPerspective != currentPerspective) {
-			FlexoModelObject newEditedObject = getCurrentObject();
+			FlexoObject newEditedObject = getCurrentObject();
 
 			if (currentPerspective == null || getCurrentObject() != null && !currentPerspective.hasModuleViewForObject(getCurrentObject())) {
 				newEditedObject = null;
@@ -164,7 +165,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				} else {
 					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject() != null ? getCurrentObject()
 							: getCurrentProject());
-			}
+				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
@@ -203,10 +204,10 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public FlexoEditor getCurrentEditor() {
 		if (requiresProject()) {
-		return currentEditor;
+			return currentEditor;
 		} else {
 			return context.getApplicationEditor();
-	}
+		}
 	}
 
 	public boolean requiresProject() {
@@ -235,9 +236,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				if (getCurrentPerspective() != null && getCurrentPerspective().getDefaultObject(projectEditor.getProject()) != null) {
 					setCurrentObject(getCurrentPerspective().getDefaultObject(projectEditor.getProject()));
 				} else {
-				setCurrentObject(null);
+					setCurrentObject(null);
+				}
 			}
-		}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
 		getPropertyChangeSupport().firePropertyChange(CURRENT_PROJECT, old != null ? old.getProject() : null,
@@ -270,7 +271,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		setCurrentEditor(context.getProjectLoader().getEditorForProject(project), switchObject);
 	}
 
-	public void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
+	public void setCurrentObjectAndPerspective(FlexoObject currentObject, FlexoPerspective perspective) {
 		setCurrentPerspective(perspective, false);
 		setCurrentObject(currentObject);
 	}
@@ -279,11 +280,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	 * NAVIGATION HISTORY *
 	 **********************/
 
-	public FlexoModelObject getCurrentObject() {
+	public FlexoObject getCurrentObject() {
 		return currentLocation != null ? currentLocation.getObject() : null;
 	}
 
-	public void setCurrentObject(FlexoModelObject currentObject) {
+	public void setCurrentObject(FlexoObject currentObject) {
 		if (currentObject != null) {
 			if (currentPerspective != null) {
 				// _history.add(moduleView.getRepresentedObject());
@@ -313,14 +314,18 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					objects.add(currentObject);
 					HistoryLocation old = currentLocation;
 					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
-					setCurrentProject(currentLocation.getObject().getProject(), false);
+					if (currentLocation.getObject() instanceof FlexoProjectObject) {
+						setCurrentProject(((FlexoProjectObject) currentLocation.getObject()).getProject(), false);
+					}
 					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 					getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentObject);
 				} else if (currentLocation.getPerspective() != currentPerspective) {
 					previousHistory.push(currentLocation);
 					HistoryLocation old = currentLocation;
 					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
-					setCurrentProject(currentLocation.getObject().getProject(), false);
+					if (currentLocation.getObject() instanceof FlexoProjectObject) {
+						setCurrentProject(((FlexoProjectObject) currentLocation.getObject()).getProject(), false);
+					}
 					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 				}
 			}
@@ -351,7 +356,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return getCurrentObject() != null && getParent(getCurrentObject()) != null;
 	}
 
-	private FlexoModelObject getParent(FlexoModelObject object) {
+	private FlexoObject getParent(FlexoObject object) {
 		if (object instanceof DMObject) {
 			return ((DMObject) object).getParent();
 		} else if (object instanceof FlexoProcess) {
@@ -423,7 +428,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	private HistoryLocation getLastHistoryLocation(FlexoPerspective perspective, FlexoProject project) {
 		for (int i = previousHistory.size() - 1; i > -1; i--) {
 			HistoryLocation location = previousHistory.get(i);
-			if (location.getPerspective() == perspective && location.getObject().getProject() == project) {
+			if (location.getPerspective() == perspective && currentLocation.getObject() instanceof FlexoProjectObject
+					&& ((FlexoProjectObject) currentLocation.getObject()).getProject() == project) {
 				return location;
 			}
 		}
@@ -442,12 +448,12 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				}
 			}
 		} else if (evt.getPropertyName().equals(FlexoObservable.DELETED_PROPERTY)) {
-			FlexoModelObject deletedObject = (FlexoModelObject) evt.getOldValue();
+			FlexoObject deletedObject = (FlexoObject) evt.getOldValue();
 			handleObjectDeletion(deletedObject);
 		}
 	}
 
-	private void handleObjectDeletion(FlexoModelObject deletedObject) {
+	private void handleObjectDeletion(FlexoObject deletedObject) {
 		while (objects.remove(deletedObject)) {
 			;
 		}
@@ -463,7 +469,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		registrationManager.removeListener(FlexoObservable.DELETED_PROPERTY, this, deletedObject);
 	}
 
-	private void updateHistoryForDeletedObject(Stack<HistoryLocation> history, FlexoModelObject deletedObject) {
+	private void updateHistoryForDeletedObject(Stack<HistoryLocation> history, FlexoObject deletedObject) {
 		Iterator<HistoryLocation> i = history.iterator();
 		while (i.hasNext()) {
 			HistoryLocation hl = i.next();

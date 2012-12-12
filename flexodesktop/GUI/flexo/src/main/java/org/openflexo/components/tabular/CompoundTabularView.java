@@ -36,6 +36,7 @@ import javax.swing.SwingConstants;
 
 import org.openflexo.ch.FCH;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionListener;
@@ -189,7 +190,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	 * @param object
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		// addToSelection() received
 		// logger.info ("addToSelection() "+object+" in "+this);
 		// _focusedObject = object;
@@ -208,7 +209,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	 * @param object
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		// removeFromSelection() received
 		for (TabularView next : _masterTabularViews) {
 			next.fireObjectDeselected(object);
@@ -262,7 +263,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 		}
 	}
 
-	public boolean represents(FlexoModelObject anObject) {
+	public boolean represents(FlexoObject anObject) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("represents() " + this + " obj: " + anObject);
 		}
@@ -289,10 +290,10 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	 * 
 	 * @return
 	 */
-	public Vector<FlexoModelObject> getViewSelection() {
+	public Vector<FlexoObject> getViewSelection() {
 		// logger.info("View selection, current selection is "+getSelectionManager().getObjectSelection());
-		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>(getSelectionManager().getSelection());
-		for (FlexoModelObject next : getSelectionManager().getSelection()) {
+		Vector<FlexoObject> returned = new Vector<FlexoObject>(getSelectionManager().getSelection());
+		for (FlexoObject next : getSelectionManager().getSelection()) {
 			if (!represents(next)) {
 				// logger.info("exclude "+next+" from view selection");
 				returned.remove(next);

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.diff.merge.MergedDocumentType;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
@@ -47,7 +47,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public abstract class ResourceType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
+public abstract class ResourceType extends KVCFlexoObject implements StringConvertable, ChoiceList, Serializable {
 	protected static final Logger logger = FlexoLogger.getLogger(ResourceType.class.getPackage().getName());
 
 	public static TextFileFormat RM_FORMAT, LINKS_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT,

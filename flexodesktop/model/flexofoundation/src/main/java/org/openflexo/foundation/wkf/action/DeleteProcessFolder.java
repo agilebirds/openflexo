@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.UndoException;
@@ -68,7 +69,7 @@ public class DeleteProcessFolder extends FlexoAction<DeleteProcessFolder, Proces
 
 	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-		for (FlexoModelObject folder : getGlobalSelectionAndFocusedObject()) {
+		for (FlexoObject folder : getGlobalSelectionAndFocusedObject()) {
 			if (folder instanceof ProcessFolder) {
 				folder.delete();
 			}

@@ -40,6 +40,7 @@ import org.openflexo.drm.Language;
 import org.openflexo.drm.dm.DRMDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -232,7 +233,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 			*/
 
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 				if (object instanceof DocItemFolder) {
 					return new DocItemFolderElement((DocItemFolder) object, browser, parent);
 				} else if (object instanceof DocItem) {

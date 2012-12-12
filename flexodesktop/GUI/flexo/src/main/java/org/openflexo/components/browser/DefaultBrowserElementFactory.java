@@ -26,7 +26,7 @@ import org.openflexo.components.browser.ie.IEBrowserElementFactory;
 import org.openflexo.components.browser.ontology.OEBrowserElementFactory;
 import org.openflexo.components.browser.wkf.WKFBrowserElementFactory;
 import org.openflexo.components.browser.ws.WSBrowserElementFactory;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
 public class DefaultBrowserElementFactory implements BrowserElementFactory {
@@ -51,7 +51,7 @@ public class DefaultBrowserElementFactory implements BrowserElementFactory {
 	}
 
 	@Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+	public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 		if (object instanceof FlexoProject) {
 			return new ProjectElement((FlexoProject) object, browser, parent);
 		}

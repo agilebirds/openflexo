@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -260,7 +260,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 		};
 	}
 
-	public static class RadioButtonMode extends FlexoObject {
+	public static class RadioButtonMode extends KVCFlexoObject {
 		public File iconFile;
 
 		public String name;

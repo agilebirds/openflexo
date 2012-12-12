@@ -33,6 +33,7 @@ import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.swing.TextFieldCustomPopup;
 
@@ -42,7 +43,7 @@ import org.openflexo.swing.TextFieldCustomPopup;
  * @author sguerin
  * 
  */
-public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
+public abstract class AbstractBrowserSelector<T extends FlexoObject> extends TextFieldCustomPopup<T> implements
 		AbstractSelectorPanelOwner<T>, FIBCustomComponent<T, TextFieldCustomPopup<T>> {
 
 	static final Logger logger = Logger.getLogger(AbstractBrowserSelector.class.getPackage().getName());
@@ -207,7 +208,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 	@Override
 	public abstract String renderedString(T editedObject);
 
-	public FlexoModelObject getSelectedObject() {
+	public FlexoObject getSelectedObject() {
 		if (_selectorPanel != null) {
 			return _selectorPanel.getSelectedObject();
 		}
@@ -215,7 +216,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 	}
 
 	@Override
-	public boolean isSelectable(FlexoModelObject object) {
+	public boolean isSelectable(FlexoObject object) {
 		return _selectableClass.isAssignableFrom(object.getClass());
 	}
 

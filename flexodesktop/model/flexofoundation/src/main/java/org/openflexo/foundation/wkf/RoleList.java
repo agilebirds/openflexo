@@ -22,6 +22,7 @@ package org.openflexo.foundation.wkf;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -141,6 +142,11 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		// if (logger.isLoggable(Level.WARNING)) logger.warning ("Could not find
 		// role named "+aName);
 		return null;
+	}
+
+	@Override
+	public Collection<Role> getEmbeddedValidableObjects() {
+		return getRoles();
 	}
 
 	/**
@@ -404,6 +410,5 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// TODO Auto-generated method stub
-
 	}
 }

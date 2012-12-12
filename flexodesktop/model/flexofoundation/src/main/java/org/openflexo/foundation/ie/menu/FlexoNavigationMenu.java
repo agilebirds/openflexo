@@ -181,6 +181,16 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		_resource = (FlexoNavigationMenuResource) resource;
 	}
 
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoNavigationMenu> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoNavigationMenu> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
 	/**
 	 * Save this object using ResourceManager scheme Additionnaly save all known processes related to this workflow
 	 * 
