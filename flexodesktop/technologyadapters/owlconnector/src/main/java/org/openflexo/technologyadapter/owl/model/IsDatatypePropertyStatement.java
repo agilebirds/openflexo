@@ -34,16 +34,6 @@ public class IsDatatypePropertyStatement extends IsAStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "is_datatype_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IsDatatypePropertyStatement: " + getStatement();
-	}
-
-	@Override
 	public String toString() {
 		return getSubject().getName() + " is a DatatypeProperty";
 	}

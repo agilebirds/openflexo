@@ -79,4 +79,8 @@ public abstract class OWLObject extends AbstractOntologyObject implements IFlexo
 		return getTechnologyAdapter().getOntologyLibrary();
 	}
 
+	@Override
+	public final String getFullyQualifiedName() {
+		return getClass().getSimpleName() + "." + getURI();
+	}
 }

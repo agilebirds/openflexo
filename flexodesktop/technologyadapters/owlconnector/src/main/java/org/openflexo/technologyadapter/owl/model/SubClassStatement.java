@@ -42,16 +42,6 @@ public class SubClassStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "sub_class_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "SubClassStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getParent() {
 		return parent;
 	}

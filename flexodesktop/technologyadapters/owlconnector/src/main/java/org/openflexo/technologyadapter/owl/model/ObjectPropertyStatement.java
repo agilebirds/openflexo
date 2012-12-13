@@ -66,16 +66,6 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "object_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "ObjectPropertyStatement: " + getStatement();
-	}
-
-	@Override
 	public OWLObjectProperty getProperty() {
 		return property;
 	}

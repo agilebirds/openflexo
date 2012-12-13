@@ -41,16 +41,6 @@ public class TypeStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "type_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "TypeStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getType() {
 		return type;
 	}

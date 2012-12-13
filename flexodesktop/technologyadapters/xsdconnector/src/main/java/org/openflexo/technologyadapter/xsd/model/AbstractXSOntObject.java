@@ -25,12 +25,11 @@ import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.xmlcode.StringConvertable;
 
 public abstract class AbstractXSOntObject extends AbstractOntologyObject implements IFlexoOntologyObject, XSOntologyURIDefinitions,
-		InspectableObject, StringConvertable<IFlexoOntologyConcept> {
+		StringConvertable<IFlexoOntologyConcept> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
 			.getPackage().getName());
@@ -127,16 +126,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	@Override
 	public boolean isOntologyDataProperty() {
 		return false;
-	}
-
-	@Override
-	@Deprecated
-	public abstract String getClassNameKey();
-
-	@Override
-	@Deprecated
-	public String getInspectorName() {
-		return null;
 	}
 
 }

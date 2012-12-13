@@ -24,9 +24,6 @@ package org.openflexo.foundation.ontology;
 import java.util.List;
 import java.util.Set;
 
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.PatternRole;
-
 /**
  * Common interface for concepts of Ontology.
  * 
@@ -115,11 +112,11 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
 
 	// NB: implemented in FlexoModelObject
-	@Deprecated
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
+	// @Deprecated
+	// public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
 
 	// NB: implemented in FlexoModelObject
-	@Deprecated
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
+	// @Deprecated
+	// public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole);
 
 }

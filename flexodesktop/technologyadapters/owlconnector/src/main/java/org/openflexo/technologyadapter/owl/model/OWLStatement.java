@@ -21,14 +21,11 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public abstract class OWLStatement extends OWLObject implements InspectableObject {
+public abstract class OWLStatement extends OWLObject {
 
 	private static final Logger logger = Logger.getLogger(OWLStatement.class.getPackage().getName());
 
@@ -44,6 +41,30 @@ public abstract class OWLStatement extends OWLObject implements InspectableObjec
 		if (!s.getSubject().equals(_subject.getOntResource())) {
 			logger.warning("Inconsistant data: subject is not " + this);
 		}
+	}
+
+	/**
+	 * Not relevant since an OWL Statement has no name, return {@link #getDisplayableDescription()}
+	 */
+	@Override
+	public String getName() {
+		return getDisplayableDescription();
+	}
+
+	/**
+	 * Not relevant since an OWL Statement has no name
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+	}
+
+	/**
+	 * Return null as OWL statement has no URI
+	 */
+	@Override
+	public String getURI() {
+		// a OWL statement has no URI
+		return null;
 	}
 
 	@Override
@@ -68,30 +89,12 @@ public abstract class OWLStatement extends OWLObject implements InspectableObjec
 		return getFlexoOntology();
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		if (_subject != null) {
-			return _subject.getProject();
-		}
-		return null;
-	}
-
 	public OWLConcept<?> getSubject() {
 		return _subject;
 	}
 
 	public Statement getStatement() {
 		return _statement;
-	}
-
-	/*public OWLOntologyLibrary getOntologyLibrary()
-	{
-		return getProject().getOntologyLibrary();
-	}*/
-
-	@Override
-	public final String getInspectorName() {
-		return Inspectors.VE.ONTOLOGY_STATEMENT_INSPECTOR;
 	}
 
 	@Override

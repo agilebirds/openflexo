@@ -34,16 +34,6 @@ public class IsClassStatement extends IsAStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "is_class_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IsClassStatement: " + getStatement();
-	}
-
-	@Override
 	public String toString() {
 		return getSubject().getName() + " is a Class";
 	}

@@ -22,7 +22,6 @@ package org.openflexo.technologyadapter.xsd.model;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -36,7 +35,6 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
 
 	private XMLModelResource modelResource;
-	private FlexoProject project;
 
 	public XMLModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI, xsdFile, adapter);
@@ -49,10 +47,23 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 	}
 
 	@Override
+	@Deprecated
+	public FlexoProject getProject() {
+		// TODO should be removed from FlexoResourceData implementation
+		return null;
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
 	public XMLModelResource getFlexoResource() {
 		return modelResource;
 	}
 
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
 	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
 		if (resource instanceof XMLModelResource) {
@@ -60,31 +71,29 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 		}
 	}
 
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
-	public void setProject(FlexoProject project) {
-		this.project = project;
+	public org.openflexo.foundation.resource.FlexoResource<XMLModel> getResource() {
+		return getFlexoResource();
 	}
 
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
-	public FlexoProject getProject() {
-		return project;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<XMLModel> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Deprecated
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VE.PROJECT_ONTOLOGY_INSPECTOR;
-	}
-
-	@Deprecated
-	@Override
-	public String getClassNameKey() {
-		return "XSD_project_ontology";
 	}
 
 }

@@ -21,40 +21,20 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.inspector.InspectableObject;
+import org.openflexo.foundation.FlexoObject;
 
-public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject {
+/**
+ * This is the default abstract implementation of all objects encoding models or metamodels conform to FlexoOntology layer
+ * 
+ * @author sylvain
+ * 
+ */
+public abstract class AbstractOntologyObject extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(AbstractOntologyObject.class.getPackage().getName());
 
 	public AbstractOntologyObject() {
 		super();
-	}
-
-	/**
-	 * @return Returns the flexoID.
-	 */
-	@Override
-	public long getFlexoID() {
-		if (isBeingCloned()) {
-			return -1;
-		}
-		if (getFlexoOntology() instanceof ImportedOntology) {
-			// Special case for ontology objects declared in imported ontology
-			// They are not linked to any project and have no FlexoID
-			return -3;
-		}
-		return super.getFlexoID();
-	}
-
-	@Override
-	public final XMLStorageResourceData getXMLResourceData() {
-		// These objects are never serialized therefore they should never return an XMLResourceData.
-		// If that was to ever change, consider also modifying
-		// org.openflexo.dg.docx.ProjectDocDocxGenerator.getEPITag(EditionPatternInstance)
-		return null;
 	}
 
 	public IFlexoOntology getOntology() {
@@ -63,12 +43,6 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 
 	public abstract IFlexoOntology getFlexoOntology();
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "_" + getURI();
-	}
-
-	@Override
 	public abstract String getDisplayableDescription();
 
 	public abstract boolean isOntology();

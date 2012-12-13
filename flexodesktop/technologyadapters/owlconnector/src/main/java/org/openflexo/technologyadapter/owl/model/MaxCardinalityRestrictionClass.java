@@ -94,16 +94,6 @@ public class MaxCardinalityRestrictionClass extends OWLRestriction {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "min_cardinality_restriction";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "MinCardinalityRestrictionClass:" + getDisplayableDescription();
-	}
-
-	@Override
 	public Restriction getOntResource() {
 		return restriction;
 	}

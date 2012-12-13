@@ -34,16 +34,6 @@ public class IsObjectPropertyStatement extends IsAStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "is_object_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IsObjectPropertyStatement: " + getStatement();
-	}
-
-	@Override
 	public String toString() {
 		return getSubject().getName() + " is an ObjectProperty";
 	}

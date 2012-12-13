@@ -53,16 +53,6 @@ public class SomeValuesFromRestrictionClass extends OWLRestriction {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "some_values_from_restriction";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "SomeValuesFromRestrictionClass:" + getDisplayableDescription();
-	}
-
-	@Override
 	public SomeValuesFromRestriction getOntResource() {
 		return restriction;
 	}

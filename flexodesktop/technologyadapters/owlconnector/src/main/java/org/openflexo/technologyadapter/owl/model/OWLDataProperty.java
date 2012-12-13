@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
@@ -46,25 +45,6 @@ public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataPr
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "ontology_data_property";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IFlexoOntologyDataProperty:" + getURI();
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_READ_ONLY_INSPECTOR; // read-only
-		} else {
-			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_INSPECTOR;
-		}
 	}
 
 	/*@Override

@@ -41,16 +41,6 @@ public class EquivalentClassStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "equivalent_class_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "EquivalentClassStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getEquivalentObject() {
 		return equivalentObject;
 	}

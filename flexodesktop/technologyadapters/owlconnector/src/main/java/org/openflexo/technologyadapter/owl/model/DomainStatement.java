@@ -41,16 +41,6 @@ public class DomainStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "domain_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "DomainStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getDomain() {
 		return domain;
 	}

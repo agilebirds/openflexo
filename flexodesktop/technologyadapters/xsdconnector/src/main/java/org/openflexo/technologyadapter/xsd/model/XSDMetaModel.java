@@ -21,15 +21,19 @@ package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
 
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
 public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSDMetaModel.class.getPackage()
 			.getName());
+
+	private XSDMetaModelResource metaModelResource;
 
 	public XSDMetaModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI, xsdFile, adapter);
@@ -48,16 +52,40 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		logger.warning("XSDMetaModels are not supposed to be saved !!!");
 	}
 
-	@Deprecated
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VE.IMPORTED_ONTOLOGY_INSPECTOR;
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	public XSDMetaModelResource getFlexoResource() {
+		return metaModelResource;
 	}
 
-	@Deprecated
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
+		if (resource instanceof XSDMetaModelResource) {
+			this.metaModelResource = (XSDMetaModelResource) resource;
+		}
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
-	public String getClassNameKey() {
-		return null;
+	public org.openflexo.foundation.resource.FlexoResource<XSDMetaModel> getResource() {
+		return getFlexoResource();
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<XSDMetaModel> resource) {
+		try {
+			setFlexoResource((FlexoResource<?>) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

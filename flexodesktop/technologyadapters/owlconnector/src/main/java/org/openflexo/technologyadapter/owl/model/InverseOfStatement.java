@@ -41,16 +41,6 @@ public class InverseOfStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "inverse_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "InverseOfStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getInverseProperty() {
 		return inverseProperty;
 	}

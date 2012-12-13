@@ -119,6 +119,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -4192,10 +4193,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					logger.warning("Found null actorReference.getPatternReference(), please investigate");
 				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
 					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
-				} else {
+				} else if (object instanceof AbstractOntologyObject) {
 					PatternRole pr = actorReference.getPatternReference().getPatternRole();
 					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-					object.registerEditionPatternReference(instance, pr);
+					((AbstractOntologyObject) object).registerEditionPatternReference(instance, pr);
 				}
 			}
 			values.clear();

@@ -49,16 +49,6 @@ public class RangeStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "range_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "RangeStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getRange() {
 		return range;
 	}

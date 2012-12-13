@@ -34,16 +34,6 @@ public class InverseFunctionalPropertyStatement extends IsAStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "is_inverse_functional_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "InverseFunctionalPropertyStatement: " + getStatement();
-	}
-
-	@Override
 	public String toString() {
 		return getSubject().getName() + " is an InverseFunctionalProperty";
 	}

@@ -22,7 +22,6 @@ package org.openflexo.technologyadapter.xsd.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
@@ -91,20 +90,6 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 	@Override
 	public boolean isOntologyObjectProperty() {
 		return true;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "XSD_ontology_object_property";
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_READ_ONLY_INSPECTOR;
-		} else {
-			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_INSPECTOR;
-		}
 	}
 
 	@Override

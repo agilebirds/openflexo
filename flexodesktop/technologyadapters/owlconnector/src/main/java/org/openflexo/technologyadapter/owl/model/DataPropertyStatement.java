@@ -44,16 +44,6 @@ public class DataPropertyStatement extends PropertyStatement {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "data_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "DataPropertyStatement: " + getStatement();
-	}
-
-	@Override
 	public OWLDataProperty getProperty() {
 		return property;
 	}

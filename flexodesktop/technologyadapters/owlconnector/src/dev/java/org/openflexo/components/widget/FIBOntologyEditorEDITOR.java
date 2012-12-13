@@ -8,9 +8,9 @@ import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -37,7 +37,7 @@ public class FIBOntologyEditorEDITOR {
 				.getTechnologyContextManager(owlAdapter);
 
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-		FlexoOntology o = ontologyLibrary.getOntology(
+		OWLOntology o = ontologyLibrary.getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				"http://www.cpmf.org/ontologies/cpmfInstance");
 		// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
@@ -233,20 +232,6 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	@Override
 	public boolean isOntologyIndividual() {
 		return true;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "XSD_ontology_individual";
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR;
-		} else {
-			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_INSPECTOR;
-		}
 	}
 
 	@Override

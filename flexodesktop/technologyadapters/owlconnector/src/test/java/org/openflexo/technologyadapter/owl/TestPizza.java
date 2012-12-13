@@ -25,11 +25,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
+import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.toolbox.FileResource;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -38,17 +38,31 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-public class TestPizza {
+public class TestPizza extends FlexoTestCase {
 
-	public static void main(String[] args) {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		ViewPointLibrary viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
+	private static ApplicationContext testApplicationContext;
+	private static OWLTechnologyAdapter owlAdapter;
+	private static OWLOntologyLibrary ontologyLibrary;
+
+	/**
+	 * Instanciate test ResourceCenter
+	 */
+	public void test0LoadTestResourceCenter() {
+		log("test0LoadTestResourceCenter()");
+		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
+		owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
+		ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
+	}
+
+	/**
+	 * Load an ontology
+	 */
+	public void test1LoadTestResourceCenter() {
 
 		File myOntology = new FileResource("MyOntologies/MyPizza.owl");
 
 		System.out.println("Found: " + myOntology);
-		OWLOntology hop = (OWLOntology) ontologyLibrary.importMetaModel("http://prout", myOntology);
+		OWLOntology hop = new OWLOntology(OWLOntology.findOntologyURI(myOntology), myOntology, ontologyLibrary, owlAdapter);
 
 		// importedOntologyLibraries.debug();
 
@@ -81,15 +95,15 @@ public class TestPizza {
 		OntClass pipiClass = ontModel.createClass(URI + "#" + "pipi");
 		pipiClass.addSuperClass(cacaClass);
 
-		OWLOntology flexoConceptsOntology = (OWLOntology) ontologyLibrary.getOntology(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
+		OWLOntology flexoConceptsOntology = ontologyLibrary.getOntology(OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
 
-		ontModel.getDocumentManager().loadImport(flexoConceptsOntology.getOntModel(), OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
-		ontModel.getDocumentManager().addModel(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI, flexoConceptsOntology.getOntModel(), true);
+		ontModel.getDocumentManager().loadImport(flexoConceptsOntology.getOntModel(), OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
+		ontModel.getDocumentManager().addModel(OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI, flexoConceptsOntology.getOntModel(), true);
 		ontModel.loadImports();
 		ontModel.getDocumentManager().loadImports(ontModel);
 
 		OntClass flexoConceptClass = flexoConceptsOntology.getOntModel().createClass(
-				OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
+				OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
 
 		for (Iterator i = flexoConceptClass.listSuperClasses(); i.hasNext();) {
 			OntClass unParent = (OntClass) i.next();
@@ -113,7 +127,7 @@ public class TestPizza {
 		}
 
 		String ONTOLOGY_C = URI;
-		String ONTOLOGY_A = OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI;
+		String ONTOLOGY_A = OWLOntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI;
 		String ONTOLOGY_B = "http://www.denali.be/flexo/ontologies/Calcs/PizzaEditor.owl";
 		String ONTOLOGY_D = "http://www.denali.be/flexo/ontologies/Calcs/PizzaIngredientEditor.owl";
 

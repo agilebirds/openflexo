@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -55,11 +54,6 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		return EditionActionType.AddRestrictionStatement;
 	}
 
-	/*@Override
-	public List<RestrictionStatementPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(RestrictionStatementPatternRole.class);
-	}*/
-
 	public String _getPropertyURI() {
 		return propertyURI;
 	}
@@ -80,19 +74,6 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
 		return (OWLConcept<?>) getObject().getBindingValue(action);
 	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_RESTRICTION_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
 
 	private ViewPointDataBinding object;
 

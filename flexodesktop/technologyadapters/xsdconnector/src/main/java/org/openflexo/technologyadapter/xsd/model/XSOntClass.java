@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
@@ -106,20 +105,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	@Override
 	public boolean isOntologyClass() {
 		return true;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "XSD_ontology_class";
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_CLASS_READ_ONLY_INSPECTOR;
-		} else {
-			return Inspectors.VE.ONTOLOGY_CLASS_INSPECTOR;
-		}
 	}
 
 	@Override

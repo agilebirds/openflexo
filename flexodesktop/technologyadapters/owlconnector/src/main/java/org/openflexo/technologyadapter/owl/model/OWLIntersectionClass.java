@@ -38,16 +38,6 @@ public class OWLIntersectionClass extends OWLOperatorClass {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "ontology_intersection_class";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "OntologyIntersectionClass:" + ontClass.getURI();
-	}
-
-	@Override
 	public IntersectionClass getOntResource() {
 		return ontClass;
 	}

@@ -38,16 +38,6 @@ public class OWLUnionClass extends OWLOperatorClass {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "ontology_union_class";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "OntologyUnionClass:" + ontClass.getURI();
-	}
-
-	@Override
 	public UnionClass getOntResource() {
 		return ontClass;
 	}

@@ -50,16 +50,6 @@ public class HasValueRestrictionClass extends OWLRestriction {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "has_value_restriction";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "HasValueRestrictionClass:" + getDisplayableDescription();
-	}
-
-	@Override
 	public HasValueRestriction getOntResource() {
 		return restriction;
 	}

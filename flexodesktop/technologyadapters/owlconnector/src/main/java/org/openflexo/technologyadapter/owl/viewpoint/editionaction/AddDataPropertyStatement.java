@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
@@ -131,11 +130,6 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	public Object getValue(EditionSchemeAction action) {
 		return getValue().getBindingValue(action);
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
 	private ViewPointDataBinding value;

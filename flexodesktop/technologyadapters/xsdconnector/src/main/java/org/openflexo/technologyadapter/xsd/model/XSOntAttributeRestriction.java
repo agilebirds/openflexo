@@ -102,11 +102,6 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "XSD_ontology_attribute_restriction";
-	}
-
-	@Override
 	public XSOntDataProperty getFeature() {
 		return attributeProperty;
 	}

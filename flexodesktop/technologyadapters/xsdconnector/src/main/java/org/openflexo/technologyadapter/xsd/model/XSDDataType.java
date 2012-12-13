@@ -67,10 +67,4 @@ public class XSDDataType extends AbstractXSOntObject implements IFlexoOntologyDa
 		return builtInDataType;
 	}
 
-	@Override
-	@Deprecated
-	public String getClassNameKey() {
-		return null;
-	}
-
 }

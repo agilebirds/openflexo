@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -166,32 +165,12 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 		}
 	}
 
-	@Deprecated
-	@Override
-	public String getClassNameKey() {
-		return "ontology_class";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IFlexoOntologyClass:" + getURI();
-	}
-
 	public static final Comparator<IFlexoOntologyClass> COMPARATOR = new Comparator<IFlexoOntologyClass>() {
 		@Override
 		public int compare(IFlexoOntologyClass o1, IFlexoOntologyClass o2) {
 			return Collator.getInstance().compare(o1.getName(), o2.getName());
 		}
 	};
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_CLASS_READ_ONLY_INSPECTOR; // read-only
-		} else {
-			return Inspectors.VE.ONTOLOGY_CLASS_INSPECTOR;
-		}
-	}
 
 	@Override
 	public int compareTo(IFlexoOntologyClass o) {

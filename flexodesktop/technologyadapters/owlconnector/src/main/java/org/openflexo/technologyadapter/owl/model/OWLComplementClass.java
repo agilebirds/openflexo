@@ -38,16 +38,6 @@ public class OWLComplementClass extends OWLOperatorClass {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "ontology_complement_class";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "OntologyComplementClass:" + ontClass.getURI();
-	}
-
-	@Override
 	public ComplementClass getOntResource() {
 		return ontClass;
 	}

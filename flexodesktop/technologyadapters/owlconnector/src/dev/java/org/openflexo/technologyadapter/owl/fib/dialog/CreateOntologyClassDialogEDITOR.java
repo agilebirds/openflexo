@@ -21,22 +21,28 @@ package org.openflexo.technologyadapter.owl.fib.dialog;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.action.CreateOntologyClass;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.ve.VECst;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.technologyadapter.owl.controller.OWLAdapterController;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
+import org.openflexo.toolbox.FileResource;
 
 public class CreateOntologyClassDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		ApplicationContext testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
+		OWLTechnologyAdapter owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(
+				OWLTechnologyAdapter.class);
+		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService()
+				.getTechnologyContextManager(owlAdapter);
 
-		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		OWLOntology ontology = (OWLOntology) ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
+		OWLOntology ontology = ontologyLibrary
+				.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
 		ontology.loadWhenUnloaded();
 		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, null);
 		return makeArray(action);
@@ -44,7 +50,7 @@ public class CreateOntologyClassDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return VECst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB;
+		return OWLAdapterController.CREATE_ONTOLOGY_CLASS_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

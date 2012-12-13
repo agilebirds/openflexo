@@ -74,12 +74,6 @@ public abstract class OWLOperatorClass extends OWLClass {
 	}
 
 	@Override
-	public abstract String getClassNameKey();
-
-	@Override
-	public abstract String getFullyQualifiedName();
-
-	@Override
 	public abstract BooleanClassDescription getOntResource();
 
 	@Override

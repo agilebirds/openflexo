@@ -41,16 +41,6 @@ public class SubPropertyStatement extends OWLStatement {
 		}
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "sub_property_statement";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "SubPropertyStatement: " + getStatement();
-	}
-
 	public OWLConcept<?> getSuperProperty() {
 		return superProperty;
 	}

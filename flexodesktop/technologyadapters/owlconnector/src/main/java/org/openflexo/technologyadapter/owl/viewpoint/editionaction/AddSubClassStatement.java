@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -48,18 +47,8 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 		return EditionActionType.AddIsAStatement;
 	}
 
-	/*@Override
-	public List<SubClassStatementPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(SubClassStatementPatternRole.class);
-	}*/
-
 	public OWLConcept<?> getPropertyFather(EditionSchemeAction action) {
 		return (OWLConcept<?>) getFather().getBindingValue(action);
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
 	private ViewPointDataBinding father;

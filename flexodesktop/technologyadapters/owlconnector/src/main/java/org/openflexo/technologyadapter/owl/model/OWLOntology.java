@@ -67,8 +67,8 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -78,6 +78,7 @@ import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyIndividual;
 import org.openflexo.technologyadapter.owl.model.action.DeleteOntologyObjects;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.ontology.AnnotationProperty;
@@ -145,6 +146,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	private final Vector<OWLObjectProperty> orderedObjectProperties;
 
 	private OWLClass THING_CONCEPT;
+
+	private OWLOntologyResource ontologyResource;
 
 	public static OWLOntology createOWLEmptyOntology(String anURI, File owlFile, OWLOntologyLibrary ontologyLibrary,
 			OWLTechnologyAdapter adapter) {
@@ -325,11 +328,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "flexo_ontology";
-	}
-
-	@Override
 	public String getURI() {
 		return getOntologyURI();
 	}
@@ -447,11 +445,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	@Override
 	public String toString() {
 		return "ImportedOntology:" + getOntologyURI();
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getOntologyURI();
 	}
 
 	public boolean importOntology(String ontologyURI) throws OntologyNotFoundException {
@@ -1471,7 +1464,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		// TODO
 	}
 
-	@Override
 	public void saveToFile(File aFile) {
 		FileOutputStream out = null;
 		try {
@@ -2083,24 +2075,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	@Override
-	public FlexoStorageResource getFlexoResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public OWLOntology getMetaModel() {
 		// TODO Auto-generated method stub
 		return null;
@@ -2154,6 +2128,57 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	public List<? extends IFlexoOntologyAnnotation> getAnnotations() {
 		// TODO return annotation statements here
 		return null;
+	}
+
+	@Override
+	public synchronized void setChanged() {
+		super.setChanged();
+		getFlexoResource().setChanged();
+	}
+
+	@Override
+	@Deprecated
+	public FlexoProject getProject() {
+		// TODO should be removed from FlexoResourceData implementation
+		return null;
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public OWLOntologyResource getFlexoResource() {
+		return ontologyResource;
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
+		if (resource instanceof OWLOntologyResource) {
+			this.ontologyResource = (OWLOntologyResource) resource;
+		}
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<OWLOntology> getResource() {
+		return getFlexoResource();
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<OWLOntology> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

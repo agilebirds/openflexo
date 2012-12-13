@@ -22,36 +22,45 @@ package org.openflexo.technologyadapter.owl.fib.dialog;
 import java.io.File;
 import java.util.Vector;
 
+import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.action.DeleteOntologyObjects;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.ve.VECst;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.technologyadapter.owl.controller.OWLAdapterController;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.action.DeleteOntologyObjects;
+import org.openflexo.toolbox.FileResource;
 
 public class DeleteOntologyObjectsDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
 		String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		OWLOntology ontology = (OWLOntology) ontologyLibrary.getOntology(URI);
+
+		ApplicationContext testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
+		OWLTechnologyAdapter owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(
+				OWLTechnologyAdapter.class);
+		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService()
+				.getTechnologyContextManager(owlAdapter);
+
+		OWLOntology ontology = ontologyLibrary.getOntology(URI);
 		ontology.loadWhenUnloaded();
-		Vector<OWLObject> selection = new Vector<OWLObject>();
+
+		Vector<OWLConcept> selection = new Vector<OWLConcept>();
 		selection.add(ontology.getOntologyObject(URI + "#Actor"));
 		selection.add(ontology.getOntologyObject(URI + "#Mission"));
 		selection.add(ontology.getOntologyObject(URI + "#hasMission"));
 		selection.add(ontology.getOntologyObject(URI + "#description"));
+
 		DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
+		return OWLAdapterController.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

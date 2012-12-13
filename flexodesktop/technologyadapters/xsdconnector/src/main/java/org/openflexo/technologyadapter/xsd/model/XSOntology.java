@@ -625,10 +625,4 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
-	@Override
-	public String getClassNameKey() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

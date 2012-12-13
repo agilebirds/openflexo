@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
@@ -179,31 +178,12 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 		logger.warning("Type " + aType + " is not a OWLClass");
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "ontology_individual";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "IFlexoOntologyIndividual:" + getURI();
-	}
-
 	public static final Comparator<IFlexoOntologyIndividual> COMPARATOR = new Comparator<IFlexoOntologyIndividual>() {
 		@Override
 		public int compare(IFlexoOntologyIndividual o1, IFlexoOntologyIndividual o2) {
 			return Collator.getInstance().compare(o1.getName(), o2.getName());
 		}
 	};
-
-	@Override
-	public String getInspectorName() {
-		if (getIsReadOnly()) {
-			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR; // read-only
-		} else {
-			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_INSPECTOR;
-		}
-	}
 
 	@Override
 	public int compareTo(IFlexoOntologyIndividual o) {

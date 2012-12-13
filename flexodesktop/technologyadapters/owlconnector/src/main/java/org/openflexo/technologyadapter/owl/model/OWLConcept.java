@@ -40,7 +40,6 @@ import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -55,7 +54,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
-public abstract class OWLConcept<R extends OntResource> extends OWLObject implements IFlexoOntologyConcept, InspectableObject,
+public abstract class OWLConcept<R extends OntResource> extends OWLObject implements IFlexoOntologyConcept,
 		StringConvertable<IFlexoOntologyConcept> {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntologyConcept.class.getPackage().getName());
@@ -1037,12 +1036,15 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		}
 	}
 
-	@Override
+	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
+	// All of this will be refactored and this method will be removed from next versions
+	@Deprecated
 	public Vector<EditionPatternReference> getEditionPatternReferences() {
-		if (getProject() != null) {
-			getProject()._retrievePendingEditionPatternReferences(this);
-		}
-		return super.getEditionPatternReferences();
+		return null;
+		/*	if (getProject() != null) {
+				getProject()._retrievePendingEditionPatternReferences(this);
+			}
+			return super.getEditionPatternReferences();*/
 	}
 
 	public String getHTMLDescription() {

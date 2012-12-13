@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
@@ -133,19 +132,6 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
 		return (OWLConcept<?>) getObject().getBindingValue(action);
 	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
 
 	private ViewPointDataBinding object;
 

@@ -21,21 +21,27 @@ package org.openflexo.technologyadapter.owl.fib.dialog;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.action.CreateOntologyIndividual;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.ve.VECst;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.technologyadapter.owl.controller.OWLAdapterController;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
+import org.openflexo.technologyadapter.owl.model.action.CreateOntologyIndividual;
+import org.openflexo.toolbox.FileResource;
 
 public class CreateOntologyIndividualDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		OWLOntology ontology = (OWLOntology) ontologyLibrary
+		ApplicationContext testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
+		OWLTechnologyAdapter owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(
+				OWLTechnologyAdapter.class);
+		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService()
+				.getTechnologyContextManager(owlAdapter);
+
+		OWLOntology ontology = ontologyLibrary
 				.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
 		ontology.loadWhenUnloaded();
 		CreateOntologyIndividual action = CreateOntologyIndividual.actionType.makeNewAction(ontology, null, null);
@@ -44,7 +50,7 @@ public class CreateOntologyIndividualDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
+		return OWLAdapterController.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
 	}
 
 	public static void main(String[] args) {

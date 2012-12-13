@@ -95,16 +95,6 @@ public class CardinalityRestrictionClass extends OWLRestriction {
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "cardinality_restriction";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "CardinalityRestrictionClass:" + getDisplayableDescription();
-	}
-
-	@Override
 	public Restriction getOntResource() {
 		return restriction;
 	}

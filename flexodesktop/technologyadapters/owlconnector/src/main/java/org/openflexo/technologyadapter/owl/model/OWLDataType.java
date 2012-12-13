@@ -25,6 +25,7 @@ import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 
@@ -33,10 +34,12 @@ public class OWLDataType extends OWLObject implements IFlexoOntologyDataType, W3
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(OWLDataType.class.getPackage()
 			.getName());
 
+	private String dataTypeURI;
 	private BuiltInDataType builtInDataType;
 
 	protected OWLDataType(String dataTypeURI, OWLTechnologyAdapter adapter) {
 		super(adapter);
+		this.dataTypeURI = dataTypeURI;
 		builtInDataType = BuiltInDataType.fromURI(getURI());
 		if (builtInDataType == null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -44,6 +47,30 @@ public class OWLDataType extends OWLObject implements IFlexoOntologyDataType, W3
 			}
 			builtInDataType = BuiltInDataType.String;
 		}
+	}
+
+	@Override
+	public String getURI() {
+		return dataTypeURI;
+	}
+
+	@Override
+	public String getName() {
+		if (StringUtils.isNotEmpty(getURI())) {
+			if (getURI().lastIndexOf("/") > -1) {
+				return getURI().substring(getURI().lastIndexOf("/") + 1);
+			}
+			if (getURI().lastIndexOf("\\") > -1) {
+				return getURI().substring(getURI().lastIndexOf("\\") + 1);
+			}
+			return getURI();
+		}
+		return null;
+	}
+
+	// Not relevant
+	@Override
+	public void setName(String name) throws Exception {
 	}
 
 	@Override
@@ -91,25 +118,7 @@ public class OWLDataType extends OWLObject implements IFlexoOntologyDataType, W3
 	}
 
 	@Override
-	@Deprecated
-	public String getClassNameKey() {
-		return null;
-	}
-
-	@Override
-	@Deprecated
-	public String getInspectorName() {
-		return null;
-	}
-
-	@Override
 	public OWLOntology getFlexoOntology() {
-		return null;
-	}
-
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
 		return null;
 	}
 

@@ -86,12 +86,6 @@ public abstract class OWLRestriction extends OWLClass implements IFlexoOntologyF
 	}
 
 	@Override
-	public abstract String getClassNameKey();
-
-	@Override
-	public abstract String getFullyQualifiedName();
-
-	@Override
 	public abstract Restriction getOntResource();
 
 	@Override
