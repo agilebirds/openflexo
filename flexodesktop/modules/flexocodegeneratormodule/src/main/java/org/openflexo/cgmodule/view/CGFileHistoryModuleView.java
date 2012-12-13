@@ -43,6 +43,7 @@ import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
@@ -374,11 +375,11 @@ public class CGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (object == _cgFile) {
 			_contentSource = ContentSource.CONTENT_ON_DISK;
 			_displayedObject = _cgFile;

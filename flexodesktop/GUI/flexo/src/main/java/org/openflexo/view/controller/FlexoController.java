@@ -1279,9 +1279,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            the view to remove
 	 */
 	public void removeModuleView(ModuleView<?> aView) {
-		if (aView.getRepresentedObject() != null) {
+		if (aView.getRepresentedObject() instanceof FlexoProjectObject) {
 			Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> map = getLoadedViewsForPerspective(aView.getPerspective());
-			Map<FlexoObject, ModuleView<?>> map2 = map.get(aView.getRepresentedObject().getProject());
+			Map<FlexoObject, ModuleView<?>> map2 = map.get(((FlexoProjectObject) aView.getRepresentedObject()).getProject());
 			if (map2.get(aView.getRepresentedObject()) == aView) {// Let's make sure we remove the proper
 																	// view!
 				map2.remove(aView.getRepresentedObject());

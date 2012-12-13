@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 
 /**
@@ -63,7 +64,7 @@ public class DESelectionManager extends SelectionManager {
 	}
 
 	@Override
-	public FlexoModelObject getPasteContext() {
+	public FlexoObject getPasteContext() {
 		return getFocusedObject();
 	}
 

@@ -33,6 +33,7 @@ import org.openflexo.dm.model.DMEOModelTableModel;
 import org.openflexo.dm.model.DMReadOnlyEOEntityTableModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.action.CreateDMEOEntity;
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.action.DMDelete;
@@ -66,7 +67,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 		addAction(new TabularViewAction(CreateDMEOModel.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -78,7 +79,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 		addAction(new TabularViewAction(ImportDMEOModel.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -90,7 +91,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 		addAction(new TabularViewAction(CreateDMEOEntity.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -102,7 +103,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -136,7 +137,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 	public DMEOModel getSelectedDMEOModel() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEOModel) {
 			return (DMEOModel) selection.firstElement();
 		}
@@ -148,7 +149,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 
 	public DMEOEntity getSelectedDMEOEntity() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEOEntity) {
 			return (DMEOEntity) selection.firstElement();
 		}

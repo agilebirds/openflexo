@@ -37,6 +37,7 @@ import org.openflexo.dm.model.DMReadOnlyMethodTableModel;
 import org.openflexo.dm.model.DMReadOnlyPropertyTableModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateDMEOAttribute;
@@ -77,7 +78,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 		addAction(new TabularViewAction(CreateDMProperty.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -92,7 +93,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 		addAction(new TabularViewAction(CreateDMMethod.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -107,7 +108,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 		addAction(new TabularViewAction(CreateDMEOAttribute.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -122,7 +123,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 		addAction(new TabularViewAction(CreateDMEORelationship.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -137,7 +138,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -199,7 +200,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 	public DMProperty getSelectedDMProperty() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
@@ -208,7 +209,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 	public DMMethod getSelectedDMMethod() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMMethod) {
 			return (DMMethod) selection.firstElement();
 		}
@@ -217,7 +218,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 	public DMEOAttribute getSelectedDMEOAttribute() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEOAttribute) {
 			return (DMEOAttribute) selection.firstElement();
 		}
@@ -226,7 +227,7 @@ public class DMEOEntityView extends DMView<DMEOEntity> {
 
 	public DMEORelationship getSelectedDMEORelationship() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEORelationship) {
 			return (DMEORelationship) selection.firstElement();
 		}

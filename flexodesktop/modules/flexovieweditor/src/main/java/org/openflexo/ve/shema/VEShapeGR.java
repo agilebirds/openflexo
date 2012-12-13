@@ -39,9 +39,9 @@ import org.openflexo.foundation.view.diagram.model.ShapeInserted;
 import org.openflexo.foundation.view.diagram.model.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -95,7 +95,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		if (getDrawable() != null) {
 			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
 			if (epRef != null) {
-				GraphicalElementPatternRole patternRole = (GraphicalElementPatternRole) epRef.getPatternRole();
+				ShapePatternRole patternRole = (ShapePatternRole) epRef.getPatternRole();
 				if (patternRole != null) {
 					for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
 						addToMouseClickControls(new VEMouseClickControl(mask, patternRole));

@@ -29,6 +29,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 
 /**
  * Default implementation of a manager of {@link FlexoService}<br>
@@ -92,6 +93,10 @@ public class FlexoServiceManager {
 
 	public FlexoResourceCenterService getResourceCenterService() {
 		return getService(FlexoResourceCenterService.class);
+	}
+
+	public ViewPointLibrary getViewPointLibrary() {
+		return getService(ViewPointLibrary.class);
 	}
 
 	public class ServiceRegistered implements ServiceNotification {

@@ -33,17 +33,16 @@ import javax.swing.Icon;
 
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -147,7 +146,7 @@ public class VPMController extends FlexoController {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+	public FlexoObject getDefaultObjectToSelect(FlexoProject project) {
 		return getViewPointLibrary();
 	}
 
@@ -159,7 +158,7 @@ public class VPMController extends FlexoController {
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		logger.info("selectAndFocusObject " + object);
 		if (object instanceof EditionPatternObject) {
 			setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
@@ -212,7 +211,7 @@ public class VPMController extends FlexoController {
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		// System.out.println("getWindowTitleforObject() "+object+" perspective="+getCurrentPerspective());
 		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("view_point_library");
@@ -254,7 +253,7 @@ public class VPMController extends FlexoController {
 
 	private List<ResourceSavingInfo> resourceSavingInfo;
 
-	public void manageResource(FlexoModelObject o) {
+	public void manageResource(FlexoObject o) {
 		boolean alreadyRegistered = false;
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			if (i.resource == o) {
@@ -266,7 +265,7 @@ public class VPMController extends FlexoController {
 		}
 	}
 
-	public void unregisterResource(FlexoModelObject o) {
+	public void unregisterResource(FlexoObject o) {
 		logger.info("Unregister " + o);
 		List<ResourceSavingInfo> deleteThis = new ArrayList<VPMController.ResourceSavingInfo>();
 		for (ResourceSavingInfo i : resourceSavingInfo) {
@@ -305,10 +304,10 @@ public class VPMController extends FlexoController {
 	}
 
 	public static class ResourceSavingInfo {
-		protected FlexoModelObject resource;
+		protected FlexoObject resource;
 		protected boolean saveThisResource = true;
 
-		public ResourceSavingInfo(FlexoModelObject r) {
+		public ResourceSavingInfo(FlexoObject r) {
 			resource = r;
 		}
 
@@ -330,7 +329,7 @@ public class VPMController extends FlexoController {
 		}
 
 		public String getName() {
-			return resource.getName() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
+			return resource.toString() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
 		}
 
 		public String getType() {
@@ -375,6 +374,6 @@ public class VPMController extends FlexoController {
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return ViewPointLibraryObject.VALIDATION_MODEL;
+		return ViewPointLibrary.VALIDATION_MODEL;
 	}
 }

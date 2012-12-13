@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.FlexoClipboard;
@@ -75,7 +76,7 @@ public class VEClipboard extends FlexoClipboard {
 		}*/
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+	protected void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext) {
 		System.out.println("Pasting context = " + pastingContext);
 		System.out.println("graphicalContext = " + graphicalContext);
 		JComponent targetContainer = graphicalContext.targetContainer;
@@ -113,19 +114,22 @@ public class VEClipboard extends FlexoClipboard {
 	 * Selection procedure for copy
 	 */
 	@Override
-	protected boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	protected boolean performCopyOfSelection(Vector<? extends FlexoObject> currentlySelectedObjects) {
 		resetClipboard();
 		if (currentlySelectedObjects.size() > 0) {
-			FlexoModelObject o = currentlySelectedObjects.get(0);
-			System.out.println("Copy for " + o + " XML=" + o.getXMLRepresentation());
-			_clipboardData = (FlexoModelObject) o.cloneUsingXMLMapping();
-			System.out.println("Copied data : " + _clipboardData + "XML=" + _clipboardData.getXMLRepresentation());
+			FlexoObject obj = currentlySelectedObjects.get(0);
+			if (obj instanceof FlexoModelObject) {
+				FlexoModelObject o = (FlexoModelObject) obj;
+				System.out.println("Copy for " + o + " XML=" + o.getXMLRepresentation());
+				_clipboardData = (FlexoModelObject) o.cloneUsingXMLMapping();
+				System.out.println("Copied data : " + _clipboardData + "XML=" + _clipboardData.getXMLRepresentation());
+			}
 		}
 
 		return true;
 	}
 
-	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext) {
+	protected boolean isTargetValidForPasting(FlexoObject pastingContext) {
 		return _clipboardData instanceof ViewShape && pastingContext instanceof ViewShape;
 	}
 }

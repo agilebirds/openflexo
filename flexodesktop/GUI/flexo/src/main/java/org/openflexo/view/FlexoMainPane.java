@@ -42,6 +42,7 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.ch.FCH;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.swing.TabbedPane;
 import org.openflexo.swing.TabbedPane.TabHeaderRenderer;
 import org.openflexo.swing.layout.JXMultiSplitPane;
@@ -144,9 +145,10 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			public boolean isTabHeaderVisible(ModuleView<?> tab) {
 				return !(tab instanceof org.openflexo.view.EmptyPanel<?>)
 						&& (AdvancedPrefs.getShowAllTabs() || tab.getRepresentedObject() != null
-								&& tab.getRepresentedObject().getProject() != null
-								&& tab.getRepresentedObject().getProject()
-										.equals(FlexoMainPane.this.controller.getControllerModel().getCurrentProject()));
+								&& tab.getRepresentedObject() instanceof FlexoProjectObject
+								&& ((FlexoProjectObject) tab.getRepresentedObject()).getProject() != null
+								&& ((FlexoProjectObject) tab.getRepresentedObject()).getProject().equals(
+										FlexoMainPane.this.controller.getControllerModel().getCurrentProject()));
 			}
 
 		});

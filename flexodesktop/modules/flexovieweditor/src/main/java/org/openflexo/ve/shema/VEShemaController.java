@@ -32,7 +32,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.ReindexViewElements;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -172,7 +172,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	@Override
 	public boolean upKeyPressed() {
 		if (!super.upKeyPressed()) {
-			FlexoModelObject o = getSelectionManager().getLastSelectedObject();
+			FlexoObject o = getSelectionManager().getLastSelectedObject();
 			if (o == null) {
 				o = getSelectionManager().getFocusedObject();
 			}
@@ -191,7 +191,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	@Override
 	public boolean downKeyPressed() {
 		if (!super.downKeyPressed()) {
-			FlexoModelObject o = getSelectionManager().getLastSelectedObject();
+			FlexoObject o = getSelectionManager().getLastSelectedObject();
 			if (o == null) {
 				o = getSelectionManager().getFocusedObject();
 			}

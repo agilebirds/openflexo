@@ -29,13 +29,13 @@ import javax.swing.JPanel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
@@ -106,7 +106,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		calcBrowser = new CalcBrowser(controller);
 		calcBrowserView = new CEDBrowserView(calcBrowser, controller, SelectionPolicy.ForceSelection) {
 			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
+			public void treeDoubleClick(FlexoObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof DiagramPalette) {
 					focusOnPalette((DiagramPalette) object);
@@ -118,7 +118,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			}
 
 			@Override
-			public void treeSingleClick(FlexoModelObject object) {
+			public void treeSingleClick(FlexoObject object) {
 				super.treeSingleClick(object);
 				if (!(object instanceof DiagramPalette) /*&& !(object instanceof OWLMetaModel)*/) {
 					hideBottomBrowser();
@@ -202,7 +202,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
@@ -210,13 +210,13 @@ public class ViewPointPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof ViewPointLibrary /*|| object instanceof ImportedOWLOntology*/|| object instanceof DiagramPalette
 				|| object instanceof ExampleDiagram || object instanceof ViewPoint || object instanceof EditionPattern;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
@@ -251,7 +251,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		return EMPTY_RIGHT_VIEW;
 	}
 
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("view_point_library");
 		}

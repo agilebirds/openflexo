@@ -29,7 +29,7 @@ import org.openflexo.components.browser.ontology.ViewDefinitionElement;
 import org.openflexo.components.browser.ontology.ViewFolderElement;
 import org.openflexo.components.browser.ontology.ViewLibraryElement;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
@@ -60,11 +60,11 @@ public class VEBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (getController().getCurrentPerspective().hasModuleViewForObject(object)) {
 			// Try to display object in view
 			getController().selectAndFocusObject(object);

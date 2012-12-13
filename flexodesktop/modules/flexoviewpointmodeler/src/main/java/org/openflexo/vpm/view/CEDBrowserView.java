@@ -22,7 +22,7 @@ package org.openflexo.vpm.view;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.vpm.controller.VPMBrowser;
 import org.openflexo.vpm.controller.VPMController;
 
@@ -42,11 +42,11 @@ public class CEDBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (getController().getCurrentPerspective().hasModuleViewForObject(object)) {
 			// Try to display object in view
 			getController().selectAndFocusObject(object);

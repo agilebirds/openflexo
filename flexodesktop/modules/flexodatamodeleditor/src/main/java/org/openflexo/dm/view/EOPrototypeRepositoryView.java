@@ -27,6 +27,7 @@ import org.openflexo.components.tabular.TabularViewAction;
 import org.openflexo.dm.model.DMEOPrototypeTableModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.action.CreateDMPrototype;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.eo.DMEOPrototype;
@@ -50,7 +51,7 @@ public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository> {
 
 		addAction(new TabularViewAction(CreateDMPrototype.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -61,7 +62,7 @@ public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository> {
 		});
 		addAction(new TabularViewAction(DMDelete.actionType, "delete_prototype", controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -88,7 +89,7 @@ public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository> {
 
 	public DMEOPrototype getSelectedDMEOPrototype() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEOPrototype) {
 			return (DMEOPrototype) selection.firstElement();
 		}

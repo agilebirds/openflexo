@@ -31,6 +31,7 @@ import org.openflexo.dm.model.DMReadOnlyMethodTableModel;
 import org.openflexo.dm.model.DMReadOnlyPropertyTableModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMProperty;
@@ -57,7 +58,7 @@ public class DMEntityView extends DMView<DMEntity> {
 		super(entity, controller, "entity_($name)");
 		addAction(new TabularViewAction(CreateDMProperty.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -68,7 +69,7 @@ public class DMEntityView extends DMView<DMEntity> {
 		});
 		addAction(new TabularViewAction(CreateDMMethod.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -79,7 +80,7 @@ public class DMEntityView extends DMView<DMEntity> {
 		});
 		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -116,7 +117,7 @@ public class DMEntityView extends DMView<DMEntity> {
 
 	public DMProperty getSelectedDMProperty() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
@@ -125,7 +126,7 @@ public class DMEntityView extends DMView<DMEntity> {
 
 	public DMMethod getSelectedDMMethod() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMMethod) {
 			return (DMMethod) selection.firstElement();
 		}

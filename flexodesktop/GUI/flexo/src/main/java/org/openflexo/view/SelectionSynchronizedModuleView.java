@@ -21,7 +21,7 @@ package org.openflexo.view;
 
 import java.util.List;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionListener;
 
 /**
@@ -30,7 +30,7 @@ import org.openflexo.selection.SelectionListener;
  * 
  * @author sguerin
  */
-public interface SelectionSynchronizedModuleView<O extends FlexoModelObject> extends ModuleView<O>, SelectionListener {
+public interface SelectionSynchronizedModuleView<O extends FlexoObject> extends ModuleView<O>, SelectionListener {
 
 	public List<SelectionListener> getSelectionListeners();
 }

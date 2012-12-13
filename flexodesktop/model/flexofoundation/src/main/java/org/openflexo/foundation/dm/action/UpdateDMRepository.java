@@ -96,7 +96,7 @@ public class UpdateDMRepository extends FlexoAction {
 		}
 		resetSecondaryProgress(getUpdatedSet().getSelectedObjects().size());
 
-		for (FlexoModelObject next : getUpdatedSet().getSelectedObjects()) {
+		for (FlexoObject next : getUpdatedSet().getSelectedObjects()) {
 			if (next instanceof ClassReference) {
 				ClassReference classReference = (ClassReference) next;
 				setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + classReference.getName());

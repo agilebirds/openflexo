@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.EmptyPanel;
@@ -75,7 +75,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
@@ -84,17 +84,17 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof IFlexoOntology /*|| object == _controller.getBaseOntologyLibrary()*/;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof IFlexoOntology) {
 			// ((IFlexoOntology) object).loadWhenUnloaded();
 			return new OntologyView((IFlexoOntology) object, (VPMController) controller, this);
 		}
-		return new EmptyPanel<FlexoModelObject>(controller, this, object);
+		return new EmptyPanel<FlexoObject>(controller, this, object);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class OntologyPerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		/*if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}

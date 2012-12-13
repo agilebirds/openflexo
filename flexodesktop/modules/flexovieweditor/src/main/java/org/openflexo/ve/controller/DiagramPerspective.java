@@ -30,8 +30,8 @@ import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -40,7 +40,6 @@ import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.owl.ontology.OWLMetaModel;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
@@ -83,7 +82,7 @@ public class DiagramPerspective extends FlexoPerspective {
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
+			public void treeDoubleClick(FlexoObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof View) {
 					focusOnShema((View) object);
@@ -156,24 +155,24 @@ public class DiagramPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public AbstractViewObject getDefaultObject(FlexoModelObject proposedObject) {
+	public AbstractViewObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof View) {
 			return (View) proposedObject;
 		}
-		if (proposedObject != null) {
-			return proposedObject.getProject().getShemaLibrary();
+		if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getViewLibrary();
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof View || object instanceof ViewDefinition;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof View) {
 			return getControllerForShema((View) object).getModuleView();
 		}
@@ -228,7 +227,7 @@ public class DiagramPerspective extends FlexoPerspective {
 		}
 	}
 
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object == null) {
 			return FlexoLocalization.localizedForKey("no_selection");
 		}
@@ -240,12 +239,6 @@ public class DiagramPerspective extends FlexoPerspective {
 		}
 		if (object instanceof View) {
 			return ((View) object).getName();
-		}
-		if (object instanceof ProjectOntology) {
-			return FlexoLocalization.localizedForKey("project_ontology");
-		}
-		if (object instanceof OWLMetaModel) {
-			return ((OWLMetaModel) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

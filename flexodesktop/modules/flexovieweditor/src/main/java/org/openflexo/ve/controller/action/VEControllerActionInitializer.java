@@ -25,7 +25,6 @@ import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.TechnologyAdapterController;
 
 /**
  * 
@@ -80,12 +79,6 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new LinkSchemeActionInitializer(this);
 		new ActionSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
-
-		// To be sure all Technology Adapters are recorded
-		TechnologyAdapterController.loadTechnologyAdapterControllers();
-		for (TechnologyAdapterController adapterController : TechnologyAdapterController.getLoadedAdapterControllers()) {
-			adapterController.initializeActions(this);
-		}
 
 	}
 

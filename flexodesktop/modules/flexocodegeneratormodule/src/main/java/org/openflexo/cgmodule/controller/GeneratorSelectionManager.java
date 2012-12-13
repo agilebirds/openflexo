@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.menu.FlexoMenuBar;
 
@@ -66,7 +67,7 @@ public class GeneratorSelectionManager extends SelectionManager {
 	}
 
 	@Override
-	public FlexoModelObject getPasteContext() {
+	public FlexoObject getPasteContext() {
 		return getFocusedObject();
 	}
 

@@ -11,7 +11,7 @@ import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -164,7 +164,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	@Override
-	public void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
+	public void handleActionFailed(FlexoAction<?, ? extends FlexoObject, ? extends FlexoObject> action) {
 		handleActionFailed(action, projectDirectory);
 	}
 

@@ -30,11 +30,11 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -52,12 +52,12 @@ import org.openflexo.vpm.palette.CalcPaletteController;
 public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VPM, Inspectors.VE };
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 
-	private DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController;
-	private DrawingView<? extends Drawing<? extends FlexoModelObject>> screenshot = null;
+	private DrawingController<? extends Drawing<? extends FlexoObject>> screenshotController;
+	private DrawingView<? extends Drawing<? extends FlexoObject>> screenshot = null;
 	private boolean drawWorkingArea;
-	private FlexoModelObject screenshotObject;
+	private FlexoObject screenshotObject;
 
 	public VPMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);

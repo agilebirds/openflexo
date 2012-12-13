@@ -22,7 +22,7 @@ package org.openflexo.cgmodule.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.ContextualMenuManager;
 
 public class GeneratorContextualMenuManager extends ContextualMenuManager {
@@ -32,7 +32,7 @@ public class GeneratorContextualMenuManager extends ContextualMenuManager {
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		return super.getFocusedObject(focusedComponent, e);
 	}
 

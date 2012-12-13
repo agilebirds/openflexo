@@ -96,7 +96,7 @@ public class EmptyPanel<O extends FlexoObject> extends JPanel implements ModuleV
 
 	public String getTitle() {
 		if (title == null) {
-			return FlexoLocalization.localizedForKey(getRepresentedObject().getClassNameKey());
+			return FlexoLocalization.localizedForKey(getRepresentedObject().getClass().getSimpleName());
 		}
 		return title;
 	}
