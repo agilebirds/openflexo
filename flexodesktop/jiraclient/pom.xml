@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>flexodesktop</artifactId>
 		<groupId>org.openflexo</groupId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>jiraclient</artifactId>
 	<dependencies>
