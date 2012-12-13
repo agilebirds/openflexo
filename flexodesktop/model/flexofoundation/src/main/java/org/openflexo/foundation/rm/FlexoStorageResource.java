@@ -188,7 +188,11 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 		if (!isLoaded()) {
 			return;
 		}
-		getProject().saveResourceData(this, true);
+		if (getProject() != null) {
+			getProject().saveResourceData(this, true);
+		} else {
+			saveResourceData(true);
+		}
 	}
 
 	protected abstract void saveResourceData(boolean clearIsModified) throws SaveResourceException;

@@ -28,12 +28,11 @@
  */
 package org.openflexo.technologyadapter.emf.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -55,10 +54,10 @@ import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
  * 
  * @author gbesancon
  */
-public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
+public class EMFModel extends FlexoObject implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
 
 	/** Resource. */
-	protected EMFModelResource resource;
+	protected EMFModelResource modelResource;
 	/** MetaModel. */
 	protected final EMFMetaModel metaModel;
 	/** Converter. */
@@ -74,7 +73,7 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	public EMFModel(EMFMetaModel metaModel, EMFModelConverter converter, EMFModelResource resource) {
 		this.metaModel = metaModel;
 		this.converter = converter;
-		this.resource = resource;
+		this.modelResource = resource;
 	}
 
 	/**
@@ -84,7 +83,7 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	 */
 	@Override
 	public String getName() {
-		return EMFModelURIBuilder.getName(resource);
+		return EMFModelURIBuilder.getName(modelResource);
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	 */
 	@Override
 	public String getURI() {
-		return EMFModelURIBuilder.getUri(resource);
+		return EMFModelURIBuilder.getUri(modelResource);
 	}
 
 	/**
@@ -186,6 +185,7 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 	 * 
 	 * @return the metaModel value
 	 */
+	@Override
 	public EMFMetaModel getMetaModel() {
 		return metaModel;
 	}
@@ -199,39 +199,54 @@ public class EMFModel extends TemporaryFlexoModelObject implements FlexoModel<EM
 		return converter;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.TemporaryFlexoModelObject#getProject()
-	 */
 	@Override
+	@Deprecated
 	public FlexoProject getProject() {
-		return project;
+		// TODO should be removed from FlexoResourceData implementation
+		return null;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.StorageResourceData#save()
-	 */
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public EMFModelResource getFlexoResource() {
+		return modelResource;
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
+		if (resource instanceof EMFModelResource) {
+			this.modelResource = (EMFModelResource) resource;
+		}
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<EMFModel> getResource() {
+		return getFlexoResource();
+	}
+
+	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
+	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
+	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<EMFModel> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void save() throws SaveResourceException {
-		try {
-			resource.save(null);
-		} catch (IOException e) {
-			throw new SaveResourceException(getFlexoResource());
-		}
+		getFlexoResource().saveResourceData();
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setFlexoResource(org.openflexo.foundation.rm.FlexoResource)
-	 */
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof EMFModelResource) {
-			this.resource = (EMFModelResource) resource;
-		}
-	}
 }
