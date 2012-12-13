@@ -103,11 +103,13 @@ public abstract class ValidationModel extends FlexoListModel {
 	}
 
 	private void appendAllEmbeddedValidableObjects(Validable o, Collection<Validable> c) {
-		c.add(o);
-		Collection<? extends Validable> embeddedObjects = o.getEmbeddedValidableObjects();
-		if (embeddedObjects != null) {
-			for (Validable o2 : embeddedObjects) {
-				appendAllEmbeddedValidableObjects(o2, c);
+		if (o != null) {
+			c.add(o);
+			Collection<? extends Validable> embeddedObjects = o.getEmbeddedValidableObjects();
+			if (embeddedObjects != null) {
+				for (Validable o2 : embeddedObjects) {
+					appendAllEmbeddedValidableObjects(o2, c);
+				}
 			}
 		}
 	}

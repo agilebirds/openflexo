@@ -3,7 +3,7 @@ package org.openflexo.foundation.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Represents a folder, as an organization item inside a {@link ResourceRepository}
@@ -11,7 +11,7 @@ import org.openflexo.foundation.TemporaryFlexoModelObject;
  * @author sylvain
  * 
  */
-public class RepositoryFolder<R extends FlexoResource<?>> extends TemporaryFlexoModelObject {
+public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 
 	private final ResourceRepository<R> resourceRepository;
 	private String name;
@@ -30,12 +30,10 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends TemporaryFlexo
 		}
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -68,4 +66,9 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends TemporaryFlexo
 		return resourceRepository;
 	}
 
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

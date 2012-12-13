@@ -10,6 +10,6 @@
     <Localized key="Advanced" lang="French">Avancé</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Calc Library" />
+  <Parameter name="title" value="View Definition Library" />
 </Panel>
 

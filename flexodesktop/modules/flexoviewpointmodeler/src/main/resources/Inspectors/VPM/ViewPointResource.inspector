@@ -7,10 +7,12 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
       <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.version" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
-      <Label label="uri" localize="true" name="CalcURILabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="CalcURI" data="data.viewPointURI" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-      <Label label="about" localize="true" name="AboutLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <TextArea columns="10" passwd="false" readOnly="true" localize="true" name="About" data="data.description" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" />
+      <Label label="openflexo_version" localize="true" name="OpenflexoVersionLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.openflexoVersion" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" />
+      <Label label="uri" localize="true" name="ViewPointURILabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="CalcURI" data="data.URI" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
+      <Label label="about" localize="true" name="AboutLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <TextArea columns="10" passwd="false" readOnly="true" localize="true" name="About" data="data.description" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -23,6 +25,6 @@
     <Localized key="uri" lang="French">URI</Localized>
     <Localized key="uri" lang="Dutch">URI</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="View Point" />
+  <Parameter name="title" value="View Definition" />
 </Panel>
 

@@ -69,7 +69,7 @@ public class VPMController extends FlexoController {
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
 	public ViewPointPerspective VIEW_POINT_PERSPECTIVE;
-	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public InformationSpacePerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -96,7 +96,7 @@ public class VPMController extends FlexoController {
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
-		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
+		addToPerspectives(ONTOLOGY_PERSPECTIVE = new InformationSpacePerspective(this));
 	}
 
 	@Override

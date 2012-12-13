@@ -95,7 +95,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private boolean exploreDirectoryLookingForViewPoints(File directory, RepositoryFolder<ViewPointResource> folder,
 			ViewPointLibrary viewPointLibrary) {
 		boolean returned = false;
-		logger.info("Exploring " + directory);
+		logger.fine("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
@@ -161,7 +161,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> boolean exploreDirectoryLookingForMetaModels(
 			File directory, RepositoryFolder folder, TA technologyAdapter, TechnologyContextManager technologyContextManager,
 			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
-		logger.info("Exploring " + directory);
+		logger.fine("Exploring " + directory);
 		boolean returned = false;
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
@@ -209,7 +209,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM> technologyAdapter,
 			TechnologyContextManager technologyContextManager, MetaModelRepository<MMR, ?, ?, ?> mmRepository,
 			ModelRepository<MR, ?, ?, ?> modelRepository) {
-		logger.info("Exploring " + directory);
+		logger.fine("Exploring " + directory);
 		boolean returned = false;
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {

@@ -24,8 +24,8 @@ import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelInitializer;
 import org.openflexo.model.ModelProperty;
-import org.openflexo.model.StringEncoder;
 import org.openflexo.model.StringConverterLibrary.Converter;
+import org.openflexo.model.StringEncoder;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -198,6 +198,12 @@ public class ModelFactory {
 		if (proxyFactory == null) {
 			ModelEntity<I> entity = modelContext.getModelEntity(implementedInterface);
 			if (entity == null) {
+				System.out.println("Debug model context");
+				Iterator<ModelEntity> it = modelContext.getEntities();
+				while (it.hasNext()) {
+					ModelEntity<?> next = it.next();
+					System.out.println("> " + next);
+				}
 				throw new ModelExecutionException("Unknown entity '" + implementedInterface.getName()
 						+ "'! Did you forget to import it or to annotated it with @ModelEntity?");
 			} else {

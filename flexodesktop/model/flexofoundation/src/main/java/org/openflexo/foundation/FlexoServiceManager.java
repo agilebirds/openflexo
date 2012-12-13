@@ -45,12 +45,17 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
  * @author sylvain
  * 
  */
-public class FlexoServiceManager {
+public class FlexoServiceManager extends FlexoObject {
 
 	private ArrayList<FlexoService> registeredServices;
 
 	public FlexoServiceManager() {
 		registeredServices = new ArrayList<FlexoService>();
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "FlexoServiceManager";
 	}
 
 	/**

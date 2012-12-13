@@ -3,11 +3,13 @@ package org.openflexo.foundation.resource;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.toolbox.IProgress;
 
 /**
- * Default implementation for {@link FlexoResource}
+ * Default implementation for {@link FlexoResource}<br>
+ * Note that this default implementation extends {@link FlexoObject}: all resources in Openflexo model are instances of {@link FlexoObject}
  * 
  * Very first draft for implementation, only implements get/load scheme
  * 
@@ -16,7 +18,7 @@ import org.openflexo.toolbox.IProgress;
  * @author Sylvain
  * 
  */
-public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> implements FlexoResource<RD> {
+public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends FlexoObject implements FlexoResource<RD> {
 
 	private RD resourceData = null;
 

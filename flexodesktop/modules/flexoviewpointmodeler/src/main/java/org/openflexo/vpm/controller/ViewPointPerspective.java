@@ -30,7 +30,6 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDiagram;
@@ -98,10 +97,10 @@ public class ViewPointPerspective extends FlexoPerspective {
 		};*/
 		setTopLeftView(viewPointLibraryBrowser);
 
-		System.out.println("Les rc:" + controller.getApplicationContext().getResourceCenterService());
+		/*System.out.println("Les rc:" + controller.getApplicationContext().getResourceCenterService());
 		for (FlexoResourceCenter rc : controller.getApplicationContext().getResourceCenterService().getResourceCenters()) {
 			System.out.println("> " + rc);
-		}
+		}*/
 
 		calcBrowser = new CalcBrowser(controller);
 		calcBrowserView = new CEDBrowserView(calcBrowser, controller, SelectionPolicy.ForceSelection) {

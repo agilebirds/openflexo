@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBInformationSpaceBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
@@ -33,7 +34,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.view.OntologyView;
 
-public class OntologyPerspective extends FlexoPerspective {
+public class InformationSpacePerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 
@@ -41,15 +42,33 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	private final JLabel infoLabel;
 
+	private FIBInformationSpaceBrowser informationSpaceBrowser;
+
 	/**
 	 * @param controller
 	 * @param name
 	 */
-	public OntologyPerspective(VPMController controller) {
-		super("ontology_perspective");
+	public InformationSpacePerspective(VPMController controller) {
+		super("information_space_perspective");
 		_controller = controller;
+
+		informationSpaceBrowser = new FIBInformationSpaceBrowser(controller.getApplicationContext(), controller);
+
+		/*_browser = new CalcLibraryBrowser(controller);
+		_browserView = new CEDBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
+			@Override
+			public void treeDoubleClick(FlexoModelObject object) {
+				super.treeDoubleClick(object);
+				if (object instanceof ViewPoint) {
+					focusOnViewPoint((ViewPoint) object);
+					// System.out.println(((OntologyCalc)object).getXMLRepresentation());
+				}
+			}
+		};*/
+		setTopLeftView(informationSpaceBrowser);
+
 		// ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
-		infoLabel = new JLabel("Ontology perspective");
+		infoLabel = new JLabel("Information space perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		// setTopLeftView(ontologyLibraryBrowser);
 	}

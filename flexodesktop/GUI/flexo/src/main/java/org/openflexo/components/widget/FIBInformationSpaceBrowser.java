@@ -57,13 +57,13 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * 
  */
 @SuppressWarnings("serial")
-public class FIBInformationSpaceBrowser extends FIBBrowserView<ViewPointLibrary> {
+public class FIBInformationSpaceBrowser extends FIBBrowserView<FlexoServiceManager> {
 	static final Logger logger = Logger.getLogger(FIBInformationSpaceBrowser.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBInformationSpaceBrowser.fib");
 
-	public FIBInformationSpaceBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
-		super(viewPointLibrary, controller, FIB_FILE);
+	public FIBInformationSpaceBrowser(FlexoServiceManager serviceManager, FlexoController controller) {
+		super(serviceManager, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test

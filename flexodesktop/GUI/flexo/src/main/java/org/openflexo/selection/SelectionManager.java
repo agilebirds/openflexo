@@ -31,10 +31,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
+import org.openflexo.inspector.EmptySelection;
+import org.openflexo.inspector.MultipleSelection;
+import org.openflexo.inspector.UniqueSelection;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.palette.PalettePanel;
 
@@ -56,7 +55,7 @@ public abstract class SelectionManager extends Observable {
 
 	protected FlexoClipboard _clipboard;
 
-	private InspectableObject _inspectedObject;
+	private FlexoObject _inspectedObject;
 
 	protected FocusableView _focusedPanel;
 
@@ -556,8 +555,8 @@ public abstract class SelectionManager extends Observable {
 	 * { return null; }
 	 */
 
-	private void setCurrentInspectedObject(InspectableObject inspectable) {
-		// logger.info("Inspect "+inspectable);
+	private void setCurrentInspectedObject(FlexoObject inspectable) {
+		logger.info("Inspect " + inspectable);
 		if (!isInspectable(inspectable)) {
 			return;
 		}
@@ -566,8 +565,8 @@ public abstract class SelectionManager extends Observable {
 		}
 		if (_inspectedObject != null) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName() + " with "
-						+ ((FlexoObject) _inspectedObject).countObservers() + " observers");
+				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName() + " with " + _inspectedObject.countObservers()
+						+ " observers");
 			}
 		}
 		if (inspectable != null) {
@@ -575,7 +574,7 @@ public abstract class SelectionManager extends Observable {
 				_inspectedObject = inspectable;
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Inspected object is now: " + _inspectedObject.getClass().getName() + " with "
-							+ ((FlexoObject) _inspectedObject).countObservers() + " observers");
+							+ _inspectedObject.countObservers() + " observers");
 				}
 				setChanged();
 				// Component focusOwner =
@@ -589,7 +588,7 @@ public abstract class SelectionManager extends Observable {
 			}
 		}
 		if (inspectable instanceof FlexoObject) {
-			setFocusedObject((FlexoObject) inspectable);
+			setFocusedObject(inspectable);
 		}
 	}
 
@@ -613,11 +612,11 @@ public abstract class SelectionManager extends Observable {
 			setCurrentInspectedObjectToNone();
 		} else if (getSelectionSize() == 1) {
 			FlexoObject selection = getSelection().firstElement();
-			if (selection instanceof InspectableObject) {
-				setCurrentInspectedObject((InspectableObject) selection);
-			} else {
+			// if (selection instanceof InspectableObject) {
+			setCurrentInspectedObject(selection);
+			/*} else {
 				setCurrentInspectedObjectToNone();
-			}
+			}*/
 		} else if (getSelectionSize() > 1) {
 			setCurrentInspectedObjectToMultiple();
 		}
@@ -638,11 +637,11 @@ public abstract class SelectionManager extends Observable {
 	 */
 	public abstract FlexoObject getRootFocusedObject();
 
-	protected boolean isInspectable(InspectableObject object) {
+	protected boolean isInspectable(FlexoObject object) {
 		if (!(object instanceof FlexoObject)) {
 			return true;
 		}
-		FlexoObject obj = (FlexoObject) object;
+		FlexoObject obj = object;
 		if (obj.getContext() != null) {
 			if (obj.getContext() instanceof PalettePanel) {
 				return ((PalettePanel) obj.getContext()).isEdited();

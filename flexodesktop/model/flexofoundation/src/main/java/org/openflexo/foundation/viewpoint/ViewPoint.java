@@ -61,6 +61,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
@@ -805,6 +806,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	@Override
 	public BindingFactory getBindingFactory() {
 		return EDITION_PATTERN_BINDING_FACTORY;
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		return ViewPointLibrary.VALIDATION_MODEL;
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();

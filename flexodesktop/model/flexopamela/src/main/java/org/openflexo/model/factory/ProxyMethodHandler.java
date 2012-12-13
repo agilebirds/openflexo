@@ -303,8 +303,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return propertyChangeSupport;
 	}
 
-	private void internallyInvokeInitializer(org.openflexo.model.ModelInitializer in, Object[] args)
-			throws ModelDefinitionException {
+	private void internallyInvokeInitializer(org.openflexo.model.ModelInitializer in, Object[] args) throws ModelDefinitionException {
 		initializing = true;
 		try {
 			List<String> parameters = in.getParameters();
@@ -447,12 +446,17 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public void invokeSetter(ModelProperty<? super I> property, Object value) {
 		try {
-			property.getSetterMethod().invoke(getObject(), value);
+			if (property.getSetterMethod() != null) {
+				property.getSetterMethod().invoke(getObject(), value);
+			} else {
+				System.err.println("Setter method not found !!!");
+			}
 		} catch (IllegalArgumentException e) {
 			throw new ModelExecutionException(e);
 		} catch (IllegalAccessException e) {
 			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 			throw new ModelExecutionException(e);
 		}
 	}
@@ -629,7 +633,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
-		Object oldValue = invokeGetter(property);
+		// Object oldValue = invokeGetter(property);
+		Object oldValue = internallyInvokeGetter(property);
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {

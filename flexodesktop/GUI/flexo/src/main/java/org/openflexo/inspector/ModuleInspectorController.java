@@ -33,10 +33,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.InspectorSelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 

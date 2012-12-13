@@ -36,13 +36,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fge.drawingeditor.EmptySelection;
+import org.openflexo.fge.drawingeditor.MultipleSelection;
+import org.openflexo.fge.drawingeditor.UniqueSelection;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 

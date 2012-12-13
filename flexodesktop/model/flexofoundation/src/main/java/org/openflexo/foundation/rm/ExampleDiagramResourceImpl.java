@@ -17,7 +17,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 
 	public static ExampleDiagramResource makeExampleDiagramResource(File exampleDiagramFile, ViewPointLibrary viewPointLibrary) {
 		try {
-			ModelFactory factory = new ModelFactory(ViewPointResource.class);
+			ModelFactory factory = new ModelFactory(ExampleDiagramResource.class);
 			ExampleDiagramResource returned = factory.newInstance(ExampleDiagramResource.class);
 			returned.setName(exampleDiagramFile.getName());
 			returned.setViewPointLibrary(viewPointLibrary);

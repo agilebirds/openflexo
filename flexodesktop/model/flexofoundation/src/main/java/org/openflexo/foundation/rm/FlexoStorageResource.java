@@ -467,6 +467,11 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
+	public void setContainer(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
 	public List<FlexoResource<?>> getContents() {
 		logger.warning("Not implemented yet");
 		return null;

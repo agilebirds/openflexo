@@ -131,6 +131,15 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public FlexoResource<?> getContainer();
 
 	/**
+	 * Sets the resource in which this resource is contained.
+	 * 
+	 * 
+	 * @param resource
+	 */
+	@Setter(CONTAINER)
+	public void setContainer(FlexoResource<?> resource);
+
+	/**
 	 * Returns a list of resources contained by this resource.
 	 * 
 	 * @return the list of contained resources.

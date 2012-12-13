@@ -35,9 +35,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
 
 public class MyDrawingController extends DrawingController<EditedDrawing> {
 	private JPopupMenu contextualMenu;

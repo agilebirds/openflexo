@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -151,10 +150,10 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 		if (selection == null) {
 			return;
 		}
-		Vector<FlexoModelObject> newSelection = new Vector<FlexoModelObject>();
+		Vector<FlexoObject> newSelection = new Vector<FlexoObject>();
 		for (Object o : selection) {
-			if (o instanceof FlexoModelObject) {
-				newSelection.add((FlexoModelObject) o);
+			if (o instanceof FlexoObject) {
+				newSelection.add((FlexoObject) o);
 			}
 		}
 		if (logger.isLoggable(Level.FINE)) {
