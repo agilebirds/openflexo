@@ -29,11 +29,11 @@ import org.openflexo.foundation.FlexoObject;
  * @author sylvain
  * 
  */
-public abstract class AbstractOntologyObject extends FlexoObject {
+public abstract class FlexoOntologyObjectImpl extends FlexoObject {
 
-	private static final Logger logger = Logger.getLogger(AbstractOntologyObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoOntologyObjectImpl.class.getPackage().getName());
 
-	public AbstractOntologyObject() {
+	public FlexoOntologyObjectImpl() {
 		super();
 	}
 

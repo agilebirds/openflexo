@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -54,7 +54,7 @@ import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
  * 
  * @author gbesancon
  */
-public class EMFModel extends FlexoObject implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
+public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFModel, EMFMetaModel>, IFlexoOntologyModel {
 
 	/** Resource. */
 	protected EMFModelResource modelResource;

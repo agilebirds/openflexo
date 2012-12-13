@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EPackage;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -52,7 +52,7 @@ import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
  * 
  * @author gbesancon
  */
-public class EMFMetaModel extends FlexoObject implements FlexoMetaModel<EMFMetaModel>, IFlexoOntologyMetaModel {
+public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaModel<EMFMetaModel>, IFlexoOntologyMetaModel {
 	/** Package. */
 	protected final EPackage ePackage;
 	/** Converter. */

@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
@@ -74,7 +74,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	private boolean showIndividuals = true;
 
 	private List<IFlexoOntologyObject> roots = null;
-	private Map<AbstractOntologyObject, List<AbstractOntologyObject>> structure = null;
+	private Map<FlexoOntologyObjectImpl, List<FlexoOntologyObjectImpl>> structure = null;
 
 	public OntologyBrowserModel(IFlexoOntology context) {
 		super();
@@ -88,7 +88,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		return roots;
 	}
 
-	public List<AbstractOntologyObject> getChildren(AbstractOntologyObject father) {
+	public List<FlexoOntologyObjectImpl> getChildren(FlexoOntologyObjectImpl father) {
 		return structure.get(father);
 	}
 
@@ -399,7 +399,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<AbstractOntologyObject, List<AbstractOntologyObject>>();
+			structure = new Hashtable<FlexoOntologyObjectImpl, List<FlexoOntologyObjectImpl>>();
 		}
 
 		if (getContext() == null) {
@@ -457,13 +457,13 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	}
 
 	private void addChildren(IFlexoOntologyObject parent, IFlexoOntologyObject child) {
-		List<AbstractOntologyObject> v = structure.get(parent);
+		List<FlexoOntologyObjectImpl> v = structure.get(parent);
 		if (v == null) {
-			v = new Vector<AbstractOntologyObject>();
-			structure.put((AbstractOntologyObject) parent, v);
+			v = new Vector<FlexoOntologyObjectImpl>();
+			structure.put((FlexoOntologyObjectImpl) parent, v);
 		}
 		if (!v.contains(child)) {
-			v.add((AbstractOntologyObject) child);
+			v.add((FlexoOntologyObjectImpl) child);
 		}
 	}
 
@@ -479,7 +479,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<AbstractOntologyObject, List<AbstractOntologyObject>>();
+			structure = new Hashtable<FlexoOntologyObjectImpl, List<FlexoOntologyObjectImpl>>();
 		}
 
 		List<IFlexoOntologyStructuralProperty> properties = new Vector<IFlexoOntologyStructuralProperty>();

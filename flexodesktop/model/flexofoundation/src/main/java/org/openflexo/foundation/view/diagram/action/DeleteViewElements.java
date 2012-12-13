@@ -254,9 +254,9 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 						EditionPatternInstance epInstance = ref.getEditionPatternInstance();
 						for (String s : epInstance.getActors().keySet()) {
 							FlexoModelObject actor = epInstance.getActors().get(s);
-							if (actor instanceof AbstractOntologyObject) {
+							if (actor instanceof FlexoOntologyObjectImpl) {
 								if (!_ontologicObjectsToBeDeleted.contains(actor)) {
-									_ontologicObjectsToBeDeleted.add(new OntologicObjectEntry(true, (AbstractOntologyObject) actor));
+									_ontologicObjectsToBeDeleted.add(new OntologicObjectEntry(true, (FlexoOntologyObjectImpl) actor));
 								}
 							}
 						}

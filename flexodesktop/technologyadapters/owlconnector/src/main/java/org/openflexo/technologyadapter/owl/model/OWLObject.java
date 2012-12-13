@@ -21,11 +21,11 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
-public abstract class OWLObject extends AbstractOntologyObject implements IFlexoOntologyObject, OWL2URIDefinitions, RDFURIDefinitions,
+public abstract class OWLObject extends FlexoOntologyObjectImpl implements IFlexoOntologyObject, OWL2URIDefinitions, RDFURIDefinitions,
 		RDFSURIDefinitions {
 
 	private static final Logger logger = Logger.getLogger(OWLObject.class.getPackage().getName());

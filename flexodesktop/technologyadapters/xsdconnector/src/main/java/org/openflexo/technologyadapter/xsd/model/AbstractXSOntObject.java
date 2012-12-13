@@ -21,14 +21,14 @@ package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.logging.Level;
 
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.xmlcode.StringConvertable;
 
-public abstract class AbstractXSOntObject extends AbstractOntologyObject implements IFlexoOntologyObject, XSOntologyURIDefinitions,
+public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implements IFlexoOntologyObject, XSOntologyURIDefinitions,
 		StringConvertable<IFlexoOntologyConcept> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
