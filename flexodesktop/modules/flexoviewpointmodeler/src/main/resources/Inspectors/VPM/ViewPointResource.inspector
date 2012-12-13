@@ -25,6 +25,6 @@
     <Localized key="uri" lang="French">URI</Localized>
     <Localized key="uri" lang="Dutch">URI</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="View Definition" />
+  <Parameter name="title" value="View Definition (unloaded)" />
 </Panel>
 

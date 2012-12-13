@@ -28,6 +28,6 @@
     <Localized key="ontology_sub_properties" lang="French">Sub properties</Localized>
     <Localized key="ontology_sub_properties" lang="Dutch">Sub properties</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Ontologic object property" />
+  <Parameter name="title" value="OWL object property" />
 </Panel>
 

@@ -37,6 +37,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -89,6 +90,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -106,11 +108,14 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
@@ -1764,6 +1769,47 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public void objectWasDoubleClicked(Object object) {
 		logger.info("Object was double-clicked: " + object);
+		if (object instanceof FlexoResource<?>) {
+			FlexoObject resourceData = null;
+			if (!((FlexoResource<?>) object).isLoaded()) {
+				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
+				try {
+					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);
+				} catch (FileNotFoundException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				}
+				progress.hideWindow();
+			} else {
+				try {
+					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);
+				} catch (FileNotFoundException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+			if (resourceData != null) {
+				selectAndFocusObject(resourceData);
+			}
+		}
 		if (object instanceof FlexoObject && getCurrentPerspective().hasModuleViewForObject((FlexoObject) object)) {
 			// Try to display object in view
 			selectAndFocusObject((FlexoObject) object);

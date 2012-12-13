@@ -22,7 +22,7 @@ package org.openflexo.foundation.technologyadapter;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
@@ -43,8 +43,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
  * @author sylvain
  * 
  */
-public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		TemporaryFlexoModelObject {
+public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
 
@@ -102,4 +101,8 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 */
 	public abstract void registerMetaModel(FlexoResource<MM> newMetaModelResource);
 
+	@Override
+	public String getFullyQualifiedName() {
+		return getClass().getName();
+	}
 }

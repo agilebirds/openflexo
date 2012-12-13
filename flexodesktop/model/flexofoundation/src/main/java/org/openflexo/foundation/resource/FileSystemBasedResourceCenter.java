@@ -139,13 +139,15 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			TA technologyAdapter, TechnologyContextManager<?, ?> technologyContextManager) {
 		MetaModelRepository<MMR, M, MM, TA> mmRepository = (MetaModelRepository<MMR, M, MM, TA>) technologyAdapter
 				.createMetaModelRepository(this);
-		metaModelRepositories.put(technologyAdapter, mmRepository);
-		ModelRepository<MR, M, MM, TA> modelRepository = (ModelRepository<MR, M, MM, TA>) technologyAdapter.createModelRepository(this);
-		modelRepositories.put(technologyAdapter, modelRepository);
-		exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
-				mmRepository);
-		exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
-				mmRepository, modelRepository);
+		if (mmRepository != null) {
+			metaModelRepositories.put(technologyAdapter, mmRepository);
+			ModelRepository<MR, M, MM, TA> modelRepository = (ModelRepository<MR, M, MM, TA>) technologyAdapter.createModelRepository(this);
+			modelRepositories.put(technologyAdapter, modelRepository);
+			exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+					mmRepository);
+			exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+					mmRepository, modelRepository);
+		}
 	}
 
 	/**

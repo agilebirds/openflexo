@@ -1,4 +1,4 @@
-<inspector title = "Project ontology" inheritsfrom="Ontology.inspector" inspectedClassName="org.openflexo.foundation.ontology.ProjectOntology">
+<inspector title = "Project ontology" inheritsfrom="Ontology.inspector" inspectedClassName="org.openflexo.technologyadapter.owl.model.OWLOntology">
 
 	<!--  <tab name="Basic" index="0" layout="DEFAULT">
 		<property name="helpText" widget="LABEL">

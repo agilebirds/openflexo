@@ -132,7 +132,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public static ViewPointInfo findViewPointInfo(File viewpointDirectory) {
 		Document document;
 		try {
-			logger.info("Try to find URI for " + viewpointDirectory);
+			logger.fine("Try to find infos for " + viewpointDirectory);
 
 			String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewpointDirectory, baseName + ".xml");
@@ -751,6 +751,10 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
 				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
 						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
+				TechnologyAdapterService taService = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class);
+				for (TechnologyAdapter ta : taService.getTechnologyAdapters()) {
+					System.out.println("> " + ta);
+				}
 			} else {
 				diagramTA = new DiagramTechnologyAdapter();
 			}

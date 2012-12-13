@@ -14,6 +14,7 @@ import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -64,23 +65,35 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 			Iterator<TechnologyAdapter> iterator = loader.iterator();
 			while (iterator.hasNext()) {
 				TechnologyAdapter technologyAdapter = iterator.next();
-				technologyAdapter.setTechnologyAdapterService(this);
-				TechnologyContextManager tcm = technologyAdapter.createTechnologyContextManager(getFlexoResourceCenterService());
-				technologyContextManagers.put(technologyAdapter, tcm);
-				addToTechnologyAdapters(technologyAdapter);
-
-				logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
-
-				if (loadedAdapters.containsKey(technologyAdapter.getClass())) {
-					logger.severe("Cannot include TechnologyAdapter with classname '" + technologyAdapter.getClass().getName()
-							+ "' because it already exists !!!! A TechnologyAdapter name MUST be unique !");
-				} else {
-					loadedAdapters.put(technologyAdapter.getClass(), technologyAdapter);
-				}
+				registerTechnologyAdapter(technologyAdapter);
+			}
+			// TODO: remove this hack to load DiagramTechnologyAdapter. Guillaume ?
+			if (getTechnologyAdapter(DiagramTechnologyAdapter.class) == null) {
+				DiagramTechnologyAdapter diagramTechnologyAdapter = new DiagramTechnologyAdapter();
+				registerTechnologyAdapter(diagramTechnologyAdapter);
 			}
 			logger.info("Loading available technology adapters. Done.");
 		}
 
+	}
+
+	private void registerTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+		logger.info("Found " + technologyAdapter);
+		technologyAdapter.setTechnologyAdapterService(this);
+		TechnologyContextManager<?, ?> tcm = technologyAdapter.createTechnologyContextManager(getFlexoResourceCenterService());
+		if (tcm != null) {
+			technologyContextManagers.put(technologyAdapter, tcm);
+		}
+		addToTechnologyAdapters(technologyAdapter);
+
+		logger.info("Load " + technologyAdapter.getName() + " as " + technologyAdapter.getClass());
+
+		if (loadedAdapters.containsKey(technologyAdapter.getClass())) {
+			logger.severe("Cannot include TechnologyAdapter with classname '" + technologyAdapter.getClass().getName()
+					+ "' because it already exists !!!! A TechnologyAdapter name MUST be unique !");
+		} else {
+			loadedAdapters.put(technologyAdapter.getClass(), technologyAdapter);
+		}
 	}
 
 	/**
@@ -169,7 +182,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
 		List<ModelRepository<?, ?, ?, ?>> returned = new ArrayList<ModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
-			if (rc.getModelRepository(technologyAdapter).getSize() > 0)
+			if (rc.getModelRepository(technologyAdapter) != null && rc.getModelRepository(technologyAdapter).getSize() > 0)
 				returned.add(rc.getModelRepository(technologyAdapter));
 		}
 		return returned;
@@ -195,7 +208,7 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
 		List<MetaModelRepository<?, ?, ?, ?>> returned = new ArrayList<MetaModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
-			if (rc.getMetaModelRepository(technologyAdapter).getSize() > 0)
+			if (rc.getMetaModelRepository(technologyAdapter) != null && rc.getMetaModelRepository(technologyAdapter).getSize() > 0)
 				returned.add(rc.getMetaModelRepository(technologyAdapter));
 		}
 		return returned;

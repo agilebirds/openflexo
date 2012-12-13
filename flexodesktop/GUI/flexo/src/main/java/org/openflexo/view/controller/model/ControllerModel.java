@@ -428,7 +428,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	private HistoryLocation getLastHistoryLocation(FlexoPerspective perspective, FlexoProject project) {
 		for (int i = previousHistory.size() - 1; i > -1; i--) {
 			HistoryLocation location = previousHistory.get(i);
-			if (location.getPerspective() == perspective && currentLocation.getObject() instanceof FlexoProjectObject
+			if (location != null && currentLocation != null && location.getPerspective() == perspective
+					&& currentLocation.getObject() instanceof FlexoProjectObject
 					&& ((FlexoProjectObject) currentLocation.getObject()).getProject() == project) {
 				return location;
 			}

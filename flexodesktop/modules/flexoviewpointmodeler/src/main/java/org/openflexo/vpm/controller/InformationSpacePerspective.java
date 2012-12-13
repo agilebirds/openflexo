@@ -80,7 +80,7 @@ public class InformationSpacePerspective extends FlexoPerspective {
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
-		return VPMIconLibrary.VPM_OP_ACTIVE_ICON;
+		return VPMIconLibrary.INFORMATION_SPACE_ICON;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class InformationSpacePerspective extends FlexoPerspective {
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
-		return VPMIconLibrary.VPM_OP_SELECTED_ICON;
+		return VPMIconLibrary.INFORMATION_SPACE_ICON;
 	}
 
 	@Override

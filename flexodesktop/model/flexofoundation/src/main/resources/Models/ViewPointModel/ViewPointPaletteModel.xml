@@ -21,7 +21,7 @@
     <property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" primary="yes"/>
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/>
     <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
-    <property name="overridingGraphicalRepresentations" type="vector" contains="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$OverridingGraphicalRepresentation" primary="yes"/>
+    <property name="overridingGraphicalRepresentations" type="vector" contains="org.openflexo.foundation.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" primary="yes"/>
    </entity>
 
   <entity name="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" xmlTag="Parameter"> 
@@ -29,15 +29,15 @@
     <property name="value" xmlTag="value" attribute="YES"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$OverridingGraphicalRepresentation" abstract="yes"> 
+  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" abstract="yes"> 
     <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$ShapeOverridingGraphicalRepresentation" xmlTag="ShapeOverridingGraphicalRepresentation"> 
+  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$ShapeOverridingGraphicalRepresentation" xmlTag="ShapeOverridingGraphicalRepresentation"> 
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$ConnectorOverridingGraphicalRepresentation" xmlTag="ConnectorOverridingGraphicalRepresentation"> 
+  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$ConnectorOverridingGraphicalRepresentation" xmlTag="ConnectorOverridingGraphicalRepresentation"> 
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ConnectorGraphicalRepresentation"/> 
   </entity>
 
