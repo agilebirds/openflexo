@@ -367,8 +367,13 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	}
 
 	@Override
-	public boolean hasText() {
+	public final boolean hasText() {
 		return false;
+	}
+
+	@Override
+	public final String getText() {
+		return null;
 	}
 
 	@Override
