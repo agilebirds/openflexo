@@ -23,7 +23,7 @@ import java.awt.Component;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,7 +113,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 
 	@Override
 	public Class getDefaultType() {
-		return Vector.class;
+		return List.class;
 	}
 
 	protected Object[] getListValues() {
@@ -127,14 +127,14 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 					// Dynamic call to getType() class on method
 					// availableValues()
 					Method availableValuesMethod = getType().getMethod("availableValues", (Class[]) null);
-					return ((Vector) availableValuesMethod.invoke(getType(), (Object[]) null)).toArray();
+					return ((List) availableValuesMethod.invoke(getType(), (Object[]) null)).toArray();
 				} catch (Exception e) {
 					// Warns about the exception
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 					}
 					e.printStackTrace();
-					return new Vector().toArray();
+					return new Object[0];
 				}
 			} else {
 				return ((ChoiceList) getObjectValue()).getAvailableValues().toArray();
@@ -146,7 +146,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' is supposed to be a list, but it doesn't hold any list definition!");
 			}
-			return new Vector().toArray();
+			return new Object[0];
 		}
 	}
 
