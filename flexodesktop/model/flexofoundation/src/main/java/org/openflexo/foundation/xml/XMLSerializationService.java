@@ -34,6 +34,8 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
@@ -67,15 +69,17 @@ import org.xml.sax.SAXException;
  * @author sguerin
  * 
  */
-public class FlexoXMLMappings {
+public class XMLSerializationService extends FlexoServiceImpl implements FlexoService {
 
-	protected static final Logger logger = Logger.getLogger(FlexoXMLMappings.class.getPackage().getName());
-
-	// private boolean isInitialized = false;
+	protected static final Logger logger = Logger.getLogger(XMLSerializationService.class.getPackage().getName());
 
 	private ModelVersions modelVersions = null;
 
-	public FlexoXMLMappings() {
+	public static XMLSerializationService createInstance() {
+		return new XMLSerializationService();
+	}
+
+	private XMLSerializationService() {
 		initialize();
 	}
 
@@ -220,7 +224,7 @@ public class FlexoXMLMappings {
 
 	public static Vector<FlexoVersion> getReleaseVersions() {
 		if (_releaseVersions.size() == 0) {
-			for (ReleaseModels rm : new FlexoXMLMappings().modelVersions.releaseModels.values()) {
+			for (ReleaseModels rm : new XMLSerializationService().modelVersions.releaseModels.values()) {
 				_releaseVersions.add(rm.identifier);
 			}
 			Collections.sort(_releaseVersions, FlexoVersion.comparator);
@@ -267,6 +271,7 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
+	@Override
 	public void initialize() {
 		// We use here a dedicated and resetted String Converter
 		// Fix a bug where relative path converter overrided File converter, and causing big issues
@@ -358,6 +363,7 @@ public class FlexoXMLMappings {
 				}
 			}
 		}
+
 	}
 
 	public static class ModelVersions implements XMLSerializable {

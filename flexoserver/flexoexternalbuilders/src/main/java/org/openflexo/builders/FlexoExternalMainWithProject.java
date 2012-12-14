@@ -26,6 +26,7 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -94,6 +95,11 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			}
 		}
 		applicationContext = new ApplicationContext() {
+
+			@Override
+			protected XMLSerializationService createXMLSerializationService() {
+				return XMLSerializationService.createInstance();
+			}
 
 			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {

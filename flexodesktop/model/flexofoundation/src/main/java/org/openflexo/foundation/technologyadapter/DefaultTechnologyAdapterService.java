@@ -10,6 +10,7 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
@@ -24,7 +25,7 @@ import org.openflexo.model.factory.ModelFactory;
  * @author sylvain
  * 
  */
-public abstract class DefaultTechnologyAdapterService implements TechnologyAdapterService {
+public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl implements TechnologyAdapterService {
 
 	private static final Logger logger = Logger.getLogger(DefaultTechnologyAdapterService.class.getPackage().getName());
 
@@ -32,8 +33,6 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 
 	private Map<Class, TechnologyAdapter<?, ?>> loadedAdapters;
 	private Map<TechnologyAdapter<?, ?>, TechnologyContextManager<?, ?>> technologyContextManagers;
-
-	private FlexoServiceManager serviceManager;
 
 	public static TechnologyAdapterService getNewInstance(FlexoResourceCenterService resourceCenterService) {
 		try {
@@ -139,16 +138,6 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 				}
 			}
 		}
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 	@Override

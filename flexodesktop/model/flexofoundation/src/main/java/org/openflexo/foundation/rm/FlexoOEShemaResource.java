@@ -80,6 +80,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 		setChanged();
 	}
 
+	@Override
 	public void setResourceData(View shema) {
 		_resourceData = shema;
 	}
@@ -117,7 +118,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	public StringEncoder getStringEncoder() {
 		if (encoder == null) {
 			return encoder = new StringEncoder(super.getStringEncoder(), new RelativePathFileConverter(getShemaDefinition().getCalc()
-					.getViewPointDirectory()));
+					.getResource().getDirectory()));
 		}
 		return encoder;
 	}

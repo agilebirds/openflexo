@@ -18,7 +18,7 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -40,13 +40,11 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
-public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectReferenceLoader {
+public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBProjectLoaderDialog.fib");
-
-	private FlexoServiceManager serviceManager;
 
 	private ApplicationContext applicationContext;
 
@@ -268,16 +266,6 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		logger.info("FlexoProjectReferenceLoader service received notification " + notification + " from " + caller);
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 	@Override

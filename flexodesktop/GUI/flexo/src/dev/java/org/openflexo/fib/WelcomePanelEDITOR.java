@@ -33,6 +33,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -41,6 +42,11 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 	@Override
 	public Object[] getData() {
 		ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
+
+			@Override
+			protected XMLSerializationService createXMLSerializationService() {
+				return XMLSerializationService.createInstance();
+			}
 
 			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {

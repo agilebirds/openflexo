@@ -29,21 +29,35 @@ import org.openflexo.foundation.FlexoException;
  */
 public abstract class LoadResourceException extends FlexoException {
 
-	protected FlexoFileResource<?> _fileResource;
+	@Deprecated
+	protected FlexoFileResource<?> deprecatedFileResource;
+	protected org.openflexo.foundation.resource.FlexoFileResource<?> fileResource;
 
+	@Deprecated
 	public LoadResourceException(FlexoFileResource<?> fileResource, String message) {
 		super(message);
-		_fileResource = fileResource;
+		deprecatedFileResource = fileResource;
+	}
+
+	public LoadResourceException(org.openflexo.foundation.resource.FlexoFileResource<?> fileResource, String message) {
+		super(message);
+		this.fileResource = fileResource;
 	}
 
 	@Override
 	public String getMessage() {
 		String msg = super.getMessage();
-		return "LoadResourceException: resource " + _fileResource.getResourceIdentifier() + (msg != null ? "\n" + msg : "");
+		return "LoadResourceException: resource "
+				+ (deprecatedFileResource != null ? deprecatedFileResource.getResourceIdentifier() : fileResource.getURI())
+				+ (msg != null ? "\n" + msg : "");
 	}
 
-	public FlexoFileResource<?> getFileResource() {
-		return _fileResource;
+	@Deprecated
+	public FlexoFileResource<?> getDeprecatedFileResource() {
+		return deprecatedFileResource;
 	}
 
+	public org.openflexo.foundation.resource.FlexoFileResource<?> getFileResource() {
+		return fileResource;
+	}
 }

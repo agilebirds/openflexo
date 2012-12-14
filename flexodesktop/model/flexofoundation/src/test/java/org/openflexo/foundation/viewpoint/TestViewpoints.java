@@ -73,7 +73,6 @@ public class TestViewpoints extends FlexoTestCase {
 		assertFalse(vpRes.isLoaded());
 
 		ViewPoint vp = vpRes.getViewPoint();
-		vp.loadWhenUnloaded();
 		assertTrue(vpRes.isLoaded());
 
 		return vp;

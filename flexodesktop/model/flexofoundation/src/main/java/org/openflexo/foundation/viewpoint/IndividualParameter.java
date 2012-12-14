@@ -24,9 +24,9 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -36,7 +36,8 @@ public class IndividualParameter extends EditionSchemeParameter {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	private String renderer;
 
@@ -66,7 +67,6 @@ public class IndividualParameter extends EditionSchemeParameter {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 

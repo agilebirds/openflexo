@@ -21,18 +21,13 @@ package org.openflexo.foundation.viewpoint;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
@@ -41,6 +36,8 @@ import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -50,16 +47,9 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class DiagramPalette extends NamedViewPointObject implements XMLStorageResourceData<DiagramPalette>, Comparable<DiagramPalette> {
@@ -72,7 +62,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 
 	private ViewPoint _viewPoint;
 
-	private File xmlFile;
+	// private File xmlFile;
 	private RelativePathFileConverter relativePathFileConverter;
 
 	private DiagramPaletteResource resource;
@@ -81,7 +71,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentation.
 	private Object graphicalRepresentation;
 
-	public static DiagramPalette instanciateDiagramPalette(ViewPoint viewPoint, File paletteFile) {
+	/*public static DiagramPalette instanciateDiagramPalette(ViewPoint viewPoint, File paletteFile) {
 		if (paletteFile.exists()) {
 			FileInputStream inputStream = null;
 			try {
@@ -137,7 +127,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 			// TODO: implement a search here (find the good XML file)
 			return null;
 		}
-	}
+	}*/
 
 	public static DiagramPalette newCalcPalette(ViewPoint calc, File paletteFile, Object graphicalRepresentation) {
 		DiagramPalette palette = new DiagramPalette(null);
@@ -158,14 +148,14 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 
 	private boolean initialized = false;
 
-	private void init(ViewPoint calc, File paletteFile) {
+	public void init(ViewPoint viewPoint, File paletteFile) {
 		if (StringUtils.isEmpty(getName())) {
 			setName(paletteFile.getName().substring(0, paletteFile.getName().length() - 8));
 		}
-		_viewPoint = calc;
-		xmlFile = paletteFile;
-		logger.info("Registering calc palette for calc " + calc.getName());
-		relativePathFileConverter = new RelativePathFileConverter(calc.getViewPointDirectory());
+		_viewPoint = viewPoint;
+		// xmlFile = paletteFile;
+		logger.info("Registering calc palette for calc " + viewPoint.getName());
+		relativePathFileConverter = new RelativePathFileConverter(viewPoint.getResource().getDirectory());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
@@ -175,8 +165,8 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromPalettes(this);
 		}
-		logger.info("Deleting file " + xmlFile);
-		xmlFile.delete();
+		// logger.info("Deleting file " + xmlFile);
+		// xmlFile.delete();
 		super.delete();
 		deleteObservers();
 	}
@@ -207,10 +197,12 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 	@Override
 	public void setName(String name) {
 		super.setName(name);
-		if (xmlFile != null && !xmlFile.getName().startsWith(name)) {
+		if (getResource().getFile() != null && !getResource().getFile().getName().startsWith(name)) {
 			try {
-				FileUtils.rename(xmlFile, new File(xmlFile.getParentFile(), name + ".palette"));
+				getResource().renameFileTo(name + ".palette");
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InvalidFileNameException e) {
 				e.printStackTrace();
 			}
 		}
@@ -285,9 +277,9 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 		return index - o.index;
 	}
 
-	public File getPaletteFile() {
-		return xmlFile;
-	}
+	/*	public File getPaletteFile() {
+			return xmlFile;
+		}*/
 
 	private ScreenshotImage screenshotImage;
 
@@ -295,7 +287,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 
 	private File getExpectedScreenshotImageFile() {
 		if (expectedScreenshotImageFile == null) {
-			expectedScreenshotImageFile = new File(getPaletteFile().getParentFile(), getName() + ".palette.png");
+			expectedScreenshotImageFile = new File(getResource().getFile().getParentFile(), getName() + ".palette.png");
 		}
 		return expectedScreenshotImageFile;
 	}
@@ -409,7 +401,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 		return getResource();
 	}
 
-	@Override
+	/*@Override
 	public void saveToFile(File aFile) {
 		FileOutputStream out = null;
 		try {
@@ -435,11 +427,11 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 			}
 		}
 		clearIsModified(true);
-	}
+	}*/
 
 	@Override
 	public void save() {
-		logger.info("Saving ExampleDiagram to " + xmlFile.getAbsolutePath() + "...");
+		logger.info("Saving ExampleDiagram to " + getResource().getFile().getAbsolutePath() + "...");
 
 		// Following was used to debug (display purpose only)
 		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
@@ -462,7 +454,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		 */
 
-		File dir = xmlFile.getParentFile();
+		/*File dir = xmlFile.getParentFile();
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -482,15 +474,22 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 			}
 		}
 
-		clearIsModified(false);
+		clearIsModified(false);*/
+
+		try {
+			getResource().save(null);
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+		}
+
 	}
 
-	private void makeLocalCopy() throws IOException {
+	/*private void makeLocalCopy() throws IOException {
 		if (xmlFile != null && xmlFile.exists()) {
 			String localCopyName = xmlFile.getName() + "~";
 			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(xmlFile, localCopy);
 		}
-	}
+	}*/
 
 }

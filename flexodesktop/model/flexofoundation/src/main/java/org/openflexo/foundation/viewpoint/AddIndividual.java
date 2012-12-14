@@ -81,10 +81,6 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
-		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
 			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {

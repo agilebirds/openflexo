@@ -64,7 +64,6 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 	}
 
 	public IFlexoOntologyClass getRange() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getRangeURI());
 	}
 

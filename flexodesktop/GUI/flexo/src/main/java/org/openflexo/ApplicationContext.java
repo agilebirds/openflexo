@@ -10,6 +10,7 @@ import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
@@ -17,6 +18,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class ApplicationContext extends FlexoServiceManager implements FlexoEditorFactory {
 
+	private XMLSerializationService xmlSerializationService;
 	private ModuleLoader moduleLoader;
 	private ProjectLoader projectLoader;
 	private FlexoEditor applicationEditor;
@@ -63,10 +65,12 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 		return projectReferenceLoader;
 	}
 
+	@Override
 	public final FlexoResourceCenterService getResourceCenterService() {
 		return resourceCenterService;
 	}
 
+	@Override
 	public final TechnologyAdapterService getTechnologyAdapterService() {
 		return technologyAdapterService;
 	}
@@ -80,6 +84,8 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 	}
 
 	public abstract ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory);
+
+	protected abstract XMLSerializationService createXMLSerializationService();
 
 	protected abstract FlexoEditor createApplicationEditor();
 

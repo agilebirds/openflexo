@@ -43,14 +43,14 @@ import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.JavaUtils;
@@ -284,7 +284,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 	}
 
 	public File saveScreenshot() {
-		File imageFile = new File(getFocusedObject().getViewPoint().getViewPointDirectory(), JavaUtils.getClassName(newElementName)
+		File imageFile = new File(getFocusedObject().getViewPoint().getResource().getDirectory(), JavaUtils.getClassName(newElementName)
 				+ ".palette-element" + ".png");
 		logger.info("Saving " + imageFile);
 		try {

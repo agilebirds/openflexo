@@ -9,7 +9,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class IndividualPatternRole extends OntologicObjectPatternRole<IFlexoOntologyIndividual> {
+public abstract class IndividualPatternRole<I extends IFlexoOntologyIndividual> extends OntologicObjectPatternRole<I> {
 
 	public IndividualPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -33,11 +33,6 @@ public class IndividualPatternRole extends OntologicObjectPatternRole<IFlexoOnto
 		return "";
 	}
 
-	@Override
-	public Class<IFlexoOntologyIndividual> getAccessedClass() {
-		return IFlexoOntologyIndividual.class;
-	}
-
 	private String conceptURI;
 
 	public String _getConceptURI() {
@@ -50,7 +45,6 @@ public class IndividualPatternRole extends OntologicObjectPatternRole<IFlexoOnto
 
 	public IFlexoOntologyClass getOntologicType() {
 		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
 			return getViewPoint().getOntologyClass(_getConceptURI());
 		}
 		return null;
@@ -78,8 +72,8 @@ public class IndividualPatternRole extends OntologicObjectPatternRole<IFlexoOnto
 	}
 
 	@Override
-	public ConceptActorReference<IFlexoOntologyIndividual> makeActorReference(IFlexoOntologyIndividual object, EditionPatternReference epRef) {
-		return new ConceptActorReference<IFlexoOntologyIndividual>(object, this, epRef);
+	public ConceptActorReference<I> makeActorReference(I object, EditionPatternReference epRef) {
+		return new ConceptActorReference<I>(object, this, epRef);
 	}
 
 }

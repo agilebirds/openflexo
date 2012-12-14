@@ -48,7 +48,7 @@ import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
@@ -71,7 +71,7 @@ import org.openflexo.view.menu.ToolsMenu;
  * 
  * @author sguerin
  */
-public class ModuleLoader implements FlexoService, IModuleLoader, HasPropertyChangeSupport {
+public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IModuleLoader, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
@@ -80,8 +80,6 @@ public class ModuleLoader implements FlexoService, IModuleLoader, HasPropertyCha
 	public static final String MODULE_LOADED = "moduleLoaded";
 	public static final String MODULE_UNLOADED = "moduleUnloaded";
 	public static final String MODULE_ACTIVATED = "moduleActivated";
-
-	private FlexoServiceManager serviceManager;
 
 	private boolean allowsDocSubmission;
 
@@ -521,16 +519,6 @@ public class ModuleLoader implements FlexoService, IModuleLoader, HasPropertyCha
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		logger.info("ModuleLoader service received notification " + notification + " from " + caller);
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 	@Override

@@ -60,7 +60,6 @@ public class ObjectPropertyParameter extends PropertyParameter {
 	}
 
 	public IFlexoOntologyClass getRange() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getRangeURI());
 	}
 

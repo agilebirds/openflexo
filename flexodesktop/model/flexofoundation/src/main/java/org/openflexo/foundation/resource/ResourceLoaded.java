@@ -19,11 +19,7 @@
  */
 package org.openflexo.foundation.resource;
 
-import java.io.FileNotFoundException;
-
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 
 /**
  * This {@link DataModification} is thrown when a {@link FlexoResource} has just been loaded
@@ -35,14 +31,9 @@ public class ResourceLoaded extends DataModification {
 
 	/**
 	 * @param resource
-	 * @throws FlexoException
-	 * @throws ResourceDependencyLoopException
-	 * @throws ResourceLoadingCancelledException
-	 * @throws FileNotFoundException
 	 */
-	public ResourceLoaded(FlexoResource<?> resource) throws FileNotFoundException, ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FlexoException {
-		super(null, resource.getResourceData(null));
+	public <RD extends ResourceData<RD>> ResourceLoaded(FlexoResource<RD> resource, RD resourceData) {
+		super(null, resourceData);
 	}
 
 }

@@ -31,9 +31,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -82,7 +82,7 @@ public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, 
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add calc palette");
 
-		_newPalette = DiagramPalette.newCalcPalette(getFocusedObject(), new File(getFocusedObject().getViewPointDirectory(),
+		_newPalette = DiagramPalette.newCalcPalette(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(),
 				newPaletteName + ".palette"), graphicalRepresentation);
 		_newPalette.setDescription(description);
 		getFocusedObject().addToPalettes(_newPalette);

@@ -39,7 +39,8 @@ public class PropertyInspectorEntry extends InspectorEntry {
 
 	private ViewPointDataBinding domainValue;
 
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public PropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -64,9 +65,6 @@ public class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
 	}
 
@@ -83,9 +81,6 @@ public class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyClass(_getDomainURI());
 	}
 

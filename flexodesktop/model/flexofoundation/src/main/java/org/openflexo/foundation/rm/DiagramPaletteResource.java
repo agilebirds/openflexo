@@ -26,4 +26,5 @@ public interface DiagramPaletteResource extends FlexoXMLFileResource<DiagramPale
 
 	@Override
 	public ViewPointResource getContainer();
+
 }

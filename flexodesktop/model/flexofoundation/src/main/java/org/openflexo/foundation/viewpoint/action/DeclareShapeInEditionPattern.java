@@ -142,7 +142,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
 					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = new IndividualPatternRole(builder);
+					IndividualPatternRole individualPatternRole = null; // new IndividualPatternRole(builder);
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 						individualPatternRole.setOntologicType(getConcept());
@@ -200,7 +200,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								if (e.property instanceof IFlexoOntologyObjectProperty) {
 									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
 									if (range instanceof IFlexoOntologyClass) {
-										IndividualPatternRole newPatternRole = new IndividualPatternRole(builder);
+										IndividualPatternRole newPatternRole = null; // new IndividualPatternRole(builder);
 										newPatternRole.setPatternRoleName(e.property.getName());
 										newPatternRole.setOntologicType((IFlexoOntologyClass) range);
 										newEditionPattern.addToPatternRoles(newPatternRole);

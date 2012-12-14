@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -49,6 +50,8 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 		FlexoResource<SRD> {
 
 	private static final Logger logger = Logger.getLogger(FlexoStorageResource.class.getPackage().getName());
+
+	private FlexoServiceManager serviceManager;
 
 	private String uri;
 	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
@@ -554,6 +557,16 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	@Override
 	public boolean isReadOnly() {
 		return false;
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
+	}
+
+	@Override
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
 	}
 
 }

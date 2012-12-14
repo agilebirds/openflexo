@@ -38,7 +38,7 @@ import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
@@ -191,7 +191,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("File " + getFile().getAbsolutePath() + " does not exist, throwing exception now!");
 				}
-				throw new FlexoFileNotFoundException(this);
+				throw new FlexoFileNotFoundException((FlexoFileResource<?>) this);
 			}
 		}
 		XMLRD returned = null;
@@ -220,9 +220,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					logger.fine("tried version = " + triedVersion.toString());
 				}
 
-				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
+				XMLSerializationService.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
 				if (cmv == null) {
-					throw new LoadXMLResourceException(this, "Class model version could not be found for class '"
+					throw new LoadXMLResourceException((FlexoXMLStorageResource) this, "Class model version could not be found for class '"
 							+ getResourceDataClass().getName() + "' and version " + triedVersion);
 				}
 				if (cmv.needsManualConversion && !(this instanceof FlexoRMResource) && !(this instanceof FlexoWorkflowResource)
@@ -265,8 +265,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 								e.getCause().printStackTrace();
 							}
 							if (exception == null) {
-								exception = new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage()
-										: e.getMessage());
+								exception = new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getCause() != null ? e
+										.getCause().getMessage() : e.getMessage());
 							}
 							exception.addLoadException(e);
 							if (logger.isLoggable(Level.SEVERE)) {
@@ -317,12 +317,14 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 						if (e.getException() instanceof AccessorInvocationException) {
 							((AccessorInvocationException) e.getException()).getTargetException().printStackTrace();
 							if (((AccessorInvocationException) e.getException()).getTargetException() instanceof Error) {
-								throw new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+								throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getCause() != null ? e.getCause()
+										.getMessage() : e.getMessage());
 							}
 						}
 					}
 					if (exception == null) {
-						exception = new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+						exception = new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getCause() != null ? e.getCause()
+								.getMessage() : e.getMessage());
 					}
 					exception.addLoadException(e);
 				} finally {
@@ -334,7 +336,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					notCorrectelyDeserialized = false;
 				} else {
 					if (!loadingHandler.useOlderMappingWhenLoadingFailure(this)) {
-						throw new LoadXMLResourceException(this, "Mapping used '" + cmv + "' could not load this resource.");
+						throw new LoadXMLResourceException((FlexoXMLStorageResource) this, "Mapping used '" + cmv
+								+ "' could not load this resource.");
 					}
 				}
 			}
@@ -354,7 +357,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					logger.fine("Found a version to load resource " + getResourceIdentifier());
 				}
 				_currentVersion = triedVersion;
-				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
+				XMLSerializationService.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
 
 				boolean convertToLatestVersion = false;
 				if (cmv.needsManualConversion || !triedVersion.equals(latestVersion())) {
@@ -402,8 +405,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 								e.getCause().printStackTrace();
 							}
 							if (exception == null) {
-								exception = new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage()
-										: e.getMessage());
+								exception = new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getCause() != null ? e
+										.getCause().getMessage() : e.getMessage());
 							}
 							exception.addLoadException(e);
 							if (logger.isLoggable(Level.SEVERE)) {
@@ -482,19 +485,19 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version !", e);
 						}
-						throw new LoadXMLResourceException(this, e.getMessage());
+						throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getMessage());
 					} catch (SaveResourcePermissionDeniedException e) {
 						if (logger.isLoggable(Level.SEVERE)) {
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version because file is read-only !", e);
 						}
-						throw new LoadXMLResourceException(this, e.getMessage());
+						throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getMessage());
 					} catch (SaveResourceException e) {
 						if (logger.isLoggable(Level.SEVERE)) {
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version !", e);
 						}
-						throw new LoadXMLResourceException(this, e.getMessage());
+						throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getMessage());
 					}
 				} else {
 					// _currentVersion has normally been set while converting during saveResourceData()
@@ -521,7 +524,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 							logger.warning("Could not save RM file: see logs for details.");
 						}
 						e1.printStackTrace();
-						throw new LoadXMLResourceException(this, e1.getMessage());
+						throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e1.getMessage());
 					}
 				}
 			}
@@ -571,7 +574,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		// We try to convert until toVersion
 		for (; i < v.length; i++) {
 			if (!v[i].isGreaterThan(toVersion)) {// As long as the current version is smaller than toVersion
-				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), v[i]);
+				XMLSerializationService.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), v[i]);
 				if (cmv.needsManualConversion) {
 					if (convertResourceFileFromVersionToVersion(v[i], cmv.toVersion)) {
 						_currentVersion = cmv.toVersion;
@@ -618,7 +621,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	/**
 	 * @return
 	 */
-	protected FlexoXMLMappings getXmlMappings() {
+	protected XMLSerializationService getXmlMappings() {
 		return getProject().getXmlMappings();
 	}
 
@@ -634,7 +637,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
 			}
-			throw new SaveResourcePermissionDeniedException(this);
+			throw new SaveResourcePermissionDeniedException((FlexoFileResource) this);
 		}
 		if (_resourceData != null) {
 			_saveResourceData(latestVersion(), clearIsModified);
@@ -667,7 +670,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Permission denied : " + getFile().getAbsolutePath());
 				}
-				throw new SaveResourcePermissionDeniedException(this);
+				throw new SaveResourcePermissionDeniedException((FlexoFileResource) this);
 			}
 			if (_resourceData != null) {
 				final XMLMapping currentMapping = getXmlMappings().getMappingForClassAndVersion(getResourceDataClass(), latestVersion());
@@ -721,7 +724,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
 			}
-			throw new SaveResourcePermissionDeniedException(this);
+			throw new SaveResourcePermissionDeniedException((FlexoFileResource) this);
 		}
 		if (_resourceData != null) {
 			_saveResourceData(version, true);
@@ -960,6 +963,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		_currentVersion = version;
 	}
 
+	@Override
+	public FlexoVersion getModelVersion() {
+		return getXmlVersion();
+	}
+
+	@Override
+	public void setModelVersion(FlexoVersion version) {
+		setXmlVersion(version);
+	}
+
 	public XMLMapping getCurrentMapping() {
 		return getXmlMappings().getMappingForClassAndVersion(getResourceDataClass(), _currentVersion);
 	}
@@ -1011,6 +1024,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	 * 
 	 * @return boolean
 	 */
+	@Override
 	public boolean hasBuilder() {
 		return false;
 	}
@@ -1020,6 +1034,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	 * 
 	 * @return boolean
 	 */
+	@Override
 	public abstract Object instanciateNewBuilder();
 
 	/**
@@ -1064,7 +1079,12 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 		private XMLOperationException exception;
 
-		public SaveXMLResourceException(FlexoXMLStorageResource thisResource, Exception exception, FlexoVersion version) {
+		public SaveXMLResourceException(FlexoXMLStorageResource<?> thisResource, Exception exception, FlexoVersion version) {
+			super((FlexoFileResource<?>) thisResource);
+			this.exception = new XMLOperationException(exception, version);
+		}
+
+		public SaveXMLResourceException(FlexoXMLFileResource<?> thisResource, Exception exception, FlexoVersion version) {
 			super(thisResource);
 			this.exception = new XMLOperationException(exception, version);
 		}
@@ -1089,6 +1109,11 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		private List<XMLOperationException> loadResourceExceptions;
 
 		public LoadXMLResourceException(FlexoXMLStorageResource thisResource, String message) {
+			super((FlexoFileResource<?>) thisResource, message);
+			loadResourceExceptions = new Vector<FlexoXMLStorageResource.XMLOperationException>();
+		}
+
+		public LoadXMLResourceException(FlexoXMLFileResource<?> thisResource, String message) {
 			super(thisResource, message);
 			loadResourceExceptions = new Vector<FlexoXMLStorageResource.XMLOperationException>();
 		}
@@ -1155,6 +1180,11 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		private JDOMException jDOMException;
 
 		public MalformedXMLException(FlexoXMLStorageResource thisResource, JDOMException exception) {
+			super((FlexoFileResource<?>) thisResource, null);
+			jDOMException = exception;
+		}
+
+		public MalformedXMLException(FlexoXMLFileResource thisResource, JDOMException exception) {
 			super(thisResource, null);
 			jDOMException = exception;
 		}
@@ -1170,6 +1200,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		return _isLoading;
 	}
 
+	@Override
 	public boolean isConverting() {
 		return isConverting;
 	}

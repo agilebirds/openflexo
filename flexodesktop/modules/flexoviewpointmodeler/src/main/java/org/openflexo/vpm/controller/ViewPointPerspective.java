@@ -225,12 +225,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new OntologyView((ImportedOWLOntology) object, (VPMController) controller, this);
 		}*/
 		if (object instanceof ViewPoint) {
-			((ViewPoint) object).loadWhenUnloaded();
-			logger.info("OK, on charge une CalcView alors");
 			return new CalcView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof DiagramPalette) {

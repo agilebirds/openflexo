@@ -22,17 +22,12 @@ package org.openflexo.foundation.viewpoint;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import org.jdom2.JDOMException;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
@@ -40,22 +35,14 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.InvalidXMLDataException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
 
 public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageResourceData<ExampleDiagram> {
 
@@ -63,7 +50,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 
 	private ExampleDiagramResource resource;
 
-	public static ExampleDiagram instanciateExampleDiagram(ViewPoint viewPoint, File shemaFile) {
+	/*public static ExampleDiagram instanciateExampleDiagram(ViewPoint viewPoint, File shemaFile) {
 		if (shemaFile.exists()) {
 			FileInputStream inputStream = null;
 			try {
@@ -119,7 +106,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			// TODO: implement a search here (find the good XML file)
 			return null;
 		}
-	}
+	}*/
 
 	public static ExampleDiagram newShema(ViewPoint calc, File shemaFile,
 			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation) {
@@ -130,8 +117,9 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	private ViewPoint _viewpoint;
-	private File xmlFile;
-	private RelativePathFileConverter relativePathFileConverter;
+
+	// private File xmlFile;
+	// private RelativePathFileConverter relativePathFileConverter;
 
 	public ExampleDiagram(ViewPointBuilder builder) {
 		super(builder);
@@ -147,14 +135,14 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 
 	private boolean initialized = false;
 
-	private void init(ViewPoint viewpoint, File drawingFile) {
+	public void init(ViewPoint viewpoint, File diagramFile) {
 		if (StringUtils.isEmpty(getName())) {
-			setName(drawingFile.getName().substring(0, drawingFile.getName().length() - 6));
+			setName(diagramFile.getName().substring(0, diagramFile.getName().length() - 6));
 		}
 		_viewpoint = viewpoint;
-		xmlFile = drawingFile;
+		// xmlFile = drawingFile;
 		logger.info("Registering example diagram for viewpoint " + viewpoint.getName());
-		relativePathFileConverter = new RelativePathFileConverter(viewpoint.getViewPointDirectory());
+		// relativePathFileConverter = new RelativePathFileConverter(viewpoint.getResource().getDirectory());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
@@ -164,12 +152,12 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromExampleDiagrams(this);
 		}
-		xmlFile.deleteOnExit();
+		// xmlFile.deleteOnExit();
 		super.delete();
 		deleteObservers();
 	}
 
-	private StringEncoder encoder;
+	/*private StringEncoder encoder;
 
 	@Override
 	public StringEncoder getStringEncoder() {
@@ -177,7 +165,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
 		}
 		return encoder;
-	}
+	}*/
 
 	@Override
 	public ViewPoint getViewPoint() {
@@ -189,9 +177,9 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return this;
 	}
 
-	public File getXMLFile() {
+	/*public File getXMLFile() {
 		return xmlFile;
-	}
+	}*/
 
 	@Override
 	public boolean isContainedIn(ExampleDiagramObject o) {
@@ -204,7 +192,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 
 	private File getExpectedScreenshotImageFile() {
 		if (expectedScreenshotImageFile == null) {
-			expectedScreenshotImageFile = new File(getXMLFile().getParentFile(), getName() + ".shema.png");
+			expectedScreenshotImageFile = new File(getResource().getFile().getParentFile(), getName() + ".diagram.png");
 		}
 		return expectedScreenshotImageFile;
 	}
@@ -313,7 +301,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return getResource();
 	}
 
-	@Override
+	/*@Override
 	public void saveToFile(File aFile) {
 		FileOutputStream out = null;
 		try {
@@ -339,11 +327,11 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			}
 		}
 		clearIsModified(true);
-	}
+	}*/
 
 	@Override
 	public void save() {
-		logger.info("Saving ExampleDiagram to " + xmlFile.getAbsolutePath() + "...");
+		logger.info("Saving ExampleDiagram to " + getResource().getFile().getAbsolutePath() + "...");
 
 		// Following was used to debug (display purpose only)
 		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
@@ -366,7 +354,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		 */
 
-		File dir = xmlFile.getParentFile();
+		/*File dir = xmlFile.getParentFile();
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -386,15 +374,22 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			}
 		}
 
-		clearIsModified(false);
+		clearIsModified(false);*/
+
+		try {
+			getResource().save(null);
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+		}
+
 	}
 
-	private void makeLocalCopy() throws IOException {
+	/*private void makeLocalCopy() throws IOException {
 		if (xmlFile != null && xmlFile.exists()) {
 			String localCopyName = xmlFile.getName() + "~";
 			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(xmlFile, localCopy);
 		}
-	}
+	}*/
 
 }

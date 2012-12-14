@@ -38,9 +38,6 @@ public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends On
 	}
 
 	public IFlexoOntologyClass getOntologicType() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 

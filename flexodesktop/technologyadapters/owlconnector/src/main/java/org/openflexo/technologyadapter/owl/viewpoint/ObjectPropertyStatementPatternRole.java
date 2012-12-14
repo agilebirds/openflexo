@@ -56,9 +56,6 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 	}
 
 	public IFlexoOntologyStructuralProperty getObjectProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyObjectProperty(_getObjectPropertyURI());
 	}
 

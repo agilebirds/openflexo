@@ -4,19 +4,17 @@ import java.io.File;
 import java.io.IOException;
 
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager.ServiceRegistered;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
-public abstract class DefaultResourceCenterService implements FlexoResourceCenterService {
+public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
 	private LocalResourceCenterImplementation openFlexoResourceCenter;
 	private UserResourceCenter userResourceCenter;
-
-	private FlexoServiceManager serviceManager;
 
 	public static FlexoResourceCenterService getNewInstance() {
 		try {
@@ -93,8 +91,8 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 	@Override
 	public void addToResourceCenters(FlexoResourceCenter resourceCenter) {
 		performSuperAdder(RESOURCE_CENTERS, resourceCenter);
-		if (serviceManager != null) {
-			serviceManager.notify(this, new ResourceCenterAdded(resourceCenter));
+		if (getFlexoServiceManager() != null) {
+			getFlexoServiceManager().notify(this, new ResourceCenterAdded(resourceCenter));
 		}
 	}
 
@@ -125,16 +123,6 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 				}
 			}
 		}
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 }

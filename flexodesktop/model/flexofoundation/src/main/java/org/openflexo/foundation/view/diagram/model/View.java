@@ -104,20 +104,6 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		logger.info("Created new shema with project " + project);
 		_viewDefinition = shemaDefinition;
 		setShema(this);
-		loadViewpointIfRequiredAndEnsureOntologyImports(project);
-	}
-
-	private void loadViewpointIfRequiredAndEnsureOntologyImports(FlexoProject project) {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		/*try {
-			if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
-				logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
-			}
-		} catch (OntologyNotFoundException e) {
-			logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
-		}*/
 	}
 
 	@Override
