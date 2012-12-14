@@ -27,6 +27,8 @@ package org.openflexo.foundation.wkf;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -144,7 +146,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	private RoleList _roleList;
 	private RoleList importedRoleList;
 
-	private Vector<Role> allAssignableRoles;
+	private List<Role> allAssignableRoles;
 
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addProcessMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addActivityMetricsDefinitionActionizer;
@@ -1207,9 +1209,9 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		notifyAttributeModification(ALL_ASSIGNABLE_ROLES, null, null);
 	}
 
-	public Vector<Role> getAllAssignableRoles() {
+	public List<Role> getAllAssignableRoles() {
 		if (allAssignableRoles == null) {
-			allAssignableRoles = new Vector<Role>();
+			allAssignableRoles = new ArrayList<Role>();
 			RoleList roleList = getRoleList();
 			appendRoles(roleList, allAssignableRoles);
 			if (getProject().getProjectData() != null) {
@@ -1220,11 +1222,12 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				}
 			}
 			appendRoles(getImportedRoleList(), allAssignableRoles);
+			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 		}
 		return allAssignableRoles;
 	}
 
-	public void appendRoles(RoleList roleList, Vector<Role> reply) {
+	public void appendRoles(RoleList roleList, List<Role> reply) {
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {

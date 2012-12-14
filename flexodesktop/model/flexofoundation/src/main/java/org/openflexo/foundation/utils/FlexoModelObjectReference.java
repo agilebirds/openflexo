@@ -92,6 +92,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private FlexoXMLStorageResource resource;
 
+	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
+		this(object);
+		setOwner(owner);
+	}
+
 	public FlexoModelObjectReference(O object) {
 		this.modelObject = object;
 		this.modelObject.addToReferencers(this);
@@ -118,6 +123,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
+		if (referringProject != null) {
+			referringProject.addToObjectReferences(this);
+		}
 		try {
 			int indexOf = modelObjectIdentifier.indexOf(PROJECT_SEPARATOR);
 			if (indexOf > 0) {
@@ -147,6 +155,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public void delete() {
+		if (getReferringProject() != null) {
+			getReferringProject().removeObjectReferences(this);
+		}
 		if (getResource() != null) {
 			getResource().removeResourceLoadingListener(this);
 			getResource().getPropertyChangeSupport().removePropertyChangeListener("name", this);
@@ -219,7 +230,6 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
 			}
 		}
-		System.err.println("coucou");
 		return null;
 	}
 
@@ -279,7 +289,15 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public void setOwner(ReferenceOwner owner) {
-		this.owner = owner;
+		if (this.owner != owner) {
+			if (this.owner != null && this.owner.getProject() != null) {
+				this.owner.getProject().removeObjectReferences(this);
+			}
+			this.owner = owner;
+			if (this.owner != null && this.owner.getProject() != null) {
+				this.owner.getProject().addToObjectReferences(this);
+			}
+		}
 	}
 
 	public String getStringRepresentation() {

@@ -657,7 +657,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	private void setSource(FlexoModelObject o) {
-		setSourceReference(new FlexoModelObjectReference<FlexoModelObject>(o));
+		setSourceReference(new FlexoModelObjectReference<FlexoModelObject>(o, this));
 	}
 
 	@Override

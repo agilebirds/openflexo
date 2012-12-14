@@ -42,7 +42,9 @@ public class FlexoProjectBuilder {
 	public FlexoProgress progress;
 
 	private int resourcesCount;
+
 	private int current;
+
 	private int stepsToNotify;
 
 	public FlexoResourceCenterService resourceCenterService;

@@ -597,13 +597,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			objectReference = null;
 		}
 		if (object != null) {
-			objectReference = new FlexoModelObjectReference<FlexoModelObject>(object);
+			objectReference = new FlexoModelObjectReference<FlexoModelObject>(object, this);
+			objectReference.setSerializeClassName(true);
 		} else {
 			objectReference = null;
 		}
 		if (objectReference != null) {
-			objectReference.setOwner(this);
-			objectReference.setSerializeClassName(true);
 		}
 	}
 

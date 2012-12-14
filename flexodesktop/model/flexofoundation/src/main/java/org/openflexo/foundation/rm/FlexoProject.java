@@ -225,6 +225,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private FlexoObjectIDManager objectIDManager;
 
+	private List<FlexoModelObjectReference> objectReferences = new ArrayList<FlexoModelObjectReference>();
 	/**
 	 * These variable are here to replace old static references.
 	 */
@@ -4226,6 +4227,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public boolean hasImportedProjects() {
 		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
+	}
+
+	public List<FlexoModelObjectReference> getObjectReferences() {
+		return objectReferences;
+	}
+
+	public void addToObjectReferences(FlexoModelObjectReference<?> objectReference) {
+		objectReferences.add(objectReference);
+	}
+
+	public void removeObjectReferences(FlexoModelObjectReference<?> objectReference) {
+		objectReferences.remove(objectReference);
 	}
 
 }
