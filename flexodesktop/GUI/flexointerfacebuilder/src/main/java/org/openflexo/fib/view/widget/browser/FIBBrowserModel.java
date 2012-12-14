@@ -420,7 +420,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 		@Override
 		public void update(Observable o, Object arg) {
-			// logger.info("Object " + o + " received " + arg);
+			logger.info("Object " + o + " received " + arg);
 			if (!isDeleted && o == representedObject) {
 				update(false);
 			}
@@ -428,7 +428,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			// logger.info("Object " + representedObject + " received " + evt);
+			logger.info("Object " + representedObject + " received " + evt);
 			if (!isDeleted) {
 				// System.out.println("cell " + this + " propertyChanged " + evt.getPropertyName() + " for " + evt.getSource());
 				update(false);

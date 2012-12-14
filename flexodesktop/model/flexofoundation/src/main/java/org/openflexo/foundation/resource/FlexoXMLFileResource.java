@@ -16,6 +16,15 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement
 public interface FlexoXMLFileResource<RD extends ResourceData<RD>> extends FlexoFileResource<RD> {
 
+	public static final String MODEL_VERSION = "modelVersion";
+
+	/*@Getter(MODEL_VERSION)
+	@XmlAttribute
+	public FlexoVersion getModelVersion();
+
+	@Setter(MODEL_VERSION)
+	public void setModelVersion(FlexoVersion file);*/
+
 	public Object instanciateNewBuilder();
 
 	public boolean isConverting();

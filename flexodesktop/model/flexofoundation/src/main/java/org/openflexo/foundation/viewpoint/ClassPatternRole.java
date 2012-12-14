@@ -8,7 +8,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ClassPatternRole extends OntologicObjectPatternRole<IFlexoOntologyClass> {
+public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
 
 	public ClassPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -25,11 +25,6 @@ public class ClassPatternRole extends OntologicObjectPatternRole<IFlexoOntologyC
 			return getOntologicType().getName();
 		}
 		return "";
-	}
-
-	@Override
-	public Class<IFlexoOntologyClass> getAccessedClass() {
-		return IFlexoOntologyClass.class;
 	}
 
 	private String conceptURI;

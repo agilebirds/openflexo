@@ -449,6 +449,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			if (property.getSetterMethod() != null) {
 				property.getSetterMethod().invoke(getObject(), value);
 			} else {
+				// TODO: guillaume ???
 				System.err.println("Setter method not found !!!");
 			}
 		} catch (IllegalArgumentException e) {
@@ -633,8 +634,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
-		// Object oldValue = invokeGetter(property);
-		Object oldValue = internallyInvokeGetter(property);
+		Object oldValue = invokeGetter(property);
+		// Object oldValue = internallyInvokeGetter(property);
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {

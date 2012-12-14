@@ -36,6 +36,9 @@ public class OWLIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(OWLIconLibrary.class.getPackage().getName());
 
+	public static final ImageIconResource ONTOLOGY_LIBRARY_BIG_ICON = new ImageIconResource(
+			"src/main/resources/Icons/32x32/OntologyLibrary.png");
+
 	public static final ImageIconResource ONTOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/Ontology.png");
 	public static final ImageIconResource ONTOLOGY_LIBRARY_ICON = new ImageIconResource("src/main/resources/Icons/OntologyLibrary.png");
 	public static final ImageIconResource ONTOLOGY_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/OntologyClass.png");

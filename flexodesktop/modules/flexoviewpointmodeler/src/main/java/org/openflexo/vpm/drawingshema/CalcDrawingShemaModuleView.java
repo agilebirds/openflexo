@@ -81,7 +81,7 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 
 	@Override
 	public void willShow() {
-		getPerspective().focusOnShema(getRepresentedObject());
+		getPerspective().focusOnExampleDiagram(getRepresentedObject());
 	}
 
 }

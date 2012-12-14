@@ -19,6 +19,12 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 	}
 
+	@Override
+	public ImageIcon getTechnologyBigIcon() {
+		// TODO
+		return VEIconLibrary.VIEW_ICON;
+	}
+
 	/**
 	 * Return icon representing underlying technology
 	 * 

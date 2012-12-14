@@ -1,7 +1,9 @@
 package org.openflexo.foundation.resource;
 
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
@@ -19,6 +21,8 @@ import org.openflexo.toolbox.IProgress;
  * 
  */
 public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends FlexoObject implements FlexoResource<RD> {
+
+	static final Logger logger = Logger.getLogger(FlexoResourceImpl.class.getPackage().getName());
 
 	private RD resourceData = null;
 
@@ -44,7 +48,14 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
 			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
 		if (resourceData == null) {
+			// The resourceData is null, we try to load it
 			resourceData = loadResourceData(progress);
+			// That's fine, resource is loaded, now let's notify the loading of the resources
+			setChanged();
+			notifyObservers(new ResourceLoaded(this));
+			// Also notify that the contents of the resource may also have changed
+			setChanged();
+			notifyObservers(new DataModification("contents", null, getContents()));
 		}
 		return resourceData;
 	}

@@ -2,6 +2,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
@@ -18,6 +19,8 @@ import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<ViewPoint> implements ViewPointResource {
+
+	static final Logger logger = Logger.getLogger(FlexoXMLFileResourceImpl.class.getPackage().getName());
 
 	public static ViewPointResource makeViewPointResource(File viewPointDirectory, ViewPointLibrary viewPointLibrary) {
 		try {
@@ -89,6 +92,10 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	public ViewPoint loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException {
 		ViewPoint returned;
 		try {
+			if (getOpenflexoVersion().equals("1.4.5")) {
+				// System.out.println("On doit d'abord convertir le truc");
+				// System.exit(-1);
+			}
 			returned = ViewPoint.openViewPoint(getFile(), getViewPointLibrary(), getOpenflexoVersion());
 			for (EditionPattern ep : returned.getEditionPatterns()) {
 				ep.finalizeParentEditionPatternDeserialization();
@@ -100,6 +107,64 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		returned.loadWhenUnloaded();
 		return returned;
 	}
+
+	/*	private void convertFrom1_4_5() {
+			String baseName = getFile().getName().substring(0, getFile().getName().length() - 10);
+			File xmlFile = new File(getFile(), baseName + ".xml");
+
+			if (xmlFile.exists()) {
+
+				// ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+
+				FileInputStream inputStream = null;
+				try {
+					ViewPointBuilder builder = new ViewPointBuilder(getViewPointLibrary(), getOpenflexoVersion());
+					RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(getFile());
+					inputStream = new FileInputStream(xmlFile);
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Reading file " + xmlFile.getAbsolutePath());
+					}
+					ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, getViewPointLibrary().getViewPointModel(),
+							builder, new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
+					}
+					returned.init(baseName, viewpointDirectory, xmlFile, library );
+					return returned;
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (InvalidXMLDataException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (InvalidObjectSpecificationException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (AccessorInvocationException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (InvalidModelException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (JDOMException e) {
+					e.printStackTrace();
+					throw e;
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw e;
+				} finally {
+					IOUtils.closeQuietly(inputStream);
+				}
+			} else {
+				logger.severe("Not found: " + xmlFile);
+				// TODO: implement a search here (find the good XML file)
+				return null;
+			}
+
+		}*/
 
 	/**
 	 * Save the &quot;real&quot; resource data of this resource.

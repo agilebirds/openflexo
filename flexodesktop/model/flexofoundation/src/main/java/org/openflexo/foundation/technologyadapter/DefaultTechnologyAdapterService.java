@@ -11,10 +11,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -68,10 +68,10 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 				registerTechnologyAdapter(technologyAdapter);
 			}
 			// TODO: remove this hack to load DiagramTechnologyAdapter. Guillaume ?
-			if (getTechnologyAdapter(DiagramTechnologyAdapter.class) == null) {
+			/*if (getTechnologyAdapter(DiagramTechnologyAdapter.class) == null) {
 				DiagramTechnologyAdapter diagramTechnologyAdapter = new DiagramTechnologyAdapter();
 				registerTechnologyAdapter(diagramTechnologyAdapter);
-			}
+			}*/
 			logger.info("Loading available technology adapters. Done.");
 		}
 
@@ -212,6 +212,16 @@ public abstract class DefaultTechnologyAdapterService implements TechnologyAdapt
 				returned.add(rc.getMetaModelRepository(technologyAdapter));
 		}
 		return returned;
+	}
+
+	public static void main(String[] args) {
+		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
+		TechnologyAdapterService taService = getNewInstance(rcService);
+		((DefaultTechnologyAdapterService) taService).loadAvailableTechnologyAdapters();
+		for (TechnologyAdapter ta : taService.getTechnologyAdapters()) {
+			System.out.println("> " + ta);
+		}
+		System.exit(-1);
 	}
 
 }

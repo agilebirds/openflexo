@@ -112,7 +112,9 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
@@ -130,6 +132,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
@@ -1754,6 +1757,29 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
+	/**
+	 * We manage here an indirection with resources: resource data is used instead of resource if resource is loaded
+	 * 
+	 * @param object
+	 * @return
+	 */
+	private FlexoObject getRelevantObject(FlexoObject object) {
+		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
+			try {
+				return (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		}
+		return object;
+	}
+
 	public void objectWasClicked(Object object) {
 		logger.info("Object was clicked: " + object);
 		logger.info("Current selection=" + getSelectionManager().getSelection());
@@ -1762,8 +1788,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public void objectWasRightClicked(Object object, MouseEvent e) {
 		logger.info("Object was right-clicked: " + object + "event=" + e);
 		if (object instanceof FlexoObject) {
-			getSelectionManager().getContextualMenuManager().showPopupMenuForObject((FlexoObject) object, (Component) e.getSource(),
-					e.getPoint());
+			FlexoObject relevantObject = getRelevantObject((FlexoObject) object);
+			getSelectionManager().getContextualMenuManager()
+					.showPopupMenuForObject(relevantObject, (Component) e.getSource(), e.getPoint());
 		}
 	}
 
@@ -1945,7 +1972,19 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
-		if (object instanceof FlexoServiceManager) {
+		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
+			try {
+				return statelessIconForObject(((FlexoResource<?>) object).getResourceData(null));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		} else if (object instanceof FlexoServiceManager) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
 		} else if (object instanceof FlexoResourceCenter) {
 			return IconLibrary.RESOURCE_CENTER_ICON;
@@ -1959,13 +1998,20 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibrary) {
 			return VPMIconLibrary.VIEWPOINT_LIBRARY_ICON;
+		} else if (object instanceof ViewPointObject) {
+			return VPMIconLibrary.iconForObject((ViewPointObject) object);
 		} else if (object instanceof ViewPointResource) {
 			return VPMIconLibrary.iconForObject((ViewPointResource) object);
+		} else if (object instanceof ExampleDiagramResource) {
+			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
+		} else if (object instanceof DiagramPaletteResource) {
+			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
-		} /*else if (object instanceof OntologyLibrary) {
-			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
-			}*/else if (object instanceof RepositoryFolder) {
+		} else if (object instanceof RepositoryFolder) {
+			if (((RepositoryFolder) object).isRootFolder()) {
+				return IconLibrary.RESOURCE_CENTER_ICON;
+			}
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof TechnologyAdapter<?, ?>) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter<?, ?>) object);

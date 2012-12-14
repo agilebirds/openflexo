@@ -66,6 +66,9 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 
 	private FlexoServiceManager serviceManager;
 
+	private XMLMapping viewPointModel_0_1;
+	private XMLMapping viewPointModel_1_0;
+
 	public ViewPointLibrary() {
 		super();
 
@@ -145,13 +148,11 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 		return vpRes;
 	}
 
-	private XMLMapping VIEW_POINT_MODEL;
-
-	protected XMLMapping get_VIEW_POINT_MODEL() {
-		if (VIEW_POINT_MODEL == null) {
-			File viewPointModelFile = new FileResource("Models/ViewPointModel/ViewPointModel.xml");
+	protected XMLMapping getViewPointModel() {
+		if (viewPointModel_1_0 == null) {
+			File viewPointModelFile = new FileResource("Models/ViewPointModel/viewpoint_model_1.0.xml");
 			try {
-				VIEW_POINT_MODEL = new XMLMapping(viewPointModelFile);
+				viewPointModel_1_0 = new XMLMapping(viewPointModelFile);
 			} catch (InvalidModelException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
@@ -178,7 +179,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 				e.printStackTrace();
 			}
 		}
-		return VIEW_POINT_MODEL;
+		return viewPointModel_1_0;
 	}
 
 	private XMLMapping VIEW_POINT_PALETTE_MODEL;

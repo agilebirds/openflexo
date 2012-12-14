@@ -94,7 +94,9 @@ public class OntologyUtils {
 		returned.add(ontology);
 		for (IFlexoOntology i : ontology.getImportedOntologies()) {
 			returned.add((O) i);
-			returned.addAll((Set<O>) getAllImportedOntologies(i));
+			if (i != ontology && !returned.contains(i)) {
+				returned.addAll((Set<O>) getAllImportedOntologies(i));
+			}
 		}
 		return returned;
 	}

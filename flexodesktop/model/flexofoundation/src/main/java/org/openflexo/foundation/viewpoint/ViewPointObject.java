@@ -64,7 +64,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 	@Override
 	public XMLMapping getXMLMapping() {
 		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().get_VIEW_POINT_MODEL();
+			return getViewPointLibrary().getViewPointModel();
 		}
 		return null;
 	}

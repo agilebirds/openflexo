@@ -204,7 +204,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Reading file " + xmlFile.getAbsolutePath());
 				}
-				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), builder,
+				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.getViewPointModel(), builder,
 						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
@@ -642,6 +642,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return _allEditionPatternWithLinkScheme;
 	}
 
+	/**
+	 * Return all {@link EditionPattern} defined in this {@link ViewPoint} which have no parent
+	 * 
+	 * @return
+	 */
 	public Vector<EditionPattern> getAllRootEditionPatterns() {
 		Vector<EditionPattern> returned = new Vector<EditionPattern>();
 		for (EditionPattern ep : getEditionPatterns()) {
@@ -652,6 +657,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return returned;
 	}
 
+	/**
+	 * Return all {@link EditionPattern} defined in this {@link ViewPoint}
+	 * 
+	 * @return
+	 */
 	public Vector<EditionPattern> getEditionPatterns() {
 		return editionPatterns;
 	}
@@ -692,7 +702,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		return getViewPointLibrary().get_VIEW_POINT_MODEL();
+		return getViewPointLibrary().getViewPointModel();
 	}
 
 	public EditionPattern getEditionPattern(String editionPatternId) {
@@ -740,8 +750,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		logger.info("Converting viewpoint from Openflexo 1.4.5 version");
 		// For all "old" viewpoints, we consider a OWL model slot
 		try {
-			TechnologyAdapter<?, ?> OWL = (TechnologyAdapter<?, ?>) Class.forName(
-					"org.openflexo.technologyadapter.owl.OWLTechnologyAdapter").newInstance();
+			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
+			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getFlexoServiceManager().getTechnologyAdapterService()
+					.getTechnologyAdapter(owlTechnologyAdapterClass);
 			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
 			ms.setMetaModel(null);
@@ -751,22 +762,12 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
 				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
 						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
-				TechnologyAdapterService taService = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class);
-				for (TechnologyAdapter ta : taService.getTechnologyAdapters()) {
-					System.out.println("> " + ta);
-				}
 			} else {
 				diagramTA = new DiagramTechnologyAdapter();
 			}
 			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
 			diagramMS.setName("diagram");
 			addToModelSlots(diagramMS);
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

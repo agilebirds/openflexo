@@ -15,7 +15,7 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 
 	private final ResourceRepository<R> resourceRepository;
 	private String name;
-	private final RepositoryFolder<R> parent;
+	private RepositoryFolder<R> parent;
 	private final ArrayList<RepositoryFolder<R>> children;
 	private final ArrayList<R> resources;
 
@@ -44,10 +44,20 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 
 	public void addToChildren(RepositoryFolder<R> aFolder) {
 		children.add(aFolder);
+		aFolder.parent = this;
 	}
 
 	public void removeFromChildren(RepositoryFolder<R> aFolder) {
 		children.remove(aFolder);
+		aFolder.parent = null;
+	}
+
+	public RepositoryFolder<R> getParentFolder() {
+		return parent;
+	}
+
+	public boolean isRootFolder() {
+		return getParentFolder() == null;
 	}
 
 	public List<R> getResources() {

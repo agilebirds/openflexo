@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.components.widget;
+package org.openflexo.vpm.widget;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +48,7 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary> {
 	static final Logger logger = Logger.getLogger(FIBViewPointLibraryBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/FIBViewPointLibraryBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBViewPointLibraryBrowser.fib");
 
 	public FIBViewPointLibraryBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
 		super(viewPointLibrary, controller, FIB_FILE);

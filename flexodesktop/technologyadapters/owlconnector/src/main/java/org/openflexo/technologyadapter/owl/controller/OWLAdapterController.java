@@ -38,6 +38,16 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	}
 
 	/**
+	 * Return icon representing underlying technology, required size is 32x32
+	 * 
+	 * @return
+	 */
+	@Override
+	public ImageIcon getTechnologyBigIcon() {
+		return OWLIconLibrary.ONTOLOGY_LIBRARY_BIG_ICON;
+	}
+
+	/**
 	 * Return icon representing underlying technology
 	 * 
 	 * @return
@@ -75,6 +85,7 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	 */
 	@Override
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
+		System.out.println("On me demande l'icone pour " + objectClass);
 		if (OWLObject.class.isAssignableFrom(objectClass))
 			return OWLIconLibrary.iconForObject((Class<? extends OWLObject>) objectClass);
 		return null;

@@ -30,6 +30,7 @@ public class EMFIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(EMFIconLibrary.class.getPackage().getName());
 
+	public static final ImageIconResource EMF_TECHNOLOGY_BIG_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology32.png");
 	public static final ImageIconResource EMF_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
 	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XSDFile.png");
 	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XMLFile.png");

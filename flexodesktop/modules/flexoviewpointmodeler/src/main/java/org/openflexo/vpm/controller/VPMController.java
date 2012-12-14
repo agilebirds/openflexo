@@ -159,7 +159,7 @@ public class VPMController extends FlexoController {
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoObject object) {
-		logger.info("selectAndFocusObject " + object);
+		logger.info("selectAndFocusObject " + object + "of " + object.getClass().getSimpleName());
 		if (object instanceof EditionPatternObject) {
 			setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
 		} else {
@@ -178,7 +178,7 @@ public class VPMController extends FlexoController {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
 				}
 				}*/else if (object instanceof ExampleDiagram) {
-				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDiagram) object);
+				VIEW_POINT_PERSPECTIVE.focusOnExampleDiagram((ExampleDiagram) object);
 			} else if (object instanceof DiagramPalette) {
 				VIEW_POINT_PERSPECTIVE.focusOnPalette((DiagramPalette) object);
 			} else if (object instanceof ViewPoint) {

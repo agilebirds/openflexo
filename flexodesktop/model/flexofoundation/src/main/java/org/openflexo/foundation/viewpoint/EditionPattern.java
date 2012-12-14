@@ -301,7 +301,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public ClassPatternRole createClassPatternRole() {
-		ClassPatternRole newPatternRole = new ClassPatternRole(null);
+		ClassPatternRole newPatternRole = null; // new ClassPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;

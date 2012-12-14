@@ -21,6 +21,16 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	}
 
 	/**
+	 * Return icon representing underlying technology, required size is 32x32
+	 * 
+	 * @return
+	 */
+	@Override
+	public ImageIcon getTechnologyBigIcon() {
+		return EMFIconLibrary.EMF_TECHNOLOGY_BIG_ICON;
+	}
+
+	/**
 	 * Return icon representing underlying technology
 	 * 
 	 * @return

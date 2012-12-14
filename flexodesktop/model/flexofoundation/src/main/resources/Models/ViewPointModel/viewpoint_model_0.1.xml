@@ -164,7 +164,7 @@
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole" abstract="yes">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.ClassPatternRole" xmlTag="ClassPatternRole">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="ClassPatternRole">
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 

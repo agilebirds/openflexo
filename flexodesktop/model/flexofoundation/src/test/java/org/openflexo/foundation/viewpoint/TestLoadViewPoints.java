@@ -8,6 +8,7 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.toolbox.FileResource;
 
 public class TestLoadViewPoints extends FlexoTestCase {
@@ -32,6 +33,7 @@ public class TestLoadViewPoints extends FlexoTestCase {
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
 		rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource("src/test/resources/TestResourceCenter")));
 		sm.registerService(rcService);
+		sm.registerService(DefaultTechnologyAdapterService.getNewInstance(rcService));
 		viewPointLibrary = new ViewPointLibrary();
 		sm.registerService(viewPointLibrary);
 

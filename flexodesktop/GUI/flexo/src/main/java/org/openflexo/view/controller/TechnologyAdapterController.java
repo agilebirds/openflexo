@@ -84,7 +84,14 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	}
 
 	/**
-	 * Return icon representing underlying technology
+	 * Return icon representing underlying technology, required size is 32x32
+	 * 
+	 * @return
+	 */
+	public abstract ImageIcon getTechnologyBigIcon();
+
+	/**
+	 * Return icon representing underlying technology, required size is 16x16
 	 * 
 	 * @return
 	 */

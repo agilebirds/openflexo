@@ -24,7 +24,10 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.rm.DiagramPaletteResource;
+import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
@@ -69,6 +72,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
@@ -103,6 +107,7 @@ public class VPMIconLibrary extends IconLibrary {
 	// Model icons
 	public static final ImageIconResource VIEWPOINT_LIBRARY_ICON = new ImageIconResource("Icons/Model/VPM/ViewPointLibrary.png");
 	public static final ImageIconResource VIEWPOINT_ICON = new ImageIconResource("Icons/Model/VPM/ViewPoint.png");
+	public static final ImageIconResource MODEL_SLOT_ICON = new ImageIconResource("Icons/Model/VPM/ModelSlot.png");
 	public static final ImageIconResource DIAGRAM_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/DiagramPalette.png");
 	public static final ImageIconResource EDITION_PATTERN_ICON = new ImageIconResource("Icons/Model/VPM/EditionPattern.png");
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
@@ -132,18 +137,27 @@ public class VPMIconLibrary extends IconLibrary {
 	 */
 	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
-			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
-			if (sm != null) {
-				TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
-				if (service != null) {
-					return service.getTechnologyAdapterController(technologyAdapter);
+			try {
+				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+				if (sm != null) {
+					TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+					if (service != null) {
+						return service.getTechnologyAdapterController(technologyAdapter);
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
 	}
 
 	public static ImageIcon iconForObject(ViewPointObject object) {
+		if (object instanceof ModelSlot) {
+			return MODEL_SLOT_ICON;
+		} else if (object instanceof EditionPatternInspector) {
+			return INSPECT_ICON;
+		}
 		if (object instanceof DiagramPalette) {
 			return DIAGRAM_PALETTE_ICON;
 		} else if (object instanceof DiagramPaletteElement) {
@@ -278,6 +292,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
 		} else if (object instanceof OntologicObjectPatternRole) {
+			logger.info("TechnologyAdapter: " + ((OntologicObjectPatternRole<?>) object).getModelSlot().getTechnologyAdapter());
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
@@ -292,6 +307,14 @@ public class VPMIconLibrary extends IconLibrary {
 
 	public static ImageIcon iconForObject(ViewPointResource object) {
 		return VIEWPOINT_ICON;
+	}
+
+	public static ImageIcon iconForObject(ExampleDiagramResource object) {
+		return EXAMPLE_DIAGRAM_ICON;
+	}
+
+	public static ImageIcon iconForObject(DiagramPaletteResource object) {
+		return DIAGRAM_PALETTE_ICON;
 	}
 
 }

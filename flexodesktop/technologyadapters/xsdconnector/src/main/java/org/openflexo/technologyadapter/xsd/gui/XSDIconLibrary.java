@@ -35,6 +35,7 @@ public class XSDIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(XSDIconLibrary.class.getPackage().getName());
 
+	public static final ImageIconResource XSD_TECHNOLOGY_BIG_ICON = new ImageIconResource("src/main/resources/Icons/XSDTechnology32.png");
 	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/XSDTechnology.png");
 	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XSDFile.png");
 	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XMLFile.png");

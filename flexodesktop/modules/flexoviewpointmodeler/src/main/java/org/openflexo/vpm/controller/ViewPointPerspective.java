@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
-import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -48,6 +47,7 @@ import org.openflexo.vpm.view.CEDBrowserView;
 import org.openflexo.vpm.view.CalcLibraryView;
 import org.openflexo.vpm.view.CalcView;
 import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.widget.FIBViewPointLibraryBrowser;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
@@ -145,6 +145,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	}
 
 	public void focusOnViewPoint(ViewPoint viewPoint) {
+		logger.info("focusOnViewPoint " + viewPoint);
 		setBottomLeftView(null);
 		// calcBrowser.deleteBrowserListener(_browserView);
 		calcBrowser.setRepresentedObject(viewPoint);
@@ -160,7 +161,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		// calcPaletteBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnShema(ExampleDiagram shema) {
+	public void focusOnExampleDiagram(ExampleDiagram shema) {
 		setBottomLeftView(calcDrawingShemaBrowserView);
 		// calcDrawingShemaBrowser.deleteBrowserListener(_browserView);
 		calcDrawingShemaBrowser.setRepresentedShema(shema);
@@ -225,6 +226,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		}*/
 		if (object instanceof ViewPoint) {
 			((ViewPoint) object).loadWhenUnloaded();
+			logger.info("OK, on charge une CalcView alors");
 			return new CalcView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(ViewPointLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(ViewPointLibraryBrowser.selected)" rightClickAction="controller.rightClick(ViewPointLibraryBrowser.selected,event)" name="ViewPointBrowser" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint">
+      <Children data="viewPoint.modelSlots" name="modelSlots" />
+      <Children data="viewPoint.allRootEditionPatterns" name="editionPatterns" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.ModelSlot" label="(((modelSlot.name + &quot; - [&quot;) + modelSlot.technologyAdapter.name) + &quot;]&quot;)" icon="controller.iconForObject(modelSlot)" isEditable="false" filtered="false" defaultVisible="true" name="modelSlot" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" icon="controller.iconForObject(editionPattern)" isEditable="false" filtered="false" defaultVisible="true" name="editionPattern">
+      <Children data="editionPattern.childEditionPatterns" name="children" />
+      <Children data="editionPattern.patternRoles" name="patternRoles" />
+      <Children data="editionPattern.editionSchemes" name="editionSchemes" />
+      <Children data="editionPattern.inspector" name="inspector" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" icon="controller.iconForObject(patternRole)" isEditable="false" filtered="false" defaultVisible="true" name="patternRole" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" label="editionScheme.name" icon="controller.iconForObject(editionScheme)" isEditable="false" filtered="false" defaultVisible="true" name="editionScheme">
+      <Children data="editionScheme.parameters" name="parameters" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" label="&quot;Inspector&quot;" icon="controller.iconForObject(inspector)" isEditable="false" filtered="false" defaultVisible="true" name="inspector">
+      <Children data="inspector.entries" name="entries" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" icon="controller.iconForObject(inspectorEntry)" isEditable="false" filtered="false" defaultVisible="true" name="inspectorEntry" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" icon="controller.iconForObject(editionSchemeParameter)" isEditable="false" filtered="false" defaultVisible="true" name="editionSchemeParameter" />
+  </Browser>
+  <LocalizedDictionary />
+</Panel>

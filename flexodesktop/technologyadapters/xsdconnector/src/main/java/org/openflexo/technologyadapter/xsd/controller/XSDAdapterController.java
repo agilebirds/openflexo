@@ -22,6 +22,16 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	}
 
 	/**
+	 * Return icon representing underlying technology, required size is 32x32
+	 * 
+	 * @return
+	 */
+	@Override
+	public ImageIcon getTechnologyBigIcon() {
+		return XSDIconLibrary.XSD_TECHNOLOGY_BIG_ICON;
+	}
+
+	/**
 	 * Return icon representing underlying technology
 	 * 
 	 * @return
