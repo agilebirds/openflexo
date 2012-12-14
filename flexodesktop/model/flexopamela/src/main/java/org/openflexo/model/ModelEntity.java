@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.openflexo.antar.binding.ReflectionUtils;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
@@ -157,27 +158,17 @@ public class ModelEntity<I> {
 
 		// We scan already all the declared properties but we do not resolve their type. We do not resolve inherited properties either.
 		for (Method m : getImplementedInterface().getDeclaredMethods()) {
-			String propertyIdentifier = null;
-			Getter aGetter = m.getAnnotation(Getter.class);
-			if (aGetter != null) {
-				propertyIdentifier = aGetter.value();
-			} else {
-				Setter aSetter = m.getAnnotation(Setter.class);
-				if (aSetter != null) {
-					propertyIdentifier = aSetter.value();
-				} else {
-					Adder anAdder = m.getAnnotation(Adder.class);
-					if (anAdder != null) {
-						propertyIdentifier = anAdder.value();
-					} else {
-						Remover aRemover = m.getAnnotation(Remover.class);
-						if (aRemover != null) {
-							propertyIdentifier = aRemover.value();
-						}
+			String propertyIdentifier = getPropertyIdentifier(m);
+			if (propertyIdentifier == null || !!declaredModelProperties.containsKey(propertyIdentifier)) {
+				List<Method> overridenMethods = ReflectionUtils.getOverridenMethods(m);
+				for (Method override : overridenMethods) {
+					propertyIdentifier = getPropertyIdentifier(override);
+					if (propertyIdentifier != null) {
+						break;
 					}
 				}
 			}
-			if (propertyIdentifier != null) {
+			if (propertyIdentifier != null && !declaredModelProperties.containsKey(propertyIdentifier)) {
 				// The next line creates the property
 				ModelProperty<I> property = ModelProperty.getModelProperty(propertyIdentifier, this);
 				declaredModelProperties.put(propertyIdentifier, property);
@@ -187,6 +178,30 @@ public class ModelEntity<I> {
 				initializers.put(m, new ModelInitializer(initializer, m));
 			}
 		}
+	}
+
+	private String getPropertyIdentifier(Method m) {
+		String propertyIdentifier = null;
+		Getter aGetter = m.getAnnotation(Getter.class);
+		if (aGetter != null) {
+			propertyIdentifier = aGetter.value();
+		} else {
+			Setter aSetter = m.getAnnotation(Setter.class);
+			if (aSetter != null) {
+				propertyIdentifier = aSetter.value();
+			} else {
+				Adder anAdder = m.getAnnotation(Adder.class);
+				if (anAdder != null) {
+					propertyIdentifier = anAdder.value();
+				} else {
+					Remover aRemover = m.getAnnotation(Remover.class);
+					if (aRemover != null) {
+						propertyIdentifier = aRemover.value();
+					}
+				}
+			}
+		}
+		return propertyIdentifier;
 	}
 
 	void init() throws ModelDefinitionException {

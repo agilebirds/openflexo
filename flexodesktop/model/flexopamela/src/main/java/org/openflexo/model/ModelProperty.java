@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openflexo.antar.binding.ReflectionUtils;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
@@ -52,6 +53,8 @@ public class ModelProperty<I> {
 	private Method adderMethod;
 	private Method removerMethod;
 
+	private Cardinality cardinality;
+
 	/* Computed values of the model property */
 	private Class<?> type;
 	private Class<?> keyType;
@@ -75,15 +78,27 @@ public class ModelProperty<I> {
 		Method setterMethod = null;
 		Method adderMethod = null;
 		Method removerMethod = null;
-		for (Method m : modelEntity.getImplementedInterface().getDeclaredMethods()) {
+		Class<I> implementedInterface = modelEntity.getImplementedInterface();
+		for (Method m : implementedInterface.getDeclaredMethods()) {
 			Getter aGetter = m.getAnnotation(Getter.class);
 			Setter aSetter = m.getAnnotation(Setter.class);
 			Adder anAdder = m.getAnnotation(Adder.class);
 			Remover aRemover = m.getAnnotation(Remover.class);
+			if (aGetter == null && aSetter == null && anAdder == null && aRemover == null) {
+				for (Method m1 : ReflectionUtils.getOverridenMethods(m)) {
+					aGetter = m1.getAnnotation(Getter.class);
+					aSetter = m1.getAnnotation(Setter.class);
+					anAdder = m1.getAnnotation(Adder.class);
+					aRemover = m1.getAnnotation(Remover.class);
+					if (aGetter != null || aSetter != null || anAdder != null || aRemover != null) {
+						break;
+					}
+				}
+			}
 			if (aGetter != null && aGetter.value().equals(propertyIdentifier)) {
 				if (getter != null) {
 					throw new ModelDefinitionException("Duplicate getter '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					getter = aGetter;
 					getterMethod = m;
@@ -98,7 +113,7 @@ public class ModelProperty<I> {
 			if (aSetter != null && aSetter.value().equals(propertyIdentifier)) {
 				if (setter != null) {
 					throw new ModelDefinitionException("Duplicate setter '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					setter = aSetter;
 					setterMethod = m;
@@ -108,7 +123,7 @@ public class ModelProperty<I> {
 			if (anAdder != null && anAdder.value().equals(propertyIdentifier)) {
 				if (adder != null) {
 					throw new ModelDefinitionException("Duplicate adder '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					adder = anAdder;
 					adderMethod = m;
@@ -118,7 +133,7 @@ public class ModelProperty<I> {
 			if (aRemover != null && aRemover.value().equals(propertyIdentifier)) {
 				if (remover != null) {
 					throw new ModelDefinitionException("Duplicate remover '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					remover = aRemover;
 					removerMethod = m;
@@ -342,7 +357,7 @@ public class ModelProperty<I> {
 				return "Cardinality " + getCardinality() + " is not equal to " + property.getCardinality();
 			}
 		}
-		if (!getGetter().inverse().equals(Getter.UNDEFINED) && !property.getGetter().inverse().equals(Getter.UNDEFINED)
+		if (hasInverseProperty() && !property.getGetter().inverse().equals(Getter.UNDEFINED)
 				&& !getGetter().inverse().equals(property.getGetter().inverse())) {
 			if (rulingProperty == null || rulingProperty.getGetter() == null
 					|| rulingProperty.getGetter().inverse().equals(Getter.UNDEFINED)) {
@@ -518,6 +533,9 @@ public class ModelProperty<I> {
 			throws ModelDefinitionException {
 		if (property == null && (rulingProperty == null || rulingProperty == this)) {
 			return this;
+		}
+		if (property.getPropertyIdentifier().equals("container")) {
+			System.err.println("coucou");
 		}
 		Getter getter = null;
 		Setter setter = null;
@@ -809,28 +827,23 @@ public class ModelProperty<I> {
 		return cardinality;
 	}
 
-	private ModelProperty<?> inverseProperty = null;
-	private Cardinality cardinality;
-
-	public ModelProperty getInverseProperty() throws ModelDefinitionException {
-		if (inverseProperty == null) {
-			findInverseProperty();
-		}
-		return inverseProperty;
+	public boolean hasInverseProperty() {
+		return !getGetter().inverse().equals(Getter.UNDEFINED);
 	}
 
-	private void findInverseProperty() throws ModelDefinitionException {
-		if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-			ModelEntity<?> oppositeEntity = getAccessedEntity();
+	public <T> ModelProperty<? super T> getInverseProperty(ModelEntity<T> oppositeEntity) throws ModelDefinitionException {
+		if (hasInverseProperty()) {
 			if (oppositeEntity == null) {
 				throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
 			}
-			inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse());
+			ModelProperty<? super T> inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse());
 			if (inverseProperty == null) {
 				throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse() + " for "
 						+ oppositeEntity.getImplementedInterface().getSimpleName());
 			}
+			return inverseProperty;
 		}
+		return null;
 	}
 
 	@Override
