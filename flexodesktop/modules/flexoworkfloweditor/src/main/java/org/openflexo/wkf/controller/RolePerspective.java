@@ -118,12 +118,19 @@ public class RolePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject roleList, FlexoController controller) {
-		if (roleList instanceof RoleList) {
-			return new RoleEditorController((RoleList) roleList, _controller).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+		if (object instanceof RoleList) {
+			RoleEditorView drawingView = new RoleEditorController((RoleList) object, _controller).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, false);
 	}
 
 	@Override

@@ -114,12 +114,20 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
-		if (process instanceof FlexoProcess) {
-			return new ProcessEditorController(_controller, (FlexoProcess) process).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+		if (object instanceof FlexoProcess) {
+			ProcessView drawingView = new ProcessEditorController(_controller, (FlexoProcess) object).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
 		} else {
 			return null;
 		}
+
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, true);
 	}
 
 	public ProcessView getCurrentProcessView() {
