@@ -123,6 +123,10 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 		setBorder(b);
 	}
 
+	public void delete() {
+		view._model.deleteObserver(this);
+	}
+
 	/**
      * 
      */

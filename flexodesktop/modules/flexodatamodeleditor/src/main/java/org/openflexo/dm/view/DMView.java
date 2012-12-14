@@ -117,6 +117,7 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Removing DM view :" + getDMObject().getName());
 		}
+		getModelObject().deleteObserver(this);
 		getDMController().removeModuleView(this);
 	}
 

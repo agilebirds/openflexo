@@ -160,6 +160,7 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 	@Override
 	public void deleteModuleView() {
 		logger.info("Removing view !");
+		getRepresentedObject().deleteObserver(this);
 		getWSEController().removeModuleView(this);
 	}
 

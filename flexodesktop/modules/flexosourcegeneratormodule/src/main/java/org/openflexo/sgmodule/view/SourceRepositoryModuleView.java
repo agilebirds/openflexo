@@ -44,6 +44,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -233,6 +234,10 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == sourceRepository /*|| observable == sourceRepository.getReaderRepository()*/) {
+			if (dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				// chooseWarLocationButton.setText(sourceRepository.getWarDirectory()!=null?sourceRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")) {

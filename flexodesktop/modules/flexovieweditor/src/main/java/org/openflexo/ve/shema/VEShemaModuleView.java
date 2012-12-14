@@ -21,6 +21,8 @@ package org.openflexo.ve.shema;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -31,7 +33,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.ve.controller.DiagramPerspective;
 import org.openflexo.view.ModuleView;
 
-public class VEShemaModuleView extends JPanel implements ModuleView<View> {
+public class VEShemaModuleView extends JPanel implements ModuleView<View>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShemaModuleView.class.getPackage().getName());
@@ -47,6 +49,7 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 		add(topPanel, BorderLayout.NORTH);
 		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	public VEShemaController getController() {
@@ -55,6 +58,7 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		if (getController() != null) {
 			getController().delete();
 		}
@@ -88,4 +92,10 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 		getPerspective().focusOnShema(getRepresentedObject());
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

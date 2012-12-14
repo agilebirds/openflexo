@@ -66,6 +66,8 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
 
+	private static final String DELETED = "deleted";
+
 	private Object dataObject;
 
 	public class FIBBrowserActionAdapter extends FIBBrowserAction {
@@ -250,6 +252,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void deleteView() {
+		fibView.delete();
 		if (this instanceof FIBMouseClickListener) {
 			fibView.getController().removeMouseClickListener((FIBMouseClickListener) this);
 		}
@@ -258,6 +261,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		} else if (dataObject instanceof FlexoObservable) {
 			((FlexoObservable) dataObject).deleteObserver(this);
 		}
+		getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
 	}
 
 	/**
@@ -284,7 +288,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	@Override
 	public String getDeletedProperty() {
-		return null;
+		return DELETED;
 	}
 
 	// test purposes

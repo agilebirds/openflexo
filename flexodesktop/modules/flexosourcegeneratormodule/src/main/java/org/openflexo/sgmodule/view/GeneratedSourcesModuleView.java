@@ -33,6 +33,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.sg.CreateSourceRepository;
@@ -89,11 +90,16 @@ public class GeneratedSourcesModuleView extends JPanel implements ModuleView<Gen
 			});
 			return;
 		}
-		updateView();
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else {
+			updateView();
+		}
 	}
 
 	@Override
 	public void deleteModuleView() {
+		_gc.deleteObserver(this);
 		_controller.removeModuleView(this);
 		component = null;
 		panel = null;

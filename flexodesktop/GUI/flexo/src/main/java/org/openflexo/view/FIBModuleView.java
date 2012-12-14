@@ -21,6 +21,7 @@ package org.openflexo.view;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
@@ -85,10 +86,12 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	protected FIBModuleView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
 			FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
+
 	}
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		deleteView();
 		getFlexoController().removeModuleView(this);
 	}
@@ -155,4 +158,11 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 		return true;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+		super.propertyChange(evt);
+	}
 }

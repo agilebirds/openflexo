@@ -257,6 +257,7 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 
 	@Override
 	public void deleteModuleView() {
+		getDKVModel().addObserver(this);
 		logger.info("Removing view !");
 		getIEController().removeModuleView(this);
 	}
