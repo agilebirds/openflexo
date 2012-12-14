@@ -794,7 +794,7 @@ public class ModelProperty<I> {
 	public Object getDefaultValue(ModelFactory factory) throws InvalidDataException {
 		if (defaultValue != null) {
 			return defaultValue;
-		} else if (getGetter().defaultValue() != null) {
+		} else if (!getGetter().defaultValue().equals(Getter.UNDEFINED)) {
 			return factory.getStringEncoder().fromString(getType(), getGetter().defaultValue());
 		} else {
 			return null;
