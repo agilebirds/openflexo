@@ -159,7 +159,7 @@ public class ModelEntity<I> {
 		// We scan already all the declared properties but we do not resolve their type. We do not resolve inherited properties either.
 		for (Method m : getImplementedInterface().getDeclaredMethods()) {
 			String propertyIdentifier = getPropertyIdentifier(m);
-			if (propertyIdentifier == null || !!declaredModelProperties.containsKey(propertyIdentifier)) {
+			if (propertyIdentifier == null || !declaredModelProperties.containsKey(propertyIdentifier)) {
 				List<Method> overridenMethods = ReflectionUtils.getOverridenMethods(m);
 				for (Method override : overridenMethods) {
 					propertyIdentifier = getPropertyIdentifier(override);
