@@ -185,7 +185,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 						if (reference.getReferredProject() == null
 								|| !reference.getReferredProject().getProjectDirectory().equals(a.getSelectedFile())) {
 							try {
-								editor = applicationContext.getProjectLoader().loadProject(a.getSelectedFile(), false);
+								editor = applicationContext.getProjectLoader().loadProject(a.getSelectedFile(), true);
 								if (editor != null) {
 									FlexoProject project = editor.getProject();
 									if (project.getProjectURI().equals(reference.getURI())) {

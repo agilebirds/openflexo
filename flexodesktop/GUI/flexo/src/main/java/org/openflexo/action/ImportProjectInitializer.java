@@ -62,7 +62,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 						FlexoEditor editor = null;
 						try {
 							editor = getController().getApplicationContext().getProjectLoader()
-									.loadProject(chooser.getSelectedFile(), false);
+									.loadProject(chooser.getSelectedFile(), true);
 						} catch (ProjectLoadingCancelledException e1) {
 							e1.printStackTrace();
 							// User chose not to load this project

@@ -122,6 +122,9 @@ public class DefaultFlexoEditor implements FlexoEditor {
 		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
 			return null;
 		}
+		if (action.getFocusedObject() != null && action.getFocusedObject().getProject() != getProject()) {
+			return null;
+		}
 		try {
 			return action.doActionInContext();
 		} catch (FlexoException e1) {

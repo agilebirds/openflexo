@@ -19,6 +19,8 @@
  */
 package org.openflexo.view.controller.model;
 
+import java.util.logging.Level;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -29,6 +31,9 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
 public abstract class FlexoPerspective extends ControllerModelObject {
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoPerspective.class.getPackage()
+			.getName());
 
 	private String name;
 
@@ -86,7 +91,18 @@ public abstract class FlexoPerspective extends ControllerModelObject {
 
 	public abstract ImageIcon getSelectedIcon();
 
-	public abstract <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+		if (!editable) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Perspective " + getName()
+						+ " does not override createModuleViewForObject(O object, FlexoController controller, boolean editable)");
+			}
+		}
+		return createModuleViewForObject(object, controller);
+	}
+
+	@Deprecated
+	public abstract ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller);
 
 	public abstract boolean hasModuleViewForObject(FlexoModelObject object);
 

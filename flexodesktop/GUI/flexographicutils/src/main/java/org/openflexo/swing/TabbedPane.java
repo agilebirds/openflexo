@@ -566,7 +566,7 @@ public class TabbedPane<J> {
 	}
 
 	public void addTab(J tab) {
-		if (useTabBody && !JComponent.class.isAssignableFrom(tab.getClass())) {
+		if (tab != null && useTabBody && !JComponent.class.isAssignableFrom(tab.getClass())) {
 			throw new IllegalArgumentException("Tab must be an instanceof JComponent but received a " + tab.getClass().getName());
 		}
 		if (!tabs.contains(tab)) {

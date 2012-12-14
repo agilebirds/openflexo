@@ -130,6 +130,15 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	@Override
 	public <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(
 			final A action, final EventObject e) {
+		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
+			return null;
+		}
+		if (action.getFocusedObject() != null && action.getFocusedObject().getProject() != getProject()) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Cannot execute action because focused object is within another project than the one of this editor");
+			}
+			return null;
+		}
 		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
 			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
