@@ -1,6 +1,6 @@
 package org.openflexo.wkf.controller.action;
 
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.wkf.Role;
@@ -17,7 +17,7 @@ public class AddToInformedRoleInitializer extends AddToXRoleInitializer<AddToInf
 	}
 
 	@Override
-	public Vector<Role> getAvailableRoles(AbstractActivityNode activity) {
+	public List<Role> getAvailableRoles(AbstractActivityNode activity) {
 		return activity.getAvailableInformedRoles();
 	}
 
