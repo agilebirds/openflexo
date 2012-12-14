@@ -13,6 +13,17 @@ public class PropertyChangeListenerRegistrationManager {
 		registrations = new Vector<PropertyChangeListenerRegistrationManager.PropertyChangeListenerRegistration>();
 	}
 
+	public boolean hasListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		for (PropertyChangeListenerRegistration registration : registrations) {
+			if (registration.hasPropertyChangeSupport == hasPropertyChangeSupport && registration.listener == listener
+					&& registration.propertyName == null && propertyName == null || registration.propertyName != null
+					&& registration.propertyName.equals(propertyName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void delete() {
 		for (PropertyChangeListenerRegistration registration : new ArrayList<PropertyChangeListenerRegistration>(registrations)) {
 			registration.removeListener();
