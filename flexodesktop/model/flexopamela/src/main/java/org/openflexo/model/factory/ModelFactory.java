@@ -24,8 +24,8 @@ import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelInitializer;
 import org.openflexo.model.ModelProperty;
-import org.openflexo.model.StringEncoder;
 import org.openflexo.model.StringConverterLibrary.Converter;
+import org.openflexo.model.StringEncoder;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -63,6 +63,7 @@ public class ModelFactory {
 			super.setSuperclass(implementingClass);
 			Class<?>[] interfaces = { modelEntity.getImplementedInterface() };
 			setInterfaces(interfaces);
+
 		}
 
 		public Class<?> getOverridingSuperClass() {
