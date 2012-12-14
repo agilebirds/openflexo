@@ -385,7 +385,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
-		for (ModuleView<?> moduleView : getAllLoadedViews()) {
+		for (ModuleView<?> moduleView : getViews()) {
 			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
 				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
 				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
@@ -639,10 +639,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	public void notifyEdgeRepresentationChanged() {
-		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
-			if (view instanceof ProcessView) {
-				((ProcessView) view).refreshConnectors();
-			}
+		for (ProcessView view : getViews(ProcessView.class)) {
+			view.refreshConnectors();
 		}
 	}
 
@@ -654,10 +652,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	public void notifyShowGrid(boolean showGrid) {
-		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
-			if (view instanceof ProcessView) {
-				((ProcessView) view).getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
-			}
+		for (ProcessView view : getViews(ProcessView.class)) {
+			view.getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
 		}
 	}
 

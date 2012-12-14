@@ -83,7 +83,6 @@ import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
@@ -347,10 +346,8 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == IEPreferences.getPreferences()) {
 			if (evt.getPropertyName().equals(IEPreferences.SHOW_BINDINGVALUE_KEY)) {
-				for (ModuleView<?> v : getAllLoadedViewsForPerspective(COMPONENT_EDITOR_PERSPECTIVE)) {
-					if (v instanceof IEWOComponentView) {
-						((IEWOComponentView) v).notifyDisplayPrefHasChanged();
-					}
+				for (IEWOComponentView v : getViews(IEWOComponentView.class)) {
+					v.notifyDisplayPrefHasChanged();
 				}
 			}
 		} else {
