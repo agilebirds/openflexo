@@ -214,7 +214,7 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 		for (ViewDefinition v : inputFolder.getViews()) {
 			logger.info("Creating view " + v.getName() + " title=" + v.getTitle() + " for viewpoint " + v.getViewPoint());
 			AddView addViewAction = AddView.actionType.makeNewAction(outputFolder, null, outputPrjEditor);
-			addViewAction.useViewPoint = (v.getViewPoint() != null);
+			addViewAction.useViewPoint = v.getViewPoint() != null;
 			addViewAction.newViewName = v.getName();
 			addViewAction.newViewTitle = v.getTitle();
 			addViewAction.viewpoint = v.getViewPoint();
@@ -252,7 +252,7 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 	public void convertView(View inputView, View outputView) {
 		logger.info("Converting view... " + inputView);
 		if (inputView.getViewPoint().getURI().equals("http://www.thalesgroup.com/ViewPoints/sepel-ng/MappingSpecification.owl")) {
-			(new ViewConverter(inputView, outputView)).convert();
+			new ViewConverter(inputView, outputView).convert();
 		}
 	}
 
@@ -525,7 +525,8 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 		private void restoreReferences(EditionPattern ep) {
 			progress.setSecondaryProgress("Restoring references for " + ep.getName());
 			for (EditionPatternInstance inputEPI : inputView.getEPInstances(ep)) {
-				logger.info("restoreReferences for EPI: " + inputEPI + " of " + ep);
+				logger.info("################## restoreReferences for EPI: [" + inputEPI.getInstanceId() + ","
+						+ inputEPI.getDisplayableName() + "]" + inputEPI + " of " + ep);
 				EditionPatternInstance outputEPI = epiMapping.get(inputEPI);
 				if (ep == genericMappingCaseEP) {
 					restoreDefaultReferences(ep, inputEPI, outputEPI);
@@ -821,7 +822,12 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 					OntologyObjectProperty property = s.getProperty();
 					OntologyIndividual inputValue = (OntologyIndividual) s.getStatementObject();
 					OntologyIndividual outputValue = retrieveIndividual(inputValue, inputEPI);
-					outputIndividual.addPropertyStatement(property, outputValue);
+					if (outputValue == null) {
+						logger.warning(">>> !! role " + pr + "for " + outputIndividual.getURI() + " outputValue was NULL !!");
+					} else {
+						outputIndividual.addPropertyStatement(property, outputValue);
+					}
+
 				}
 			}
 			// Object property statement will be added later
@@ -834,19 +840,27 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 
 		private void duplicateShape(ShapePatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
 			ViewShape inputShape = (ViewShape) inputEPI.getPatternActor(pr);
-			ViewShape outputShape = new ViewShape(outputView);
-			ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
-			newGR.setsWith(inputShape.getGraphicalRepresentation());
-			outputShape.setGraphicalRepresentation(newGR);
-			// Register reference
-			outputShape.registerEditionPatternReference(outputEPI, pr);
-			ViewObject inputContainer = inputShape.getParent();
-			ViewObject outputContainer = grObjectsMapping.get(inputContainer);
-			outputContainer.addToChilds(outputShape);
-			outputEPI.setObjectForPatternRole(outputShape, pr);
-			grObjectsMapping.put(inputShape, outputShape);
-			logger.info(" > role " + pr + " add shape " + outputShape + " under " + outputContainer + " (" + inputShape + " was under "
-					+ inputContainer + ")");
+			if (inputShape == null) {
+				logger.warning(">> Not able to duplicate shape for role " + pr + "of EPI: " + inputEPI.getInstanceId() + ","
+						+ inputEPI.getDisplayableName());
+			} else {
+
+				System.out.println(" DEBUG : duplicating SHAPE : " + "[" + pr + "]" + inputShape);
+
+				ViewShape outputShape = new ViewShape(outputView);
+				ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
+				newGR.setsWith(inputShape.getGraphicalRepresentation());
+				outputShape.setGraphicalRepresentation(newGR);
+				// Register reference
+				outputShape.registerEditionPatternReference(outputEPI, pr);
+				ViewObject inputContainer = inputShape.getParent();
+				ViewObject outputContainer = grObjectsMapping.get(inputContainer);
+				outputContainer.addToChilds(outputShape);
+				outputEPI.setObjectForPatternRole(outputShape, pr);
+				grObjectsMapping.put(inputShape, outputShape);
+				logger.info(" > role " + pr + " add shape " + outputShape + " under " + outputContainer + " (" + inputShape + " was under "
+						+ inputContainer + ")");
+			}
 		}
 
 		private void duplicateConnector(ConnectorPatternRole pr, EditionPatternInstance inputEPI, EditionPatternInstance outputEPI) {
@@ -907,8 +921,9 @@ public class GenerateSepelCleanedUpProject extends FlexoAction<GenerateSepelClea
 				individualName = baseIndividualName + i;
 			}
 			try {
-				outputIndividual = outputPrj.getProjectOntology().createOntologyIndividual(individualName, father);
-				logger.info("********* Added individual " + outputIndividual.getName() + " as " + father);
+				OntologyClass outputFather = outputPrj.getProjectOntology().getClass(father.getURI());
+				outputIndividual = outputPrj.getProjectOntology().createOntologyIndividual(individualName, outputFather);
+				logger.info("********* Added individual " + outputIndividual.getName() + " as " + outputFather);
 				for (OntologyStatement statement : inputIndividual.getStatements()) {
 					if (statement instanceof DataPropertyStatement) {
 						DataPropertyStatement s = (DataPropertyStatement) statement;
