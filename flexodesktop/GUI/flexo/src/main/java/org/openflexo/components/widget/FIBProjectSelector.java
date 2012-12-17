@@ -74,8 +74,9 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
-	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	/*public static void main(String[] args) {
+	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not instantiated in EDIT mode)
+	/*
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
@@ -87,8 +88,19 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 				Mockito.when(subProject2.getProjectName()).thenReturn("Sub project 2");
 				ProjectData projectData = Mockito.mock(ProjectData.class);
 				Mockito.when(project.getProjectData()).thenReturn(projectData);
-				Mockito.when(projectData.getImportedProjects()).thenReturn(
-						Arrays.asList(new FlexoProjectReference(project, subProject1), new FlexoProjectReference(project, subProject2)));
+				ModelFactory factory;
+				try {
+					factory = new ModelFactory(FlexoProjectReference.class);
+					FlexoProjectReference ref1 = factory.newInstance(FlexoProjectReference.class);
+					ref1.init(subProject1);
+					FlexoProjectReference ref2 = factory.newInstance(FlexoProjectReference.class);
+					ref1.init(subProject2);
+					Mockito.when(projectData.getImportedProjects()).thenReturn(Arrays.asList(ref1, ref2));
+				} catch (ModelDefinitionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				ProjectLoader projectLoader = Mockito.mock(ProjectLoader.class);
 				Mockito.when(projectLoader.getRootProjects()).thenReturn(Arrays.asList(project));
 				mockPropertyChangeSupport(projectLoader);
@@ -115,6 +127,6 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 			}
 		};
 		editor.launch();
-	}*/
-
+	}
+	*/
 }
