@@ -121,6 +121,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.LOCATIONS, this, controller.getControllerModel());
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_LOCATION, this, controller.getControllerModel());
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_EDITOR, this, controller.getControllerModel());
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.LEFT_VIEW_VISIBLE, this, controller.getControllerModel());
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.RIGHT_VIEW_VISIBLE, this,
 				controller.getControllerModel());
@@ -566,7 +567,9 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 					perspective = nextPerspective;
 					restoreLayout();
 				}
-				tabbedPane.selectTab(next);
+				if (next != null && next.getObject() != null) {
+					tabbedPane.selectTab(next);
+				}
 				updatePropertyChangeListener(previousPerspective, nextPerspective);
 				updateLayoutForPerspective();
 			} else if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {
@@ -575,10 +578,18 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				updateRightViewVisibility();
 			} else if (evt.getPropertyName().equals(ControllerModel.LOCATIONS)) {
 				if (evt.getNewValue() != null) {
-					tabbedPane.addTab((Location) evt.getNewValue());
+					Location newValue = (Location) evt.getNewValue();
+					if (newValue.getObject() != null) {
+						tabbedPane.addTab(newValue);
+					}
 				} else if (evt.getOldValue() != null) {
-					tabbedPane.removeTab((Location) evt.getOldValue());
+					Location oldValue = (Location) evt.getOldValue();
+					if (oldValue.getObject() != null) {
+						tabbedPane.removeTab(oldValue);
+					}
 				}
+			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
+				tabbedPane.refreshTabHeaders();
 			}
 		} else if (evt.getSource() == controller.getCurrentPerspective()) {
 			if (evt.getPropertyName().equals(FlexoPerspective.HEADER)) {
