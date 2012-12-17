@@ -25,6 +25,7 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyObject;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.openflexo.model.ModelContext;
 import org.openflexo.model.ModelEntity;
@@ -286,14 +287,32 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, TO_STRING)) {
 			return internallyInvokeToString();
 		}
+		ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
+		if (property != null) {
+			if (methodIsEquivalentTo(method, property.getGetterMethod())) {
+				return internallyInvokeGetter(property);
+			} else if (methodIsEquivalentTo(method, property.getSetterMethod())) {
+				internallyInvokeSetter(property, args[0]);
+				return null;
+			} else if (methodIsEquivalentTo(method, property.getAdderMethod())) {
+				internallyInvokeAdder(property, args[0]);
+				return null;
+			} else if (methodIsEquivalentTo(method, property.getRemoverMethod())) {
+				internallyInvokeRemover(property, args[0]);
+				return null;
+			}
 
+		}
 		System.err.println("Cannot handle method " + method);
 		return null;
 	}
 
-	private boolean methodIsEquivalentTo(Method method, Method to) {
-		return method.getName().equals(to.getName()) && method.getReturnType().equals(to.getReturnType())
-				&& Arrays.deepEquals(method.getParameterTypes(), to.getParameterTypes());
+	private boolean methodIsEquivalentTo(@Nonnull Method method, @Nullable Method to) {
+		if (to == null) {
+			return method == null;
+		}
+		return method.getName().equals(to.getName())/* && method.getReturnType().equals(to.getReturnType())*/
+				&& Arrays.equals(method.getParameterTypes(), to.getParameterTypes());
 	}
 
 	private PropertyChangeSupport getPropertyChangeSuppport() {

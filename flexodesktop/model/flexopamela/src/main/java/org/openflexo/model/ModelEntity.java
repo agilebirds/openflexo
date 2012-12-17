@@ -67,6 +67,11 @@ public class ModelEntity<I> {
 	private Map<String, ModelProperty<? super I>> properties;
 
 	/**
+	 * The properties of this entity. The key is the identifier of the property
+	 */
+	private Map<ModelMethod, ModelProperty<? super I>> propertyMethods;
+
+	/**
 	 * The properties of this entity. The key is the xml attribute name of the property
 	 */
 	private Map<String, ModelProperty<? super I>> modelPropertiesByXMLAttributeName;
@@ -113,7 +118,7 @@ public class ModelEntity<I> {
 
 	private boolean initialized;
 
-	private HashMap<String, ModelProperty<I>> declaredModelProperties;
+	private Map<String, ModelProperty<I>> declaredModelProperties;
 
 	private Set<ModelEntity<?>> embeddedEntities;
 
@@ -121,6 +126,7 @@ public class ModelEntity<I> {
 		this.implementedInterface = implementedInterface;
 		declaredModelProperties = new HashMap<String, ModelProperty<I>>();
 		properties = new HashMap<String, ModelProperty<? super I>>();
+		propertyMethods = new HashMap<ModelMethod, ModelProperty<? super I>>();
 		initializers = new HashMap<Method, ModelInitializer>();
 		embeddedEntities = new HashSet<ModelEntity<?>>();
 		entityAnnotation = implementedInterface.getAnnotation(org.openflexo.model.annotations.ModelEntity.class);
@@ -249,6 +255,19 @@ public class ModelEntity<I> {
 			p.validate();
 		}
 		initialized = true;
+		for (ModelProperty<? super I> p : properties.values()) {
+			propertyMethods.put(new ModelMethod(p.getGetterMethod()), p);
+			if (p.getSetterMethod() != null) {
+				propertyMethods.put(new ModelMethod(p.getSetterMethod()), p);
+			}
+			if (p.getAdderMethod() != null) {
+				propertyMethods.put(new ModelMethod(p.getAdderMethod()), p);
+			}
+			if (p.getRemoverMethod() != null) {
+				propertyMethods.put(new ModelMethod(p.getRemoverMethod()), p);
+			}
+		}
+
 		// TODO: maybe it would be better to be closer to what constructors do, ie, if there are super-initializer,
 		// And none of them are without arguments, then this entity should define an initializer with the same
 		// method signature (this is to enforce the developer to be aware of what the parameters do):
@@ -348,6 +367,10 @@ public class ModelEntity<I> {
 
 	public boolean hasProperty(ModelProperty<?> modelProperty) {
 		return properties.containsValue(modelProperty);
+	}
+
+	public ModelProperty<? super I> getPropertyForMethod(Method method) {
+		return propertyMethods.get(new ModelMethod(method));
 	}
 
 	public ModelProperty<? super I> getPropertyForXMLAttributeName(String name) throws ModelDefinitionException {
