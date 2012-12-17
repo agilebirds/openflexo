@@ -431,6 +431,10 @@ public class TabbedPane<J> {
 					availableWidth = getWidth() - x;
 					selectedHeaderDone |= tab == selectedTab;
 				}
+				if (selectedHeader != null) {
+					xBorderEnd = selectedHeader.getX();
+					xBorderStart = xBorderEnd + selectedHeader.getWidth();
+				}
 			}
 			if (!moveToPopup) {
 				if (extraTabsButton.getParent() == this) {
@@ -574,7 +578,7 @@ public class TabbedPane<J> {
 		if (!tabs.contains(tab)) {
 			tabs.add(tab);
 			tabHeaders.addTab(tab);
-			if (selectedTab == null) {
+			if (selectedTab == null && (tabHeaderRenderer == null || tabHeaderRenderer.isTabHeaderVisible(tab))) {
 				selectTab(tab);
 			}
 		}

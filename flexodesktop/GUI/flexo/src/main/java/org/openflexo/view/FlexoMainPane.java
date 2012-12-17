@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,6 +43,8 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.ch.FCH;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.swing.TabbedPane;
 import org.openflexo.swing.TabbedPane.TabHeaderRenderer;
 import org.openflexo.swing.layout.JXMultiSplitPane;
@@ -126,7 +129,11 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 			@Override
 			public Icon getTabHeaderIcon(Location tab) {
-				return getController().iconForObject(tab.getObject());
+				ImageIcon iconForObject = getController().iconForObject(tab.getObject());
+				if (tab.getObject() != null && tab.getObject().getProject() != getController().getControllerModel().getCurrentProject()) {
+					iconForObject = IconFactory.getImageIcon(iconForObject, IconLibrary.LOCKED);
+				}
+				return iconForObject;
 			}
 
 			@Override
@@ -141,10 +148,18 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 			@Override
 			public boolean isTabHeaderVisible(Location tab) {
-				return tab != null
-						&& tab.getObject() != null
-						&& (AdvancedPrefs.getShowAllTabs() || tab.getEditor() != null
-								&& tab.getEditor().equals(FlexoMainPane.this.controller.getControllerModel().getCurrentEditor()));
+				if (tab == null) {
+					return false;
+				}
+				if (tab.getObject() == null) {
+					return false;
+				}
+				if (!AdvancedPrefs.getShowAllTabs()
+						&& (tab.getEditor() == null || !tab.getEditor().equals(getController().getControllerModel().getCurrentEditor()))) {
+					return false;
+				}
+				ModuleView<?> view = getController().moduleViewForLocation(tab, true);
+				return view != null && !(view instanceof EmptyPanel);
 			}
 
 		});

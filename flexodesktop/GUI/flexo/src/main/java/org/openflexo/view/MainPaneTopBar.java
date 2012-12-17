@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.openflexo.components.widget.FIBProjectSelector;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
@@ -169,7 +170,12 @@ public class MainPaneTopBar extends JMenuBar {
 	}
 
 	private void initProjectSelector() {
-		projectSelector = new FIBProjectSelector(null);
+		projectSelector = new FIBProjectSelector(null) {
+			@Override
+			public boolean evaluateSelectableCondition(FlexoProject project) {
+				return model.isSelectableProject(project);
+			}
+		};
 		projectSelector.addApplyCancelListener(new CustomPopup.ApplyCancelListener() {
 			@Override
 			public void fireApplyPerformed() {

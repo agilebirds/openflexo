@@ -1117,9 +1117,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ModuleView<?> moduleView = viewsForLocation.get(location);
 		if (moduleView == null) {
 			moduleView = lookupViewForLocation(location);
-			if (createViewIfRequired && controllerModel.getCurrentPerspective().hasModuleViewForObject(location.getObject())) {
-				moduleView = createModuleViewForObjectAndPerspective(location.getObject(), controllerModel.getCurrentPerspective(),
-						location.isEditable());
+			if (createViewIfRequired && location.getPerspective().hasModuleViewForObject(location.getObject())) {
+				moduleView = createModuleViewForObjectAndPerspective(location.getObject(), location.getPerspective(), location.isEditable());
 				if (moduleView != null) {
 					FlexoModelObject representedObject = moduleView.getRepresentedObject();
 					if (representedObject == null) {
@@ -1192,28 +1191,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		} else {
 			return perspective.createModuleViewForObject(object, this, editable);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public final boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
-		if (object == null) {
-			return false;
-		}
-		try {
-			return _hasViewForObjectAndPerspective(object, perspective);
-		} catch (ClassCastException e) {
-			// Don't worry here
-			// This class cast exception is expected here, this test was intended for this goal
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Perspective " + perspective + " is not supposed to represent objects of class "
-						+ object.getClass().getSimpleName());
-			}
-			return false;
-		}
-	}
-
-	public final boolean _hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
-		return perspective.hasModuleViewForObject(object);
 	}
 
 	/**
@@ -1825,7 +1802,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
-		if (iconForObject != null && object instanceof FlexoModelObject && ((FlexoModelObject) object).getProject() != getProject()) {
+		if (iconForObject != null && object instanceof FlexoModelObject && getProject() != null
+				&& ((FlexoModelObject) object).getProject() != getProject()
+				&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 		}
 		return iconForObject;
