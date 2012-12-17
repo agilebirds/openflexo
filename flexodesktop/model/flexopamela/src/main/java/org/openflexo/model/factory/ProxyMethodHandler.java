@@ -446,18 +446,12 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public void invokeSetter(ModelProperty<? super I> property, Object value) {
 		try {
-			if (property.getSetterMethod() != null) {
-				property.getSetterMethod().invoke(getObject(), value);
-			} else {
-				// TODO: guillaume ???
-				System.err.println("Setter method not found !!!");
-			}
+			property.getSetterMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
 			throw new ModelExecutionException(e);
 		} catch (IllegalAccessException e) {
 			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
 			throw new ModelExecutionException(e);
 		}
 	}
@@ -639,23 +633,27 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {
+			boolean hasInverse = property.hasInverseProperty();
 			// First handle inverse property for oldValue
-			if (property.getInverseProperty() != null) {
-				switch (property.getInverseProperty().getCardinality()) {
+			if (hasInverse && oldValue != null) {
+				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(oldValue);
+				if (oppositeHandler == null) {
+					// Should not happen
+					throw new ModelExecutionException("Opposite entity of " + property + " is of type " + oldValue.getClass().getName()
+							+ " is not a ModelEntity.");
+				}
+				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
+				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					if (oldValue != null) {
-						getModelFactory().getHandler(oldValue).invokeSetter(property.getInverseProperty(), null);
-					}
+					oppositeHandler.invokeSetter(inverseProperty, null);
 					break;
 				case LIST:
-					if (oldValue != null) {
-						getModelFactory().getHandler(oldValue).invokeRemover(property.getInverseProperty(), getObject());
-					}
+					oppositeHandler.invokeRemover(inverseProperty, getObject());
 					break;
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
 
@@ -675,28 +673,29 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					((HasPropertyChangeSupport) value).getPropertyChangeSupport().addPropertyChangeListener(MODIFIED, this);
 				}
 			}
-			// First handle inverse property for newValue
-			if (property.getInverseProperty() != null) {
-				ProxyMethodHandler<Object> handler = getModelFactory().getHandler(value);
-				switch (property.getInverseProperty().getCardinality()) {
+			// Now handle inverse property for newValue
+			if (hasInverse && value != null) {
+				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(value);
+				if (oppositeHandler == null) {
+					// Should not happen
+					throw new ModelExecutionException("Opposite entity of " + property + " is of type " + value.getClass().getName()
+							+ " is not a ModelEntity.");
+				}
+				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
+				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					if (value != null) {
-						handler.invokeSetter(property.getInverseProperty(), getObject());
-					}
+					oppositeHandler.invokeSetter(inverseProperty, getObject());
 					break;
 				case LIST:
-					// System.out.println("Je viens de faire le setter pour "+property+" value="+value);
-					if (value != null) {
-						handler.invokeAdder(property.getInverseProperty(), getObject());
-						// System.out.println("J'ai execute: "+property.getInverseProperty().getAdderMethod()+" avec "+getObject());
-					}
+					oppositeHandler.invokeAdder(inverseProperty, getObject());
 					break;
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
+
 			markAsModified();
 		}
 	}
@@ -791,22 +790,25 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (!list.contains(value)) {
 			list.add(value);
 			// Handle inverse property for new value
-			if (property.getInverseProperty() != null) {
-				switch (property.getInverseProperty().getCardinality()) {
+			if (property.hasInverseProperty() && value != null) {
+				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(value);
+				if (oppositeHandler == null) {
+					// Should not happen
+					throw new ModelExecutionException("Opposite entity of " + property + " is of type " + value.getClass().getName()
+							+ " is not a ModelEntity.");
+				}
+				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
+				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					if (value != null) {
-						getModelFactory().getHandler(value).invokeSetter(property.getInverseProperty(), getObject());
-					}
+					oppositeHandler.invokeSetter(inverseProperty, getObject());
 					break;
 				case LIST:
-					if (value != null) {
-						getModelFactory().getHandler(value).invokeAdder(property.getInverseProperty(), getObject());
-					}
+					oppositeHandler.invokeAdder(inverseProperty, getObject());
 					break;
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
 			markAsModified();
@@ -847,22 +849,25 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (list.contains(value)) {
 			list.remove(value);
 			// Handle inverse property for new value
-			if (property.getInverseProperty() != null) {
-				switch (property.getInverseProperty().getCardinality()) {
+			if (property.hasInverseProperty() && value != null) {
+				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(value);
+				if (oppositeHandler == null) {
+					// Should not happen
+					throw new ModelExecutionException("Opposite entity of " + property + " is of type " + value.getClass().getName()
+							+ " is not a ModelEntity.");
+				}
+				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
+				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					if (value != null) {
-						getModelFactory().getHandler(value).invokeSetter(property.getInverseProperty(), null);
-					}
+					oppositeHandler.invokeSetter(inverseProperty, null);
 					break;
 				case LIST:
-					if (value != null) {
-						getModelFactory().getHandler(value).invokeAdder(property.getInverseProperty(), null);
-					}
+					oppositeHandler.invokeRemover(inverseProperty, getObject());
 					break;
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
 			markAsModified();

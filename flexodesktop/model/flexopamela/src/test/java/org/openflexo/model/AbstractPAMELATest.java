@@ -44,11 +44,11 @@ public abstract class AbstractPAMELATest extends TestCase {
 
 		ModelProperty<? super WKFObject> wkfObjectProcessProperty = wkfObjectEntity.getModelProperty(WKFObject.PROCESS);
 		assertNotNull(wkfObjectProcessProperty);
-		assertNull(wkfObjectProcessProperty.getInverseProperty());
+		assertNull(wkfObjectProcessProperty.getInverseProperty(processEntity));
 		assertNotNull(wkfObjectProcessProperty.getSetter());
 		ModelProperty<? super AbstractNode> abstractNodeProcessProperty = abstractNodeEntity.getModelProperty(WKFObject.PROCESS);
 		assertNotNull(abstractNodeProcessProperty);
-		assertNotNull(abstractNodeProcessProperty.getInverseProperty());
+		assertNotNull(abstractNodeProcessProperty.getInverseProperty(processEntity));
 		assertNotNull(abstractNodeProcessProperty.getSetter());
 		assertTrue(modelObjectEntity.getAllDescendants(modelContext).contains(processEntity));
 	}
