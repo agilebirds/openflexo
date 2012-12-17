@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ExampleDiagramObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">

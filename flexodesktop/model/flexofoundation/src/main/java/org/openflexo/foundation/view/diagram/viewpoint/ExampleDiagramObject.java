@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.Collection;
 import java.util.Vector;
@@ -26,12 +26,13 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class ExampleDiagramObject extends NamedViewPointObject implements Bindable {
 
@@ -79,24 +80,19 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		childs.clear();
 	}
 
-	public ExampleDiagram getShema() {
+	public ExampleDiagram getExampleDiagram() {
 		if (getParent() != null) {
-			return getParent().getShema();
+			return getParent().getExampleDiagram();
 		}
 		return null;
 	}
 
 	@Override
 	public ViewPoint getViewPoint() {
-		if (getShema() != null) {
-			return getShema().getViewPoint();
+		if (getExampleDiagram() != null) {
+			return getExampleDiagram().getViewPoint();
 		}
 		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL();
 	}
 
 	public Vector<ExampleDiagramObject> getChilds() {
@@ -192,8 +188,8 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		if (getShema() != null && !ignoreNotifications()) {
-			getShema().setIsModified();
+		if (getExampleDiagram() != null && !ignoreNotifications()) {
+			getExampleDiagram().setIsModified();
 		}
 	}
 

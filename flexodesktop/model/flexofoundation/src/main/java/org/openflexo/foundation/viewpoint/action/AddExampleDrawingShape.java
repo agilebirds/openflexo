@@ -29,9 +29,9 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
 public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, ExampleDiagramObject, ExampleDiagramObject> {
 

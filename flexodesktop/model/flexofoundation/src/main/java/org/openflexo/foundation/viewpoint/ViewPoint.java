@@ -52,6 +52,8 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;

@@ -32,25 +32,25 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, ViewPoint, ViewPointObject> {
+public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, ViewPoint, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(CreateExampleDrawing.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateViewPointPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject>(
-			"create_example_drawing", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject>(
+			"create_new_palette", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateExampleDrawing makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
-			return new CreateExampleDrawing(focusedObject, globalSelection, editor);
+		public CreateViewPointPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+			return new CreateViewPointPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -66,28 +66,28 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateExampleDrawing.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateViewPointPalette.actionType, ViewPoint.class);
 	}
 
-	public String newShemaName;
+	public String newPaletteName;
 	public String description;
-	public DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation;
+	public Object graphicalRepresentation;
 
-	private ExampleDiagram _newShema;
+	private DiagramPalette _newPalette;
 
-	CreateExampleDrawing(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateViewPointPalette(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc shema");
+		logger.info("Add calc palette");
 
-		_newShema = ExampleDiagram.newShema(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(), newShemaName
-				+ ".shema"), graphicalRepresentation);
-		_newShema.setDescription(description);
-		getFocusedObject().addToExampleDiagrams(_newShema);
-		_newShema.save();
+		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(),
+				newPaletteName + ".palette"), (DrawingGraphicalRepresentation<?>) graphicalRepresentation);
+		_newPalette.setDescription(description);
+		getFocusedObject().addToPalettes(_newPalette);
+		_newPalette.save();
 
 	}
 
@@ -98,8 +98,8 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 		return null;
 	}
 
-	public ExampleDiagram getNewShema() {
-		return _newShema;
+	public DiagramPalette getNewPalette() {
+		return _newPalette;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
@@ -113,10 +113,10 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 	}
 
 	public boolean isNameValid() {
-		if (StringUtils.isEmpty(newShemaName)) {
+		if (StringUtils.isEmpty(newPaletteName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getExampleDiagram(newShemaName) != null) {
+		} else if (getFocusedObject().getPalette(newPaletteName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
 		} else {
@@ -124,5 +124,4 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 			return true;
 		}
 	}
-
 }

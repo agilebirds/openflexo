@@ -30,7 +30,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.toolbox.ToolBox;
 
 public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDiagramConnector> implements GraphicalFlexoObserver,
@@ -113,7 +113,7 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcDrawingConnector() != null
-				&& !getCalcDrawingConnector().getShema().ignoreNotifications()) {
+				&& !getCalcDrawingConnector().getExampleDiagram().ignoreNotifications()) {
 			getCalcDrawingConnector().setChanged();
 		}
 	}

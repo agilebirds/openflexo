@@ -17,13 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ExampleDiagramShape extends ExampleDiagramObject {
@@ -69,7 +70,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getShema().getFullyQualifiedName() + "." + getName();
+		return getExampleDiagram().getFullyQualifiedName() + "." + getName();
 	}
 
 	public Vector<ExampleDiagramConnector> getIncomingConnectors() {

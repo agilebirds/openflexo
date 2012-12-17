@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.Collection;
 import java.util.Vector;
@@ -29,12 +29,14 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.xmlcode.XMLMapping;
 
-public class DiagramPaletteElement extends NamedViewPointObject {
+public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	private static final Logger logger = Logger.getLogger(DiagramPaletteElement.class.getPackage().getName());
 
@@ -84,10 +86,6 @@ public class DiagramPaletteElement extends NamedViewPointObject {
 	}
 
 	@Override
-	public XMLMapping getXMLMapping() {
-		return getViewPointLibrary().get_VIEW_POINT_PALETTE_MODEL();
-	}
-
 	public DiagramPalette getPalette() {
 		return _palette;
 	}
@@ -301,7 +299,7 @@ public class DiagramPaletteElement extends NamedViewPointObject {
 		this.patternRoleName = patternRoleName;
 	}
 
-	public static abstract class OverridingGraphicalRepresentation extends ViewPointObject {
+	public static abstract class OverridingGraphicalRepresentation extends DiagramPaletteObject {
 		private DiagramPaletteElement paletteElement;
 		private String patternRoleName;
 
@@ -349,6 +347,16 @@ public class DiagramPaletteElement extends NamedViewPointObject {
 		@Override
 		public String getLanguageRepresentation() {
 			return "<not_implemented:" + getFullyQualifiedName() + ">";
+		}
+
+		@Override
+		public DiagramPalette getPalette() {
+			return getPaletteElement().getPalette();
+		}
+
+		@Override
+		public String getURI() {
+			return null;
 		}
 	}
 

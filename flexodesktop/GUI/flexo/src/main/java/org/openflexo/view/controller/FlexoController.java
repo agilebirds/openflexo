@@ -1784,7 +1784,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		logger.info("Object was clicked: " + object);
 		logger.info("Current selection=" + getSelectionManager().getSelection());
 		if (getCurrentPerspective() != null) {
-			getCurrentPerspective().objectWasClicked(object);
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasClicked(object);
+			}
 		}
 	}
 
@@ -1796,7 +1800,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					.showPopupMenuForObject(relevantObject, (Component) e.getSource(), e.getPoint());
 		}
 		if (getCurrentPerspective() != null) {
-			getCurrentPerspective().objectWasRightClicked(object);
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasRightClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasRightClicked(object);
+			}
 		}
 	}
 
@@ -1848,7 +1856,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			selectAndFocusObject((FlexoObject) object);
 		}
 		if (getCurrentPerspective() != null) {
-			getCurrentPerspective().objectWasDoubleClicked(object);
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasDoubleClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasDoubleClicked(object);
+			}
 		}
 	}
 

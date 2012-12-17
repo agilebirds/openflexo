@@ -39,12 +39,12 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {

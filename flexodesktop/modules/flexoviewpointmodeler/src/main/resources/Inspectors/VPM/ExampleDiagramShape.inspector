@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.DiagramPaletteElement" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Semantic" layout="twocols" font="SansSerif,0,11" name="SemanticTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="edition_pattern" localize="true" name="EditionPatternLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="EditionPattern" data="data.editionPattern" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" list="data.allAvailableEditionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
-      <Label label="drop_scheme" localize="true" name="DropSchemeLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="DropScheme" data="data.dropScheme" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" list="data.editionPattern.dropSchemes" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" />
-      <Label label="bound_label" localize="true" name="BoundLabelLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="BoundLabelCB" data="data.boundLabelToElementName" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-      <Label label="parameters" align="center" localize="true" name="ParametersLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.parameters" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="Parameters" localize="true" manageDynamicModel="true">
-        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-        <TextFieldColumn isEditable="iterator.isEditable" data="iterator.value" title="value" columnWidth="100" resizable="true" displayTitle="true" />
-      </Table>
-      <TextArea columns="10" data="data.description" constraints="twocols(location=center;index=11;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
-    </Tab>
-
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center;index=0)">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" localize="true" name="NameTF" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=true)">
     <Tab index="0" title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="ShapeTab">
       <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" manageDynamicModel="true">
         <Assignment variable="component.panelWidth" value="120" />
@@ -43,21 +28,7 @@
         <Custom componentClassName="org.openflexo.fge.view.widget.FIBShapeSelector" data="GRTab.data.shape" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ShapeSelector" localize="true" manageDynamicModel="true" />
       </Panel>
     </Tab>
-        <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
-          <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
-          <TextField columns="10" passwd="false" localize="true" name="Text" data="GRTab.data.text" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
-          <Label label="text" localize="true" name="MultilineTextLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = true)" />
-          <TextArea columns="10" data="GRTab.data.multilineText" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" visible="(GRTab.data.isMultilineAllowed = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MultilineText" localize="true" />
-          <Label label="text_style" localize="true" name="TextStyleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" data="GRTab.data.textStyle" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="TextStyle" localize="true" manageDynamicModel="true" />
-          <Label label="multiple_lines" localize="true" name="IsMultilineAllowedLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsMultilineAllowed" data="GRTab.data.isMultilineAllowed" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-          <Label label="horizontal_text_alignment" localize="true" name="HTextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="HTextAlignment" data="GRTab.data.horizontalTextAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$HorizontalTextAlignment" />
-          <Label label="vertical_text_alignment" localize="true" name="VTextAlignmentLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="VTextAlignment" data="GRTab.data.verticalTextAlignment" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" />
-          <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.paragraphAlignment" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
+        <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="TextTab">
           <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
           <CheckBox selected="false" localize="true" name="IsFloatingLabel" data="GRTab.data.isFloatingLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
           <Label label="line_wrap" localize="true" name="LineWrapLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)"/>
@@ -94,6 +65,26 @@
           </Panel>
           <Label label="dimensions_constraints" localize="true" name="DimensionConstraintsLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
           <DropDown format="object.name.toLowerCase" localize="true" name="DimensionConstraints" data="GRTab.data.dimensionConstraints" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" />
+          <Label label="x_constraints" localize="true" constraints="twocols(location=left;index=10;expandVertically=false)" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.xConstraints.binding" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xConstraints)">
+            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.X_CONSTRAINTS" />
+          </Custom>
+          <Label label="y_constraints" localize="true" constraints="twocols(location=left;index=12;expandVertically=false)" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.yConstraints.binding" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yConstraints)">
+            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.Y_CONSTRAINTS" />
+          </Custom>
+          <Label label="width_constraints" localize="true" constraints="twocols(location=left;index=14;expandVertically=false)" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.widthConstraints.binding" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthConstraints)">
+            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.WIDTH_CONSTRAINTS" />
+          </Custom>
+          <Label label="height_constraints" localize="true" constraints="twocols(location=left;index=16;expandVertically=false)" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.heightConstraints.binding" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightConstraints)">
+            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.HEIGHT_CONSTRAINTS" />
+          </Custom>
           <Label label="border" localize="true" name="BorderLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />
           <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=19;expandHorizontally=true;expandVertically=false)">
             <Label label="top" localize="true" name="BorderTopLabel" constraints="flow(location=left;index=0;expandVertically=false;expandHorizontally=false)" />
@@ -111,9 +102,7 @@
           <CheckBox selected="false" localize="true" name="AllowToLeaveBounds" data="GRTab.data.allowToLeaveBounds" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" />
         </Tab>
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
-          <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsReadOnly" data="GRTab.data.isReadOnly" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
- 	<Label label="is_selectable" localize="true" name="IsSelectableLabel"
+	<Label label="is_selectable" localize="true" name="IsSelectableLabel"
 		constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)"
 		useScrollBar="false" />
 	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
@@ -176,95 +165,11 @@
 			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
 			useScrollBar="false" />
 	</Panel>
-          <TabPanel name="ControlsTab" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
-            <Tab index="0" title="mouse_click_controls" layout="border" font="SansSerif,0,11" name="MouseClickControlTab">
-              <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseClickControls" constraints="border(location=center;index=0)" name="MouseClickControls" localize="true" manageDynamicModel="true">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-                <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
-                <NumberColumn numberType="IntegerType" data="iterator.clickCount" title="clics" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
-                <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
-                <AddAction method="GRTab.data.createMouseClickControl" name="new" />
-                <RemoveAction method="GRTab.data.deleteMouseClickControl(selected)" isAvailable="GRTab.data.isMouseClickControlDeletable(selected)" name="delete" />
-              </Table>
-            </Tab>
-            <Tab index="1" title="mouse_drag_controls" layout="border" font="SansSerif,0,11" name="MouseDragControlTab">
-              <Table iteratorClassName="org.openflexo.fge.controller.MouseDragControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseDragControls" constraints="border(location=center;index=0)" name="MouseDragControls" localize="true" manageDynamicModel="true">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-                <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
-                <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
-                <AddAction method="GRTab.data.createMouseDragControl" name="new" />
-                <RemoveAction method="GRTab.data.deleteMouseDragControl(selected)" isAvailable="GRTab.data.isMouseDragControlDeletable(selected)" name="delete" />
-              </Table>
-            </Tab>
-          </TabPanel>
         </Tab>
-        <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
-          <Label label="identifier" localize="true" name="IdentifierLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-          <TextField columns="10" passwd="false" localize="true" name="Identifier" data="GRTab.data.identifier" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-          <Table iteratorClassName="org.openflexo.fge.GRVariable" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.variables" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=true)" name="VariablesTable" localize="true" manageDynamicModel="true">
-            <TextFieldColumn data="iterator.name" title="name" columnWidth="120" resizable="true" displayTitle="true" name="name" />
-            <DropDownColumn data="iterator.type" title="type" columnWidth="120" resizable="true" displayTitle="true" name="type" />
-            <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="value" />
-            <AddAction method="GRTab.data.createStringVariable()" name="string_variable" />
-            <AddAction method="GRTab.data.createIntegerVariable()" name="integer_variable" />
-            <RemoveAction method="GRTab.data.deleteVariable(selected)" isAvailable="selected != null" name="delete_variable" />
-          </Table>
-        </Tab>
-      </TabPanel>
+       </TabPanel>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="read_only" lang="English">Read only</Localized>
-    <Localized key="read_only" lang="French">Lecture seule</Localized>
-    <Localized key="read_only" lang="Dutch">Read only</Localized>
-    <Localized key="is_selectable" lang="English">Is selectable</Localized>
-    <Localized key="is_selectable" lang="French">Sélectionnable</Localized>
-    <Localized key="is_selectable" lang="Dutch">Is selectable</Localized>
-    <Localized key="is_selected" lang="English">Is selected</Localized>
-    <Localized key="is_selected" lang="French">Sélectionné ?</Localized>
-    <Localized key="is_selected" lang="Dutch">Is selected</Localized>
-    <Localized key="is_focusable" lang="English">Is focusable</Localized>
-    <Localized key="is_focusable" lang="French">Focusable</Localized>
-    <Localized key="is_focusable" lang="Dutch">Is focusable</Localized>
-    <Localized key="is_focused" lang="English">Is focused</Localized>
-    <Localized key="is_focused" lang="French">A le focus</Localized>
-    <Localized key="is_focused" lang="Dutch">Is focused</Localized>
-    <Localized key="mouse_click_controls" lang="English">Mouse click controls</Localized>
-    <Localized key="mouse_click_controls" lang="French">Contrôle des clicks de souris</Localized>
-    <Localized key="mouse_click_controls" lang="Dutch">Mouse click controls</Localized>
-    <Localized key="mouse_drag_controls" lang="English">Mouse drag controls</Localized>
-    <Localized key="mouse_drag_controls" lang="French">Contrôle des 'drag' de souris</Localized>
-    <Localized key="mouse_drag_controls" lang="Dutch">Mouse drag controls</Localized>
-    <Localized key="Text" lang="French">Texte</Localized>
-    <Localized key="text" lang="English">Text</Localized>
-    <Localized key="text" lang="French">Texte</Localized>
-    <Localized key="text" lang="Dutch">Text</Localized>
-    <Localized key="text_style" lang="English">Text style</Localized>
-    <Localized key="text_style" lang="French">Style de texte</Localized>
-    <Localized key="text_style" lang="Dutch">Text style</Localized>
-    <Localized key="multiple_lines" lang="English">Multiple lines</Localized>
-    <Localized key="multiple_lines" lang="French">Lignes multiples</Localized>
-    <Localized key="multiple_lines" lang="Dutch">Multiple lines</Localized>
-    <Localized key="center" lang="English">Center</Localized>
-    <Localized key="center" lang="French">Centré</Localized>
-    <Localized key="center" lang="Dutch">Center</Localized>
-    <Localized key="left" lang="English">Left</Localized>
-    <Localized key="left" lang="French">Gauche</Localized>
-    <Localized key="left" lang="Dutch">Left</Localized>
-    <Localized key="right" lang="English">Right</Localized>
-    <Localized key="right" lang="French">Droit</Localized>
-    <Localized key="right" lang="Dutch">Right</Localized>
-    <Localized key="text_alignment" lang="English">Text alignment</Localized>
-    <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
-    <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
     <Localized key="Location/Size" lang="French">Emplacement/Taille</Localized>
     <Localized key="layer" lang="English">Layer</Localized>
     <Localized key="layer" lang="French">Couche</Localized>
@@ -419,6 +324,5 @@
     <Localized key="arc_type" lang="French">Type d'arc</Localized>
     <Localized key="arc_type" lang="Dutch">Arc type</Localized>
   </LocalizedDictionary>
-   <Parameter name="title" value="Palette element" />
+  <Parameter name="title" value="Shape" />
 </Panel>
-

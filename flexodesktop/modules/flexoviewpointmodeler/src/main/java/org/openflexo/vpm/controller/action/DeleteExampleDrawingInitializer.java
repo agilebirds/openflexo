@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawing;
 import org.openflexo.icon.IconLibrary;

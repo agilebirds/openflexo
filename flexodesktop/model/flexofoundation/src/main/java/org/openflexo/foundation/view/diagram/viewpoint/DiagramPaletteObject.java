@@ -17,29 +17,17 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.dm;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-/**
- * Notify that a new element has been added to palette
- * 
- * @author sguerin
- * 
- */
-public class CalcDrawingShapeInserted extends OEDataModification {
+public abstract class DiagramPaletteObject extends NamedViewPointObject {
 
-	private ExampleDiagramObject _parent;
-
-	public CalcDrawingShapeInserted(ExampleDiagramShape element, ExampleDiagramObject parent) {
-		super(null, element);
-		_parent = parent;
+	public DiagramPaletteObject(ViewPointBuilder builder) {
+		super(builder);
 	}
 
-	public ExampleDiagramObject getParent() {
-		return _parent;
-	}
+	public abstract DiagramPalette getPalette();
 
 }

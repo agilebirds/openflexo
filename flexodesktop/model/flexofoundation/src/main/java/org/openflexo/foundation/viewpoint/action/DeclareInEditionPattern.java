@@ -25,11 +25,11 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
 
 public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1>, T1 extends ExampleDiagramObject> extends
 		FlexoAction<A, T1, ExampleDiagramObject> {

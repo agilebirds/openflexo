@@ -28,9 +28,11 @@ import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -44,8 +46,8 @@ import org.openflexo.vpm.drawingshema.CalcDrawingShemaModuleView;
 import org.openflexo.vpm.palette.CalcPaletteController;
 import org.openflexo.vpm.palette.CalcPaletteModuleView;
 import org.openflexo.vpm.view.CalcLibraryView;
-import org.openflexo.vpm.view.ViewPointView;
 import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.view.ViewPointView;
 import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
 import org.openflexo.vpm.widget.FIBExampleDiagramBrowser;
 import org.openflexo.vpm.widget.FIBViewPointBrowser;
@@ -211,10 +213,66 @@ public class ViewPointPerspective extends FlexoPerspective {
 	@Override
 	public void objectWasClicked(Object object) {
 		logger.info("ViewPointPerspective: object was clicked: " + object);
-		if (!(object instanceof ViewPointObject)) {
-			setBottomLeftView(null);
+		if (object == null) {
+			return;
 		}
-		// else if ((ViewPointObject)object)
+
+		if (getBottomLeftView() == viewPointBrowser) {
+			if (!(object instanceof ViewPointObject) || (object instanceof DiagramPaletteObject)
+					|| (object instanceof ExampleDiagramObject)) {
+				setBottomLeftView(null);
+			} else {
+				ViewPointObject o = (ViewPointObject) object;
+				if (o.getViewPoint() != viewPointBrowser.getRootObject()) {
+					setBottomLeftView(null);
+				}
+			}
+		}
+
+		else if (getBottomLeftView() == exampleDiagramBrowser) {
+			if (!(object instanceof ViewPointObject)) {
+				setBottomLeftView(null);
+			} else {
+				ViewPointObject o = (ViewPointObject) object;
+				if (o instanceof ExampleDiagramObject) {
+					if (((ExampleDiagramObject) o).getExampleDiagram() != exampleDiagramBrowser.getRootObject()) {
+						setBottomLeftView(null);
+					}
+				} else {
+					setBottomLeftView(null);
+				}
+			}
+		}
+
+		else if (getBottomLeftView() == diagramPaletteBrowser) {
+			if (!(object instanceof ViewPointObject)) {
+				setBottomLeftView(null);
+			} else {
+				ViewPointObject o = (ViewPointObject) object;
+				if (o instanceof DiagramPaletteObject) {
+					if (((DiagramPaletteObject) o).getPalette() != diagramPaletteBrowser.getRootObject()) {
+						setBottomLeftView(null);
+					}
+				} else {
+					setBottomLeftView(null);
+				}
+			}
+		}
+
+		if (getBottomLeftView() == null) {
+			if (object instanceof ViewPointObject) {
+				if (object instanceof DiagramPaletteObject) {
+					diagramPaletteBrowser.setRootObject(((DiagramPaletteObject) object).getPalette());
+					setBottomLeftView(diagramPaletteBrowser);
+				} else if (object instanceof ExampleDiagramObject) {
+					exampleDiagramBrowser.setRootObject(((ExampleDiagramObject) object).getExampleDiagram());
+					setBottomLeftView(exampleDiagramBrowser);
+				} else {
+					viewPointBrowser.setRootObject(((ViewPointObject) object).getViewPoint());
+					setBottomLeftView(viewPointBrowser);
+				}
+			}
+		}
 	}
 
 	@Override

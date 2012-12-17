@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**

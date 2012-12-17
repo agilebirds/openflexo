@@ -37,7 +37,7 @@ import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.ReindexViewElements;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.VEController;

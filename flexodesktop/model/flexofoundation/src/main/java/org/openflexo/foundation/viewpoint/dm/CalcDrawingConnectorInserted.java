@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 
 /**
  * Notify that a new connector has been added to palette

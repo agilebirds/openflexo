@@ -21,8 +21,8 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 
 /**
  * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less

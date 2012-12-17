@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -37,6 +37,7 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
@@ -49,64 +50,12 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	private static final Logger logger = Logger.getLogger(ExampleDiagram.class.getPackage().getName());
 
 	private ExampleDiagramResource resource;
+	private ViewPoint _viewpoint;
+	private boolean initialized = false;
 
-	/*public static ExampleDiagram instanciateExampleDiagram(ViewPoint viewPoint, File shemaFile) {
-		if (shemaFile.exists()) {
-			FileInputStream inputStream = null;
-			try {
-				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(shemaFile.getParentFile());
-				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-				inputStream = new FileInputStream(shemaFile);
-				logger.info("Loading file " + shemaFile.getAbsolutePath());
-				ViewPointBuilder builder = new ViewPointBuilder(viewPoint.getViewPointLibrary(), viewPoint);
-				ExampleDiagram returned = (ExampleDiagram) XMLDecoder.decodeObjectWithMapping(inputStream, viewPoint.getViewPointLibrary()
-						.get_EXAMPLE_DRAWING_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
-						relativePathFileConverter));
-				returned.init(viewPoint, shemaFile);
-				return returned;
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidXMLDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidObjectSpecificationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (AccessorInvocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidModelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;
-		}
-
-		else {
-			logger.severe("Not found: " + shemaFile);
-			// TODO: implement a search here (find the good XML file)
-			return null;
-		}
-	}*/
+	private boolean screenshotModified = false;
+	private ScreenshotImage screenshotImage;
+	private File expectedScreenshotImageFile = null;
 
 	public static ExampleDiagram newShema(ViewPoint calc, File shemaFile,
 			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation) {
@@ -115,11 +64,6 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		shema.init(calc, shemaFile);
 		return shema;
 	}
-
-	private ViewPoint _viewpoint;
-
-	// private File xmlFile;
-	// private RelativePathFileConverter relativePathFileConverter;
 
 	public ExampleDiagram(ViewPointBuilder builder) {
 		super(builder);
@@ -133,16 +77,12 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
-	private boolean initialized = false;
-
 	public void init(ViewPoint viewpoint, File diagramFile) {
 		if (StringUtils.isEmpty(getName())) {
 			setName(diagramFile.getName().substring(0, diagramFile.getName().length() - 6));
 		}
 		_viewpoint = viewpoint;
-		// xmlFile = drawingFile;
 		logger.info("Registering example diagram for viewpoint " + viewpoint.getName());
-		// relativePathFileConverter = new RelativePathFileConverter(viewpoint.getResource().getDirectory());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
@@ -152,20 +92,9 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromExampleDiagrams(this);
 		}
-		// xmlFile.deleteOnExit();
 		super.delete();
 		deleteObservers();
 	}
-
-	/*private StringEncoder encoder;
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
-		}
-		return encoder;
-	}*/
 
 	@Override
 	public ViewPoint getViewPoint() {
@@ -173,22 +102,14 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	@Override
-	public ExampleDiagram getShema() {
+	public ExampleDiagram getExampleDiagram() {
 		return this;
 	}
-
-	/*public File getXMLFile() {
-		return xmlFile;
-	}*/
 
 	@Override
 	public boolean isContainedIn(ExampleDiagramObject o) {
 		return o == this;
 	}
-
-	private ScreenshotImage screenshotImage;
-
-	private File expectedScreenshotImageFile = null;
 
 	private File getExpectedScreenshotImageFile() {
 		if (expectedScreenshotImageFile == null) {
@@ -272,8 +193,6 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		}
 	}
 
-	private boolean screenshotModified = false;
-
 	// Implementation of XMLStorageResourceData
 
 	@Override
@@ -301,80 +220,9 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return getResource();
 	}
 
-	/*@Override
-	public void saveToFile(File aFile) {
-		FileOutputStream out = null;
-		try {
-			if (!aFile.getParentFile().exists()) {
-				aFile.getParentFile().mkdirs();
-			}
-			out = new FileOutputStream(aFile);
-			XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), out, getStringEncoder());
-			out.flush();
-		} catch (Exception e) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-			}
-			e.printStackTrace();
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		clearIsModified(true);
-	}*/
-
 	@Override
 	public void save() {
 		logger.info("Saving ExampleDiagram to " + getResource().getFile().getAbsolutePath() + "...");
-
-		// Following was used to debug (display purpose only)
-		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-		try {
-			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
-		} catch (InvalidObjectSpecificationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AccessorInvocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DuplicateSerializationIdentifierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
-		 */
-
-		/*File dir = xmlFile.getParentFile();
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		File temporaryFile = null;
-		try {
-			makeLocalCopy();
-			temporaryFile = File.createTempFile("temp", ".xml", dir);
-			saveToFile(temporaryFile);
-			FileUtils.rename(temporaryFile, xmlFile);
-			clearIsModified(true);
-			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
-			if (temporaryFile != null) {
-				temporaryFile.delete();
-			}
-		}
-
-		clearIsModified(false);*/
 
 		try {
 			getResource().save(null);
@@ -383,13 +231,5 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		}
 
 	}
-
-	/*private void makeLocalCopy() throws IOException {
-		if (xmlFile != null && xmlFile.exists()) {
-			String localCopyName = xmlFile.getName() + "~";
-			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
-			FileUtils.copyFileToFile(xmlFile, localCopy);
-		}
-	}*/
 
 }

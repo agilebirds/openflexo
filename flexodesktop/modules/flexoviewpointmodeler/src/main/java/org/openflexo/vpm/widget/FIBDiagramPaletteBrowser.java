@@ -30,7 +30,7 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;

@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.browser.dm.DMBrowserElementFactory;
 import org.openflexo.components.browser.ie.IEBrowserElementFactory;
-import org.openflexo.components.browser.ontology.OEBrowserElementFactory;
 import org.openflexo.components.browser.wkf.WKFBrowserElementFactory;
 import org.openflexo.components.browser.ws.WSBrowserElementFactory;
 import org.openflexo.foundation.FlexoObject;
@@ -39,7 +38,6 @@ public class DefaultBrowserElementFactory implements BrowserElementFactory {
 	private IEBrowserElementFactory ieFactory;
 	private DMBrowserElementFactory dmFactory;
 	private WSBrowserElementFactory wsFactory;
-	private OEBrowserElementFactory oeFactory;
 
 	protected DefaultBrowserElementFactory() {
 		super();
@@ -47,7 +45,6 @@ public class DefaultBrowserElementFactory implements BrowserElementFactory {
 		ieFactory = new IEBrowserElementFactory();
 		dmFactory = new DMBrowserElementFactory();
 		wsFactory = new WSBrowserElementFactory();
-		oeFactory = new OEBrowserElementFactory();
 	}
 
 	@Override
@@ -69,10 +66,6 @@ public class DefaultBrowserElementFactory implements BrowserElementFactory {
 			return tryThis;
 		}
 		tryThis = wsFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null) {
-			return tryThis;
-		}
-		tryThis = oeFactory.makeNewElement(object, browser, parent);
 		if (tryThis != null) {
 			return tryThis;
 		}

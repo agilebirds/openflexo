@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
