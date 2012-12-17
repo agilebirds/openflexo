@@ -265,9 +265,11 @@ public class ModelProperty<I> {
 						+ getSetterMethod().toString() + " must have exactly 1 parameter");
 			}
 
-			if (!TypeUtils.isTypeAssignableFrom(getGetterMethod().getReturnType(), getSetterMethod().getParameterTypes()[0])) {
+			if (!TypeUtils.isTypeAssignableFrom(getGetterMethod().getReturnType(), getSetterMethod().getParameterTypes()[0])
+					&& !TypeUtils.isTypeAssignableFrom(getSetterMethod().getParameterTypes()[0], getGetterMethod().getReturnType())) {
 				throw new ModelDefinitionException("Invalid setter method for property '" + propertyIdentifier + "': method "
-						+ getSetterMethod().toString() + " parameter must be assignable to " + getGetterMethod().getReturnType().getName());
+						+ getSetterMethod().toString() + " parameter must be assignable from or to "
+						+ getGetterMethod().getReturnType().getName());
 			}
 		}
 
