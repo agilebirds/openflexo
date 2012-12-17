@@ -361,6 +361,8 @@ public class TabbedPane<J> {
 		@Override
 		public void doLayout() {
 			extraTabsPopup.removeAll();
+			xBorderEnd = 0;
+			xBorderStart = getWidth();
 			boolean moveToPopup = false;
 			if (tabs.size() > 0) {
 				TabHeader selectedHeader = selectedTab != null ? headerComponents.get(selectedTab) : null;
