@@ -28,6 +28,14 @@ public class Location extends ControllerModelObject {
 	}
 
 	@Override
+	public String toString() {
+		return (object != null ? object : "No object")
+				+ " - "
+				+ (perspective != null ? perspective.getName() : " No perspective" + " - "
+						+ (editor != null ? editor.getProject() : "No project"));
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
