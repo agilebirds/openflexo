@@ -278,12 +278,12 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			builder.setViewPoint(this);
 		}
 		editionPatterns = new Vector<EditionPattern>();
+		modelSlots = new ArrayList<ModelSlot<?, ?>>();
 	}
 
 	// Used during deserialization, do not use it
 	private ViewPoint() {
-		super(null);
-		editionPatterns = new Vector<EditionPattern>();
+		this(null);
 	}
 
 	public void init(String baseName, /* File viewpointDir, File xmlFile,*/ViewPointLibrary library/*, ViewPointFolder folder*/) {

@@ -125,6 +125,10 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		FlexoVersion[] availableVersions = getXMLSerializationService().getAvailableVersionsForClass(getResourceDataClass());
 		FlexoVersion[] availableVersionsNew = new FlexoVersion[availableVersions.length + 1];
 
+		if (getModelVersion() == null) {
+			setModelVersion(latestVersion());
+		}
+
 		for (int k = 0; k < availableVersions.length; k++) {
 			availableVersionsNew[k] = availableVersions[k];
 		}

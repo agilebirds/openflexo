@@ -16,7 +16,7 @@
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
 		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
-		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
+		<!--  <property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>-->
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"

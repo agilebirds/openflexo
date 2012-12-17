@@ -34,8 +34,9 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			ModelFactory factory = new ModelFactory(ExampleDiagramResource.class);
 			ExampleDiagramResourceImpl returned = (ExampleDiagramResourceImpl) factory.newInstance(ExampleDiagramResource.class);
 			returned.setName(exampleDiagramFile.getName());
+			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
 
 			return returned;
@@ -46,8 +47,18 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
+	public Class<ExampleDiagram> getResourceDataClass() {
+		return ExampleDiagram.class;
+	}
+
+	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
 		return new ViewPointBuilder(getViewPointLibrary());
+	}
+
+	@Override
+	public boolean hasBuilder() {
+		return true;
 	}
 
 	@Override
@@ -84,11 +95,6 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 		returned.init(getContainer().getViewPoint(), getFile());
 		getContainer().getViewPoint().addToExampleDiagrams(returned);
 		return returned;
-	}
-
-	@Override
-	public Class<ExampleDiagram> getResourceDataClass() {
-		return ExampleDiagram.class;
 	}
 
 	/**

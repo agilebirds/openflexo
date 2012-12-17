@@ -29,6 +29,8 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 	private ViewPointLibrary viewPointLibrary;
 
 	public ApplicationContext() {
+		xmlSerializationService = XMLSerializationService.createInstance();
+		registerService(xmlSerializationService);
 		applicationEditor = createApplicationEditor();
 		try {
 			projectLoader = new ProjectLoader(this);

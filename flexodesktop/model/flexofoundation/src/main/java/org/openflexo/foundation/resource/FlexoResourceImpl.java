@@ -70,6 +70,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	 * Called to notify that a resource has successfully been loaded
 	 */
 	public void notifyResourceLoaded() {
+		logger.info("***************** notify resource loaded !!!!!!!!!!!!!!!!!");
 		setChanged();
 		notifyObservers(new ResourceLoaded(this, resourceData));
 		// Also notify that the contents of the resource may also have changed

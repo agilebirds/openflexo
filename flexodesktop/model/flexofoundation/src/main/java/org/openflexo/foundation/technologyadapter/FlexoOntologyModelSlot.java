@@ -23,4 +23,5 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	public abstract <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
+
 }

@@ -34,10 +34,10 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
 			returned.setName(diagramPaletteFile.getName());
+			returned.setFile(diagramPaletteFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
-
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -48,6 +48,16 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
 		return new ViewPointBuilder(getViewPointLibrary());
+	}
+
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
+
+	@Override
+	public Class<DiagramPalette> getResourceDataClass() {
+		return DiagramPalette.class;
 	}
 
 	@Override
