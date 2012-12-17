@@ -534,9 +534,6 @@ public class ModelProperty<I> {
 		if (property == null && (rulingProperty == null || rulingProperty == this)) {
 			return this;
 		}
-		if (property.getPropertyIdentifier().equals("container")) {
-			System.err.println("coucou");
-		}
 		Getter getter = null;
 		Setter setter = null;
 		Adder adder = null;
