@@ -10,7 +10,7 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(ExampleDiagramResourceImpl.class)
+@ImplementationClass(DiagramPaletteResourceImpl.class)
 @XMLElement
 public interface DiagramPaletteResource extends FlexoXMLFileResource<DiagramPalette> {
 

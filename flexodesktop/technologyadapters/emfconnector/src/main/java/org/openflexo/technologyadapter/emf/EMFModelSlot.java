@@ -37,6 +37,11 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 	}
 
 	@Override
+	public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
+		return EMFTechnologyAdapter.class;
+	}
+
+	@Override
 	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		// TODO
 		return null;

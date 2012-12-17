@@ -197,7 +197,7 @@ public class DiagramPalette extends NamedViewPointObject implements XMLStorageRe
 	@Override
 	public void setName(String name) {
 		super.setName(name);
-		if (getResource().getFile() != null && !getResource().getFile().getName().startsWith(name)) {
+		if (!isDeserializing() && getResource().getFile() != null && !getResource().getFile().getName().startsWith(name)) {
 			try {
 				getResource().renameFileTo(name + ".palette");
 			} catch (IOException e) {

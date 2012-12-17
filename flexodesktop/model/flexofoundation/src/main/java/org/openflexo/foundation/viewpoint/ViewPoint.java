@@ -82,8 +82,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
-	private Vector<DiagramPalette> palettes;
-	private Vector<ExampleDiagram> exampleDiagrams;
+	private List<DiagramPalette> palettes;
+	private List<ExampleDiagram> exampleDiagrams;
 
 	// private File viewPointDirectory;
 	// private File owlFile;
@@ -279,6 +279,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		}
 		editionPatterns = new Vector<EditionPattern>();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		exampleDiagrams = new ArrayList<ExampleDiagram>();
+		palettes = new ArrayList<DiagramPalette>();
 	}
 
 	// Used during deserialization, do not use it
@@ -323,6 +325,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getURI();
 	}
 
 	private StringEncoder encoder;
@@ -440,7 +447,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return _library;
 	}
 
-	public Vector<DiagramPalette> getPalettes() {
+	public List<DiagramPalette> getPalettes() {
 		/*if (palettes == null) {
 			findPalettes(viewPointDirectory);
 		}*/
@@ -471,7 +478,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		notifyObservers(new DiagramPaletteRemoved(aPalette, this));
 	}
 
-	public Vector<ExampleDiagram> getExampleDiagrams() {
+	public List<ExampleDiagram> getExampleDiagrams() {
 		/*if (exampleDiagrams == null) {
 			findShemas(viewPointDirectory);
 		}*/

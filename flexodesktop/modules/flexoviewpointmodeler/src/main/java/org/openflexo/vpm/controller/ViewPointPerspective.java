@@ -34,6 +34,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
@@ -47,6 +48,7 @@ import org.openflexo.vpm.view.CEDBrowserView;
 import org.openflexo.vpm.view.CalcLibraryView;
 import org.openflexo.vpm.view.CalcView;
 import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.widget.FIBViewPointBrowser;
 import org.openflexo.vpm.widget.FIBViewPointLibraryBrowser;
 
 public class ViewPointPerspective extends FlexoPerspective {
@@ -72,6 +74,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	private FIBViewPointLibraryBrowser viewPointLibraryBrowser = null;
+	private FIBViewPointBrowser viewPointBrowser = null;
 
 	/**
 	 * @param controller
@@ -83,6 +86,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 		_controller = controller;
 
 		viewPointLibraryBrowser = new FIBViewPointLibraryBrowser(controller.getViewPointLibrary(), controller);
+
+		viewPointBrowser = new FIBViewPointBrowser(null, controller);
 
 		/*_browser = new CalcLibraryBrowser(controller);
 		_browserView = new CEDBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
@@ -144,11 +149,13 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	public void focusOnViewPoint(ViewPoint viewPoint) {
 		logger.info("focusOnViewPoint " + viewPoint);
-		setBottomLeftView(null);
 		// calcBrowser.deleteBrowserListener(_browserView);
 		// calcBrowser.setRepresentedObject(viewPoint);
 		// calcBrowser.update();
 		// calcBrowser.addBrowserListener(_browserView);
+
+		viewPointBrowser.setDataObject(viewPoint);
+		setBottomLeftView(viewPointBrowser);
 	}
 
 	public void focusOnPalette(DiagramPalette palette) {
@@ -270,6 +277,25 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return object.getFullyQualifiedName();
 		}
 		return "null";
+	}
+
+	@Override
+	public void objectWasClicked(Object object) {
+		logger.info("ViewPointPerspective: object was clicked: " + object);
+		if (!(object instanceof ViewPointObject)) {
+			setBottomLeftView(null);
+		}
+		// else if ((ViewPointObject)object)
+	}
+
+	@Override
+	public void objectWasRightClicked(Object object) {
+		logger.info("ViewPointPerspective: object was right-clicked: " + object);
+	}
+
+	@Override
+	public void objectWasDoubleClicked(Object object) {
+		logger.info("ViewPointPerspective: object was double-clicked: " + object);
 	}
 
 }

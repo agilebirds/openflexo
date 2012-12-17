@@ -44,6 +44,11 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	}
 
 	@Override
+	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
+		return OWLTechnologyAdapter.class;
+	}
+
+	@Override
 	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		if (pr instanceof SubClassStatementPatternRole) {
 			return new IsAStatementPatternRolePathElement((SubClassStatementPatternRole) pr, container);

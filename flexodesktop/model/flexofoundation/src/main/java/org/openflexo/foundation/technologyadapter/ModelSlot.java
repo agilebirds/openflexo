@@ -67,6 +67,11 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		super(builder);
 		if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
+			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
+					&& builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService() != null) {
+				this.technologyAdapter = builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService()
+						.getTechnologyAdapter(getTechnologyAdapterClass());
+			}
 		}
 	}
 
@@ -174,6 +179,8 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
 		return technologyAdapter;
 	}
+
+	public abstract Class<? extends TechnologyAdapter<M, MM>> getTechnologyAdapterClass();
 
 	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		// TODO Auto-generated method stub

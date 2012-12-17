@@ -1,6 +1,8 @@
 package org.openflexo.foundation.resource;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
@@ -93,4 +95,21 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	public final String toString() {
 		return getClass().getSimpleName() + "." + getURI() + "." + getVersion() + "." + getRevision();
 	}
+
+	/**
+	 * Returns a list of resources of supplied type contained by this resource.
+	 * 
+	 * @return the list of contained resources.
+	 */
+	@Override
+	public <R extends FlexoResource<?>> List<R> getContents(Class<R> resourceClass) {
+		ArrayList<R> returned = new ArrayList<R>();
+		for (FlexoResource<?> r : getContents()) {
+			if (resourceClass.isAssignableFrom(r.getClass())) {
+				returned.add((R) r);
+			}
+		}
+		return returned;
+	}
+
 }

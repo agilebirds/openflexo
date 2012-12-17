@@ -80,6 +80,19 @@ public abstract class FIBBrowserView<O extends FlexoObject> extends SelectionSyn
 	}
 
 	@Override
+	public O getDataObject() {
+		return (O) super.getDataObject();
+	}
+
+	public O getRootObject() {
+		return getDataObject();
+	}
+
+	public void setRootObject(O obj) {
+		setDataObject(obj);
+	}
+
+	@Override
 	protected void initializeFIBComponent() {
 		super.initializeFIBComponent();
 		FIBBrowser browser = retrieveFIBBrowser(getFIBComponent());

@@ -170,7 +170,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
 					MMR mmRes = (MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager);
 					if (mmRes != null) {
-						logger.info("TechnologyAdapter "
+						logger.fine("TechnologyAdapter "
 								+ technologyAdapter.getName()
 								+ ": found and register metamodel "
 								+ mmRes.getURI()
@@ -219,7 +219,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
 						MR modelRes = (MR) technologyAdapter.retrieveModelResource(f, technologyContextManager);
 						if (modelRes != null) {
-							logger.info("TechnologyAdapter "
+							logger.fine("TechnologyAdapter "
 									+ technologyAdapter.getName()
 									+ ": found and register model "
 									+ modelRes.getURI()

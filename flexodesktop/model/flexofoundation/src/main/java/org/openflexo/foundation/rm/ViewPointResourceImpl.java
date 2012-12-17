@@ -76,6 +76,17 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 				}
 			}
 
+			// Now look for palettes
+			if (viewPointDirectory.exists() && viewPointDirectory.isDirectory()) {
+				for (File f : viewPointDirectory.listFiles()) {
+					if (f.getName().endsWith(".palette")) {
+						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.makeDiagramPaletteResource(f,
+								viewPointLibrary);
+						returned.addToContents(diagramPaletteResource);
+					}
+				}
+			}
+
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 
 			return returned;

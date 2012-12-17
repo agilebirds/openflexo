@@ -43,6 +43,11 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	}
 
 	@Override
+	public Class<XSDTechnologyAdapter> getTechnologyAdapterClass() {
+		return XSDTechnologyAdapter.class;
+	}
+
+	@Override
 	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		// TODO
 		return null;

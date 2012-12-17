@@ -92,8 +92,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		ExampleDiagram returned = super.loadResourceData(progress);
-		returned.init(getContainer().getViewPoint(), getFile());
-		getContainer().getViewPoint().addToExampleDiagrams(returned);
+		returned.init(((ViewPointResource) getContainer()).getViewPoint(), getFile());
+		((ViewPointResource) getContainer()).getViewPoint().addToExampleDiagrams(returned);
 		return returned;
 	}
 

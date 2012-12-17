@@ -34,6 +34,11 @@ public class DiagramModelSlot extends ModelSlot<View, DiagramMetaModel> {
 	}
 
 	@Override
+	public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
+		return DiagramTechnologyAdapter.class;
+	}
+
+	@Override
 	public BindingVariable<?> makePatternRolePathElement(PatternRole pr, Bindable container) {
 		if (pr instanceof ShapePatternRole) {
 			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);

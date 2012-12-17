@@ -31,7 +31,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 
 	public static DiagramPaletteResource makeDiagramPaletteResource(File diagramPaletteFile, ViewPointLibrary viewPointLibrary) {
 		try {
-			ModelFactory factory = new ModelFactory(ViewPointResource.class);
+			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
 			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
 			returned.setName(diagramPaletteFile.getName());
 			returned.setFile(diagramPaletteFile);
