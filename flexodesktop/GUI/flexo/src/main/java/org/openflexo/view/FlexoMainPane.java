@@ -569,6 +569,8 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				}
 				if (next != null && next.getObject() != null) {
 					tabbedPane.selectTab(next);
+				} else {
+					tabbedPane.selectTab(null);
 				}
 				updatePropertyChangeListener(previousPerspective, nextPerspective);
 				updateLayoutForPerspective();
