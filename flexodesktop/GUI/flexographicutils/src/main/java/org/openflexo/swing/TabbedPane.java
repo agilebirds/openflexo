@@ -591,10 +591,29 @@ public class TabbedPane<J> {
 			if (selectedTab == tab) {
 				// TODO: Handle removal of selected tab
 				if (tabs.size() > 0) {
-					if (indexOf >= tabs.size()) {
-						selectTab(tabs.get(tabs.size() - 1));
+					if (tabHeaderRenderer == null) {
+						if (indexOf >= tabs.size()) {
+							selectTab(tabs.get(tabs.size() - 1));
+						} else {
+							selectTab(tabs.get(indexOf));
+						}
 					} else {
-						selectTab(tabs.get(indexOf));
+						J tabToSelect = null;
+						for (int i = indexOf; i > -1; i--) {
+							if (tabHeaderRenderer.isTabHeaderVisible(tabs.get(i))) {
+								tabToSelect = tabs.get(i);
+								break;
+							}
+						}
+						if (tabToSelect == null) {
+							for (int i = indexOf + 1; i < tabs.size(); i++) {
+								if (tabHeaderRenderer.isTabHeaderVisible(tabs.get(i))) {
+									tabToSelect = tabs.get(i);
+									break;
+								}
+							}
+						}
+						selectTab(tabToSelect);
 					}
 				} else {
 					selectTab(null);
