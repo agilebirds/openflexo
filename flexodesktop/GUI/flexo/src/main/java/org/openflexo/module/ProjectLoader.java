@@ -42,7 +42,7 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -59,7 +59,7 @@ import org.openflexo.foundation.utils.FlexoProjectUtil;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.UnreadableProjectException;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.inspector.widget.FileEditWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -71,7 +71,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeListener, FlexoService {
+public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChangeSupport, PropertyChangeListener, FlexoService {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -94,8 +94,6 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 	private PropertyChangeSupport propertyChangeSupport;
 	private List<FlexoProject> rootProjects;
 	private ModelFactory modelFactory;
-
-	private FlexoServiceManager serviceManager;
 
 	public ProjectLoader(ApplicationContext applicationContext) throws ModelDefinitionException {
 		this.applicationContext = applicationContext;
@@ -364,7 +362,7 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 
 	public void saveAsProject(FlexoProject project) {
 		project.getXmlMappings();
-		List<FlexoVersion> availableVersions = new ArrayList<FlexoVersion>(FlexoXMLMappings.getReleaseVersions());
+		List<FlexoVersion> availableVersions = new ArrayList<FlexoVersion>(XMLSerializationService.getReleaseVersions());
 		Collections.sort(availableVersions, Collections.reverseOrder(FlexoVersion.comparator));
 
 		final DirectoryParameter targetPrjDirectory = new DirectoryParameter("targetPrjDirectory", "new_project_file", project
@@ -514,14 +512,14 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 	}
 
 	private static void informUserAboutPermissionDeniedException(SaveResourcePermissionDeniedException e) {
-		if (e.getFileResource().getFile().isDirectory()) {
+		if (e.getDeprecatedFileResource().getFile().isDirectory()) {
 			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
-							+ e.getFileResource().getFile().getAbsolutePath());
+							+ e.getDeprecatedFileResource().getFile().getAbsolutePath());
 		} else {
 			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-							+ e.getFileResource().getFile().getAbsolutePath());
+							+ e.getDeprecatedFileResource().getFile().getAbsolutePath());
 		}
 	}
 
@@ -541,16 +539,6 @@ public class ProjectLoader implements HasPropertyChangeSupport, PropertyChangeLi
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		logger.info("ProjectLoader service received notification " + notification + " from " + caller);
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 	@Override

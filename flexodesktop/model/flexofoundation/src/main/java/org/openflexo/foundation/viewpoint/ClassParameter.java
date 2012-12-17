@@ -34,7 +34,8 @@ public class ClassParameter extends EditionSchemeParameter {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public ClassParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -59,7 +60,6 @@ public class ClassParameter extends EditionSchemeParameter {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 

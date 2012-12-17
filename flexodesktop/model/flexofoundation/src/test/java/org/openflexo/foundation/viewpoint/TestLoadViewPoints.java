@@ -9,6 +9,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.toolbox.FileResource;
 
 public class TestLoadViewPoints extends FlexoTestCase {
@@ -30,6 +31,8 @@ public class TestLoadViewPoints extends FlexoTestCase {
 		log("test0InstantiateResourceCenter()");
 
 		FlexoServiceManager sm = new FlexoServiceManager();
+		XMLSerializationService xmlSerializationService = XMLSerializationService.createInstance();
+		sm.registerService(xmlSerializationService);
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
 		rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource("src/test/resources/TestResourceCenter")));
 		sm.registerService(rcService);

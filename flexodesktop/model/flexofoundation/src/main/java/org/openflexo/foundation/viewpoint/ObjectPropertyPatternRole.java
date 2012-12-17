@@ -7,7 +7,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ObjectPropertyPatternRole extends PropertyPatternRole<IFlexoOntologyObjectProperty> {
+public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectProperty> extends PropertyPatternRole<P> {
 
 	private String rangeURI;
 
@@ -29,11 +29,6 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<IFlexoOntolog
 	}
 
 	@Override
-	public Class<IFlexoOntologyObjectProperty> getAccessedClass() {
-		return IFlexoOntologyObjectProperty.class;
-	}
-
-	@Override
 	public IFlexoOntologyObjectProperty getParentProperty() {
 		return (IFlexoOntologyObjectProperty) super.getParentProperty();
 	}
@@ -51,7 +46,6 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<IFlexoOntolog
 	}
 
 	public IFlexoOntologyClass getRange() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getRangeURI());
 	}
 
@@ -60,9 +54,8 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole<IFlexoOntolog
 	}
 
 	@Override
-	public ActorReference<IFlexoOntologyObjectProperty> makeActorReference(IFlexoOntologyObjectProperty object,
-			EditionPatternReference epRef) {
-		return new ConceptActorReference<IFlexoOntologyObjectProperty>(object, this, epRef);
+	public ActorReference<P> makeActorReference(P object, EditionPatternReference epRef) {
+		return new ConceptActorReference<P>(object, this, epRef);
 	}
 
 }

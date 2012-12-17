@@ -11,6 +11,7 @@ import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterServic
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
@@ -23,6 +24,11 @@ public class InteractiveApplicationContext extends ApplicationContext {
 	@Override
 	public FlexoEditor makeFlexoEditor(FlexoProject project) {
 		return new InteractiveFlexoEditor(this, project);
+	}
+
+	@Override
+	protected XMLSerializationService createXMLSerializationService() {
+		return XMLSerializationService.createInstance();
 	}
 
 	@Override

@@ -38,7 +38,8 @@ public class ClassInspectorEntry extends InspectorEntry {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public ClassInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -63,9 +64,6 @@ public class ClassInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 

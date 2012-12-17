@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.diff.merge.MergedDocumentType;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -297,7 +297,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getRMMapping();
 		}
 
@@ -329,7 +329,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getRMMapping();
 		}
 
@@ -361,7 +361,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -387,7 +387,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWorkflowMapping();
 		}
 
@@ -418,7 +418,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getComponentLibraryMapping();
 		}
 
@@ -450,7 +450,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getNavigationMenuMapping();
 		}
 
@@ -481,7 +481,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getNavigationMenuMapping();
 		}
 
@@ -512,7 +512,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWKFMapping();
 		}
 
@@ -544,7 +544,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -576,7 +576,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -608,7 +608,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -640,7 +640,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -672,7 +672,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -703,7 +703,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -729,7 +729,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -760,7 +760,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -791,7 +791,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -817,7 +817,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -844,7 +844,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -871,7 +871,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getImplementationModelMapping();
 		}
 
@@ -898,7 +898,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -925,7 +925,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -952,7 +952,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getDMMapping();
 		}
 
@@ -984,7 +984,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getDKVMapping();
 		}
 
@@ -1016,7 +1016,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1048,7 +1048,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1080,7 +1080,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1112,7 +1112,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getShemaLibraryMapping();
 		}
 
@@ -1144,7 +1144,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getShemaMapping();
 		}
 
@@ -1176,7 +1176,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1208,7 +1208,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1240,7 +1240,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1272,7 +1272,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1303,7 +1303,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1335,7 +1335,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1367,7 +1367,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWSMapping();
 		}
 
@@ -1398,7 +1398,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1430,7 +1430,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1456,7 +1456,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1482,7 +1482,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1508,7 +1508,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1534,7 +1534,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1560,7 +1560,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1587,7 +1587,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1614,7 +1614,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1641,7 +1641,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1668,7 +1668,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1705,7 +1705,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1731,7 +1731,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1757,7 +1757,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1783,7 +1783,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1809,7 +1809,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 
 	public abstract boolean isFlexoXMLStorageResource();
 
-	public abstract XMLMapping getMapping(FlexoXMLMappings mappings);
+	public abstract XMLMapping getMapping(XMLSerializationService mappings);
 
 	/*protected static final ImageIcon PROJECT_ICON = new ImageIconResource("Resources/WKF/SmallFlexo.gif");
 	protected static final ImageIcon WORKFLOW_ICON = new ImageIconResource("Resources/Flexo/Library_WKF.gif");

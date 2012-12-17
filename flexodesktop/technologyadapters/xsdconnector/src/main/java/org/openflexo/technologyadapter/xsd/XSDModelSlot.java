@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.xsd;
 
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
@@ -41,10 +42,10 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 		super(builder);
 	}
 
-	@Deprecated
 	@Override
-	public String getFullyQualifiedName() {
-		return "XSDModelSlot";
+	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+		// TODO
+		return null;
 	}
 
 }

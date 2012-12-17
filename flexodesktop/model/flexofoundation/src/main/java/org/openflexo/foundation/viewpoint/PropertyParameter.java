@@ -36,7 +36,8 @@ public class PropertyParameter extends EditionSchemeParameter {
 
 	private ViewPointDataBinding domainValue;
 
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public PropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -61,7 +62,6 @@ public class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getDomainURI());
 	}
 
@@ -120,9 +120,6 @@ public class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
 	}
 

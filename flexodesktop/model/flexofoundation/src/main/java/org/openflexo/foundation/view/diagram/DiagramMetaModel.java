@@ -45,5 +45,13 @@ public interface DiagramMetaModel extends FlexoMetaModel<DiagramMetaModel> {
 		@Override
 		public void setIsModified() {
 		}
+
+		@Override
+		public void clearIsModified() {
+		}
+
+		@Override
+		public void clearIsModified(boolean clearLastMemoryUpdate) {
+		}
 	};
 }

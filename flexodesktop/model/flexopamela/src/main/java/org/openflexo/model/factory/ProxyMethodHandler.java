@@ -647,8 +647,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
-		Object oldValue = invokeGetter(property);
-		// Object oldValue = internallyInvokeGetter(property);
+		// Object oldValue = invokeGetter(property);
+		Object oldValue = internallyInvokeGetter(property);
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {

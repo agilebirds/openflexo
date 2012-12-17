@@ -24,7 +24,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 
 	static final Logger logger = Logger.getLogger(FlexoResourceImpl.class.getPackage().getName());
 
-	private RD resourceData = null;
+	protected RD resourceData = null;
 
 	/**
 	 * Return flag indicating if this resource is loaded
@@ -51,11 +51,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 			// The resourceData is null, we try to load it
 			resourceData = loadResourceData(progress);
 			// That's fine, resource is loaded, now let's notify the loading of the resources
-			setChanged();
-			notifyObservers(new ResourceLoaded(this));
-			// Also notify that the contents of the resource may also have changed
-			setChanged();
-			notifyObservers(new DataModification("contents", null, getContents()));
+			notifyResourceLoaded();
 		}
 		return resourceData;
 	}
@@ -70,4 +66,31 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		this.resourceData = resourceData;
 	}
 
+	/**
+	 * Called to notify that a resource has successfully been loaded
+	 */
+	public void notifyResourceLoaded() {
+		logger.info("***************** notify resource loaded !!!!!!!!!!!!!!!!!");
+		setChanged();
+		notifyObservers(new ResourceLoaded(this, resourceData));
+		// Also notify that the contents of the resource may also have changed
+		setChanged();
+		notifyObservers(new DataModification("contents", null, getContents()));
+	}
+
+	/**
+	 * Called to notify that a resource has successfully been saved
+	 */
+	public void notifyResourceSaved() {
+		setChanged();
+		notifyObservers(new ResourceSaved(this, resourceData));
+	}
+
+	public void notifyResourceStatusChanged() {
+	}
+
+	@Override
+	public final String toString() {
+		return getClass().getSimpleName() + "." + getURI() + "." + getVersion() + "." + getRevision();
+	}
 }

@@ -300,69 +300,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
-	public ClassPatternRole createClassPatternRole() {
-		ClassPatternRole newPatternRole = null; // new ClassPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public IndividualPatternRole createIndividualPatternRole() {
-		IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("individual"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public PropertyPatternRole createPropertyPatternRole() {
-		PropertyPatternRole newPatternRole = new PropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
-		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public DataPropertyPatternRole createDataPropertyPatternRole() {
-		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	/*public IsAStatementPatternRole createIsAStatementPatternRole() {
-		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
-		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
-		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
-		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}*/
-
 	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));

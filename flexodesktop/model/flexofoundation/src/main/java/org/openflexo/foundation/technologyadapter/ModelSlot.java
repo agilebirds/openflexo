@@ -51,6 +51,8 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	private boolean isReadOnly;
 	private MM metaModel;
 
+	private String metaModelURI;
+
 	private TechnologyAdapter<M, MM> technologyAdapter;
 
 	private ViewPoint viewPoint;
@@ -133,6 +135,14 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	public void setMetaModel(MM metaModel) {
 		this.metaModel = metaModel;
+	}
+
+	public String getMetaModelURI() {
+		return metaModelURI;
+	}
+
+	public void setMetaModelURI(String metaModelURI) {
+		this.metaModelURI = metaModelURI;
 	}
 
 	public boolean getIsReadOnly() {

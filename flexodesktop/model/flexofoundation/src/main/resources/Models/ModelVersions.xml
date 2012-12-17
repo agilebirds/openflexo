@@ -136,9 +136,18 @@
     <version id="0.1" modelFile="TOCModel/toc_model_0.1.xml"/>
   </class>
   
-    <class name="org.openflexo.foundation.viewpoint.ViewPoint" latestVersion="1.0"> 
-    <version id="0.1" modelFile="ViewPointModel/viewpoint_model_0.1.xml"  needsManualConversion="true" toVersion="1.0"/>
+  <class name="org.openflexo.foundation.viewpoint.ViewPoint" latestVersion="1.0"> 
+    <version id="0.1" modelFile="ViewPointModel/viewpoint_model_0.1.xml"  needsManualConversion="true" toVersion="0.2"/>
+    <version id="0.2" modelFile="ViewPointModel/viewpoint_model_0.2.xml"/>
     <version id="1.0" modelFile="ViewPointModel/viewpoint_model_1.0.xml"/>
+  </class>
+  
+  <class name="org.openflexo.foundation.viewpoint.DiagramPalette" latestVersion="0.1"> 
+    <version id="0.1" modelFile="ViewPointModel/diagram_palette_model_0.1.xml"/>
+  </class>
+  
+  <class name="org.openflexo.foundation.viewpoint.ExampleDiagram" latestVersion="0.1"> 
+    <version id="0.1" modelFile="ViewPointModel/example_diagram_model_0.1.xml"/>
   </class>
   
   <release identifier="1.3.4">

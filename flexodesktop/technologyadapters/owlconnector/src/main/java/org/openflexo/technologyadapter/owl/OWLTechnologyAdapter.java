@@ -38,17 +38,22 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
+import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 
@@ -60,19 +65,29 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
  */
 @DeclarePatternRoles({
 /** Instances */
-@DeclarePatternRole(IndividualPatternRole.class),
+@DeclarePatternRole(OWLIndividualPatternRole.class),
 /** Classes */
-@DeclarePatternRole(ClassPatternRole.class),
+@DeclarePatternRole(OWLClassPatternRole.class),
 /** Data properties */
-@DeclarePatternRole(DataPropertyPatternRole.class),
+@DeclarePatternRole(OWLDataPropertyPatternRole.class),
 /** Object properties */
-@DeclarePatternRole(ObjectPropertyPatternRole.class) })
+@DeclarePatternRole(OWLObjectPropertyPatternRole.class),
+/** Properties */
+@DeclarePatternRole(OWLPropertyPatternRole.class),
+/** Data property statements */
+@DeclarePatternRole(DataPropertyStatementPatternRole.class),
+/** Object propertie statements */
+@DeclarePatternRole(ObjectPropertyStatementPatternRole.class),
+/** Restriction statements */
+@DeclarePatternRole(RestrictionStatementPatternRole.class),
+/** Subclass statement */
+@DeclarePatternRole(SubClassStatementPatternRole.class) })
 @DeclareEditionActions({
 /** Add instance */
 @DeclareEditionAction(AddOWLIndividual.class),
 /** Add class */
 @DeclareEditionAction(AddOWLClass.class),
-/** Add class */
+/** Delete */
 @DeclareEditionAction(DeleteAction.class) })
 public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology> {
 

@@ -54,7 +54,7 @@ public class SaveResourceExceptionList extends Exception {
 	public String errorFilesList() {
 		StringBuilder sb = new StringBuilder();
 		for (SaveResourceException excep : _saveExceptions) {
-			sb.append(excep.getFileResource().getFile().getName()).append('\n');
+			sb.append(excep.getDeprecatedFileResource().getFile().getName()).append('\n');
 		}
 		return sb.toString();
 	}

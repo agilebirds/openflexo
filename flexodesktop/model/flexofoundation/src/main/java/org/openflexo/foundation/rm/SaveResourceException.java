@@ -29,14 +29,26 @@ import org.openflexo.foundation.FlexoException;
  */
 public class SaveResourceException extends FlexoException {
 
-	protected FlexoFileResource<?> _fileResource;
+	@Deprecated
+	protected FlexoFileResource<?> deprecatedFileResource;
+	protected org.openflexo.foundation.resource.FlexoFileResource<?> fileResource;
 
+	@Deprecated
 	public SaveResourceException(FlexoFileResource<?> fileResource) {
 		super();
-		_fileResource = fileResource;
+		deprecatedFileResource = fileResource;
 	}
 
-	public FlexoFileResource<?> getFileResource() {
-		return _fileResource;
+	public SaveResourceException(org.openflexo.foundation.resource.FlexoFileResource<?> fileResource) {
+		super();
+		this.fileResource = fileResource;
+	}
+
+	public FlexoFileResource<?> getDeprecatedFileResource() {
+		return deprecatedFileResource;
+	}
+
+	public org.openflexo.foundation.resource.FlexoFileResource<?> getFileResource() {
+		return fileResource;
 	}
 }

@@ -56,13 +56,13 @@ public class ViewPointPerspective extends FlexoPerspective {
 	private final VPMController _controller;
 
 	// private final CalcLibraryBrowser _browser;
-	private final CalcBrowser calcBrowser;
+	// private final CalcBrowser calcBrowser;
 	private final CalcPaletteBrowser calcPaletteBrowser;
 	// private final OntologyBrowser ontologyBrowser;
 	private final CalcDrawingShemaBrowser calcDrawingShemaBrowser;
 
 	// private final CEDBrowserView _browserView;
-	private final CEDBrowserView calcBrowserView;
+	// private final CEDBrowserView calcBrowserView;
 	private final CEDBrowserView calcPaletteBrowserView;
 	// private final CEDBrowserView ontologyBrowserView;
 	private final CEDBrowserView calcDrawingShemaBrowserView;
@@ -102,16 +102,14 @@ public class ViewPointPerspective extends FlexoPerspective {
 			System.out.println("> " + rc);
 		}*/
 
-		calcBrowser = new CalcBrowser(controller);
+		/*calcBrowser = new CalcBrowser(controller);
 		calcBrowserView = new CEDBrowserView(calcBrowser, controller, SelectionPolicy.ForceSelection) {
 			@Override
 			public void treeDoubleClick(FlexoObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof DiagramPalette) {
 					focusOnPalette((DiagramPalette) object);
-				} /*else if (object instanceof OWLMetaModel) {
-					focusOnOntology((OWLMetaModel) object);
-					}*/else if (object instanceof EditionPattern) {
+				} else if (object instanceof EditionPattern) {
 					hideBottomBrowser();
 				}
 			}
@@ -119,11 +117,11 @@ public class ViewPointPerspective extends FlexoPerspective {
 			@Override
 			public void treeSingleClick(FlexoObject object) {
 				super.treeSingleClick(object);
-				if (!(object instanceof DiagramPalette) /*&& !(object instanceof OWLMetaModel)*/) {
+				if (!(object instanceof DiagramPalette)) {
 					hideBottomBrowser();
 				}
 			}
-		};
+		};*/
 
 		calcPaletteBrowser = new CalcPaletteBrowser(controller);
 		calcPaletteBrowserView = new CEDBrowserView(calcPaletteBrowser, controller, SelectionPolicy.ForceSelection);
@@ -148,8 +146,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 		logger.info("focusOnViewPoint " + viewPoint);
 		setBottomLeftView(null);
 		// calcBrowser.deleteBrowserListener(_browserView);
-		calcBrowser.setRepresentedObject(viewPoint);
-		calcBrowser.update();
+		// calcBrowser.setRepresentedObject(viewPoint);
+		// calcBrowser.update();
 		// calcBrowser.addBrowserListener(_browserView);
 	}
 
@@ -225,12 +223,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new OntologyView((ImportedOWLOntology) object, (VPMController) controller, this);
 		}*/
 		if (object instanceof ViewPoint) {
-			((ViewPoint) object).loadWhenUnloaded();
-			logger.info("OK, on charge une CalcView alors");
 			return new CalcView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof DiagramPalette) {

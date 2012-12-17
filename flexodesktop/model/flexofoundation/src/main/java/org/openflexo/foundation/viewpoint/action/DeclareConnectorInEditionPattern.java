@@ -146,7 +146,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Create individual pattern role if required
 				IndividualPatternRole individualPatternRole = null;
 				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-					individualPatternRole = new IndividualPatternRole(builder);
+					individualPatternRole = null; // new IndividualPatternRole(builder);
 					individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 					individualPatternRole.setOntologicType(getConcept());
 					newEditionPattern.addToPatternRoles(individualPatternRole);
@@ -189,7 +189,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 							if (e.property instanceof IFlexoOntologyObjectProperty) {
 								IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
 								if (range instanceof IFlexoOntologyClass) {
-									IndividualPatternRole newPatternRole = new IndividualPatternRole(builder);
+									IndividualPatternRole newPatternRole = null; // new IndividualPatternRole(builder);
 									newPatternRole.setPatternRoleName(e.property.getName());
 									newPatternRole.setOntologicType((IFlexoOntologyClass) range);
 									newEditionPattern.addToPatternRoles(newPatternRole);

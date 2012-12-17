@@ -63,7 +63,6 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	}
 
 	public OWLProperty getObjectProperty() {
-		getViewPoint().loadWhenUnloaded();
 		return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
 	}
 

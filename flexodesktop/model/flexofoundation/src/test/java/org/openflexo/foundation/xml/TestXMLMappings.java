@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
-import org.openflexo.foundation.xml.FlexoXMLMappings.ClassModels;
+import org.openflexo.foundation.xml.XMLSerializationService.ClassModels;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
@@ -48,7 +48,7 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestXMLMappings.class.getPackage().getName());
 
-	private FlexoXMLMappings xmlMappings;
+	private XMLSerializationService xmlMappings;
 
 	public TestXMLMappings() {
 		super("TestXMLMappings");
@@ -57,7 +57,7 @@ public class TestXMLMappings extends FlexoTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		xmlMappings = new FlexoXMLMappings();
+		xmlMappings = XMLSerializationService.createInstance();
 		xmlMappings.initialize();
 	}
 

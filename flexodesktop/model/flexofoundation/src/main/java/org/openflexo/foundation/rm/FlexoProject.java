@@ -182,7 +182,7 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -234,7 +234,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private FlexoResourceManager resourceManagerInstance;
 
-	private FlexoXMLMappings xmlMappings;
+	private XMLSerializationService xmlMappings;
 
 	// private FlexoResourceCenterService resourceCenterService;
 	private FlexoServiceManager serviceManager;
@@ -405,7 +405,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	private FlexoProject() {
 		super(null);
-		xmlMappings = new FlexoXMLMappings();
+		xmlMappings = getServiceManager().getXMLSerializationService();
 		stringEncoder = new FlexoProjectStringEncoder();
 		stringEncoder._initialize();
 		// Just to be sure, we initialize them here
@@ -592,9 +592,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					: Deflater.DEFAULT_COMPRESSION);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new SaveResourceException(null) {
-
-			};
+			throw new SaveResourceException((FlexoFileResource<?>) null);
 		}
 	}
 
@@ -706,9 +704,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				directoriesAreDifferent = !oldProjectDirectory.getCanonicalFile().equals(newProjectDirectory.getCanonicalFile());
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new SaveResourceException(null) {
-
-				};
+				throw new SaveResourceException((FlexoFileResource<?>) null);
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
@@ -749,7 +745,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-					throw new SaveResourcePermissionDeniedException(null);
+					throw new SaveResourcePermissionDeniedException((FlexoFileResource<?>) null);
 				}
 			}
 			setProjectDirectory(newProjectDirectory, useNewDirectoryFromNow);
@@ -811,7 +807,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	protected void writeDotVersion() {
-		writeDotVersion(FlexoXMLMappings.latestRelease());
+		writeDotVersion(XMLSerializationService.latestRelease());
 	}
 
 	private void writeDotVersion(FlexoVersion version) {
@@ -2039,11 +2035,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return xmlMappings.getRMMapping();
 	}
 
-	public FlexoXMLMappings getXmlMappings() {
+	public XMLSerializationService getXmlMappings() {
 		return xmlMappings;
 	}
 
-	public void setXmlMappings(FlexoXMLMappings xmlMappings) {
+	public void setXmlMappings(XMLSerializationService xmlMappings) {
 		this.xmlMappings = xmlMappings;
 	}
 

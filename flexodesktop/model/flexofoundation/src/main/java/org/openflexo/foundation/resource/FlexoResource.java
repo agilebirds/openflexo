@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
@@ -42,6 +43,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public static final String CONTENTS = "contents";
 	public static final String DEPENDENCIES = "dependencies";
 	public static final String LAST_UPDATE = "lastUpdate";
+	public static final String SERVICE_MANAGER = "serviceManager";
 
 	/**
 	 * Returns the name of this resource. The name of the resource is a displayable name that the end-user will understand. There are no
@@ -106,6 +108,22 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(REVISION)
 	@XMLAttribute
 	public Long getRevision();
+
+	/**
+	 * Returns the FlexoServiceManager where this resource is registered
+	 * 
+	 * @return the name of this resource.
+	 */
+	@Getter(value = SERVICE_MANAGER, ignoreType = true)
+	public FlexoServiceManager getServiceManager();
+
+	/**
+	 * Sets the FlexoServiceManager where this resource is registered
+	 * 
+	 * @param aName
+	 */
+	@Setter(SERVICE_MANAGER)
+	public void setServiceManager(FlexoServiceManager serviceManager);
 
 	/**
 	 * Returns the class of the resource data held by this resource.

@@ -101,6 +101,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		// Not allowed
 	}
 
+	@Override
 	public Class<EOModelResourceData> getResourceDataClass() {
 		return EOModelResourceData.class;
 	}
@@ -287,9 +288,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 			try {
 				getEOModelResourceData().getEOModel().writeToFile(getFile());
 			} catch (IOException e) {
-				throw new SaveResourceException(null) {
-
-				};
+				throw new SaveResourceException(this);
 			}
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();

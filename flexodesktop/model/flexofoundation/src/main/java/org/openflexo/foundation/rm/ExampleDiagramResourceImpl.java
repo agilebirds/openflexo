@@ -12,15 +12,33 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
+import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImpl<ExampleDiagram> implements ExampleDiagramResource {
+
+	private RelativePathFileConverter relativePathFileConverter;
+
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
+	}
 
 	public static ExampleDiagramResource makeExampleDiagramResource(File exampleDiagramFile, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(ExampleDiagramResource.class);
-			ExampleDiagramResource returned = factory.newInstance(ExampleDiagramResource.class);
+			ExampleDiagramResourceImpl returned = (ExampleDiagramResourceImpl) factory.newInstance(ExampleDiagramResource.class);
 			returned.setName(exampleDiagramFile.getName());
+			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -29,8 +47,18 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
+	public Class<ExampleDiagram> getResourceDataClass() {
+		return ExampleDiagram.class;
+	}
+
+	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
 		return new ViewPointBuilder(getViewPointLibrary());
+	}
+
+	@Override
+	public boolean hasBuilder() {
+		return true;
 	}
 
 	@Override
@@ -56,26 +84,17 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 	 *            a progress monitor in case the resource data is not immediately available.
 	 * @return the resource data.
 	 * @throws ResourceLoadingCancelledException
+	 * @throws ResourceDependencyLoopException
+	 * @throws FileNotFoundException
 	 */
 	@Override
-	public ExampleDiagram loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException {
-		ExampleDiagram returned;
-		try {
-			returned = ExampleDiagram.instanciateExampleDiagram(getContainer().getViewPoint(), getFile());
-			getContainer().getViewPoint().addToExampleDiagrams(returned);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FlexoException(e);
-		}
-		return returned;
-	}
+	public ExampleDiagram loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException,
+			FileNotFoundException, ResourceDependencyLoopException {
 
-	/**
-	 * Save the &quot;real&quot; resource data of this resource.
-	 */
-	@Override
-	public void save(IProgress progress) {
-		getExampleDiagram().save();
+		ExampleDiagram returned = super.loadResourceData(progress);
+		returned.init(getContainer().getViewPoint(), getFile());
+		getContainer().getViewPoint().addToExampleDiagrams(returned);
+		return returned;
 	}
 
 	/**
@@ -86,8 +105,4 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 		return null;
 	}
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + getURI() + "]";
-	}
 }

@@ -8,7 +8,7 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -21,13 +21,11 @@ import org.openflexo.module.ModuleLoader.ModuleLoaded;
  * @author sylvain
  * 
  */
-public abstract class DefaultTechnologyAdapterControllerService implements TechnologyAdapterControllerService {
+public abstract class DefaultTechnologyAdapterControllerService extends FlexoServiceImpl implements TechnologyAdapterControllerService {
 
 	private static final Logger logger = Logger.getLogger(DefaultTechnologyAdapterControllerService.class.getPackage().getName());
 
 	private Map<Class, TechnologyAdapterController<?>> loadedAdapters;
-
-	private FlexoServiceManager serviceManager;
 
 	public static TechnologyAdapterControllerService getNewInstance() {
 		try {
@@ -122,16 +120,6 @@ public abstract class DefaultTechnologyAdapterControllerService implements Techn
 						.getControllerActionInitializer());
 			}
 		}
-	}
-
-	@Override
-	public void register(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
-	}
-
-	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
-		return serviceManager;
 	}
 
 	@Override

@@ -30,6 +30,7 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 
 /**
  * Default implementation of a manager of {@link FlexoService}<br>
@@ -102,6 +103,10 @@ public class FlexoServiceManager extends FlexoObject {
 
 	public ViewPointLibrary getViewPointLibrary() {
 		return getService(ViewPointLibrary.class);
+	}
+
+	public XMLSerializationService getXMLSerializationService() {
+		return getService(XMLSerializationService.class);
 	}
 
 	public class ServiceRegistered implements ServiceNotification {

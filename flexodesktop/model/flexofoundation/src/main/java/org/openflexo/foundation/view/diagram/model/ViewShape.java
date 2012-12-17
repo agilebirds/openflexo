@@ -221,18 +221,17 @@ public class ViewShape extends ViewElement {
 
 		Vector<DropAndLinkScheme> availableLinkSchemeFromThisShape = null;
 
-		ViewPoint calc = getShema().getCalc();
-		if (calc == null) {
+		ViewPoint viewPoint = getShema().getViewPoint();
+		if (viewPoint == null) {
 			return null;
 		}
-		calc.loadWhenUnloaded();
 
 		availableLinkSchemeFromThisShape = new Vector<DropAndLinkScheme>();
 
-		for (EditionPattern ep1 : calc.getEditionPatterns()) {
+		for (EditionPattern ep1 : viewPoint.getEditionPatterns()) {
 			for (DropScheme ds : ep1.getDropSchemes()) {
 				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
-					for (EditionPattern ep2 : calc.getEditionPatterns()) {
+					for (EditionPattern ep2 : viewPoint.getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
 							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
 									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
@@ -260,7 +259,6 @@ public class ViewShape extends ViewElement {
 		if (calc == null) {
 			return null;
 		}
-		calc.loadWhenUnloaded();
 
 		availableLinkSchemeFromThisShape = new Vector<LinkScheme>();
 

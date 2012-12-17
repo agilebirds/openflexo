@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.emf;
 
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -35,15 +36,9 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 		super(builder);
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.ViewPointObject#getFullyQualifiedName()
-	 */
 	@Override
-	public String getFullyQualifiedName() {
-		return "EMFModelSlot";
+	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+		// TODO
+		return null;
 	}
-
 }

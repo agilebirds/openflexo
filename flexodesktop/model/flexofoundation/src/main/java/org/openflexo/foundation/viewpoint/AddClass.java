@@ -75,9 +75,6 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
 			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {

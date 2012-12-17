@@ -189,6 +189,10 @@ public abstract class FlexoObject extends FlexoObservable {
 		lastMemoryUpdate = new Date();
 	}
 
+	public synchronized void clearIsModified() {
+		clearIsModified(false);
+	}
+
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		isModified = false;
 		// GPO: I commented the line hereunder because I don't think that we need to reset this date

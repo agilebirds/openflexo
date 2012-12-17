@@ -7,7 +7,7 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
+public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
 
 	private String parentPropertyURI;
 	private String domainURI;
@@ -26,7 +26,6 @@ public class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> ext
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
 		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
 			return getViewPoint().getOntologyProperty(_getParentPropertyURI());
 		}
 		return null;
@@ -45,7 +44,6 @@ public class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> ext
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		getViewPoint().loadWhenUnloaded();
 		return getViewPoint().getOntologyClass(_getDomainURI());
 	}
 
@@ -64,11 +62,6 @@ public class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> ext
 			return getParentProperty().getName();
 		}
 		return "";
-	}
-
-	@Override
-	public Class<T> getAccessedClass() {
-		return (Class<T>) IFlexoOntologyStructuralProperty.class;
 	}
 
 	@Override

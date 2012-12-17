@@ -144,6 +144,11 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	}
 
 	@Override
+	public void clearIsModified() {
+		clearIsModified(false);
+	}
+
+	@Override
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		isModified = false;
 		if (clearLastMemoryUpdate) {

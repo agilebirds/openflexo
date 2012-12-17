@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xml.XMLDiffTest;
 import org.openflexo.xmlcode.InvalidModelException;
@@ -50,14 +50,14 @@ public class XMLDiff3Test extends TestCase {
 	public void testTableMoved() {
 		logger.info("Start Diff3 Table moved test");
 		XMLDiff3 diff3 = buildDiff3("TableMoved/Screen1A.woxml", "TableMoved/Screen1A.woxml", "TableMoved/Screen1B.woxml",
-				new FlexoXMLMappings().getIEMapping());
+				XMLSerializationService.createInstance().getIEMapping());
 		// print(diff3.getMergedDocument(), System.out);
 	}
 
 	public void testBlocMove() throws SAXException, ParserConfigurationException, Exception {
 		logger.info("Start Diff3 Bloc move test");
 		XMLDiff3 diff3 = buildDiff3("BlocMove/Screen1Base.woxml", "BlocMove/Screen1A.woxml", "BlocMove/Screen1B.woxml",
-				new FlexoXMLMappings().getIEMapping());
+				XMLSerializationService.createInstance().getIEMapping());
 		// print(diff3.getMergedDocument(), System.out);
 		assertDocumentMatchContentOfFile(diff3.getMergedDocument(), "BlocMove/ExpectedResults.woxml");
 	}
@@ -65,7 +65,7 @@ public class XMLDiff3Test extends TestCase {
 	public void testSwitch() throws IOException, SAXException, ParserConfigurationException {
 		logger.info("Start Diff3 Switch test");
 		XMLDiff3 diff3 = buildDiff3("SwitchIEWidget/Base.woxml", "SwitchIEWidget/UserA.woxml", "SwitchIEWidget/UserB.woxml",
-				new FlexoXMLMappings().getIEMapping());
+				XMLSerializationService.createInstance().getIEMapping());
 		// print(diff3.getMergedDocument(), System.out);
 		assertDocumentEquals(diff3.getMergedDocument(), "SwitchIEWidget/Results.woxml");
 	}
@@ -73,14 +73,14 @@ public class XMLDiff3Test extends TestCase {
 	public void testBlocTitleConflict() {
 		logger.info("Start Diff3 Bloc title conflict test");
 		XMLDiff3 diff3 = buildDiff3("BlocTitleConflict/Screen1Base.woxml", "BlocTitleConflict/Screen1A.woxml",
-				"BlocTitleConflict/Screen1B.woxml", new FlexoXMLMappings().getIEMapping());
+				"BlocTitleConflict/Screen1B.woxml", XMLSerializationService.createInstance().getIEMapping());
 		// print(diff3.getMergedDocument(), System.out);
 	}
 
 	public void testTableInBlocConflict() {
 		logger.info("Start TableInBloc conflict test");
 		XMLDiff3 diff3 = buildDiff3("TableInBlocConflict/Screen1Base.woxml", "TableInBlocConflict/Screen1A.woxml",
-				"TableInBlocConflict/Screen1B.woxml", new FlexoXMLMappings().getIEMapping());
+				"TableInBlocConflict/Screen1B.woxml", XMLSerializationService.createInstance().getIEMapping());
 		// print(diff3.getMergedDocument(), System.out);
 	}
 
