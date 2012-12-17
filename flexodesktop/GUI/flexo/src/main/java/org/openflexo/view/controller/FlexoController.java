@@ -1087,10 +1087,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		controllerModel.setCurrentPerspective(perspective);
 	}
 
-	public final FlexoModelObject getDefaultObjectForPerspective(FlexoModelObject currentObjectAsModuleView, FlexoPerspective perspective) {
-		return perspective.getDefaultObject(currentObjectAsModuleView);
-	}
-
 	/**
 	 * Return current displayed object, assuming that current displayed view represents returned object (for example the process for WKF
 	 * module)
