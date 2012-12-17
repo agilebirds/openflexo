@@ -39,10 +39,10 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
  * @author sguerin
  * 
  */
-public class CalcView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener {
+public class ViewPointView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener {
 
-	public CalcView(ViewPoint viewPoint, VPMController controller) {
-		super(viewPoint, controller, CEDCst.CALC_VIEW_FIB);
+	public ViewPointView(ViewPoint viewPoint, VPMController controller) {
+		super(viewPoint, controller, CEDCst.VIEWPOINT_VIEW_FIB);
 
 		controller.manageResource(viewPoint);
 	}

@@ -53,7 +53,7 @@ public class CEDCst {
 	// General components
 	// public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
 	public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
-	public static File CALC_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
+	public static File VIEWPOINT_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
 	public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");
 
 	// Calc edition
