@@ -374,6 +374,7 @@ public class TabbedPane<J> {
 					J tab = tabs.get(i);
 					TabHeader tabHeader = headerComponents.get(tab);
 					if (!tabHeader.isVisible()) {
+						tabHeader.setBounds(0, 0, 0, 0);
 						selectedHeaderDone |= tabHeader == selectedHeader;
 						continue;
 					}
