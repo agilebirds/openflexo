@@ -136,7 +136,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		perspectives.clear();
 		registrationManager.delete();
 		super.delete();
-		currentLocation = null;
+		currentLocation = NO_LOCATION;
 	}
 
 	/***************
@@ -149,10 +149,20 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	 * @return the current perspective
 	 */
 	public FlexoPerspective getCurrentPerspective() {
-		return currentLocation.getPerspective();
+		if (currentLocation != null) {
+			return currentLocation.getPerspective();
+		} else {
+			return null;
+		}
 	}
 
 	public void setCurrentPerspective(FlexoPerspective currentPerspective) {
+		FlexoModelObject object = getCurrentObject();
+		if (currentPerspective != null) {
+			if (object == null || !currentPerspective.hasModuleViewForObject(object)) {
+				object = currentPerspective.getDefaultObject(object != null ? object : getCurrentProject());
+			}
+		}
 		setCurrentLocation(getCurrentEditor(), getCurrentObject(), currentPerspective);
 	}
 
@@ -193,7 +203,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentEditor(FlexoEditor currentEditor) {
-		setCurrentLocation(new Location(currentEditor, null, getCurrentPerspective()));
+		setCurrentLocation(currentEditor, null, getCurrentPerspective());
 	}
 
 	public FlexoProject getCurrentProject() {
@@ -283,27 +293,30 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (perspective == null) {
 			perspective = getCurrentPerspective();
 		}
+		if (object == null && perspective != null && editor != null) {
+			object = perspective.getDefaultObject(editor.getProject());
+		}
+		if (!isGoingForward && !isGoingBackward) {
+			if (currentLocation != null && currentLocation != NO_LOCATION) {
+				previousHistory.push(currentLocation);
+			}
+			nextHistory.clear();
+		}
 		if (object != null) {
-			if (currentLocation == null || getCurrentObject() != object) {
-				if (!isGoingForward && !isGoingBackward) {
-					if (currentLocation != null && currentLocation != NO_LOCATION) {
-						previousHistory.push(currentLocation);
+			// Little block to change the currentPerspective if the
+			// current perspective can't handle this object
+			if (!perspective.hasModuleViewForObject(object)) {
+				for (FlexoPerspective p : getPerspectives()) {
+					if (p == null) {
+						continue;
 					}
-					nextHistory.clear();
-					// Little block to change the currentPerspective if the
-					// current perspective can't handle this object
-					if (!perspective.hasModuleViewForObject(object)) {
-						for (FlexoPerspective p : getPerspectives()) {
-							if (p == null) {
-								continue;
-							}
-							if (p.hasModuleViewForObject(object)) {
-								perspective = p;
-								break;
-							}
-						}
+					if (p.hasModuleViewForObject(object)) {
+						perspective = p;
+						break;
 					}
 				}
+			}
+			if (currentLocation == null || getCurrentObject() != object) {
 				if (!objects.contains(object)) {
 					registrationManager.new PropertyChangeListenerRegistration(object.getDeletedProperty(), this, object);
 					objects.add(object);
