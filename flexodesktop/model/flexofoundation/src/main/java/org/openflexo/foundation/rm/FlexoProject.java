@@ -1259,6 +1259,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		FlexoComponentLibraryResource returned = (FlexoComponentLibraryResource) resourceForKey(ResourceType.COMPONENT_LIBRARY,
 				getProjectName());
 		if (returned == null && create) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Create ComponentLibrary");
+			}
 			FlexoComponentLibrary.createNewComponentLibrary(this);
 			return getFlexoComponentLibraryResource(false);
 		}
@@ -1531,9 +1534,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public FlexoComponentLibrary getFlexoComponentLibrary(boolean create) {
 		if (getFlexoComponentLibraryResource(create) != null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Create ComponentLibrary");
-			}
 			return getFlexoComponentLibraryResource(create).getResourceData();
 		}
 		return null;
