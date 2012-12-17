@@ -260,8 +260,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	public void setCurrentLocation(Location location) {
 		if (location != null && location.equals(getCurrentLocation())) {
 			return;
+		} else if (location != null) {
+			setCurrentLocation(location.getEditor(), location.getObject(), location.getPerspective());
 		}
-		setCurrentLocation(location.getEditor(), location.getObject(), location.getPerspective());
 	}
 
 	public Set<Location> getLocations() {
