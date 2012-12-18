@@ -80,7 +80,9 @@ public class MainPaneTopBar extends JMenuBar {
 
 	public void delete() {
 		registrationManager.delete();
-		projectSelector.delete();
+		if (projectSelector != null) {
+			projectSelector.delete();
+		}
 	}
 
 	private void initModules() {
