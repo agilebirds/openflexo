@@ -33,7 +33,7 @@
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
   </Panel>
   <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-    <Assignment variable="component.serviceManager" value="data.focusedObject.viewPointLibrary.flexoServiceManager" />
+    <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.flexoServiceManager.informationSpace" />
     <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
     <Dependancy componentName="TechnologyAdapterDD" />
   </Custom>

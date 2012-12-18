@@ -33,6 +33,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -76,15 +77,15 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		return "";
 	}
 
-	private FlexoServiceManager serviceManager;
+	private InformationSpace informationSpace;
 
-	public FlexoServiceManager getServiceManager() {
-		return serviceManager;
+	public InformationSpace getInformationSpace() {
+		return informationSpace;
 	}
 
-	@CustomComponentParameter(name = "serviceManager", type = CustomComponentParameter.Type.MANDATORY)
-	public void setServiceManager(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
+	@CustomComponentParameter(name = "informationSpace", type = CustomComponentParameter.Type.MANDATORY)
+	public void setInformationSpace(InformationSpace informationSpace) {
+		this.informationSpace = informationSpace;
 		updateCustomPanel(getEditedObject());
 	}
 
@@ -104,7 +105,7 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		if (getTechnologyAdapter() != null) {
 			return getTechnologyAdapter();
 		} else {
-			return getServiceManager();
+			return getInformationSpace();
 		}
 	}
 
@@ -135,17 +136,18 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		serviceManager.registerService(taService);
 		TechnologyAdapterControllerService tacService = DefaultTechnologyAdapterControllerService.getNewInstance();
 		serviceManager.registerService(tacService);
+		final InformationSpace informationSpace = new InformationSpace();
+		serviceManager.registerService(informationSpace);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
 				FIBMetaModelSelector selector = new FIBMetaModelSelector(null);
-				selector.setServiceManager(serviceManager);
+				selector.setInformationSpace(informationSpace);
 				try {
 					selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
 							(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter")));
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return makeArray(selector);

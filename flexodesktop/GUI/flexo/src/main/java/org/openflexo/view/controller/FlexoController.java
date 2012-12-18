@@ -123,6 +123,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -2008,7 +2009,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			} catch (FlexoException e) {
 				e.printStackTrace();
 			}
-		} else if (object instanceof FlexoServiceManager) {
+		} else if (object instanceof InformationSpace) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
 		} else if (object instanceof FlexoResourceCenter) {
 			return IconLibrary.RESOURCE_CENTER_ICON;

@@ -29,6 +29,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -87,6 +88,12 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 			protected ViewPointLibrary createViewPointLibraryService() {
 				return null;
 			}
+
+			@Override
+			protected InformationSpace createInformationSpace() {
+				return null;
+			}
+
 		});
 		return FIBAbstractEditor.makeArray(applicationData);
 	}

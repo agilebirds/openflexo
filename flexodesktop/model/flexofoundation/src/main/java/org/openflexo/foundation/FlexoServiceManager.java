@@ -27,6 +27,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -103,6 +104,10 @@ public class FlexoServiceManager extends FlexoObject {
 
 	public ViewPointLibrary getViewPointLibrary() {
 		return getService(ViewPointLibrary.class);
+	}
+
+	public InformationSpace getInformationSpace() {
+		return getService(InformationSpace.class);
 	}
 
 	public XMLSerializationService getXMLSerializationService() {

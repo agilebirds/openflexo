@@ -10,6 +10,7 @@ import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -89,4 +90,10 @@ public class TestApplicationContext extends ApplicationContext {
 	protected ViewPointLibrary createViewPointLibraryService() {
 		return new ViewPointLibrary();
 	}
+
+	@Override
+	protected InformationSpace createInformationSpace() {
+		return new InformationSpace();
+	}
+
 }

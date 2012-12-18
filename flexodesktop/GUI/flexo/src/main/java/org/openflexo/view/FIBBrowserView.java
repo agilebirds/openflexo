@@ -28,7 +28,6 @@ import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.view.controller.FlexoController;
 
@@ -38,7 +37,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public abstract class FIBBrowserView<O extends FlexoObject> extends SelectionSynchronizedFIBView implements FIBSelectionListener {
+public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView implements FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(FIBBrowserView.class.getPackage().getName());
 
 	// private O representedObject;

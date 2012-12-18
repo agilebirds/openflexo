@@ -52,7 +52,7 @@ public class InformationSpacePerspective extends FlexoPerspective {
 		super("information_space_perspective");
 		_controller = controller;
 
-		informationSpaceBrowser = new FIBInformationSpaceBrowser(controller.getApplicationContext(), controller);
+		informationSpaceBrowser = new FIBInformationSpaceBrowser(controller.getApplicationContext().getInformationSpace(), controller);
 
 		/*_browser = new CalcLibraryBrowser(controller);
 		_browserView = new CEDBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
