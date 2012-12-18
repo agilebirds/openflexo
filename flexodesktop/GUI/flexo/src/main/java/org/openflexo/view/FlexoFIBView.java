@@ -220,6 +220,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void setDataObject(Object object) {
+		// logger.info(">>>>>>> setDataObject with " + object);
 		if (this.dataObject instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) this.dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
 		} else if (this.dataObject instanceof FlexoObservable) {

@@ -24,25 +24,23 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.CreateExampleDrawing;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.action.CreateExampleDiagram;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
+public class CreateExampleDiagramInitializer extends ActionInitializer<CreateExampleDiagram, ViewPoint, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateCalcDrawingShemaInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(CreateExampleDrawing.actionType, actionInitializer);
+	CreateExampleDiagramInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(CreateExampleDiagram.actionType, actionInitializer);
 	}
 
 	@Override
@@ -56,23 +54,21 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateExampleDrawing> getDefaultInitializer() {
-		return new FlexoActionInitializer<CreateExampleDrawing>() {
+	protected FlexoActionInitializer<CreateExampleDiagram> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateExampleDiagram>() {
 			@Override
-			public boolean run(EventObject e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDiagram action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, CEDCst.CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateExampleDrawing> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<CreateExampleDrawing>() {
+	protected FlexoActionFinalizer<CreateExampleDiagram> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateExampleDiagram>() {
 			@Override
-			public boolean run(EventObject e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDiagram action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}

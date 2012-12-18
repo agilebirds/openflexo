@@ -187,7 +187,7 @@ public class VPMIconLibrary extends IconLibrary {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddClass) object).getModelSlot()
 						.getTechnologyAdapter());
 				if (tac != null) {
-					return tac.getIconForOntologyObject(((AddClass) object).getOntologyClass().getClass());
+					return tac.getIconForOntologyObject(((AddClass) object).getOntologyClassClass());
 				}
 				return null;
 			} else if (object instanceof CloneIndividual) {
@@ -201,8 +201,8 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof AddIndividual) {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
 						.getTechnologyAdapter());
-				if (tac != null) {
-					return tac.getIconForOntologyObject(((AddIndividual) object).getOntologyClass().getClass());
+				if (tac != null && ((AddIndividual) object).getOntologyClass() != null) {
+					return tac.getIconForOntologyObject(((AddIndividual) object).getOntologyIndividualClass());
 				}
 				return null;
 			} else if (object instanceof AddDiagram) {
@@ -292,7 +292,6 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
 		} else if (object instanceof OntologicObjectPatternRole) {
-			logger.info("TechnologyAdapter: " + ((OntologicObjectPatternRole<?>) object).getModelSlot().getTechnologyAdapter());
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {

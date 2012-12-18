@@ -143,11 +143,11 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return null;
 	}
 
-	public final ModelSlot<M, MM> getModelSlot() {
+	public ModelSlot<M, MM> getModelSlot() {
 		return modelSlot;
 	}
 
-	public final void setModelSlot(ModelSlot<M, MM> modelSlot) {
+	public void setModelSlot(ModelSlot<M, MM> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 

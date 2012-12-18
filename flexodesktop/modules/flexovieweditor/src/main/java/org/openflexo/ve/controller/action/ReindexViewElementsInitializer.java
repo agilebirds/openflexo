@@ -22,15 +22,11 @@ package org.openflexo.ve.controller.action;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.action.ReindexViewElements;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -55,9 +51,7 @@ public class ReindexViewElementsInitializer extends ActionInitializer<ReindexVie
 				if (action.skipDialog) {
 					return true;
 				}
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB);
 			}
 		};
 	}

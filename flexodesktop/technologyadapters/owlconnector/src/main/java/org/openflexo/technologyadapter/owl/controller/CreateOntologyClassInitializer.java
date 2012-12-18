@@ -24,16 +24,12 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.action.CreateOntologyClass;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -50,9 +46,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer<CreateOnto
 		return new FlexoActionInitializer<CreateOntologyClass>() {
 			@Override
 			public boolean run(EventObject e, CreateOntologyClass action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(OWLFIBLibrary.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, OWLFIBLibrary.CREATE_ONTOLOGY_CLASS_DIALOG_FIB);
 			}
 		};
 	}

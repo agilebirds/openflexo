@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.fib;
+package org.openflexo.vpm.fib.dialogs;
 
 import java.io.File;
 
@@ -25,36 +25,31 @@ import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.CEDCst;
 
-public class ViewPointViewEDITOR extends FIBAbstractEditor {
+public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-
 		TestApplicationContext testApplicationContext = new TestApplicationContext(
 				new FileResource("src/test/resources/TestResourceCenter"));
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
-		ViewPoint calc1 = viewPointLibrary
+		ViewPoint vp = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-
-		ViewPoint calc2 = viewPointLibrary
-				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
-
-		ViewPoint calc3 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-
-		return makeArray(calc1, calc2, calc3);
+		CreateModelSlot action = CreateModelSlot.actionType.makeNewAction(vp, null, null);
+		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.VIEWPOINT_VIEW_FIB;
+		return CEDCst.CREATE_MODEL_SLOT_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {
-		main(ViewPointViewEDITOR.class);
+		main(CreateModelSlotDialogEDITOR.class);
 	}
 
 }

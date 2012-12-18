@@ -1,5 +1,3 @@
-#French
-#Fri Nov 16 16:00:37 CET 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -213,6 +211,7 @@ logical_not=NON logique
 logical_or=OU logique
 logs=Logs
 look_and_feel=Look and feel
+model_slot_must_have_an_non_empty_and_unique_name=model_slot_must_have_an_non_empty_and_unique_name
 modified=modified
 multiplication=multiplication
 name_is_valid=Le nom est valide
@@ -252,6 +251,8 @@ pattern_role_must_define_a_valid_object_property_description=Le r\u00F4le doit d
 pattern_role_must_have_a_name=Le r\u00F4le doit avoir un nom
 pattern_role_must_have_a_name_description=Le r\u00F4le doit avoir un nom
 plain=Brut
+please_choose_a_technology_adapter=please_choose_a_technology_adapter
+please_choose_a_valid_metamodel=please_choose_a_valid_metamodel
 power=puissance
 preferences=Pr\u00E9f\u00E9rences
 process=Processus

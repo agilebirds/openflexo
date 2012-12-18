@@ -4501,7 +4501,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
 			View v = vd.getView();
 			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-				returned.add(msi.getModelSlot().getMetaModel());
+				returned.add(msi.getModelSlot().getMetaModelResource().getMetaModel());
 			}
 		}
 		return returned;

@@ -85,7 +85,6 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	 */
 	@Override
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		System.out.println("On me demande l'icone pour " + objectClass);
 		if (OWLObject.class.isAssignableFrom(objectClass))
 			return OWLIconLibrary.iconForObject((Class<? extends OWLObject>) objectClass);
 		return null;

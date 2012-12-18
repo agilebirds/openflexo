@@ -77,6 +77,10 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 		return technologyAdapterService;
 	}
 
+	public final TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
+		return technologyAdapterControllerService;
+	}
+
 	public final FlexoEditor getApplicationEditor() {
 		return applicationEditor;
 	}

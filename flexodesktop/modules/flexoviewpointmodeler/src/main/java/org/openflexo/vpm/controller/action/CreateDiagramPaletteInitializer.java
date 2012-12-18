@@ -24,26 +24,24 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.CreateViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.action.CreateDiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.palette.PaletteGR;
 
-public class CreateCalcPaletteInitializer extends ActionInitializer {
+public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDiagramPalette, ViewPoint, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateCalcPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(CreateViewPointPalette.actionType, actionInitializer);
+	CreateDiagramPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(CreateDiagramPalette.actionType, actionInitializer);
 	}
 
 	@Override
@@ -57,25 +55,22 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateViewPointPalette> getDefaultInitializer() {
-		return new FlexoActionInitializer<CreateViewPointPalette>() {
+	protected FlexoActionInitializer<CreateDiagramPalette> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateDiagramPalette>() {
 			@Override
-			public boolean run(EventObject e, CreateViewPointPalette action) {
+			public boolean run(EventObject e, CreateDiagramPalette action) {
 
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
-
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_PALETTE_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, CEDCst.CREATE_PALETTE_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateViewPointPalette> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<CreateViewPointPalette>() {
+	protected FlexoActionFinalizer<CreateDiagramPalette> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDiagramPalette>() {
 			@Override
-			public boolean run(EventObject e, CreateViewPointPalette action) {
+			public boolean run(EventObject e, CreateDiagramPalette action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}

@@ -44,6 +44,11 @@ public class AddEMFClass extends AddClass<EMFModel, EMFMetaModel, EMFClass> {
 	}
 
 	@Override
+	public Class<EMFClass> getOntologyClassClass() {
+		return EMFClass.class;
+	}
+
+	@Override
 	public EMFClass performAction(EditionSchemeAction action) {
 		EMFClass father = getOntologyClass();
 		String newClassName = (String) getClassName().getBindingValue(action);

@@ -38,19 +38,19 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, ViewPoint, ViewPointObject> {
+public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, ViewPoint, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(CreateViewPointPalette.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateDiagramPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject>(
+	public static FlexoActionType<CreateDiagramPalette, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateDiagramPalette, ViewPoint, ViewPointObject>(
 			"create_new_palette", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateViewPointPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
-			return new CreateViewPointPalette(focusedObject, globalSelection, editor);
+		public CreateDiagramPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+			return new CreateDiagramPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -66,7 +66,7 @@ public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateViewPointPalette.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateDiagramPalette.actionType, ViewPoint.class);
 	}
 
 	public String newPaletteName;
@@ -75,7 +75,7 @@ public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, 
 
 	private DiagramPalette _newPalette;
 
-	CreateViewPointPalette(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateDiagramPalette(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

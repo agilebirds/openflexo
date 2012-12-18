@@ -24,14 +24,10 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -61,9 +57,7 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}

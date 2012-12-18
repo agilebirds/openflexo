@@ -56,7 +56,7 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBListWidget;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -350,11 +350,13 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	 * Override when required
 	 */
 	protected boolean matches(T o, String filteredName) {
-		if (o instanceof FlexoModelObject) {
+		return o != null && StringUtils.isNotEmpty(renderedString(o))
+				&& (renderedString(o)).toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+		/*if (o instanceof FlexoModelObject) {
 			return ((FlexoModelObject) o).getName() != null
 					&& ((FlexoModelObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
-		}
-		return false;
+		}*/
+		// return false;
 	}
 
 	public List<T> getMatchingValues() {
@@ -527,7 +529,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			selector.apply();
 		}
 
-		protected final Icon decorateIcon(FlexoModelObject object, Icon returned) {
+		protected final Icon decorateIcon(FlexoObject object, Icon returned) {
 			if (AdvancedPrefs.getHightlightUncommentedItem() && object != null && object.isDescriptionImportant()
 					&& !object.hasDescription()) {
 				if (returned instanceof ImageIcon) {
@@ -660,8 +662,8 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		if (editedObject == null) {
 			return "";
 		}
-		if (editedObject instanceof FlexoModelObject) {
-			return ((FlexoModelObject) editedObject).getFullyQualifiedName();
+		if (editedObject instanceof FlexoObject) {
+			return ((FlexoObject) editedObject).getFullyQualifiedName();
 		}
 		return editedObject.toString();
 	}

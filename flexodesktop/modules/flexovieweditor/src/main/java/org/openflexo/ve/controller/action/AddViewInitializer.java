@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -37,7 +35,6 @@ import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -63,9 +60,7 @@ public class AddViewInitializer extends ActionInitializer {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
-					FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.ADD_VIEW_DIALOG_FIB, action, FlexoFrame.getActiveFrame(),
-							true, FlexoLocalization.getMainLocalizer());
-					return dialog.getStatus() == Status.VALIDATED;
+					return instanciateAndShowDialog(action, VECst.ADD_VIEW_DIALOG_FIB);
 				}
 
 			}

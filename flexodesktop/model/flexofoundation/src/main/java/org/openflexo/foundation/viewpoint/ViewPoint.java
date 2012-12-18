@@ -62,6 +62,8 @@ import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
+import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
+import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
@@ -661,7 +663,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
-			ms.setMetaModel(null);
+			ms.setMetaModelResource(null);
 			addToModelSlots(ms);
 			DiagramTechnologyAdapter diagramTA = null;
 			if (viewPointLibrary.getFlexoServiceManager() != null
@@ -741,10 +743,15 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
+		System.out.println("Et hop, on notifie");
+		setChanged();
+		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
 	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.remove(modelSlot);
+		setChanged();
+		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
 	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
@@ -755,6 +762,15 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			}
 		}
 		return returned;
+	}
+
+	public ModelSlot<?, ?> getModelSlot(String modelSlotName) {
+		for (ModelSlot<?, ?> ms : getModelSlots()) {
+			if (ms.getName().equals(modelSlotName)) {
+				return ms;
+			}
+		}
+		return null;
 	}
 
 	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
@@ -953,7 +969,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			returned.add(modelSlot.getMetaModel());
+			returned.add(modelSlot.getMetaModelResource().getMetaModel());
 		}
 		return returned;
 	}

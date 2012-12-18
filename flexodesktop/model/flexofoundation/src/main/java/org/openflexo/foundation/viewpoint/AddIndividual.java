@@ -59,13 +59,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		return EditionActionType.AddIndividual;
 	}
 
-	/*@Override
-	public List<IndividualPatternRole> getAvailablePatternRoles() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
-		}
-		return null;
-	}*/
+	public abstract Class<T> getOntologyIndividualClass();
 
 	@Override
 	public IndividualPatternRole getPatternRole() {

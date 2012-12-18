@@ -26,19 +26,21 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class DeclareConnectorInEditionPatternInitializer extends ActionInitializer {
+public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlot, ViewPoint, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareConnectorInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
+	CreateModelSlotInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(CreateModelSlot.actionType, actionInitializer);
 	}
 
 	@Override
@@ -52,23 +54,21 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareConnectorInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionInitializer<CreateModelSlot> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateModelSlot>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
-
-				return instanciateAndShowDialog(action, CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+			public boolean run(EventObject e, CreateModelSlot action) {
+				return instanciateAndShowDialog(action, CEDCst.CREATE_MODEL_SLOT_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareConnectorInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionFinalizer<CreateModelSlot> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateModelSlot>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
-				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
+			public boolean run(EventObject e, CreateModelSlot action) {
+				getController().setCurrentEditedObjectAsModuleView(action.getNewModelSlot(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}
 		};
@@ -76,6 +76,7 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.EDITION_PATTERN_ICON;
+		return VPMIconLibrary.MODEL_SLOT_ICON;
 	}
+
 }

@@ -48,6 +48,6 @@
     <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
     <Localized key="background_color" lang="Dutch">Background color</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Shema" />
+  <Parameter name="title" value="Example Diagram" />
 </Panel>
 

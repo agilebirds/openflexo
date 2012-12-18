@@ -24,17 +24,13 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -51,9 +47,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer<CreateObj
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
 			public boolean run(EventObject e, CreateObjectProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(OWLFIBLibrary.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, OWLFIBLibrary.CREATE_OBJECT_PROPERTY_DIALOG_FIB);
 			}
 		};
 	}

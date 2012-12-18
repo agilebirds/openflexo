@@ -14,4 +14,6 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @XMLElement
 public interface FlexoMetaModelResource<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends TechnologyAdapterResource<MM> {
+
+	public MM getMetaModel();
 }

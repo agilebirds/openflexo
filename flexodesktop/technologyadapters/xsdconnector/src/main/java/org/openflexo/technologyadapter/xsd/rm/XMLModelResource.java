@@ -32,7 +32,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -42,17 +41,20 @@ import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 
 @SuppressWarnings("serial")
-public class XMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoResource<XMLModel> {
+public class XMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoModelResource<XMLModel, XSDMetaModel> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLModelResource.class
-			.getPackage().getName());
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLModelResource.class.getPackage()
+			.getName());
 
 	public XMLModelResource(FlexoProjectBuilder builder) {
 		this(builder.project);
@@ -142,5 +144,34 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 	@Override
 	public Class<XMLModel> getResourceDataClass() {
 		return XMLModel.class;
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public XSDMetaModel getMetaModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMetaModel(XSDMetaModel aMetaModel) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public XMLModel getModel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

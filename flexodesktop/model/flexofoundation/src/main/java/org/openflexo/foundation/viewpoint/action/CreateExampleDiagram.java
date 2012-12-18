@@ -38,19 +38,19 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, ViewPoint, ViewPointObject> {
+public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, ViewPoint, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(CreateExampleDrawing.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateExampleDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject>(
-			"create_example_drawing", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateExampleDiagram, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateExampleDiagram, ViewPoint, ViewPointObject>(
+			"create_example_diagram", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateExampleDrawing makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
-			return new CreateExampleDrawing(focusedObject, globalSelection, editor);
+		public CreateExampleDiagram makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+			return new CreateExampleDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -66,7 +66,7 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateExampleDrawing.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateExampleDiagram.actionType, ViewPoint.class);
 	}
 
 	public String newShemaName;
@@ -75,7 +75,7 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, View
 
 	private ExampleDiagram _newShema;
 
-	CreateExampleDrawing(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateExampleDiagram(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

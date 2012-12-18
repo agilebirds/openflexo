@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -237,4 +238,13 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		metaModel = aMetaModel;
 	}
 
+	@Override
+	public OWLOntology getModel() {
+		try {
+			return getResourceData(null);
+		} catch (ResourceLoadingCancelledException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

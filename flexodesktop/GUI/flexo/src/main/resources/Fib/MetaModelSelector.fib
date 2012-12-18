@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBMetaModelSelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" width="270" height="300">
+  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches">
+    <Label label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; data.isFiltered)" name="MatchesLabel" localize="true" />
+  </Panel>
+  <Browser root="data.rootObject" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedObject" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" name="InformationSpaceBrowser" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <BrowserElement dataClassName="org.openflexo.foundation.FlexoServiceManager" label="&quot;Information Space&quot;" icon="controller.iconForObject(informationSpace)" isEditable="false" filtered="false" defaultVisible="true" name="informationSpace">
+      <Children data="data.serviceManager.technologyAdapterService.technologyAdapters" name="resourceCenters" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder" label="viewPointFolder.name" icon="controller.iconForObject(viewPointFolder)" isEditable="false" filtered="false" defaultVisible="true" name="viewPointFolder">
+      <Children data="viewPointFolder.children" name="subFolders" />
+      <Children data="viewPointFolder.resources" name="resource" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.FlexoMetaModelResource" label="metaModelResource.uRI" icon="controller.iconForObject(metaModelResource)" isEditable="false" filtered="false" defaultVisible="true" name="metaModelResource" />
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" label="technologyAdapter.name" icon="controller.iconForObject(technologyAdapter)" isEditable="false" filtered="false" defaultVisible="true" name="technologyAdapter">
+      <Children data="data.serviceManager.technologyAdapterService.getAllMetaModelRepositories(technologyAdapter)" cast="child.rootFolder" name="metaModelRepositories" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.FlexoModelResource" label="modelResource.uRI" icon="controller.iconForObject(modelResource)" isEditable="false" filtered="false" defaultVisible="true" name="modelResource" />
+  </Browser>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true" enable="(data.selectedValue != null)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" localize="true" />
+  </Panel>
+  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.uRI" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.FlexoMetaModelResource" autoSelectFirstRow="true" />
+  <LocalizedDictionary />
+</Panel>

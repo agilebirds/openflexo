@@ -21,28 +21,29 @@ package org.openflexo.vpm.fib;
 
 import java.io.File;
 
+import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.CEDCst;
 
-public class CalcLibraryViewEDITOR extends FIBAbstractEditor {
+public class ViewPointLibraryViewEDITOR extends FIBAbstractEditor {
 
-			@Override
-			public Object[] getData() {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				return makeArray(calcLibrary);
-			}
+	@Override
+	public Object[] getData() {
+		TestApplicationContext testApplicationContext = new TestApplicationContext(
+				new FileResource("src/test/resources/TestResourceCenter"));
+		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
+		return makeArray(viewPointLibrary);
+	}
 
-			@Override
-			public File getFIBFile() {
-				return CEDCst.CALC_LIBRARY_VIEW_FIB;
-			}
+	@Override
+	public File getFIBFile() {
+		return CEDCst.VIEWPOINT_LIBRARY_VIEW_FIB;
+	}
 
 	public static void main(String[] args) {
-		main(CalcLibraryViewEDITOR.class);
+		main(ViewPointLibraryViewEDITOR.class);
 	}
 
 }

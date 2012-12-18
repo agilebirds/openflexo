@@ -52,12 +52,13 @@ public class CEDCst {
 
 	// General components
 	// public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
-	public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
+	public static File VIEWPOINT_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
 	public static File VIEWPOINT_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
 	public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");
 
-	// Calc edition
-	public static File CREATE_EXAMPLE_DRAWING_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
+	// ViewPoint edition
+	public static File CREATE_MODEL_SLOT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateModelSlotDialog.fib");
+	public static File CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
 	public static File CREATE_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePaletteDialog.fib");
 	public static File CREATE_VIEW_POINT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewPointDialog.fib");
 	public static File DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource("Fib/Dialog/DeclareShapeInEditionPatternDialog.fib");

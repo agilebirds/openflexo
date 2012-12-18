@@ -245,6 +245,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		}
 
 		else if (getBottomLeftView() == diagramPaletteBrowser) {
+
 			if (!(object instanceof ViewPointObject)) {
 				setBottomLeftView(null);
 			} else {

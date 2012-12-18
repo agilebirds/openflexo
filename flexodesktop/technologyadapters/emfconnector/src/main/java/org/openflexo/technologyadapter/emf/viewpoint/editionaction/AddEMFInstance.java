@@ -46,6 +46,11 @@ public class AddEMFInstance extends AddIndividual<EMFModel, EMFMetaModel, EMFIns
 		return (EMFClass) super.getOntologyClass();
 	}
 
+	@Override
+	public Class<EMFInstance> getOntologyIndividualClass() {
+		return EMFInstance.class;
+	}
+
 	// TODO: implement this
 	@Override
 	public EMFInstance performAction(EditionSchemeAction action) {

@@ -49,7 +49,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	private boolean isRequired;
 	private boolean isReadOnly;
-	private MM metaModel;
+	private FlexoMetaModelResource<M, MM> metaModelResource;
 
 	private String metaModelURI;
 
@@ -134,19 +134,26 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 	}
 
-	public MM getMetaModel() {
-		return metaModel;
+	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
+		return metaModelResource;
 	}
 
-	public void setMetaModel(MM metaModel) {
-		this.metaModel = metaModel;
+	public void setMetaModelResource(FlexoMetaModelResource<M, MM> metaModelResource) {
+		this.metaModelResource = metaModelResource;
 	}
 
 	public String getMetaModelURI() {
+		if (metaModelResource != null) {
+			return metaModelResource.getURI();
+		}
 		return metaModelURI;
 	}
 
 	public void setMetaModelURI(String metaModelURI) {
+		if (getViewPointLibrary() != null) {
+			logger.warning("Gerer un truc ici !!!");
+			// metaModelResource = getViewPointLibrary().;
+		}
 		this.metaModelURI = metaModelURI;
 	}
 
@@ -173,7 +180,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	@Override
 	public String getLanguageRepresentation() {
-		return "ModelSlot " + getName() + " conformTo " + getMetaModel().getURI() + " access=READ cardinality=ONE";
+		return "ModelSlot " + getName() + " conformTo " + getMetaModelURI() + " access=READ cardinality=ONE";
 	}
 
 	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
