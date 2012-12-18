@@ -323,8 +323,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			}
 		}
 		Location old = currentLocation;
-		currentLocation = new Location(editor, object, perspective);
-		currentLocation = addToLocations(currentLocation);
+		currentLocation = addToLocations(new Location(editor, object, perspective));
 		notifyLocationChange(old, currentLocation);
 	}
 
