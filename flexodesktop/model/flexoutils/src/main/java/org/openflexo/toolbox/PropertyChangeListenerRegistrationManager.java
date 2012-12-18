@@ -51,7 +51,7 @@ public class PropertyChangeListenerRegistrationManager {
 			} else {
 				hasPropertyChangeSupport.getPropertyChangeSupport().addPropertyChangeListener(listener);
 			}
-
+			registrations.add(this);
 		}
 
 		public void removeListener() {
