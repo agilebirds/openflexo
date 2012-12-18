@@ -25,42 +25,84 @@
     <description>Root class for all objects of Flexo</description>
   </entity>
 
-  <entity name="org.openflexo.foundation.view.EditionPatternReference" xmlTag="EditionPatternReference">
-     <description>EditionPattern references in which this object is involved</description>
-     <property name="editionPattern" xmlTag="editionPattern" attribute="YES" description=""/>
-     <property name="instanceId" xmlTag="instanceId" attribute="YES" description=""/>
-     <property name="patternRoleName" xmlTag="patternRole" attribute="YES" description=""/>
-     <property name="actors" contains="org.openflexo.foundation.view.ActorReference" primary="yes" type="hashtable" key="patternRole" description=""/> 
-  </entity>
+	<entity name="org.openflexo.foundation.view.EditionPatternReference"
+		xmlTag="EditionPatternReference">
+		<description>EditionPattern references in which this object is
+			involved</description>
+		<property name="editionPattern" xmlTag="editionPattern"
+			attribute="YES" description="" />
+		<property name="instanceId" xmlTag="instanceId" attribute="YES"
+			description="" />
+		<property name="patternRoleName" xmlTag="patternRole"
+			attribute="YES" description="" />
+		<property name="actors"
+			contains="org.openflexo.foundation.view.ActorReference"
+			primary="yes" type="hashtable" key="patternRole" description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.view.ActorReference" abstract="yes">
-      <property name="patternRole" xmlTag="patternRole" attribute="YES" description=""/>
-  </entity>
+	<entity
+		name="org.openflexo.foundation.view.ActorReference"
+		abstract="yes">
+		<property name="patternRole" xmlTag="patternRole" attribute="YES"
+			description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.view.ConceptActorReference" xmlTag="ConceptActorReference">
-      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
-  </entity>
+	<entity
+		name="org.openflexo.foundation.view.ConceptActorReference"
+		xmlTag="ConceptActorReference">
+		<property name="objectURI" xmlTag="objectURI" attribute="YES"
+			description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ObjectPropertyStatementActorReference" xmlTag="ObjectPropertyStatementActorReference">
-      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
-      <property name="objectPropertyURI" xmlTag="objectPropertyURI" attribute="YES" description=""/>
-      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
-  </entity>
+	<entity
+		name="org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole$ObjectPropertyStatementActorReference"
+		xmlTag="ObjectPropertyStatementActorReference">
+		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
+			description="" />
+		<property name="objectPropertyURI" xmlTag="objectPropertyURI"
+			attribute="YES" description="" />
+		<property name="objectURI" xmlTag="objectURI" attribute="YES"
+			description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$SubClassStatementActorReference" xmlTag="SubClassStatementActorReference">
-      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
-      <property name="parentURI" xmlTag="parentURI" attribute="YES" description=""/>
-  </entity>
+	<entity
+		name="org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole$DataPropertyStatementActorReference"
+		xmlTag="DataPropertyStatementActorReference">
+		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
+			description="" />
+		<property name="dataPropertyURI" xmlTag="dataPropertyURI"
+			attribute="YES" description="" />
+		<property name="value" xmlTag="value" attribute="YES"
+			description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference" xmlTag="RestrictionStatementActorReference">
-      <!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
-      <property name="propertyURI" xmlTag="propertyURI" attribute="YES" description=""/>
-      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
-  </entity>
+	<entity
+		name="org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole$SubClassStatementActorReference"
+		xmlTag="SubClassStatementActorReference">
+		<property name="subjectURI" xmlTag="subjectURI" attribute="YES"
+			description="" />
+		<property name="parentURI" xmlTag="parentURI" attribute="YES"
+			description="" />
+	</entity>
 
-  <entity name="org.openflexo.foundation.view.ModelObjectActorReference" xmlTag="ModelObjectActorReference">
-      <property name="objectReference" xmlTag="objectReference" attribute="YES" description=""/>
-   </entity>
+	<entity
+		name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole$RestrictionStatementActorReference"
+		xmlTag="RestrictionStatementActorReference">
+		<!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
+		<property name="propertyURI" xmlTag="propertyURI" attribute="YES"
+			description="" />
+		<property name="objectURI" xmlTag="objectURI" attribute="YES"
+			description="" />
+	</entity>
+
+
+	<entity
+		name="org.openflexo.foundation.view.ModelObjectActorReference"
+		xmlTag="ModelObjectActorReference">
+		<property name="objectReference" xmlTag="objectReference"
+			attribute="YES" description="" />
+	</entity>
+
   
   <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
     <property name="isDeletedOnServer" xmlTag="isDeletedOnServer" attribute="YES" description="Unique ID generated and maintained by Flexo"/>

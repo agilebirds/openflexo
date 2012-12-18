@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 
 public class TestProjectOntologyManipulations extends FlexoTestCase {
@@ -36,7 +35,6 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	private static FlexoProject _project;
 
 	private static File _resourceCenterDirectory;
-	private static FlexoResourceCenterService _resourceCenter;
 
 	public TestProjectOntologyManipulations(String name) {
 		super(name);
@@ -47,7 +45,6 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	 */
 	public void test0InstanciateNewResourceCenter() {
 		log("test0InstanciateNewResourceCenter()");
-		_resourceCenter = getNewResourceCenter(TestProjectOntologyManipulations.class.getSimpleName());
 	}
 
 	/**
@@ -56,7 +53,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	public void test1CreateProject() {
 		log("test1CreateProject()");
 
-		_editor = createProject("TestOntology", _resourceCenter);
+		_editor = createProject("TestOntology");
 		_project = _editor.getProject();
 	}
 

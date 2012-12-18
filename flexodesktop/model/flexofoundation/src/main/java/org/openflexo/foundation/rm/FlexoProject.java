@@ -403,9 +403,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	/**
 	 *
 	 */
-	private FlexoProject() {
+	private FlexoProject(FlexoServiceManager serviceManager) {
 		super(null);
-		xmlMappings = getServiceManager().getXMLSerializationService();
+		this.serviceManager = serviceManager;
+		xmlMappings = serviceManager.getXMLSerializationService();
 		stringEncoder = new FlexoProjectStringEncoder();
 		stringEncoder._initialize();
 		// Just to be sure, we initialize them here
@@ -433,7 +434,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param builder
 	 */
 	public FlexoProject(FlexoProjectBuilder builder) {
-		this();
+		this(builder.serviceManager);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Deserialization for FlexoProject started");
 		}
@@ -444,8 +445,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		initializeDeserialization(builder);
 	}
 
-	protected FlexoProject(File aProjectDirectory) {
-		this();
+	protected FlexoProject(File aProjectDirectory, FlexoServiceManager serviceManager) {
+		this(serviceManager);
 		setProjectDirectory(aProjectDirectory);
 		projectName = aProjectDirectory.getName().replaceAll(BAD_CHARACTERS_REG_EXP, " ");
 		if (projectName.endsWith(".prj")) {
@@ -1848,7 +1849,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
 			FlexoServiceManager serviceManager) {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
-		FlexoProject project = new FlexoProject(aProjectDirectory);
+		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
 		project.setServiceManager(serviceManager);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);

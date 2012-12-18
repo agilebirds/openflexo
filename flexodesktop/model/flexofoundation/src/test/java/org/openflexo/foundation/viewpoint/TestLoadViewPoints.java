@@ -2,22 +2,12 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
-import org.openflexo.foundation.xml.XMLSerializationService;
-import org.openflexo.toolbox.FileResource;
 
 public class TestLoadViewPoints extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestLoadViewPoints.class.getPackage().getName());
-
-	private static UserResourceCenter resourceCenter;
-	private static ViewPointLibrary viewPointLibrary;
 
 	public TestLoadViewPoints(String name) {
 		super(name);
@@ -30,18 +20,7 @@ public class TestLoadViewPoints extends FlexoTestCase {
 
 		log("test0InstantiateResourceCenter()");
 
-		FlexoServiceManager sm = new FlexoServiceManager();
-		XMLSerializationService xmlSerializationService = XMLSerializationService.createInstance();
-		sm.registerService(xmlSerializationService);
-		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-		rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource("src/test/resources/TestResourceCenter")));
-		sm.registerService(rcService);
-		sm.registerService(DefaultTechnologyAdapterService.getNewInstance(rcService));
-		viewPointLibrary = new ViewPointLibrary();
-		sm.registerService(viewPointLibrary);
-
-		logger.info("ResourceCenter:" + rcService.getResourceCenters());
-
+		instanciateTestServiceManager();
 	}
 
 	private void testLoadViewPoint(String viewPointURI) {

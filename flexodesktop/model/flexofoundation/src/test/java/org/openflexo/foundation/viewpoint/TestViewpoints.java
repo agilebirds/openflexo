@@ -21,18 +21,14 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
-import org.openflexo.toolbox.FileResource;
 
 public class TestViewpoints extends FlexoTestCase {
 
@@ -52,14 +48,7 @@ public class TestViewpoints extends FlexoTestCase {
 
 		log("test0InstantiateResourceCenter()");
 
-		FlexoServiceManager sm = new FlexoServiceManager();
-		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-		rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource("src/test/resources/TestResourceCenter")));
-		sm.registerService(rcService);
-		viewPointLibrary = new ViewPointLibrary();
-		sm.registerService(viewPointLibrary);
-
-		logger.info("ResourceCenter:" + rcService.getResourceCenters());
+		instanciateTestServiceManager();
 
 	}
 

@@ -207,6 +207,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		}
 		if (StringUtils.isEmpty(returned)) {
 			logger.warning("Could not find URI for ontology stored in file " + aFile.getAbsolutePath());
+			return aFile.toURI().toString();
 		}
 		return returned;
 

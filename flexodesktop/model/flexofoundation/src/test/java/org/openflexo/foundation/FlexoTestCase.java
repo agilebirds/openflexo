@@ -66,6 +66,7 @@ import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -102,6 +103,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.KeyValueCoder;
 
@@ -117,8 +119,8 @@ public abstract class FlexoTestCase extends TestCase {
 	protected static FlexoProject _project;
 	protected static File _projectDirectory;
 	protected static String _projectIdentifier;
-	protected static FlexoResourceCenterService resourceCenterService;
-
+	protected static FlexoServiceManager serviceManager;
+	protected static UserResourceCenter resourceCenter;
 	static {
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.WARNING, null);
@@ -183,8 +185,32 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
+	protected static FlexoServiceManager instanciateTestServiceManager() {
+		serviceManager = new DefaultFlexoServiceManager() {
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return new FlexoTestEditor(null);
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
+				rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource(
+						"src/test/resources/TestResourceCenter")));
+				return rcService;
+			}
+		};
+		return serviceManager;
+	}
+
 	protected FlexoEditor createProject(String projectName) {
-		return createProject(projectName, getNewResourceCenter(projectName));
+		return createProject(projectName, instanciateTestServiceManager());
 	}
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {
@@ -197,11 +223,11 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
-	protected FlexoEditor createProject(String projectName, FlexoResourceCenterService resourceCenterService) {
-		return createProject(projectName, resourceCenterService, true);
+	protected FlexoEditor createProject(String projectName, FlexoServiceManager serviceManager) {
+		return createProject(projectName, serviceManager, true);
 	}
 
-	protected FlexoEditor createProject(String projectName, FlexoResourceCenterService resourceCenterService, boolean createRootProcess) {
+	protected FlexoEditor createProject(String projectName, FlexoServiceManager serviceManager, boolean createRootProcess) {
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(projectName, "");
@@ -213,8 +239,8 @@ public abstract class FlexoTestCase extends TestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
-				getResourceCenterService(resourceCenterService).getFlexoServiceManager());
+
+		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, serviceManager);
 		if (createRootProcess) {
 			// Added this line to make all previous tests still work
 			createSubProcess(_projectIdentifier, null, reply);
@@ -235,13 +261,8 @@ public abstract class FlexoTestCase extends TestCase {
 		return reply;
 	}
 
-	protected static FlexoResourceCenterService getResourceCenterService(FlexoResourceCenterService resourceCenterService2) {
-		if (resourceCenterService2 != null) {
-			return resourceCenterService2;
-		} else if (resourceCenterService == null) {
-			resourceCenterService = getNewResourceCenter("TestDefaultRC");
-		}
-		return resourceCenterService;
+	protected static FlexoServiceManager getFlexoServiceManager() {
+		return serviceManager;
 	}
 
 	protected void saveProject(FlexoProject prj) {
@@ -252,18 +273,15 @@ public abstract class FlexoTestCase extends TestCase {
 		}
 	}
 
-	@Deprecated
 	protected FlexoEditor reloadProject(File prjDir) {
-		return reloadProject(prjDir, null, null);
+		return reloadProject(prjDir, serviceManager.getProjectReferenceLoader());
 	}
 
-	protected FlexoEditor reloadProject(File prjDir, FlexoResourceCenterService resourceCenterService,
-			FlexoProjectReferenceLoader projectReferenceLoader) {
+	protected FlexoEditor reloadProject(File prjDir, FlexoProjectReferenceLoader projectReferenceLoader) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
-					new DefaultProjectLoadingHandler(), projectReferenceLoader, getResourceCenterService(resourceCenterService)
-							.getFlexoServiceManager()));
+					new DefaultProjectLoadingHandler(), projectReferenceLoader, serviceManager));
 			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {

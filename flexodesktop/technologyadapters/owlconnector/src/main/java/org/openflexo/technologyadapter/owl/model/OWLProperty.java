@@ -63,6 +63,7 @@ public abstract class OWLProperty extends OWLConcept<OntProperty> implements IFl
 		rangeStatementList = new ArrayList<RangeStatement>();
 		domainList = null;
 		rangeList = null;
+		referencingRestrictions = new ArrayList<OWLRestriction>();
 	}
 
 	/**

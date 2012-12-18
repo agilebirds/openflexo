@@ -27,15 +27,13 @@ import java.util.logging.Logger;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.DefaultFlexoServiceManager;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.UserResourceCenter;
-import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
@@ -126,18 +124,20 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 
 		final ViewPointLibrary viewPointLibrary;
 
-		final FlexoServiceManager serviceManager = new FlexoServiceManager();
-		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-		rcService.addToResourceCenters(new UserResourceCenter(new FileResource("TestResourceCenter")));
-		serviceManager.registerService(rcService);
-		viewPointLibrary = new ViewPointLibrary();
-		serviceManager.registerService(viewPointLibrary);
-		TechnologyAdapterService taService = DefaultTechnologyAdapterService.getNewInstance(rcService);
-		serviceManager.registerService(taService);
+		final FlexoServiceManager serviceManager = new DefaultFlexoServiceManager() {
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return null;
+			}
+		};
 		TechnologyAdapterControllerService tacService = DefaultTechnologyAdapterControllerService.getNewInstance();
 		serviceManager.registerService(tacService);
-		final InformationSpace informationSpace = new InformationSpace();
-		serviceManager.registerService(informationSpace);
+		final InformationSpace informationSpace = serviceManager.getInformationSpace();
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
@@ -165,5 +165,4 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		};
 		editor.launch();
 	}
-
 }

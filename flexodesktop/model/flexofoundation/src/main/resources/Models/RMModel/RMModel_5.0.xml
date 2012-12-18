@@ -120,10 +120,8 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
-  <entity name="org.openflexo.technologyadapter.owl.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+  <entity name="org.openflexo.technologyadapter.owl.rm.OWLOntologyResource" xmlTag="ProjectOntology"/>
   
-  <entity name="org.openflexo.foundation.ontology.xsd.FlexoXMLModelResource" xmlTag="XMLModel"/>
-
   <entity name="org.openflexo.foundation.rm.FlexoViewLibraryResource" xmlTag="ShemaLibrary"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
