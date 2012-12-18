@@ -19,8 +19,10 @@
  */
 package org.openflexo.technologyadapter.xsd;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
@@ -48,8 +50,18 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	}
 
 	@Override
-	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		// TODO
+		return null;
+	}
+
+	@Override
+	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+		return super.defaultPatternRoleName(patternRoleClass);
+	}
+
+	@Override
+	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		return null;
 	}
 

@@ -3,6 +3,7 @@ package org.openflexo.technologyadapter.xsd.controller;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.gui.XSDIconLibrary;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
@@ -74,4 +75,14 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 		return null;
 	}
 
+	/**
+	 * Return icon representating supplied pattern role
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+		return null;
+	}
 }

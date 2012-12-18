@@ -743,7 +743,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
-		System.out.println("Et hop, on notifie");
 		setChanged();
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
@@ -969,7 +968,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			returned.add(modelSlot.getMetaModelResource().getMetaModel());
+			if (modelSlot.getMetaModelResource() != null) {
+				returned.add(modelSlot.getMetaModelResource().getMetaModel());
+			}
 		}
 		return returned;
 	}

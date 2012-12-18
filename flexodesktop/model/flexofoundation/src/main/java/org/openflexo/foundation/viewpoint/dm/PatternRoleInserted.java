@@ -28,7 +28,7 @@ public class PatternRoleInserted extends OEDataModification {
 	private EditionPattern _parent;
 
 	public PatternRoleInserted(PatternRole patternRole, EditionPattern parent) {
-		super(null, patternRole);
+		super("patternRoles", null, patternRole);
 		_parent = parent;
 	}
 

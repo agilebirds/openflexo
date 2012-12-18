@@ -34,7 +34,7 @@ public class ModelSlotRemoved extends OEDataModification {
 	private ViewPoint viewPoint;
 
 	public ModelSlotRemoved(ModelSlot<?, ?> modelSlot, ViewPoint viewPoint) {
-		super(modelSlot, null);
+		super("modelSlots", modelSlot, null);
 		this.viewPoint = viewPoint;
 	}
 

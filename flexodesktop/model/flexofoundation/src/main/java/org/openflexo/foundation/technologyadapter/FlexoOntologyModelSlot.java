@@ -2,7 +2,7 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
@@ -22,6 +22,7 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 		super(builder);
 	}
 
-	public abstract <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
+	@Override
+	public abstract <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
 
 }

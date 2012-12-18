@@ -305,14 +305,20 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		if (element == null) {
 			return false;
 		}
-		return _addActions.get(element).size() > 1;
+		if (_addActions.get(element) != null) {
+			return _addActions.get(element).size() > 1;
+		}
+		return false;
 	}
 
 	boolean hasMultipleMinusActions(FIBBrowserElement element) {
 		if (element == null) {
 			return false;
 		}
-		return _removeActions.get(element).size() > 1;
+		if (_removeActions.get(element) != null) {
+			return _removeActions.get(element).size() > 1;
+		}
+		return false;
 	}
 
 	private JPopupMenu plusActionMenu = null;

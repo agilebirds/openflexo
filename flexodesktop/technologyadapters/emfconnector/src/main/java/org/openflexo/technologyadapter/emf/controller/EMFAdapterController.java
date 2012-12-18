@@ -3,6 +3,7 @@ package org.openflexo.technologyadapter.emf.controller;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.gui.EMFIconLibrary;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -69,6 +70,17 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	@Override
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
 		return EMFIconLibrary.iconForObject(objectClass);
+	}
+
+	/**
+	 * Return icon representating supplied pattern role
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+		return null;
 	}
 
 }

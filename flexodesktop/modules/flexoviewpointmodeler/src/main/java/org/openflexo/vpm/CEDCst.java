@@ -58,6 +58,7 @@ public class CEDCst {
 
 	// ViewPoint edition
 	public static File CREATE_MODEL_SLOT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateModelSlotDialog.fib");
+	public static File CREATE_PATTERN_ROLE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePatternRoleDialog.fib");
 	public static File CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
 	public static File CREATE_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePaletteDialog.fib");
 	public static File CREATE_VIEW_POINT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewPointDialog.fib");

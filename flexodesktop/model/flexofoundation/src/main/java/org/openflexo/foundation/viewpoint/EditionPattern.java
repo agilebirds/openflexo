@@ -265,6 +265,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return testName;
 	}
 
+	@Deprecated
 	public PatternRole createShapePatternRole() {
 		ShapePatternRole newPatternRole = new ShapePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
@@ -272,6 +273,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public ConnectorPatternRole createConnectorPatternRole() {
 		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
@@ -279,6 +281,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public DiagramPatternRole createDiagramPatternRole() {
 		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
@@ -286,6 +289,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
 		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
@@ -293,6 +297,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public EditionPatternPatternRole createEditionPatternPatternRole() {
 		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
@@ -300,6 +305,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));

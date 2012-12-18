@@ -53,15 +53,16 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 
 		new VPMSetPropertyInitializer(this);
 
-		// ViewPointEditor perspective
+		// ViewPoint perspective
 		new CreateViewPointInitializer(this);
 		new CreateModelSlotInitializer(this);
+		new CreatePatternRoleInitializer(this);
 		new AddEditionPatternInitializer(this);
 		new DeleteEditionPatternInitializer(this);
 		new DuplicateEditionPatternInitializer(this);
 		new ShowLanguageRepresentationInitializer(this);
 
-		// CalcDrawing edition
+		// ExampleDiagram edition
 		new CreateExampleDiagramInitializer(this);
 		new DeleteExampleDrawingInitializer(this);
 		new PushToPaletteInitializer(this);
@@ -69,7 +70,7 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new DeclareConnectorInEditionPatternInitializer(this);
 		new DeleteCalcShemaElementsInitializer(this);
 
-		// Palette edition
+		// DiagramPalette edition
 		new CreateDiagramPaletteInitializer(this);
 		new DeleteCalcPaletteInitializer(this);
 		new AddCalcPaletteElementInitializer(this);

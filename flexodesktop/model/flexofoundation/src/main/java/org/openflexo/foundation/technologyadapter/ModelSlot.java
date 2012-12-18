@@ -2,7 +2,9 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -10,24 +12,14 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.PropertyPatternRole;
+import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicPropertyPatternRolePathElement;
 
 /**
  * A model slot is a named object providing symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
@@ -65,6 +57,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	protected ModelSlot(ViewPointBuilder builder) {
 		super(builder);
+
 		if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
 			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
@@ -78,6 +71,20 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	@Override
 	public String getURI() {
 		return getViewPoint().getURI() + "." + getName();
+	}
+
+	public abstract <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
+
+	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "editionPattern";
+		} else if (FlexoModelObjectPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "modelObject";
+		} else if (PrimitivePatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "primitive";
+		}
+		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
+		return "???";
 	}
 
 	@Override
@@ -189,12 +196,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	public abstract Class<? extends TechnologyAdapter<M, MM>> getTechnologyAdapterClass();
 
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container);
 
-	public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
+	/*public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
 		if (pr instanceof OntologicObjectPatternRole) {
 			if (pr instanceof ClassPatternRole) {
 				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
@@ -218,6 +222,30 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		} else {
 			return null;
 		}
+	}*/
+
+	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
+
+	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+		if (availablePatternRoleTypes == null) {
+			availablePatternRoleTypes = computeAvailablePatternRoleTypes();
+		}
+		return availablePatternRoleTypes;
+	}
+
+	private List<Class<? extends PatternRole>> computeAvailablePatternRoleTypes() {
+		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole>>();
+		Class<?> cl = getClass();
+		if (cl.isAnnotationPresent(DeclarePatternRoles.class)) {
+			DeclarePatternRoles allPatternRoles = cl.getAnnotation(DeclarePatternRoles.class);
+			for (DeclarePatternRole patternRoleDeclaration : allPatternRoles.value()) {
+				availablePatternRoleTypes.add(patternRoleDeclaration.value());
+			}
+		}
+		availablePatternRoleTypes.add(EditionPatternPatternRole.class);
+		availablePatternRoleTypes.add(FlexoModelObjectPatternRole.class);
+		availablePatternRoleTypes.add(PrimitivePatternRole.class);
+		return availablePatternRoleTypes;
 	}
 
 }

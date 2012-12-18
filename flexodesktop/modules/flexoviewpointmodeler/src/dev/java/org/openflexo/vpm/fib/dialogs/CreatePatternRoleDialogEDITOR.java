@@ -25,11 +25,11 @@ import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
+import org.openflexo.foundation.viewpoint.action.CreatePatternRole;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.CEDCst;
 
-public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
+public class CreatePatternRoleDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
@@ -38,17 +38,17 @@ public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
 		ViewPoint vp = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		CreateModelSlot action = CreateModelSlot.actionType.makeNewAction(vp, null, null);
+		CreatePatternRole action = CreatePatternRole.actionType.makeNewAction(vp.getEditionPatterns().get(0), null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.CREATE_MODEL_SLOT_DIALOG_FIB;
+		return CEDCst.CREATE_PATTERN_ROLE_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {
-		main(CreateModelSlotDialogEDITOR.class);
+		main(CreatePatternRoleDialogEDITOR.class);
 	}
 
 }

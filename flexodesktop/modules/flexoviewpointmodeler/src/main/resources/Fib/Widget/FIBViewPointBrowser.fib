@@ -15,12 +15,17 @@
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" icon="controller.iconForObject(patternRole)" isEditable="false" filtered="false" defaultVisible="true" name="patternRole" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" label="editionScheme.name" icon="controller.iconForObject(editionScheme)" isEditable="false" filtered="false" defaultVisible="true" name="editionScheme">
       <Children data="editionScheme.parameters" name="parameters" />
+      <Children data="editionScheme.actions" name="actions" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" label="&quot;Inspector&quot;" icon="controller.iconForObject(inspector)" isEditable="false" filtered="false" defaultVisible="true" name="inspector">
       <Children data="inspector.entries" name="entries" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" icon="controller.iconForObject(inspectorEntry)" isEditable="false" filtered="false" defaultVisible="true" name="inspectorEntry" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" icon="controller.iconForObject(editionSchemeParameter)" isEditable="false" filtered="false" defaultVisible="true" name="editionSchemeParameter" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionAction" icon="controller.iconForObject(editionAction)" isEditable="false" filtered="false" defaultVisible="true" name="editionAction" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ControlStructureAction" icon="controller.iconForObject(controlStructureAction)" isEditable="false" filtered="false" defaultVisible="true" name="controlStructureAction">
+      <Children data="controlStructureAction.actions" name="children" />
+    </BrowserElement>
   </Browser>
   <LocalizedDictionary />
 </Panel>
