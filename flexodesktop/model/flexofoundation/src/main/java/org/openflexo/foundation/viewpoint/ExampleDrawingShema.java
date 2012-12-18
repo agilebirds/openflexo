@@ -147,7 +147,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		_drawingFile = drawingFile;
 		logger.info("Registering example diagram for viewpoint " + viewpoint.getName());
 		relativePathFileConverter = new RelativePathFileConverter(viewpoint.getViewPointDirectory());
-		tryToLoadScreenshotImage();
+		// tryToLoadScreenshotImage();
 		initialized = true;
 	}
 
@@ -308,8 +308,10 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		if (screenshotImage == null || screenshotModified) {
 			if (screenshotModified) {
 				logger.info("Rebuilding screenshot for " + this + " because screenshot is modified");
+				buildAndSaveScreenshotImage();
+			} else {
+				tryToLoadScreenshotImage();
 			}
-			buildAndSaveScreenshotImage();
 		}
 		return screenshotImage;
 	}
