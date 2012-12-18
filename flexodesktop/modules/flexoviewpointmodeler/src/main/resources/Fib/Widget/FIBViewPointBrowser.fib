@@ -8,9 +8,9 @@
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.ModelSlot" label="(((modelSlot.name + &quot; - [&quot;) + modelSlot.technologyAdapter.name) + &quot;]&quot;)" icon="controller.iconForObject(modelSlot)" isEditable="false" filtered="false" defaultVisible="true" name="modelSlot" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" icon="controller.iconForObject(editionPattern)" isEditable="false" filtered="false" defaultVisible="true" name="editionPattern">
       <Children data="editionPattern.childEditionPatterns" name="children" />
-      <Children data="editionPattern.patternRoles" name="patternRoles" />
-      <Children data="editionPattern.editionSchemes" name="editionSchemes" />
       <Children data="editionPattern.inspector" name="inspector" />
+      <Children data="editionPattern.structuralFacet" name="structural" />
+      <Children data="editionPattern.behaviouralFacet" name="behavioural" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" icon="controller.iconForObject(patternRole)" isEditable="false" filtered="false" defaultVisible="true" name="patternRole" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" label="editionScheme.name" icon="controller.iconForObject(editionScheme)" isEditable="false" filtered="false" defaultVisible="true" name="editionScheme">
@@ -25,6 +25,12 @@
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionAction" icon="controller.iconForObject(editionAction)" isEditable="false" filtered="false" defaultVisible="true" name="editionAction" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ControlStructureAction" icon="controller.iconForObject(controlStructureAction)" isEditable="false" filtered="false" defaultVisible="true" name="controlStructureAction">
       <Children data="controlStructureAction.actions" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPatternStructuralFacet" label="&quot;Structural&quot;" icon="controller.iconForObject(editionPatternStructuralFacet)" isEditable="false" filtered="false" defaultVisible="true" name="editionPatternStructuralFacet">
+      <Children data="editionPatternStructuralFacet.editionPattern.patternRoles" name="patternRoles" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPatternBehaviouralFacet" label="&quot;Behavioural&quot;" icon="controller.iconForObject(editionPatternBehaviouralFacet)" isEditable="false" filtered="false" defaultVisible="true" name="editionPatternBehaviouralFacet">
+      <Children data="editionPatternBehaviouralFacet.editionPattern.editionSchemes" name="editionSchemes" />
     </BrowserElement>
   </Browser>
   <LocalizedDictionary />

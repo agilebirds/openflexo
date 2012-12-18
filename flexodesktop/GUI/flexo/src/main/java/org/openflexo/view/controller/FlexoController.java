@@ -132,6 +132,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -2011,6 +2012,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		} else if (object instanceof InformationSpace) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
+		} else if (object instanceof FlexoFacet) {
+			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof FlexoResourceCenter) {
 			return IconLibrary.RESOURCE_CENTER_ICON;
 		} else if (object instanceof WorkflowModelObject) {

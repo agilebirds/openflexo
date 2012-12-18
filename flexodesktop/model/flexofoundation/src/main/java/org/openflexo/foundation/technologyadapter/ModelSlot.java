@@ -242,9 +242,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 				availablePatternRoleTypes.add(patternRoleDeclaration.value());
 			}
 		}
-		availablePatternRoleTypes.add(EditionPatternPatternRole.class);
-		availablePatternRoleTypes.add(FlexoModelObjectPatternRole.class);
-		availablePatternRoleTypes.add(PrimitivePatternRole.class);
+		// availablePatternRoleTypes.add(EditionPatternPatternRole.class);
+		// availablePatternRoleTypes.add(FlexoModelObjectPatternRole.class);
+		// availablePatternRoleTypes.add(PrimitivePatternRole.class);
 		return availablePatternRoleTypes;
 	}
 

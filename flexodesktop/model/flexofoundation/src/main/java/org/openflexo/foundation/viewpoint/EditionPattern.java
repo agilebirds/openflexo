@@ -73,6 +73,9 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private EditionPattern parentEditionPattern = null;
 	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
 
+	private EditionPatternStructuralFacet structuralFacet;
+	private EditionPatternBehaviouralFacet behaviouralFacet;
+
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
@@ -94,6 +97,16 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		if (builder != null) {
 			setViewPoint(builder.getViewPoint());
 		}
+		structuralFacet = new EditionPatternStructuralFacet(this);
+		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+	}
+
+	public EditionPatternStructuralFacet getStructuralFacet() {
+		return structuralFacet;
+	}
+
+	public EditionPatternBehaviouralFacet getBehaviouralFacet() {
+		return behaviouralFacet;
 	}
 
 	@Override
