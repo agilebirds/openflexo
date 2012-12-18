@@ -153,7 +153,6 @@ import org.openflexo.prefs.PreferencesWindow;
 import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
@@ -181,8 +180,7 @@ import com.google.common.collect.Multimap;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler,
-		PropertyChangeListener, HasPropertyChangeSupport {
+public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler, PropertyChangeListener {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
@@ -1445,16 +1443,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	}
 
-	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		return propertyChangeSupport;
-	}
-
-	@Override
-	public String getDeletedProperty() {
-		return DISPOSED;
-	}
-
 	public boolean isDisposed() {
 		return disposed;
 	}
@@ -1802,7 +1790,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
-		if (iconForObject != null && object instanceof FlexoModelObject && getProject() != null
+		if (iconForObject != null && getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
 				&& ((FlexoModelObject) object).getProject() != getProject()
 				&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
