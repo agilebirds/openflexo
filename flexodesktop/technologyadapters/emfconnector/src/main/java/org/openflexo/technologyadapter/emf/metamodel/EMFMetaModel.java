@@ -37,13 +37,19 @@ import org.eclipse.emf.ecore.EPackage;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 
@@ -53,18 +59,21 @@ import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
  * @author gbesancon
  */
 public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaModel<EMFMetaModel>, IFlexoOntologyMetaModel {
+	/** MetaModel Resource. */
+	protected EMFMetaModelResource metaModelResource;
+	/** Adapter. */
+	protected final EMFTechnologyAdapter adapter;
 	/** Package. */
 	protected final EPackage ePackage;
 	/** Converter. */
 	protected final EMFMetaModelConverter converter;
 
-	private EMFMetaModelResource metaModelResource;
-
 	/**
 	 * Constructor.
 	 */
-	public EMFMetaModel(EMFMetaModelConverter converter, EPackage aPackage) {
-		this.ePackage = aPackage;
+	public EMFMetaModel(EMFMetaModelConverter converter, EPackage ePackage, EMFTechnologyAdapter adapter) {
+		this.adapter = adapter;
+		this.ePackage = ePackage;
 		this.converter = converter;
 	}
 
@@ -102,6 +111,26 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+	}
+
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "EMFMetaModel." + getURI();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDescription()
 	 */
 	@Override
@@ -113,66 +142,11 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getImportedOntologies()
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
 	 */
 	@Override
-	public List<IFlexoOntology> getImportedOntologies() {
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getSubContainers()
-	 */
-	@Override
-	public List<IFlexoOntologyContainer> getSubContainers() {
-		List<IFlexoOntologyContainer> result = new ArrayList<IFlexoOntologyContainer>();
-		for (IFlexoOntologyContainer container : converter.getPackages().values()) {
-			result.add(container);
-		}
-		return result;
-	}
-
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getConcepts()
-	 */
-	@Override
-	public List<IFlexoOntologyConcept> getConcepts() {
-		return Collections.emptyList();
-	}
-
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataTypes()
-	 */
-	@Override
-	public List<IFlexoOntologyDataType> getDataTypes() {
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAnnotations()
-	 */
-	@Override
-	public List<IFlexoOntologyAnnotation> getAnnotations() {
-		List<IFlexoOntologyAnnotation> annotations = null;
-		if (ePackage.getEAnnotations() != null && ePackage.getEAnnotations().size() != 0) {
-			annotations = new ArrayList<IFlexoOntologyAnnotation>();
-			for (EAnnotation annotation : ePackage.getEAnnotations()) {
-				annotations.add(this.getConverter().convertAnnotation(this, annotation));
-			}
-		} else {
-			annotations = Collections.emptyList();
-		}
-		return annotations;
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -182,30 +156,6 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	public EMFMetaModelConverter getConverter() {
 		return converter;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#isReadOnly()
-	 */
-	@Override
-	public boolean isReadOnly() {
-		return true;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#setIsReadOnly(boolean)
-	 */
-	@Override
-	public void setIsReadOnly(boolean b) {
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "EMFMetaModel." + getURI();
 	}
 
 	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
@@ -244,4 +194,447 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 		}
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#isReadOnly()
+	 */
+	@Override
+	public boolean isReadOnly() {
+		return true;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#setIsReadOnly(boolean)
+	 */
+	@Override
+	public void setIsReadOnly(boolean b) {
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getRootConcept()
+	 */
+	@Override
+	public IFlexoOntologyClass getRootConcept() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getImportedOntologies()
+	 */
+	@Override
+	public List<IFlexoOntology> getImportedOntologies() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getSubContainers()
+	 */
+	@Override
+	public List<IFlexoOntologyContainer> getSubContainers() {
+		List<IFlexoOntologyContainer> result = new ArrayList<IFlexoOntologyContainer>();
+		for (IFlexoOntologyContainer container : converter.getPackages().values()) {
+			result.add(container);
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#getObject(java.lang.String)
+	 */
+	@Override
+	public Object getObject(String objectURI) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getOntologyObject(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyConcept getOntologyObject(String objectURI) {
+		IFlexoOntologyConcept result = null;
+		for (IFlexoOntologyConcept concept : getConcepts()) {
+			if (concept.getURI().equalsIgnoreCase(objectURI)) {
+				result = concept;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getConcepts()
+	 */
+	@Override
+	public List<IFlexoOntologyConcept> getConcepts() {
+		List<IFlexoOntologyConcept> result = new ArrayList<IFlexoOntologyConcept>();
+		result.addAll(getClasses());
+		result.addAll(getIndividuals());
+		result.addAll(getDataProperties());
+		result.addAll(getObjectProperties());
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getIndividuals()
+	 */
+	@Override
+	public List<IFlexoOntologyIndividual> getIndividuals() {
+		List<IFlexoOntologyIndividual> result = new ArrayList<IFlexoOntologyIndividual>();
+		for (IFlexoOntologyIndividual individual : converter.getEnumLiterals().values()) {
+			result.add(individual);
+		}
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getIndividual(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyIndividual getIndividual(String individualURI) {
+		IFlexoOntologyIndividual result = null;
+		for (IFlexoOntologyIndividual individual : getIndividuals()) {
+			if (individual.getURI().equalsIgnoreCase(individualURI)) {
+				result = individual;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getClasses()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyClass> getClasses() {
+		List<IFlexoOntologyClass> result = new ArrayList<IFlexoOntologyClass>();
+		for (EMFClassClass aClass : converter.getClasses().values()) {
+			result.add(aClass);
+		}
+		for (EMFEnumClass aClass : converter.getEnums().values()) {
+			result.add(aClass);
+		}
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getClass(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyClass getClass(String classURI) {
+		IFlexoOntologyClass result = null;
+		for (IFlexoOntologyClass aClass : getClasses()) {
+			if (aClass.getURI().equalsIgnoreCase(classURI)) {
+				result = aClass;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataTypes()
+	 */
+	@Override
+	public List<IFlexoOntologyDataType> getDataTypes() {
+		List<IFlexoOntologyDataType> result = new ArrayList<IFlexoOntologyDataType>();
+		for (IFlexoOntologyDataType dataType : converter.getDataTypes().values()) {
+			result.add(dataType);
+		}
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty(String objectURI) {
+		IFlexoOntologyStructuralProperty result = null;
+		if (result == null) {
+			result = getDataProperty(objectURI);
+		}
+		if (result == null) {
+			result = getObjectProperty(objectURI);
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataProperties()
+	 */
+	@Override
+	public List<IFlexoOntologyDataProperty> getDataProperties() {
+		List<IFlexoOntologyDataProperty> result = new ArrayList<IFlexoOntologyDataProperty>();
+		for (IFlexoOntologyDataProperty dataProperty : converter.getDataAttributes().values()) {
+			result.add(dataProperty);
+		}
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyDataProperty getDataProperty(String propertyURI) {
+		IFlexoOntologyDataProperty result = null;
+		for (IFlexoOntologyDataProperty dataProperty : getDataProperties()) {
+			if (dataProperty.getURI().equalsIgnoreCase(propertyURI)) {
+				result = dataProperty;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getObjectProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyObjectProperty> getObjectProperties() {
+		List<IFlexoOntologyObjectProperty> result = new ArrayList<IFlexoOntologyObjectProperty>();
+		for (IFlexoOntologyObjectProperty objectProperty : converter.getObjectAttributes().values()) {
+			result.add(objectProperty);
+		}
+		for (IFlexoOntologyObjectProperty objectProperty : converter.getReferences().values()) {
+			result.add(objectProperty);
+		}
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getObjectProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyObjectProperty getObjectProperty(String propertyURI) {
+		IFlexoOntologyObjectProperty result = null;
+		for (IFlexoOntologyObjectProperty objectProperty : getObjectProperties()) {
+			if (objectProperty.getURI().equalsIgnoreCase(propertyURI)) {
+				result = objectProperty;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAnnotations()
+	 */
+	@Override
+	public List<IFlexoOntologyAnnotation> getAnnotations() {
+		List<IFlexoOntologyAnnotation> annotations = null;
+		if (ePackage.getEAnnotations() != null && ePackage.getEAnnotations().size() != 0) {
+			annotations = new ArrayList<IFlexoOntologyAnnotation>();
+			for (EAnnotation annotation : ePackage.getEAnnotations()) {
+				annotations.add(this.getConverter().convertAnnotation(this, annotation));
+			}
+		} else {
+			annotations = Collections.emptyList();
+		}
+		return annotations;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAccessibleIndividuals()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyIndividual> getAccessibleIndividuals() {
+		return getIndividuals();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAccessibleClasses()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyClass> getAccessibleClasses() {
+		return getClasses();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAccessibleObjectProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyObjectProperty> getAccessibleObjectProperties() {
+		return getObjectProperties();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getAccessibleDataProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyDataProperty> getAccessibleDataProperties() {
+		return getDataProperties();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredOntologyObject(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyConcept getDeclaredOntologyObject(String objectURI) {
+		return getOntologyObject(objectURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredIndividual(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyIndividual getDeclaredIndividual(String individualURI) {
+		return getIndividual(individualURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredClass(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyClass getDeclaredClass(String classURI) {
+		return getClass(classURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyStructuralProperty getDeclaredProperty(String objectURI) {
+		return getProperty(objectURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredDataProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyDataProperty getDeclaredDataProperty(String propertyURI) {
+		return getDataProperty(propertyURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getDeclaredObjectProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyObjectProperty getDeclaredObjectProperty(String propertyURI) {
+		return getObjectProperty(propertyURI);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.FlexoMetaModel#getTechnologyAdapter()
+	 */
+	@Override
+	public EMFTechnologyAdapter getTechnologyAdapter() {
+		return adapter;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getFlexoOntology()
+	 */
+	@Override
+	public IFlexoOntology getFlexoOntology() {
+		return this;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntology()
+	 */
+	@Override
+	public boolean isOntology() {
+		return true;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyClass()
+	 */
+	@Override
+	public boolean isOntologyClass() {
+		return false;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyIndividual()
+	 */
+	@Override
+	public boolean isOntologyIndividual() {
+		return false;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyObjectProperty()
+	 */
+	@Override
+	public boolean isOntologyObjectProperty() {
+		return false;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyDataProperty()
+	 */
+	@Override
+	public boolean isOntologyDataProperty() {
+		return false;
+	}
 }
