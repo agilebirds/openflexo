@@ -299,6 +299,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentLocation(FlexoEditor editor, FlexoModelObject object, FlexoPerspective perspective) {
+		if (isDeleted()) {
+			return;
+		}
 		if (editor == null) {
 			editor = getCurrentEditor();
 		}
