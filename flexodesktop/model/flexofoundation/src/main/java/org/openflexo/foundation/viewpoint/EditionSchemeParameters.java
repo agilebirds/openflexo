@@ -24,42 +24,47 @@ import java.util.Collection;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 
-public class EditionPatternBehaviouralFacet extends EditionPatternObject implements FlexoFacet<EditionPattern> {
+public class EditionSchemeParameters extends EditionSchemeObject implements FlexoFacet<EditionScheme> {
 
-	private EditionPattern editionPattern;
+	private EditionScheme editionScheme;
 
-	public EditionPatternBehaviouralFacet(EditionPattern editionPattern) {
+	public EditionSchemeParameters(EditionScheme editionScheme) {
 		super(null);
-		this.editionPattern = editionPattern;
+		this.editionScheme = editionScheme;
 	}
 
 	@Override
-	public EditionPattern getEditionPattern() {
-		return editionPattern;
+	public EditionScheme getEditionScheme() {
+		return editionScheme;
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
+		return getEditionScheme().getBindingModel();
 	}
 
 	@Override
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return getEditionPattern().getEditionSchemes();
+		return getEditionScheme().getParameters();
 	}
 
 	@Override
-	public EditionPattern getObject() {
-		return getEditionPattern();
+	public EditionScheme getObject() {
+		return getEditionScheme();
 	}
 
 	@Override
 	public String getURI() {
-		return getEditionPattern().getURI();
+		return getEditionScheme().getURI();
 	}
 
 	@Override
 	public ViewPoint getViewPoint() {
 		return getEditionPattern().getViewPoint();
+	}
+
+	@Override
+	public EditionPattern getEditionPattern() {
+		return getEditionScheme().getEditionPattern();
 	}
 }

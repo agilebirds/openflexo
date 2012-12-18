@@ -68,6 +68,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private EditionPattern _editionPattern;
 
+	private EditionSchemeParameters editionSchemeParameters;
+
 	private boolean definePopupDefaultSize = false;
 	private int width = 800;
 	private int height = 600;
@@ -81,6 +83,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		super(builder);
 		actions = new Vector<EditionAction<?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
+		editionSchemeParameters = new EditionSchemeParameters(this);
+	}
+
+	public EditionSchemeParameters getEditionSchemeParameters() {
+		return editionSchemeParameters;
 	}
 
 	@Override

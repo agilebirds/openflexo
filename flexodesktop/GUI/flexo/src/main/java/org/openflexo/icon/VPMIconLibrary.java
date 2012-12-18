@@ -153,6 +153,20 @@ public class VPMIconLibrary extends IconLibrary {
 	}
 
 	public static ImageIcon iconForObject(ViewPointObject object) {
+
+		if (object instanceof PatternRole && ((PatternRole) object).getModelSlot() != null) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((PatternRole) object).getModelSlot()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
+			}
+		} else if (object instanceof EditionAction && ((EditionAction) object).getModelSlot() != null) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+			}
+		}
 		if (object instanceof ModelSlot) {
 			return MODEL_SLOT_ICON;
 		} else if (object instanceof EditionPatternInspector) {

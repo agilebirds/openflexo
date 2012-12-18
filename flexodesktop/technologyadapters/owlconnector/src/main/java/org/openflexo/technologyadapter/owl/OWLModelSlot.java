@@ -9,7 +9,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -48,8 +48,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
 		@DeclarePatternRole(SubClassStatementPatternRole.class) // Subclass statement */
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddOWLIndividual.class), // Add instance
-		@DeclareEditionAction(AddOWLClass.class), // Add class
-		@DeclareEditionAction(DeleteAction.class) // Delete
+		@DeclareEditionAction(AddOWLClass.class) // Add class
 })
 public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
 
@@ -84,6 +83,14 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 		}
 	}
 
+	/**
+	 * Creates and return a new {@link PatternRole} of supplied class.<br>
+	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
+	 * {@link PatternRole} types related to OWL technology
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -131,5 +138,24 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 			return "fact";
 		}
 		return super.defaultPatternRoleName(patternRoleClass);
+	}
+
+	/**
+	 * Creates and return a new {@link EditionAction} of supplied class.<br>
+	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
+	 * {@link EditionAction} types related to OWL technology
+	 * 
+	 * @param editionActionClass
+	 * @return
+	 */
+	@Override
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddOWLIndividual(null);
+		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddOWLClass(null);
+		} else {
+			return super.makeEditionAction(editionActionClass);
+		}
 	}
 }

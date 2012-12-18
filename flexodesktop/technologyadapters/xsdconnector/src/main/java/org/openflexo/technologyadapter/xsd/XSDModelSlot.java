@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.xsd;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -49,10 +50,37 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 		return XSDTechnologyAdapter.class;
 	}
 
+	/**
+	 * Creates and return a new {@link PatternRole} of supplied class.<br>
+	 * This responsability is delegated to the XSD-specific {@link XSDModelSlot} which manages with introspection its own
+	 * {@link PatternRole} types related to XSD/XML technology
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		// TODO
 		return null;
+	}
+
+	/**
+	 * Creates and return a new {@link EditionAction} of supplied class.<br>
+	 * This responsability is delegated to the XSD-specific {@link XSDModelSlot} which manages with introspection its own
+	 * {@link EditionAction} types related to XSD/XML technology
+	 * 
+	 * @param editionActionClass
+	 * @return
+	 */
+	@Override
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		/*if (AddXMLIndividual.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddXMLIndividual(null);
+		} else if (AddXSDClass.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddXSDClass(null);
+		} else {*/
+		return super.makeEditionAction(editionActionClass);
+		// }
 	}
 
 	@Override

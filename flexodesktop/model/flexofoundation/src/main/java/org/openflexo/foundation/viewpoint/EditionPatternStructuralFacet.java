@@ -19,13 +19,47 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-public class EditionPatternStructuralFacet extends FlexoFacet<EditionPattern> {
+import java.util.Collection;
+
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
+
+public class EditionPatternStructuralFacet extends EditionPatternObject implements FlexoFacet<EditionPattern> {
+
+	private EditionPattern editionPattern;
 
 	public EditionPatternStructuralFacet(EditionPattern editionPattern) {
-		super(editionPattern);
+		super(null);
+		this.editionPattern = editionPattern;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
-		return getObject();
+		return editionPattern;
+	}
+
+	@Override
+	public BindingModel getBindingModel() {
+		return getEditionPattern().getBindingModel();
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return getEditionPattern().getPatternRoles();
+	}
+
+	@Override
+	public EditionPattern getObject() {
+		return getEditionPattern();
+	}
+
+	@Override
+	public String getURI() {
+		return getEditionPattern().getURI();
+	}
+
+	@Override
+	public ViewPoint getViewPoint() {
+		return getEditionPattern().getViewPoint();
 	}
 }

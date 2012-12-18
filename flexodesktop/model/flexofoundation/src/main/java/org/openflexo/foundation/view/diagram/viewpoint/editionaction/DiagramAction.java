@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
 import org.openflexo.foundation.view.diagram.DiagramMetaModel;
+import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.viewpoint.AssignableAction;
@@ -35,5 +36,16 @@ public abstract class DiagramAction<T extends ViewObject> extends AssignableActi
 	protected void updatePatternRoleType()
 	{
 	}*/
+
+	@Override
+	public DiagramModelSlot getModelSlot() {
+		DiagramModelSlot returned = (DiagramModelSlot) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(DiagramModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(DiagramModelSlot.class).get(0);
+			}
+		}
+		return returned;
+	}
 
 }

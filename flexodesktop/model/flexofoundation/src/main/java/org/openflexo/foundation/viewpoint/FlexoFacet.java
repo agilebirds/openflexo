@@ -1,14 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
-public class FlexoFacet<T> {
+public interface FlexoFacet<T> {
 
-	private T object;
-
-	public FlexoFacet(T object) {
-		this.object = object;
-	}
-
-	public T getObject() {
-		return object;
-	}
+	public T getObject();
 }

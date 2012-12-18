@@ -31,11 +31,6 @@
         <CustomAction name="sort" />
       </Table>
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
-      <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" localize="true" manageDynamicModel="true" name="SpecificDescriptions" index="21" data="data" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="200" height="100" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" />
-      <CheckBox selected="false" index="22" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DontGenerate" localize="true" />
-      <Label label="dont_generate" index="23" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" name="DontGenerateLabel" localize="true" />
-    </Tab>
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
