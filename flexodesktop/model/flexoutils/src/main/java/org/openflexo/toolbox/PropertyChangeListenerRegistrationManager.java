@@ -2,6 +2,7 @@ package org.openflexo.toolbox;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -65,11 +66,13 @@ public class PropertyChangeListenerRegistrationManager {
 	}
 
 	public void removeListener(String property, PropertyChangeListener listener, HasPropertyChangeSupport next) {
-		for (PropertyChangeListenerRegistration r : registrations) {
+		Iterator<PropertyChangeListenerRegistration> i = registrations.iterator();
+		while (i.hasNext()) {
+			PropertyChangeListenerRegistration r = i.next();
 			if (r.hasPropertyChangeSupport == next
 					&& (r.propertyName == null && property == null || property != null && property.equals(r.propertyName))
 					&& r.listener == listener) {
-				r.removeListener();
+				i.remove();
 			}
 		}
 	}
