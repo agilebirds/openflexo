@@ -43,11 +43,11 @@ import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette {

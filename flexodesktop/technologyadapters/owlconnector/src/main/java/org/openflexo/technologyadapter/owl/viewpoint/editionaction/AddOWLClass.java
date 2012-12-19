@@ -44,6 +44,11 @@ public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
 	}
 
 	@Override
+	public Class<OWLClass> getOntologyClassClass() {
+		return OWLClass.class;
+	}
+
+	@Override
 	public OWLClass performAction(EditionSchemeAction action) {
 		OWLClass father = getOntologyClass();
 		String newClassName = (String) getClassName().getBindingValue(action);

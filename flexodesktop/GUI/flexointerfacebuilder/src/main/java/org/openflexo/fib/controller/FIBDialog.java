@@ -58,9 +58,21 @@ public class FIBDialog<T> extends JDialog {
 		return new FIBDialog<T>(fibComponent, data, frame, modal, localizer);
 	}
 
+	public static <T> FIBDialog<T> instanciateDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
+			FIBController controller) {
+		return new FIBDialog<T>(fibComponent, data, frame, modal, controller);
+	}
+
 	public static <T> FIBDialog<T> instanciateAndShowDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
 			LocalizedDelegate localizer) {
 		FIBDialog<T> dialog = instanciateDialog(fibComponent, data, frame, modal, localizer);
+		dialog.showDialog();
+		return dialog;
+	}
+
+	public static <T> FIBDialog<T> instanciateAndShowDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
+			FIBController controller) {
+		FIBDialog<T> dialog = instanciateDialog(fibComponent, data, frame, modal, controller);
 		dialog.showDialog();
 		return dialog;
 	}
@@ -85,13 +97,32 @@ public class FIBDialog<T> extends JDialog {
 		return instanciateAndShowDialog(fibComponent, data, frame, modal, localizer);
 	}
 
+	protected FIBDialog(FIBComponent fibComponent, T data, Window frame, boolean modal, LocalizedDelegate localizer) {
+		this(frame, modal, fibComponent, localizer);
+		getController().setDataObject(data);
+	}
+
+	protected FIBDialog(FIBComponent fibComponent, T data, Window frame, boolean modal, FIBController controller) {
+		this(frame, modal, fibComponent, controller);
+		getController().setDataObject(data);
+	}
+
 	private FIBDialog(Window window, boolean modal, FIBComponent fibComponent, LocalizedDelegate localizer) {
 		super(window, fibComponent.getParameter("title"), modal ? DEFAULT_MODALITY_TYPE : ModalityType.MODELESS);
 		initDialog(fibComponent, localizer);
 	}
 
+	private FIBDialog(Window window, boolean modal, FIBComponent fibComponent, FIBController controller) {
+		super(window, fibComponent.getParameter("title"), modal ? DEFAULT_MODALITY_TYPE : ModalityType.MODELESS);
+		initDialog(fibComponent, controller);
+	}
+
 	public void initDialog(FIBComponent fibComponent, LocalizedDelegate localizer) {
-		view = FIBController.makeView(fibComponent, localizer);
+		initDialog(fibComponent, FIBController.instanciateController(fibComponent, localizer));
+	}
+
+	public void initDialog(FIBComponent fibComponent, FIBController controller) {
+		view = FIBController.makeView(fibComponent, controller);
 		getContentPane().add(view.getResultingJComponent());
 		List<FIBButton> def = fibComponent.getDefaultButtons();
 		boolean defaultButtonSet = false;
@@ -107,11 +138,6 @@ public class FIBDialog<T> extends JDialog {
 		}
 		validate();
 		pack();
-	}
-
-	protected FIBDialog(FIBComponent fibComponent, T data, Window frame, boolean modal, LocalizedDelegate localizer) {
-		this(frame, modal, fibComponent, localizer);
-		getController().setDataObject(data);
 	}
 
 	public FIBController getController() {

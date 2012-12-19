@@ -26,25 +26,12 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
-import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
@@ -53,26 +40,6 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({
-/** Instances */
-@DeclarePatternRole(IndividualPatternRole.class),
-/** Classes */
-@DeclarePatternRole(ClassPatternRole.class),
-/** Data properties */
-@DeclarePatternRole(DataPropertyPatternRole.class),
-/** Object properties */
-@DeclarePatternRole(ObjectPropertyPatternRole.class) })
-@DeclareEditionActions({
-/** Add diagram */
-@DeclareEditionAction(AddDiagram.class),
-/** Add instance */
-@DeclareEditionAction(AddShape.class),
-/** Add class */
-@DeclareEditionAction(AddConnector.class),
-/** Add class */
-@DeclareEditionAction(GraphicalAction.class),
-/** Add class */
-@DeclareEditionAction(DeleteAction.class) })
 public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(DiagramTechnologyAdapter.class.getPackage().getName());

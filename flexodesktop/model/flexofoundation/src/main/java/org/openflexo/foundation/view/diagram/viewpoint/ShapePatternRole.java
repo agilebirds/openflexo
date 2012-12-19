@@ -6,8 +6,6 @@ import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChange
 import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationModified;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.DiagramPaletteElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {

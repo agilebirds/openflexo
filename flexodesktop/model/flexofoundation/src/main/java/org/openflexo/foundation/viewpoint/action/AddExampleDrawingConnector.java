@@ -27,9 +27,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
 public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingConnector, ExampleDiagramShape, ExampleDiagramObject> {
 

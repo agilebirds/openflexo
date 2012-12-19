@@ -184,6 +184,13 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public void removeFromContents(FlexoResource<?> resource);
 
 	/**
+	 * Returns a list of resources of supplied type contained by this resource.
+	 * 
+	 * @return the list of contained resources.
+	 */
+	public <R extends FlexoResource<?>> List<R> getContents(Class<R> resourceClass);
+
+	/**
 	 * Returns a list of resources required by this resource.
 	 * 
 	 * @return a list of resources required by this resource.

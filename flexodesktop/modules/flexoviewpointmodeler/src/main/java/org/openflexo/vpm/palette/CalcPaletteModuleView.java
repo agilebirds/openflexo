@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 

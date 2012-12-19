@@ -85,6 +85,8 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		return null;
 	}
 
+	public abstract Class<T> getOntologyClassClass();
+
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {

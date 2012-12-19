@@ -64,6 +64,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private int lastInspectedTabIndex = -1;
 	private FIBTabPanelView tabPanelView;
 
+	private FIBInspector currentlyDisplayedInspector;
+
 	public FIBInspectorPanel(ModuleInspectorController inspectorController) {
 
 		super(new BorderLayout());
@@ -182,6 +184,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	private void switchToEmptyContent() {
 		currentInspectorView = null;
+		currentlyDisplayedInspector = null;
 		removeAll();
 		add(EMPTY_CONTENT, BorderLayout.CENTER);
 		validate();
@@ -190,6 +193,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	private void switchToMultipleSelection() {
 		currentInspectorView = null;
+		currentlyDisplayedInspector = null;
 		removeAll();
 		add(MULTIPLE_SELECTION_CONTENT, BorderLayout.CENTER);
 		validate();
@@ -201,6 +205,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("switchToInspector " + newInspector + " for " + this);
 		}
+
+		currentlyDisplayedInspector = newInspector;
 
 		if (updateEPTabs) {
 			FIBView<?, ?> view = viewForInspector(newInspector);
@@ -274,4 +280,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		// System.out.println("Change for index "+lastInspectedTabIndex);
 	}
 
+	public FIBInspector getCurrentlyDisplayedInspector() {
+		return currentlyDisplayedInspector;
+	}
 }

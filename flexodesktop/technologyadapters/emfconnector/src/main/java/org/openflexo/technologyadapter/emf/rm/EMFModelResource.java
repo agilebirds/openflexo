@@ -31,10 +31,13 @@ import org.openflexo.foundation.rm.LoadResourceException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
 /**
@@ -42,7 +45,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
  * 
  * @author gbesancon
  */
-public class EMFModelResource extends FlexoStorageResource<EMFModel> {
+public class EMFModelResource extends FlexoStorageResource<EMFModel> implements FlexoModelResource<EMFModel, EMFMetaModel> {
 
 	/** Logger. */
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class.getPackage()
@@ -167,5 +170,34 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> {
 	@Override
 	public Class<EMFModel> getResourceDataClass() {
 		return EMFModel.class;
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public EMFMetaModel getMetaModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMetaModel(EMFMetaModel aMetaModel) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public EMFModel getModel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

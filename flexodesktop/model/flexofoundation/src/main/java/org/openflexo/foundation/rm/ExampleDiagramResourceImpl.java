@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -92,8 +92,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		ExampleDiagram returned = super.loadResourceData(progress);
-		returned.init(getContainer().getViewPoint(), getFile());
-		getContainer().getViewPoint().addToExampleDiagrams(returned);
+		returned.init(((ViewPointResource) getContainer()).getViewPoint(), getFile());
+		((ViewPointResource) getContainer()).getViewPoint().addToExampleDiagrams(returned);
 		return returned;
 	}
 

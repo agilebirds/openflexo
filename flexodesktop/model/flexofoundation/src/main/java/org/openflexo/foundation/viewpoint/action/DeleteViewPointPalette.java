@@ -26,8 +26,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
 
 public class DeleteViewPointPalette extends FlexoAction<DeleteViewPointPalette, DiagramPalette, ViewPointObject> {
 

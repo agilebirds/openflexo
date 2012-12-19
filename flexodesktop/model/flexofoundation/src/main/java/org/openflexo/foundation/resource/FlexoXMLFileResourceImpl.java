@@ -391,6 +391,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 	protected RD tryToLoadResourceDataWithVersion(FlexoVersion version) throws XMLOperationException, JDOMException {
 		RD returned = null;
 		try {
+
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Trying to load " + getResourceDataClass().getName() + " with model version " + version);
 			}
@@ -411,6 +412,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 			if (returned != null) {
 				returned.setResource(this);
 			}
+
 			setModelVersion(version);
 			return returned;
 		} catch (AccessorInvocationException e) {

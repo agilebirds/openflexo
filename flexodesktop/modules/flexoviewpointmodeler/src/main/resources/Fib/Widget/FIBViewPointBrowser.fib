@@ -8,19 +8,33 @@
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.ModelSlot" label="(((modelSlot.name + &quot; - [&quot;) + modelSlot.technologyAdapter.name) + &quot;]&quot;)" icon="controller.iconForObject(modelSlot)" isEditable="false" filtered="false" defaultVisible="true" name="modelSlot" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" icon="controller.iconForObject(editionPattern)" isEditable="false" filtered="false" defaultVisible="true" name="editionPattern">
       <Children data="editionPattern.childEditionPatterns" name="children" />
-      <Children data="editionPattern.patternRoles" name="patternRoles" />
-      <Children data="editionPattern.editionSchemes" name="editionSchemes" />
       <Children data="editionPattern.inspector" name="inspector" />
+      <Children data="editionPattern.structuralFacet" name="structural" />
+      <Children data="editionPattern.behaviouralFacet" name="behavioural" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" icon="controller.iconForObject(patternRole)" isEditable="false" filtered="false" defaultVisible="true" name="patternRole" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" label="editionScheme.name" icon="controller.iconForObject(editionScheme)" isEditable="false" filtered="false" defaultVisible="true" name="editionScheme">
-      <Children data="editionScheme.parameters" name="parameters" />
+      <Children data="editionScheme.editionSchemeParameters" visible="(editionScheme.parameters.size &gt; 0)" name="parameters" />
+      <Children data="editionScheme.actions" name="actions" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" label="&quot;Inspector&quot;" icon="controller.iconForObject(inspector)" isEditable="false" filtered="false" defaultVisible="true" name="inspector">
       <Children data="inspector.entries" name="entries" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" icon="controller.iconForObject(inspectorEntry)" isEditable="false" filtered="false" defaultVisible="true" name="inspectorEntry" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" icon="controller.iconForObject(editionSchemeParameter)" isEditable="false" filtered="false" defaultVisible="true" name="editionSchemeParameter" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionAction" icon="controller.iconForObject(editionAction)" isEditable="false" filtered="false" defaultVisible="true" name="editionAction" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ControlStructureAction" icon="controller.iconForObject(controlStructureAction)" isEditable="false" filtered="false" defaultVisible="true" name="controlStructureAction">
+      <Children data="controlStructureAction.actions" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPatternStructuralFacet" label="&quot;Structural&quot;" icon="controller.iconForObject(editionPatternStructuralFacet)" isEditable="false" filtered="false" defaultVisible="true" name="editionPatternStructuralFacet">
+      <Children data="editionPatternStructuralFacet.editionPattern.patternRoles" name="patternRoles" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPatternBehaviouralFacet" label="&quot;Behavioural&quot;" icon="controller.iconForObject(editionPatternBehaviouralFacet)" isEditable="false" filtered="false" defaultVisible="true" name="editionPatternBehaviouralFacet">
+      <Children data="editionPatternBehaviouralFacet.editionPattern.editionSchemes" name="editionSchemes" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameters" label="&quot;Parameters&quot;" icon="controller.iconForObject(editionSchemeParameters)" isEditable="false" filtered="false" defaultVisible="true" name="editionSchemeParameters">
+      <Children data="editionSchemeParameters.editionScheme.parameters" name="children" />
+    </BrowserElement>
   </Browser>
   <LocalizedDictionary />
 </Panel>

@@ -51,6 +51,11 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 	}
 
 	@Override
+	public Class<OWLIndividual> getOntologyIndividualClass() {
+		return OWLIndividual.class;
+	}
+
+	@Override
 	public OWLIndividual performAction(EditionSchemeAction action) {
 		OWLClass father = getOntologyClass();
 		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());

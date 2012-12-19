@@ -481,6 +481,12 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
+	public <R extends FlexoResource<?>> List<R> getContents(Class<R> resourceClass) {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
 	public void addToContents(FlexoResource<?> resource) {
 		logger.warning("Not implemented yet");
 	}

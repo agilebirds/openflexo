@@ -19,9 +19,15 @@
  */
 package org.openflexo.view.controller;
 
+import java.io.File;
+
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -37,6 +43,7 @@ import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.view.FlexoFrame;
 
 public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> {
 	private final ControllerActionInitializer _controllerActionInitializer;
@@ -71,6 +78,13 @@ public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 ext
 		} else {
 			return null;
 		}
+	}
+
+	public boolean instanciateAndShowDialog(FlexoAction<?, ?, ?> action, File fibFile) {
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(fibComponent, action, FlexoFrame.getActiveFrame(), true,
+				new FlexoFIBController(fibComponent, getController()));
+		return dialog.getStatus() == Status.VALIDATED;
 	}
 
 	/**

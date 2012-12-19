@@ -2,7 +2,9 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -10,24 +12,18 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.PropertyPatternRole;
+import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicPropertyPatternRolePathElement;
 
 /**
  * A model slot is a named object providing symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
@@ -49,13 +45,13 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	private boolean isRequired;
 	private boolean isReadOnly;
-	private MM metaModel;
-
+	private FlexoMetaModelResource<M, MM> metaModelResource;
 	private String metaModelURI;
-
 	private TechnologyAdapter<M, MM> technologyAdapter;
-
 	private ViewPoint viewPoint;
+
+	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
+	private List<Class<? extends EditionAction>> availableEditionActionTypes;
 
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
 		super(null);
@@ -65,14 +61,48 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	protected ModelSlot(ViewPointBuilder builder) {
 		super(builder);
+
 		if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
+			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
+					&& builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService() != null) {
+				this.technologyAdapter = builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService()
+						.getTechnologyAdapter(getTechnologyAdapterClass());
+			}
 		}
 	}
 
 	@Override
 	public String getURI() {
 		return getViewPoint().getURI() + "." + getName();
+	}
+
+	/**
+	 * Creates and return a new {@link PatternRole} of supplied class.<br>
+	 * This responsability is delegated to the technology-specific {@link ModelSlot} which manages with introspection its own
+	 * {@link PatternRole} types
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
+	public abstract <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
+
+	/**
+	 * Return default name for supplied pattern role class
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
+	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "editionPattern";
+		} else if (FlexoModelObjectPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "modelObject";
+		} else if (PrimitivePatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "primitive";
+		}
+		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
+		return "???";
 	}
 
 	@Override
@@ -129,19 +159,26 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 	}
 
-	public MM getMetaModel() {
-		return metaModel;
+	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
+		return metaModelResource;
 	}
 
-	public void setMetaModel(MM metaModel) {
-		this.metaModel = metaModel;
+	public void setMetaModelResource(FlexoMetaModelResource<M, MM> metaModelResource) {
+		this.metaModelResource = metaModelResource;
 	}
 
 	public String getMetaModelURI() {
+		if (metaModelResource != null) {
+			return metaModelResource.getURI();
+		}
 		return metaModelURI;
 	}
 
 	public void setMetaModelURI(String metaModelURI) {
+		if (getViewPointLibrary() != null) {
+			logger.warning("Gerer un truc ici !!!");
+			// metaModelResource = getViewPointLibrary().;
+		}
 		this.metaModelURI = metaModelURI;
 	}
 
@@ -168,19 +205,18 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	@Override
 	public String getLanguageRepresentation() {
-		return "ModelSlot " + getName() + " conformTo " + getMetaModel().getURI() + " access=READ cardinality=ONE";
+		return "ModelSlot " + getName() + " conformTo " + getMetaModelURI() + " access=READ cardinality=ONE";
 	}
 
 	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract Class<? extends TechnologyAdapter<M, MM>> getTechnologyAdapterClass();
 
-	public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
+	public abstract BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container);
+
+	/*public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
 		if (pr instanceof OntologicObjectPatternRole) {
 			if (pr instanceof ClassPatternRole) {
 				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
@@ -202,6 +238,77 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 			return new EditionPatternPathElement(pr.getPatternRoleName(), ((EditionPatternPatternRole) pr).getEditionPatternType(),
 					container);
 		} else {
+			return null;
+		}
+	}*/
+
+	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+		if (availablePatternRoleTypes == null) {
+			availablePatternRoleTypes = computeAvailablePatternRoleTypes();
+		}
+		return availablePatternRoleTypes;
+	}
+
+	private List<Class<? extends PatternRole>> computeAvailablePatternRoleTypes() {
+		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole>>();
+		Class<?> cl = getClass();
+		if (cl.isAnnotationPresent(DeclarePatternRoles.class)) {
+			DeclarePatternRoles allPatternRoles = cl.getAnnotation(DeclarePatternRoles.class);
+			for (DeclarePatternRole patternRoleDeclaration : allPatternRoles.value()) {
+				availablePatternRoleTypes.add(patternRoleDeclaration.value());
+			}
+		}
+		// availablePatternRoleTypes.add(EditionPatternPatternRole.class);
+		// availablePatternRoleTypes.add(FlexoModelObjectPatternRole.class);
+		// availablePatternRoleTypes.add(PrimitivePatternRole.class);
+		return availablePatternRoleTypes;
+	}
+
+	public List<Class<? extends EditionAction>> getAvailableEditionActionTypes() {
+		if (availableEditionActionTypes == null) {
+			availableEditionActionTypes = computeAvailableEditionActionTypes();
+		}
+		return availableEditionActionTypes;
+	}
+
+	private List<Class<? extends EditionAction>> computeAvailableEditionActionTypes() {
+		availableEditionActionTypes = new ArrayList<Class<? extends EditionAction>>();
+		Class<?> cl = getClass();
+		if (cl.isAnnotationPresent(DeclareEditionActions.class)) {
+			DeclareEditionActions allEditionActions = cl.getAnnotation(DeclareEditionActions.class);
+			for (DeclareEditionAction patternRoleDeclaration : allEditionActions.value()) {
+				availableEditionActionTypes.add(patternRoleDeclaration.value());
+			}
+		}
+		availableEditionActionTypes.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
+		availableEditionActionTypes.add(org.openflexo.foundation.viewpoint.AddEditionPattern.class);
+		availableEditionActionTypes.add(DeleteAction.class);
+		availableEditionActionTypes.add(ConditionalAction.class);
+		availableEditionActionTypes.add(IterationAction.class);
+		return availableEditionActionTypes;
+	}
+
+	/**
+	 * Creates and return a new {@link EditionAction} of supplied class.<br>
+	 * This responsability is delegated to the technology-specific {@link ModelSlot} which manages with introspection its own
+	 * {@link EditionAction} types
+	 * 
+	 * @param editionActionClass
+	 * @return
+	 */
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new org.openflexo.foundation.viewpoint.DeclarePatternRole(null);
+		} else if (AddEditionPattern.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEditionPattern(null);
+		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new DeleteAction(null);
+		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new ConditionalAction(null);
+		} else if (IterationAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new IterationAction(null);
+		} else {
+			logger.warning("Unexpected " + editionActionClass);
 			return null;
 		}
 	}

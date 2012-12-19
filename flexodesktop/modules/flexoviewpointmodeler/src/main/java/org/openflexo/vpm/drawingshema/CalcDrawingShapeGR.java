@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
@@ -120,8 +120,8 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiag
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null && getCalcDrawingShape().getShema() != null
-				&& !getCalcDrawingShape().getShema().ignoreNotifications()) {
+				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null && getCalcDrawingShape().getExampleDiagram() != null
+				&& !getCalcDrawingShape().getExampleDiagram().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();
 		}
 	}

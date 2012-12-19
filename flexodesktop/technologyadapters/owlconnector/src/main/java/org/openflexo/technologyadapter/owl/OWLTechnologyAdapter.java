@@ -30,32 +30,16 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
-import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
-import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
-import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
-import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 
 /**
  * This class defines and implements the OWL technology adapter
@@ -63,32 +47,6 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
  * @author sylvain, luka
  * 
  */
-@DeclarePatternRoles({
-/** Instances */
-@DeclarePatternRole(OWLIndividualPatternRole.class),
-/** Classes */
-@DeclarePatternRole(OWLClassPatternRole.class),
-/** Data properties */
-@DeclarePatternRole(OWLDataPropertyPatternRole.class),
-/** Object properties */
-@DeclarePatternRole(OWLObjectPropertyPatternRole.class),
-/** Properties */
-@DeclarePatternRole(OWLPropertyPatternRole.class),
-/** Data property statements */
-@DeclarePatternRole(DataPropertyStatementPatternRole.class),
-/** Object propertie statements */
-@DeclarePatternRole(ObjectPropertyStatementPatternRole.class),
-/** Restriction statements */
-@DeclarePatternRole(RestrictionStatementPatternRole.class),
-/** Subclass statement */
-@DeclarePatternRole(SubClassStatementPatternRole.class) })
-@DeclareEditionActions({
-/** Add instance */
-@DeclareEditionAction(AddOWLIndividual.class),
-/** Add class */
-@DeclareEditionAction(AddOWLClass.class),
-/** Delete */
-@DeclareEditionAction(DeleteAction.class) })
 public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLTechnologyAdapter.class.getPackage().getName());

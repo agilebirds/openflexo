@@ -34,6 +34,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
@@ -110,6 +111,14 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			return;
 		}
 		getRootView().updateDataObject(getDataObject());
+	}
+
+	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter<?, ?> technologyAdapter) {
+		if (getFlexoController() != null) {
+			return getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(technologyAdapter);
+		}
+		return null;
 	}
 
 	@Override

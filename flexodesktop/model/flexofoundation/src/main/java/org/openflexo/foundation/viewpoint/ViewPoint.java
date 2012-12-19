@@ -52,6 +52,8 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -60,6 +62,8 @@ import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
+import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
+import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
@@ -82,8 +86,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
-	private Vector<DiagramPalette> palettes;
-	private Vector<ExampleDiagram> exampleDiagrams;
+	private List<DiagramPalette> palettes;
+	private List<ExampleDiagram> exampleDiagrams;
 
 	// private File viewPointDirectory;
 	// private File owlFile;
@@ -279,6 +283,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		}
 		editionPatterns = new Vector<EditionPattern>();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		exampleDiagrams = new ArrayList<ExampleDiagram>();
+		palettes = new ArrayList<DiagramPalette>();
 	}
 
 	// Used during deserialization, do not use it
@@ -323,6 +329,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getURI();
 	}
 
 	private StringEncoder encoder;
@@ -440,7 +451,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return _library;
 	}
 
-	public Vector<DiagramPalette> getPalettes() {
+	public List<DiagramPalette> getPalettes() {
 		/*if (palettes == null) {
 			findPalettes(viewPointDirectory);
 		}*/
@@ -471,7 +482,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		notifyObservers(new DiagramPaletteRemoved(aPalette, this));
 	}
 
-	public Vector<ExampleDiagram> getExampleDiagrams() {
+	public List<ExampleDiagram> getExampleDiagrams() {
 		/*if (exampleDiagrams == null) {
 			findShemas(viewPointDirectory);
 		}*/
@@ -652,7 +663,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
-			ms.setMetaModel(null);
+			ms.setMetaModelResource(null);
 			addToModelSlots(ms);
 			DiagramTechnologyAdapter diagramTA = null;
 			if (viewPointLibrary.getFlexoServiceManager() != null
@@ -732,10 +743,14 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
+		setChanged();
+		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
 	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.remove(modelSlot);
+		setChanged();
+		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
 	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
@@ -746,6 +761,15 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			}
 		}
 		return returned;
+	}
+
+	public ModelSlot<?, ?> getModelSlot(String modelSlotName) {
+		for (ModelSlot<?, ?> ms : getModelSlots()) {
+			if (ms.getName().equals(modelSlotName)) {
+				return ms;
+			}
+		}
+		return null;
 	}
 
 	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
@@ -944,7 +968,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			returned.add(modelSlot.getMetaModel());
+			if (modelSlot.getMetaModelResource() != null) {
+				returned.add(modelSlot.getMetaModelResource().getMetaModel());
+			}
 		}
 		return returned;
 	}

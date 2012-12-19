@@ -26,6 +26,8 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.PatternRole;
 
 /**
  * This class represents a technology-specific controller provided by a {@link TechnologyAdapter}<br>
@@ -112,11 +114,27 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	public abstract ImageIcon getMetaModelIcon();
 
 	/**
-	 * Return icon representating supplied ontology object
+	 * Return icon representing supplied ontology object
 	 * 
 	 * @param object
 	 * @return
 	 */
 	public abstract ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass);
+
+	/**
+	 * Return icon representing supplied pattern role
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public abstract ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass);
+
+	/**
+	 * Return icon representing supplied edition action
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public abstract ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass);
 
 }

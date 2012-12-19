@@ -4,15 +4,15 @@
 
 <model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
-  <entity name="org.openflexo.foundation.viewpoint.DiagramPalette" xmlTag="Palette"> 
+  <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette" xmlTag="Palette"> 
     <property name="index" xmlTag="index" attribute="YES"/> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
-    <property name="elements" type="vector" contains="org.openflexo.foundation.viewpoint.DiagramPaletteElement" primary="yes"/>
+    <property name="elements" type="vector" contains="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement" primary="yes"/>
    	<property name="graphicalRepresentation" contains="org.openflexo.fge.DrawingGraphicalRepresentation"/>
   </entity>
 
- <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement" xmlTag="PaletteElement" contexts="Contained"> 
+ <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement" xmlTag="PaletteElement" contexts="Contained"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="editionPatternId" xmlTag="editionPattern" attribute="YES"/> 
@@ -21,7 +21,7 @@
     <property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" primary="yes"/>
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/>
     <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
-    <property name="overridingGraphicalRepresentations" type="vector" contains="org.openflexo.foundation.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" primary="yes"/>
+    <property name="overridingGraphicalRepresentations" type="vector" contains="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" primary="yes"/>
    </entity>
 
   <entity name="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" xmlTag="Parameter"> 
@@ -29,15 +29,15 @@
     <property name="value" xmlTag="value" attribute="YES"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" abstract="yes"> 
+  <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" abstract="yes"> 
     <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$ShapeOverridingGraphicalRepresentation" xmlTag="ShapeOverridingGraphicalRepresentation"> 
+  <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement$ShapeOverridingGraphicalRepresentation" xmlTag="ShapeOverridingGraphicalRepresentation"> 
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/> 
   </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.DiagramPaletteElement$ConnectorOverridingGraphicalRepresentation" xmlTag="ConnectorOverridingGraphicalRepresentation"> 
+  <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement$ConnectorOverridingGraphicalRepresentation" xmlTag="ConnectorOverridingGraphicalRepresentation"> 
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ConnectorGraphicalRepresentation"/> 
   </entity>
 

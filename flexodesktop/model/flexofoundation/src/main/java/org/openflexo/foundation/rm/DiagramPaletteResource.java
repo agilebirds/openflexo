@@ -1,7 +1,7 @@
 package org.openflexo.foundation.rm;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -10,7 +10,7 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(ExampleDiagramResourceImpl.class)
+@ImplementationClass(DiagramPaletteResourceImpl.class)
 @XMLElement
 public interface DiagramPaletteResource extends FlexoXMLFileResource<DiagramPalette> {
 

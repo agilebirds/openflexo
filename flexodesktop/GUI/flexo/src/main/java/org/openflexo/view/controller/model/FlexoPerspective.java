@@ -19,6 +19,8 @@
  */
 package org.openflexo.view.controller.model;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -29,6 +31,8 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
 public abstract class FlexoPerspective extends ControllerModelObject {
+
+	static final Logger logger = Logger.getLogger(FlexoPerspective.class.getPackage().getName());
 
 	private String name;
 
@@ -195,4 +199,17 @@ public abstract class FlexoPerspective extends ControllerModelObject {
 		this.middleRightView = middleRightView;
 		getPropertyChangeSupport().firePropertyChange(MIDDLE_RIGHT_VIEW, old, middleRightView);
 	}
+
+	public void objectWasClicked(Object object) {
+		logger.info("FlexoPerspective: object was clicked: " + object);
+	}
+
+	public void objectWasRightClicked(Object object) {
+		logger.info("FlexoPerspective: object was right-clicked: " + object);
+	}
+
+	public void objectWasDoubleClicked(Object object) {
+		logger.info("FlexoPerspective: object was double-clicked: " + object);
+	}
+
 }

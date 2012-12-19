@@ -5,9 +5,33 @@ import java.io.File;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
+import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
+import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
+import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.PropertyStatement;
+import org.openflexo.technologyadapter.owl.model.SubClassStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -78,17 +102,61 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	}
 
 	/**
-	 * Return icon representating supplied ontology object
+	 * Return icon representing supplied ontology object
 	 * 
 	 * @param object
 	 * @return
 	 */
 	@Override
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		System.out.println("On me demande l'icone pour " + objectClass);
 		if (OWLObject.class.isAssignableFrom(objectClass))
 			return OWLIconLibrary.iconForObject((Class<? extends OWLObject>) objectClass);
 		return null;
 	}
 
+	/**
+	 * Return icon representing supplied pattern role
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(OWLClass.class);
+		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(OWLIndividual.class);
+		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(OWLDataProperty.class);
+		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(OWLObjectProperty.class);
+		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(OWLProperty.class);
+		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(DataPropertyStatement.class);
+		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(ObjectPropertyStatement.class);
+		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(PropertyStatement.class);
+		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(SubClassStatement.class);
+		}
+		return null;
+	}
+
+	/**
+	 * Return icon representing supplied edition action
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForOntologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
+		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForOntologyObject(OWLClass.class), IconLibrary.DUPLICATE);
+		}
+		return null;
+	}
 }

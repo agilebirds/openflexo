@@ -19,6 +19,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
@@ -150,6 +151,11 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			@Override
 			protected ViewPointLibrary createViewPointLibraryService() {
 				return new ViewPointLibrary();
+			}
+
+			@Override
+			protected InformationSpace createInformationSpace() {
+				return new InformationSpace();
 			}
 
 		};

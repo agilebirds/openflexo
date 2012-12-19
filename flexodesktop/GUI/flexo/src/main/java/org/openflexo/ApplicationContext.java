@@ -7,6 +7,7 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -18,7 +19,9 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class ApplicationContext extends FlexoServiceManager implements FlexoEditorFactory {
 
-	private XMLSerializationService xmlSerializationService;
+	private FlexoEditor applicationEditor;
+
+	/*private XMLSerializationService xmlSerializationService;
 	private ModuleLoader moduleLoader;
 	private ProjectLoader projectLoader;
 	private FlexoEditor applicationEditor;
@@ -27,54 +30,51 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 	private TechnologyAdapterService technologyAdapterService;
 	private TechnologyAdapterControllerService technologyAdapterControllerService;
 	private ViewPointLibrary viewPointLibrary;
+	private InformationSpace informationSpace;*/
 
 	public ApplicationContext() {
-		xmlSerializationService = XMLSerializationService.createInstance();
+		XMLSerializationService xmlSerializationService = XMLSerializationService.createInstance();
 		registerService(xmlSerializationService);
 		applicationEditor = createApplicationEditor();
 		try {
-			projectLoader = new ProjectLoader(this);
+			ProjectLoader projectLoader = new ProjectLoader(this);
 			registerService(projectLoader);
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		moduleLoader = new ModuleLoader(this);
+		ModuleLoader moduleLoader = new ModuleLoader(this);
 		registerService(moduleLoader);
-		projectReferenceLoader = createProjectReferenceLoader();
+		FlexoProjectReferenceLoader projectReferenceLoader = createProjectReferenceLoader();
 		if (projectReferenceLoader != null) {
 			registerService(projectReferenceLoader);
 		}
-		resourceCenterService = createResourceCenterService();
+		FlexoResourceCenterService resourceCenterService = createResourceCenterService();
 		registerService(resourceCenterService);
-		technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
+		TechnologyAdapterService technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
 		registerService(technologyAdapterService);
-		technologyAdapterControllerService = createTechnologyAdapterControllerService();
+		TechnologyAdapterControllerService technologyAdapterControllerService = createTechnologyAdapterControllerService();
 		registerService(technologyAdapterControllerService);
-		viewPointLibrary = createViewPointLibraryService();
+		InformationSpace informationSpace = createInformationSpace();
+		registerService(informationSpace);
+		ViewPointLibrary viewPointLibrary = createViewPointLibraryService();
 		registerService(viewPointLibrary);
 	}
 
 	public ModuleLoader getModuleLoader() {
-		return moduleLoader;
+		return getService(ModuleLoader.class);
 	}
 
 	public ProjectLoader getProjectLoader() {
-		return projectLoader;
+		return getService(ProjectLoader.class);
 	}
 
 	public final FlexoProjectReferenceLoader getProjectReferenceLoader() {
-		return projectReferenceLoader;
+		return getService(FlexoProjectReferenceLoader.class);
 	}
 
-	@Override
-	public final FlexoResourceCenterService getResourceCenterService() {
-		return resourceCenterService;
-	}
-
-	@Override
-	public final TechnologyAdapterService getTechnologyAdapterService() {
-		return technologyAdapterService;
+	public final TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
+		return getService(TechnologyAdapterControllerService.class);
 	}
 
 	public final FlexoEditor getApplicationEditor() {
@@ -101,4 +101,5 @@ public abstract class ApplicationContext extends FlexoServiceManager implements 
 
 	protected abstract ViewPointLibrary createViewPointLibraryService();
 
+	protected abstract InformationSpace createInformationSpace();
 }

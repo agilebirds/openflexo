@@ -35,6 +35,7 @@ import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -57,13 +58,13 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * 
  */
 @SuppressWarnings("serial")
-public class FIBInformationSpaceBrowser extends FIBBrowserView<FlexoServiceManager> {
+public class FIBInformationSpaceBrowser extends FIBBrowserView<InformationSpace> {
 	static final Logger logger = Logger.getLogger(FIBInformationSpaceBrowser.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBInformationSpaceBrowser.fib");
 
-	public FIBInformationSpaceBrowser(FlexoServiceManager serviceManager, FlexoController controller) {
-		super(serviceManager, controller, FIB_FILE);
+	public FIBInformationSpaceBrowser(InformationSpace informationSpace, FlexoController controller) {
+		super(informationSpace, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -82,6 +83,7 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<FlexoServiceManag
 		}
 
 		final ViewPointLibrary viewPointLibrary;
+		final InformationSpace informationSpace;
 
 		final FlexoServiceManager serviceManager = new FlexoServiceManager();
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
@@ -93,6 +95,8 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<FlexoServiceManag
 		serviceManager.registerService(taService);
 		TechnologyAdapterControllerService tacService = DefaultTechnologyAdapterControllerService.getNewInstance();
 		serviceManager.registerService(tacService);
+		informationSpace = new InformationSpace();
+		serviceManager.registerService(informationSpace);
 
 		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
 		// System.exit(-1);
@@ -100,7 +104,7 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<FlexoServiceManag
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(serviceManager);
+				return makeArray(informationSpace);
 			}
 
 			@Override

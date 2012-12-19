@@ -22,7 +22,7 @@ package org.openflexo.vpm.palette;
 import javax.swing.JTabbedPane;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.VPMController;

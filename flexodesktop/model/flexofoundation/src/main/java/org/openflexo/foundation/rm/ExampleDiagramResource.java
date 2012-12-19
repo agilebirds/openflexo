@@ -1,7 +1,7 @@
 package org.openflexo.foundation.rm;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
-import org.openflexo.foundation.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;

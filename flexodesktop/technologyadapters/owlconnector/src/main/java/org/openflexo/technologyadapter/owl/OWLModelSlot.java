@@ -4,8 +4,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
+import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
+import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -23,6 +27,8 @@ import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRo
 import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRolePathElement.RestrictionStatementPatternRolePathElement;
 import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 
 /**
  * <p>
@@ -31,6 +37,19 @@ import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRol
  * @author Luka Le Roux
  * 
  */
+@DeclarePatternRoles({ @DeclarePatternRole(OWLIndividualPatternRole.class), // Instances
+		@DeclarePatternRole(OWLClassPatternRole.class), // Classes
+		@DeclarePatternRole(OWLDataPropertyPatternRole.class), // Data properties
+		@DeclarePatternRole(OWLObjectPropertyPatternRole.class), // Object properties
+		@DeclarePatternRole(OWLPropertyPatternRole.class), // Properties
+		@DeclarePatternRole(DataPropertyStatementPatternRole.class), // Data property statements
+		@DeclarePatternRole(ObjectPropertyStatementPatternRole.class), // Object property statements
+		@DeclarePatternRole(RestrictionStatementPatternRole.class), // Restriction statements
+		@DeclarePatternRole(SubClassStatementPatternRole.class) // Subclass statement */
+})
+@DeclareEditionActions({ @DeclareEditionAction(AddOWLIndividual.class), // Add instance
+		@DeclareEditionAction(AddOWLClass.class) // Add class
+})
 public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
@@ -41,6 +60,11 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 
 	public OWLModelSlot(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
+		return OWLTechnologyAdapter.class;
 	}
 
 	@Override
@@ -59,46 +83,79 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 		}
 	}
 
+	/**
+	 * Creates and return a new {@link PatternRole} of supplied class.<br>
+	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
+	 * {@link PatternRole} types related to OWL technology
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
 	@Override
-	public <PR extends OntologicObjectPatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new OWLClassPatternRole(null);
-			returned.setPatternRoleName("class");
-			return returned;
+			return (PR) new OWLClassPatternRole(null);
 		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new OWLIndividualPatternRole(null);
-			returned.setPatternRoleName("individual");
-			return returned;
+			return (PR) new OWLIndividualPatternRole(null);
 		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new OWLPropertyPatternRole(null);
-			returned.setPatternRoleName("property");
-			return returned;
+			return (PR) new OWLPropertyPatternRole(null);
 		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new OWLDataPropertyPatternRole(null);
-			returned.setPatternRoleName("dataProperty");
-			return returned;
+			return (PR) new OWLDataPropertyPatternRole(null);
 		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new OWLObjectPropertyPatternRole(null);
-			returned.setPatternRoleName("objectProperty");
-			return returned;
+			return (PR) new OWLObjectPropertyPatternRole(null);
 		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new DataPropertyStatementPatternRole(null);
-			returned.setPatternRoleName("fact");
-			return returned;
+			return (PR) new DataPropertyStatementPatternRole(null);
 		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new ObjectPropertyStatementPatternRole(null);
-			returned.setPatternRoleName("fact");
-			return returned;
+			return (PR) new ObjectPropertyStatementPatternRole(null);
 		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new RestrictionStatementPatternRole(null);
-			returned.setPatternRoleName("restriction");
-			return returned;
+			return (PR) new RestrictionStatementPatternRole(null);
 		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			PR returned = (PR) new SubClassStatementPatternRole(null);
-			returned.setPatternRoleName("fact");
-			return returned;
+			return (PR) new SubClassStatementPatternRole(null);
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
+	}
+
+	@Override
+	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "class";
+		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "individual";
+		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "property";
+		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "dataProperty";
+		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "objectProperty";
+		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "fact";
+		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "fact";
+		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "restriction";
+		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "fact";
+		}
+		return super.defaultPatternRoleName(patternRoleClass);
+	}
+
+	/**
+	 * Creates and return a new {@link EditionAction} of supplied class.<br>
+	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
+	 * {@link EditionAction} types related to OWL technology
+	 * 
+	 * @param editionActionClass
+	 * @return
+	 */
+	@Override
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddOWLIndividual(null);
+		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddOWLClass(null);
+		} else {
+			return super.makeEditionAction(editionActionClass);
+		}
 	}
 }
