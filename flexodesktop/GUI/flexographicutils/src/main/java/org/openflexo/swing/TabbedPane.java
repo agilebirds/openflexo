@@ -599,7 +599,7 @@ public class TabbedPane<J> {
 						}
 					} else {
 						J tabToSelect = null;
-						for (int i = indexOf; i > -1; i--) {
+						for (int i = indexOf - 1; i > -1; i--) {
 							if (tabHeaderRenderer.isTabHeaderVisible(tabs.get(i))) {
 								tabToSelect = tabs.get(i);
 								break;
