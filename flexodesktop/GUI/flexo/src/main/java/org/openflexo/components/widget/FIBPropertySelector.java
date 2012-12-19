@@ -360,18 +360,18 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 					e.printStackTrace();
 				}
 
-				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
-				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				ApplicationContext ac = new TestApplicationContext(new FileResource("TestResourceCenter"));
+
+				IFlexoOntology o = (IFlexoOntology) ac.getInformationSpace()
+						.getMetaModel("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl").getMetaModelData();
+
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 				// "http://www.w3.org/2002/07/owl");
-						"http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl");
+				// "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl");
 				// "http://www.openflexo.org/test/TestProperties.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
-				o.loadWhenUnloaded();
 
 				FIBPropertySelector selector = new FIBPropertySelector(null);
 
@@ -393,7 +393,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();
