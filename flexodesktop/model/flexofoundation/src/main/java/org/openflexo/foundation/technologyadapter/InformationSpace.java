@@ -5,6 +5,7 @@ import java.util.List;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 
@@ -62,4 +63,23 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
+	public FlexoMetaModelResource<?, ?> getMetaModel(String uri) {
+		for (TechnologyAdapter ta : getFlexoServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
+			FlexoMetaModelResource<?, ?> returned = getMetaModel(uri, ta);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public FlexoMetaModelResource<?, ?> getMetaModel(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+		for (MetaModelRepository<?, ?, ?, ?> mmRep : getAllMetaModelRepositories(technologyAdapter)) {
+			FlexoResource<?> resource = mmRep.getResource(uri);
+			if (resource != null) {
+				return (FlexoMetaModelResource<?, ?>) resource;
+			}
+		}
+		return null;
+	}
 }
