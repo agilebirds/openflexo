@@ -23,7 +23,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -197,42 +196,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			return -1;
 		}
 
-		@Override
-		public int hashCode() {
-			int hashCode = 1;
-			if (list != null) {
-				for (Object e : list) {
-					hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
-				}
-			} else if (array != null) {
-				for (Object e : array) {
-					hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
-				}
-			}
-			return hashCode;
-		}
-
-		@Override
-		public boolean equals(Object object) {
-			if (object instanceof FIBMultipleValueWidget<?, ?, ?>.FIBMultipleValueModel) {
-				FIBMultipleValueModel object2 = (FIBMultipleValueModel) object;
-				if (list != null) {
-					if (object2.list == null) {
-						return false;
-					} else {
-						return list.equals(object2.list);
-					}
-				} else if (array != null) {
-					if (object2.array == null) {
-						return false;
-					} else {
-						return Arrays.deepEquals(array, object2.array);
-					}
-				}
-			}
-			return super.equals(object);
-		}
-
 		/*@Override
 		public FIBMultipleValueModel clone() {
 			FIBMultipleValueModel returned = new FIBMultipleValueModel();
@@ -388,7 +351,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			returned = lastKnownValues != null;
 			lastKnownValues = null;
 		}
-		return returned;
+		return returned || true;
 	}
 
 	/*protected final FIBListModel rebuildListModel()
