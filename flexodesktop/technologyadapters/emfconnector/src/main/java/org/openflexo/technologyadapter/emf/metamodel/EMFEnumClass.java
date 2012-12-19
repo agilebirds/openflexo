@@ -31,23 +31,27 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EEnum;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * EMF Enum.
  * 
  * @author gbesancon
  */
-public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnum> implements IFlexoOntologyClass {
+public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFlexoOntologyClass {
 	/**
 	 * Constructor.
 	 */
@@ -63,6 +67,28 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	@Override
 	public String getName() {
 		return object.getName();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+		System.out.println("Name can't be modified.");
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -84,6 +110,16 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -138,10 +174,10 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isEqualToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#equalsToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
 	 */
 	@Override
-	public boolean isEqualToConcept(IFlexoOntologyConcept concept) {
+	public boolean equalsToConcept(IFlexoOntologyConcept concept) {
 		return concept == this;
 	}
 
@@ -168,10 +204,10 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#getSubClasses()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#getSubClasses(org.openflexo.foundation.ontology.IFlexoOntology)
 	 */
 	@Override
-	public List<IFlexoOntologyClass> getSubClasses() {
+	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context) {
 		return Collections.emptyList();
 	}
 
@@ -188,20 +224,64 @@ public class EMFEnumClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isSubClassOf(org.openflexo.foundation.ontology.IFlexoOntologyClass)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyVisitor)
 	 */
 	@Override
-	public boolean isSubClassOf(IFlexoOntologyClass aClass) {
-		return false;
+	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
 	 */
 	@Override
-	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
-		return visitor.visit(this);
+	@Deprecated
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	 */
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return ontology.getTechnologyAdapter();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isNamedClass()
+	 */
+	@Override
+	@Deprecated
+	public boolean isNamedClass() {
+		return true;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isRootConcept()
+	 */
+	@Override
+	@Deprecated
+	public boolean isRootConcept() {
+		return false;
 	}
 }

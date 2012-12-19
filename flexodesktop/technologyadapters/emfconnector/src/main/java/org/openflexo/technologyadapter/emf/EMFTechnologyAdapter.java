@@ -235,7 +235,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		if (aModelFile.exists()) {
 			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
 			if (aModelFile.getName().endsWith("." + emfMetaModelResource.getModelFileExtension())) {
-//				isValid = true;
+				// FIXME isValid = true;
 			}
 		}
 		return isValid;
@@ -249,8 +249,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public String retrieveModelURI(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
+		return retrieveModelResource(aModelFile, technologyContextManager).getURI();
 	}
 
 	/**
@@ -262,11 +261,15 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		logger.warning("Not implemented yet");
-		EMFModelResource emfModelResource = new EMFModelResource((FlexoProjectBuilder) null);
+		EMFModelResource emfModelResource = null;
+		// FIXME TODO
+		if (aModelFile.isFile()) {
+			new EMFModelResource((FlexoProjectBuilder) null);
+		}
 
 		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
 		emfContextManager.registerModel(emfModelResource);
+
 		return emfModelResource;
 	}
 
@@ -281,7 +284,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFModel createEmptyModel(FlexoProject project, EMFMetaModel metaModel,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO implement this
-		// See code in XSD/XML connector
 		return null;
 	}
 

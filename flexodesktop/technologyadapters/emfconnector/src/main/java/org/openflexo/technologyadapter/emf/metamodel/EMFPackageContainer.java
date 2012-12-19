@@ -35,18 +35,22 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 /**
  * EMF Package Container.
  * 
  * @author gbesancon
  */
-public class EMFPackageContainer extends AFlexoOntologyWrapperObject<EMFMetaModel, EPackage> implements IFlexoOntologyContainer {
+public class EMFPackageContainer extends AEMFMetaModelObjectImpl<EPackage> implements IFlexoOntologyContainer {
 	/**
 	 * Constructor.
 	 */
@@ -67,12 +71,34 @@ public class EMFPackageContainer extends AFlexoOntologyWrapperObject<EMFMetaMode
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyContainer#getDescription()
 	 */
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -106,29 +132,199 @@ public class EMFPackageContainer extends AFlexoOntologyWrapperObject<EMFMetaMode
 	 */
 	@Override
 	public List<IFlexoOntologyConcept> getConcepts() {
-		List<IFlexoOntologyConcept> concepts = new ArrayList<IFlexoOntologyConcept>();
+		List<IFlexoOntologyConcept> result = new ArrayList<IFlexoOntologyConcept>();
+		result.addAll(getClasses());
+		result.addAll(getIndividuals());
+		result.addAll(getDataProperties());
+		result.addAll(getObjectProperties());
+		return Collections.unmodifiableList(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getOntologyObject(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyConcept getOntologyObject(String objectURI) {
+		IFlexoOntologyConcept result = null;
+		for (IFlexoOntologyConcept concept : getConcepts()) {
+			if (concept.getURI().equalsIgnoreCase(objectURI)) {
+				result = concept;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getIndividuals()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyIndividual> getIndividuals() {
+		List<IFlexoOntologyIndividual> concepts = new ArrayList<IFlexoOntologyIndividual>();
 		for (EClassifier classifier : object.getEClassifiers()) {
-			if (classifier.eClass().getClassifierID() == EcorePackage.ECLASS) {
-				EClass eClass = (EClass) classifier;
-				concepts.add(ontology.getConverter().convertClass(ontology, eClass));
-				for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
-					if (feature.eClass().getClassifierID() == EcorePackage.EREFERENCE) {
-						EReference reference = (EReference) feature;
-						concepts.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
-					} else if (feature.eClass().getClassifierID() == EcorePackage.EATTRIBUTE) {
-						EAttribute attribute = (EAttribute) feature;
-						concepts.add(ontology.getConverter().convertAttributeProperty(ontology, attribute));
-					}
-				}
-			} else if (classifier.eClass().getClassifierID() == EcorePackage.EENUM) {
+			if (classifier.eClass().getClassifierID() == EcorePackage.EENUM) {
 				EEnum eEnum = (EEnum) classifier;
-				concepts.add(ontology.getConverter().convertEnum(ontology, eEnum));
 				for (EEnumLiteral eEnumLiteral : eEnum.getELiterals()) {
 					concepts.add(ontology.getConverter().convertEnumLiteral(ontology, eEnumLiteral));
 				}
 			}
 		}
 		return Collections.unmodifiableList(concepts);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getIndividual(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyIndividual getIndividual(String individualURI) {
+		IFlexoOntologyIndividual result = null;
+		for (IFlexoOntologyIndividual individual : getIndividuals()) {
+			if (individual.getURI().equalsIgnoreCase(individualURI)) {
+				result = individual;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getClasses()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyClass> getClasses() {
+		List<IFlexoOntologyClass> concepts = new ArrayList<IFlexoOntologyClass>();
+		for (EClassifier classifier : object.getEClassifiers()) {
+			if (classifier.eClass().getClassifierID() == EcorePackage.ECLASS) {
+				EClass eClass = (EClass) classifier;
+				concepts.add(ontology.getConverter().convertClass(ontology, eClass));
+			} else if (classifier.eClass().getClassifierID() == EcorePackage.EENUM) {
+				EEnum eEnum = (EEnum) classifier;
+				concepts.add(ontology.getConverter().convertEnum(ontology, eEnum));
+			}
+		}
+		return Collections.unmodifiableList(concepts);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getClass(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyClass getClass(String classURI) {
+		IFlexoOntologyClass result = null;
+		for (IFlexoOntologyClass aClass : getClasses()) {
+			if (aClass.getURI().equalsIgnoreCase(classURI)) {
+				result = aClass;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty(String objectURI) {
+		IFlexoOntologyStructuralProperty result = null;
+		if (result == null) {
+			result = getDataProperty(objectURI);
+		}
+		if (result == null) {
+			result = getObjectProperty(objectURI);
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyDataProperty> getDataProperties() {
+		List<IFlexoOntologyDataProperty> concepts = new ArrayList<IFlexoOntologyDataProperty>();
+		for (EClassifier classifier : object.getEClassifiers()) {
+			if (classifier.eClass().getClassifierID() == EcorePackage.ECLASS) {
+				EClass eClass = (EClass) classifier;
+				for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
+					if (feature.eClass().getClassifierID() == EcorePackage.EATTRIBUTE) {
+						EAttribute attribute = (EAttribute) feature;
+						if (attribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EDATA_TYPE) {
+							concepts.add(ontology.getConverter().convertAttributeDataProperty(ontology, attribute));
+						}
+					}
+				}
+			}
+		}
+		return Collections.unmodifiableList(concepts);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getDataProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyDataProperty getDataProperty(String propertyURI) {
+		IFlexoOntologyDataProperty result = null;
+		for (IFlexoOntologyDataProperty dataProperty : getDataProperties()) {
+			if (dataProperty.getURI().equalsIgnoreCase(propertyURI)) {
+				result = dataProperty;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getObjectProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyObjectProperty> getObjectProperties() {
+		List<IFlexoOntologyObjectProperty> concepts = new ArrayList<IFlexoOntologyObjectProperty>();
+		for (EClassifier classifier : object.getEClassifiers()) {
+			if (classifier.eClass().getClassifierID() == EcorePackage.ECLASS) {
+				EClass eClass = (EClass) classifier;
+				for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
+					if (feature.eClass().getClassifierID() == EcorePackage.EREFERENCE) {
+						EReference reference = (EReference) feature;
+						concepts.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
+					} else if (feature.eClass().getClassifierID() == EcorePackage.EATTRIBUTE) {
+						EAttribute attribute = (EAttribute) feature;
+						if (attribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EENUM) {
+							concepts.add(ontology.getConverter().convertAttributeObjectProperty(ontology, attribute));
+						}
+					}
+				}
+			}
+		}
+		return Collections.unmodifiableList(concepts);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getObjectProperty(java.lang.String)
+	 */
+	@Override
+	public IFlexoOntologyObjectProperty getObjectProperty(String propertyURI) {
+		IFlexoOntologyObjectProperty result = null;
+		for (IFlexoOntologyObjectProperty objectProperty : getObjectProperties()) {
+			if (objectProperty.getURI().equalsIgnoreCase(propertyURI)) {
+				result = objectProperty;
+			}
+		}
+		return result;
 	}
 
 	/**

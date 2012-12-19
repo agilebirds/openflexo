@@ -371,8 +371,6 @@ public class EMFMetaModelConverter {
 
 			if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EDATA_TYPE) {
 				EMFDataTypeDataType emfDataType = convertDataType(metaModel, aAttribute.getEAttributeType());
-			} else if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EENUM) {
-				EMFEnumClass emfEnum = convertEnum(metaModel, (EEnum) aAttribute.getEAttributeType());
 			}
 		} else {
 			dataProperty = dataAttributes.get(aAttribute);
@@ -396,6 +394,10 @@ public class EMFMetaModelConverter {
 
 			objectProperty = builder.buildAttributeObjectProperty(metaModel, aAttribute);
 			objectAttributes.put(aAttribute, objectProperty);
+
+			if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EENUM) {
+				EMFEnumClass emfEnum = convertEnum(metaModel, (EEnum) aAttribute.getEAttributeType());
+			}
 		} else {
 			objectProperty = objectAttributes.get(aAttribute);
 		}
