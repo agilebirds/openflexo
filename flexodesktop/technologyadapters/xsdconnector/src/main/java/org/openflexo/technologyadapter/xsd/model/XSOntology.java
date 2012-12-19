@@ -387,11 +387,13 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntClass getClass(String classURI) {
 		XSOntClass result = classes.get(classURI);
 		if (result == null) {
-			for (XSOntology o : getImportedOntologies()) {
-				if (o != this) {
-					result = o.getClass(classURI);
-					if (result != null) {
-						return result;
+			if (getImportedOntologies() != null) {
+				for (XSOntology o : getImportedOntologies()) {
+					if (o != this) {
+						result = o.getClass(classURI);
+						if (result != null) {
+							return result;
+						}
 					}
 				}
 			}
