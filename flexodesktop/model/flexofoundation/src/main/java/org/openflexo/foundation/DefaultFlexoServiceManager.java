@@ -20,10 +20,15 @@
 package org.openflexo.foundation;
 
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.xml.XMLSerializationService;
@@ -79,4 +84,52 @@ public abstract class DefaultFlexoServiceManager extends FlexoServiceManager {
 		return new InformationSpace();
 	}
 
+	public String debug() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("**********************************************\n");
+		sb.append("FLEXO SERVICE MANAGER: " + getClass() + "\n");
+		sb.append("**********************************************\n");
+		sb.append("Registered services: " + getRegisteredServices().size() + "\n");
+		for (FlexoService s : getRegisteredServices()) {
+			sb.append("Service: " + s.getClass().getSimpleName() + "\n");
+		}
+		if (getTechnologyAdapterService() != null) {
+			sb.append("**********************************************\n");
+			sb.append("Technology Adapter Service: " + getTechnologyAdapterService().getClass().getSimpleName() + " technology adapters: "
+					+ getTechnologyAdapterService().getTechnologyAdapters().size() + "\n");
+			for (TechnologyAdapter ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+				sb.append("> " + ta.getName() + "\n");
+			}
+		}
+		if (getResourceCenterService() != null) {
+			sb.append("**********************************************\n");
+			sb.append("Resource Center Service: " + getResourceCenterService().getClass().getSimpleName() + " resource centers: "
+					+ getResourceCenterService().getResourceCenters().size() + "\n");
+			for (FlexoResourceCenter rc : getResourceCenterService().getResourceCenters()) {
+				sb.append("> " + rc.getName() + "\n");
+			}
+		}
+		if (getInformationSpace() != null) {
+			sb.append("**********************************************\n");
+			sb.append("Information Space\n");
+			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+				for (MetaModelRepository<?, ?, ?, ?> mmRep : getInformationSpace().getAllMetaModelRepositories(ta)) {
+					System.out.println("Technology adapter: " + ta + " meta-model repository: " + mmRep + "\n");
+					for (FlexoResource<?> r : mmRep.getAllResources()) {
+						sb.append("> " + r.getURI() + "\n");
+					}
+				}
+			}
+			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+				for (ModelRepository<?, ?, ?, ?> mRep : getInformationSpace().getAllModelRepositories(ta)) {
+					System.out.println("Technology adapter: " + ta + " model repository: " + mRep);
+					for (FlexoResource<?> r : mRep.getAllResources()) {
+						System.out.println("> " + r.getURI());
+					}
+				}
+			}
+		}
+		sb.append("**********************************************");
+		return sb.toString();
+	}
 }
