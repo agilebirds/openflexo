@@ -618,9 +618,9 @@ public class TabbedPane<J> {
 				} else {
 					selectTab(null);
 				}
+				tabHeaders.removeTab(tab);
+				fireTabClosed(tab);
 			}
-			tabHeaders.removeTab(tab);
-			fireTabClosed(tab);
 		}
 	}
 
