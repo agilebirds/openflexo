@@ -92,10 +92,12 @@ public class OntologyUtils {
 	public static <O extends IFlexoOntology> Set<O> getAllImportedOntologies(O ontology) {
 		Set<O> returned = new HashSet<O>();
 		returned.add(ontology);
-		for (IFlexoOntology i : ontology.getImportedOntologies()) {
-			returned.add((O) i);
-			if (i != ontology && !returned.contains(i)) {
-				returned.addAll((Set<O>) getAllImportedOntologies(i));
+		if (ontology.getImportedOntologies() != null) {
+			for (IFlexoOntology i : ontology.getImportedOntologies()) {
+				returned.add((O) i);
+				if (i != ontology && !returned.contains(i)) {
+					returned.addAll((Set<O>) getAllImportedOntologies(i));
+				}
 			}
 		}
 		return returned;

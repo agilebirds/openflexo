@@ -39,9 +39,9 @@ public class XSDIconLibrary {
 	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/XSDTechnology.png");
 	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XSDFile.png");
 	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XMLFile.png");
-	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/OntologyClass.png");
-	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/OntologyIndividual.png");
-	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("src/main/resources/Icons/OntologyObjectProperty.png");
+	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/XSDClass.png");
+	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/XSDIndividual.png");
+	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("src/main/resources/Icons/XSDProperty.png");
 
 	public static ImageIcon iconForObject(Class<? extends AbstractXSOntObject> objectClass) {
 		if (XSDMetaModel.class.isAssignableFrom(objectClass)) {

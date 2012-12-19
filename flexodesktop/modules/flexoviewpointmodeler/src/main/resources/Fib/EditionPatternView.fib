@@ -63,164 +63,7 @@
               <AddAction method="data.createCloningScheme" name="new_cloning_scheme" />
             </Table>
             <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=1;location=center)">
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="DropScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;DropScheme&quot;)" name="DropSchemePanel">
-                <Label label="drop_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="DropSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="DropSchemeTF" localize="true" columns="6" text="TextField" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left)" localize="true" />
-                <TextField data="DropSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="DropSchemeTF" />
-                </TextField>
-                <Label label="target" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left)" localize="true" />
-                <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-                  <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" data="DropSchemePanel.data.targetEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(DropSchemePanel.data.topTarget))">
-                    <Assignment variable="component.viewPoint" value="data.viewPoint" />
-                    <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
-                    <Assignment variable="component.project" />
-                    <Assignment variable="component.selectableCondition" />
-                  </Custom>
-                  <CheckBox selected="true" data="DropSchemePanel.data.topTarget" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" />
-                  <Label label="top_level" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.01;weightY=0.0)" localize="true" />
-                </Panel>
-                <Label label="target_role" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="DropSchemePanel.data.targetHasMultipleRoles" localize="true">
-                  <Dependancy componentName="TargetEditionPatternDropDown" />
-                  <LocalizedDictionary />
-                </Label>
-                <DropDown data="DropSchemePanel.data.targetPatternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="DropSchemePanel.data.targetHasMultipleRoles" name="dropdown" localize="true" staticList="" list="DropSchemePanel.data.targetEditionPattern.shapePatternRoles" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
-                  <Dependancy componentName="TargetEditionPatternDropDown" />
-                  <LocalizedDictionary />
-                </DropDown>
-                <Label label="description" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" text="TextArea" data="DropSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="LinkScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.LinkScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;LinkScheme&quot;)" name="LinkSchemePanel">
-                <Label label="link_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="LinkSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="LinkSchemeTF" localize="true" columns="6" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="LinkSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="LinkSchemeTF" />
-                </TextField>
-                <Label label="from" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" data="LinkSchemePanel.data.fromTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-                  <Assignment variable="component.viewPoint" value="data.viewPoint" />
-                  <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
-                  <Assignment variable="component.project" />
-                  <Assignment variable="component.selectableCondition" />
-                </Custom>
-                <Label label="to" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" data="LinkSchemePanel.data.toTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-                  <Assignment variable="component.viewPoint" value="data.viewPoint" />
-                  <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
-                  <Assignment variable="component.project" />
-                  <Assignment variable="component.selectableCondition" />
-                </Custom>
-                <CheckBox selected="true" data="LinkSchemePanel.data.isAvailableWithFloatingPalette" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=1;location=left)" name="checkbox" localize="true" />
-                <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right)">
-                  <Label label="available with floating palette" constraints="flow(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=center)" localize="true">
-                    <LocalizedDictionary />
-                  </Label>
-                  <CheckBox selected="true" data="LinkSchemePanel.data.northDirectionSupported" constraints="flow(index=1)" name="checkbox" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <Label label="north" constraints="flow(index=2)" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <CheckBox selected="true" data="LinkSchemePanel.data.eastDirectionSupported" constraints="flow(index=3)" name="checkbox" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <Label label="east" constraints="flow(index=4)" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <CheckBox selected="true" data="LinkSchemePanel.data.southDirectionSupported" constraints="flow(index=5)" name="checkbox" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <Label label="south" constraints="flow(index=6)" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <CheckBox selected="true" data="LinkSchemePanel.data.westDirectionSupported" constraints="flow(index=7)" name="checkbox" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                  <Label label="west" constraints="flow(index=8)" localize="true" enable="LinkSchemePanel.data.isAvailableWithFloatingPalette" />
-                </Panel>
-                <Label label="description" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" data="LinkSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="ActionScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ActionScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;ActionScheme&quot;)" name="ActionSchemePanel">
-                <Label label="action_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="ActionSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="ActionSchemeTF" localize="true" columns="6" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="ActionSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="ActionSchemeTF" />
-                </TextField>
-                <Label label="conditional" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="ActionSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                  <Assignment variable="component.bindable" value="ActionSchemePanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="ActionSchemePanel.data.conditionalBindingDefinition" />
-                </Custom>
-                <Label label="description" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" data="ActionSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="CreationScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;CreationScheme&quot;)" name="CreationSchemePanel">
-                <Label label="creation_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="CreationSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="CreationSchemeTF" localize="true" columns="6" text="TextField" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="CreationSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="CreationSchemeTF" />
-                </TextField>
-                <Label label="description" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" text="TextArea" data="CreationSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="NavigationScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.NavigationScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;NavigationScheme&quot;)" name="NavigationSchemePanel">
-                <Label label="navigation_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="NavigationSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="NavigationSchemeTF" localize="true" columns="6" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="NavigationSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="NavigationSchemeTF" />
-                </TextField>
-                <Label label="target_object" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="NavigationSchemePanel.data.targetObject.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                  <Assignment variable="component.bindable" value="NavigationSchemePanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="NavigationSchemePanel.data.targetObjectBindingDefinition" />
-                </Custom>
-                <Label label="conditional" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="NavigationSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                  <Assignment variable="component.bindable" value="NavigationSchemePanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="NavigationSchemePanel.data.conditionalBindingDefinition" />
-                </Custom>
-                <Label label="description" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" data="NavigationSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="DeletionScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DeletionScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;DeletionScheme&quot;)" name="DeletionSchemePanel">
-                <Label label="deletion_scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="DeletionSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="DeletionSchemeTF" localize="true" columns="6" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="DeletionSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="DeletionSchemeTF" />
-                </TextField>
-                <Label label="conditional" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="DeletionSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                  <Assignment variable="component.bindable" value="DeletionSchemePanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="DeletionSchemePanel.data.conditionalBindingDefinition" />
-                </Custom>
-                <Label label="description" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" data="DeletionSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-              </Panel>
-              <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="CloningScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.CloningScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;CloningScheme&quot;)" name="CloningSchemePanel">
-                <Label label="cloning__scheme" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <TextField data="CloningSchemePanel.data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="CloningSchemeTF" localize="true" columns="6" />
-                <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextField data="CloningSchemePanel.data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
-                  <Dependancy componentName="CloningSchemeTF" />
-                </TextField>
-                <Label label="conditional" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="CloningSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                  <Assignment variable="component.bindable" value="CloningSchemePanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="CloningSchemePanel.data.conditionalBindingDefinition" />
-                </Custom>
-                <Label label="description" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-                <TextArea columns="6" rows="2" data="CloningSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-              </Panel>
-            </Panel>
-          </Panel>
-          <TabPanel name="EditionSchemePanel" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" constraints="split(index=0;location=center;splitIdentifier=bottom)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
-            <Tab title="parameters" layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" borderTitle="Parameters" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="border(index=0;location=north)" name="ParametersPanel">
-              <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-                <CheckBox selected="true" data="EditionSchemePanel.data.skipConfirmationPanel" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" />
-                <Label label="skip_confirmation_panel_when_possible" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true">
-                  <LocalizedDictionary />
-                </Label>
-                <CheckBox selected="true" data="EditionSchemePanel.data.definePopupDefaultSize" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" />
-                <Label label="define_popup_size" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="EditionSchemePanel.data.width" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="EditionSchemePanel.data.definePopupDefaultSize" />
-                <Label label="x" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="false" />
-                <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="EditionSchemePanel.data.height" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="EditionSchemePanel.data.definePopupDefaultSize" />
-              </Panel>
-              <Panel layout="twocols" borderTitle="Panel" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="ParametersTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=1;gridY=0;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=1;y=0)" width="400" height="200" name="ParametersDetailsPanel">
+              <Panel layout="twocols" borderTitle="Panel" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="ParametersTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=1;gridY=0;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=1;y=0)" width="400" height="200" name="ParametersDetailsPanel">
                 <Label label="name" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
                 <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                   <TextField data="ParametersDetailsPanel.data.name" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="parameterNameLabel" localize="true" columns="6" text="TextField" />
@@ -351,7 +194,7 @@
                   </Custom>
                 </Panel>
               </Panel>
-              <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)">
+              <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)">
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ParametersTable" data="EditionSchemePanel.data.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" font="SansSerif.plain,0,12">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
                   <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
@@ -390,7 +233,10 @@
                   <LocalizedDictionary />
                 </Panel>
               </Panel>
-            </Tab>
+            </Panel>
+          </Panel>
+          <TabPanel name="EditionSchemePanel" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" constraints="split(index=0;location=center;splitIdentifier=bottom)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
+            <Tab title="parameters" layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" borderTitle="Parameters" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="border(index=0;location=north)" name="ParametersPanel" />
             <Tab title="edition_actions" layout="border" borderTitle="Actions" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" name="ActionsPanel">
               <SplitPanel constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                 <RowSplit name="RowSplit" weight="0.0">
