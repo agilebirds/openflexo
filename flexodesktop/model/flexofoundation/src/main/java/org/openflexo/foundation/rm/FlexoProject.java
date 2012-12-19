@@ -4007,7 +4007,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	@SuppressWarnings("unchecked")
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource(boolean createIfNotExist) {
 		FlexoStorageResource<ProjectOntology> returned = (FlexoStorageResource<ProjectOntology>) resourceForKey(
-				ResourceType.PROJECT_ONTOLOGY, getProjectName());
+				ResourceType.OWL_ONTOLOGY, getProjectName());
 		if (returned == null && createIfNotExist) {
 			return createProjectOntology().getFlexoResource();
 		}

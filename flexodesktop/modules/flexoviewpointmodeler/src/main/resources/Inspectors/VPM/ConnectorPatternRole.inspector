@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+    <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ConnectorGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
         <Tab index="0" title="Connector" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ConnectorTab">
           <Label label="foreground" align="right" localize="true" name="ForegroundLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" width="130" height="16" />

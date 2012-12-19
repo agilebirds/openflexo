@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+    <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandVertically=true;expandHorizontally=true)">
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
           <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
@@ -124,5 +124,6 @@
     <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
     <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
   </LocalizedDictionary>
+  <Parameter name="title" value="Graphical Element Pattern Role" />
 </Panel>
 

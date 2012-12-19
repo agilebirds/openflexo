@@ -127,7 +127,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 
 	@Override
 	public ResourceType getResourceType() {
-		return ResourceType.PROJECT_ONTOLOGY;
+		return ResourceType.OWL_ONTOLOGY;
 	}
 
 	@Override

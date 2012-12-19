@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+    <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
     <Tab index="0" title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="ShapeTab">
       <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" manageDynamicModel="true">
