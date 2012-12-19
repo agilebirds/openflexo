@@ -28,14 +28,13 @@ import java.util.Map.Entry;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
 
 /**
  * EMF Annotation annotation.
  * 
  * @author gbesancon
  */
-public class EMFAnnotationAnnotation extends AFlexoOntologyWrapperObject<EMFMetaModel, EAnnotation> implements IFlexoOntologyAnnotation {
+public class EMFAnnotationAnnotation extends AEMFMetaModelObjectImpl<EAnnotation> implements IFlexoOntologyAnnotation {
 
 	/**
 	 * Constructor.
@@ -52,6 +51,29 @@ public class EMFAnnotationAnnotation extends AFlexoOntologyWrapperObject<EMFMeta
 	@Override
 	public String getName() {
 		return object.getSource();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**

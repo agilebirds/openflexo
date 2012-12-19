@@ -69,5 +69,10 @@ public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, F
 	@Getter(value = RESOURCE_FACTORY, ignoreType = true)
 	Resource.Factory getResourceFactory();
 
+	/**
+	 * Get the MetaModel stored in the Resource..
+	 * 
+	 * @return
+	 */
 	public EMFMetaModel getMetaModel();
 }

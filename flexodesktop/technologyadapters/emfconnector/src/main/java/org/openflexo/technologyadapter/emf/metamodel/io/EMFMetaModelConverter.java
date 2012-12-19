@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAnnotationAnnotation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
@@ -59,7 +60,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 public class EMFMetaModelConverter {
 
 	/** Builder. */
-	protected EMFMetaModelBuilder builder = new EMFMetaModelBuilder();
+	protected final EMFMetaModelBuilder builder;
 	/** Packages from EPackage. */
 	protected Map<EPackage, EMFPackageContainer> packages = new HashMap<EPackage, EMFPackageContainer>();
 	/** Classes from EClass. */
@@ -86,7 +87,8 @@ public class EMFMetaModelConverter {
 	/**
 	 * Constructor.
 	 */
-	public EMFMetaModelConverter() {
+	public EMFMetaModelConverter(EMFTechnologyAdapter adapter) {
+		builder = new EMFMetaModelBuilder(adapter);
 	}
 
 	/**
@@ -369,8 +371,6 @@ public class EMFMetaModelConverter {
 
 			if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EDATA_TYPE) {
 				EMFDataTypeDataType emfDataType = convertDataType(metaModel, aAttribute.getEAttributeType());
-			} else if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EENUM) {
-				EMFEnumClass emfEnum = convertEnum(metaModel, (EEnum) aAttribute.getEAttributeType());
 			}
 		} else {
 			dataProperty = dataAttributes.get(aAttribute);
@@ -394,6 +394,10 @@ public class EMFMetaModelConverter {
 
 			objectProperty = builder.buildAttributeObjectProperty(metaModel, aAttribute);
 			objectAttributes.put(aAttribute, objectProperty);
+
+			if (aAttribute.getEAttributeType().eClass().getClassifierID() == EcorePackage.EENUM) {
+				EMFEnumClass emfEnum = convertEnum(metaModel, (EEnum) aAttribute.getEAttributeType());
+			}
 		} else {
 			objectProperty = objectAttributes.get(aAttribute);
 		}

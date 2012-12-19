@@ -31,6 +31,7 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EEnumLiteral;
@@ -39,17 +40,19 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * EMF Enum Literal.
  * 
  * @author gbesancon
  */
-public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel, EEnumLiteral> implements IFlexoOntologyIndividual {
+public class EMFEnumIndividual extends AEMFMetaModelObjectImpl<EEnumLiteral> implements IFlexoOntologyIndividual {
 	/**
 	 * Constructor.
 	 */
@@ -65,6 +68,28 @@ public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel,
 	@Override
 	public String getName() {
 		return object.getName();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+		System.out.println("Name can't be modified.");
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -86,6 +111,16 @@ public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel,
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -140,10 +175,10 @@ public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel,
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isEqualToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#equalsToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
 	 */
 	@Override
-	public boolean isEqualToConcept(IFlexoOntologyConcept concept) {
+	public boolean equalsToConcept(IFlexoOntologyConcept concept) {
 		return concept == this;
 	}
 
@@ -160,7 +195,7 @@ public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel,
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyVisitor)
 	 */
 	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
@@ -195,5 +230,72 @@ public class EMFEnumIndividual extends AFlexoOntologyWrapperObject<EMFMetaModel,
 	@Override
 	public List<IFlexoOntologyPropertyValue> getPropertyValues() {
 		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#getPropertyValue(org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty)
+	 */
+	@Override
+	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#addToPropertyValue(org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty,
+	 *      java.lang.Object)
+	 */
+	@Override
+	public IFlexoOntologyPropertyValue addToPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
+		System.out.println("Property Values can't be modified.");
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#removeFromPropertyValue(org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty,
+	 *      java.lang.Object)
+	 */
+	@Override
+	public IFlexoOntologyPropertyValue removeFromPropertyValue(IFlexoOntologyStructuralProperty property, Object valueToRemove) {
+		System.out.println("Property Values can't be modified.");
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	 */
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return ontology.getTechnologyAdapter();
 	}
 }

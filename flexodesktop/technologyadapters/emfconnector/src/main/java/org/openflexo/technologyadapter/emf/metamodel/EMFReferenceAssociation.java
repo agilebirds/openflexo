@@ -24,21 +24,42 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import org.eclipse.emf.ecore.EReference;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
 
 /**
  * EMF Reference association.
  * 
  * @author gbesancon
  */
-public class EMFReferenceAssociation extends AFlexoOntologyWrapperObject<EMFMetaModel, EReference> implements
-		IFlexoOntologyFeatureAssociation {
+public class EMFReferenceAssociation extends AEMFMetaModelObjectImpl<EReference> implements IFlexoOntologyFeatureAssociation {
 
 	/**
 	 * Constructor.
 	 */
 	public EMFReferenceAssociation(EMFMetaModel metaModel, EReference aReference) {
 		super(metaModel, aReference);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**

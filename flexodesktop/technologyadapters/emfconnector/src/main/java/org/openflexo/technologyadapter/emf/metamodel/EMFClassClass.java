@@ -32,25 +32,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * EMF Class.
  * 
  * @author gbesancon
  */
-public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, EClass> implements IFlexoOntologyClass {
+public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IFlexoOntologyClass {
 	/**
 	 * Constructor.
 	 */
@@ -81,12 +85,44 @@ public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, ECl
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+		System.out.println("Name can't be modified.");
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getDescription()
 	 */
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -148,10 +184,10 @@ public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, ECl
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isEqualToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#equalsToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
 	 */
 	@Override
-	public boolean isEqualToConcept(IFlexoOntologyConcept concept) {
+	public boolean equalsToConcept(IFlexoOntologyConcept concept) {
 		return concept == this;
 	}
 
@@ -168,7 +204,7 @@ public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, ECl
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyVisitor)
 	 */
 	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
@@ -192,10 +228,10 @@ public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, ECl
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#getSubClasses()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#getSubClasses(org.openflexo.foundation.ontology.IFlexoOntology)
 	 */
 	@Override
-	public List<IFlexoOntologyClass> getSubClasses() {
+	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context) {
 		List<IFlexoOntologyClass> subClasses = new ArrayList<IFlexoOntologyClass>();
 		// FIXME biais a cause de chargement a la demande.
 		for (Entry<EClass, EMFClassClass> classEntry : ontology.getConverter().getClasses().entrySet()) {
@@ -221,16 +257,70 @@ public class EMFClassClass extends AFlexoOntologyWrapperObject<EMFMetaModel, ECl
 	}
 
 	/**
-	 * Follow the link.
+	 * Is SubClass Of.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isSubClassOf(org.openflexo.foundation.ontology.IFlexoOntologyClass)
+	 * @param aClass
+	 * @return
 	 */
-	@Override
 	public boolean isSubClassOf(IFlexoOntologyClass aClass) {
 		boolean isSubClass = false;
 		if (aClass instanceof EMFClassClass && aClass != this) {
 			isSubClass = ((EMFClassClass) aClass).getObject().isSuperTypeOf(object);
 		}
 		return isSubClass;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	 */
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return ontology.getTechnologyAdapter();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isNamedClass()
+	 */
+	@Override
+	@Deprecated
+	public boolean isNamedClass() {
+		return true;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#isRootConcept()
+	 */
+	@Override
+	@Deprecated
+	public boolean isRootConcept() {
+		return getName().equalsIgnoreCase("EObject");
 	}
 }

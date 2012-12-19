@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -28,6 +29,7 @@ import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -37,6 +39,14 @@ import org.openflexo.toolbox.IProgress;
  */
 public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMFMetaModel> implements EMFMetaModelResource {
 
+	protected static final Logger logger = Logger.getLogger(EMFMetaModelResourceImpl.class.getPackage().getName());
+
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource#getMetaModel()
+	 */
 	@Override
 	public EMFMetaModel getMetaModel() {
 		try {
@@ -60,8 +70,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	 */
 	@Override
 	public EMFMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
-		EMFMetaModel returned = new EMFMetaModel(getURI(), getFile(), (EMFTechnologyAdapter) getTechnologyAdapter());
-		return returned;
+		EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
+		EMFMetaModel result = converter.convertMetaModel(getPackage());
+		// result.setResource(this);
+		return result;
 	}
 
 	/**
@@ -71,7 +83,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	 */
 	@Override
 	public void save(IProgress progress) {
-
+		logger.info("MetaModel is not supposed to be modified.");
 	}
 
 	/**
@@ -81,7 +93,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	 */
 	@Override
 	public FlexoResourceTree update() {
+		logger.info("MetaModel is not supposed to be updated.");
 		return null;
 	}
-
 }

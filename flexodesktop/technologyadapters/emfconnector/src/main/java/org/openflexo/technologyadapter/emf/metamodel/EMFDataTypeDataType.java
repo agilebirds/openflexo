@@ -29,15 +29,16 @@
 package org.openflexo.technologyadapter.emf.metamodel;
 
 import org.eclipse.emf.ecore.EDataType;
+import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * EMF Data Type.
  * 
  * @author gbesancon
  */
-public class EMFDataTypeDataType extends AFlexoOntologyWrapperObject<EMFMetaModel, EDataType> implements IFlexoOntologyDataType {
+public class EMFDataTypeDataType extends AEMFMetaModelObjectImpl<EDataType> implements IFlexoOntologyDataType {
 
 	/**
 	 * Constructor.
@@ -69,10 +70,74 @@ public class EMFDataTypeDataType extends AFlexoOntologyWrapperObject<EMFMetaMode
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+		System.out.println("Name can't be modified.");
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getDescription()
 	 */
 	@Override
 	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	 */
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return ontology.getTechnologyAdapter();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyDataType#getAccessedType()
+	 */
+	@Override
+	public Class<?> getAccessedType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyDataType#getBuiltInDataType()
+	 */
+	@Override
+	public BuiltInDataType getBuiltInDataType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -31,24 +31,27 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EReference;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * EMF Reference.
  * 
  * @author gbesancon
  */
-public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFMetaModel, EReference> implements
-		IFlexoOntologyObjectProperty {
+public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReference> implements IFlexoOntologyObjectProperty {
 	/**
 	 * Constructor.
 	 */
@@ -79,12 +82,44 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) throws Exception {
+		System.out.println("Name can't be modified.");
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getDescription()
 	 */
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		return getDescription();
 	}
 
 	/**
@@ -139,10 +174,10 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isEqualToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#equalsToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
 	 */
 	@Override
-	public boolean isEqualToConcept(IFlexoOntologyConcept concept) {
+	public boolean equalsToConcept(IFlexoOntologyConcept concept) {
 		return concept == this;
 	}
 
@@ -159,7 +194,7 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyVisitor)
 	 */
 	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
@@ -188,5 +223,78 @@ public class EMFReferenceObjectProperty extends AFlexoOntologyWrapperObject<EMFM
 	@Override
 	public IFlexoOntologyConcept getRange() {
 		return ontology.getConverter().convertClass(ontology, object.getEReferenceType());
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getDomain()
+	 */
+	@Override
+	public IFlexoOntologyConcept getDomain() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#isAnnotationProperty()
+	 */
+	@Override
+	public boolean isAnnotationProperty() {
+		return false;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getSuperProperties()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyStructuralProperty> getSuperProperties() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getSubProperties(org.openflexo.foundation.ontology.IFlexoOntology)
+	 */
+	@Override
+	public List<? extends IFlexoOntologyStructuralProperty> getSubProperties(IFlexoOntology context) {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	 */
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		return ontology.getTechnologyAdapter();
 	}
 }
