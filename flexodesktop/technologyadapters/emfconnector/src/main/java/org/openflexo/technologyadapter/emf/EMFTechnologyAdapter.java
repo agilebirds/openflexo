@@ -54,7 +54,6 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
-import org.openflexo.technologyadapter.emf.model.EMFTechnologyContextManager;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
@@ -235,7 +234,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		if (aModelFile.exists()) {
 			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
 			if (aModelFile.getName().endsWith("." + emfMetaModelResource.getModelFileExtension())) {
-				// FIXME isValid = true;
+				isValid = true;
 			}
 		}
 		return isValid;

@@ -30,14 +30,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 /**
  * EMF Object Individual Attribute Object Property Value.
  * 
  * @author gbesancon
  */
-public class EMFObjectIndividualAttributeObjectPropertyValue extends AFlexoOntologyWrapperObject<EMFModel, EObject> implements
+public class EMFObjectIndividualAttributeObjectPropertyValue extends AEMFModelObjectImpl<EObject> implements
 		IFlexoOntologyObjectPropertyValue {
 
 	/** Attribute. */
@@ -57,6 +57,29 @@ public class EMFObjectIndividualAttributeObjectPropertyValue extends AFlexoOntol
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue#getObjectProperty()
 	 */
 	@Override
@@ -67,10 +90,20 @@ public class EMFObjectIndividualAttributeObjectPropertyValue extends AFlexoOntol
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue#getProperty()
+	 */
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getObjectProperty();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue#getValue()
 	 */
 	@Override
-	public List<IFlexoOntologyConcept> getValue() {
+	public List<IFlexoOntologyConcept> getValues() {
 		List<IFlexoOntologyConcept> result = null;
 		if (object.eGet(attribute) != null) {
 			if (attribute.getUpperBound() == 1) {

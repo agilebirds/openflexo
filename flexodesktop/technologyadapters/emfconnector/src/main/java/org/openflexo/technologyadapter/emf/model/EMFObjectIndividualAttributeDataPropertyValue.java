@@ -28,15 +28,14 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue;
-import org.openflexo.foundation.ontology.util.AFlexoOntologyWrapperObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 /**
  * EMF Object Individual Attribute Data Property Value.
  * 
  * @author gbesancon
  */
-public class EMFObjectIndividualAttributeDataPropertyValue extends AFlexoOntologyWrapperObject<EMFModel, EObject> implements
-		IFlexoOntologyDataPropertyValue {
+public class EMFObjectIndividualAttributeDataPropertyValue extends AEMFModelObjectImpl<EObject> implements IFlexoOntologyDataPropertyValue {
 
 	/** Attribute. */
 	protected final EAttribute attribute;
@@ -52,6 +51,29 @@ public class EMFObjectIndividualAttributeDataPropertyValue extends AFlexoOntolog
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
+	 */
+	@Override
+	@Deprecated
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
+	 */
+	@Override
+	public String getDisplayableDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue#getDataProperty()
 	 */
 	@Override
@@ -62,10 +84,20 @@ public class EMFObjectIndividualAttributeDataPropertyValue extends AFlexoOntolog
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue#getProperty()
+	 */
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getDataProperty();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue#getValue()
 	 */
 	@Override
-	public List<Object> getValue() {
+	public List<Object> getValues() {
 		List<Object> result = null;
 		if (object.eGet(attribute) != null) {
 			if (attribute.getUpperBound() == 1) {
