@@ -74,5 +74,6 @@ public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, F
 	 * 
 	 * @return
 	 */
-	public EMFMetaModel getMetaModel();
+	@Override
+	public EMFMetaModel getMetaModelData();
 }

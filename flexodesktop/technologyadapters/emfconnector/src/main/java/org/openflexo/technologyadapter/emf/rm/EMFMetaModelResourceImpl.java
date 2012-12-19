@@ -48,7 +48,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	 * @see org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource#getMetaModel()
 	 */
 	@Override
-	public EMFMetaModel getMetaModel() {
+	public EMFMetaModel getMetaModelData() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {

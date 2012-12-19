@@ -5,8 +5,16 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.gui.EMFIconLibrary;
+import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClassClass;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
@@ -49,7 +57,7 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	 */
 	@Override
 	public ImageIcon getModelIcon() {
-		return EMFIconLibrary.XML_FILE_ICON;
+		return EMFIconLibrary.EMF_FILE_ICON;
 	}
 
 	/**
@@ -59,7 +67,7 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	 */
 	@Override
 	public ImageIcon getMetaModelIcon() {
-		return EMFIconLibrary.XSD_FILE_ICON;
+		return EMFIconLibrary.ECORE_FILE_ICON;
 	}
 
 	/**
@@ -81,6 +89,11 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	 */
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(EMFClassClass.class);
+		} else if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForOntologyObject(EMFObjectIndividual.class);
+		}
 		return null;
 	}
 
@@ -92,6 +105,11 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	 */
 	@Override
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForOntologyObject(EMFObjectIndividual.class), IconLibrary.DUPLICATE);
+		} else if (AddEMFClassClass.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForOntologyObject(EMFClassClass.class), IconLibrary.DUPLICATE);
+		}
 		return null;
 	}
 
