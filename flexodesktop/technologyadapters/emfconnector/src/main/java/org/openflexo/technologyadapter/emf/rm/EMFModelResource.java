@@ -196,7 +196,7 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	}
 
 	@Override
-	public EMFModel getModel() {
+	public EMFModel getModelData() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -170,7 +170,7 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 	}
 
 	@Override
-	public XMLModel getModel() {
+	public XMLModel getModelData() {
 		// TODO Auto-generated method stub
 		return null;
 	}

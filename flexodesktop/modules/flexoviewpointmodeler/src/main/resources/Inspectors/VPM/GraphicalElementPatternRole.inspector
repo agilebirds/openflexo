@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
+
+     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+              <Label index="14" label="features" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" localize="true" />
+              <Table index="15" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.grSpecifications" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=true)">
+                <CheckBoxColumn data="iterator.mandatory" title="mandatory" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
+                <TextFieldColumn data="iterator.featureName" title="feature" columnWidth="40" resizable="true" displayTitle="true" />
+                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value.binding" title="value" columnWidth="300" resizable="true" displayTitle="true" name="value">
+                  <ColumnAssignment variable="component.bindable" value="iterator" />
+                  <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
+                </CustomColumn>
+                <CheckBoxColumn data="iterator.readOnly" title="RO" columnWidth="30" resizable="false" displayTitle="true" name="checkbox" />
+                <LocalizedDictionary />
+              </Table>
+              
+              <Label index="16" label="actions" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" localize="true" />
+              <Table index="17" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.actions" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=true)">
+                <IconColumn data="controller.iconForObject(iterator.abstractActionScheme)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
+                <DropDownColumn data="iterator.actionMask" title="mask" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
+                <DropDownColumn list="iterator.editionPattern.abstractActionSchemes" data="iterator.abstractActionScheme" format="object.name" title="action" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
+                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.conditional.binding" title="conditional" columnWidth="300" resizable="true" displayTitle="true" name="value">
+                  <ColumnAssignment variable="component.bindable" value="iterator" />
+                  <ColumnAssignment variable="component.bindingDefinition" value="iterator.conditionalBindingDefinition" />
+                </CustomColumn>
+                <AddAction method="data.createAction" name="add_action" />
+                <RemoveAction method="data.deleteAction(selected)" name="delete_action" />
+                <LocalizedDictionary />
+              </Table>
+              
+    </Tab>
+
     <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandVertically=true;expandHorizontally=true)">
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">

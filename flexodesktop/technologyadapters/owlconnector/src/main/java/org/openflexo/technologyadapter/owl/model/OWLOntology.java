@@ -192,6 +192,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		orderedIndividuals = new Vector<OWLIndividual>();
 		orderedDataProperties = new Vector<OWLDataProperty>();
 		orderedObjectProperties = new Vector<OWLObjectProperty>();
+
 	}
 
 	public static String findOntologyURI(File aFile) {
@@ -445,7 +446,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public String toString() {
-		return "ImportedOntology:" + getOntologyURI();
+		return "OWLOntology:" + getOntologyURI();
 	}
 
 	public boolean importOntology(String ontologyURI) throws OntologyNotFoundException {
@@ -1275,6 +1276,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public Vector<OWLClass> getClasses() {
+		loadWhenUnloaded();
 		if (needsReordering) {
 			reorderConceptAndProperties();
 		}
@@ -1283,6 +1285,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public Vector<OWLIndividual> getIndividuals() {
+		loadWhenUnloaded();
 		if (needsReordering) {
 			reorderConceptAndProperties();
 		}
@@ -1291,6 +1294,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public Vector<OWLDataProperty> getDataProperties() {
+		loadWhenUnloaded();
 		if (needsReordering) {
 			reorderConceptAndProperties();
 		}
@@ -1299,6 +1303,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public Vector<OWLObjectProperty> getObjectProperties() {
+		loadWhenUnloaded();
 		if (needsReordering) {
 			reorderConceptAndProperties();
 		}

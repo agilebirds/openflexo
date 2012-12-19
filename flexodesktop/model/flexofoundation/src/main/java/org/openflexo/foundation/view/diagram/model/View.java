@@ -389,7 +389,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
 		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
-			model = modelSlot.createEmptyModel(this, modelSlot.getMetaModelResource().getMetaModel());
+			model = modelSlot.createEmptyModel(this, modelSlot.getMetaModelResource().getMetaModelData());
 			setModel(modelSlot, model);
 		}
 		return model;
@@ -403,7 +403,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
 			if (instance.getModelSlot() != null && instance.getModelSlot().getMetaModelResource() != null) {
-				allMetaModels.add(instance.getModelSlot().getMetaModelResource().getMetaModel());
+				allMetaModels.add(instance.getModelSlot().getMetaModelResource().getMetaModelData());
 			}
 		}
 		return allMetaModels;

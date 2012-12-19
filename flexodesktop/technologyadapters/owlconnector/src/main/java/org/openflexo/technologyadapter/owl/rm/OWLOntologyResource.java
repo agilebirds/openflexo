@@ -239,7 +239,17 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	}
 
 	@Override
-	public OWLOntology getModel() {
+	public OWLOntology getModelData() {
+		try {
+			return getResourceData(null);
+		} catch (ResourceLoadingCancelledException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public OWLOntology getMetaModelData() {
 		try {
 			return getResourceData(null);
 		} catch (ResourceLoadingCancelledException e) {

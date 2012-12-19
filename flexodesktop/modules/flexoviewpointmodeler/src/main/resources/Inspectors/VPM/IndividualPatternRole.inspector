@@ -4,7 +4,7 @@
      <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
        <Label label="ontologic_type" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
        <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" data="data.ontologicType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-         <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModel" />
+         <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
        </Custom>
      </Tab>
   </TabPanel>

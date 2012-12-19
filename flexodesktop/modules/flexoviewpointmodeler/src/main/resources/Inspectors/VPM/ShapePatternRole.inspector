@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
+
+	<Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11"
+		name="BasicTab">
+		<Label label="label" align="right"
+			constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)"
+			localize="true" />
+		<Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING"
+			borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0"
+			constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
+			<Custom componentClassName="org.openflexo.fib.utils.BindingSelector"
+				localize="true" manageDynamicModel="true" data="data.label.binding"
+				constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+				<Assignment variable="component.bindable" value="data" />
+				<Assignment variable="component.bindingDefinition" value="data.labelBindingDefinition" />
+			</Custom>
+			<CheckBox selected="true" data="data.readOnlyLabel"
+				constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)"
+				name="checkbox" localize="true" />
+			<Label label="read_only"
+				constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)"
+				localize="true">
+				<LocalizedDictionary />
+			</Label>
+		</Panel>
+		<Label label="example_label"
+			constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)"
+			localize="true" />
+		<TextField data="data.exampleLabel"
+			constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)"
+			localize="true" columns="6" text="ShapeExampleLabelTextField" />
+		<Label label="parent_shape"
+			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
+			localize="true" />
+		<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
+			borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0"
+			constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)">
+			<DropDown data="data.parentShapePatternRole"
+				constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)"
+				visible="(!(ParentShapeCheckbox.data))" name="dropdown" localize="true"
+				staticList="" list="data.editionPattern.shapePatternRoles"
+				iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole"
+				autoSelectFirstRow="true">
+				<LocalizedDictionary />
+			</DropDown>
+			<CheckBox selected="true" data="data.parentShapeAsDefinedInAction"
+				constraints="flow(index=1)" name="ParentShapeCheckbox" localize="true"
+				manageDynamicModel="true" />
+			<Label label="as_described_in_action" constraints="flow(index=2)"
+				localize="true">
+				<LocalizedDictionary />
+			</Label>
+		</Panel>
+
+	</Tab>
+
     <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
     <Tab index="0" title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="ShapeTab">
