@@ -126,7 +126,7 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 
 	@Override
 	public ResourceType getResourceType() {
-		return ResourceType.PROJECT_ONTOLOGY;
+		return ResourceType.OWL_ONTOLOGY;
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 	}
 
 	@Override
-	public XMLModel getModel() {
+	public XMLModel getModelData() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -969,7 +969,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
 			if (modelSlot.getMetaModelResource() != null) {
-				returned.add(modelSlot.getMetaModelResource().getMetaModel());
+				returned.add(modelSlot.getMetaModelResource().getMetaModelData());
 			}
 		}
 		return returned;

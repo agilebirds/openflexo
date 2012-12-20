@@ -85,7 +85,6 @@ public class ModuleInspectorController extends Observable implements Observer {
 				return name.endsWith(".inspector");
 			}
 		})) {
-			// System.out.println("Read "+f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				if (inspector.getDataClass() != null) {

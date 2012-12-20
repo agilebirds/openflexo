@@ -301,7 +301,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 				}
 			}
 		}
-		// logger.info("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
+		logger.info("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

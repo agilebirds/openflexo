@@ -36,8 +36,8 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -364,15 +364,30 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
-				FIBIndividualSelector selector = new FIBIndividualSelector(null);
-				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				try {
+					FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				ApplicationContext ac = new TestApplicationContext(new FileResource("TestResourceCenter"));
+
+				IFlexoOntology o = (IFlexoOntology) ac.getInformationSpace()
+						.getMetaModel("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl").getMetaModelData();
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
+				// "http://www.cpmf.org/ontologies/cpmfInstance");
+				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
+				// "http://www.w3.org/2002/07/owl");
+				// "http://www.w3.org/2000/01/rdf-schema");
 				// "http://www.openflexo.org/test/TestInstances.owl");
-						"http://www.openflexo.org/test/Family.owl");
-				o.loadWhenUnloaded();
+				// "http://www.openflexo.org/test/Family.owl");
+
+				FIBIndividualSelector selector = new FIBIndividualSelector(null);
+
 				selector.setContext(o);
 				selector.setHierarchicalMode(true); // false
 				selector.setStrictMode(true);
@@ -390,7 +405,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

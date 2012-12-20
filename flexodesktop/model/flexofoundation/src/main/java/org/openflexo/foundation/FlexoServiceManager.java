@@ -25,6 +25,7 @@ import java.util.List;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
@@ -47,7 +48,7 @@ import org.openflexo.foundation.xml.XMLSerializationService;
  * @author sylvain
  * 
  */
-public class FlexoServiceManager extends FlexoObject {
+public abstract class FlexoServiceManager extends FlexoObject {
 
 	private ArrayList<FlexoService> registeredServices;
 
@@ -110,11 +111,29 @@ public class FlexoServiceManager extends FlexoObject {
 		return getService(InformationSpace.class);
 	}
 
+	public FlexoProjectReferenceLoader getProjectReferenceLoader() {
+		return getService(FlexoProjectReferenceLoader.class);
+	}
+
 	public XMLSerializationService getXMLSerializationService() {
 		return getService(XMLSerializationService.class);
 	}
 
 	public class ServiceRegistered implements ServiceNotification {
-
 	}
+
+	protected abstract XMLSerializationService createXMLSerializationService();
+
+	protected abstract FlexoEditor createApplicationEditor();
+
+	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
+
+	protected abstract FlexoResourceCenterService createResourceCenterService();
+
+	protected abstract TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService flexoResourceCenterService);
+
+	protected abstract ViewPointLibrary createViewPointLibraryService();
+
+	protected abstract InformationSpace createInformationSpace();
+
 }

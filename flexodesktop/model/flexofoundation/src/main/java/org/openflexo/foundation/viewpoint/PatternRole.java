@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -33,12 +34,14 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * A PatternRole is an element of an EditionPattern, which play a role in this edition pattern
+ * A PatternRole is a structural element of an EditionPattern, which plays a role in this edition pattern
  * 
  * @author sylvain
  * 
  */
 public abstract class PatternRole<T> extends EditionPatternObject {
+
+	private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
 
 	public static enum PatternRoleType {
 		Shape,
@@ -59,8 +62,6 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	}
 
 	private EditionPattern _pattern;
-	private String patternRoleName;
-	private String description;
 
 	private ModelSlot<?, ?> modelSlot;
 
@@ -83,6 +84,7 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	}
 
 	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+		logger.info("setModelSlot with " + modelSlot);
 		this.modelSlot = modelSlot;
 	}
 
@@ -103,23 +105,12 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		return null;
 	}
 
-	@Override
-	public String getName() {
-		return getPatternRoleName();
-	}
-
 	public String getPatternRoleName() {
-		return patternRoleName;
+		return getName();
 	}
 
 	public void setPatternRoleName(String patternRoleName) {
-		this.patternRoleName = patternRoleName;
-		/*String oldValue = patternRoleName;
-		if (patternRoleName != null && !patternRoleName.equals(oldValue)) {
-			this.patternRoleName = patternRoleName;
-			setChanged();
-			notifyObservers(new NameChanged(oldValue, patternRoleName));
-		}*/
+		setName(patternRoleName);
 	}
 
 	@Override

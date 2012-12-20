@@ -68,10 +68,10 @@ public class TestXSD extends FlexoTestCase {
 		XSDMetaModelResource libraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.openflexo.org/test/library.xsd");
 		assertNotNull(libraryRes);
 		assertFalse(libraryRes.isLoaded());
-		assertNotNull(libraryRes.getMetaModel());
+		assertNotNull(libraryRes.getMetaModelData());
 		assertTrue(libraryRes.isLoaded());
 
-		logger.info("Classes: " + libraryRes.getMetaModel().getClasses());
+		logger.info("Classes: " + libraryRes.getMetaModelData().getClasses());
 
 		// TODO: implement tests
 		logger.warning("Please perform some checks here");
@@ -83,10 +83,10 @@ public class TestXSD extends FlexoTestCase {
 		XSDMetaModelResource mavenRes = (XSDMetaModelResource) mmRepository.getResource("http://www.openflexo.org/test/maven-v4_0_0.xsd");
 		assertNotNull(mavenRes);
 		assertFalse(mavenRes.isLoaded());
-		assertNotNull(mavenRes.getMetaModel());
+		assertNotNull(mavenRes.getMetaModelData());
 		assertTrue(mavenRes.isLoaded());
 
-		logger.info("Classes: " + mavenRes.getMetaModel().getClasses());
+		logger.info("Classes: " + mavenRes.getMetaModelData().getClasses());
 
 		// TODO: implement tests
 		logger.warning("Please perform some checks here");

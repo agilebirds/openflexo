@@ -24,6 +24,11 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.toolbox.ImageIconResource;
 
 public class EMFIconLibrary {
@@ -32,24 +37,25 @@ public class EMFIconLibrary {
 
 	public static final ImageIconResource EMF_TECHNOLOGY_BIG_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology32.png");
 	public static final ImageIconResource EMF_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
-	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XSDFile.png");
-	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XMLFile.png");
-	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/OntologyClass.png");
-	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/OntologyIndividual.png");
-	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("src/main/resources/Icons/OntologyObjectProperty.png");
+	public static final ImageIconResource ECORE_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
+	public static final ImageIconResource EMF_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
+	public static final ImageIconResource EMF_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/EClass.gif");
+	public static final ImageIconResource EMF_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/EObject.gif");
+	public static final ImageIconResource EMF_REFERENCE_ICON = new ImageIconResource("src/main/resources/Icons/EReference.gif");
+	public static final ImageIconResource EMF_ATTRIBUTE_ICON = new ImageIconResource("src/main/resources/Icons/EAttribute.gif");
 
 	public static ImageIcon iconForObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		/*if (XSDMetaModel.class.isAssignableFrom(objectClass)) {
-			return XSD_FILE_ICON;
-		} else if (XMLModel.class.isAssignableFrom(objectClass)) {
-			return XML_FILE_ICON;
-		} else if (XSOntClass.class.isAssignableFrom(objectClass)) {
-			return XSD_CLASS_ICON;
-		} else if (XSOntIndividual.class.isAssignableFrom(objectClass)) {
-			return XSD_INDIVIDUAL_ICON;
-		} else if (XSOntProperty.class.isAssignableFrom(objectClass)) {
-			return XSD_PROPERTY_ICON;
-		}*/
+		if (EMFMetaModel.class.isAssignableFrom(objectClass)) {
+			return ECORE_FILE_ICON;
+		} else if (EMFModel.class.isAssignableFrom(objectClass)) {
+			return EMF_FILE_ICON;
+		} else if (EMFClassClass.class.isAssignableFrom(objectClass)) {
+			return EMF_CLASS_ICON;
+		} else if (EMFObjectIndividual.class.isAssignableFrom(objectClass)) {
+			return EMF_INDIVIDUAL_ICON;
+		} else if (EMFReferenceObjectProperty.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		}
 		logger.warning("No icon for " + objectClass);
 		return null;
 	}

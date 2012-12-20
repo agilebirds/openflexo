@@ -13,5 +13,6 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 @XMLElement
 public interface XSDMetaModelResource extends FlexoFileResource<XSDMetaModel>, FlexoMetaModelResource<XMLModel, XSDMetaModel> {
 
-	public XSDMetaModel getMetaModel();
+	@Override
+	public XSDMetaModel getMetaModelData();
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.NamedViewPointObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="PatternRoleNameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="uri" localize="true" name="URILabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" readOnly="true" passwd="false" localize="true" name="URITextField" data="data.uRI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Named ViewPoint Object" />
+</Panel>
+

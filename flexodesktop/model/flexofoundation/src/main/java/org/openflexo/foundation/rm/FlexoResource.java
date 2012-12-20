@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.Validable;
@@ -55,7 +55,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
-public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObservable implements XMLSerializable, Validable {
+public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObject implements XMLSerializable, Validable {
 
 	private static final FlexoDependantResourceComparator dependancyComparator = new FlexoDependantResourceComparator();
 
@@ -421,6 +421,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * Delete this resource. Note that this method does nothing, except removing resource from projet, so this must be overriden in
 	 * sub-classes
 	 */
+	@Override
 	public void delete() {
 		isDeleted = true;
 		getProject().removeResource(this);
@@ -451,6 +452,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 * @see org.openflexo.foundation.rm.FlexoResource#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
 	 */
+	@Override
 	public void notifyRM(RMNotification notification) throws FlexoException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Resource " + getResourceIdentifier() + " is notified of " + notification);
@@ -520,6 +522,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResource#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 */
+	@Override
 	public void receiveRMNotification(RMNotification notification) throws FlexoException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Receive RMNotification in FlexoResource IGNORED\n\treceiver:" + this + "\n\tnotification:" + notification);
@@ -1016,6 +1019,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
 	 */
+	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);

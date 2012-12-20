@@ -14,7 +14,7 @@ import org.openflexo.toolbox.IProgress;
 public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSDMetaModel> implements XSDMetaModelResource {
 
 	@Override
-	public XSDMetaModel getMetaModel() {
+	public XSDMetaModel getMetaModelData() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {

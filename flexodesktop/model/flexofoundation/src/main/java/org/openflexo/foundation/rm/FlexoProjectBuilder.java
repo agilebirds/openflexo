@@ -47,6 +47,10 @@ public class FlexoProjectBuilder {
 
 	public FlexoServiceManager serviceManager;
 
+	public FlexoProjectBuilder(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
 	public void initResourcesCount(int resourcesCount) {
 		if (progress != null) {
 			this.resourcesCount = resourcesCount;

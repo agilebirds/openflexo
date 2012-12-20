@@ -25,6 +25,6 @@ public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends Flex
 	@Setter(META_MODEL)
 	public void setMetaModel(MM aMetaModel);
 
-	public M getModel();
+	public M getModelData();
 
 }

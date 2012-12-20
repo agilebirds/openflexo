@@ -313,4 +313,7 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 		return returned;
 	}
 
+	/*public void setModelSlot(DiagramModelSlot modelSlot) {
+		super.setModelSlot(modelSlot);
+	}*/
 }

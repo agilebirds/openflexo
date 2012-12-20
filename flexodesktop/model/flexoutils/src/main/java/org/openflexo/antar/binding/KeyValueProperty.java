@@ -260,21 +260,40 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
 		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
-		for (Method m : declaringClass.getMethods()) {
-			for (int i = 0; i < tries.length; i++) {
-				if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
-						&& m.getGenericParameterTypes()[0].equals(aType)) {
-					return m;
+		if (aType instanceof Class) {
+			for (Method m : declaringClass.getMethods()) {
+				for (int i = 0; i < tries.length; i++) {
+					if (m.getName().equals(tries[i]) && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(aType)) {
+						return m;
+					}
+				}
+			}
+		} else {
+			for (Method m : declaringClass.getMethods()) {
+				for (int i = 0; i < tries.length; i++) {
+					if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
+							&& m.getGenericParameterTypes()[0].equals(aType)) {
+						return m;
+					}
 				}
 			}
 		}
 
+		// Find with super types (typed with generics)
 		Type superType = TypeUtils.getSuperType(aType);
 		if (superType != null) {
 			// Try with a super class
-			return searchMatchingSetMethod(declaringClass, propertyName, superType);
+			Method returned = searchMatchingSetMethod(declaringClass, propertyName, superType);
+			if (returned != null) {
+				return returned;
+			}
 		}
 
+		// Finally try without generics
+		if (TypeUtils.getBaseClass(aType) != null && TypeUtils.getBaseClass(aType).getSuperclass() != null
+				&& TypeUtils.getBaseClass(aType).getSuperclass() != superType) {
+			return searchMatchingSetMethod(declaringClass, propertyName, TypeUtils.getBaseClass(aType).getSuperclass());
+		}
 		/*
 		Class typeClass = TypeUtils.getBaseClass(aType);
 		

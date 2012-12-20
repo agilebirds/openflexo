@@ -24,6 +24,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * A model slot is a named object providing symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
@@ -160,6 +161,10 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
+		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
+			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModel(metaModelURI);
+			logger.info("Looked-up " + metaModelResource);
+		}
 		return metaModelResource;
 	}
 
@@ -175,10 +180,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	public void setMetaModelURI(String metaModelURI) {
-		if (getViewPointLibrary() != null) {
-			logger.warning("Gerer un truc ici !!!");
-			// metaModelResource = getViewPointLibrary().;
-		}
+		System.out.println("Sets metaModelURI=" + metaModelURI);
 		this.metaModelURI = metaModelURI;
 	}
 

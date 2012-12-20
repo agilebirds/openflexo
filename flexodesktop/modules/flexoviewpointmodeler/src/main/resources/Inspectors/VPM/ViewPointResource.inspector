@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.rm.ViewPointResource" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
       <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.version" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
-      <Label label="openflexo_version" localize="true" name="OpenflexoVersionLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.openflexoVersion" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.version.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
       <Label label="uri" localize="true" name="ViewPointURILabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="CalcURI" data="data.URI" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
-      <Label label="about" localize="true" name="AboutLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <TextArea columns="10" passwd="false" readOnly="true" localize="true" name="About" data="data.description" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" />
     </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="model_version" localize="true" name="OpenflexoVersionLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.modelVersion.toString" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+    
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>

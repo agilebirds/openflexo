@@ -28,10 +28,10 @@ import java.util.logging.Logger;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.DefaultFlexoServiceManager;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.UserResourceCenter;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -119,12 +119,18 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPointResour
 
 		final ViewPointLibrary viewPointLibrary;
 
-		FlexoServiceManager sm = new FlexoServiceManager();
-		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-		rcService.addToResourceCenters(new UserResourceCenter(new FileResource("TestResourceCenter")));
-		sm.registerService(rcService);
-		viewPointLibrary = new ViewPointLibrary();
-		sm.registerService(viewPointLibrary);
+		final FlexoServiceManager serviceManager = new DefaultFlexoServiceManager() {
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return null;
+			}
+		};
+		viewPointLibrary = serviceManager.getViewPointLibrary();
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override

@@ -38,7 +38,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		@Override
 		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
 			if (importedProject == null) {
-				importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
+				importedProject = reloadProject(importedProjectDirectory).getProject();
 			}
 			references.get(0).setReferredProject(importedProject);
 		}
@@ -57,9 +57,9 @@ public class TestProjectReuse extends FlexoTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		resourceCenter = getNewResourceCenter("TestImport");
-		rootEditor = createProject("RootTestImport", resourceCenter);
+		rootEditor = createProject("RootTestImport", serviceManager);
 		rootProject = rootEditor.getProject();
-		importedProjectEditor = createProject("ImportedProject", resourceCenter);
+		importedProjectEditor = createProject("ImportedProject", serviceManager);
 		importedProject = importedProjectEditor.getProject();
 		rootProjectDirectory = rootProject.getProjectDirectory();
 		importedProjectDirectory = importedProject.getProjectDirectory();
@@ -92,7 +92,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootProject = reloadProject(rootProjectDirectory).getProject();
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 		// loader
 		assertNotNull(rootProject.getProjectData(false));
@@ -114,7 +114,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootProject = reloadProject(rootProjectDirectory, new ProjectReferenceLoader()).getProject();
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 										// loader
 		subProcess = importedProject.getWorkflow().getLocalFlexoProcessWithName(SUB_PROCESS_NAME);

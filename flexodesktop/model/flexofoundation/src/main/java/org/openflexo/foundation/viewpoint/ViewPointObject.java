@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.foundation.XMLSerializableFlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -78,6 +79,13 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 	public ViewPointLibrary getViewPointLibrary() {
 		if (getViewPoint() != null) {
 			return getViewPoint().getViewPointLibrary();
+		}
+		return null;
+	}
+
+	public InformationSpace getInformationSpace() {
+		if (getViewPointLibrary() != null) {
+			return getViewPointLibrary().getFlexoServiceManager().getInformationSpace();
 		}
 		return null;
 	}

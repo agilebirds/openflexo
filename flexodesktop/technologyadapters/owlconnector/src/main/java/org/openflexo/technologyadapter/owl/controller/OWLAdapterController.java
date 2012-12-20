@@ -39,11 +39,12 @@ import org.openflexo.view.controller.TechnologyAdapterController;
 public class OWLAdapterController extends TechnologyAdapterController<OWLTechnologyAdapter> {
 
 	// Ontology edition
-	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
-	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
-	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
-	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
-	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
+	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("src/main/resources/Fib/Dialog/CreateOntologyClassDialog.fib");
+	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("src/main/resources/Fib/Dialog/CreateOntologyIndividualDialog.fib");
+	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource(
+			"src/main/resources/Fib/Dialog/DeleteOntologyObjectsDialog.fib");
+	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("src/main/resources/Fib/Dialog/CreateDataPropertyDialog.fib");
+	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("src/main/resources/Fib/Dialog/CreateObjectPropertyDialog.fib");
 
 	@Override
 	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
@@ -52,6 +53,9 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
+
+		actionInitializer.getController().getModuleInspectorController()
+				.loadDirectory(new FileResource("src/main/resources/Inspectors/OWL"));
 
 		new CreateOntologyClassInitializer(actionInitializer);
 		new CreateOntologyIndividualInitializer(actionInitializer);

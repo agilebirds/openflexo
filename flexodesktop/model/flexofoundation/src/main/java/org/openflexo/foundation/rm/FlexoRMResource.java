@@ -603,7 +603,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	 */
 	@Override
 	public FlexoProjectBuilder instanciateNewBuilder() {
-		FlexoProjectBuilder returned = new FlexoProjectBuilder();
+		FlexoProjectBuilder returned = new FlexoProjectBuilder(serviceManager);
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;

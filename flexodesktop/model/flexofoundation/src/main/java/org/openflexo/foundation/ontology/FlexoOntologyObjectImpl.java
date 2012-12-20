@@ -41,6 +41,13 @@ public abstract class FlexoOntologyObjectImpl extends FlexoObject {
 		return getFlexoOntology();
 	}
 
+	/**
+	 * Name of Object.
+	 * 
+	 * @return
+	 */
+	public abstract String getName();
+
 	public abstract IFlexoOntology getFlexoOntology();
 
 	public abstract String getDisplayableDescription();

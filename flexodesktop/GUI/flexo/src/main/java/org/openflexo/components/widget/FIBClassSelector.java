@@ -26,7 +26,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -204,13 +203,6 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 		}
 	}
 
-	@Override
-	public void setProject(FlexoProject project) {
-		super.setProject(project);
-		// With model slots, setContext has to be called explicitly
-		// if (project != null) {setContext(project.getProjectOntology());}
-	}
-
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
@@ -228,17 +220,15 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 					e.printStackTrace();
 				}
 
-				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
-				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				IFlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				ApplicationContext ac = new TestApplicationContext(new FileResource("TestResourceCenter"));
+
+				IFlexoOntology o = (IFlexoOntology) ac.getInformationSpace()
+						.getMetaModel("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl").getMetaModelData();
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 				// "http://www.w3.org/2002/07/owl");
-						"http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
-				o.loadWhenUnloaded();
 
 				FIBClassSelector selector = new FIBClassSelector(null);
 
@@ -254,8 +244,8 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 			}
 
 			@Override
-			public FIBController<?> makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+			public FIBController makeNewController(FIBComponent component) {
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

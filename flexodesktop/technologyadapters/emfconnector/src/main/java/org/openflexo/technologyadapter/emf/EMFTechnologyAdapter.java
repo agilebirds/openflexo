@@ -37,16 +37,9 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -63,16 +56,6 @@ import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({
-/** Instances */
-@DeclarePatternRole(IndividualPatternRole.class),
-/** Classes */
-@DeclarePatternRole(ClassPatternRole.class),
-/** Data properties */
-@DeclarePatternRole(DataPropertyPatternRole.class),
-/** Object properties */
-@DeclarePatternRole(ObjectPropertyPatternRole.class) })
-@DeclareEditionActions({})
 public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel> {
 
 	protected static final Logger logger = Logger.getLogger(EMFTechnologyAdapter.class.getPackage().getName());

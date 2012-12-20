@@ -208,9 +208,11 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		currentlyDisplayedInspector = newInspector;
 
+		FIBView<?, ?> view = viewForInspector(newInspector);
+		FIBInspectorController controller = (FIBInspectorController) view.getController();
+		controller.setFlexoController(inspectorController.getFlexoController());
+
 		if (updateEPTabs) {
-			FIBView<?, ?> view = viewForInspector(newInspector);
-			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(newInspector.getTabPanel());
 			tabPanelView.updateLayout();
 		}
@@ -220,8 +222,6 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 			// System.out.println("removeChangeListener for "+tabPanelView.getJComponent());
 		}
 
-		// System.out.println("switchToInspector() "+newInspector);
-		FIBView<?, ?> view = viewForInspector(newInspector);
 		if (view != null) {
 			currentInspectorView = view;
 			removeAll();

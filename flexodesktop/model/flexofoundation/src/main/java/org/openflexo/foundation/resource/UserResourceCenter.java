@@ -150,24 +150,26 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 
 	@Override
 	public void update() throws IOException {
-		FileInputStream fis = new FileInputStream(getRootDirectory());
-		try {
+		if (getRootDirectory().exists()) {
+			FileInputStream fis = new FileInputStream(getRootDirectory());
 			try {
-				storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
-			} catch (JDOMException e) {
-				e.printStackTrace();
-				throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
-			} catch (InvalidDataException e) {
-				e.printStackTrace();
-				throw new IOException("Invalid XML data: " + e.getMessage(), e);
-			} catch (ModelDefinitionException e) {
-				// This should not happen
-				e.printStackTrace();
+				try {
+					storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
+				} catch (JDOMException e) {
+					e.printStackTrace();
+					throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
+				} catch (InvalidDataException e) {
+					e.printStackTrace();
+					throw new IOException("Invalid XML data: " + e.getMessage(), e);
+				} catch (ModelDefinitionException e) {
+					// This should not happen
+					e.printStackTrace();
+				}
+			} finally {
+				IOUtils.closeQuietly(fis);
 			}
-		} finally {
-			IOUtils.closeQuietly(fis);
+			checkKnownResources();
 		}
-		checkKnownResources();
 	}
 
 	private void checkKnownResources() throws IOException {

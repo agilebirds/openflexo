@@ -124,7 +124,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPoint, Vie
 			return false;
 		} else if (mmRes == null) {
 			validityMessage = NO_META_MODEL;
-			return false;
+			return true;
 		} else {
 			validityMessage = "";
 			return true;

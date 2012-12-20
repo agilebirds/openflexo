@@ -22,8 +22,9 @@ package org.openflexo.foundation;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoBuilder;
+import org.openflexo.xmlcode.XMLSerializable;
 
-public class FlexoProperty extends FlexoObject {
+public class FlexoProperty extends FlexoObject implements XMLSerializable {
 
 	private FlexoObject owner;
 

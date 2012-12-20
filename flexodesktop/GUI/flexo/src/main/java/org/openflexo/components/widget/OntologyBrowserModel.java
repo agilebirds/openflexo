@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.BuiltInDataType;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -92,12 +92,17 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		return structure.get(father);
 	}
 
+	private boolean isRecomputingStructure = false;
+
 	public void recomputeStructure() {
+
+		isRecomputingStructure = true;
 		if (getHierarchicalMode()) {
 			computeHierarchicalStructure();
 		} else {
 			computeNonHierarchicalStructure();
 		}
+		isRecomputingStructure = false;
 	}
 
 	public void delete() {
@@ -120,7 +125,9 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		System.out.println("ok, je recalcule tout");
+		if (isRecomputingStructure) {
+			return;
+		}
 		recomputeStructure();
 	}
 

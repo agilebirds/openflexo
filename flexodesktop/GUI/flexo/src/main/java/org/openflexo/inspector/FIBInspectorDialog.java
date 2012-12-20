@@ -106,7 +106,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
-			} else {
+			} else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {
 				setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title"));
 			}
 			if (object instanceof FlexoObject) {
@@ -114,7 +114,8 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 				if (icon != null) {
 					setIconImage(icon.getImage());
 				}
-				if (object.getClass() != getInspectorPanel().getCurrentlyDisplayedInspector().getDataClass()
+				if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null
+						&& object.getClass() != getInspectorPanel().getCurrentlyDisplayedInspector().getDataClass()
 						&& !object.getClass().getSimpleName().contains("javassist")) {
 					setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title") + " : "
 							+ object.getClass().getSimpleName());

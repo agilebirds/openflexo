@@ -53,8 +53,8 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 	public static TextFileFormat RM_FORMAT, LINKS_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT,
 			PROCESS_FORMAT, OPERATION_COMPONENT_FORMAT, TAB_COMPONENT_FORMAT, MONITORING_SCREEN_FORMAT, MONITORING_COMPONENT_FORMAT,
 			GENERATED_CODE_FORMAT, GENERATED_SOURCES_FORMAT, GENERATED_DOC_FORMAT, IMPLEMENTATION_MODEL_FORMAT, TOC_FORMAT,
-			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, PROJECT_ONTOLOGY_FORMAT, IMPORTED_ONTOLOGY_FORMAT,
-			OE_SHEMA_LIBRARY_FORMAT, OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
+			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, OWL_ONTOLOGY_FORMAT, OE_SHEMA_LIBRARY_FORMAT,
+			OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
 	public static DirectoryFormat PALETTE_FORMAT, TEMPLATES_FORMAT, INSPECTORS_FORMAT;
 
 	static {
@@ -84,10 +84,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 				"application/openflexo/implementation_model", TextSyntax.XML);
 		TOC_FORMAT = FileFormat.registerTextFileFormat("TOC", "application/openflexo/toc", TextSyntax.XML, "toc");
 		DATA_MODEL_FORMAT = FileFormat.registerTextFileFormat("DATA_MODEL", "application/openflexo/dm", TextSyntax.XML, "dm");
-		PROJECT_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("PROJECT_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
-				"owl");
-		IMPORTED_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("IMPORTED_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
-				"owl");
+		OWL_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("OWL_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML, "owl");
 		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY", "application/openflexo/oelib", TextSyntax.XML,
 				"oelib");
 		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/shema", TextSyntax.XML, "shema");
@@ -231,8 +228,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 
 	public static final ResourceType EOMODEL = new EOModelResourceType();
 
-	public static final ResourceType PROJECT_ONTOLOGY = new ProjectOntologyResourceType();
-	public static final ResourceType IMPORTED_ONTOLOGY = new ImportedOntologyResourceType();
+	public static final ResourceType OWL_ONTOLOGY = new OWLOntologyResourceType();
 	public static final ResourceType OE_SHEMA_LIBRARY = new OEShemaLibraryResourceType();
 	public static final ResourceType OE_SHEMA = new OEShemaResourceType();
 
@@ -1027,51 +1023,19 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 
 	}
 
-	private static class ImportedOntologyResourceType extends ResourceType {
-		ImportedOntologyResourceType() {
+	private static class OWLOntologyResourceType extends ResourceType {
+		OWLOntologyResourceType() {
 			super();
 		}
 
 		@Override
 		public String getName() {
-			return "IMPORTED_ONTOLOGY";
+			return "OWL_ONTOLOGY";
 		}
 
 		@Override
 		public FileFormat getFormat() {
-			return IMPORTED_ONTOLOGY_FORMAT;
-		}
-
-		@Override
-		public boolean isFlexoXMLStorageResource() {
-			return false;
-		}
-
-		@Override
-		public XMLMapping getMapping(XMLSerializationService mappings) {
-			return null;
-		}
-
-		@Override
-		public Color getMainColor() {
-			return Color.BLUE.brighter();
-		}
-
-	}
-
-	private static class ProjectOntologyResourceType extends ResourceType {
-		ProjectOntologyResourceType() {
-			super();
-		}
-
-		@Override
-		public String getName() {
-			return "PROJECT_ONTOLOGY";
-		}
-
-		@Override
-		public FileFormat getFormat() {
-			return PROJECT_ONTOLOGY_FORMAT;
+			return OWL_ONTOLOGY_FORMAT;
 		}
 
 		@Override
