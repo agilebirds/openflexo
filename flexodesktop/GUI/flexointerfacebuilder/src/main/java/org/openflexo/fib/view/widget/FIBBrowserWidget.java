@@ -474,16 +474,24 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			selectedObject = ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
 		}
 		for (TreePath tp : e.getPaths()) {
-			if (e.isAddedPath(tp)) {
-				selection.add(((BrowserCell) tp.getLastPathComponent()).getRepresentedObject());
-			} else {
-				selection.remove(((BrowserCell) tp.getLastPathComponent()).getRepresentedObject());
+			Object obj = ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
+			if (obj != null
+					&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
+				if (e.isAddedPath(tp)) {
+					selection.add(obj);
+				} else {
+					selection.remove(obj);
+				}
 			}
 		}
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);
 
-		getDynamicModel().selected = selectedObject;
+		if (selectedObject == null) {
+			getDynamicModel().selected = null;
+		} else if (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(selectedObject.getClass())) {
+			getDynamicModel().selected = selectedObject;
+		}
 		getDynamicModel().selection = selection;
 		notifyDynamicModelChanged();
 
