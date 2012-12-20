@@ -126,7 +126,7 @@ public class VPMController extends FlexoController {
 	public void initInspectors() {
 		super.initInspectors();
 		if (useNewInspectorScheme()) {
-			loadInspectorGroup("Ontology");
+			loadInspectorGroup("IFlexoOntology");
 		}
 
 	}

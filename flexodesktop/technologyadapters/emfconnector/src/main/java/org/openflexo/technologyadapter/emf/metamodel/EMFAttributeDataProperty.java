@@ -296,4 +296,10 @@ public class EMFAttributeDataProperty extends AEMFMetaModelObjectImpl<EAttribute
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
 	}
+
+	@Override
+	public boolean isOntologyDataProperty() {
+		return true;
+	}
+
 }
