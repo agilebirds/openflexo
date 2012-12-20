@@ -32,7 +32,7 @@ public class TestLoadEMFMetaModel {
 					.getMetaModelRepository(technologicalAdapter);
 			Collection<FlexoResource<EMFMetaModel>> metaModelResources = metaModelRepository.getAllResources();
 			for (FlexoResource<EMFMetaModel> metaModelResource : metaModelResources) {
-				EMFMetaModel metaModel = ((EMFMetaModelResource) metaModelResource).getMetaModel();
+				EMFMetaModel metaModel = ((EMFMetaModelResource) metaModelResource).getMetaModelData();
 				System.out.println(FlexoOntologyUtility.toString(metaModel));
 			}
 			ModelRepository<FlexoResource<EMFModel>, EMFModel, EMFMetaModel, EMFTechnologyAdapter> modelRepository = resourceCenter

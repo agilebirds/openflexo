@@ -57,6 +57,17 @@ public class EMFObjectIndividualReferenceObjectPropertyValue extends AEMFModelOb
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
 	 */
 	@Override

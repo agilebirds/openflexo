@@ -42,6 +42,16 @@ public class EMFAttributeAssociation extends AEMFMetaModelObjectImpl<EAttribute>
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getName()
+	 */
+	@Override
+	public String getName() {
+		return object.getName();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
 	 */
 	@Override
