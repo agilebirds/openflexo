@@ -57,8 +57,10 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @param builder
 	 */
 	public EMFModelResource(FlexoProjectBuilder builder) {
-		this(builder.project);
-		builder.notifyResourceLoading(this);
+		this(builder != null ? builder.project : null);
+		if (builder != null) {
+			builder.notifyResourceLoading(this);
+		}
 	}
 
 	/**
