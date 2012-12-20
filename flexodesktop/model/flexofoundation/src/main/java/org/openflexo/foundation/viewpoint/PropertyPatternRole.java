@@ -2,6 +2,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
@@ -72,6 +73,17 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
 		return false;
+	}
+
+	@Override
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		FlexoOntologyModelSlot<?, ?> returned = super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

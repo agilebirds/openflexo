@@ -26,10 +26,11 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class PropertyParameter extends EditionSchemeParameter {
+public class PropertyParameter extends InnerModelSlotParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -125,6 +126,17 @@ public class PropertyParameter extends EditionSchemeParameter {
 
 	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
+	}
+
+	@Override
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

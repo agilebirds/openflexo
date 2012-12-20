@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class EditionPatternParameter extends EditionSchemeParameter {
+public class EditionPatternParameter extends InnerModelSlotParameter {
 
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
