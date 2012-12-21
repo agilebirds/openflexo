@@ -31,6 +31,9 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		FlexoProject project = getReferredProject();
 		if (project == null && tryToLoadIfNotLoaded) {
 			project = getReferringProject().loadProjectReference(this);
+			if (project != null) {
+				setReferredProject(project);
+			}
 		}
 		return project;
 	}
