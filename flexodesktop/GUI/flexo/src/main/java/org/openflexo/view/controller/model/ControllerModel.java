@@ -370,24 +370,27 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	private Location getLastLocationForEditor(FlexoEditor editor, FlexoPerspective perspective) {
 		if (perspective != null) {
 			for (int i = previousHistory.size() - 1; i > -1; i--) {
-				if ((editor == null || previousHistory.get(i).getEditor() == editor)
-						&& previousHistory.get(i).getPerspective() == perspective) {
-					return previousHistory.get(i);
+				Location location = previousHistory.get(i);
+				if ((editor == null || location.getEditor() == editor) && location.getPerspective() == perspective
+						&& locations.contains(location)) {
+					return location;
 				}
 			}
 			for (Location location : nextHistory) {
-				if ((editor == null || location.getEditor() == editor) && location.getPerspective() == perspective) {
+				if ((editor == null || location.getEditor() == editor) && location.getPerspective() == perspective
+						&& locations.contains(location)) {
 					return location;
 				}
 			}
 		}
 		for (int i = previousHistory.size() - 1; i > -1; i--) {
-			if (editor == null || previousHistory.get(i).getEditor() == editor) {
-				return previousHistory.get(i);
+			Location location = previousHistory.get(i);
+			if (editor == null || location.getEditor() == editor && locations.contains(location)) {
+				return location;
 			}
 		}
 		for (Location location : nextHistory) {
-			if (editor == null || location.getEditor() == editor) {
+			if (editor == null || location.getEditor() == editor && locations.contains(location)) {
 				return location;
 			}
 		}
