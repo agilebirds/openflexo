@@ -1133,6 +1133,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					}
 				}
 			}
+			viewsForLocation.put(location, moduleView);
 			locationsForView.put(moduleView, location);
 		}
 		return moduleView;
@@ -1182,11 +1183,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            TODO
 	 * @return a newly created and initialized ModuleView instance
 	 */
-	protected final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective,
-			boolean editable) {
+	private ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective, boolean editable) {
 		if (perspective == null) {
 			return null;
 		} else {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Creating module view for " + object + " in perspective " + perspective.getName()
+						+ (editable ? " (editable)" : " (read-only)"));
+			}
 			return perspective.createModuleViewForObject(object, this, editable);
 		}
 	}
