@@ -192,7 +192,7 @@ public class DGFileDiffEditorPopup extends FlexoDialog {
 			sourceParam = new EnumDropDownParameter<ContentSourceType>("source", label, source.getType(), ContentSourceType.values()) {
 				@Override
 				public boolean accept(ContentSourceType value) {
-					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile, null, _controller.getEditor());
+					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile, null);
 				}
 
 				@Override

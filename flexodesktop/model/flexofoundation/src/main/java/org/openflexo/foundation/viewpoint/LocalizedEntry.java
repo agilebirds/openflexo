@@ -19,7 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class LocalizedEntry extends ViewPointObject {
@@ -81,12 +84,6 @@ public class LocalizedEntry extends ViewPointObject {
 	}
 
 	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public BindingModel getBindingModel() {
 		return getViewPoint().getBindingModel();
 	}
@@ -96,4 +93,8 @@ public class LocalizedEntry extends ViewPointObject {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
 }

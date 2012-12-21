@@ -2,18 +2,14 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -24,45 +20,34 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.DeserializationPolicy;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.XMLDeserializer;
-import org.openflexo.model.xml.InvalidXMLDataException;
+import org.openflexo.model.factory.SerializationPolicy;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter implements FlexoResourceCenter {
+public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	private ModelFactory modelFactory;
-	private File userResourceCenterStorageFile;
 	private Storage storage;
+	private File userResourceCenterStorageFile;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
+		super(userResourceCenterStorageFile.getParentFile());
 		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
-		this.modelFactory = new ModelFactory();
 		try {
-			modelFactory.importClass(Storage.class);
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
+			this.modelFactory = new ModelFactory(Storage.class);
+		} catch (ModelDefinitionException e1) {
+			// Hum this sucks...
+			e1.printStackTrace();
 		}
 		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile()) {
-			FileInputStream fis = null;
 			try {
-				fis = new FileInputStream(userResourceCenterStorageFile);
-				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
+				update();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidXMLDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ModelDefinitionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				IOUtils.closeQuietly(fis);
 			}
 		}
 		if (storage == null) {
@@ -72,10 +57,6 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	public File getUserResourceCenterStorageFile() {
 		return userResourceCenterStorageFile;
-	}
-
-	public void setUserResourceCenterStorageFile(File userResourceCenterStorageFile) {
-		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
 	}
 
 	@ModelEntity
@@ -98,26 +79,13 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		public void removeFromResources(FlexoResource<?> resource);
 	}
 
-	@ModelEntity
-	@XMLElement
-	public static interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoResource<RD> {
-		public static final String FILE = "file";
-
-		@Getter(FILE)
-		@XmlAttribute
-		public File getFile();
-
-		@Setter(FILE)
-		public void setFile(File file);
-	}
-
 	@Override
 	public List<FlexoResource<?>> getAllResources(IProgress progress) {
 		return Collections.unmodifiableList(storage.getResources());
 	}
 
 	@Override
-	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, String version, Class<T> type, IProgress progress) {
+	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, FlexoVersion version, Class<T> type, IProgress progress) {
 		List<FlexoResource<?>> resources = storage.getResources();
 		if (progress != null) {
 			progress.resetSecondaryProgress(resources.size());
@@ -128,7 +96,8 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			}
 			if (resource.getURI().equals(uri)) {
 				if (resource.getVersion() == null && version == null || resource.getVersion() != null
-						&& resource.getVersion().equals(version) && type.isAssignableFrom(resource.getResourceDataClass())) {
+						&& resource.getVersion().equals(version)
+						&& (type == null || type.isAssignableFrom(resource.getResourceDataClass()))) {
 					return (FlexoResource<T>) resource;
 				}
 			}
@@ -158,49 +127,61 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	}
 
 	@Override
-	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
-		retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
+	public void publishResource(FlexoResource<?> resource, FlexoVersion newVersion, IProgress progress) throws Exception {
+		FlexoResource<?> oldResource = retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
+		if (oldResource != null) {
+			storage.removeFromResources(oldResource);
+		}
+		storage.addToResources(resource);
+		saveStorage();
 	}
 
-	@Override
-	public void update() throws IOException {
-		FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
+	private void saveStorage() throws IOException {
+		if (!getUserResourceCenterStorageFile().exists()) {
+			getUserResourceCenterStorageFile().getParentFile().mkdirs();
+		}
+		FileOutputStream fos = new FileOutputStream(getUserResourceCenterStorageFile());
 		try {
-			try {
-				storage = (Storage) new XMLDeserializer(modelFactory).deserializeDocument(fis);
-			} catch (JDOMException e) {
-				e.printStackTrace();
-				throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
-			} catch (InvalidXMLDataException e) {
-				e.printStackTrace();
-				throw new IOException("Invalid XML data: " + e.getMessage(), e);
-			} catch (ModelDefinitionException e) {
-				// This should not happen
-				e.printStackTrace();
-			}
+			modelFactory.serialize(storage, fos, SerializationPolicy.EXTENSIVE);
 		} finally {
-			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(fos);
 		}
 	}
 
 	@Override
-	public OntologyLibrary retrieveBaseOntologyLibrary() {
-		return null;
+	public void update() throws IOException {
+		if (getRootDirectory().exists()) {
+			FileInputStream fis = new FileInputStream(getRootDirectory());
+			try {
+				try {
+					storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
+				} catch (JDOMException e) {
+					e.printStackTrace();
+					throw new IOException("Parsing XML data failed: " + e.getMessage(), e);
+				} catch (InvalidDataException e) {
+					e.printStackTrace();
+					throw new IOException("Invalid XML data: " + e.getMessage(), e);
+				} catch (ModelDefinitionException e) {
+					// This should not happen
+					e.printStackTrace();
+				}
+			} finally {
+				IOUtils.closeQuietly(fis);
+			}
+			checkKnownResources();
+		}
 	}
 
-	@Override
-	public ViewPointLibrary retrieveViewPointLibrary() {
-		return null;
-	}
-
-	@Override
-	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
-		return null;
-	}
-
-	@Override
-	public File getNewCalcSandboxDirectory() {
-		return new File(userResourceCenterStorageFile.getParentFile(), "ViewPoints");
+	private void checkKnownResources() throws IOException {
+		if (storage != null) {
+			boolean changed = false;
+			for (FlexoResource<?> resource : storage.getResources()) {
+				// TODO check resources
+			}
+			if (changed) {
+				saveStorage();
+			}
+		}
 	}
 
 }

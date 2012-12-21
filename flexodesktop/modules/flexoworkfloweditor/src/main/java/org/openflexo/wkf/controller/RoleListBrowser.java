@@ -21,9 +21,11 @@ package org.openflexo.wkf.controller;
 
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoProjectObject;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -35,21 +37,18 @@ public class RoleListBrowser extends ProjectBrowser {
 
 	private static final Logger logger = Logger.getLogger(RoleListBrowser.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
 	protected WKFController _controller;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public RoleListBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getSelectionManager());
+		super(controller);
 		_controller = controller;
+	}
+
+	@Override
+	protected boolean activateBrowsingFor(BrowserElement newElement) {
+		return newElement.getObject() instanceof FlexoProjectObject && getRootObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
+				&& super.activateBrowsingFor(newElement);
 	}
 
 	@Override
@@ -59,14 +58,13 @@ public class RoleListBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE, true);
-		setRoleViewMode(RoleViewMode.TOP_DOWN);
 	}
 
 	@Override

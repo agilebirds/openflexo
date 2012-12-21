@@ -43,6 +43,9 @@ import javax.swing.tree.TreePath;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.drawingeditor.EmptySelection;
+import org.openflexo.fge.drawingeditor.MultipleSelection;
+import org.openflexo.fge.drawingeditor.UniqueSelection;
 import org.openflexo.fge.geomedit.edition.CreateBandFromLines;
 import org.openflexo.fge.geomedit.edition.CreateCircleWithCenterAndPoint;
 import org.openflexo.fge.geomedit.edition.CreateCubicCurveFromFourPoints;
@@ -71,9 +74,6 @@ import org.openflexo.fge.geomedit.edition.CreateVerticalLineWithPoint;
 import org.openflexo.fge.geomedit.edition.Edition;
 import org.openflexo.fge.geomedit.edition.EditionInput;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.logging.FlexoLogger;
 
 public class GeomEditController extends DrawingController<GeometricDrawing> implements TreeSelectionListener {

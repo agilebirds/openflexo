@@ -33,7 +33,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;

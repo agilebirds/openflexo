@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
@@ -36,7 +36,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class DeleteRuleType extends FlexoObject implements StringConvertable<DeleteRuleType>, ChoiceList {
+public abstract class DeleteRuleType extends KVCFlexoObject implements StringConvertable<DeleteRuleType>, ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(DeleteRuleType.class.getPackage().getName());
 

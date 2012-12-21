@@ -52,14 +52,11 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 
 	private Object model;
 
-	private FIBController controller;
-
 	private FIBTableWidget tableWidget;
 
-	public FIBTableActionListener(FIBTableAction tableAction, FIBTableWidget tableWidget, FIBController controller) {
+	public FIBTableActionListener(FIBTableAction tableAction, FIBTableWidget tableWidget) {
 		super();
 		this.tableWidget = tableWidget;
-		this.controller = controller;
 		this.tableAction = tableAction;
 		selectedObject = null;
 		tableAction.addObserver(this);
@@ -67,7 +64,6 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 
 	public void delete() {
 		tableAction.deleteObserver(this);
-		this.controller = null;
 		this.tableAction = null;
 		this.tableWidget = null;
 	}
@@ -84,7 +80,7 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 	}
 
 	public FIBController getController() {
-		return controller;
+		return tableWidget.getController();
 	}
 
 	public boolean isAddAction() {

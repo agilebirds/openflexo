@@ -11,14 +11,19 @@ import java.lang.annotation.Target;
 public @interface XMLAttribute {
 
 	public static final String DEFAULT_XML_TAG = "";
+	public static final String DEFAULT_NAMESPACE = "";
 
 	public String xmlTag() default DEFAULT_XML_TAG;
 
-	public static class XMLAttributeImpl implements XMLAttribute {
-		private String xmlTag;
+	public String namespace() default DEFAULT_NAMESPACE;
 
-		public XMLAttributeImpl(String xmlTag) {
+	public static class XMLAttributeImpl implements XMLAttribute {
+		private final String xmlTag;
+		private final String namespace;
+
+		public XMLAttributeImpl(String xmlTag, String namespace) {
 			this.xmlTag = xmlTag;
+			this.namespace = namespace;
 		}
 
 		@Override
@@ -29,6 +34,11 @@ public @interface XMLAttribute {
 		@Override
 		public String xmlTag() {
 			return xmlTag;
+		}
+
+		@Override
+		public String namespace() {
+			return namespace;
 		}
 
 	}

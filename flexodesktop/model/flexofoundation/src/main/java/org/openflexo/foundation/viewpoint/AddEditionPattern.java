@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,16 +28,23 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.CompoundIssue;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern extends AssignableAction {
+public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
+		AssignableAction<M, MM, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
@@ -57,11 +65,6 @@ public class AddEditionPattern extends AssignableAction {
 	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
 	}*/
-
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
 
 	public View getView(EditionSchemeAction action) {
 		return (View) getView().getBindingValue(action);
@@ -201,6 +204,35 @@ public class AddEditionPattern extends AssignableAction {
 		}
 	}
 
+	@Override
+	public EditionPatternInstance performAction(EditionSchemeAction action) {
+		logger.info("Perform performAddEditionPattern " + action);
+		View view = getView(action);
+		logger.info("View: " + view);
+		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, action);
+		creationSchemeAction.setCreationScheme(getCreationScheme());
+		for (AddEditionPatternParameter p : getParameters()) {
+			EditionSchemeParameter param = p.getParam();
+			Object value = p.evaluateParameterValue(action);
+			logger.info("For parameter " + param + " value is " + value);
+			if (value != null) {
+				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+			}
+		}
+		creationSchemeAction.doAction();
+		if (creationSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed performAddEditionPattern " + action);
+			return creationSchemeAction.getEditionPatternInstance();
+		}
+		return null;
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action, EditionPatternInstance initialContext) {
+		// TODO Auto-generated method stub
+
+	}
+
 	public static class AddEditionPatternParameter extends EditionSchemeObject implements Bindable {
 
 		@SuppressWarnings("unused")
@@ -294,12 +326,6 @@ public class AddEditionPattern extends AssignableAction {
 		}
 
 		@Override
-		public String getInspectorName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public BindingModel getBindingModel() {
 			if (getAction() != null) {
 				return getAction().getBindingModel();
@@ -341,6 +367,16 @@ public class AddEditionPattern extends AssignableAction {
 			this.paramName = param;
 		}
 
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
+
+		@Override
+		public String getURI() {
+			return null;
+		}
+
 	}
 
 	@Override
@@ -370,15 +406,16 @@ public class AddEditionPattern extends AssignableAction {
 	}
 
 	public static class AddEditionPatternParametersMustBeValid extends
-			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPattern> {
+			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>> {
 		public AddEditionPatternParametersMustBeValid() {
 			super(AddEditionPattern.class, "add_edition_pattern_parameters_must_be_valid");
 		}
 
 		@Override
-		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern> applyValidation(AddEditionPattern action) {
+		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>> applyValidation(
+				AddEditionPattern<?, ?> action) {
 			if (action.getCreationScheme() != null) {
-				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>>();
+				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>>();
 				for (AddEditionPatternParameter p : action.getParameters()) {
 					if (p.getParam().getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
@@ -401,7 +438,8 @@ public class AddEditionPattern extends AssignableAction {
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<AddEditionPattern.AddEditionPatternParametersMustBeValid, AddEditionPattern>(action, issues);
+					return new CompoundIssue<AddEditionPattern.AddEditionPatternParametersMustBeValid, AddEditionPattern<?, ?>>(action,
+							issues);
 				}
 			}
 			return null;

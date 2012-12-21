@@ -25,6 +25,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -61,7 +62,7 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 	}
 
 	@Override
-	public boolean isSelectable(FlexoModelObject object) {
+	public boolean isSelectable(FlexoObject object) {
 		return object instanceof FlexoProcess || object instanceof ProcessFolder;
 	}
 
@@ -132,9 +133,9 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 			setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
+			// setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+			// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
 			setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);

@@ -38,16 +38,19 @@ import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -219,6 +222,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void setDataObject(Object object) {
+		// logger.info(">>>>>>> setDataObject with " + object);
 		if (this.dataObject instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) this.dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
 		} else if (this.dataObject instanceof FlexoObservable) {
@@ -290,9 +294,24 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	// test purposes
 	public static FlexoEditor loadProject(File prjDir) {
 		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
+		FlexoServiceManager sm = new DefaultFlexoServiceManager() {
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		sm.registerService(resourceCenter);
 		FlexoEditor editor = null;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, sm);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

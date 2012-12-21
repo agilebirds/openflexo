@@ -45,7 +45,7 @@ import javax.swing.table.TableColumn;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.inspector.InspectableObject;
@@ -85,7 +85,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 								logger.fine("Double-click detected in a NON-editable cell. Select !");
 							}
 						}
-						FlexoModelObject selectMe = _model.elementAt(row);
+						FlexoObject selectMe = _model.elementAt(row);
 						if (_controller.moduleViewForObject(selectMe) != null) {
 							_controller.setCurrentEditedObjectAsModuleView(selectMe);
 						}
@@ -96,7 +96,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 							logger.fine("Simple-click detected !");
 						}
 					}
-					// FlexoModelObject selectMe = _model.elementAt(row);
+					// FlexoObject selectMe = _model.elementAt(row);
 					// _focusedObject = selectMe;
 					// updateSlaveTabularViews();
 
@@ -164,7 +164,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	private JScrollPane scrollPane;
 
-	protected Vector<FlexoModelObject> _selectedObjects;
+	protected Vector<FlexoObject> _selectedObjects;
 
 	protected boolean _selectedObjectsNeedsRecomputing;
 
@@ -183,12 +183,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		}
 
 		@Override
-		public void fireObjectDeselected(FlexoModelObject object) {
+		public void fireObjectDeselected(FlexoObject object) {
 			selectionHasChanged = true;
 		}
 
 		@Override
-		public void fireObjectSelected(FlexoModelObject object) {
+		public void fireObjectSelected(FlexoObject object) {
 			selectionHasChanged = true;
 		}
 
@@ -222,7 +222,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		_table.getTableHeader().setReorderingAllowed(false);
 		// _table.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
 		_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		_selectedObjects = new Vector<FlexoModelObject>();
+		_selectedObjects = new Vector<FlexoObject>();
 		_selectedObjectsNeedsRecomputing = false;
 
 		// _table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -331,13 +331,13 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		int beginIndex = e.getFirstIndex();
 		int endIndex = e.getLastIndex();
 
-		Vector<FlexoModelObject> toBeRemovedFromSelection = new Vector<FlexoModelObject>();
-		Vector<FlexoModelObject> toBeAddedToSelection = new Vector<FlexoModelObject>();
+		Vector<FlexoObject> toBeRemovedFromSelection = new Vector<FlexoObject>();
+		Vector<FlexoObject> toBeAddedToSelection = new Vector<FlexoObject>();
 
 		// First remove all selected object that cannot be represented on this view
 		/*if (getSelectionManager() != null) {
 		    for (Enumeration en=getSelectionManager().getSelection().elements(); en.hasMoreElements();) {
-		        FlexoModelObject next = (FlexoModelObject)en.nextElement();
+		        FlexoObject next = (FlexoObject)en.nextElement();
 		        if (!mayRepresents(next)) {
 		            toBeRemovedFromSelection.add(next);
 		            if (logger.isLoggable(Level.FINE)) logger.fine("Mark "+next+" for deletion ");
@@ -361,7 +361,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		}
 
 		/*for (Enumeration en=toBeAddedToSelection.elements(); en.hasMoreElements();) {
-		    FlexoModelObject next = (FlexoModelObject)en.nextElement();
+		    FlexoObject next = (FlexoObject)en.nextElement();
 		    getSelectionManager().addToSelected(next);
 		}*/
 		fireBeginMultipleSelection();
@@ -369,14 +369,14 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		fireEndMultipleSelection();
 		/*
 		        for (Enumeration en=toBeRemovedFromSelection.elements(); en.hasMoreElements();) {
-		            FlexoModelObject next = (FlexoModelObject)en.nextElement();
+		            FlexoObject next = (FlexoObject)en.nextElement();
 		            getSelectionManager().removeFromSelected(next);
 		        }
 		*/
 		updateSlaveTabularViews();
 		if (getSelectionManager() != null) {
 			for (Enumeration en = getSelectionManager().getSelection().elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				FlexoObject next = (FlexoObject) en.nextElement();
 				if (!mayRepresents(next)) {
 					toBeRemovedFromSelection.add(next);
 					if (logger.isLoggable(Level.FINE)) {
@@ -389,7 +389,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	private void updateSlaveTabularViews() {
-		Vector<FlexoModelObject> currentSelection = getSelectedObjects();
+		Vector<FlexoObject> currentSelection = getSelectedObjects();
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("udpateSlaveTabularViews");
@@ -405,7 +405,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	}
 
-	private void setModelInSlaveTabularViews(FlexoModelObject newModel) {
+	private void setModelInSlaveTabularViews(FlexoObject newModel) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModelInDrivenTableViews with " + newModel);
 		}
@@ -417,7 +417,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		}
 	}
 
-	private void setModelObject(FlexoModelObject newModel) {
+	private void setModelObject(FlexoObject newModel) {
 		if (_table.isEditing() && _table.getCellEditor() != null && getModel().getModel() != null && getModel().getModel() != newModel
 				&& newModel != null) {
 			_table.getCellEditor().stopCellEditing();
@@ -428,7 +428,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		_selectedObjectsNeedsRecomputing = true;
 	}
 
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < _model.getRowCount(); i++) {
@@ -441,15 +441,15 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		return _selectedObjects;
 	}
 
-	public boolean isSelected(Vector<FlexoModelObject> objectList) {
+	public boolean isSelected(Vector<FlexoObject> objectList) {
 		return getSelectedObjects().containsAll(objectList);
 	}
 
-	public boolean isSelected(FlexoModelObject object) {
+	public boolean isSelected(FlexoObject object) {
 		return getSelectedObjects().contains(object);
 	}
 
-	public void selectObject(FlexoModelObject object) {
+	public void selectObject(FlexoObject object) {
 		resetSelection();
 
 		// Calling addToSelected does not always work
@@ -462,7 +462,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		return getSelectedObjects();
 	}
 
-	public FlexoModelObject getObject() {
+	public FlexoObject getObject() {
 		return _model.getModel();
 	}
 
@@ -515,7 +515,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	protected void refreshNow() {
 		// Before updating the content of the table, we make a copy of the current selection
-		Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) _controller.getSelectionManager().getSelection().clone();
+		Vector<FlexoObject> v = (Vector<FlexoObject>) _controller.getSelectionManager().getSelection().clone();
 		selectionHasChanged = false;
 		_controller.getSelectionManager().addToSelectionListeners(temporarySelectionListener);
 		_model.fireTableDataChanged();
@@ -602,7 +602,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getSelection() {
+	public Vector<FlexoObject> getSelection() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
 		}
@@ -619,7 +619,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public void addToSelected(FlexoModelObject object) {
+	public void addToSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().addToSelected(object);
@@ -630,7 +630,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public void removeFromSelected(FlexoModelObject object) {
+	public void removeFromSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().removeFromSelected(object);
@@ -641,13 +641,13 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+	public void addToSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().addToSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
 			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				FlexoObject next = (FlexoObject) en.nextElement();
 				fireObjectSelected(next);
 			}
 			fireEndMultipleSelection();
@@ -655,13 +655,13 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+	public void removeFromSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().removeFromSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
 			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				FlexoObject next = (FlexoObject) en.nextElement();
 				fireObjectDeselected(next);
 			}
 			fireEndMultipleSelection();
@@ -669,7 +669,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
@@ -679,7 +679,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		boolean b = getModel().indexOf(anObject) > -1;
 		Enumeration<TabularView> en = _slaveTabularViews.elements();
 		while (en.hasMoreElements() && !b) {
@@ -690,7 +690,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
 		}
@@ -701,11 +701,11 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 * ATTENTION ICI: manipuler ce code avec precaution !!!
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("TabularView for " + getObject() + " fireObjectSelected() with " + object);
 		}
-		FlexoModelObject parent = getParentObject(object);
+		FlexoObject parent = getParentObject(object);
 		if (getMasterTabularView() != null && parent != null) {
 			// If master tabular view not null (means that is is a slave
 			// tabular view), and if current selection has no object selected
@@ -732,11 +732,11 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 * ATTENTION ICI: manipuler ce code avec precaution !!!
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("TabularView for " + getObject() + " fireObjectDeselected() with " + object);
 		}
-		FlexoModelObject parent = getParentObject(object);
+		FlexoObject parent = getParentObject(object);
 		if (getMasterTabularView() != null && parent != null) {
 			// If master tabular view not null (means that is is a slave
 			// tabular view), and if parent of deselected object is selected
@@ -768,7 +768,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		}
 	}
 
-	protected abstract FlexoModelObject getParentObject(FlexoModelObject object);
+	protected abstract FlexoObject getParentObject(FlexoObject object);
 
 	@Override
 	public void fireResetSelection() {

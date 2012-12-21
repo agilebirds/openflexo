@@ -3,11 +3,9 @@ package org.openflexo.model.factory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.jdom2.Attribute;
@@ -16,14 +14,16 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
-import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.ModelContext.ModelPropertyXMLTag;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelProperty;
+import org.openflexo.model.StringEncoder;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.xml.DefaultStringEncoder;
-import org.openflexo.model.xml.InvalidDataException;
-import org.openflexo.model.xml.InvalidXMLDataException;
+import org.openflexo.model.exceptions.RestrictiveDeserializationException;
 
-public class XMLDeserializer {
+class XMLDeserializer {
 
 	public static final String ID = "id";
 	public static final String ID_REF = "idref";
@@ -37,40 +37,47 @@ public class XMLDeserializer {
 	 * object
 	 */
 	private Map<Object, Object> alreadyDeserialized;
+	private final DeserializationPolicy policy;
 
 	public XMLDeserializer(ModelFactory factory) {
+		this(factory, DeserializationPolicy.PERMISSIVE);
+	}
+
+	public XMLDeserializer(ModelFactory factory, DeserializationPolicy policy) {
 		this.modelFactory = factory;
+		this.policy = policy;
 		alreadyDeserialized = new HashMap<Object, Object>();
 	}
 
-	private DefaultStringEncoder getStringEncoder() {
+	private StringEncoder getStringEncoder() {
 		return modelFactory.getStringEncoder();
 	}
 
-	public Object deserializeDocument(InputStream in) throws IOException, JDOMException, InvalidXMLDataException, ModelDefinitionException {
+	public Object deserializeDocument(InputStream in) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
 		alreadyDeserialized.clear();
 		Document dataDocument = parseXMLData(in);
 		Element rootElement = dataDocument.getRootElement();
 		return buildObjectFromNode(rootElement);
 	}
 
-	public Object deserializeDocument(String xml) throws IOException, JDOMException, InvalidXMLDataException, ModelDefinitionException {
+	public Object deserializeDocument(String xml) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
 		alreadyDeserialized.clear();
 		Document dataDocument = parseXMLData(xml);
 		Element rootElement = dataDocument.getRootElement();
 		return buildObjectFromNode(rootElement);
 	}
 
-	private Object buildObjectFromNode(Element node) throws InvalidXMLDataException, ModelDefinitionException {
+	private Object buildObjectFromNode(Element node) throws InvalidDataException, ModelDefinitionException {
 		// System.out.println("What to do with "+node+" ?");
 
-		ModelEntity<?> modelEntity = modelFactory.getModelEntity(node.getName());
+		ModelEntity<?> modelEntity = modelFactory.getModelContext().getModelEntity(node.getName());
 
 		return buildObjectFromNodeAndModelEntity(node, modelEntity);
 	}
 
-	private <I> Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity<I> modelEntity) throws InvalidXMLDataException,
+	private <I> Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity<I> modelEntity) throws InvalidDataException,
 			ModelDefinitionException {
+
 		Object currentDeserializedReference = null;
 
 		Attribute idAttribute = node.getAttribute(ID);
@@ -93,7 +100,7 @@ public class XMLDeserializer {
 				if (idRefElement != null) {
 					return buildObjectFromNodeAndModelEntity(idRefElement, modelEntity);
 				}
-				throw new InvalidXMLDataException("No reference to object with identifier " + reference);
+				throw new InvalidDataException("No reference to object with identifier " + reference);
 			} else {
 				// No need to go further: i've got my object
 				// Debugging.debug ("Stopping decoding: object found as a
@@ -106,8 +113,6 @@ public class XMLDeserializer {
 			Object referenceObject = alreadyDeserialized.get(currentDeserializedReference);
 			if (referenceObject != null) {
 				// No need to go further: i've got my object
-				// Debugging.debug ("Stopping decoding: object found as a
-				// reference "+reference+" "+referenceObject);
 				return referenceObject;
 			}
 		}
@@ -117,92 +122,132 @@ public class XMLDeserializer {
 		I returned;
 		String text = node.getText();
 		if (text != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
+			// GPO: I am not sure this is still useful.
 			try {
 				returned = getStringEncoder().fromString(modelEntity.getImplementedInterface(), text);
 			} catch (InvalidDataException e) {
 				throw new ModelExecutionException(e);
 			}
 		} else {
-			returned = modelFactory.newInstance(modelEntity);
-
+			returned = modelFactory.newInstance(modelEntity.getImplementedInterface());
 		}
 
 		if (currentDeserializedReference != null) {
-			// Debugging.debug ("Registering object reference
-			// "+currentDeserializedReference);
-			// System.out.println ("Registering ref:
-			// "+currentDeserializedReference+" object
-			// "+returnedObject.getClass().getName());
 			alreadyDeserialized.put(currentDeserializedReference, returned);
 		}
 
 		ProxyMethodHandler<I> handler = modelFactory.getHandler(returned);
 		handler.setDeserializing(true);
 		try {
-			Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
-			while (properties.hasNext()) {
-				ModelProperty<? super I> p = properties.next();
-				if (p.getXMLAttribute() != null) {
-					Object value;
-					try {
-						value = getStringEncoder().fromString(p.getType(), node.getAttributeValue(p.getXMLTag()));
-						if (value != null) {
-							handler.invokeSetterForDeserialization(p, value);
-						}
-					} catch (InvalidDataException e) {
-						throw new InvalidXMLDataException(e.getMessage());
+			for (Attribute attribute : node.getAttributes()) {
+				ModelProperty<? super I> property = modelEntity.getPropertyForXMLAttributeName(attribute.getName());
+				if (property == null) {
+					if (attribute.getNamespace().equals(PAMELAConstants.NAMESPACE)
+							&& (attribute.getName().equals(PAMELAConstants.CLASS_ATTRIBUTE) || attribute.getName().equals(
+									PAMELAConstants.MODEL_ENTITY_ATTRIBUTE))) {
+						continue;
 					}
-				} else if (p.getXMLElement() != null) {
-					XMLElement propertyXMLElement = p.getXMLElement();
-					// System.out.println("Handle element "+p);
-					if (p.getAccessedEntity() != null) {
-						Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p);
-						switch (p.getCardinality()) {
-						case SINGLE:
-							if (matchingElements.hasNext()) {
-								MatchingElement matchingElement = matchingElements.next();
-								// System.out.println("SINGLE, "+matchingElement);
-								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.invokeSetterForDeserialization(p, value);
+					if (attribute.getName().equals(ID) || attribute.getName().equals(ID_REF)) {
+						continue;
+					}
+					switch (policy) {
+					case PERMISSIVE:
+						continue;
+					case RESTRICTIVE:
+						throw new RestrictiveDeserializationException("No attribute found for the attribute named: " + attribute.getName());
+					case EXTENSIVE:
+						// TODO: handle extra values
+						break;
+					}
+				}
+				Object value = getStringEncoder().fromString(property.getType(), attribute.getValue());
+				if (value != null) {
+					handler.invokeSetterForDeserialization(property, value);
+				}
+
+			}
+			for (Element child : node.getChildren()) {
+				ModelPropertyXMLTag<I> modelPropertyXMLTag = modelFactory.getModelContext().getPropertyForXMLTag(modelEntity,
+						child.getName());
+				ModelProperty<? super I> property = null;
+				ModelEntity<?> entity = null;
+				if (modelPropertyXMLTag != null) {
+					property = modelPropertyXMLTag.getProperty();
+					entity = modelPropertyXMLTag.getAccessedEntity();
+				} else if (policy == DeserializationPolicy.RESTRICTIVE) {
+					throw new RestrictiveDeserializationException("Element with name does not fit any properties within entity "
+							+ modelEntity);
+				}
+				Class<?> implementedInterface = null;
+				Class<?> implementingClass = null;
+				String entityName = child.getAttributeValue(PAMELAConstants.MODEL_ENTITY_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+				String className = child.getAttributeValue(PAMELAConstants.CLASS_ATTRIBUTE, PAMELAConstants.NAMESPACE);
+				if (entityName != null) {
+					try {
+						implementedInterface = Class.forName(entityName);
+					} catch (ClassNotFoundException e) {
+						// TODO: log something here
+					}
+					switch (policy) {
+					case PERMISSIVE:
+						break;
+					case RESTRICTIVE:
+						break;
+					case EXTENSIVE:
+						if (entityName != null) {
+							modelFactory.importClass(implementedInterface);
+							if (className != null) {
+								try {
+									implementingClass = Class.forName(className);
+									if (implementedInterface.isAssignableFrom(implementingClass)) {
+										modelFactory.setImplementingClassForInterface((Class) implementingClass, implementedInterface);
+									} else {
+										throw new ModelExecutionException(className + " does not implement " + implementedInterface
+												+ " for node " + child.getName());
+									}
+								} catch (ClassNotFoundException e) {
+									// TODO: log something here
+								}
 							}
-							break;
-						case LIST:
-							while (matchingElements.hasNext()) {
-								MatchingElement matchingElement = matchingElements.next();
-								// System.out.println("LIST, "+matchingElement);
-								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.invokeAdderForDeserialization(p, value);
-							}
-							break;
-						case MAP:
-							throw new UnsupportedOperationException("Cannot deserialize maps for now");
-						default:
-							break;
 						}
-					} else if (getStringEncoder().isConvertable(p.getType())) {
-						// TODO: deserialize string convertable elements.
-						List<Element> elements = node.getContent(new ElementFilter(p.getXMLElement().xmlTag()));
-						for (Element element : elements) {
-							Object value;
-							try {
-								value = getStringEncoder().fromString(p.getType(), element.getText());
-							} catch (InvalidDataException e) {
-								throw new InvalidXMLDataException("'" + element.getText() + "' cannot be converted to "
-										+ p.getType().getName());
-							}
-							switch (p.getCardinality()) {
-							case SINGLE:
-								handler.invokeSetterForDeserialization(p, value);
-								break;
-							case LIST:
-								handler.invokeAdderForDeserialization(p, value);
-								break;
-							default:
-								break;
-							}
+						break;
+					}
+					if (implementedInterface != null) {
+						entity = modelFactory.getModelContext().getModelEntity(implementedInterface);
+					}
+					if (entity == null && policy == DeserializationPolicy.RESTRICTIVE) {
+						if (entityName != null) {
+							throw new RestrictiveDeserializationException("Entity " + entityName + " is not part of this model context");
+						} else {
+							throw new RestrictiveDeserializationException("No entity found for tag " + child.getName());
 						}
 					}
 				}
+				if (property != null) {
+					Object value = null;
+					if (entity != null && !getStringEncoder().isConvertable(property.getType())) {
+						value = buildObjectFromNodeAndModelEntity(child, entity);
+					} else if (getStringEncoder().isConvertable(property.getType())) {
+						value = getStringEncoder().fromString(property.getType(), child.getText());
+					} else {
+						// Should not happen
+						throw new ModelExecutionException("Found property " + property
+								+ " but was unable to deserialize the content of node " + child);
+					}
+					switch (property.getCardinality()) {
+					case SINGLE:
+						handler.invokeSetterForDeserialization(property, value);
+						break;
+					case LIST:
+						handler.invokeAdderForDeserialization(property, value);
+						break;
+					case MAP:
+						throw new UnsupportedOperationException("Cannot deserialize maps for now");
+					default:
+						break;
+					}
+				}
+
 			}
 		} finally {
 			handler.setDeserializing(false);
@@ -225,27 +270,6 @@ public class XMLDeserializer {
 		public String toString() {
 			return element.toString() + "/" + modelEntity;
 		}
-	}
-
-	private Iterator<MatchingElement> elementsMatchingHandledXMLTags(Element node, ModelProperty<?> modelProperty)
-			throws ModelDefinitionException {
-		ArrayList<MatchingElement> returned = new ArrayList<MatchingElement>();
-		String contextString = modelProperty.getXMLElement() != null ? modelProperty.getXMLElement().context() : "";
-		if (modelProperty.getAccessedEntity() != null) {
-			for (ModelEntity<?> entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
-				if (entity.getXMLElement() != null || getStringEncoder().isConvertable(entity.getImplementedInterface())) { // Only consider
-					// "XML-concrete"
-					// entities and string
-					// convertable entities
-					List<Element> elements = node.getContent(new ElementFilter(contextString + entity.getXMLTag()));
-					for (Element element : elements) {
-						returned.add(new MatchingElement(element, entity));
-					}
-				}
-			}
-		}
-		// System.out.println("elementsMatchingHandledXMLTags="+returned);
-		return returned.iterator();
 	}
 
 	protected Document parseXMLData(InputStream xmlStream) throws IOException, JDOMException {

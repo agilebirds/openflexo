@@ -15,12 +15,12 @@
   </Panel>
   <Panel layout="gridbag" borderTitle="Panel" borderRight="10" darkLevel="0" trackViewPortWidth="false" trackViewPortHeight="false" constraints="gridbag(anchor=center;fill=both;gridHeight=-1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="Bottom panel">
     <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EPITable" index="0" data="CalcTable.selected.editionPatterns" constraints="gridbag(anchor=center;fill=both;gridHeight=-1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
-      <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
-      <LabelColumn data="iterator.name" title="edition_pattern" columnWidth="200" resizable="true" displayTitle="true" name="label" />
-      <LocalizedDictionary />
-    </Table>
+    <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+    <LabelColumn data="iterator.name" title="edition_pattern" columnWidth="200" resizable="true" displayTitle="true" name="label" />
+    <LocalizedDictionary />
+  </Table>
     <Image imageFile="../../../../../../../../../InterfaceBuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="AdjustHeight" align="center" imageWidth="32" imageHeight="250" index="1" data="ShemaTable.selected.screenshotImage.image" constraints="gridbag(anchor=center;fill=none;gridHeight=-1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=1.0)" name="My Image" localize="false" />
-    <Table iteratorClassName="org.openflexo.foundation.viewpoint.ExampleDrawingShema" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ShemaTable" index="2" data="CalcTable.selected.shemas" constraints="gridbag(anchor=center;fill=both;gridHeight=-1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ShemaTable" index="2" data="CalcTable.selected.shemas" constraints="gridbag(anchor=center;fill=both;gridHeight=-1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="22" resizable="false" displayTitle="false" name="icon" />
       <LabelColumn data="iterator.name" title="example_diagram" columnWidth="150" resizable="true" displayTitle="true" name="label" />
       <LocalizedDictionary />
@@ -42,3 +42,4 @@
     <Localized key="example_diagram" lang="English">Example diagram</Localized>
   </LocalizedDictionary>
 </Panel>
+

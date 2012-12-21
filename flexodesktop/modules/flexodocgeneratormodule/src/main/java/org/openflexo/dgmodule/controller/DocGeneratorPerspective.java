@@ -18,7 +18,7 @@ import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.dgmodule.view.GeneratedDocModuleView;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
@@ -76,7 +76,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		// System.out.println("Proposed object in DOCGeneratorPerspective: " + proposedObject);
 		/*if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
@@ -86,13 +86,13 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
 				|| object instanceof DGScreenshotFile || object instanceof CGTemplate || object instanceof TOCEntry;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof GeneratedDoc) {
 			return new GeneratedDocModuleView((GeneratedDoc) object, (DGController) controller,
 					((DGController) controller).DOCUMENTATION_GENERATOR_PERSPECTIVE);

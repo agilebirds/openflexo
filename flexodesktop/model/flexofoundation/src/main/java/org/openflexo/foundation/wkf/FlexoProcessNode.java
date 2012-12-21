@@ -20,6 +20,7 @@
 package org.openflexo.foundation.wkf;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -437,6 +438,11 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);
 		return v;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public Enumeration<FlexoProcessNode> getSortedSubprocesses() {

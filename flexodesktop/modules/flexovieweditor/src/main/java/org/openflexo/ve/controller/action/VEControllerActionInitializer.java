@@ -50,6 +50,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 	@Override
 	public void initializeActions() {
+
 		super.initializeActions();
 
 		new VESetPropertyInitializer(this);
@@ -79,13 +80,6 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new ActionSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
 
-		// Ontology perspective
-		new CreateOntologyClassInitializer(this);
-		new CreateOntologyIndividualInitializer(this);
-		new CreateObjectPropertyInitializer(this);
-		new CreateDataPropertyInitializer(this);
-		new DeleteOntologyObjectsInitializer(this);
-		new AddAnnotationStatementInitializer(this);
 	}
 
 }

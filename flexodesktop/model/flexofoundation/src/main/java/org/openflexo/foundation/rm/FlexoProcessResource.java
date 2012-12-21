@@ -49,7 +49,6 @@ import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.foundation.xml.XMLUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.ModelEntity;
@@ -1661,7 +1660,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 		private void convert() throws DuplicateResourceException {
 			int count = 0;
-			XMLMapping processMapping = new FlexoXMLMappings().getWKFMapping();
+			XMLMapping processMapping = getProject().getServiceManager().getXMLSerializationService().getWKFMapping();
 
 			// 1. Convert all Next... to End...
 			Iterator<Element> nextElementIterator = document.getDescendants(new ElementFilter() {

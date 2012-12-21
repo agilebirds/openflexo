@@ -25,12 +25,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.FIBView;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
@@ -41,6 +49,8 @@ public class ProcessPerspective extends FlexoPerspective {
 	private final WKFController _controller;
 
 	private JComponent topRightDummy;
+
+	private FIBView<?, ?> importedWorkflowView;
 
 	/**
 	 * @param controller
@@ -54,6 +64,9 @@ public class ProcessPerspective extends FlexoPerspective {
 		setTopLeftView(_controller.getWkfBrowserView());
 		setBottomLeftView(_controller.getProcessBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
+		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedWorkflowTree.fib"));
+		importedWorkflowView = FIBController.makeView(comp, new FlexoFIBController(comp, _controller));
+		importedWorkflowView.getController().setDataObject(controller.getControllerModel());
 	}
 
 	@Override
@@ -86,23 +99,23 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoProcess getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (_controller.getProject() != null) {
-			return _controller.getProject().getRootFlexoProcess();
+		} else if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess();
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 		if (process instanceof FlexoProcess) {
 			return new ProcessEditorController(_controller, (FlexoProcess) process).getDrawingView();
 		} else {
@@ -135,6 +148,18 @@ public class ProcessPerspective extends FlexoPerspective {
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
 		}
+	}
+
+	private void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedWorkflowView.getResultingJComponent());
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }

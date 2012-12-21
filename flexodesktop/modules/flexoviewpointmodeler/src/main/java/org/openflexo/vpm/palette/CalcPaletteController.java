@@ -22,7 +22,7 @@ package org.openflexo.vpm.palette;
 import javax.swing.JTabbedPane;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.VPMController;
@@ -33,7 +33,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	private PalettePalette _commonPalette;
 	private CalcPaletteModuleView _moduleView;
 
-	public CalcPaletteController(VPMController controller, ViewPointPalette palette, boolean readOnly) {
+	public CalcPaletteController(VPMController controller, DiagramPalette palette, boolean readOnly) {
 		super(new CalcPaletteRepresentation(palette, readOnly), controller.getSelectionManager());
 		_controller = controller;
 
@@ -87,7 +87,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 		return paletteView;
 	}
 
-	public ViewPointPalette getCalcPalette() {
+	public DiagramPalette getCalcPalette() {
 		return getDrawing().getModel();
 	}
 

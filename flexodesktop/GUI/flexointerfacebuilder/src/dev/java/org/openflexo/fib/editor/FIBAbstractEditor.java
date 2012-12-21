@@ -276,15 +276,16 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 		for (Object data : getData()) {
 			final Object d = data;
-			JMenuItem switchDataItem = new JMenuItem(data.toString());
-			switchDataItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					switchToData(d);
-				}
-			});
-			fileMenu.add(switchDataItem);
-
+			if (d != null) {
+				JMenuItem switchDataItem = new JMenuItem(data.toString());
+				switchDataItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						switchToData(d);
+					}
+				});
+				fileMenu.add(switchDataItem);
+			}
 		}
 
 		if (showExitMenuItem()) {

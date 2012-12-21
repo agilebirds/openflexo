@@ -22,6 +22,7 @@ package org.openflexo.wse.view;
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
@@ -44,7 +45,7 @@ public class WSETabularView extends TabularView {
 	}
 
 	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+	protected FlexoModelObject getParentObject(FlexoObject object) {
 		if (object instanceof WSObject) {
 			return ((WSObject) object).getParent();
 		} else if (object instanceof DMRepository) {

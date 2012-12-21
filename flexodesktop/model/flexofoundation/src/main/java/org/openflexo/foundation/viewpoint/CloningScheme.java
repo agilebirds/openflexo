@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
@@ -37,11 +36,6 @@ public class CloningScheme extends AbstractCreationScheme {
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.CloningScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CREATION_SCHEME_INSPECTOR;
 	}
 
 }

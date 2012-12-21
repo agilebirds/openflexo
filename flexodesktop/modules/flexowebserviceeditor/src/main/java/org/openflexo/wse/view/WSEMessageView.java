@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.ws.ExternalWSService;
@@ -76,7 +76,7 @@ public class WSEMessageView extends WSEView<ServiceMessageDefinition> {
 
 	public MessageEntry getSelectedMessageEntry() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}

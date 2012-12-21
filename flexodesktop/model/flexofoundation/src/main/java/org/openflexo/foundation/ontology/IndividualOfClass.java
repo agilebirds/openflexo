@@ -6,35 +6,26 @@ import org.openflexo.antar.binding.CustomType;
 
 public class IndividualOfClass implements CustomType {
 
-	public static IndividualOfClass getIndividualOfClass(OntologyClass anOntologyClass) {
+	public static IndividualOfClass getIndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		if (anOntologyClass.getOntologyLibrary() != null) {
-			if (anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass) != null) {
-				return anOntologyClass.getOntologyLibrary().individualsOfClass.get(anOntologyClass);
-			} else {
-				IndividualOfClass returned = new IndividualOfClass(anOntologyClass);
-				anOntologyClass.getOntologyLibrary().individualsOfClass.put(anOntologyClass, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyClass.getTechnologyAdapter().getTechnologyContextManager().getIndividualOfClass(anOntologyClass);
 	}
 
-	private OntologyClass ontologyClass;
+	private IFlexoOntologyClass ontologyClass;
 
-	private IndividualOfClass(OntologyClass anOntologyClass) {
+	public IndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		this.ontologyClass = anOntologyClass;
 	}
 
-	public OntologyClass getOntologyClass() {
+	public IFlexoOntologyClass getOntologyClass() {
 		return ontologyClass;
 	}
 
 	@Override
 	public Class getBaseClass() {
-		return OntologyIndividual.class;
+		return IFlexoOntologyIndividual.class;
 	}
 
 	@Override

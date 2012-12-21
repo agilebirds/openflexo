@@ -1,5 +1,3 @@
-#French
-#Fri Oct 05 19:23:07 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1212,6 +1210,7 @@ business_data_class_must_not_be_read_only_description=la classe de donn\u00E9e b
 business_data_must_not_be_readonly=la classe de donn\u00E9e business doit \u00EAtre une entit\u00E9 \u00E9ditable
 business_description=description m\u00E9tier
 businessrule=r\u00E8gle m\u00E9tier
+but=mais
 button=Bouton
 button_container=Conteneur de boutons
 button_label=Label du bouton
@@ -4068,6 +4067,7 @@ project_repository=Biblioth\u00E8que de projet
 project_repository_description=Ce type de biblioth\u00E8que correspond a un mod\u00E8le de donn\u00E9es business utilis\u00E9es dans le cadre du projet, mais qui ne sont pas stock\u00E9es dans une base de donn\u00E9es, mais volatile ou reconstruites.
 project_restoration=R\u00E9tablissement du projet
 project_shared_on=Projet partag\u00E9 le
+project_uri_do_not_match=L'URI du projet ne correspond pas
 project_was_not_properly_saved_permission_denied_directory=Le projet n'a pas \u00E9t\u00E9 sauv\u00E9 correctement. Veuillez v\u00E9rifier que vous avez les droits en \u00E9criture sur le r\u00E9pertoire suivant ainsi que tous les fichiers qu'il contient\: 
 project_was_not_properly_saved_permission_denied_file=Le projet n'a pas \u00E9t\u00E9 sauv\u00E9 correctement. Veuillez v\u00E9rifier que vous avez les droits en \u00E9criture sur le fichier suivant\: 
 project_will_be_checkouted_in=Le projet va \u00EAtre t\u00E9l\u00E9charg\u00E9 dans
@@ -5182,6 +5182,8 @@ war_install_directory=R\u00E9pertoire d'installation du WAR
 war_name=Nom du WAR
 warning=Avertissement \!
 warnings=Avertissements
+was_expected=\u00E9tait attendue
+was_found=a \u00E9t\u00E9 trouv\u00E9e
 was_up_to_date=est \u00E0 jour
 web_image_file_(png,jpg,gif)=Images Web (PNG,JPG,GIF)
 web_service_cannot_be_moved=Un web service ne peut \u00EAtre d\u00E9plac\u00E9

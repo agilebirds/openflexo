@@ -35,12 +35,14 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -123,7 +125,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
-		public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 			if (process instanceof FlexoProcess) {
 				ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, (FlexoProcess) process);
 			}
@@ -144,7 +146,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public WKFController(FlexoModule module) {
 		super(module);
 		initWithWKFPreferences();
-		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+		manager.new PropertyChangeListenerRegistration(AdvancedPrefs.SHOW_ALL_TABS, this, WKFPreferences.getPreferences());
 	}
 
 	@Override
@@ -180,6 +182,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		super.updateEditor(from, to);
 		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
 		_roleListBrowser.setRootObject(to != null && to.getProject() != null ? to.getProject().getWorkflow().getRoleList() : null);
+		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
+		ROLE_EDITOR_PERSPECTIVE.setProject(getProject());
 	}
 
 	@Override
@@ -293,7 +297,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	 *            the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof WKFObject) {
 			setCurrentFlexoProcess(((WKFObject) object).getProcess());
 			getSelectionManager().setSelectedObject(object);
@@ -312,7 +316,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
-	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object, FlexoPerspective perspective) {
 		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
@@ -524,11 +528,11 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getName();
 		} else if (object instanceof RoleList) {
-			return FlexoLocalization.localizedForKeyWithParams("roles_defined_for_project_($0)", getProject().getName());
+			return FlexoLocalization.localizedForKeyWithParams("roles");
 		}
 		return null;
 	}

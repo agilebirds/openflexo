@@ -25,10 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -38,7 +39,8 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddIndividual extends AddConcept {
+public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyIndividual> extends
+		AddConcept<M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
@@ -57,13 +59,7 @@ public class AddIndividual extends AddConcept {
 		return EditionActionType.AddIndividual;
 	}
 
-	/*@Override
-	public List<IndividualPatternRole> getAvailablePatternRoles() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
-		}
-		return null;
-	}*/
+	public abstract Class<T> getOntologyIndividualClass();
 
 	@Override
 	public IndividualPatternRole getPatternRole() {
@@ -78,16 +74,9 @@ public class AddIndividual extends AddConcept {
 	}
 
 	@Override
-	public OntologyClass getOntologyClass() {
-		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
+	public IFlexoOntologyClass getOntologyClass() {
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				// System.out.println("Je reponds avec " + ontologyClassURI);
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
 				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
@@ -99,7 +88,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
@@ -191,19 +180,6 @@ public class AddIndividual extends AddConcept {
 		return assertion;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_INDIVIDUAL_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
-
 	private ViewPointDataBinding individualName;
 
 	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, true);
@@ -230,7 +206,7 @@ public class AddIndividual extends AddConcept {
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyIndividual.class;
+			return IFlexoOntologyIndividual.class;
 		}
 		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}

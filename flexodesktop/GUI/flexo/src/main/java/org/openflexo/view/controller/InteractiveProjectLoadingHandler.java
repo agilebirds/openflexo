@@ -119,7 +119,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 						FlexoLocalization.localizedForKey("could_not_open_resource_manager_file") + "\n"
 								+ FlexoLocalization.localizedForKey("to_avoid_damaging_the_project_flexo_will_exit") + "\n"
 								+ FlexoLocalization.localizedForKey("error_is_caused_by_file") + " : '"
-								+ e.getFileResource().getResourceIdentifier() + "'",
+								+ e.getDeprecatedFileResource().getResourceIdentifier() + "'",
 						FlexoLocalization.localizedForKey("error_during_opening_project"), JOptionPane.ERROR_MESSAGE);
 			}
 		}

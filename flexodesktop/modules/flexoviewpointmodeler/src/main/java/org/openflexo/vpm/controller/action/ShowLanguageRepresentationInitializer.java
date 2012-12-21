@@ -32,13 +32,13 @@ public class ShowLanguageRepresentationInitializer extends ActionInitializer<Sho
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public ShowLanguageRepresentationInitializer(CEDControllerActionInitializer actionInitializer) {
+	public ShowLanguageRepresentationInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(ShowLanguageRepresentation.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

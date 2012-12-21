@@ -27,7 +27,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
-public abstract class EditionPatternObject extends ViewPointObject {
+public abstract class EditionPatternObject extends NamedViewPointObject {
 
 	public EditionPatternObject(ViewPointBuilder builder) {
 		super(builder);

@@ -23,13 +23,13 @@ import java.util.Comparator;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class CGVersionIdentifier extends FlexoObject implements StringConvertable, Cloneable {
+public class CGVersionIdentifier extends KVCFlexoObject implements StringConvertable, Cloneable {
 	protected static final Logger logger = Logger.getLogger(CGVersionIdentifier.class.getPackage().getName());
 
 	public enum VersionType {

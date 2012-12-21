@@ -22,14 +22,14 @@ package org.openflexo.javaparser;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadoc;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadocItem;
 import org.openflexo.toolbox.StringUtils;
 
 import com.thoughtworks.qdox.model.DocletTag;
 
-public class JavadocItem extends FlexoObject implements ParsedJavadoc {
+public class JavadocItem extends KVCFlexoObject implements ParsedJavadoc {
 
 	private String comment;
 	private Vector<FJPDocletTag> _docletTags;

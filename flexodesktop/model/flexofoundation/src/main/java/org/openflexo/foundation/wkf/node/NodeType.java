@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -33,7 +33,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  * @author sguerin
  */
-public abstract class NodeType extends FlexoObject implements StringConvertable, Serializable {
+public abstract class NodeType extends KVCFlexoObject implements StringConvertable, Serializable {
 
 	private static final Logger logger = Logger.getLogger(NodeType.class.getPackage().getName());
 

@@ -37,6 +37,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -89,9 +90,13 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -102,12 +107,24 @@ import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
@@ -115,7 +132,9 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
+import org.openflexo.foundation.viewpoint.FlexoFacet;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
@@ -125,8 +144,9 @@ import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
@@ -141,6 +161,7 @@ import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
@@ -197,7 +218,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	private boolean disposed = false;
 
-	private final Map<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>> loadedViews;
+	private final Map<FlexoPerspective, Map<FlexoProject, Map<FlexoObject, ModuleView<?>>>> loadedViews;
 
 	private final List<ModuleView<?>> moduleViews;
 
@@ -236,7 +257,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		super();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
 		this.module = module;
-		loadedViews = new Hashtable<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>();
+		loadedViews = new Hashtable<FlexoPerspective, Map<FlexoProject, Map<FlexoObject, ModuleView<?>>>>();
 		moduleViews = new ArrayList<ModuleView<?>>();
 		controllerModel = new ControllerModel(module.getApplicationContext(), module);
 		propertyChangeSupport = new PropertyChangeSupport(this);
@@ -436,7 +457,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public abstract FlexoModelObject getDefaultObjectToSelect(FlexoProject project);
+	public abstract FlexoObject getDefaultObjectToSelect(FlexoProject project);
 
 	public FlexoProject getProject() {
 		if (getEditor() != null) {
@@ -607,8 +628,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						FlexoModelObject focusedObject = getSelectionManager().getFocusedObject();
-						Vector<FlexoModelObject> globalSelection = getSelectionManager().getSelection();
+						FlexoObject focusedObject = getSelectionManager().getFocusedObject();
+						Vector<FlexoObject> globalSelection = getSelectionManager().getSelection();
 						FlexoActionType actionType = entry.getKey();
 						if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
 								&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection,
@@ -1082,7 +1103,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		controllerModel.setCurrentPerspective(perspective);
 	}
 
-	public final FlexoModelObject getDefaultObjectForPerspective(FlexoModelObject currentObjectAsModuleView, FlexoPerspective perspective) {
+	public final FlexoObject getDefaultObjectForPerspective(FlexoObject currentObjectAsModuleView, FlexoPerspective perspective) {
 		return perspective.getDefaultObject(currentObjectAsModuleView);
 	}
 
@@ -1090,9 +1111,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * Return current displayed object, assuming that current displayed view represents returned object (for example the process for WKF
 	 * module)
 	 * 
-	 * @return the FlexoModelObject
+	 * @return the FlexoObject
 	 */
-	public FlexoModelObject getCurrentDisplayedObjectAsModuleView() {
+	public FlexoObject getCurrentDisplayedObjectAsModuleView() {
 		// logger.info("getCurrentModuleView()="+getCurrentModuleView());
 		if (getCurrentModuleView() != null) {
 			return getCurrentModuleView().getRepresentedObject();
@@ -1108,16 +1129,20 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param createViewIfRequired
 	 * @return an initialized ModuleView instance
 	 */
-	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean createViewIfRequired) {
+	public ModuleView<?> moduleViewForObject(FlexoObject object, boolean createViewIfRequired) {
 		if (object == null) {
 			return null;
 		}
-		Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> perpsectiveViews = getLoadedViewsForPerspective(getCurrentPerspective());
-		Map<FlexoModelObject, ModuleView<?>> projectViews = perpsectiveViews.get(object.getProject());
+
+		FlexoProject project = (object instanceof FlexoProjectObject ? ((FlexoProjectObject) object).getProject() : null);
+
+		Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> perpsectiveViews = getLoadedViewsForPerspective(getCurrentPerspective());
+		Map<FlexoObject, ModuleView<?>> projectViews = perpsectiveViews.get(project);
 		if (projectViews == null) {
-			perpsectiveViews.put(object.getProject(), projectViews = new HashMap<FlexoModelObject, ModuleView<?>>());
-			if (object.getProject() != null) {
-				manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this, object.getProject());
+			perpsectiveViews.put(project, projectViews = new HashMap<FlexoObject, ModuleView<?>>());
+			if (project != null) {
+				manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this,
+						((FlexoProjectObject) object).getProject());
 			}
 		}
 		ModuleView<?> moduleView = projectViews.get(object);
@@ -1125,7 +1150,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (createViewIfRequired && controllerModel.getCurrentPerspective().hasModuleViewForObject(object)) {
 				moduleView = createModuleViewForObjectAndPerspective(object, controllerModel.getCurrentPerspective());
 				if (moduleView != null) {
-					FlexoModelObject representedObject = moduleView.getRepresentedObject();
+					FlexoObject representedObject = moduleView.getRepresentedObject();
 					if (representedObject == null) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Module view: " + moduleView.getClass().getName() + " does not return its represented object");
@@ -1139,6 +1164,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		}
 		return moduleView;
+
 	}
 
 	/**
@@ -1148,7 +1174,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public ModuleView<?> moduleViewForObject(FlexoModelObject object) {
+	public ModuleView<?> moduleViewForObject(FlexoObject object) {
 		return moduleViewForObject(object, true);
 	}
 
@@ -1160,7 +1186,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            TODO
 	 * @return a newly created and initialized ModuleView instance
 	 */
-	protected final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
+	protected final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoObject object, FlexoPerspective perspective) {
 		if (perspective == null) {
 			return null;
 		} else {
@@ -1169,7 +1195,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	@SuppressWarnings("unchecked")
-	public final boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
+	public final boolean hasViewForObjectAndPerspective(FlexoObject object, FlexoPerspective perspective) {
 		if (object == null) {
 			return false;
 		}
@@ -1186,7 +1212,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public final boolean _hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
+	public final boolean _hasViewForObjectAndPerspective(FlexoObject object, FlexoPerspective perspective) {
 		return perspective.hasModuleViewForObject(object);
 	}
 
@@ -1197,7 +1223,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public final void setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
+	public final void setCurrentEditedObjectAsModuleView(FlexoObject object) {
 		getControllerModel().setCurrentObject(object);
 	}
 
@@ -1208,7 +1234,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object, FlexoPerspective perspective) {
 		controllerModel.setCurrentPerspective(perspective);
 		controllerModel.setCurrentObject(object);
 	}
@@ -1260,9 +1286,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            the view to remove
 	 */
 	public void removeModuleView(ModuleView<?> aView) {
-		if (aView.getRepresentedObject() != null) {
-			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = getLoadedViewsForPerspective(aView.getPerspective());
-			Map<FlexoModelObject, ModuleView<?>> map2 = map.get(aView.getRepresentedObject().getProject());
+		if (aView.getRepresentedObject() instanceof FlexoProjectObject) {
+			Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> map = getLoadedViewsForPerspective(aView.getPerspective());
+			Map<FlexoObject, ModuleView<?>> map2 = map.get(((FlexoProjectObject) aView.getRepresentedObject()).getProject());
 			if (map2.get(aView.getRepresentedObject()) == aView) {// Let's make sure we remove the proper
 																	// view!
 				map2.remove(aView.getRepresentedObject());
@@ -1274,10 +1300,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	protected Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> getLoadedViewsForPerspective(FlexoPerspective p) {
-		Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = loadedViews.get(p);
+	protected Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> getLoadedViewsForPerspective(FlexoPerspective p) {
+		Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> map = loadedViews.get(p);
 		if (map == null) {
-			loadedViews.put(p, map = new HashMap<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>());
+			loadedViews.put(p, map = new HashMap<FlexoProject, Map<FlexoObject, ModuleView<?>>>());
 		}
 		return map;
 	}
@@ -1300,33 +1326,33 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 		List<E> views = new ArrayList<E>();
 		if (perspective != null) {
-			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = getLoadedViewsForPerspective(perspective);
+			Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> map = getLoadedViewsForPerspective(perspective);
 			appendViews(map, views, project, moduleViewType);
 		} else {
-			for (Map.Entry<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>> e : loadedViews.entrySet()) {
+			for (Map.Entry<FlexoPerspective, Map<FlexoProject, Map<FlexoObject, ModuleView<?>>>> e : loadedViews.entrySet()) {
 				appendViews(e.getValue(), views, project, moduleViewType);
 			}
 		}
 		return views;
 	}
 
-	private <E extends ModuleView<?>> void appendViews(Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> views, List<E> list,
+	private <E extends ModuleView<?>> void appendViews(Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> views, List<E> list,
 			FlexoProject project, Class<E> moduleViewType) {
 		if (project != null) {
 			appendViews(views.get(project), list, moduleViewType);
 		} else {
-			for (Map.Entry<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> e : views.entrySet()) {
+			for (Map.Entry<FlexoProject, Map<FlexoObject, ModuleView<?>>> e : views.entrySet()) {
 				appendViews(e.getValue(), list, moduleViewType);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private <E extends ModuleView<?>> void appendViews(Map<FlexoModelObject, ModuleView<?>> views, List<E> list, Class<E> moduleViewType) {
+	private <E extends ModuleView<?>> void appendViews(Map<FlexoObject, ModuleView<?>> views, List<E> list, Class<E> moduleViewType) {
 		if (moduleViewType == null) {
 			moduleViewType = (Class<E>) ModuleView.class;
 		}
-		for (Map.Entry<FlexoModelObject, ModuleView<?>> e : views.entrySet()) {
+		for (Map.Entry<FlexoObject, ModuleView<?>> e : views.entrySet()) {
 			if (moduleViewType.isAssignableFrom(e.getValue().getClass())) {
 				list.add((E) e.getValue());
 			}
@@ -1366,7 +1392,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return null;
 	}
 
-	public abstract String getWindowTitleforObject(FlexoModelObject object);
+	public abstract String getWindowTitleforObject(FlexoObject object);
 
 	public String getWindowTitle() {
 		String projectTitle = getModule().getModule().requireProject() && getProject() != null ? " - " + getProject().getProjectName()
@@ -1405,9 +1431,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		public boolean setObjectValue(Object value) {
 
 			if (target != null) {
-				if (target instanceof FlexoModelObject) {
-					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction((FlexoModelObject) target,
-							new Vector<FlexoModelObject>(), getEditor());
+				if (target instanceof FlexoObject) {
+					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction((FlexoObject) target, new Vector<FlexoObject>(),
+							getEditor());
 					action.setKey(key);
 					action.setValue(value);
 					action.setLocalizedPropertyName(localizedPropertyName);
@@ -1417,7 +1443,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					target.setObjectForKey(value, key);
 				} else {
 					if (logger.isLoggable(Level.SEVERE)) {
-						logger.severe("Target object is not a FlexoModelObject, I cannot set the value for that object");
+						logger.severe("Target object is not a FlexoObject, I cannot set the value for that object");
 					}
 				}
 			} else if (logger.isLoggable(Level.WARNING)) {
@@ -1463,12 +1489,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		 */
 		@Override
 		public boolean performAction(ActionEvent e, String actionName, Object object) {
-			if (object instanceof FlexoModelObject) {
-				FlexoModelObject m = (FlexoModelObject) object;
+			if (object instanceof FlexoObject) {
+				FlexoObject m = (FlexoObject) object;
 				for (FlexoActionType<?, ?, ?> actionType : m.getActionList()) {
 					if (actionType.getUnlocalizedName().equals(actionName)) {
-						return getEditor().performActionType((FlexoActionType<?, FlexoModelObject, FlexoModelObject>) actionType, m,
-								(Vector<FlexoModelObject>) null, e).hasActionExecutionSucceeded();
+						return getEditor().performActionType((FlexoActionType<?, FlexoObject, FlexoObject>) actionType, m,
+								(Vector<FlexoObject>) null, e).hasActionExecutionSucceeded();
 					}
 				}
 			}
@@ -1523,7 +1549,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			mainInspectorController.delete();
 		}
 		for (ModuleView<?> view : getAllLoadedViews()) {
-			view.deleteModuleView();
+			try {
+				view.deleteModuleView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		if (rmWindow != null) {
@@ -1536,6 +1566,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		if (flexoFrame != null) {
 			flexoFrame.disposeAll();
+		}
+		if (menuBar != null) {
+			menuBar.dispose();
 		}
 		for (FlexoEditor editor : controllerModel.getEditors()) {
 			if (editor instanceof InteractiveFlexoEditor) {
@@ -1572,12 +1605,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public PPMWebServiceClient getWSClient(boolean forceDialog) {
-		ModelFactory factory = new ModelFactory();
+		ModelFactory factory;
 		try {
-			factory.importClass(PPMWSClientParameter.class);
-		} catch (org.openflexo.model.exceptions.ModelDefinitionException e) {
-			// It sucks but it seems that a developer left a crappy thing.
+			factory = new ModelFactory(PPMWSClientParameter.class);
+		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
+			throw new Error("Improperly configured PPMWSClientParameter. ", e);
 		}
 		FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
 				.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
@@ -1723,20 +1756,113 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public void objectWasClicked(FlexoModelObject object) {
+	/**
+	 * We manage here an indirection with resources: resource data is used instead of resource if resource is loaded
+	 * 
+	 * @param object
+	 * @return
+	 */
+	private FlexoObject getRelevantObject(FlexoObject object) {
+		if (object instanceof FlexoResource<?>) {
+			logger.info("Resource " + object + " loaded=" + ((FlexoResource<?>) object).isLoaded());
+		}
+		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
+			try {
+				return (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		}
+		return object;
+	}
+
+	public void objectWasClicked(Object object) {
 		logger.info("Object was clicked: " + object);
+		logger.info("Current selection=" + getSelectionManager().getSelection());
+		if (getCurrentPerspective() != null) {
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasClicked(object);
+			}
+		}
 	}
 
-	public void objectWasRightClicked(FlexoModelObject object, MouseEvent e) {
+	public void objectWasRightClicked(Object object, MouseEvent e) {
 		logger.info("Object was right-clicked: " + object + "event=" + e);
-		getSelectionManager().getContextualMenuManager().showPopupMenuForObject(object, (Component) e.getSource(), e.getPoint());
+		if (object instanceof FlexoObject) {
+			FlexoObject relevantObject = getRelevantObject((FlexoObject) object);
+			getSelectionManager().getContextualMenuManager()
+					.showPopupMenuForObject(relevantObject, (Component) e.getSource(), e.getPoint());
+		}
+		if (getCurrentPerspective() != null) {
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasRightClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasRightClicked(object);
+			}
+		}
 	}
 
-	public void objectWasDoubleClicked(FlexoModelObject object) {
+	public void objectWasDoubleClicked(Object object) {
 		logger.info("Object was double-clicked: " + object);
-		if (getCurrentPerspective().hasModuleViewForObject(object)) {
+		if (object instanceof FlexoResource<?>) {
+			FlexoObject resourceData = null;
+			if (!((FlexoResource<?>) object).isLoaded()) {
+				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
+				try {
+					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);
+				} catch (FileNotFoundException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				}
+				progress.hideWindow();
+			} else {
+				try {
+					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);
+				} catch (FileNotFoundException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					notify("Cannot load resource: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+			if (resourceData != null) {
+				selectAndFocusObject(resourceData);
+			}
+		}
+		if (object instanceof FlexoObject && getCurrentPerspective().hasModuleViewForObject((FlexoObject) object)) {
 			// Try to display object in view
-			selectAndFocusObject(object);
+			selectAndFocusObject((FlexoObject) object);
+		}
+		if (getCurrentPerspective() != null) {
+			if (object instanceof FlexoObject) {
+				getCurrentPerspective().objectWasDoubleClicked(getRelevantObject((FlexoObject) object));
+			} else {
+				getCurrentPerspective().objectWasDoubleClicked(object);
+			}
 		}
 	}
 
@@ -1798,9 +1924,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				}
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
-			for (Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map : new ArrayList<Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>(
+			for (Map<FlexoProject, Map<FlexoObject, ModuleView<?>>> map : new ArrayList<Map<FlexoProject, Map<FlexoObject, ModuleView<?>>>>(
 					loadedViews.values())) {
-				Map<FlexoModelObject, ModuleView<?>> map2 = map.get(evt.getSource());
+				Map<FlexoObject, ModuleView<?>> map2 = map.get(evt.getSource());
 				if (map2 != null) {
 					for (ModuleView<?> view : new ArrayList<ModuleView<?>>(map2.values())) {
 						view.deleteModuleView();
@@ -1821,7 +1947,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return rmWindow = new ResourceManagerWindow(project);
 	}
 
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof FlexoProject) {
 			getControllerModel().setCurrentProject((FlexoProject) object);
 		} else {
@@ -1841,8 +1967,53 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return getControllerModel().getCurrentEditor();
 	}
 
-	public static ImageIcon iconForObject(Object object) {
-		if (object instanceof WorkflowModelObject) {
+	/**
+	 * Return the technology-specific controller for supplied technology adapter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+		if (technologyAdapter != null) {
+			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+			if (sm != null) {
+				TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+				if (service != null) {
+					return service.getTechnologyAdapterController(technologyAdapter);
+				}
+			}
+		}
+		return null;
+	}
+
+	public ImageIcon iconForObject(Object object) {
+		ImageIcon iconForObject = statelessIconForObject(object);
+		if (iconForObject != null && object instanceof FlexoModelObject && ((FlexoModelObject) object).getProject() != getProject()) {
+			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+		}
+		return iconForObject;
+	}
+
+	public static ImageIcon statelessIconForObject(Object object) {
+		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
+			try {
+				return statelessIconForObject(((FlexoResource<?>) object).getResourceData(null));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		} else if (object instanceof InformationSpace) {
+			return IconLibrary.INFORMATION_SPACE_ICON;
+		} else if (object instanceof FlexoFacet) {
+			return IconLibrary.FOLDER_ICON;
+		} else if (object instanceof FlexoResourceCenter) {
+			return IconLibrary.RESOURCE_CENTER_ICON;
+		} else if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {
 			return WKFIconLibrary.iconForObject((WKFObject) object);
@@ -1850,16 +2021,54 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return SEIconLibrary.iconForObject((IEObject) object);
 		} else if (object instanceof DMObject) {
 			return DMEIconLibrary.iconForObject((DMObject) object);
-		} else if (object instanceof ViewPointLibraryObject) {
-			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
+		} else if (object instanceof ViewPointLibrary) {
+			return VPMIconLibrary.VIEWPOINT_LIBRARY_ICON;
+		} else if (object instanceof ViewPointObject) {
+			return VPMIconLibrary.iconForObject((ViewPointObject) object);
+		} else if (object instanceof ViewPointResource) {
+			return VPMIconLibrary.iconForObject((ViewPointResource) object);
+		} else if (object instanceof ExampleDiagramResource) {
+			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
+		} else if (object instanceof DiagramPaletteResource) {
+			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
-		} else if (object instanceof OntologyLibrary) {
-			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
-		} else if (object instanceof OntologyFolder) {
+		} else if (object instanceof RepositoryFolder) {
+			if (((RepositoryFolder) object).isRootFolder()) {
+				return IconLibrary.RESOURCE_CENTER_ICON;
+			}
 			return IconLibrary.FOLDER_ICON;
-		} else if (object instanceof AbstractOntologyObject) {
-			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
+		} else if (object instanceof TechnologyAdapter<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter<?, ?>) object);
+			if (tac != null) {
+				return tac.getTechnologyIcon();
+			}
+		} else if (object instanceof FlexoModel<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModel<?, ?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getModelIcon();
+			}
+		} else if (object instanceof FlexoModelResource<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModelResource<?, ?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getModelIcon();
+			}
+		} else if (object instanceof FlexoMetaModel<?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModel<?>) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getMetaModelIcon();
+			}
+		} else if (object instanceof FlexoMetaModelResource<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModelResource<?, ?>) object)
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getMetaModelIcon();
+			}
+		} else if (object instanceof IFlexoOntologyObject) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyObject) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForOntologyObject(((IFlexoOntologyObject) object).getClass());
+			}
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
 		} else if (object instanceof CGTemplateObject) {
@@ -1872,5 +2081,4 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
-
 }

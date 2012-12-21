@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label localize="true" name="HelpText" data="data.helpText" constraints="twocols(location=right;index=0;expandHorizontally=true;expandVertically=true)" width="200" height="200" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="View Definition Library" />
+</Panel>
+

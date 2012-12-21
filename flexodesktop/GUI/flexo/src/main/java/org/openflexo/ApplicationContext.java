@@ -2,48 +2,51 @@ package org.openflexo;
 
 import java.io.File;
 
+import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
-public abstract class ApplicationContext implements FlexoEditorFactory {
-
-	private ModuleLoader moduleLoader;
-
-	private ProjectLoader projectLoader;
+public abstract class ApplicationContext extends DefaultFlexoServiceManager implements FlexoEditorFactory {
 
 	private FlexoEditor applicationEditor;
 
-	private FlexoProjectReferenceLoader projectReferenceLoader;
-
-	private FlexoResourceCenterService resourceCenterService;
-
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
-		projectLoader = new ProjectLoader(this);
-		moduleLoader = new ModuleLoader(this);
-		projectReferenceLoader = createProjectReferenceLoader();
-		resourceCenterService = createResourceCenterService();
+		try {
+			ProjectLoader projectLoader = new ProjectLoader(this);
+			registerService(projectLoader);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		ModuleLoader moduleLoader = new ModuleLoader(this);
+		registerService(moduleLoader);
+		TechnologyAdapterControllerService technologyAdapterControllerService = createTechnologyAdapterControllerService();
+		registerService(technologyAdapterControllerService);
 	}
 
 	public ModuleLoader getModuleLoader() {
-		return moduleLoader;
+		return getService(ModuleLoader.class);
 	}
 
 	public ProjectLoader getProjectLoader() {
-		return projectLoader;
+		return getService(ProjectLoader.class);
 	}
 
 	public final FlexoProjectReferenceLoader getProjectReferenceLoader() {
-		return projectReferenceLoader;
+		return getService(FlexoProjectReferenceLoader.class);
 	}
 
-	public final FlexoResourceCenterService getResourceCenterService() {
-		return resourceCenterService;
+	public final TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
+		return getService(TechnologyAdapterControllerService.class);
 	}
 
 	public final FlexoEditor getApplicationEditor() {
@@ -56,10 +59,17 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 
 	public abstract ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory);
 
+	@Override
 	protected abstract FlexoEditor createApplicationEditor();
 
+	@Override
 	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
 
-	protected abstract FlexoResourceCenterService createResourceCenterService();
+	protected abstract TechnologyAdapterControllerService createTechnologyAdapterControllerService();
+
+	@Override
+	protected FlexoResourceCenterService createResourceCenterService() {
+		return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
+	}
 
 }

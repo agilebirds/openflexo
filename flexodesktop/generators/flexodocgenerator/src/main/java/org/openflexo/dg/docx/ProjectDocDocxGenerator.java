@@ -51,7 +51,6 @@ import org.openflexo.foundation.cg.dm.CustomTemplateRepositoryChanged;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.TemplateFileNotification;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
@@ -60,6 +59,8 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.generator.PackagedResourceToCopyGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
@@ -342,9 +343,9 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 		if (object == null) {
 			return null;
 		}
-		TreeMap<String, FlexoModelObject> treeMap = new TreeMap<String, FlexoModelObject>(object.getActors());
+		TreeMap<PatternRole<?>, FlexoModelObject> treeMap = new TreeMap<PatternRole<?>, FlexoModelObject>(object.getActors());
 		String modelObjectReference = null;
-		for (Entry<String, FlexoModelObject> e : treeMap.entrySet()) {
+		for (Entry<PatternRole<?>, FlexoModelObject> e : treeMap.entrySet()) {
 			if (e.getValue().getXMLResourceData() != null) {
 				modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(e.getValue()).getStringRepresentation();
 				break;

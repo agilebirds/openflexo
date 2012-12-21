@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="label" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <TextField columns="10" passwd="false" localize="true" name="Label" data="data.label" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+       <Label label="required" align="right" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" localize="true" />
+       <CheckBox selected="true" data="data.isRequired" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="checkbox" localize="true" />
+       <Label label="conditional" align="right" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" localize="true" />
+       <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+           <Assignment variable="component.bindable" value="data" />
+           <Assignment variable="component.bindingDefinition" value="data.conditionalBindingDefinition" />
+       </Custom>
+       <Label label="default_value" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" visible="(data.widget != &quot;URI&quot;)"/>
+       <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(data.widget != &quot;URI&quot;)">
+         <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.defaultValue.binding" constraints="gridbag(anchor=east;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)">
+           <Assignment variable="component.bindable" value="data" />
+           <Assignment variable="component.bindingDefinition" value="data.defaultValueBindingDefinition" />
+         </Custom>
+         <CheckBox selected="true" data="data.usePaletteLabelAsDefaultValue" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" name="checkbox" localize="true" />
+         <Label label="use_palette_label" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=0.01;weightY=0.0;x=0;y=0)" localize="true" />
+       </Panel>
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Edition Scheme Parameter" />
+</Panel>
+

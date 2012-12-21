@@ -41,6 +41,7 @@ import org.openflexo.dm.view.controller.action.DMControllerActionInitializer;
 import org.openflexo.dm.view.menu.DMMenuBar;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
@@ -162,14 +163,14 @@ public class DMController extends FlexoController {
 		return (DMObject) getCurrentDisplayedObjectAsModuleView();
 	}
 
-	public ModuleView<? extends FlexoModelObject> getCurrentEditedObjectView() {
+	public ModuleView<? extends FlexoObject> getCurrentEditedObjectView() {
 		if (getCurrentEditedObject() != null) {
 			return viewForObject(getCurrentEditedObject());
 		}
 		return null;
 	}
 
-	public ModuleView<? extends FlexoModelObject> viewForObject(DMObject object) {
+	public ModuleView<? extends FlexoObject> viewForObject(DMObject object) {
 		return moduleViewForObject(object);
 	}
 
@@ -217,7 +218,7 @@ public class DMController extends FlexoController {
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		super.selectAndFocusObject(object);
 		getSelectionManager().setSelectedObject(object);
 	}
@@ -256,13 +257,13 @@ public class DMController extends FlexoController {
 
 	@Override
 	public void switchToPerspective(FlexoPerspective perspective) {
-		List<FlexoModelObject> selection = new ArrayList<FlexoModelObject>(getSelectionManager().getSelection());
+		List<FlexoObject> selection = new ArrayList<FlexoObject>(getSelectionManager().getSelection());
 		super.switchToPerspective(perspective);
 		getSelectionManager().setSelectedObjects(selection);
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof DMObject) {
 			return ((DMObject) object).getLocalizedName();
 		}

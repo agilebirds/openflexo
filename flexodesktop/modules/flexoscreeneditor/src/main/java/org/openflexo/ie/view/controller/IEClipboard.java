@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.IEContainer;
@@ -66,7 +66,7 @@ public class IEClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+	protected void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext) {
 		JComponent container = graphicalContext.targetContainer;
 		Point location = graphicalContext.pastingLocation;
 

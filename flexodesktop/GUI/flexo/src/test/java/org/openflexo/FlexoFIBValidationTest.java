@@ -8,7 +8,7 @@ public class FlexoFIBValidationTest extends AbstractTestFIBFile {
 
 	@Test
 	public void testFlexoFIB() {
-		validateFIBDirectory(new FileResource("Fib/DescriptionPanel.fib").getParentFile(), new FileResource(
+		validateFIBDirectory(new FileResource("Fib/DescriptionWidget.fib").getParentFile(), new FileResource(
 				"Inspectors/COMMON/ModelObject.inspector").getParentFile().getParentFile());
 	}
 }

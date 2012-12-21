@@ -29,12 +29,12 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.view.ElementUpdated;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.viewpoint.GraphicalElementAction;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.diagram.model.ElementUpdated;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 
@@ -73,7 +73,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		if (getDrawable() != null) {
 			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
 			if (epRef != null) {
-				GraphicalElementPatternRole patternRole = (GraphicalElementPatternRole) epRef.getPatternRole();
+				ConnectorPatternRole patternRole = (ConnectorPatternRole) epRef.getPatternRole();
 				for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
 					addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
 				}

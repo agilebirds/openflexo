@@ -40,6 +40,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
@@ -205,7 +206,7 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 		return returnedStatus;
 	}
 
-	public Vector<? extends FlexoModelObject> getSelectedObjects() {
+	public Vector<? extends FlexoObject> getSelectedObjects() {
 		return choicePanel.getSelectedObjects();
 	}
 

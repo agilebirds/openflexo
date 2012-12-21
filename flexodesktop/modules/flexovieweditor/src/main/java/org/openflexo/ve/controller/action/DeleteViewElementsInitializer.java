@@ -26,15 +26,11 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.action.DeleteViewElements;
+import org.openflexo.foundation.view.diagram.action.DeleteViewElements;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -56,9 +52,7 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<DeleteViewElements>() {
 			@Override
 			public boolean run(EventObject e, DeleteViewElements action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB);
 			}
 		};
 	}

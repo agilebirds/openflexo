@@ -39,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.print.PrinterException;
@@ -86,6 +87,7 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
@@ -1078,7 +1080,10 @@ public class MetaphaseEditorPanel extends JPanel {
 				htmlTextPaneMouseClicked(evt);
 			}
 		});
-		htmlTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
+		Action insertBreakAction = htmlTextPane.getActionMap().get(DefaultEditorKit.insertBreakAction);
+		Action deletePrevCharAction = htmlTextPane.getActionMap().get(DefaultEditorKit.deletePrevCharAction);
+		htmlTextPane.getActionMap().put(DefaultEditorKit.insertBreakAction, new InsertBreakAction(insertBreakAction, deletePrevCharAction));
+		/*htmlTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
 			@Override
 			public void keyPressed(java.awt.event.KeyEvent evt) {
 				htmlTextPaneKeyPressed(evt);
@@ -1093,7 +1098,7 @@ public class MetaphaseEditorPanel extends JPanel {
 			public void keyTyped(java.awt.event.KeyEvent evt) {
 				htmlTextPaneKeyTyped(evt);
 			}
-		});
+		});*/
 		mainScrollPane = new JScrollPane();
 		mainScrollPane.setViewportView(htmlTextPane);
 
@@ -1318,6 +1323,17 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	public void removeEditorMouseMotionListener(EditorMouseMotionListener editorMouseMotionListener) {
 		editorMouseMotionListeners.remove(editorMouseMotionListener);
+	}
+
+	public Element getParentTag(HTML.Tag tag) {
+		Element e = htmlDocument.getCharacterElement(htmlTextPane.getSelectionStart());
+		while (!e.getName().equalsIgnoreCase("html")) {
+			if (e.getName().equalsIgnoreCase(tag.toString())) {
+				return e;
+			}
+			e = e.getParentElement();
+		}
+		return null;
 	}
 
 	public AttributeSet getSelectedParagraphAttributes() {
@@ -1672,12 +1688,8 @@ public class MetaphaseEditorPanel extends JPanel {
 	}// GEN-LAST:event_htmlTextPaneKeyReleased
 
 	private void htmlTextPaneKeyTyped(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_htmlTextPaneKeyTyped
-		if (evt.getKeyChar() == 10) {
-			// TODO: currently this inserts two list items, fix this. PS it's
-			// not because of the two actions below, they will only insert
-			// when encountering either a UL or OL
-			new HTMLEditorKit.InsertHTMLTextAction("Insert List Item", "<li></li>", Tag.UL, Tag.LI).actionPerformed(null);
-			new HTMLEditorKit.InsertHTMLTextAction("Insert List Item", "<li></li>", Tag.OL, Tag.LI).actionPerformed(null);
+		if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+
 		}
 	}// GEN-LAST:event_htmlTextPaneKeyTyped
 
@@ -1895,6 +1907,57 @@ public class MetaphaseEditorPanel extends JPanel {
 			// Next line is just an instruction to editor to change color
 			StyleConstants.setBackground(outerAttr, this.color);
 			setCharacterAttributes(editor, outerAttr, false);
+
+		}
+	}
+
+	class InsertBreakAction extends HTMLEditorKit.InsertHTMLTextAction {
+
+		private final Action insertBreakAction;
+		private final Action deletePreviousCharAction;
+
+		public InsertBreakAction(Action insertBreakAction, Action deletePreviousCharAction) {
+			super(DefaultEditorKit.insertBreakAction, null, null, null, null, null);
+			this.insertBreakAction = insertBreakAction;
+			this.deletePreviousCharAction = deletePreviousCharAction;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			try {
+				Element parentListTag = getParentTag(HTML.Tag.UL);
+				if (parentListTag == null) {
+					parentListTag = getParentTag(HTML.Tag.OL);
+				}
+				if (parentListTag != null) {
+					Element li = getParentTag(HTML.Tag.LI);
+					int start = li.getStartOffset();
+					final int end = li.getEndOffset();
+					String liText = htmlTextPane.getText(start, end - start);
+					boolean content = false;
+					for (int i = 0; i < liText.length() && !content; i++) {
+						if (!Character.isWhitespace(liText.charAt(i))) {
+							content = true;
+						}
+					}
+					if (content) {
+						htmlDocument.insertAfterEnd(li, "<li></li>");
+						htmlTextPane.setText(getDocument());
+						htmlTextPane.setCaretPosition(end);
+					} else {
+						deletePreviousCharAction.actionPerformed(ae);
+						htmlDocument.insertAfterEnd(parentListTag, "<p></p>");
+						htmlTextPane.setText(getDocument());
+						htmlTextPane.setCaretPosition(Math.min(Math.max(0, end - 1), htmlDocument.getLength()));
+					}
+				} else if (insertBreakAction != null) {
+					insertBreakAction.actionPerformed(ae);
+				}
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		}
 	}

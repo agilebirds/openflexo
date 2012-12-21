@@ -32,4 +32,8 @@ public abstract class RMDataModification extends DataModification {
 		super(oldValue, newValue);
 	}
 
+	public RMDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(propertyName, oldValue, newValue);
+	}
+
 }

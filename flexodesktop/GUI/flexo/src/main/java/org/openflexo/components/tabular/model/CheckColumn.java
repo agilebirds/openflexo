@@ -19,7 +19,7 @@
  */
 package org.openflexo.components.tabular.model;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Please comment this class
@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoModelObject;
  * @author sguerin
  * 
  */
-public abstract class CheckColumn<D extends FlexoModelObject> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
+public abstract class CheckColumn<D extends FlexoObject> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
 
 	public CheckColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, false);
@@ -68,7 +68,7 @@ public abstract class CheckColumn<D extends FlexoModelObject> extends AbstractCo
 	}
 
 	@Override
-	public boolean isCellEditableFor(FlexoModelObject object) {
+	public boolean isCellEditableFor(FlexoObject object) {
 		return true;
 	}
 

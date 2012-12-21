@@ -9,12 +9,12 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.FinalBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 
 public abstract class GraphicalElementPatternRolePathElement<T extends ViewObject> extends PatternRolePathElement<T> {
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRolePathElement.class.getPackage().getName());

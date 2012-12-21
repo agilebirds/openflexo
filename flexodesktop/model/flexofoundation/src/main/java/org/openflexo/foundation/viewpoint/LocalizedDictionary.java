@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.text.Collator;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -27,6 +28,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
@@ -101,12 +103,6 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 			_values.put(lang, dict);
 		}
 		return dict;
-	}
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/*public String getDefaultValue(String key, Language language) {
@@ -341,4 +337,8 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return getEntries();
+	}
 }

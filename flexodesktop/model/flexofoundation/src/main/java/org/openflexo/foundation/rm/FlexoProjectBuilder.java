@@ -21,7 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
@@ -45,7 +45,11 @@ public class FlexoProjectBuilder {
 	private int current;
 	private int stepsToNotify;
 
-	public FlexoResourceCenterService resourceCenterService;
+	public FlexoServiceManager serviceManager;
+
+	public FlexoProjectBuilder(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
 
 	public void initResourcesCount(int resourcesCount) {
 		if (progress != null) {

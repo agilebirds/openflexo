@@ -25,11 +25,11 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPointPalette> {
+public class CalcPaletteModuleView extends JPanel implements ModuleView<DiagramPalette> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcPaletteModuleView.class.getPackage().getName());
@@ -66,7 +66,7 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPoin
 	}
 
 	@Override
-	public ViewPointPalette getRepresentedObject() {
+	public DiagramPalette getRepresentedObject() {
 		return _controller.getCalcPalette();
 	}
 

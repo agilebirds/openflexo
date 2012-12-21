@@ -41,7 +41,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  */
 
-public abstract class GeneratedOutput extends CGObject implements XMLStorageResourceData {
+public abstract class GeneratedOutput<RD extends GeneratedOutput<RD>> extends CGObject implements XMLStorageResourceData<RD> {
 
 	public static interface GeneratorFactory {
 
@@ -50,22 +50,11 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedOutput.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 	protected FlexoGeneratedOutputResource _resource;
 
 	private Vector<GenerationRepository> _generatedRepositories;
 
 	private GeneratorFactory factory;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -73,7 +62,6 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	public GeneratedOutput(FlexoProject project) {
 		super(project);
 		setGeneratedCode(this);
-		_project = project;
 		_generatedRepositories = new Vector<GenerationRepository>();
 	}
 
@@ -112,8 +100,13 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
+	public org.openflexo.foundation.resource.FlexoResource<RD> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<RD> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**

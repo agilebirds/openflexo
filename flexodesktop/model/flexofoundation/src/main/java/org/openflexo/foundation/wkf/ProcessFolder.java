@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -280,6 +281,11 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Collection<FlexoProcessNode> getEmbeddedValidableObjects() {
+		return getProcesses();
 	}
 
 }

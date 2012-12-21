@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.action.SuroundWithRepetition;
@@ -60,7 +60,7 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, SuroundWithRepetition action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
-					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
+					Vector<FlexoObject> v = (Vector<FlexoObject>) action.getGlobalSelection().clone();
 					if (!v.contains(action.getFocusedObject())) {
 						v.add(action.getFocusedObject());
 					}

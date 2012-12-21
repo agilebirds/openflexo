@@ -35,8 +35,8 @@ import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -139,7 +139,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		}
 
 		// Now the OEShemas
-		if (getProject().getFlexoShemaLibraryResource(false) != null && getProject().getResourceCenter() != null) {
+		if (getProject().getFlexoShemaLibraryResource(false) != null && getProject() != null) {
 			Enumeration<ViewDefinition> en5 = getProject().getShemaLibrary().retrieveAllShemas().elements();
 			while (en5.hasMoreElements()) {
 				ViewDefinition sd = en5.nextElement();

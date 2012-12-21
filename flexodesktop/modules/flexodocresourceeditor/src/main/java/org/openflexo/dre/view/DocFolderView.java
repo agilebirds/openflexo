@@ -30,7 +30,7 @@ import org.openflexo.dre.view.model.DocItemFolderTableModel;
 import org.openflexo.dre.view.model.DocItemTableModel;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 
 /**
@@ -107,7 +107,7 @@ public class DocFolderView extends DREView<DocItemFolder> {
 
 	public DocItemFolder getSelectedDocItemFolder() {
 		SelectionManager sm = getDREController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DocItemFolder) {
 			return (DocItemFolder) selection.firstElement();
 		}
@@ -116,7 +116,7 @@ public class DocFolderView extends DREView<DocItemFolder> {
 
 	public DocItem getSelectedDocItem() {
 		SelectionManager sm = getDREController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DocItem) {
 			return (DocItem) selection.firstElement();
 		}

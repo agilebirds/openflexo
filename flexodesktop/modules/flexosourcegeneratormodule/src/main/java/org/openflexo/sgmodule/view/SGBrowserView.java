@@ -33,7 +33,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.icon.GeneratorIconLibrary;
@@ -206,7 +206,7 @@ public class SGBrowserView extends BrowserView {
 	 * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 		/*  if (object instanceof FlexoWorkflow || object instanceof FlexoProject || object instanceof DMEORepository || object instanceof DMEOModel || object instanceof DMEOEntity || object instanceof OperationNode)
 		      controller.setCurrentEditedObjectAsModuleView(object); */
 		if (object instanceof GenerationRepository) {
@@ -223,7 +223,7 @@ public class SGBrowserView extends BrowserView {
 	 * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		getController().setCurrentEditedObjectAsModuleView(object);
 	}
 

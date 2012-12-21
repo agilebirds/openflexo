@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.validation.ValidationReport;
 
 public class TestConsistencyChecker extends AbstractTestExternalBuilders<FlexoConsistencyCheckerMain> {
@@ -19,7 +19,7 @@ public class TestConsistencyChecker extends AbstractTestExternalBuilders<FlexoCo
 	@Test
 	public void testConsistencyCheck() {
 		// Just forcing FlexoObject to load before CodeType
-		FlexoObject.initialize(true);
+		KVCFlexoObject.initialize(true);
 		List<String> argList = getArgList();
 		argList.add(getProjectFile().getAbsolutePath());
 		addArgument(argList, FlexoConsistencyCheckerMain.CODE_TYPE_ARGUMENT_PREFIX + CodeType.PROTOTYPE);

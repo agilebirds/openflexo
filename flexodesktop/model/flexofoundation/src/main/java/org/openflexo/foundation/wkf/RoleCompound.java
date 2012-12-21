@@ -20,6 +20,7 @@
 package org.openflexo.foundation.wkf;
 
 import java.awt.geom.Point2D;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -29,7 +30,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -89,7 +89,7 @@ public final class RoleCompound extends WorkflowModelObject {
 	}
 
 	private void makeConnex(RoleCompound clone, Vector<Role> originalSelectedRoles) {
-		XMLMapping mapping = new FlexoXMLMappings().getWorkflowMapping();
+		XMLMapping mapping = getProject().getServiceManager().getXMLSerializationService().getWorkflowMapping();
 		HashSet<RoleSpecialization> embedded = new HashSet<RoleSpecialization>();
 		mapping.getEmbeddedObjectsForObject(clone, embedded, RoleSpecialization.class, true);
 		HashSet<WorkflowModelObject> originalSet = new HashSet<WorkflowModelObject>();
@@ -223,4 +223,10 @@ public final class RoleCompound extends WorkflowModelObject {
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		return null;
 	}
+
+	@Override
+	public Collection<Role> getEmbeddedValidableObjects() {
+		return getRoles();
+	}
+
 }

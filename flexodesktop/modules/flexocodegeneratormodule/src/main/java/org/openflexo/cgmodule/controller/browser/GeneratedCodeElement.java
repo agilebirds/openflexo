@@ -38,7 +38,7 @@ public class GeneratedCodeElement extends GCBrowserElement {
 		addToChilds(getGeneratedCode().getTemplates());
 	}
 
-	public GeneratedOutput getGeneratedCode() {
-		return (GeneratedOutput) getObject();
+	public GeneratedOutput<?> getGeneratedCode() {
+		return (GeneratedOutput<?>) getObject();
 	}
 }

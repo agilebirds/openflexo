@@ -26,6 +26,7 @@ import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -45,11 +46,11 @@ public class RemoveDocType extends FlexoAction<RemoveDocType, DocType, DocType> 
 
 		@Override
 		public boolean isVisibleForSelection(DocType object, Vector<DocType> globalSelection) {
-			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
+			Vector<FlexoObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
 			boolean ok = v.size() > 0;
-			for (FlexoModelObject o : v) {
+			for (FlexoObject o : v) {
 				for (DefaultDocType defaultDocType : DefaultDocType.values()) {
-					ok &= o != o.getProject().getDocTypeNamed(defaultDocType.name());
+					ok &= (o instanceof FlexoModelObject && o != ((FlexoModelObject) o).getProject().getDocTypeNamed(defaultDocType.name()));
 				}
 			}
 			return ok;

@@ -42,11 +42,9 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class EOModelResourceData extends FlexoObservable implements StorageResourceData {
+public class EOModelResourceData extends FlexoObservable implements StorageResourceData<EOModelResourceData> {
 
 	private static final Logger logger = Logger.getLogger(EOModelResourceData.class.getPackage().getName());
-
-	private FlexoProject _project;
 
 	private EOModel _eoModel;
 
@@ -62,9 +60,8 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	 * isModified = false; lastMemoryUpdate = null; }
 	 */
 
-	public EOModelResourceData(FlexoProject aProject, FlexoEOModelResource resource) {
+	public EOModelResourceData(FlexoEOModelResource resource) {
 		super();
-		_project = aProject;
 		_eoModel = null;
 		isModified = false;
 		lastMemoryUpdate = null;
@@ -100,13 +97,18 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
+	public org.openflexo.foundation.resource.FlexoResource<EOModelResourceData> getResource() {
+		return getFlexoResource();
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<EOModelResourceData> resource) {
+		setFlexoResource((FlexoResource) resource);
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		return getFlexoResource().getProject();
 	}
 
 	public DMModel getDMModel() {
@@ -139,6 +141,11 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 		}
 		isModified = true;
 		lastMemoryUpdate = new Date();
+	}
+
+	@Override
+	public void clearIsModified() {
+		clearIsModified(false);
 	}
 
 	@Override

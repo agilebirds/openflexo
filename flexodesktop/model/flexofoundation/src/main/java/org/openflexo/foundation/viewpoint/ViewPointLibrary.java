@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -28,10 +29,15 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
@@ -40,41 +46,43 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
-public class ViewPointLibrary extends ViewPointLibraryObject {
+/**
+ * The {@link ViewPointLibrary} manages all references to all {@link ViewPoint} known in a JVM instance.<br>
+ * The {@link ViewPointLibrary} is a {@link FlexoService} working in conjunction with a {@link FlexoResourceCenterService}, with
+ * synchronization performed through a {@link FlexoServiceManager} (generally this is the ApplicationContext)
+ * 
+ * @author sylvain
+ * 
+ */
+public class ViewPointLibrary extends FlexoObject implements FlexoService, Validable {
 
 	private static final Logger logger = Logger.getLogger(ViewPointLibrary.class.getPackage().getName());
 
-	// public static final File CALC_LIBRARY_DIR = new FileResource("Calcs");
+	public static final ViewPointValidationModel VALIDATION_MODEL = new ViewPointValidationModel();
 
-	private final OntologyLibrary ontologyLibrary;
-	private final Vector<ViewPoint> calcs;
-	private final Hashtable<String, ViewPoint> map;
-
-	private FlexoResourceCenter resourceCenter;
+	private final Hashtable<String, ViewPointResource> map;
 
 	protected EditionPatternConverter editionPatternConverter;
 
-	private final ViewPointFolder rootFolder;
+	private FlexoServiceManager serviceManager;
 
-	public ViewPointLibrary(FlexoResourceCenter resourceCenterService, OntologyLibrary anOntologyLibrary) {
+	private XMLMapping viewPointModel_0_1;
+	private XMLMapping viewPointModel_1_0;
+
+	public ViewPointLibrary() {
 		super();
 
-		editionPatternConverter = new EditionPatternConverter(resourceCenterService);
+		editionPatternConverter = new EditionPatternConverter(this);
 		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
 
-		this.resourceCenter = resourceCenterService;
-		ontologyLibrary = anOntologyLibrary;
-		calcs = new Vector<ViewPoint>();
-		map = new Hashtable<String, ViewPoint>();
+		map = new Hashtable<String, ViewPointResource>();
 		// findCalcs(CALC_LIBRARY_DIR);
 		/*for (OntologyCalc calc : calcs.values()) {
 			calc.loadWhenUnloaded();
 		}*/
 
-		rootFolder = new ViewPointFolder("root", null, this);
-
 		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
-		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
+		// StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
 
@@ -83,21 +91,24 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return "ViewPointLibrary";
 	}
 
-	public FlexoResourceCenter getResourceCenter() {
-		return resourceCenter;
+	/**
+	 * Retrieve, and return ViewPointResource identified by supplied URI
+	 * 
+	 * @param viewpointURI
+	 * @return
+	 */
+	public ViewPointResource getViewPointResource(String viewpointURI) {
+		return map.get(viewpointURI);
 	}
 
-	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		this.resourceCenter = resourceCenter;
-	}
-
-	@Deprecated
-	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
-		return map.get(ontologyCalcUri);
-	}
-
+	/**
+	 * Retrieve, load and return ViewPoint identified by supplied URI
+	 * 
+	 * @param viewpointURI
+	 * @return
+	 */
 	public ViewPoint getViewPoint(String viewpointURI) {
-		return getOntologyCalc(viewpointURI);
+		return map.get(viewpointURI).getViewPoint();
 	}
 
 	/**
@@ -106,48 +117,42 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 	 * 
 	 * @return
 	 */
-	public Vector<ViewPoint> getViewPoints() {
-		return calcs;
+	public Collection<ViewPointResource> getViewPoints() {
+		return map.values();
 	}
 
-	public ViewPoint importViewPoint(File viewpointDirectory, ViewPointFolder folder) {
-		logger.info("Import viewpoint " + viewpointDirectory.getAbsolutePath());
-		ViewPoint viewpoint = ViewPoint.openViewPoint(viewpointDirectory, this, folder);
-		if (viewpoint != null) {
-			registerViewPoint(viewpoint);
-			return viewpoint;
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Coult not open VP in " + viewpointDirectory.getAbsolutePath());
+	/**
+	 * Return all loaded viewpoint in the current library
+	 */
+	public Collection<ViewPoint> getLoadedViewPoints() {
+		Vector<ViewPoint> returned = new Vector<ViewPoint>();
+		for (ViewPointResource vpRes : getViewPoints()) {
+			if (vpRes.isLoaded()) {
+				returned.add(vpRes.getViewPoint());
 			}
-			return null;
 		}
+		return returned;
 	}
 
-	public ViewPoint registerViewPoint(ViewPoint vp) {
-		String uri = vp.getViewPointURI();
-		map.put(uri, vp);
-		calcs.add(vp);
+	/**
+	 * Register supplied ViewPointResource in this library
+	 * 
+	 * @param vpRes
+	 * @return
+	 */
+	public ViewPointResource registerViewPoint(ViewPointResource vpRes) {
+		String uri = vpRes.getURI();
+		map.put(uri, vpRes);
 		setChanged();
-		notifyObservers(new OntologyCalcCreated(vp));
-		for (EditionPattern ep : vp.getEditionPatterns()) {
-			ep.finalizeParentEditionPatternDeserialization();
-		}
-		return vp;
+		notifyObservers(new OntologyCalcCreated(vpRes));
+		return vpRes;
 	}
 
-	@Override
-	public OntologyLibrary getOntologyLibrary() {
-		return ontologyLibrary;
-	}
-
-	private XMLMapping VIEW_POINT_MODEL;
-
-	protected XMLMapping get_VIEW_POINT_MODEL() {
-		if (VIEW_POINT_MODEL == null) {
-			File viewPointModelFile = new FileResource("Models/ViewPointModel/ViewPointModel.xml");
+	protected XMLMapping getViewPointModel() {
+		if (viewPointModel_1_0 == null) {
+			File viewPointModelFile = new FileResource("Models/ViewPointModel/viewpoint_model_1.0.xml");
 			try {
-				VIEW_POINT_MODEL = new XMLMapping(viewPointModelFile);
+				viewPointModel_1_0 = new XMLMapping(viewPointModelFile);
 			} catch (InvalidModelException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
@@ -174,7 +179,7 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 				e.printStackTrace();
 			}
 		}
-		return VIEW_POINT_MODEL;
+		return viewPointModel_1_0;
 	}
 
 	private XMLMapping VIEW_POINT_PALETTE_MODEL;
@@ -249,24 +254,10 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return EXAMPLE_DRAWING_MODEL;
 	}
 
-	@Override
-	public ViewPointLibrary getViewPointLibrary() {
-		return this;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CALC_LIBRARY_INSPECTOR;
-	}
-
-	public ViewPointFolder getRootFolder() {
-		return rootFolder;
-	}
-
 	public EditionPattern getEditionPattern(String editionPatternURI) {
 		if (editionPatternURI.indexOf("#") > -1) {
 			String viewPointURI = editionPatternURI.substring(0, editionPatternURI.indexOf("#"));
-			ViewPoint vp = getOntologyCalc(viewPointURI);
+			ViewPoint vp = getViewPoint(viewPointURI);
 			if (vp != null) {
 				return vp.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#") + 1));
 			}
@@ -287,20 +278,49 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return null;
 	}
 
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		Vector<Validable> returned = new Vector<Validable>();
-		returned.add(this);
-		for (ViewPoint v : getViewPoints()) {
-			returned.addAll(v.getAllEmbeddedValidableObjects());
-		}
+	public Collection<ViewPoint> getEmbeddedValidableObjects() {
+		return getLoadedViewPoints();
+	}
 
-		return returned;
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (caller instanceof FlexoResourceCenterService) {
+			if (notification instanceof ResourceCenterAdded) {
+				FlexoResourceCenter newRC = ((ResourceCenterAdded) notification).getAddedResourceCenter();
+				// A new resource center has just been referenced, initialize it related to viewpoint exploring
+				newRC.initialize(this);
+			}
+		}
+	}
+
+	@Override
+	public void register(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
+	@Override
+	public FlexoServiceManager getFlexoServiceManager() {
+		return serviceManager;
+	}
+
+	public FlexoResourceCenterService getResourceCenterService() {
+		return getFlexoServiceManager().getService(FlexoResourceCenterService.class);
+	}
+
+	@Override
+	public void initialize() {
+		if (getResourceCenterService() != null) {
+			// At initialization, initialize all already existing FlexoResourceCenter with this ViewPointLibrary
+			for (FlexoResourceCenter rc : getResourceCenterService().getResourceCenters()) {
+				rc.initialize(this);
+			}
+		}
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		return VALIDATION_MODEL;
 	}
 
 }

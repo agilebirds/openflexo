@@ -3,20 +3,27 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.foundation.FlexoServiceManager.ServiceRegistered;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
-public abstract class DefaultResourceCenterService implements FlexoResourceCenterService {
+public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
 	private LocalResourceCenterImplementation openFlexoResourceCenter;
 	private UserResourceCenter userResourceCenter;
 
 	public static FlexoResourceCenterService getNewInstance() {
 		try {
-			ModelFactory factory = new ModelFactory().importClass(FlexoResourceCenterService.class);
+			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
 			factory.setImplementingClassForInterface(DefaultResourceCenterService.class, FlexoResourceCenterService.class);
-			return factory.newInstance(FlexoResourceCenterService.class);
+			DefaultResourceCenterService returned = (DefaultResourceCenterService) factory.newInstance(FlexoResourceCenterService.class);
+			returned.addToResourceCenters(returned.openFlexoResourceCenter);
+			returned.addToResourceCenters(returned.userResourceCenter);
+			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}
@@ -62,7 +69,14 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
 		userResourceCenter = new UserResourceCenter(new File(FileUtils.getDocumentDirectory(),
 				"FlexoUserResourceCenter/ResourceCenterData.xml"));
+
 	}
+
+	/*	@Override
+		public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService) {
+			openFlexoResourceCenter.initialize(technologyAdapterService);
+			userResourceCenter.initialize(technologyAdapterService);
+		}*/
 
 	@Override
 	public LocalResourceCenterImplementation getOpenFlexoResourceCenter() {
@@ -73,4 +87,42 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 	public FlexoResourceCenter getUserResourceCenter() {
 		return userResourceCenter;
 	}
+
+	@Override
+	public void addToResourceCenters(FlexoResourceCenter resourceCenter) {
+		performSuperAdder(RESOURCE_CENTERS, resourceCenter);
+		if (getFlexoServiceManager() != null) {
+			getFlexoServiceManager().notify(this, new ResourceCenterAdded(resourceCenter));
+		}
+	}
+
+	/**
+	 * Notification of a new ResourceCenter added to the list of referenced resource centers
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class ResourceCenterAdded implements ServiceNotification {
+		private FlexoResourceCenter addedResourceCenter;
+
+		public ResourceCenterAdded(FlexoResourceCenter addedResourceCenter) {
+			this.addedResourceCenter = addedResourceCenter;
+		}
+
+		public FlexoResourceCenter getAddedResourceCenter() {
+			return addedResourceCenter;
+		}
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (caller instanceof TechnologyAdapterService) {
+			if (notification instanceof ServiceRegistered) {
+				for (FlexoResourceCenter rc : getResourceCenters()) {
+					rc.initialize((TechnologyAdapterService) caller);
+				}
+			}
+		}
+	}
+
 }

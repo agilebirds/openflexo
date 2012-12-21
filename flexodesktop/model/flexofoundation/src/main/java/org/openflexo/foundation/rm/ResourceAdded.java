@@ -27,7 +27,7 @@ package org.openflexo.foundation.rm;
 public class ResourceAdded extends RMDataModification {
 
 	public ResourceAdded(FlexoResource<? extends FlexoResourceData> newResource) {
-		super(null, newResource);
+		super(FlexoProject.RESOURCES, null, newResource);
 	}
 
 	public FlexoResource<? extends FlexoResourceData> getAddedResource() {

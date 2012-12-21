@@ -28,7 +28,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.dm.view.DMBrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
@@ -92,7 +92,7 @@ class RepositoryPerspective extends DMPerspective {
 	}
 
 	@Override
-	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
+	public DMObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
@@ -100,13 +100,13 @@ class RepositoryPerspective extends DMPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		// Only DMProperty or Diagrams objects have no module view representation
 		return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof DMObject) {
 			return getController().createDMView((DMObject) object);
 		} else {

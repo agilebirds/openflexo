@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.dm.eo.model.EORelationship;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
@@ -38,7 +38,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class JoinSemanticType extends FlexoObject implements StringConvertable, ChoiceList {
+public abstract class JoinSemanticType extends KVCFlexoObject implements StringConvertable, ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(JoinSemanticType.class.getPackage().getName());
 

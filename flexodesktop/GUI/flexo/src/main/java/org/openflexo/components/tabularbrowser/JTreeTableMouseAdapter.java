@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * 
@@ -52,7 +52,7 @@ public class JTreeTableMouseAdapter extends MouseAdapter implements MouseMotionL
 		int col = _table.columnAtPoint(p);
 		int row = _table.rowAtPoint(p);
 
-		FlexoModelObject selectedObject = _table.getObjectAt(row);
+		FlexoObject selectedObject = _table.getObjectAt(row);
 
 		/*logger.info("Click on row "+row+" and col "+col);
 		logger.info("Represented object is a "+selectedObject);

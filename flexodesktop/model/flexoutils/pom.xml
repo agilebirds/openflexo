@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>model</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexoutils</artifactId>
 	<name>Model :: FlexoUtils</name>
@@ -38,6 +38,10 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
 		</dependency>
 		<dependency>
     		<groupId>sablecc</groupId>

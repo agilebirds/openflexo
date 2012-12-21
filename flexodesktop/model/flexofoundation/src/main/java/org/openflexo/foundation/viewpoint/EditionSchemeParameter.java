@@ -20,15 +20,17 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.action.DropSchemeAction;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
@@ -39,12 +41,25 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, PROPERTY, OBJECT_PROPERTY, DATA_PROPERTY, FLEXO_OBJECT, LIST, EDITION_PATTERN;
+		URI,
+		TEXT_FIELD,
+		LOCALIZED_TEXT_FIELD,
+		TEXT_AREA,
+		INTEGER,
+		FLOAT,
+		CHECKBOX,
+		DROPDOWN,
+		INDIVIDUAL,
+		CLASS,
+		PROPERTY,
+		OBJECT_PROPERTY,
+		DATA_PROPERTY,
+		FLEXO_OBJECT,
+		LIST,
+		EDITION_PATTERN;
 	}
 
-	private String name;
 	private String label;
-	private String description;
 	private boolean usePaletteLabelAsDefaultValue;
 
 	private EditionScheme _scheme;
@@ -58,6 +73,16 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public EditionSchemeParameter(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getURI() {
+		return getEditionScheme().getURI() + "." + getName();
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	@Override
@@ -101,31 +126,11 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@Override
 	public ViewPoint getViewPoint() {
 		if (getScheme() != null) {
 			return getScheme().getViewPoint();
 		}
 		return null;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getLabel() {
@@ -137,11 +142,6 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.EDITION_PATTERN_PARAMETER_INSPECTOR;
 	}
 
 	public boolean getUsePaletteLabelAsDefaultValue() {
@@ -211,7 +211,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		ViewPointPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
+		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
 				: null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");

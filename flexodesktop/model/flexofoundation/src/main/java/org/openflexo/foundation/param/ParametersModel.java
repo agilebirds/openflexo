@@ -22,7 +22,7 @@ package org.openflexo.foundation.param;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
@@ -69,7 +69,7 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 		// interface
 	}
 
-	protected class ParamsModel extends FlexoObject {
+	protected class ParamsModel extends KVCFlexoObject {
 		@Override
 		public Object objectForKey(String key) {
 			return parameterForKey(key);

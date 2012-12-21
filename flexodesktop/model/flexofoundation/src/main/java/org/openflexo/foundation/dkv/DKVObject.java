@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.dkv;
 
-import java.util.Vector;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -28,15 +26,12 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author gpolet
  * 
  */
 public abstract class DKVObject extends FlexoModelObject implements Validable {
-
-	private FlexoProject project;
 
 	protected DKVModel dkvModel;
 
@@ -48,7 +43,6 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 	public DKVObject(DKVModel dl) {
 		super(dl.getProject());
 		this.dkvModel = dl;
-		this.project = dkvModel.getProject();
 	}
 
 	// Should not be called by other object than DKVModel
@@ -56,36 +50,7 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 		super(project);
 	}
 
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		return project;
-	}
-
 	public abstract boolean isDeleteAble();
-
-	/**
-	 * Overrides setProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	public void setProject(FlexoProject aProject) {
-		this.project = aProject;
-	}
-
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getDkvModel().getXMLMapping();
-	}
 
 	/**
 	 * Overrides getXMLResourceData
@@ -159,14 +124,6 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 	public void validate(ValidationReport report, ValidationModel validationModel) {
 		validationModel.validate(this, report);
 	}
-
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
-	@Override
-	public abstract Vector getAllEmbeddedValidableObjects();
 
 	/**
 	 * Returns fully qualified name for this object

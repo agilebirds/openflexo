@@ -21,8 +21,8 @@ package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -39,7 +39,8 @@ public class PropertyInspectorEntry extends InspectorEntry {
 
 	private ViewPointDataBinding domainValue;
 
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public PropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -47,7 +48,7 @@ public class PropertyInspectorEntry extends InspectorEntry {
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyProperty.class;
+		return IFlexoOntologyStructuralProperty.class;
 	}
 
 	@Override
@@ -63,14 +64,11 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		this.parentPropertyURI = parentPropertyURI;
 	}
 
-	public OntologyProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
+	public IFlexoOntologyStructuralProperty getParentProperty() {
+		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
 	}
 
-	public void setParentProperty(OntologyProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
@@ -82,14 +80,11 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		this.domainURI = domainURI;
 	}
 
-	public OntologyClass getDomain() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
+	public IFlexoOntologyClass getDomain() {
+		return getViewPoint().getOntologyClass(_getDomainURI());
 	}
 
-	public void setDomain(OntologyClass c) {
+	public void setDomain(IFlexoOntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 

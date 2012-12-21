@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
@@ -48,7 +48,7 @@ public class DMClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+	protected void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext) {
 		logger.warning("Pasting " + _clipboardData + " not implemented");
 	}
 

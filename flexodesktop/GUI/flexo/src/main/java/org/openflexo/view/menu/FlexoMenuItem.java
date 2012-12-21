@@ -37,7 +37,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
@@ -99,12 +99,12 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return _controller.getSelectionManager().getLastSelectedObject();
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return _controller.getSelectionManager().getSelection();
 	}
 
@@ -123,7 +123,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 	public void itemWillShow() {
 		if (actionType instanceof FlexoActionType && getSelectionManager() != null) {
 			if (getFocusedObject() == null || getFocusedObject().getActionList().indexOf(actionType) > -1) {
-				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
+				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection()));
 			} else {
 				setEnabled(false);
 			}

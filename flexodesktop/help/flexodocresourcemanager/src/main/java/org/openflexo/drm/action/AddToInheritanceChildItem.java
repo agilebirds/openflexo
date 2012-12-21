@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.drm.DocItem;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -36,30 +36,30 @@ public class AddToInheritanceChildItem extends FlexoAction {
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public FlexoAction makeNewAction(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 			return new AddToInheritanceChildItem(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
 			return object != null && object instanceof DocItem;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+		FlexoObject.addActionForClass(actionType, DocItem.class);
 	}
 
 	private DocItem _parentDocItem;
 	private DocItem _childDocItem;
 
-	AddToInheritanceChildItem(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	AddToInheritanceChildItem(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

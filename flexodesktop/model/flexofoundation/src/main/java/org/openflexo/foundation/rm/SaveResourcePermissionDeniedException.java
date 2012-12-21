@@ -27,15 +27,13 @@ package org.openflexo.foundation.rm;
  */
 public class SaveResourcePermissionDeniedException extends SaveResourceException {
 
-	protected FlexoFileResource _myFileResource;
-
+	@Deprecated
 	public SaveResourcePermissionDeniedException(FlexoFileResource fileResource) {
 		super(fileResource);
-		_myFileResource = fileResource;
 	}
 
-	@Override
-	public FlexoFileResource getFileResource() {
-		return _myFileResource;
+	public SaveResourcePermissionDeniedException(org.openflexo.foundation.resource.FlexoFileResource<?> fileResource) {
+		super(fileResource);
 	}
+
 }

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawing;
 import org.openflexo.icon.IconLibrary;
@@ -34,17 +34,17 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExampleDrawing, ExampleDrawingShema, ViewPointObject> {
+public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExampleDrawing, ExampleDiagram, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteExampleDrawingInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteExampleDrawingInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(DeleteExampleDrawing.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

@@ -20,7 +20,7 @@
 package org.openflexo.fps.view;
 
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.fps.controller.FPSController;
 
 /**
@@ -36,11 +36,11 @@ public class SharedProjectBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		// Try to display object in view
 		getController().selectAndFocusObject(object);
 	}

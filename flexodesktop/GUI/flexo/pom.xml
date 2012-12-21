@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>GUI</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexo</artifactId>
 	<name>GUI :: Flexo</name>
@@ -16,6 +16,7 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>client-config.wsdd</include>
+					<include>META-INF/**/*</include>
 				</includes>
 			</resource>
 		</resources>

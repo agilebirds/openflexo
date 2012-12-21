@@ -37,12 +37,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
+import org.jdesktop.swingx.JXTable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -66,7 +68,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	private static final Logger logger = Logger.getLogger(FIBTableWidget.class.getPackage().getName());
 
-	private JTable _table;
+	private JXTable _table;
 	private final JPanel _dynamicComponent;
 	private final FIBTable _fibTable;
 	private FIBTableModel _tableModel;
@@ -345,12 +347,13 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	private void buildTable() {
 		getTableModel().addTableModelListener(this);
 
-		_table = new JTable(getTableModel()) {
+		_table = new JXTable(getTableModel()) {
 			@Override
 			public Dimension getPreferredScrollableViewportSize() {
 				return super.getPreferredSize();
 			}
 		};
+		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
 		_table.setAutoCreateRowSorter(true);
 		_table.setFillsViewportHeight(true);
 		_table.setShowHorizontalLines(false);

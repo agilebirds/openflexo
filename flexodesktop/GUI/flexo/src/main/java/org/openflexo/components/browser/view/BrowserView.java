@@ -71,7 +71,7 @@ import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.browser.dnd.TreeDragSource;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.ContextualMenuManager;
@@ -318,7 +318,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		return (BrowserElement) treeView.getLastSelectedPathComponent();
 	}
 
-	public FlexoModelObject getSelectedObject() {
+	public FlexoObject getSelectedObject() {
 		if (getSelectedElement() != null) {
 			return getSelectedElement().getObject();
 		}
@@ -327,7 +327,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	private Vector<BrowserElement> selectedElements = new Vector<BrowserElement>();
 
-	private Vector<FlexoModelObject> selectedObjects = new Vector<FlexoModelObject>();
+	private Vector<FlexoObject> selectedObjects = new Vector<FlexoObject>();
 
 	private boolean selectedElementsNeedRecomputing = true;
 
@@ -367,7 +367,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	 * 
 	 * @return a Vector of BrowserElement
 	 */
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		if (selectedElementsNeedRecomputing) {
 			rebuildSelectedElementsAndObjects();
 		}
@@ -408,15 +408,15 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 	}
 
-	public abstract void treeSingleClick(FlexoModelObject object);
+	public abstract void treeSingleClick(FlexoObject object);
 
-	public abstract void treeDoubleClick(FlexoModelObject object);
+	public abstract void treeDoubleClick(FlexoObject object);
 
-	public void treeSingleClickWithAltDown(FlexoModelObject object) {
+	public void treeSingleClickWithAltDown(FlexoObject object) {
 		treeSingleClick(object);
 	}
 
-	public void treeDoubleClickWithAltDown(FlexoModelObject object) {
+	public void treeDoubleClickWithAltDown(FlexoObject object) {
 		treeDoubleClick(object);
 	}
 
@@ -503,8 +503,8 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		/*
 		 * if (getSelectionPolicy() == SelectionPolicy.ForceSelection) { System.out.println("value changed with "+e); if
 		 * (_browser.getSelectionManager() != null) { selectedElementsNeedRecomputing = true; _browser.deleteBrowserListener(this);
-		 * Vector<FlexoModelObject> objectsToSelect = getSelectedObjects(); _browser.getSelectionManager().resetSelection(); for
-		 * (FlexoModelObject o : objectsToSelect) { System.out.println("Selected: "+o); _browser.getSelectionManager().addToSelected(o); }
+		 * Vector<FlexoObject> objectsToSelect = getSelectedObjects(); _browser.getSelectionManager().resetSelection(); for
+		 * (FlexoObject o : objectsToSelect) { System.out.println("Selected: "+o); _browser.getSelectionManager().addToSelected(o); }
 		 * _browser.addBrowserListener(this); return; } }
 		 */
 		// Code initial suit:
@@ -534,9 +534,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 					}
 				}
 			} else if (getSelectionPolicy() == SelectionPolicy.ForceSelection) {
-				Vector<FlexoModelObject> objectsToSelect = getSelectedObjects();
+				Vector<FlexoObject> objectsToSelect = getSelectedObjects();
 				_browser.getSelectionManager().resetSelection();
-				for (FlexoModelObject o : objectsToSelect) {
+				for (FlexoObject o : objectsToSelect) {
 					_browser.getSelectionManager().addToSelected(o);
 				}
 			}
@@ -602,7 +602,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				// If we come here, the tree expansion event was originated by the user pressing the + in the JTree
 				// Therefore, if we are on a node that
 				if (_browser.getSelectionManager() != null) {
-					for (FlexoModelObject o : _browser.getSelectionManager().getSelection()) {
+					for (FlexoObject o : _browser.getSelectionManager().getSelection()) {
 						if (element.contains(o)) {
 							// browser
 							// view with the selection given by the selection manager
@@ -912,7 +912,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		/*
 		 * if(_browser.getSelectionManager()!=null) return _browser.getSelectionManager().getFocusedObject();
 		 */
@@ -923,7 +923,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		/*
 		 * if(_browser.getSelectionManager()!=null) return _browser.getSelectionManager().getSelection();
 		 */

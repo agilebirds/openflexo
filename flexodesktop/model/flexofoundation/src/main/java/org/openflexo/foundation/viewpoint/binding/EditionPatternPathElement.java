@@ -10,7 +10,7 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
@@ -38,8 +38,10 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 			for (PatternRole pr : editionPattern.getPatternRoles()) {
 				BindingPathElement<?> newPathElement = null;
 				newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, anEditionPattern);
-				elements.put(pr, newPathElement);
-				allElements.add(newPathElement);
+				if (newPathElement != null) {
+					elements.put(pr, newPathElement);
+					allElements.add(newPathElement);
+				}
 			}
 		}
 	}

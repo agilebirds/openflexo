@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 
 public class VECut extends FlexoUndoableAction<VECut, ViewObject, ViewObject> {
 

@@ -27,18 +27,18 @@ import org.openflexo.components.browser.DefaultBrowserConfiguration.ObjectVisibi
 import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.components.widget.SelectionTabularBrowserModel.SelectionTabularBrowserModelSelectionListener;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.controller.FlexoController;
 
-public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularBrowserView implements
+public class MultipleObjectSelector<E extends FlexoObject> extends TabularBrowserView implements
 		SelectionTabularBrowserModelSelectionListener {
 
-	public static interface ObjectSelectabilityDelegate<O extends FlexoModelObject> {
+	public static interface ObjectSelectabilityDelegate<O extends FlexoObject> {
 		public boolean isSelectable(O object);
 	}
 
-	public MultipleObjectSelector(FlexoModelObject rootObject, FlexoController controller, ObjectVisibilityDelegate visibilityDelegate,
+	public MultipleObjectSelector(FlexoObject rootObject, FlexoController controller, ObjectVisibilityDelegate visibilityDelegate,
 			ObjectSelectabilityDelegate<E> selectabilityDelegate) {
 		super(controller, new SelectionTabularBrowserModel<E>(new DefaultBrowserConfiguration(rootObject, visibilityDelegate),
 				selectabilityDelegate));
@@ -68,7 +68,7 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 	}
 
 	@Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		getModel()._selectionColumn.setSelectedObjects((Vector<E>) objects);
 		// getTreeTable().getTree().treeStructureChanged();
 	}
@@ -80,15 +80,15 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 
 		public AbstractColumn<?, ?> getExtraColumnAt(int index);
 
-		public boolean isSelectable(FlexoModelObject obj);
+		public boolean isSelectable(FlexoObject obj);
 	}
 
 	@Override
-	public FlexoModelObject getRootObject() {
+	public FlexoObject getRootObject() {
 		return getModel().getDefaultRootObject();
 	}
 
-	public void setRootObject(FlexoModelObject rootObject) {
+	public void setRootObject(FlexoObject rootObject) {
 		logger.info("setRootObject with " + rootObject);
 		if (((DefaultBrowserConfiguration) getModel().getConfiguration()).getDefaultRootObject() != rootObject) {
 			((DefaultBrowserConfiguration) getModel().getConfiguration()).setDefaultRootObject(rootObject);

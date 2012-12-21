@@ -30,7 +30,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -40,12 +39,9 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.view.controller.FlexoController;
@@ -67,7 +63,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	private BrowserElement _rootElement;
 
-	private FlexoModelObject _rootObject = null;
+	private FlexoObject _rootObject = null;
 
 	protected Map<BrowserElementType, BrowserFilterStatus> _filterStatus;
 
@@ -79,10 +75,10 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	private List<CustomBrowserFilter> _customFilters;
 
-	// hashtable where keys are FlexoModelObject objects while values are either
+	// hashtable where keys are FlexoObject objects while values are either
 	// BrowserElement
 	// or a Vector of BrowserElement
-	private Map<FlexoModelObject, Object> _elements = null;
+	private Map<FlexoObject, Object> _elements = null;
 
 	private final List<ProjectBrowserListener> _browserListeners;
 
@@ -230,7 +226,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_browserElementFactory = browserElementFactory;
 	}
 
-	public BrowserElement makeNewElement(FlexoModelObject object, BrowserElement parent) {
+	public BrowserElement makeNewElement(FlexoObject object, BrowserElement parent) {
 		return getBrowserElementFactory().makeNewElement(object, this, parent);
 	}
 
@@ -261,14 +257,14 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return returned;
 	}
 
-	public boolean activateBrowsingFor(FlexoModelObject object) {
+	public boolean activateBrowsingFor(FlexoObject object) {
 		BrowserElement browserElement = makeNewElement(object, null);
 		boolean returned = activateBrowsingFor(browserElement);
 		browserElement.delete();
 		return returned;
 	}
 
-	public ElementTypeBrowserFilter getFilterForObject(FlexoModelObject object) {
+	public ElementTypeBrowserFilter getFilterForObject(FlexoObject object) {
 		BrowserElement browserElement = makeNewElement(object, null);
 		ElementTypeBrowserFilter returned = getFilterForElement(browserElement);
 		browserElement.delete();
@@ -339,16 +335,16 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			});
 			return;
 		}
-		Vector<FlexoModelObject> selectionBeforeUpdate = null;
+		Vector<FlexoObject> selectionBeforeUpdate = null;
 		if (getSelectedObjects() != null) {
-			selectionBeforeUpdate = new Vector<FlexoModelObject>(getSelectedObjects());
+			selectionBeforeUpdate = new Vector<FlexoObject>(getSelectedObjects());
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Before update, selected objects are " + selectionBeforeUpdate);
 			}
 		}
-		Vector<FlexoModelObject> expandedObjects = null;
+		Vector<FlexoObject> expandedObjects = null;
 		if (leadingView != null) {
-			expandedObjects = new Vector<FlexoModelObject>();
+			expandedObjects = new Vector<FlexoObject>();
 			Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
 			for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
 				BrowserElement next = en.nextElement();
@@ -365,8 +361,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 		notifyListeners(new ExpansionNotificationEvent());
 		if (selectionBeforeUpdate != null) {
-			for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
+			for (Enumeration<FlexoObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
+				FlexoObject next = en.nextElement();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Select " + next);
 				}
@@ -374,8 +370,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			}
 		}
 		if (expandedObjects != null) {
-			for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
+			for (Enumeration<FlexoObject> en = expandedObjects.elements(); en.hasMoreElements();) {
+				FlexoObject next = en.nextElement();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Expand " + next);
 				}
@@ -386,7 +382,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	/*
-	 * private void expandAll(FlexoModelObject object) { BrowserElement[] elements = elementForObject(object); for (int i=0;
+	 * private void expandAll(FlexoObject object) { BrowserElement[] elements = elementForObject(object); for (int i=0;
 	 * i<elements.length; i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount(); j++) { BrowserElement el2 =
 	 * (BrowserElement)el.getChildAt(j); expand(el2.getObject()); } } }
 	 */
@@ -408,15 +404,15 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return null;
 	}
 
-	protected Vector<FlexoModelObject> getSelectedObjects() {
+	protected Vector<FlexoObject> getSelectedObjects() {
 		if (leadingView != null) {
 			return leadingView.getSelectedObjects();
 		}
 		return null;
 	}
 
-	protected Vector<FlexoModelObject> getExpandedObjects() {
-		Vector<FlexoModelObject> expandedObjects = new Vector<FlexoModelObject>();
+	protected Vector<FlexoObject> getExpandedObjects() {
+		Vector<FlexoObject> expandedObjects = new Vector<FlexoObject>();
 		if (leadingView != null) {
 			Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
 			for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
@@ -480,7 +476,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 				if (_elements != null) {
 					clearTree();
 				}
-				_elements = new Hashtable<FlexoModelObject, Object>();
+				_elements = new Hashtable<FlexoObject, Object>();
 				_rootElement = makeNewElement(getRootObject(), null);
 			}
 		} finally {
@@ -488,7 +484,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public void setRootObject(FlexoModelObject aRootObject) {
+	public void setRootObject(FlexoObject aRootObject) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting root object to be " + aRootObject);
 		}
@@ -516,7 +512,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public FlexoModelObject getRootObject() {
+	public FlexoObject getRootObject() {
 		if (_rootObject != null) {
 			return _rootObject;
 		} else {
@@ -562,7 +558,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
 
-	protected void registerElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+	protected void registerElementForObject(BrowserElement element, FlexoObject modelObject) {
 		if (element == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to register a null element for " + modelObject + " in ProjectBrowser !");
@@ -605,7 +601,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	protected void unregisterElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+	protected void unregisterElementForObject(BrowserElement element, FlexoObject modelObject) {
 		if (_elements == null) {
 			return;
 		}
@@ -640,7 +636,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @param object
 	 * @return
 	 */
-	public TreePath[] treePathForObject(FlexoModelObject object) {
+	public TreePath[] treePathForObject(FlexoObject object) {
 		Vector<TreePath> builtVector = new Vector<TreePath>();
 		if (object == null) {
 			return null;
@@ -682,7 +678,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @param object
 	 * @return
 	 */
-	protected BrowserElement[] elementForObject(FlexoModelObject object) {
+	protected BrowserElement[] elementForObject(FlexoObject object) {
 		List<BrowserElement> builtVector = new ArrayList<BrowserElement>();
 		Object found = object != null ? _elements.get(object) : null;
 		if (found instanceof BrowserElement) {
@@ -703,7 +699,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Deprecated
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		return null;
 	}
 
@@ -800,9 +796,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public class ObjectAddedToSelectionEvent extends BrowserEvent {
 
-		private final FlexoModelObject _object;
+		private final FlexoObject _object;
 
-		protected ObjectAddedToSelectionEvent(FlexoModelObject object) {
+		protected ObjectAddedToSelectionEvent(FlexoObject object) {
 			super();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ObjectAddedToSelectionEvent");
@@ -810,16 +806,16 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			_object = object;
 		}
 
-		public FlexoModelObject getAddedObject() {
+		public FlexoObject getAddedObject() {
 			return _object;
 		}
 	}
 
 	public class ObjectRemovedFromSelectionEvent extends BrowserEvent {
 
-		private final FlexoModelObject _object;
+		private final FlexoObject _object;
 
-		protected ObjectRemovedFromSelectionEvent(FlexoModelObject object) {
+		protected ObjectRemovedFromSelectionEvent(FlexoObject object) {
 			super();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ObjectRemovedFromSelectionEvent");
@@ -827,7 +823,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			_object = object;
 		}
 
-		public FlexoModelObject getRemovedObject() {
+		public FlexoObject getRemovedObject() {
 			return _object;
 		}
 	}
@@ -919,7 +915,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @param object
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (object instanceof IEWOComponent) {
 			fireObjectSelected(((IEWOComponent) object).getComponentDefinition());
 			return;
@@ -936,7 +932,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @param object
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (object instanceof IEWOComponent) {
 			fireObjectDeselected(((IEWOComponent) object).getComponentDefinition());
 			return;
@@ -999,7 +995,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _selectionManager;
 	}
 
-	public void focusOn(FlexoModelObject object) {
+	public void focusOn(FlexoObject object) {
 		// logger.info("Focus on "+object);
 		// fireResetSelection();
 		// fireObjectSelected(object);
@@ -1007,11 +1003,11 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		addToSelected(object);
 	}
 
-	public void focusOff(FlexoModelObject object) {
+	public void focusOff(FlexoObject object) {
 		collapse(object);
 	}
 
-	public void expand(FlexoModelObject object, boolean synchronizeExpansion) {
+	public void expand(FlexoObject object, boolean synchronizeExpansion) {
 		BrowserElement[] elements = elementForObject(object);
 		if (elements == null) {
 			// logger.info("Elements representing object "+object+" could not be
@@ -1031,7 +1027,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public void collapse(FlexoModelObject object) {
+	public void collapse(FlexoObject object) {
 		BrowserElement[] elements = elementForObject(object);
 		if (elements != null) {
 			notifyListeners(new ExpansionNotificationEvent(elements, false));
@@ -1054,7 +1050,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public Iterator<FlexoModelObject> getAllObjects() {
+	public Iterator<FlexoObject> getAllObjects() {
 		return _elements.keySet().iterator();
 	}
 
@@ -1087,7 +1083,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getSelection() {
+	public Vector<FlexoObject> getSelection() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
 		}
@@ -1104,7 +1100,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public void addToSelected(FlexoModelObject object) {
+	public void addToSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().addToSelected(object);
@@ -1115,7 +1111,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public void removeFromSelected(FlexoModelObject object) {
+	public void removeFromSelected(FlexoObject object) {
 		if (mayRepresents(object)) {
 			if (getSelectionManager() != null) {
 				getSelectionManager().removeFromSelected(object);
@@ -1126,13 +1122,13 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+	public void addToSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().addToSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
+			for (Enumeration<? extends FlexoObject> en = objects.elements(); en.hasMoreElements();) {
+				FlexoObject next = en.nextElement();
 				fireObjectSelected(next);
 			}
 			fireEndMultipleSelection();
@@ -1140,13 +1136,13 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+	public void removeFromSelected(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().removeFromSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
+			for (Enumeration<? extends FlexoObject> en = objects.elements(); en.hasMoreElements();) {
+				FlexoObject next = en.nextElement();
 				fireObjectDeselected(next);
 			}
 			fireEndMultipleSelection();
@@ -1154,7 +1150,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		if (getSelectionManager() != null) {
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
@@ -1164,7 +1160,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
 		}
@@ -1172,7 +1168,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Override
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		if (anObject instanceof IEWOComponent) {
 			return _elements.get(anObject) != null || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
 		}
@@ -1250,36 +1246,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_showOnlyAnnotationProperties = showOnlyAnnotationProperties;
 	}
 
-	// TODO: should NOT be handled at this level
-	private RoleViewMode roleViewMode = RoleViewMode.TOP_DOWN;
-
-	// TODO: should NOT be handled at this level
-	public enum RoleViewMode {
-		TOP_DOWN {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_DOWN;
-			}
-		},
-		BOTTOM_UP {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_UP;
-			}
-		},
-		FLAT {
-			@Override
-			public ImageIcon getIcon() {
-				return WKFIconLibrary.FLAT_ICON;
-			}
-		};
-		public abstract ImageIcon getIcon();
-
-		public String getLocalizedName() {
-			return FlexoLocalization.localizedForKey(name().toLowerCase());
-		}
-	}
-
 	@Override
 	public void reload(TreeNode node) {
 		if (node instanceof BrowserElement && ((BrowserElement) node).isDeleted()) {
@@ -1288,17 +1254,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		setHoldStructure();
 		super.reload(node);
 		resetHoldStructure();
-	}
-
-	// TODO: should NOT be handled at this level
-	public RoleViewMode getRoleViewMode() {
-		return roleViewMode;
-	}
-
-	// TODO: should NOT be handled at this level
-	public void setRoleViewMode(RoleViewMode viewMode) {
-		this.roleViewMode = viewMode;
-		update();
 	}
 
 	public boolean isRebuildingStructure() {

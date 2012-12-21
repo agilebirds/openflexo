@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.InnerModelSlotParameter" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="model_slot" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" localize="true" />
+       <DropDown data="data.modelSlot" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" name="ModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.viewPoint.modelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" />
+      </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Inner Model Slot Parameter" />
+</Panel>
+

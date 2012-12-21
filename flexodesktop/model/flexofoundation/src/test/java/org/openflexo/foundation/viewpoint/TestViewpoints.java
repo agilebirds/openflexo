@@ -23,28 +23,54 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
+import org.openflexo.foundation.resource.UserResourceCenter;
+import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationReport;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
-import org.openflexo.toolbox.FileResource;
 
 public class TestViewpoints extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
-	private static FlexoResourceCenter testResourceCenter;
+	private static UserResourceCenter resourceCenter;
+	private static ViewPointLibrary viewPointLibrary;
 
 	public TestViewpoints(String name) {
 		super(name);
 	}
 
+	/**
+	 * Instantiate test resource center
+	 */
+	public void test0InstantiateResourceCenter() {
+
+		log("test0InstantiateResourceCenter()");
+
+		instanciateTestServiceManager();
+
+	}
+
+	private ViewPoint testLoadViewPoint(String viewPointURI) {
+
+		log("Testing ViewPoint loading: " + viewPointURI);
+
+		ViewPointResource vpRes = resourceCenter.getViewPointRepository().getResource(viewPointURI);
+
+		assertNotNull(vpRes);
+		assertFalse(vpRes.isLoaded());
+
+		ViewPoint vp = vpRes.getViewPoint();
+		assertTrue(vpRes.isLoaded());
+
+		return vp;
+
+	}
+
 	private void assertViewPointIsValid(ViewPoint vp) {
 
-		assertNotNull(vp);
-
-		vp.loadWhenUnloaded();
+		log("Testing ViewPoint" + vp.getURI());
 
 		ValidationReport report = vp.validate();
 
@@ -60,32 +86,11 @@ public class TestViewpoints extends FlexoTestCase {
 
 	}
 
-	/**
-	 * Instanciate new ResourceCenter
-	 */
-	public void test0LoadTestResourceCenter() {
-		log("test0LoadTestResourceCenter()");
-		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
-				"TestResourceCenter"));
-
-		System.out.println(testResourceCenter.retrieveViewPointLibrary().getViewPoints());
-	}
-
 	public void test1BasicOntologyEditor() {
 		log("test1BasicOntologyEditor()");
 
-		ViewPoint basicOntologyEditor = testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
+		ViewPoint basicOntologyEditor = testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 		assertNotNull(basicOntologyEditor);
-
-		/*System.out.println("basicOntologyEditor=" + basicOntologyEditor);
-		System.out.println("ontology=" + basicOntologyEditor.getViewpointOntology());
-		System.out.println("loaded=" + basicOntologyEditor.getViewpointOntology().isLoaded());
-		for (OntologyClass c : basicOntologyEditor.getViewpointOntology().getClasses()) {
-			System.out.println("> Class " + c);
-		}*/
-
-		basicOntologyEditor.loadWhenUnloaded();
 
 		EditionPattern conceptEP = basicOntologyEditor.getEditionPattern("Concept");
 		assertNotNull(conceptEP);
@@ -100,40 +105,35 @@ public class TestViewpoints extends FlexoTestCase {
 	public void test2BDN() {
 		log("test2BDN()");
 
-		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/BenefitDependancyNetwork.owl"));
+		assertViewPointIsValid(testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/BenefitDependancyNetwork.owl"));
 
 	}
 
 	public void test3OrganizationalChart() {
 		log("test3OrganizationalChart()");
 
-		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl"));
+		assertViewPointIsValid(testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl"));
 
 	}
 
 	public void test4OrganizationalMap() {
 		log("test4OrganizationalMap()");
 
-		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl"));
+		assertViewPointIsValid(testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl"));
 
 	}
 
 	public void test5OrganizationalUnitDefinition() {
 		log("test5OrganizationalUnitDefinition()");
 
-		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl"));
+		assertViewPointIsValid(testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl"));
 
 	}
 
 	public void test6SKOS() {
 		log("test6SKOS()");
 
-		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
-				"http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl"));
+		assertViewPointIsValid(testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl"));
 
 	}
 

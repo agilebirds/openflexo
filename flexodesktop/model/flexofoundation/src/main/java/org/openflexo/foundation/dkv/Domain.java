@@ -21,6 +21,7 @@ package org.openflexo.foundation.dkv;
 
 import java.text.Collator;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -40,6 +41,7 @@ import org.openflexo.foundation.dkv.dm.KeyRemoved;
 import org.openflexo.foundation.dkv.dm.LanguageAdded;
 import org.openflexo.foundation.dkv.dm.LanguageRemoved;
 import org.openflexo.foundation.utils.FlexoIndexManager;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.logging.FlexoLogger;
@@ -425,7 +427,7 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 		}
 
 		@Override
-		public Vector getAllEmbeddedValidableObjects() {
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
 			return keys;
 		}
 	}
@@ -478,10 +480,8 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 		}
 
 		@Override
-		public Vector getAllEmbeddedValidableObjects() {
-			Vector reply = new Vector();
-			reply.addAll(values.values());
-			return reply;
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return values.values();
 		}
 
 	}
@@ -594,9 +594,7 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	@Override
-	public Vector getAllEmbeddedValidableObjects() {
-		Vector reply = new Vector();
-		reply.addAll(getKeys());
-		return reply;
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return getKeys();
 	}
 }

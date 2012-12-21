@@ -25,7 +25,7 @@ import java.util.WeakHashMap;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.StorageResourceData;
@@ -36,8 +36,8 @@ import org.openflexo.foundation.rm.StorageResourceData;
  * 
  * @author sguerin
  */
-public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
-		extends FlexoAction<A, T1, T2> {
+public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends
+		FlexoAction<A, T1, T2> {
 	private WeakHashMap<FlexoStorageResource<?>, Object> _modifiedResources;
 
 	public FlexoUndoableAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {

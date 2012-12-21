@@ -45,9 +45,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A WKFObject instance represents an object (model in MVC paradigm) of a process (or be the process itself). This is the root class for all
@@ -120,20 +118,18 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 		_process = p;
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		if (getProcess() != null) {
-			return getProcess().getProject();
-		}
-		return null;
-	}
-
 	/**
 	 * Return a Vector of all embedded WKFObjects (Note must include itself in this vector)
 	 * 
 	 * @return a Vector of WKFObject instances
 	 */
 	public abstract Vector<? extends WKFObject> getAllEmbeddedWKFObjects();
+
+	@Override
+	public Collection<? extends WKFObject> getEmbeddedValidableObjects() {
+		// TODO : use a non-recursive method instead (or implement getEmbeddedValidableObject in every subclass)
+		return getAllEmbeddedWKFObjects();
+	}
 
 	public Vector<WKFObject> getAllRecursivelyEmbeddedWKFObjects() {
 		HashSet<WKFObject> returned = new HashSet<WKFObject>();
@@ -165,26 +161,6 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (getProcess() != null) {
-			return getProcess().getXMLMapping();
-		} else if (getProject() != null) {
-			return getProject().getXmlMappings().getWKFMapping();
-		} else {
-			return new FlexoXMLMappings().getWKFMapping();
-		}
-	}
-
-	// ==========================================================================
-	// ============================== KeyValueCoding
-	// ============================
-	// ==========================================================================
 
 	@Override
 	public Object objectForKey(String key) {

@@ -34,6 +34,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -48,7 +49,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 	protected Hashtable<String, PackageReference> _packages;
 	private boolean _importGetOnlyProperties = false;
 	private boolean _importMethods = false;
-	protected Vector<FlexoModelObject> _selectedObjects;
+	protected Vector<FlexoObject> _selectedObjects;
 	protected String _unlocalizedName;
 	public FlexoProject _project;
 	private ExternalRepository _externalRepository;
@@ -56,7 +57,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 	protected DMSet(FlexoProject project) {
 		super();
 		_project = project;
-		_selectedObjects = new Vector<FlexoModelObject>();
+		_selectedObjects = new Vector<FlexoObject>();
 		_packages = new Hashtable<String, PackageReference>();
 		_justResolvedEntities = new Hashtable<ClassReference, DMEntity>();
 	}
@@ -141,11 +142,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 
 	}
 
-	public Vector<FlexoModelObject> getSelectedObjects() {
+	public Vector<FlexoObject> getSelectedObjects() {
 		return _selectedObjects;
 	}
 
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> someSelectedObjects) {
+	public void setSelectedObjects(Vector<? extends FlexoObject> someSelectedObjects) {
 		_selectedObjects.clear();
 		_selectedObjects.addAll(someSelectedObjects);
 	}

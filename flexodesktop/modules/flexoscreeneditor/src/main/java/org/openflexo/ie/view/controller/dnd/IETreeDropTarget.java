@@ -23,7 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.action.MoveIEElement;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
@@ -43,8 +43,8 @@ public class IETreeDropTarget extends TreeDropTarget {
 		if (target == null || source == null) {
 			return false;
 		}
-		FlexoModelObject targetObject = target.getObject();
-		FlexoModelObject sourceObject = source.getObject();
+		FlexoObject targetObject = target.getObject();
+		FlexoObject sourceObject = source.getObject();
 		if (targetObject instanceof IEWidget && sourceObject instanceof IEWidget) {
 			return IEDTListener.isValidDropTargetContainer((IEWidget) targetObject, (IEWidget) sourceObject);
 		}
@@ -53,8 +53,8 @@ public class IETreeDropTarget extends TreeDropTarget {
 
 	@Override
 	public boolean handleDrop(BrowserElement moved, BrowserElement destination) {
-		FlexoModelObject targetObject = destination.getObject();
-		FlexoModelObject sourceObject = moved.getObject();
+		FlexoObject targetObject = destination.getObject();
+		FlexoObject sourceObject = moved.getObject();
 		if (!(targetObject instanceof IEWidget) || !(sourceObject instanceof IEWidget)) {
 			return false;
 		}

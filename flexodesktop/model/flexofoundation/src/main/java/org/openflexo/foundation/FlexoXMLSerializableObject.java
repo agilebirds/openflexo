@@ -48,7 +48,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public abstract class FlexoXMLSerializableObject extends FlexoObservable implements FlexoXMLSerializable {
+public abstract class FlexoXMLSerializableObject extends FlexoProjectObject implements FlexoXMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(FlexoXMLSerializableObject.class.getPackage().getName());
 

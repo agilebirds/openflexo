@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public interface FlexoResourceTree {
-	public FlexoResource getRootNode();
+	public org.openflexo.foundation.rm.FlexoResource getRootNode();
 
 	public List<FlexoResourceTree> getChildNodes();
 

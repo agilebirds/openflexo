@@ -29,8 +29,8 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.StringEncoder;
@@ -47,7 +47,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 
 	protected String name;
 
-	public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoOEShemaLibraryResource slResource, FlexoProjectFile componentFile)
+	public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoViewLibraryResource slResource, FlexoProjectFile componentFile)
 			throws InvalidFileNameException {
 		this(aProject);
 		setName(aName);
@@ -80,6 +80,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 		setChanged();
 	}
 
+	@Override
 	public void setResourceData(View shema) {
 		_resourceData = shema;
 	}
@@ -117,7 +118,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	public StringEncoder getStringEncoder() {
 		if (encoder == null) {
 			return encoder = new StringEncoder(super.getStringEncoder(), new RelativePathFileConverter(getShemaDefinition().getCalc()
-					.getViewPointDirectory()));
+					.getResource().getDirectory()));
 		}
 		return encoder;
 	}
@@ -144,9 +145,6 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 				logger.warning("DuplicateResourceException !!!");
 			}
 			_resourceData = shema;
-		}
-		if (shema != null) {
-			shema.setProject(getProject());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for shema " + getShemaDefinition().getName());

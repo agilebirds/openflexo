@@ -53,12 +53,13 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ElementTypeBrowserFilter;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.swing.ImageButton;
+import org.openflexo.toolbox.EmptyVector;
 
 public class BrowserFooter extends JPanel implements MouseListener, WindowListener {
 
@@ -91,7 +92,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!hasMultiplePlusActions()) {
-					BrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> plusPressed(e);
+					BrowserFooter.this.<FlexoAction, FlexoObject, FlexoObject> plusPressed(e);
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
 				}
 			}
@@ -106,8 +107,8 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_SELECTED_ICON);
 				}
 				if (hasMultiplePlusActions()) {
-					BrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> getPlusActionMenu().show(
-							mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+					BrowserFooter.this.<FlexoAction, FlexoObject, FlexoObject> getPlusActionMenu().show(mouseEvent.getComponent(),
+							mouseEvent.getX(), mouseEvent.getY());
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
 				}
 			}
@@ -118,8 +119,8 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
 				}
 				if (hasMultiplePlusActions()) {
-					BrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> getPlusActionMenu().show(
-							mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+					BrowserFooter.this.<FlexoAction, FlexoObject, FlexoObject> getPlusActionMenu().show(mouseEvent.getComponent(),
+							mouseEvent.getX(), mouseEvent.getY());
 				}
 			}
 		});
@@ -131,7 +132,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			public void actionPerformed(ActionEvent e) {
 				// Multiple DELETE ACTION popup menu not implemented yet
 				// If you need it, do the same as for ADD ACTION
-				BrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> minusPressed(e);
+				BrowserFooter.this.<FlexoAction, FlexoObject, FlexoObject> minusPressed(e);
 				minusButton.setIcon(IconLibrary.BROWSER_MINUS_ICON);
 			}
 
@@ -357,7 +358,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	}
 
 	protected void handleSelectionChanged() {
-		FlexoModelObject focusedObject = getFocusedObject();
+		FlexoObject focusedObject = getFocusedObject();
 		Vector globalSelection = buildGlobalSelection();
 		plusButton.setEnabled(_browserView.getController() != null && focusedObject != null
 				&& getActionTypesWithAddType(focusedObject, (Vector) null).size() > 0);
@@ -366,13 +367,13 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		plusActionMenuNeedsRecomputed = true;
 	}
 
-	private <A2 extends FlexoAction<A2, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A2, T1, T2>> getActionTypesWithAddType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	private <A2 extends FlexoAction<A2, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A2, T1, T2>> getActionTypesWithAddType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		return _browserView.getContextualMenuManager().getActionTypesWithAddType(focusedObject, globalSelection);
 	}
 
-	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
-			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
+			FlexoObject focusedObject, Vector<? extends FlexoObject> globalSelection) {
 		return _browserView.getContextualMenuManager().getActionTypesWithDeleteType(focusedObject, globalSelection);
 
 	}
@@ -383,12 +384,12 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		plusActionMenuNeedsRecomputed = true;
 	}
 
-	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void plusPressed(ActionEvent e) {
+	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void plusPressed(ActionEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on plus");
 		}
-		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(),
-				(Vector<FlexoModelObject>) null).get(0);
+		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(), (Vector<FlexoObject>) null)
+				.get(0);
 		if (getEditor() != null) {
 			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
 		} else if (logger.isLoggable(Level.WARNING)) {
@@ -411,7 +412,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 
 	private boolean plusActionMenuNeedsRecomputed = true;
 
-	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JPopupMenu getPlusActionMenu() {
+	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> JPopupMenu getPlusActionMenu() {
 		if (_browserView.getContextualMenuManager() != null) {
 			return _browserView.getContextualMenuManager().makePopupMenu(getFocusedObject(), new ContextualMenuManager.MenuFilter() {
 
@@ -448,12 +449,12 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		return plusActionMenu;
 	}
 
-	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void minusPressed(ActionEvent e) {
+	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void minusPressed(ActionEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on plus");
 		}
 		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithDeleteType(getFocusedObject(),
-				(Vector<FlexoModelObject>) null).get(0);
+				EmptyVector.EMPTY_VECTOR(FlexoObject.class)).get(0);
 		if (getEditor() != null) {
 			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
 		} else if (logger.isLoggable(Level.WARNING)) {
@@ -471,16 +472,16 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	/**
 	 * Returns focused object, considering focused object is the last selected object. If none object are selected, return null.
 	 */
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return _browserView.getFocusedObject();
 	}
 
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return buildGlobalSelection();
 	}
 
-	private Vector<FlexoModelObject> buildGlobalSelection() {
-		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+	private Vector<FlexoObject> buildGlobalSelection() {
+		Vector<FlexoObject> returned = new Vector<FlexoObject>();
 		Vector<BrowserElement> elements = _browserView.getSelectedElements();
 		for (Enumeration<BrowserElement> en = elements.elements(); en.hasMoreElements();) {
 			BrowserElement next = en.nextElement();

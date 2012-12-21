@@ -22,18 +22,40 @@ package org.openflexo.foundation.rm;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.toolbox.FlexoVersion;
+import org.openflexo.toolbox.IProgress;
 
-public abstract class FlexoStorageResource<SRD extends StorageResourceData> extends FlexoFileResource<SRD> {
+/**
+ * Old resource scheme: abstract implementation of a storage resource stored in a file
+ * 
+ * I just declare this implemenation implementing FlexoResource<SRD>, to start merging both notions
+ * 
+ * @author sylvain
+ * 
+ * @param <SRD>
+ */
+public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>> extends FlexoFileResource<SRD> implements
+		FlexoResource<SRD> {
 
 	private static final Logger logger = Logger.getLogger(FlexoStorageResource.class.getPackage().getName());
+
+	private FlexoServiceManager serviceManager;
+
+	private String uri;
+	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
+	private Date lastKnownMemoryUpdate;
 
 	private static final class StorageResourceLoadResourceException extends LoadResourceException {
 		private final Exception cause;
@@ -54,10 +76,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 
 		public void notifyResourceHasBeenLoaded(FlexoStorageResource resource);
 	}
-
-	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
-
-	private Date lastKnownMemoryUpdate;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -164,6 +182,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	 * 
 	 * @return
 	 */
+	@Override
 	public synchronized boolean isLoaded() {
 		return _resourceData != null;
 	}
@@ -172,7 +191,11 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		if (!isLoaded()) {
 			return;
 		}
-		getProject().saveResourceData(this, true);
+		if (getProject() != null) {
+			getProject().saveResourceData(this, true);
+		} else {
+			saveResourceData(true);
+		}
 	}
 
 	protected abstract void saveResourceData(boolean clearIsModified) throws SaveResourceException;
@@ -358,7 +381,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	}
 
 	@Override
-	protected Date getRequestDateToBeUsedForOptimisticDependencyChecking(FlexoResource resource) {
+	protected Date getRequestDateToBeUsedForOptimisticDependencyChecking(org.openflexo.foundation.rm.FlexoResource resource) {
 		Date returned = getLastSynchronizedWithResource(resource);
 		if (returned.getTime() == 0) {
 			// If never synchronized, consider last update
@@ -368,7 +391,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	}
 
 	@Override
-	protected boolean requireUpdateBecauseOf(FlexoResource resource) {
+	protected boolean requireUpdateBecauseOf(org.openflexo.foundation.rm.FlexoResource resource) {
 		if (super.requireUpdateBecauseOf(resource)) {
 			// OK, at first sight 'resource' of which 'this' depends is newer than 'this' so it seems that we need to update 'this'. BUT,
 			// maybe
@@ -407,7 +430,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 						+ " resources :");
 			}
 			for (FlexoResourceTree resourceTrees : updatedResources.getChildNodes()) {
-				FlexoResource resource = resourceTrees.getRootNode();
+				org.openflexo.foundation.rm.FlexoResource resource = resourceTrees.getRootNode();
 				resource.update();
 				if (FlexoResourceManager.getBackwardSynchronizationHook() != null) {
 					FlexoResourceManager.getBackwardSynchronizationHook().notifyBackwardSynchronization(this, resource);
@@ -417,7 +440,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		}
 	}
 
-	public void backwardSynchronizeWith(FlexoResource aResource) throws FlexoException /*throws FlexoException*/
+	public void backwardSynchronizeWith(org.openflexo.foundation.rm.FlexoResource aResource) throws FlexoException /*throws FlexoException*/
 	{
 		// Must be called sub sub-classes implementation: must be overriden in subclasses !
 		// At this level, only set last synchronized date
@@ -438,6 +461,118 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		if (updatedResources != null) {
 			backwardSynchronizeWith(updatedResources);
 		}
+	}
+
+	@Override
+	public FlexoResource<?> getContainer() {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public void setContainer(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public List<FlexoResource<?>> getContents() {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public <R extends FlexoResource<?>> List<R> getContents(Class<R> resourceClass) {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public void addToContents(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public void removeFromContents(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public List<FlexoResource<?>> getDependencies() {
+		logger.warning("Not implemented yet");
+		return null;
+	}
+
+	@Override
+	public void addToDependencies(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public void removeFromDependencies(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public SRD getResourceData(IProgress progress) throws ResourceLoadingCancelledException {
+		return getResourceData();
+	}
+
+	@Override
+	public void setResourceData(SRD resourceData) {
+		_resourceData = resourceData;
+	}
+
+	@Override
+	public SRD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException {
+		return loadResourceData();
+	}
+
+	@Override
+	public void save(IProgress progress) throws SaveResourceException {
+		saveResourceData();
+	}
+
+	@Override
+	public String getURI() {
+		return uri;
+	}
+
+	@Override
+	public void setURI(String uri) {
+		this.uri = uri;
+	}
+
+	@Override
+	public FlexoVersion getVersion() {
+		logger.warning("Retrieving version for resource: not implemented yet");
+		return null;
+	}
+
+	@Override
+	public void setVersion(FlexoVersion aVersion) {
+		logger.warning("Sets version for resource: not implemented yet");
+	}
+
+	@Override
+	public Long getRevision() {
+		logger.warning("Retrieving revision for resource: not implemented yet");
+		return null;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
+	}
+
+	@Override
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
 	}
 
 }

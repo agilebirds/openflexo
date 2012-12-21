@@ -21,11 +21,12 @@ package org.openflexo.wkf.controller;
 
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.view.controller.FlexoController;
 
 /**
  * Browser for WKF module, browse all processes without details
@@ -37,15 +38,20 @@ public class WorkflowBrowser extends ProjectBrowser {
 
 	protected static final Logger logger = Logger.getLogger(WorkflowBrowser.class.getPackage().getName());
 
-	protected WKFController _controller;
-
 	public WorkflowBrowser(FlexoProject project) {
-		super((FlexoController) null);
+		this((WKFController) null);
 		setRootObject(project);
 	}
 
 	public WorkflowBrowser(WKFController controller) {
 		super(controller);
+	}
+
+	@Override
+	protected boolean activateBrowsingFor(BrowserElement newElement) {
+		return newElement.getObject() instanceof FlexoProjectObject && getRootObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
+				&& super.activateBrowsingFor(newElement);
 	}
 
 	@Override
@@ -79,9 +85,9 @@ public class WorkflowBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE_LIST, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);

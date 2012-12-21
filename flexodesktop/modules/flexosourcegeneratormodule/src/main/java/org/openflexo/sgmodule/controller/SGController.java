@@ -30,6 +30,7 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -112,7 +113,7 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		_browser = new SGBrowser(this);
 		_browserView = new SGBrowserView(this, _browser) {
 			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
+			public void treeDoubleClick(FlexoObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof SourceRepository) {
 					selectAndFocusObject(object);
@@ -196,7 +197,7 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof CGFile) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
@@ -268,7 +269,7 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	}
 
 	public SourceRepository getCurrentGeneratedCodeRepository() {
-		FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
+		FlexoObject object = getCurrentDisplayedObjectAsModuleView();
 		if (object instanceof CGObject && AbstractGCAction.repositoryForObject((CGObject) object) instanceof SourceRepository) {
 			return (SourceRepository) AbstractGCAction.repositoryForObject((CGObject) object);
 		}
@@ -407,9 +408,9 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof ImplementationModel) {
-			return FlexoLocalization.localizedForKey("implementation_model") + " " + object.getName();
+			return FlexoLocalization.localizedForKey("implementation_model") + " " + ((ImplementationModel) object).getName();
 		}
 		if (object instanceof TechnologyModuleImplementation) {
 			return ((TechnologyModuleImplementation) object).getTechnologyModuleDefinition().getName();

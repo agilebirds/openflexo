@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget.table;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -84,7 +85,10 @@ public class TextFieldColumn extends StringColumn implements EditableColumn<Stri
 					return textfield;
 				}
 			};
-			((JTextField) editor.getComponent()).setFont(getFont());
+			Font font = getFont();
+			if (font != null) {
+				((JTextField) editor.getComponent()).setFont(font);
+			}
 		}
 		return editor;
 	}

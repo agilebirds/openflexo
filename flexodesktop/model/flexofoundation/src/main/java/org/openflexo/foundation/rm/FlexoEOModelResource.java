@@ -101,6 +101,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		// Not allowed
 	}
 
+	@Override
 	public Class<EOModelResourceData> getResourceDataClass() {
 		return EOModelResourceData.class;
 	}
@@ -123,7 +124,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 			}
 			throw new LoadEOModelException(this, e);
 		}
-		_resourceData = new EOModelResourceData(project, this);
+		_resourceData = new EOModelResourceData(this);
 		_resourceData.setEOModel(eoModel);
 		notifyResourceStatusChanged();
 		return _resourceData;
@@ -132,7 +133,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 	public EOModelResourceData createsNewEOModel(DMEOAdaptorType adaptor, String username, String passwd, String databaseServerURL,
 			String plugin, String driver) throws InvalidEOModelFileException {
 		EOModel eoModel = createsEOModel(getModelGroup(), adaptor, username, passwd, databaseServerURL, plugin, driver);
-		_resourceData = new EOModelResourceData(project, this);
+		_resourceData = new EOModelResourceData(this);
 		_resourceData.setEOModel(eoModel);
 		_resourceData.setIsModified();
 		notifyResourceStatusChanged();
@@ -287,9 +288,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 			try {
 				getEOModelResourceData().getEOModel().writeToFile(getFile());
 			} catch (IOException e) {
-				throw new SaveResourceException(null) {
-
-				};
+				throw new SaveResourceException(this);
 			}
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();

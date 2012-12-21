@@ -29,15 +29,11 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -49,13 +45,13 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+	PushToPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(PushToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -82,12 +78,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				if (dialog.getStatus() == Status.VALIDATED) {
-					return true;
-				}
-				return false;
+				return instanciateAndShowDialog(action, CEDCst.PUSH_TO_PALETTE_DIALOG_FIB);
 			}
 		};
 	}
@@ -106,7 +97,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_PALETTE_ICON;
+		return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
 	}
 
 }

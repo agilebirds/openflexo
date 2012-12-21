@@ -38,6 +38,7 @@ import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.dgmodule.controller.browser.GeneratedDocFileElement;
 import org.openflexo.dgmodule.controller.browser.GeneratedDocFolderElement;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
@@ -210,7 +211,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 
 		class SelectFilesBrowserElementFactory implements BrowserElementFactory {
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 				if (object instanceof DGFilesSet) {
 					return new CGFilesSetElement((DGFilesSet) object, browser, parent);
 				} else if (object instanceof CGFolder) {
@@ -255,7 +256,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 	public void performConfirm() {
 		super.performConfirm();
 		Vector<AbstractCGFile> selectedFiles = new Vector<AbstractCGFile>();
-		for (FlexoModelObject o : choicePanel.getSelectedObjects()) {
+		for (FlexoObject o : choicePanel.getSelectedObjects()) {
 			if (o instanceof AbstractCGFile) {
 				selectedFiles.add((AbstractCGFile) o);
 			}

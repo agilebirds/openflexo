@@ -34,12 +34,11 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
+import org.openflexo.xmlcode.XMLMapping;
 
-public class TOCData extends TOCObject implements XMLStorageResourceData {
+public class TOCData extends TOCObject implements XMLStorageResourceData<TOCData> {
 
 	private FlexoTOCResource resource;
-
-	private FlexoProject project;
 
 	private Vector<TOCRepository> repositories;
 
@@ -52,7 +51,6 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	public TOCData(FlexoProject project) {
 		super(project);
-		this.project = project;
 		repositories = new Vector<TOCRepository>();
 	}
 
@@ -67,6 +65,11 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 			rep.setTitle(attempt);
 		}
 		super.finalizeDeserialization(builder);
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getTOCMapping();
 	}
 
 	@Override
@@ -90,13 +93,13 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return project;
+	public org.openflexo.foundation.resource.FlexoResource<TOCData> getResource() {
+		return getFlexoResource();
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-		this.project = project;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<TOCData> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	@Override
@@ -139,7 +142,7 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 	public static TOCData createNewTOCData(FlexoProject project) {
 		TOCData newCG = new TOCData(project);
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("createNewTOCData(), project=" + project + " " + newCG);
+			logger.info("createNewTOCData(), project=" + project);
 		}
 
 		File cgFile = ProjectRestructuration.getExpectedTOCFile(project);

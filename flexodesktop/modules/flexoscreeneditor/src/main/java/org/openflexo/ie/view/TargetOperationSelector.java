@@ -46,7 +46,7 @@ import javax.swing.event.DocumentListener;
 
 import org.openflexo.components.widget.ProcessSelector;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -208,7 +208,7 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			}
 
 			@Override
-			public boolean isSelectable(FlexoModelObject object) {
+			public boolean isSelectable(FlexoObject object) {
 				boolean isSelectable = super.isSelectable(object);
 				if (isSelectable) {
 					if (object instanceof FlexoProcess) {

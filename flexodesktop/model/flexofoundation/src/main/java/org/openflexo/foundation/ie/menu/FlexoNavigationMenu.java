@@ -59,24 +59,15 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceData, Validable {
+public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceData<FlexoNavigationMenu>, Validable {
 
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibrary.class.getPackage().getName());
-
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 
 	private FlexoNavigationMenuResource _resource;
 
 	private FlexoItemMenu _rootMenu;
 
 	private boolean useDefaultImage = true;
-
-	// private String imageRelPath;
 
 	private ImageFile logo;
 
@@ -108,7 +99,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	 */
 	public FlexoNavigationMenu(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	/**
@@ -192,13 +182,13 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
+	public org.openflexo.foundation.resource.FlexoResource<FlexoNavigationMenu> getResource() {
+		return getFlexoResource();
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoNavigationMenu> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**

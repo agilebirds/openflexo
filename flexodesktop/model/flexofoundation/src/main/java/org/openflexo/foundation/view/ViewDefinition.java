@@ -32,10 +32,9 @@ import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ie.IERegExp;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.dm.ShemaNameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoOEShemaLibraryResource;
+import org.openflexo.foundation.rm.FlexoViewLibraryResource;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -45,6 +44,7 @@ import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.Sortable;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
@@ -167,7 +167,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new shema resource !");
 				}
-				FlexoOEShemaLibraryResource libRes = getProject().getFlexoShemaLibraryResource();
+				FlexoViewLibraryResource libRes = getProject().getFlexoShemaLibraryResource();
 				File shemaFile = new File(ProjectRestructuration.getExpectedOntologyDirectory(getProject().getProjectDirectory()),
 						getName() + ProjectRestructuration.SHEMA_EXTENSION);
 				FlexoProjectFile resourceShemaFile = new FlexoProjectFile(shemaFile, getProject());

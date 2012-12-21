@@ -118,7 +118,6 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 	protected FlexoWebServerResourceData doImport() throws FlexoException {
 		if (_resourceData == null) {
 			_resourceData = new FlexoWebServerResourceData();
-			_resourceData.setProject(getProject());
 			_resourceData.setFlexoResource(this);
 		}
 		return _resourceData;

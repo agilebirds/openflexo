@@ -1,0 +1,1044 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.bolton.ac.uk/archimate">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="Node">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AssociationRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="RealisationRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationFunction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Gap">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ImplementationMigrationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationCollaboration">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SketchModelSticky">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Properties"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TextContent"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DiagramModelContainer"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DiagramModelObject"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationComponent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationService">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AndJunction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="JunctionElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InfrastructureInterface">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="InterfaceElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationInteraction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Assessment">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="MotivationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#JunctionElement">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ArchimateElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SketchModelActor">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Documentable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DiagramModelObject"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessInterface">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#InterfaceElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Identifier">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="id"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BorderObject">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="borderColor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelConnection">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="text"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass>
+          <owl:Class rdf:about="#DiagramModelObject"/>
+        </owl:onClass>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="target"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="type"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass>
+          <owl:Class rdf:about="#DiagramModelObject"/>
+        </owl:onClass>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="source"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="lineWidth"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Documentable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="lineColor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FontAttribute"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DiagramModelComponent"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#FontAttribute">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="textPosition"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="textAlignment"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="fontColor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="font"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#ArchimateElement">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Documentable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Nameable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Cloneable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Identifier"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ArchimateModelElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Driver">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#MotivationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#InterfaceElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="interfaceType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="FlowRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessProcess">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Device">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Folder">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Documentable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Identifier"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Nameable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FolderContainer"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ArchimateModelElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="#type"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelImage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DiagramModelImageProvider"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BorderObject"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DiagramModelObject"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#DiagramModelImageProvider">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="imagePath"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ArchimateModel">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ArchimateModelElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Identifier"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Nameable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#FolderContainer"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="version"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="file"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="purpose"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AccessRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="accessType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SystemSoftware">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessObject">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#DiagramModelContainer">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DiagramModelComponent"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Junction">
+    <rdfs:subClassOf rdf:resource="#JunctionElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Requirement">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#MotivationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AssignmentRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="TriggeringRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InfluenceRelationship">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Relationship"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InfrastructureFunction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelArchimateObject">
+    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DiagramModelObject"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="#type"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#ArchimateElement"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="archimateElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#ImplementationMigrationElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Product">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModel">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Documentable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ArchimateModelElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="connectionRouterType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SketchModel">
+    <rdfs:subClassOf rdf:resource="#DiagramModel"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelNote">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TextContent"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DiagramModelObject"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Stakeholder">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#MotivationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Relationship">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#ArchimateElement"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#target"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#ArchimateElement"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#source"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationInterface">
+    <rdfs:subClassOf rdf:resource="#InterfaceElement"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Principle">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#MotivationElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessInteraction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#TextContent">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="content"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="WorkPackage">
+    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessRole">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessFunction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BusinessLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#MotivationElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="#BusinessLayerElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DataObject">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ApplicationLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="CompositionRelationship">
+    <rdfs:subClassOf rdf:resource="#Relationship"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Artifact">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#DiagramModelComponent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Nameable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Adapter"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Cloneable"/>
+    <rdfs:subClassOf rdf:resource="#Identifier"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#DiagramModel"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="diagramModel"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessEvent">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessService">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="#ArchimateModelElement">
+    <rdfs:subClassOf rdf:resource="#Adapter"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#ArchimateModel"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="archimateModel"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Documentable">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="documentation"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Plateau">
+    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessActivity">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DiagramModelObject">
+    <rdfs:subClassOf rdf:resource="#FontAttribute"/>
+    <rdfs:subClassOf rdf:resource="#DiagramModelComponent"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="fillColor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass>
+          <owl:Class rdf:ID="Bounds"/>
+        </owl:onClass>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="bounds"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Deliverable">
+    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="InfrastructureService">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#TechnologyLayerElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Meaning">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Value">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Lockable">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="locked"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Property">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="value"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="key"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessActor">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelArchimateConnection">
+    <rdfs:subClassOf rdf:resource="#DiagramModelConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#Relationship"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="relationship"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ArchimateDiagramModel">
+    <rdfs:subClassOf rdf:resource="#DiagramModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="viewpoint"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelBendpoint">
+    <rdfs:subClassOf rdf:resource="#Cloneable"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="endY"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="endX"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="startY"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="startX"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#TechnologyLayerElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Network">
+    <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelGroup">
+    <rdfs:subClassOf rdf:resource="#Properties"/>
+    <rdfs:subClassOf rdf:resource="#Documentable"/>
+    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+    <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Nameable">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Bounds">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="height"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="width"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="y"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="x"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="CommunicationPath">
+    <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Location">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Contract">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Representation">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DiagramModelReference">
+    <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onClass rdf:resource="#DiagramModel"/>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="referencedModel"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="OrJunction">
+    <rdfs:subClassOf rdf:resource="#JunctionElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessCollaboration">
+    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Goal">
+    <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AggregationRelationship">
+    <rdfs:subClassOf rdf:resource="#Relationship"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Constraint">
+    <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="#ApplicationLayerElement">
+    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SpecialisationRelationship">
+    <rdfs:subClassOf rdf:resource="#Relationship"/>
+  </owl:Class>
+  <owl:Class rdf:ID="UsedByRelationship">
+    <rdfs:subClassOf rdf:resource="#Relationship"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="bendpoints">
+    <rdfs:range rdf:resource="#DiagramModelBendpoint"/>
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="properties">
+    <rdfs:range rdf:resource="#Property"/>
+    <rdfs:domain rdf:resource="#Properties"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#target">
+    <rdfs:range rdf:resource="#ArchimateElement"/>
+    <rdfs:domain rdf:resource="#Relationship"/>
+    <rdfs:range rdf:resource="#DiagramModelObject"/>
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#archimateElement">
+    <rdfs:range rdf:resource="#ArchimateElement"/>
+    <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#bounds">
+    <rdfs:range rdf:resource="#Bounds"/>
+    <rdfs:domain rdf:resource="#DiagramModelObject"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="children">
+    <rdfs:range rdf:resource="#DiagramModelObject"/>
+    <rdfs:domain rdf:resource="#DiagramModelContainer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#relationship">
+    <rdfs:range rdf:resource="#Relationship"/>
+    <rdfs:domain rdf:resource="#DiagramModelArchimateConnection"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#source">
+    <rdfs:range rdf:resource="#DiagramModelObject"/>
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    <rdfs:range rdf:resource="#ArchimateElement"/>
+    <rdfs:domain rdf:resource="#Relationship"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sourceConnections">
+    <rdfs:range rdf:resource="#DiagramModelConnection"/>
+    <rdfs:domain rdf:resource="#DiagramModelObject"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="elements">
+    <rdfs:domain rdf:resource="#Folder"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#diagramModel">
+    <rdfs:range rdf:resource="#DiagramModel"/>
+    <rdfs:domain rdf:resource="#DiagramModelComponent"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#archimateModel">
+    <rdfs:range rdf:resource="#ArchimateModel"/>
+    <rdfs:domain rdf:resource="#ArchimateModelElement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="targetConnections">
+    <rdfs:range rdf:resource="#DiagramModelConnection"/>
+    <rdfs:domain rdf:resource="#DiagramModelObject"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="folders">
+    <rdfs:range rdf:resource="#Folder"/>
+    <rdfs:domain rdf:resource="#FolderContainer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#referencedModel">
+    <rdfs:range rdf:resource="#DiagramModel"/>
+    <rdfs:domain rdf:resource="#DiagramModelReference"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="#startY">
+    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#name">
+    <rdfs:domain rdf:resource="#Nameable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#key">
+    <rdfs:domain rdf:resource="#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#documentation">
+    <rdfs:domain rdf:resource="#Documentable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#fontColor">
+    <rdfs:domain rdf:resource="#FontAttribute"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#lineWidth">
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#purpose">
+    <rdfs:domain rdf:resource="#ArchimateModel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#accessType">
+    <rdfs:domain rdf:resource="#AccessRelationship"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#value">
+    <rdfs:domain rdf:resource="#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#connectionRouterType">
+    <rdfs:domain rdf:resource="#DiagramModel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#id">
+    <rdfs:domain rdf:resource="#Identifier"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#height">
+    <rdfs:domain rdf:resource="#Bounds"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#x">
+    <rdfs:domain rdf:resource="#Bounds"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#textAlignment">
+    <rdfs:domain rdf:resource="#FontAttribute"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#text">
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#file">
+    <rdfs:domain rdf:resource="#ArchimateModel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#type">
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    <rdfs:domain rdf:resource="#Folder"/>
+    <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#content">
+    <rdfs:domain rdf:resource="#TextContent"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#borderColor">
+    <rdfs:domain rdf:resource="#BorderObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#endY">
+    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#version">
+    <rdfs:domain rdf:resource="#ArchimateModel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#textPosition">
+    <rdfs:domain rdf:resource="#FontAttribute"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#fillColor">
+    <rdfs:domain rdf:resource="#DiagramModelObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#startX">
+    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#imagePath">
+    <rdfs:domain rdf:resource="#DiagramModelImageProvider"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#width">
+    <rdfs:domain rdf:resource="#Bounds"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#viewpoint">
+    <rdfs:domain rdf:resource="#ArchimateDiagramModel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#font">
+    <rdfs:domain rdf:resource="#FontAttribute"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#locked">
+    <rdfs:domain rdf:resource="#Lockable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#lineColor">
+    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#endX">
+    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#y">
+    <rdfs:domain rdf:resource="#Bounds"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#interfaceType">
+    <rdfs:domain rdf:resource="#InterfaceElement"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>

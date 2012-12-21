@@ -39,7 +39,7 @@ import javax.swing.SwingConstants;
 
 import org.openflexo.ch.DefaultInspectorHelpDelegate;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement.ControlGraphFactory;
@@ -51,12 +51,12 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.icon.CGIconLibrary;
+import org.openflexo.inspector.EmptySelection;
 import org.openflexo.inspector.InspectableObject;
+import org.openflexo.inspector.InspectorSelection;
 import org.openflexo.inspector.InspectorTabbedPanel;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.InspectorSelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
+import org.openflexo.inspector.MultipleSelection;
+import org.openflexo.inspector.UniqueSelection;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.selection.SelectionManager;
@@ -101,7 +101,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 			ExecutableWorkflowElement objectToInspect = (ExecutableWorkflowElement) sm.getSelection().firstElement();
 			objectToInspect.setInterproceduralForControlGraphComputation(selectedInterprocedural);
 			objectToInspect.setProgrammingLanguageForControlGraphComputation(selectedLanguage);
-			update(sm, new UniqueSelection((InspectableObject) objectToInspect, sm.getInspectionContext()));
+			update(sm, new UniqueSelection((FlexoObject) objectToInspect, sm.getInspectionContext()));
 		} else if (sm.getSelectionSize() > 1) {
 			update(sm, new MultipleSelection());
 		}
@@ -291,7 +291,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 			return _header;
 		}
 
-		private FlexoModelObject getFocusedObject() {
+		private FlexoObject getFocusedObject() {
 			return _controller.getSelectionManager().getFocusedObject();
 		}
 

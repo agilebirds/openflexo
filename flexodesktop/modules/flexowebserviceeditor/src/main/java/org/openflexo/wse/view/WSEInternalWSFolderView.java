@@ -27,6 +27,7 @@ import javax.swing.JSplitPane;
 
 import org.openflexo.components.tabular.TabularViewAction;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.InternalWSFolder;
@@ -63,7 +64,7 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 		super(folder, controller, folder.getLocalizedName());
 		addAction(new TabularViewAction(CreateNewWebService.actionType, "ws_add_webservice", controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -85,7 +86,7 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 		    });*/
 		addAction(new TabularViewAction(WSDelete.actionType, "delete_webservice", controller.getEditor()) {
 			@Override
-			protected Vector<FlexoModelObject> getGlobalSelection() {
+			protected Vector<FlexoObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -118,7 +119,7 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 
 	public WSService getSelectedWSService() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof WSService) {
 			return (WSService) selection.firstElement();
 		}
@@ -144,7 +145,7 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 
 	public ServiceInterface getSelectedPortType() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
@@ -153,7 +154,7 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 
 	public WSDLRepository getSelectedWSDLRepository() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof WSDLRepository) {
 			return (WSDLRepository) selection.firstElement();
 		}

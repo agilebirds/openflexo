@@ -37,7 +37,7 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
 public class PalettePalette extends DrawingPalette {
@@ -172,14 +172,14 @@ public class PalettePalette extends DrawingPalette {
 		PaletteElement returned = new PaletteElement() {
 			@Override
 			public boolean acceptDragging(GraphicalRepresentation target) {
-				return target.getDrawable() instanceof ViewPointPalette;
+				return target.getDrawable() instanceof DiagramPalette;
 			}
 
 			@Override
 			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
-				if (containerGR.getDrawable() instanceof ViewPointPalette) {
+				if (containerGR.getDrawable() instanceof DiagramPalette) {
 
-					ViewPointPalette container = (ViewPointPalette) containerGR.getDrawable();
+					DiagramPalette container = (DiagramPalette) containerGR.getDrawable();
 
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);

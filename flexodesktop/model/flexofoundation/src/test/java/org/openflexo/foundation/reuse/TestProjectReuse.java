@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -32,30 +33,33 @@ public class TestProjectReuse extends FlexoTestCase {
 	private FlexoEditor importedProjectEditor;
 	private FlexoProject importedProject;
 
-	class ProjectReferenceLoader implements FlexoProjectReferenceLoader {
+	class ProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
 		@Override
 		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
 			if (importedProject == null) {
-				importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
+				importedProject = reloadProject(importedProjectDirectory).getProject();
 			}
 			references.get(0).setReferredProject(importedProject);
+		}
+
+		@Override
+		public void initialize() {
 		}
 
 	}
 
 	public void testProjectDataClassValidity() throws ModelDefinitionException {
-		ModelFactory factory = new ModelFactory();
-		factory.importClass(ProjectData.class);
+		ModelFactory factory = new ModelFactory(ProjectData.class);
 	}
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		resourceCenter = getNewResourceCenter("TestImport");
-		rootEditor = createProject("RootTestImport", resourceCenter);
+		rootEditor = createProject("RootTestImport", serviceManager);
 		rootProject = rootEditor.getProject();
-		importedProjectEditor = createProject("ImportedProject", resourceCenter);
+		importedProjectEditor = createProject("ImportedProject", serviceManager);
 		importedProject = importedProjectEditor.getProject();
 		rootProjectDirectory = rootProject.getProjectDirectory();
 		importedProjectDirectory = importedProject.getProjectDirectory();
@@ -64,7 +68,7 @@ public class TestProjectReuse extends FlexoTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		if (rootProject != null) {
 			rootProject.close();
@@ -88,7 +92,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootProject = reloadProject(rootProjectDirectory).getProject();
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 		// loader
 		assertNotNull(rootProject.getProjectData(false));
@@ -110,7 +114,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootProject = reloadProject(rootProjectDirectory, new ProjectReferenceLoader()).getProject();
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 										// loader
 		subProcess = importedProject.getWorkflow().getLocalFlexoProcessWithName(SUB_PROCESS_NAME);

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.inspector.AbstractController;
@@ -61,7 +61,7 @@ public class ServiceInterfaceInspectorWidget extends CustomInspectorWidget<WKFOb
 			}
 
 			@Override
-			public boolean isSelectable(FlexoModelObject object) {
+			public boolean isSelectable(FlexoObject object) {
 				boolean returned = super.isSelectable(object);
 				if (returned) {
 					if (hasValueForParameter("isSelectable")) {

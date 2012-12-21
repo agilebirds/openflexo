@@ -46,8 +46,8 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -422,15 +422,6 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		@Override
 		public FlexoProject getProject() {
 			return getFlexoResource().getProject();
-		}
-
-		/**
-		 * Overrides setProject
-		 * 
-		 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-		 */
-		@Override
-		public void setProject(FlexoProject aProject) {
 		}
 
 		@Override

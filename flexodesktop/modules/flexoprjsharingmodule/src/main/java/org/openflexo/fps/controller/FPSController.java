@@ -44,6 +44,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.param.CheckboxParameter;
@@ -218,7 +219,7 @@ public class FPSController extends FlexoController {
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		// TODO: Implements this
 		setCurrentEditedObjectAsModuleView(object);
 	}
@@ -417,7 +418,7 @@ public class FPSController extends FlexoController {
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof CVSFile) {
 			CVSFile cvsFile = (CVSFile) object;
 			return cvsFile.getFileName() + (cvsFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");

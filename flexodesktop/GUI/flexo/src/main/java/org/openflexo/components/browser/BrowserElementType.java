@@ -30,6 +30,7 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
@@ -105,10 +106,7 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
-import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.ProjectOWLOntology;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -117,23 +115,21 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -185,7 +181,6 @@ import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.JavaIconLibrary;
-import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -362,26 +357,26 @@ public enum BrowserElementType {
 	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.OPENFLEXO_NOTEXT_16),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),
-	PROJECT_ONTOLOGY("project_ontology", ProjectOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
-	IMPORTED_ONTOLOGY("imported_ontology", ImportedOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
-	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
-	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
-	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
-		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
-		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
-		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
+	/*ONTOLOGY("ontology", OWLModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	IMPORTED_ONTOLOGY("imported_ontology", OWLMetaModel.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),*/
+	ONTOLOGY_FOLDER("ontology_folder", RepositoryFolder.class, IconLibrary.FOLDER_ICON),
+	/*	ONTOLOGY_CLASS("ontology_class", IFlexoOntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
+		ONTOLOGY_INDIVIDUAL("ontology_individual", IFlexoOntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
+		ONTOLOGY_DATA_PROPERTY("ontology_data_property", IFlexoOntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
+		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", IFlexoOntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
 		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
-	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
-	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
-	ONTOLOGY_CALC("calc", ViewPoint.class, VPMIconLibrary.CALC_ICON),
+	// CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.VIEWPOINT_LIBRARY_ICON),
+	// CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
+	ONTOLOGY_CALC("calc", ViewPoint.class, VPMIconLibrary.VIEWPOINT_ICON),
 	EDITION_PATTERN("edition_pattern", EditionPattern.class, VPMIconLibrary.EDITION_PATTERN_ICON),
-	ONTOLOGY_CALC_PALETTE("palette", ViewPointPalette.class, VPMIconLibrary.CALC_PALETTE_ICON),
-	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element", ViewPointPaletteElement.class, VEIconLibrary.SHAPE_ICON),
+	ONTOLOGY_CALC_PALETTE("palette", DiagramPalette.class, VPMIconLibrary.DIAGRAM_PALETTE_ICON),
+	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element", DiagramPaletteElement.class, VEIconLibrary.SHAPE_ICON),
 	OVERRIDING_SHAPE_GR("overriding_shape_gr", ShapeOverridingGraphicalRepresentation.class, VEIconLibrary.SHAPE_ICON),
 	OVERRIDING_CONNECTOR_GR("overriding_connector_gr", ConnectorOverridingGraphicalRepresentation.class, VEIconLibrary.CONNECTOR_ICON),
-	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema", ExampleDrawingShema.class, VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
-	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape", ExampleDrawingShape.class, VPMIconLibrary.CALC_SHAPE_ICON),
-	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDrawingConnector.class, VPMIconLibrary.CALC_CONNECTOR_ICON),
+	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema", ExampleDiagram.class, VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
+	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape", ExampleDiagramShape.class, VPMIconLibrary.SHAPE_ICON),
+	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDiagramConnector.class, VPMIconLibrary.CONNECTOR_ICON),
 	OE_SHEMA_LIBRARY("shema_library", ViewLibrary.class, VEIconLibrary.VIEW_LIBRARY_ICON),
 	OE_SHEMA_FOLDER("shema_folder", ViewFolder.class, IconLibrary.FOLDER_ICON),
 	OE_SHEMA_DEFINITION("shema", ViewDefinition.class, VEIconLibrary.VIEW_ICON),
@@ -393,10 +388,10 @@ public enum BrowserElementType {
 	static final Logger logger = Logger.getLogger(BrowserElementType.class.getPackage().getName());
 
 	private String name;
-	private Class<? extends FlexoModelObject> modelObjectClass;
+	private Class<? extends FlexoObject> modelObjectClass;
 	private ImageIcon icon;
 
-	private BrowserElementType(String name, Class<? extends FlexoModelObject> modelObjectClass, ImageIcon icon) {
+	private BrowserElementType(String name, Class<? extends FlexoObject> modelObjectClass, ImageIcon icon) {
 		this.name = name;
 		this.modelObjectClass = modelObjectClass;
 		this.icon = icon;
@@ -406,7 +401,7 @@ public enum BrowserElementType {
 		return name;
 	}
 
-	public Class<? extends FlexoModelObject> getModelObjectClass() {
+	public Class<? extends FlexoObject> getModelObjectClass() {
 		return modelObjectClass;
 	}
 

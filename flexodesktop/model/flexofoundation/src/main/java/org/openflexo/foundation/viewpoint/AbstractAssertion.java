@@ -19,9 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -33,6 +36,16 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	public AbstractAssertion(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public void setAction(AddIndividual action) {

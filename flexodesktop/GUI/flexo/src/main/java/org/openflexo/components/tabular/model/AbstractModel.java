@@ -33,7 +33,7 @@ import javax.swing.table.TableModel;
 
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
 
@@ -43,8 +43,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoModelObject> extends DefaultTableModel implements
-		DataFlexoObserver {
+public abstract class AbstractModel<M extends FlexoObject, D extends FlexoObject> extends DefaultTableModel implements DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(AbstractModel.class.getPackage().getName());
 
@@ -197,7 +196,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	private void updateObservedObjects() {
-		for (FlexoModelObject observed : _observedObjects) {
+		for (FlexoObject observed : _observedObjects) {
 			observed.deleteObserver(this);
 		}
 		_observedObjects.clear();
@@ -210,7 +209,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable instanceof FlexoModelObject) {
+		if (observable instanceof FlexoObject) {
 			int row = indexOf((D) observable);
 			fireTableRowsUpdated(row, row);
 			if (logger.isLoggable(Level.FINE)) {

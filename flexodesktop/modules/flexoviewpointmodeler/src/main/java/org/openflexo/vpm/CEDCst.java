@@ -52,25 +52,21 @@ public class CEDCst {
 
 	// General components
 	// public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
-	public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
-	public static File CALC_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
+	public static File VIEWPOINT_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
+	public static File VIEWPOINT_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
 	public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");
 
-	// Calc edition
-	public static File CREATE_EXAMPLE_DRAWING_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
+	// ViewPoint edition
+	public static File CREATE_MODEL_SLOT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateModelSlotDialog.fib");
+	public static File CREATE_PATTERN_ROLE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePatternRoleDialog.fib");
+	public static File CREATE_EDITION_ACTION_DIALOG_FIB = new FileResource("Fib/Dialog/CreateEditionActionDialog.fib");
+	public static File CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
 	public static File CREATE_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePaletteDialog.fib");
 	public static File CREATE_VIEW_POINT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewPointDialog.fib");
 	public static File DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource("Fib/Dialog/DeclareShapeInEditionPatternDialog.fib");
 	public static File DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource(
 			"Fib/Dialog/DeclareConnectorInEditionPatternDialog.fib");
 	public static File PUSH_TO_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/PushToPaletteDialog.fib");
-
-	// Ontology edition
-	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
-	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
-	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
-	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
-	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
 
 	// Saving operations
 	public static File REVIEW_UNSAVED_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedViewPointModelerDialog.fib");

@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.dkv;
 
-import java.util.Vector;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
@@ -214,7 +214,7 @@ public class Language extends DKVObject implements InspectableObject {
 	}
 
 	@Override
-	public Vector getAllEmbeddedValidableObjects() {
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		return null;
 	}
 

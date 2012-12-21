@@ -19,21 +19,20 @@
  */
 package org.openflexo.view.controller.model;
 
-import java.beans.PropertyChangeSupport;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class FlexoPerspective implements HasPropertyChangeSupport {
+public abstract class FlexoPerspective extends ControllerModelObject {
 
-	private PropertyChangeSupport propertyChangeSupport;
+	static final Logger logger = Logger.getLogger(FlexoPerspective.class.getPackage().getName());
 
 	private String name;
 
@@ -69,18 +68,6 @@ public abstract class FlexoPerspective implements HasPropertyChangeSupport {
 	public FlexoPerspective(String name) {
 		super();
 		this.name = name;
-		propertyChangeSupport = new PropertyChangeSupport(this);
-	}
-
-	@Override
-	public String getDeletedProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		return propertyChangeSupport;
 	}
 
 	public String getName() {
@@ -103,11 +90,11 @@ public abstract class FlexoPerspective implements HasPropertyChangeSupport {
 
 	public abstract ImageIcon getSelectedIcon();
 
-	public abstract <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+	public abstract <O extends FlexoObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
 
-	public abstract boolean hasModuleViewForObject(FlexoModelObject object);
+	public abstract boolean hasModuleViewForObject(FlexoObject object);
 
-	public abstract FlexoModelObject getDefaultObject(FlexoModelObject proposedObject);
+	public abstract FlexoObject getDefaultObject(FlexoObject proposedObject);
 
 	public JComponent getHeader() {
 		return header;
@@ -212,4 +199,17 @@ public abstract class FlexoPerspective implements HasPropertyChangeSupport {
 		this.middleRightView = middleRightView;
 		getPropertyChangeSupport().firePropertyChange(MIDDLE_RIGHT_VIEW, old, middleRightView);
 	}
+
+	public void objectWasClicked(Object object) {
+		logger.info("FlexoPerspective: object was clicked: " + object);
+	}
+
+	public void objectWasRightClicked(Object object) {
+		logger.info("FlexoPerspective: object was right-clicked: " + object);
+	}
+
+	public void objectWasDoubleClicked(Object object) {
+		logger.info("FlexoPerspective: object was double-clicked: " + object);
+	}
+
 }

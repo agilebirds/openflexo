@@ -26,7 +26,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
@@ -105,23 +106,23 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoProcess getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (_controller.getProject() != null) {
-			return _controller.getProject().getRootFlexoProcess();
+		} else if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess();
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 		if (process instanceof FlexoProcess) {
 			return getControllerForProcess((FlexoProcess) process).getDrawingView();
 		} else {

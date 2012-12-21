@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -29,15 +28,19 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.XMLSerializableFlexoObject;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents an object which is part of the model of a ViewPoint
@@ -45,23 +48,26 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
+public abstract class ViewPointObject extends XMLSerializableFlexoObject implements Bindable, Validable {
 
 	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
 
-	private ImportedOntology viewPointOntology = null;
+	// private ImportedOntology viewPointOntology = null;
 
 	public ViewPointObject(ViewPointBuilder builder) {
 		if (builder != null) {
 			// System.out.println("BEGIN deserialisation for " + getClass().getSimpleName());
 			initializeDeserialization(builder);
-			viewPointOntology = builder.getViewPointOntology();
+			// viewPointOntology = builder.getViewPointOntology();
 		}
 	}
 
 	@Override
-	public final Object instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPoint());
+	public XMLMapping getXMLMapping() {
+		if (getViewPointLibrary() != null) {
+			return getViewPointLibrary().getViewPointModel();
+		}
+		return null;
 	}
 
 	/*@Override
@@ -70,10 +76,29 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		super.finalizeDeserialization(builder);
 	}*/
 
-	@Override
 	public ViewPointLibrary getViewPointLibrary() {
 		if (getViewPoint() != null) {
 			return getViewPoint().getViewPointLibrary();
+		}
+		return null;
+	}
+
+	public InformationSpace getInformationSpace() {
+		if (getViewPointLibrary() != null) {
+			return getViewPointLibrary().getFlexoServiceManager().getInformationSpace();
+		}
+		return null;
+	}
+
+	@Override
+	public ViewPoint getXMLResourceData() {
+		return getViewPoint();
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		if (getViewPoint() != null) {
+			return getViewPoint().getDefaultValidationModel();
 		}
 		return null;
 	}
@@ -125,40 +150,6 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public abstract ViewPoint getViewPoint();
-
-	public FlexoOntology getViewpointOntology() {
-		if (isDeserializing() || getViewPoint() == null) {
-			return viewPointOntology;
-		} else {
-			return getViewPoint().getViewpointOntology();
-		}
-	}
-
-	@Deprecated
-	public ViewPoint getCalc() {
-		return getViewPoint();
-	}
-
-	@Deprecated
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
-	/*@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		return new Vector<Validable>(getAllEmbeddedViewPointObjects());
-	}*/
-
-	public final Vector<ViewPointObject> getAllEmbeddedViewPointObjects() {
-		return null;
-	}
 
 	public abstract String getLanguageRepresentation();
 
@@ -248,6 +239,11 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 			}
 			return null;
 		}
+	}
+
+	@Deprecated
+	public FlexoProject getProject() {
+		return null;
 	}
 
 }

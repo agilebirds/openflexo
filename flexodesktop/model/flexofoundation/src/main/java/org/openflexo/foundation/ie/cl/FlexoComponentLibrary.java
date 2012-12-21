@@ -64,16 +64,9 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData<FlexoComponentLibrary>, InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibrary.class.getPackage().getName());
-
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 
 	private FlexoComponentLibraryResource _resource;
 
@@ -82,11 +75,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	private FlexoComponentFolder _rootFolder;
 
 	private ComponentLibraryStatistics statistics;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -103,7 +91,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	 */
 	public FlexoComponentLibrary(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	@Override
@@ -114,6 +101,16 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoComponentLibrary> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoComponentLibrary> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	@Override
@@ -129,7 +126,7 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	public static FlexoComponentLibrary createNewComponentLibrary(FlexoProject project) {
 		FlexoComponentLibrary newLibrary = new FlexoComponentLibrary(project);
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("createNewComponentLibrary(), project=" + project + " " + newLibrary);
+			logger.info("createNewComponentLibrary(), project=" + project);
 		}
 
 		File compFile = ProjectRestructuration.getExpectedComponentLibFile(project);
@@ -188,16 +185,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoComponentLibraryResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override
@@ -312,10 +299,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	public File getFile() {
 		return _resource.getResourceFile().getFile();
 	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
 
 	@Override
 	public XMLMapping getXMLMapping() {

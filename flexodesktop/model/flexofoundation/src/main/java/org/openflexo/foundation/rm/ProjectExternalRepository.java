@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -35,7 +35,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public class ProjectExternalRepository extends FlexoObject implements XMLSerializable {
+public class ProjectExternalRepository extends KVCFlexoObject implements XMLSerializable {
 	private FlexoProject _project;
 	private String _identifier;
 	private File _directory;

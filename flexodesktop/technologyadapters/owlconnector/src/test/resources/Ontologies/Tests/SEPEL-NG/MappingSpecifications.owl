@@ -1,0 +1,782 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY SEPELInputModel "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel.owl#" >
+    <!ENTITY SEPELOutputModel "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel.owl#" >
+    <!ENTITY MappingSpecifications "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#"
+     xml:base="http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl"
+     xmlns:MappingSpecifications="http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:SEPELInputModel="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:SEPELOutputModel="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel.owl#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#addressConcept -->
+
+    <owl:ObjectProperty rdf:about="#addressConcept">
+        <rdfs:domain rdf:resource="#Occurence"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#addressInputConcept -->
+
+    <owl:ObjectProperty rdf:about="#addressInputConcept">
+        <rdfs:domain rdf:resource="#InputOccurence"/>
+        <rdfs:subPropertyOf rdf:resource="#addressConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#addressOutputConcept -->
+
+    <owl:ObjectProperty rdf:about="#addressOutputConcept">
+        <rdfs:domain rdf:resource="#OutputOccurence"/>
+        <rdfs:subPropertyOf rdf:resource="#addressConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#conformTo -->
+
+    <owl:ObjectProperty rdf:about="#conformTo">
+        <rdfs:domain rdf:resource="#ExampleMappingCase"/>
+        <rdfs:range rdf:resource="#GenericMappingCase"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#containsRule -->
+
+    <owl:ObjectProperty rdf:about="#containsRule">
+        <rdfs:domain rdf:resource="#Transformation"/>
+        <rdfs:range rdf:resource="#TransformationRule"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasAttributeReference -->
+
+    <owl:ObjectProperty rdf:about="#hasAttributeReference">
+        <rdfs:range rdf:resource="#AttributeReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasAttributeReferenceForClass -->
+
+    <owl:ObjectProperty rdf:about="#hasAttributeReferenceForClass">
+        <rdfs:domain rdf:resource="#ClassReference"/>
+        <rdfs:subPropertyOf rdf:resource="#hasAttributeReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasAttributeReferenceForOccurence -->
+
+    <owl:ObjectProperty rdf:about="#hasAttributeReferenceForOccurence">
+        <rdfs:domain rdf:resource="#Occurence"/>
+        <rdfs:subPropertyOf rdf:resource="#hasAttributeReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasClassReference -->
+
+    <owl:ObjectProperty rdf:about="#hasClassReference">
+        <rdfs:range rdf:resource="#ClassReference"/>
+        <rdfs:domain rdf:resource="#InputOutput"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasCondition -->
+
+    <owl:ObjectProperty rdf:about="#hasCondition">
+        <rdfs:range rdf:resource="#Condition"/>
+        <rdfs:domain rdf:resource="#Output"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasConditionalOutput -->
+
+    <owl:ObjectProperty rdf:about="#hasConditionalOutput">
+        <rdfs:range rdf:resource="#Output"/>
+        <rdfs:subPropertyOf rdf:resource="#hasOutput"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasDiscriminatingCriteria -->
+
+    <owl:ObjectProperty rdf:about="#hasDiscriminatingCriteria">
+        <rdfs:domain rdf:resource="#DiscCritHolder"/>
+        <rdfs:range rdf:resource="#DiscriminatingCriteria"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasIO -->
+
+    <owl:ObjectProperty rdf:about="#hasIO">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasInput -->
+
+    <owl:ObjectProperty rdf:about="#hasInput">
+        <rdfs:range rdf:resource="#Input"/>
+        <rdfs:subPropertyOf rdf:resource="#hasIO"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasInputClassReference -->
+
+    <owl:ObjectProperty rdf:about="#hasInputClassReference">
+        <rdfs:range rdf:resource="#InputClassReference"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasInputOccurence -->
+
+    <owl:ObjectProperty rdf:about="#hasInputOccurence">
+        <rdfs:range rdf:resource="#InputOccurence"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasOccurence -->
+
+    <owl:ObjectProperty rdf:about="#hasOccurence">
+        <rdfs:domain rdf:resource="#InputOutput"/>
+        <rdfs:range rdf:resource="#Occurence"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasOutput -->
+
+    <owl:ObjectProperty rdf:about="#hasOutput">
+        <rdfs:range rdf:resource="#Output"/>
+        <rdfs:subPropertyOf rdf:resource="#hasIO"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasOutputClassReference -->
+
+    <owl:ObjectProperty rdf:about="#hasOutputClassReference">
+        <rdfs:range rdf:resource="#OutputClassReference"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasOutputOccurence -->
+
+    <owl:ObjectProperty rdf:about="#hasOutputOccurence">
+        <rdfs:range rdf:resource="#OutputOccurence"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasRelationshipToClassReference -->
+
+    <owl:ObjectProperty rdf:about="#hasRelationshipToClassReference">
+        <rdfs:range rdf:resource="#ClassReference"/>
+        <rdfs:domain rdf:resource="#ClassReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasTransformation -->
+
+    <owl:ObjectProperty rdf:about="#hasTransformation">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+        <rdfs:range rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasTransformationInput -->
+
+    <owl:ObjectProperty rdf:about="#hasTransformationInput">
+        <rdfs:range rdf:resource="#InputAttributeReference"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#hasTransformationOutput -->
+
+    <owl:ObjectProperty rdf:about="#hasTransformationOutput">
+        <rdfs:range rdf:resource="#OutputAttributeReference"/>
+        <rdfs:domain rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#isLinkedToConcept -->
+
+    <owl:ObjectProperty rdf:about="#isLinkedToConcept">
+        <rdfs:domain rdf:resource="#Occurence"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#isLinkedToMultipleConcept -->
+
+    <owl:ObjectProperty rdf:about="#isLinkedToMultipleConcept">
+        <rdfs:range rdf:resource="#MultipleOccurence"/>
+        <rdfs:subPropertyOf rdf:resource="#isLinkedToConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#isLinkedToSingleConcept -->
+
+    <owl:ObjectProperty rdf:about="#isLinkedToSingleConcept">
+        <rdfs:range rdf:resource="#Occurence"/>
+        <rdfs:subPropertyOf rdf:resource="#isLinkedToConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#refineOutput -->
+
+    <owl:ObjectProperty rdf:about="#refineOutput">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+        <rdfs:range rdf:resource="#Output"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#refineTransformation -->
+
+    <owl:ObjectProperty rdf:about="#refineTransformation">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+        <rdfs:range rdf:resource="#Transformation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#attributeName -->
+
+    <owl:DatatypeProperty rdf:about="#attributeName">
+        <rdfs:domain rdf:resource="#AttributeReference"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#author -->
+
+    <owl:DatatypeProperty rdf:about="#author">
+        <rdfs:domain rdf:resource="#MappingSpecificationObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#caseNumber -->
+
+    <owl:DatatypeProperty rdf:about="#caseNumber">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#conditionDescription -->
+
+    <owl:DatatypeProperty rdf:about="#conditionDescription">
+        <rdfs:domain rdf:resource="#Condition"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#date -->
+
+    <owl:DatatypeProperty rdf:about="#date">
+        <rdfs:domain rdf:resource="#MappingSpecificationObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#discriminatingCriteriaDescription -->
+
+    <owl:DatatypeProperty rdf:about="#discriminatingCriteriaDescription">
+        <rdfs:domain rdf:resource="#DiscriminatingCriteria"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#endValue -->
+
+    <owl:DatatypeProperty rdf:about="#endValue">
+        <rdfs:subPropertyOf rdf:resource="#stringTruncatureParameter"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#enumValueMappingParameter -->
+
+    <owl:DatatypeProperty rdf:about="#enumValueMappingParameter">
+        <rdfs:domain rdf:resource="#EnumValueMapping"/>
+        <rdfs:subPropertyOf rdf:resource="#transformationRuleParameter"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#inputValue -->
+
+    <owl:DatatypeProperty rdf:about="#inputValue">
+        <rdfs:subPropertyOf rdf:resource="#enumValueMappingParameter"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdfs:domain rdf:resource="#InputOutput"/>
+        <rdfs:domain rdf:resource="#Occurence"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#note -->
+
+    <owl:DatatypeProperty rdf:about="#note">
+        <rdfs:domain rdf:resource="#MappingSpecificationObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#occurenceCardinality -->
+
+    <owl:DatatypeProperty rdf:about="#occurenceCardinality">
+        <rdfs:domain rdf:resource="#MultipleOccurence"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#outputValue -->
+
+    <owl:DatatypeProperty rdf:about="#outputValue">
+        <rdfs:subPropertyOf rdf:resource="#enumValueMappingParameter"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#revision -->
+
+    <owl:DatatypeProperty rdf:about="#revision">
+        <rdfs:domain rdf:resource="#MappingSpecificationObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#startValue -->
+
+    <owl:DatatypeProperty rdf:about="#startValue">
+        <rdfs:subPropertyOf rdf:resource="#stringTruncatureParameter"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#stringTruncatureParameter -->
+
+    <owl:DatatypeProperty rdf:about="#stringTruncatureParameter">
+        <rdfs:domain rdf:resource="#StringTruncature"/>
+        <rdfs:subPropertyOf rdf:resource="#transformationRuleParameter"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#title -->
+
+    <owl:DatatypeProperty rdf:about="#title">
+        <rdfs:domain rdf:resource="#MappingCase"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#transformationDescription -->
+
+    <owl:DatatypeProperty rdf:about="#transformationDescription">
+        <rdfs:domain rdf:resource="#TransformationRule"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#transformationName -->
+
+    <owl:DatatypeProperty rdf:about="#transformationName">
+        <rdfs:domain rdf:resource="#Transformation"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#transformationRuleParameter -->
+
+    <owl:DatatypeProperty rdf:about="#transformationRuleParameter">
+        <rdfs:domain rdf:resource="#TransformationRule"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#value -->
+
+    <owl:DatatypeProperty rdf:about="#value">
+        <rdfs:domain rdf:resource="#AttributeReference"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#AttributeReference -->
+
+    <owl:Class rdf:about="#AttributeReference">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#ClassReference -->
+
+    <owl:Class rdf:about="#ClassReference">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#Condition -->
+
+    <owl:Class rdf:about="#Condition">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#DirectCopy -->
+
+    <owl:Class rdf:about="#DirectCopy">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#DiscCritHolder -->
+
+    <owl:Class rdf:about="#DiscCritHolder">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#DiscriminatingCriteria -->
+
+    <owl:Class rdf:about="#DiscriminatingCriteria">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#EnumMapping -->
+
+    <owl:Class rdf:about="#EnumMapping">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#EnumValueMapping -->
+
+    <owl:Class rdf:about="#EnumValueMapping">
+        <rdfs:subClassOf rdf:resource="#TransformationRule"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#ExampleMappingCase -->
+
+    <owl:Class rdf:about="#ExampleMappingCase">
+        <rdfs:subClassOf rdf:resource="#MappingCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#FunctionMapping -->
+
+    <owl:Class rdf:about="#FunctionMapping">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#GenericMappingCase -->
+
+    <owl:Class rdf:about="#GenericMappingCase">
+        <rdfs:subClassOf rdf:resource="#MappingCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#Input -->
+
+    <owl:Class rdf:about="#Input">
+        <rdfs:subClassOf rdf:resource="#InputOutput"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#InputAttributeReference -->
+
+    <owl:Class rdf:about="#InputAttributeReference">
+        <rdfs:subClassOf rdf:resource="#AttributeReference"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#InputClassReference -->
+
+    <owl:Class rdf:about="#InputClassReference">
+        <rdfs:subClassOf rdf:resource="#ClassReference"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#InputModelObject -->
+
+    <owl:Class rdf:about="#InputModelObject"/>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#InputOccurence -->
+
+    <owl:Class rdf:about="#InputOccurence">
+        <rdfs:subClassOf rdf:resource="#Occurence"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#InputOutput -->
+
+    <owl:Class rdf:about="#InputOutput">
+        <rdfs:subClassOf rdf:resource="#DiscCritHolder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#MappingCase -->
+
+    <owl:Class rdf:about="#MappingCase">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#MappingSpecificationObject -->
+
+    <owl:Class rdf:about="#MappingSpecificationObject">
+        <rdfs:comment xml:lang="en"
+            >This is the top-level concept of this ontology</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#MultipleInputOccurence -->
+
+    <owl:Class rdf:about="#MultipleInputOccurence">
+        <rdfs:subClassOf rdf:resource="#InputOccurence"/>
+        <rdfs:subClassOf rdf:resource="#MultipleOccurence"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#MultipleOccurence -->
+
+    <owl:Class rdf:about="#MultipleOccurence">
+        <rdfs:subClassOf rdf:resource="#Occurence"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#MultipleOutputOccurence -->
+
+    <owl:Class rdf:about="#MultipleOutputOccurence">
+        <rdfs:subClassOf rdf:resource="#MultipleOccurence"/>
+        <rdfs:subClassOf rdf:resource="#OutputOccurence"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#NoMapping -->
+
+    <owl:Class rdf:about="#NoMapping">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#NumericMapping -->
+
+    <owl:Class rdf:about="#NumericMapping">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#Occurence -->
+
+    <owl:Class rdf:about="#Occurence">
+        <rdfs:subClassOf rdf:resource="#DiscCritHolder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#Output -->
+
+    <owl:Class rdf:about="#Output">
+        <rdfs:subClassOf rdf:resource="#InputOutput"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#OutputAttributeReference -->
+
+    <owl:Class rdf:about="#OutputAttributeReference">
+        <rdfs:subClassOf rdf:resource="#AttributeReference"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#OutputClassReference -->
+
+    <owl:Class rdf:about="#OutputClassReference">
+        <rdfs:subClassOf rdf:resource="#ClassReference"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#OutputModelObject -->
+
+    <owl:Class rdf:about="#OutputModelObject"/>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#OutputOccurence -->
+
+    <owl:Class rdf:about="#OutputOccurence">
+        <rdfs:subClassOf rdf:resource="#Occurence"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#StringMapping -->
+
+    <owl:Class rdf:about="#StringMapping">
+        <rdfs:subClassOf rdf:resource="#Transformation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#StringTruncature -->
+
+    <owl:Class rdf:about="#StringTruncature">
+        <rdfs:subClassOf rdf:resource="#TransformationRule"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#Transformation -->
+
+    <owl:Class rdf:about="#Transformation">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#TransformationRule -->
+
+    <owl:Class rdf:about="#TransformationRule">
+        <rdfs:subClassOf rdf:resource="#MappingSpecificationObject"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

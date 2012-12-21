@@ -23,11 +23,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class ConditionalAction extends ControlStructureAction {
+public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
 
@@ -87,6 +89,14 @@ public class ConditionalAction extends ControlStructureAction {
 			return getCondition() + " ?";
 		}
 		return super.getStringRepresentation();
+	}
+
+	@Override
+	public Object performAction(EditionSchemeAction action) {
+		if (evaluateCondition(action)) {
+			performBatchOfActions(getActions(), action);
+		}
+		return null;
 	}
 
 	public static class ConditionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ConditionalAction> {

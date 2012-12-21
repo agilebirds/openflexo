@@ -43,7 +43,6 @@ import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class ImplementationModelDefinition extends FlexoModelObject {
 
@@ -247,11 +246,6 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 
 	public String getInspectorName() {
 		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getGeneratedSourcesMapping();
 	}
 
 	@Override

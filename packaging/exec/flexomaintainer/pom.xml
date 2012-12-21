@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.openflexo.packaging</groupId>
 		<artifactId>exec</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<userType>developer_release</userType>
@@ -74,5 +74,18 @@
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexofoundation</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexo</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 </project>

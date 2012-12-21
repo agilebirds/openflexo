@@ -19,7 +19,7 @@
  */
 package org.openflexo.view;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
@@ -28,7 +28,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * 
  * @author sguerin
  */
-public interface ModuleView<O extends FlexoModelObject> {
+public interface ModuleView<O extends FlexoObject> {
 
 	public O getRepresentedObject();
 

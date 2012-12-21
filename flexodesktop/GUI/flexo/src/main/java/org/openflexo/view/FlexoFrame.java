@@ -50,7 +50,7 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
@@ -121,9 +121,29 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				}
 				// We break since there won't be any other active frame.
 				break;
+			} else if (frame instanceof FlexoFrame) {
+				if (hasActiveOwnedWindows(frame)) {
+					return (FlexoFrame) frame;
+				}
+			}
+		}
+		for (Frame frame : getFrames()) {
+			if (frame instanceof FlexoFrame) {
+				return (FlexoFrame) frame;
 			}
 		}
 		return createDefaultIfNull ? getDefaultFrame() : null;
+	}
+
+	protected static boolean hasActiveOwnedWindows(Window window) {
+		for (Window w : window.getOwnedWindows()) {
+			if (w.isActive()) {
+				return true;
+			} else if (hasActiveOwnedWindows(w)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Frame getOwner(Frame owner) {
@@ -158,14 +178,21 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		if (f != null) {
 			boolean isDisposable = true;
 			for (Window w : f.getOwnedWindows()) {
-				isDisposable &= !w.isVisible();
+				if (w.isVisible()) {
+					// a bit clumsy if two dialogs are visible but eventually the frame should get disposed.
+					w.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowClosed(WindowEvent e) {
+							disposeDefaultFrameWhenPossible();
+						}
+					});
+					isDisposable = false;
+				}
 			}
 			if (isDisposable) {
 				f.setVisible(false);
 				f.dispose();
 				defaultFrame = null;
-			} else {
-				disposeDefaultFrameWhenPossible();
 			}
 		}
 	}
@@ -479,12 +506,12 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return getController().getSelectionManager().getFocusedObject();
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return getController().getSelectionManager().getSelection();
 	}
 

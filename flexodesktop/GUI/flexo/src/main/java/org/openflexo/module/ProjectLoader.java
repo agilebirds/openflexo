@@ -19,6 +19,8 @@
  */
 package org.openflexo.module;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileFilter;
@@ -36,11 +38,11 @@ import java.util.logging.Logger;
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.antar.binding.KeyValueLibrary;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -49,6 +51,7 @@ import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
@@ -56,19 +59,19 @@ import org.openflexo.foundation.utils.FlexoProjectUtil;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.UnreadableProjectException;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
-import org.openflexo.help.FlexoHelp;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.inspector.widget.FileEditWidget;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.xmlcode.KeyValueCoder;
 
-public class ProjectLoader implements HasPropertyChangeSupport {
+public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChangeSupport, PropertyChangeListener, FlexoService {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -90,12 +93,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	private PropertyChangeSupport propertyChangeSupport;
 	private List<FlexoProject> rootProjects;
+	private ModelFactory modelFactory;
 
-	public ProjectLoader(ApplicationContext applicationContext) {
+	public ProjectLoader(ApplicationContext applicationContext) throws ModelDefinitionException {
 		this.applicationContext = applicationContext;
 		this.editors = new LinkedHashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
+		modelFactory = new ModelFactory(FlexoProjectReference.class);
 	}
 
 	@Override
@@ -164,7 +169,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			}
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
 					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
-					applicationContext.getResourceCenterService());
+					applicationContext);
 			newEditor(editor);
 		} finally {
 			ProgressWindow.hideProgressWindow();
@@ -191,7 +196,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 			preInitialization(projectDirectory);
 			FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-					applicationContext.getProjectReferenceLoader(), applicationContext.getResourceCenterService());
+					applicationContext.getProjectReferenceLoader(), applicationContext);
 			newEditor(editor);
 			return editor;
 		} finally {
@@ -204,9 +209,36 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		if (applicationContext.isAutoSaveServiceEnabled()) {
 			autoSaveServices.put(editor.getProject(), new AutoSaveService(this, editor.getProject()));
 		}
+		editor.getProject().getPropertyChangeSupport().addPropertyChangeListener(FlexoProject.RESOURCES, this);
+		if (editor.getProject().getProjectData() != null) {
+			editor.getProject().getProjectData().getPropertyChangeSupport().addPropertyChangeListener(ProjectData.IMPORTED_PROJECTS, this);
+		}
 		resetRootProjects();
 		getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, editor.getProject());
 		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
+		if (applicationContext.getResourceCenterService().getUserResourceCenter()
+				.retrieveResource(editor.getProject().getURI(), editor.getProject().getVersion(), FlexoProject.class, null) == null) {
+			try {
+				FlexoProjectReference ref = modelFactory.newInstance(FlexoProjectReference.class);
+				ref.init(editor.getProject());
+				applicationContext.getResourceCenterService().getUserResourceCenter()
+						.publishResource(ref, editor.getProject().getVersion(), null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(FlexoProject.RESOURCES)) {
+			if (evt.getNewValue() != null && ((FlexoProject) evt.getSource()).getProjectDataResource() == evt.getNewValue()) {
+				((FlexoProject) evt.getSource()).getProjectData().getPropertyChangeSupport()
+						.addPropertyChangeListener(ProjectData.IMPORTED_PROJECTS, this);
+			}
+		} else if (evt.getSource() instanceof ProjectData && evt.getPropertyName().equals(ProjectData.IMPORTED_PROJECTS)) {
+			resetRootProjects();
+		}
 	}
 
 	public void resetRootProjects() {
@@ -221,14 +253,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			autoSaveServices.remove(project);
 		}
 		FlexoEditor editor = editors.remove(project);
+		if (project.getProjectData() != null) {
+			project.getProjectData().getPropertyChangeSupport().removePropertyChangeListener(ProjectData.IMPORTED_PROJECTS, this);
+		}
+		project.getPropertyChangeSupport().removePropertyChangeListener(FlexoProject.RESOURCES, this);
 		project.close();
 		getPropertyChangeSupport().firePropertyChange(PROJECT_CLOSED, project, null);
 		getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
-		KeyValueCoder.clearClassCache();
-		KeyValueLibrary.clearCache();
-		FCH.clearComponentsHashtable();
-		FlexoHelp.instance.deleteObservers();
-		FlexoLocalization.clearStoredLocalizedForComponents();
+		resetRootProjects();
 	}
 
 	public AutoSaveService getAutoSaveService(FlexoProject project) {
@@ -330,7 +362,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	public void saveAsProject(FlexoProject project) {
 		project.getXmlMappings();
-		List<FlexoVersion> availableVersions = new ArrayList<FlexoVersion>(FlexoXMLMappings.getReleaseVersions());
+		List<FlexoVersion> availableVersions = new ArrayList<FlexoVersion>(XMLSerializationService.getReleaseVersions());
 		Collections.sort(availableVersions, Collections.reverseOrder(FlexoVersion.comparator));
 
 		final DirectoryParameter targetPrjDirectory = new DirectoryParameter("targetPrjDirectory", "new_project_file", project
@@ -480,14 +512,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 	}
 
 	private static void informUserAboutPermissionDeniedException(SaveResourcePermissionDeniedException e) {
-		if (e.getFileResource().getFile().isDirectory()) {
+		if (e.getDeprecatedFileResource().getFile().isDirectory()) {
 			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
-							+ e.getFileResource().getFile().getAbsolutePath());
+							+ e.getDeprecatedFileResource().getFile().getAbsolutePath());
 		} else {
 			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-							+ e.getFileResource().getFile().getAbsolutePath());
+							+ e.getDeprecatedFileResource().getFile().getAbsolutePath());
 		}
 	}
 
@@ -502,6 +534,15 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	public boolean someProjectsAreModified() {
 		return false;
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		logger.info("ProjectLoader service received notification " + notification + " from " + caller);
+	}
+
+	@Override
+	public void initialize() {
 	}
 
 }

@@ -30,6 +30,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.ve.shema.VEShemaModuleView;
@@ -76,7 +77,7 @@ public class VESelectionManager extends SelectionManager {
 	 * @return FlexoModelObject
 	 */
 	@Override
-	public FlexoModelObject getRootFocusedObject() {
+	public FlexoObject getRootFocusedObject() {
 		return getVEController().getCurrentDisplayedObjectAsModuleView();
 	}
 

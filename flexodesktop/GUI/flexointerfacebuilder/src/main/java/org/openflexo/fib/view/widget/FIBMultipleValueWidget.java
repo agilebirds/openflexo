@@ -331,7 +331,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				} else {
 					label.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_selection"));
 				}
-				label.setFont(FIBMultipleValueWidget.this.getFont());
+				if (FIBMultipleValueWidget.this.getFont() != null) {
+					label.setFont(FIBMultipleValueWidget.this.getFont());
+				}
 			} else {
 				label.setText(null);
 			}

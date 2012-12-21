@@ -32,10 +32,9 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
@@ -60,12 +59,12 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
 	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
 
-	public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
+	/*public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
 	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
 	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
 	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 	public static final ImageIcon ONTOLOGY_OBJECT_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;*/
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
@@ -114,6 +113,14 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		getRootView().updateDataObject(getDataObject());
 	}
 
+	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter<?, ?> technologyAdapter) {
+		if (getFlexoController() != null) {
+			return getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(technologyAdapter);
+		}
+		return null;
+	}
+
 	@Override
 	public void setDataObject(Object anObject) {
 		if (anObject != getDataObject()) {
@@ -130,26 +137,30 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		super.setDataObject(anObject);
 	}
 
-	public void singleClick(FlexoModelObject object) {
+	public void singleClick(Object object) {
 		if (getFlexoController() != null) {
 			getFlexoController().objectWasClicked(object);
 		}
 	}
 
-	public void doubleClick(FlexoModelObject object) {
+	public void doubleClick(Object object) {
 		if (getFlexoController() != null) {
 			getFlexoController().objectWasDoubleClicked(object);
 		}
 	}
 
-	public void rightClick(FlexoModelObject object, MouseEvent e) {
+	public void rightClick(Object object, MouseEvent e) {
 		if (getFlexoController() != null) {
 			getFlexoController().objectWasRightClicked(object, e);
 		}
 	}
 
 	public ImageIcon iconForObject(Object object) {
-		return FlexoController.iconForObject(object);
+		if (controller != null) {
+			return controller.iconForObject(object);
+		} else {
+			return FlexoController.statelessIconForObject(object);
+		}
 	}
 
 	@Override
@@ -196,7 +207,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		return ARROW_BOTTOM;
 	}
 
-	public ImageIcon getOntologyIcon() {
+	/*public ImageIcon getOntologyIcon() {
 		return ONTOLOGY_ICON;
 	}
 
@@ -218,9 +229,9 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	public ImageIcon getOntologyAnnotationPropertyIcon() {
 		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
-	}
+	}*/
 
-	/*public void createOntologyClass(FlexoOntology ontology) {
+	/*public void createOntologyClass(IFlexoOntology ontology) {
 		System.out.println("Create class for " + ontology);
 		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
 		action.doAction();

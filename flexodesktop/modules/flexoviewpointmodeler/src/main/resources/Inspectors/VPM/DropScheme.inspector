@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.DropScheme" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+               <Label label="target" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left)" localize="true" />
+                <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+                  <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" data="data.targetEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(data.topTarget))">
+                    <Assignment variable="component.viewPoint" value="data.viewPoint" />
+                    <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
+                    <Assignment variable="component.project" />
+                    <Assignment variable="component.selectableCondition" />
+                  </Custom>
+                  <CheckBox selected="true" data="data.topTarget" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" />
+                  <Label label="top_level" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.01;weightY=0.0)" localize="true" />
+                </Panel>
+                <Label label="target_role" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.targetHasMultipleRoles" localize="true">
+                  <Dependancy componentName="TargetEditionPatternDropDown" />
+                  <LocalizedDictionary />
+                </Label>
+                <DropDown data="data.targetPatternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.targetHasMultipleRoles" name="dropdown" localize="true" staticList="" list="data.targetEditionPattern.shapePatternRoles" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+                  <Dependancy componentName="TargetEditionPatternDropDown" />
+                  <LocalizedDictionary />
+                </DropDown>
     </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>

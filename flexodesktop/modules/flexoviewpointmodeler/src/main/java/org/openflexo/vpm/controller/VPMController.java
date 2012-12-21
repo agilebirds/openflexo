@@ -33,22 +33,16 @@ import javax.swing.Icon;
 
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -60,7 +54,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
+import org.openflexo.vpm.controller.action.VPMControllerActionInitializer;
 import org.openflexo.vpm.view.CEDMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
@@ -74,12 +68,8 @@ public class VPMController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
-	private FlexoResourceCenter resourceCenter;
-	private ViewPointLibrary viewPointLibrary;
-	private OntologyLibrary baseOntologyLibrary;
-
 	public ViewPointPerspective VIEW_POINT_PERSPECTIVE;
-	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public InformationSpacePerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -100,13 +90,13 @@ public class VPMController extends FlexoController {
 
 	@Override
 	protected void initializePerspectives() {
-		resourceCenter = getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter();
-		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
-		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
+		// resourceCenter = getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter();
+		// viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
+		// baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
-		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
+		addToPerspectives(ONTOLOGY_PERSPECTIVE = new InformationSpacePerspective(this));
 	}
 
 	@Override
@@ -116,7 +106,7 @@ public class VPMController extends FlexoController {
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {
-		return new CEDControllerActionInitializer(this);
+		return new VPMControllerActionInitializer(this);
 	}
 
 	/**
@@ -136,7 +126,7 @@ public class VPMController extends FlexoController {
 	public void initInspectors() {
 		super.initInspectors();
 		if (useNewInspectorScheme()) {
-			loadInspectorGroup("Ontology");
+			loadInspectorGroup("IFlexoOntology");
 		}
 
 	}
@@ -146,8 +136,17 @@ public class VPMController extends FlexoController {
 		return new CEDMainPane(this);
 	}
 
+	/**
+	 * Return the ViewPointLibrary
+	 * 
+	 * @return
+	 */
+	public ViewPointLibrary getViewPointLibrary() {
+		return getApplicationContext().getService(ViewPointLibrary.class);
+	}
+
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+	public FlexoObject getDefaultObjectToSelect(FlexoProject project) {
 		return getViewPointLibrary();
 	}
 
@@ -159,8 +158,8 @@ public class VPMController extends FlexoController {
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
-		logger.info("selectAndFocusObject " + object);
+	public void selectAndFocusObject(FlexoObject object) {
+		logger.info("selectAndFocusObject " + object + "of " + object.getClass().getSimpleName());
 		if (object instanceof EditionPatternObject) {
 			setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
 		} else {
@@ -168,20 +167,20 @@ public class VPMController extends FlexoController {
 		}
 		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
 			if (object instanceof ViewPointLibrary) {
-				ViewPointLibrary cl = (ViewPointLibrary) object;
+				/*ViewPointLibrary cl = (ViewPointLibrary) object;
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
-				}
-			} else if (object instanceof ImportedOWLOntology) {
-				ImportedOWLOntology ontology = (ImportedOWLOntology) object;
+				}*/
+			} /*else if (object instanceof OWLMetaModel) {
+				OWLMetaModel ontology = (OWLMetaModel) object;
 				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size() > 0) {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
 				}
-			} else if (object instanceof ExampleDrawingShema) {
-				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDrawingShema) object);
-			} else if (object instanceof ViewPointPalette) {
-				VIEW_POINT_PERSPECTIVE.focusOnPalette((ViewPointPalette) object);
+				}*/else if (object instanceof ExampleDiagram) {
+				VIEW_POINT_PERSPECTIVE.focusOnExampleDiagram((ExampleDiagram) object);
+			} else if (object instanceof DiagramPalette) {
+				VIEW_POINT_PERSPECTIVE.focusOnPalette((DiagramPalette) object);
 			} else if (object instanceof ViewPoint) {
 				ViewPoint viewPoint = (ViewPoint) object;
 				VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
@@ -212,14 +211,14 @@ public class VPMController extends FlexoController {
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		// System.out.println("getWindowTitleforObject() "+object+" perspective="+getCurrentPerspective());
 		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("view_point_library");
 		}
-		if (object instanceof OntologyLibrary) {
+		/*if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
-		}
+		}*/
 		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
 			return VIEW_POINT_PERSPECTIVE.getWindowTitleforObject(object);
 		}
@@ -236,26 +235,15 @@ public class VPMController extends FlexoController {
 		return null;
 	}
 
-	public FlexoResourceCenter getResourceCenter() {
-		return resourceCenter;
-	}
-
 	@Deprecated
 	public ViewPointLibrary getCalcLibrary() {
 		return getViewPointLibrary();
 	}
 
-	public ViewPointLibrary getViewPointLibrary() {
-		return viewPointLibrary;
-	}
-
-	public OntologyLibrary getBaseOntologyLibrary() {
-		return baseOntologyLibrary;
-	}
-
 	@Override
+	@Deprecated
 	public FlexoProject getProject() {
-		logger.warning("Could not access to any project in this module (outside project scope module)");
+		// logger.warning("Could not access to any project in this module (outside project scope module)");
 		return super.getProject();
 	}
 
@@ -265,7 +253,7 @@ public class VPMController extends FlexoController {
 
 	private List<ResourceSavingInfo> resourceSavingInfo;
 
-	public void manageResource(FlexoModelObject o) {
+	public void manageResource(FlexoObject o) {
 		boolean alreadyRegistered = false;
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			if (i.resource == o) {
@@ -277,7 +265,7 @@ public class VPMController extends FlexoController {
 		}
 	}
 
-	public void unregisterResource(FlexoModelObject o) {
+	public void unregisterResource(FlexoObject o) {
 		logger.info("Unregister " + o);
 		List<ResourceSavingInfo> deleteThis = new ArrayList<VPMController.ResourceSavingInfo>();
 		for (ResourceSavingInfo i : resourceSavingInfo) {
@@ -316,10 +304,10 @@ public class VPMController extends FlexoController {
 	}
 
 	public static class ResourceSavingInfo {
-		protected FlexoModelObject resource;
+		protected FlexoObject resource;
 		protected boolean saveThisResource = true;
 
-		public ResourceSavingInfo(FlexoModelObject r) {
+		public ResourceSavingInfo(FlexoObject r) {
 			resource = r;
 		}
 
@@ -328,20 +316,20 @@ public class VPMController extends FlexoController {
 		}
 
 		public Icon getIcon() {
-			if (resource instanceof ImportedOWLOntology) {
+			/*if (resource instanceof OWLMetaModel) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
-			} else if (resource instanceof ViewPoint) {
-				return VPMIconLibrary.CALC_ICON;
-			} else if (resource instanceof ViewPointPalette) {
-				return VPMIconLibrary.CALC_PALETTE_ICON;
-			} else if (resource instanceof ExampleDrawingShema) {
+			} else*/if (resource instanceof ViewPoint) {
+				return VPMIconLibrary.VIEWPOINT_ICON;
+			} else if (resource instanceof DiagramPalette) {
+				return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
+			} else if (resource instanceof ExampleDiagram) {
 				return VPMIconLibrary.EXAMPLE_DIAGRAM_ICON;
 			}
 			return VPMIconLibrary.UNKNOWN_ICON;
 		}
 
 		public String getName() {
-			return resource.getName() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
+			return resource.toString() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
 		}
 
 		public String getType() {
@@ -366,19 +354,19 @@ public class VPMController extends FlexoController {
 
 		public void saveModified() {
 			if (saveThisResource) {
-				try {
-					if (resource instanceof ImportedOWLOntology) {
-						((ImportedOWLOntology) resource).save();
-					} else if (resource instanceof ViewPoint) {
-						((ViewPoint) resource).save();
-					} else if (resource instanceof ViewPointPalette) {
-						((ViewPointPalette) resource).save();
-					} else if (resource instanceof ExampleDrawingShema) {
-						((ExampleDrawingShema) resource).save();
-					}
-				} catch (SaveResourceException e) {
-					e.printStackTrace();
+				// try {
+				/*if (resource instanceof OWLMetaModel) {
+					((OWLMetaModel) resource).save();
+				} else*/if (resource instanceof ViewPoint) {
+					((ViewPoint) resource).save();
+				} else if (resource instanceof DiagramPalette) {
+					((DiagramPalette) resource).save();
+				} else if (resource instanceof ExampleDiagram) {
+					((ExampleDiagram) resource).save();
 				}
+				/*} catch (SaveResourceException e) {
+					e.printStackTrace();
+				}*/
 			}
 		}
 
@@ -386,6 +374,6 @@ public class VPMController extends FlexoController {
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return ViewPointLibraryObject.VALIDATION_MODEL;
+		return ViewPointLibrary.VALIDATION_MODEL;
 	}
 }

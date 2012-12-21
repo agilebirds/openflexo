@@ -1,5 +1,6 @@
 package org.openflexo.module;
 
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -7,6 +8,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
@@ -15,8 +17,10 @@ import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -36,7 +40,9 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
-public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectReferenceLoader {
+public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
+
+	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBProjectLoaderDialog.fib");
 
@@ -55,6 +61,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		public static final String REFERENCE = "reference";
 		public static final String SELECTED_FILE = "selectedFile";
 		public static final String MESSAGE = "message";
+		public static final String BG_COLOR = "backgroundColor";
 
 		@Initializer
 		public ProjectReferenceFileAssociation init(@Parameter(REFERENCE) FlexoProjectReference reference,
@@ -77,6 +84,12 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 
 		@Setter(MESSAGE)
 		public void setMessage(String message);
+
+		@Getter(BG_COLOR)
+		public Color getBackgroundColor();
+
+		@Setter(BG_COLOR)
+		public void setBackgroundColor(Color color);
 	}
 
 	public static class ProjectReferenceLoaderData implements HasPropertyChangeSupport {
@@ -103,6 +116,11 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			getProjectChooserComponent().setSelectedFile(association.getSelectedFile());
 			if (getProjectChooserComponent().showOpenDialog() == JFileChooser.APPROVE_OPTION) {
 				association.setSelectedFile(getProjectChooserComponent().getSelectedFile());
+				if (association.getSelectedFile() != null) {
+					association.setBackgroundColor(null);
+				} else {
+					association.setBackgroundColor(Color.RED);
+				}
 				boolean isValid = isValid();
 				getPropertyChangeSupport().firePropertyChange("isValid", !isValid, isValid);
 			}
@@ -146,7 +164,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
 		try {
 			boolean done = false;
-			ModelFactory factory = new ModelFactory().importClass(ProjectReferenceFileAssociation.class);
+			ModelFactory factory = new ModelFactory(ProjectReferenceFileAssociation.class);
 			List<ProjectReferenceFileAssociation> associations = new ArrayList<InteractiveFlexoProjectReferenceLoader.ProjectReferenceFileAssociation>();
 			for (FlexoProjectReference ref : references) {
 				FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
@@ -163,6 +181,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			while (!done) {
 				dialog.setMinimumSize(new Dimension(800, 250));
 				dialog.showDialog();
+				dialog.dispose();
 				if (dialog.getStatus() == Status.VALIDATED) {
 					done = true;
 					for (ProjectReferenceFileAssociation a : data.getAssociations()) {
@@ -208,6 +227,8 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 												+ FlexoLocalization.localizedForKey("was_found") + "\n"
 												+ FlexoLocalization.localizedForKey("but") + " " + reference + " "
 												+ FlexoLocalization.localizedForKey("was_expected"));
+										a.setBackgroundColor(Color.RED);
+										a.setSelectedFile(null);
 										done = false;
 										break;
 									}
@@ -241,4 +262,14 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		logger.info("FlexoProjectReferenceLoader service received notification " + notification + " from " + caller);
+	}
+
+	@Override
+	public void initialize() {
+	}
+
 }

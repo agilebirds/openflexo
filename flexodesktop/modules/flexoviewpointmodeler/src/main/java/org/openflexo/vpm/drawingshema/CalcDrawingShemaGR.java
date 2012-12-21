@@ -26,13 +26,13 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 
-public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDrawingShema> implements GraphicalFlexoObserver,
+public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDiagram> implements GraphicalFlexoObserver,
 		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
@@ -66,7 +66,7 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDr
 		return (CalcDrawingShemaRepresentation) super.getDrawing();
 	}
 
-	public ExampleDrawingShema getShema() {
+	public ExampleDiagram getShema() {
 		if (getDrawing() != null) {
 			return getDrawing().getShema();
 		}

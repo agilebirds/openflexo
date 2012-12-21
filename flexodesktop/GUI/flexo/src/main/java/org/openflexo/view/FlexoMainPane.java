@@ -22,7 +22,6 @@ package org.openflexo.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
@@ -38,9 +37,12 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.ch.FCH;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.swing.TabbedPane;
 import org.openflexo.swing.TabbedPane.TabHeaderRenderer;
 import org.openflexo.swing.layout.JXMultiSplitPane;
@@ -61,6 +63,8 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * @author sguerin
  */
 public class FlexoMainPane extends JPanel implements PropertyChangeListener {
+
+	private static final MatteBorder MODULE_VIEW_BORDER = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY);
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 
@@ -96,7 +100,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
-	private TabbedPane<JComponent> tabbedPane;
+	private TabbedPane<ModuleView<?>> tabbedPane;
 
 	private static final int KNOB_SIZE = 5;
 	private static final int KNOB_SPACE = 2;
@@ -120,52 +124,51 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				controller.getControllerModel());
 		registrationManager.new PropertyChangeListenerRegistration(FlexoController.MODULE_VIEWS, this, controller);
 		perspective = controller.getCurrentPerspective();
-		tabbedPane = new TabbedPane<JComponent>(new TabHeaderRenderer<JComponent>() {
+		tabbedPane = new TabbedPane<ModuleView<?>>(new TabHeaderRenderer<ModuleView<?>>() {
 
 			@Override
-			public Icon getTabHeaderIcon(JComponent tab) {
-				if (tab instanceof ModuleView) {
-					return FlexoController.iconForObject(((ModuleView<?>) tab).getRepresentedObject());
-				}
+			public Icon getTabHeaderIcon(ModuleView<?> tab) {
+				return getController().iconForObject(tab.getRepresentedObject());
+			}
+
+			@Override
+			public String getTabHeaderTitle(ModuleView<?> tab) {
+				return getController().getWindowTitleforObject(tab.getRepresentedObject());
+			}
+
+			@Override
+			public String getTabHeaderTooltip(ModuleView<?> tab) {
 				return null;
 			}
 
 			@Override
-			public String getTabHeaderTitle(JComponent tab) {
-				if (tab instanceof ModuleView) {
-					return FlexoMainPane.this.controller.getWindowTitleforObject(((ModuleView<?>) tab).getRepresentedObject());
-				}
-				return null;
-			}
-
-			@Override
-			public String getTabHeaderTooltip(JComponent tab) {
-				return null;
-			}
-
-			@Override
-			public boolean isTabHeaderVisible(JComponent tab) {
-				return !(tab instanceof org.openflexo.view.EmptyPanel<?>);
+			public boolean isTabHeaderVisible(ModuleView<?> tab) {
+				return !(tab instanceof org.openflexo.view.EmptyPanel<?>)
+						&& (AdvancedPrefs.getShowAllTabs() || tab.getRepresentedObject() != null
+								&& (!(tab.getRepresentedObject() instanceof FlexoProjectObject)
+										|| ((FlexoProjectObject) tab.getRepresentedObject()).getProject() == null || !((FlexoProjectObject) tab
+											.getRepresentedObject()).getProject().equals(
+										FlexoMainPane.this.controller.getControllerModel().getCurrentProject())));
 			}
 
 		});
 		tabbedPane.setUseTabBody(false);
-		tabbedPane.addToTabListeners(new TabbedPane.TabListener<JComponent>() {
+		tabbedPane.addToTabListeners(new TabbedPane.TabListener<ModuleView<?>>() {
 
 			@Override
-			public void tabSelected(JComponent tab) {
+			public void tabSelected(ModuleView<?> tab) {
 				if (tab != null) {
-					FlexoMainPane.this.controller.getControllerModel().setCurrentObjectAndPerspective(
-							((ModuleView<?>) tab).getRepresentedObject(), ((ModuleView<?>) tab).getPerspective());
+					FlexoMainPane.this.controller.getControllerModel().setCurrentObjectAndPerspective(tab.getRepresentedObject(),
+							tab.getPerspective());
 				} else {
 					FlexoMainPane.this.controller.getControllerModel().setCurrentObject(null);
 				}
-				setModuleView((ModuleView<?>) tab);
+				setModuleView(tab);
 			}
 
 			@Override
-			public void tabClosed(JComponent tab) {
-				((ModuleView<?>) tab).deleteModuleView();
+			public void tabClosed(ModuleView<?> tab) {
+				tab.deleteModuleView();
 				FlexoMainPane.this.controller.setCurrentEditedObjectAsModuleView(null);
 			}
 		});
@@ -281,7 +284,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				}
 			}
 			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
-			newCenterView.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
+			newCenterView.setBorder(MODULE_VIEW_BORDER);
 		} else {
 			newCenterView = new JPanel();
 		}
@@ -381,14 +384,23 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			if (previous != null) {
 				centerPanel.remove(previous);
 			}
-			toAdd.setPreferredSize(new Dimension(0, 0));
+			// toAdd.setPreferredSize(new Dimension(0, 0));
 			centerPanel.add(toAdd, position.name());
-			centerLayout.displayNode(position.name(), next != null);
+			// boolean wasVisible = centerLayout.getNodeForName(position.name()).isVisible();
+			boolean visible = next != null;
+			centerLayout.displayNode(position.name(), visible);
 			Node node = centerLayout.getNodeForName(position.name());
 			Split parent = node.getParent();
 			if (parent != centerLayout.getNodeForName(LayoutColumns.CENTER.name())) {
 				fixWeightForNodeChildren(parent);
 			}
+			/*
+			if (!wasVisible && visible) {
+				for (Node child : parent.getChildren()) {
+					 child.setBounds(new Rectangle());
+				}
+			}
+			*/
 			centerPanel.revalidate();
 		}
 	}
@@ -539,10 +551,9 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
 				saveLayout();
 				perspective = next;
+				restoreLayout();
 				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView());
-				if (moduleView != null) {
-					tabbedPane.selectTab((JComponent) moduleView);
-				}
+				tabbedPane.selectTab(moduleView);
 				updatePropertyChangeListener(previous, next);
 				updateLayoutForPerspective();
 			} else if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {
@@ -553,7 +564,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				if (controller.getControllerModel().getCurrentObject() != null) {
 					ModuleView<?> moduleView = controller.moduleViewForObject(controller.getControllerModel().getCurrentObject());
 					if (moduleView != null) {
-						tabbedPane.selectTab((JComponent) moduleView);
+						tabbedPane.selectTab(moduleView);
 					}
 				}
 			}
@@ -582,9 +593,9 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		} else if (evt.getSource() == controller) {
 			if (evt.getPropertyName().equals(FlexoController.MODULE_VIEWS)) {
 				if (evt.getNewValue() != null) {
-					tabbedPane.addTab((JComponent) evt.getNewValue());
+					tabbedPane.addTab((ModuleView<?>) evt.getNewValue());
 				} else if (evt.getOldValue() != null) {
-					tabbedPane.removeTab((JComponent) evt.getOldValue());
+					tabbedPane.removeTab((ModuleView<?>) evt.getOldValue());
 				}
 			}
 		}
@@ -594,7 +605,6 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		if (perspective == null) {
 			return;
 		}
-		restoreLayout();
 
 		boolean hasLeftView = false;
 		boolean hasRightView = false;

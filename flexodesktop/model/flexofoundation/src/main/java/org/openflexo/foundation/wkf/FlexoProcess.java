@@ -187,8 +187,8 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint, XMLStorageResourceData,
-		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint,
+		XMLStorageResourceData<FlexoProcess>, InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	static final Logger logger = Logger.getLogger(FlexoProcess.class.getPackage().getName());
 
@@ -196,8 +196,6 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	public static final String OPERATION_CONTEXT = "OPERATION";
 	public static final String ACTION_CONTEXT = "ACTION";
 	public static final String EXECUTION_CONTEXT = "EXECUTION";
-
-	private transient FlexoProject _project;
 
 	private FlexoProcessResource _resource;
 
@@ -255,14 +253,12 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		this(builder.getProject());
 		builder.process = this;
 		_resource = builder.resource;
-		setProject(builder.getProject());
 		_name = new String(builder.defaultProcessName);
 		initializeDeserialization(builder);
 	}
 
 	private FlexoProcess(FlexoProject project) {
 		super(project);
-		setProject(project);
 		setProcess(this);
 		_subProcessNodes = new Vector<SubProcessNode>();
 		_serviceInterfaces = new Vector<ServiceInterface>();
@@ -342,7 +338,6 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			throw new DuplicateResourceException("PROCESS." + processName);
 		}
 		FlexoProcess newProcess = new FlexoProcess(processName, workflow);
-		newProcess.setProject(project);
 		ProcessDMEntity e = project.getDataModel().getProcessInstanceRepository().getProcessDMEntity(newProcess);
 		if (e != null && logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Dm entity for process " + processName + "already exists.");
@@ -350,6 +345,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		FlexoProcessResource processRes = createProcessResource(parentProcess, processName, workflow, newProcess, false);
 
 		project.registerResource(processRes);
+		if (isRoot) {
+			workflow.setRootProcess(newProcess);
+		}
 		initProcessObjects(newProcess);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("END createNewProcess()");
@@ -648,7 +646,6 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 */
 	@Override
 	public XMLMapping getXMLMapping() {
-		// if you change this line, change it also in WKFObject (same method)
 		return getProject().getXmlMappings().getWKFMapping();
 	}
 
@@ -663,13 +660,13 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
+	public org.openflexo.foundation.resource.FlexoResource<FlexoProcess> getResource() {
+		return getFlexoResource();
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoProcess> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	/**
@@ -1437,7 +1434,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			logger.fine("FlexoProcess.setName() with " + newName + " was: " + _name);
 		}
 		if (!newName.equals(_name) || _name == null) {
-			if (processWithSimilarNameExists(getWorkflow(), this, ToolBox.getJavaName(newName))) {
+			if (getWorkflow() != null && processWithSimilarNameExists(getWorkflow(), this, ToolBox.getJavaName(newName))) {
 				throw new InvalidNameException("A process with similar name exists");
 			}
 			if (getProject() != null && getFlexoResource() != null && !isDeserializing()) {

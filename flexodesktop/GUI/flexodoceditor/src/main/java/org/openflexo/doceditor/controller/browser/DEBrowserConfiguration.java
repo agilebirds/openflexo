@@ -25,6 +25,7 @@ import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -69,7 +70,7 @@ class DEBrowserConfiguration implements BrowserConfiguration {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof TOCRepository) {
 				return new TOCRepositoryElement((TOCRepository) object, browser, parent);
 			} else if (object instanceof TOCEntry) {

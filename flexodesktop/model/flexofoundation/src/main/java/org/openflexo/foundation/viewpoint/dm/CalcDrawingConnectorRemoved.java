@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 
 /**
  * Notify that a new connector has been removed from palette
@@ -31,14 +31,14 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
  */
 public class CalcDrawingConnectorRemoved extends OEDataModification {
 
-	private ExampleDrawingObject _parent;
+	private ExampleDiagramObject _parent;
 
-	public CalcDrawingConnectorRemoved(ExampleDrawingConnector connector, ExampleDrawingObject parent) {
+	public CalcDrawingConnectorRemoved(ExampleDiagramConnector connector, ExampleDiagramObject parent) {
 		super(connector, null);
 		_parent = parent;
 	}
 
-	public ExampleDrawingObject getParent() {
+	public ExampleDiagramObject getParent() {
 		return _parent;
 	}
 

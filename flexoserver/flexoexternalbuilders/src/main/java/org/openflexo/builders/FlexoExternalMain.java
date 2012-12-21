@@ -16,8 +16,8 @@ import org.openflexo.FlexoProperties;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.logging.FlexoLogger;
@@ -126,7 +126,7 @@ public abstract class FlexoExternalMain implements Runnable {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
-		FlexoObject.initialize(false);
+		KVCFlexoObject.initialize(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching " + getName() + "...");
 		}
@@ -232,7 +232,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		return true;
 	}
 
-	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action, File fileToOpen) {
+	protected void handleActionFailed(FlexoAction<?, ? extends FlexoObject, ? extends FlexoObject> action, File fileToOpen) {
 		if (fileToOpen != null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Action " + action.getLocalizedName() + " could not be performed on project at "
@@ -258,7 +258,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		this.resourceCenterService = resourceCenter;
 	}
 
-	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
+	protected void handleActionFailed(FlexoAction<?, ? extends FlexoObject, ? extends FlexoObject> action) {
 		handleActionFailed(action, null);
 	}
 

@@ -1,4 +1,4 @@
-<inspector title = "Statement" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.owl.OWLStatement">
+<inspector title = "Statement" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.technologyadapter.owl.model.OWLStatement">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="toString" label="name" widget="READ_ONLY_TEXT_AREA" constraint="0" displayLabel="NO">

@@ -66,9 +66,9 @@ import javax.swing.border.Border;
 
 import org.openflexo.icon.UtilsIconLibrary;
 
-public class TabbedPane<J extends JComponent> {
+public class TabbedPane<J> {
 
-	public static interface TabHeaderRenderer<J extends JComponent> {
+	public static interface TabHeaderRenderer<J> {
 		public boolean isTabHeaderVisible(J tab);
 
 		public Icon getTabHeaderIcon(J tab);
@@ -78,7 +78,7 @@ public class TabbedPane<J extends JComponent> {
 		public String getTabHeaderTooltip(J tab);
 	}
 
-	public static interface TabListener<J extends JComponent> {
+	public static interface TabListener<J> {
 		public void tabSelected(@Nullable J tab);
 
 		public void tabClosed(@Nonnull J tab);
@@ -164,6 +164,11 @@ public class TabbedPane<J extends JComponent> {
 			}
 
 			@Override
+			public String toString() {
+				return title.getText() + " visible=" + isVisible() + " bounds=" + getBounds();
+			}
+
+			@Override
 			public boolean isVisible() {
 				return (tabHeaderRenderer == null || tabHeaderRenderer.isTabHeaderVisible(tab)) && super.isVisible();
 			}
@@ -175,10 +180,9 @@ public class TabbedPane<J extends JComponent> {
 					title.setToolTipText(tabHeaderRenderer.getTabHeaderTooltip(tab));
 				} else {
 					title.setIcon(null);
-					title.setText(tab.getName());
-					title.setToolTipText(tab.getToolTipText());
+					title.setText(((JComponent) tab).getName());
+					title.setToolTipText(((JComponent) tab).getToolTipText());
 				}
-				// setSize(getPreferredSize());
 				TabHeaders.this.revalidate();
 			}
 
@@ -248,6 +252,11 @@ public class TabbedPane<J extends JComponent> {
 				if (e.getSource() != close) {
 					dropHoveringEffect();
 					TabHeaders.this.hidePopup();
+					if (getParent() != TabHeaders.this) {
+						// Move the tab at the beginning
+						tabs.remove(tab);
+						tabs.add(0, tab);
+					}
 					TabbedPane.this.selectTab(tab);
 				}
 			}
@@ -352,9 +361,9 @@ public class TabbedPane<J extends JComponent> {
 			extraTabsPopup.removeAll();
 			boolean moveToPopup = false;
 			if (tabs.size() > 0) {
-				TabHeader selectedHeader = headerComponents.get(selectedTab);
+				TabHeader selectedHeader = selectedTab != null ? headerComponents.get(selectedTab) : null;
 
-				boolean selectedHeaderDone = false;
+				boolean selectedHeaderDone = selectedTab == null;
 				int x = 0;
 				int availableWidth = getWidth();
 				for (int i = 0; i < tabs.size(); i++) {
@@ -479,16 +488,16 @@ public class TabbedPane<J extends JComponent> {
 
 	}
 
-	private TabHeaderRenderer<J> tabHeaderRenderer;
+	protected TabHeaderRenderer<J> tabHeaderRenderer;
 	private List<TabListener<J>> tabListeners;
 
-	private TabHeaders tabHeaders;
+	protected TabHeaders tabHeaders;
 	private JPanel tabBody;
 
 	private boolean useTabBody = true;
 
-	private List<J> tabs;
-	private J selectedTab;
+	protected List<J> tabs;
+	protected J selectedTab;
 
 	public TabbedPane() {
 		tabs = new ArrayList<J>();
@@ -548,6 +557,9 @@ public class TabbedPane<J extends JComponent> {
 	}
 
 	public void addTab(J tab) {
+		if (!JComponent.class.isAssignableFrom(tab.getClass())) {
+			throw new IllegalArgumentException("Tab must be an instanceof JComponent but received a " + tab.getClass().getName());
+		}
 		if (!tabs.contains(tab)) {
 			tabs.add(tab);
 			tabHeaders.addTab(tab);
@@ -581,18 +593,19 @@ public class TabbedPane<J extends JComponent> {
 		if (selectedTab == tab) {
 			return;
 		}
-		if (tab == null && tabs.size() > 0) {
-			throw new NullPointerException("Cannot select null tab");
-		}
 		if (tab != null && !tabs.contains(tab)) {
 			throw new IllegalArgumentException("Tab must be added to the content pane first.");
 		}
 		if (selectedTab != null) {
-			tabBody.remove(selectedTab);
+			tabBody.remove((JComponent) selectedTab);
 		}
 		selectedTab = tab;
 		if (useTabBody) {
-			tabBody.add(tab, 0);
+			if (tab != null) {
+				tabBody.add((JComponent) tab, 0);
+			} else {
+				tabBody.add(new JPanel(), 0);
+			}
 			tabBody.revalidate();
 			tabBody.repaint();
 		}
@@ -663,7 +676,9 @@ public class TabbedPane<J extends JComponent> {
 			}
 		});
 		for (int i = 0; i < 20; i++) {
-			tabbedPane.addTab(new JLabel("Some label " + (i + 1)));
+			JLabel label = new JLabel("Some label " + (i + 1));
+			label.setHorizontalAlignment(JLabel.CENTER);
+			tabbedPane.addTab(label);
 		}
 		tabbedPane.getTabHeaders().doLayout();
 		frame.add(tabbedPane.getTabHeaders(), BorderLayout.NORTH);

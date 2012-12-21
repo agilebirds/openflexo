@@ -27,8 +27,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.diff.merge.MergedDocumentType;
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.KVCFlexoObject;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -47,14 +47,14 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public abstract class ResourceType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
+public abstract class ResourceType extends KVCFlexoObject implements StringConvertable, ChoiceList, Serializable {
 	protected static final Logger logger = FlexoLogger.getLogger(ResourceType.class.getPackage().getName());
 
 	public static TextFileFormat RM_FORMAT, LINKS_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT,
 			PROCESS_FORMAT, OPERATION_COMPONENT_FORMAT, TAB_COMPONENT_FORMAT, MONITORING_SCREEN_FORMAT, MONITORING_COMPONENT_FORMAT,
 			GENERATED_CODE_FORMAT, GENERATED_SOURCES_FORMAT, GENERATED_DOC_FORMAT, IMPLEMENTATION_MODEL_FORMAT, TOC_FORMAT,
-			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, PROJECT_ONTOLOGY_FORMAT, IMPORTED_ONTOLOGY_FORMAT,
-			OE_SHEMA_LIBRARY_FORMAT, OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
+			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, OWL_ONTOLOGY_FORMAT, OE_SHEMA_LIBRARY_FORMAT,
+			OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
 	public static DirectoryFormat PALETTE_FORMAT, TEMPLATES_FORMAT, INSPECTORS_FORMAT;
 
 	static {
@@ -84,10 +84,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 				"application/openflexo/implementation_model", TextSyntax.XML);
 		TOC_FORMAT = FileFormat.registerTextFileFormat("TOC", "application/openflexo/toc", TextSyntax.XML, "toc");
 		DATA_MODEL_FORMAT = FileFormat.registerTextFileFormat("DATA_MODEL", "application/openflexo/dm", TextSyntax.XML, "dm");
-		PROJECT_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("PROJECT_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
-				"owl");
-		IMPORTED_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("IMPORTED_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
-				"owl");
+		OWL_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("OWL_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML, "owl");
 		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY", "application/openflexo/oelib", TextSyntax.XML,
 				"oelib");
 		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/shema", TextSyntax.XML, "shema");
@@ -231,8 +228,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	public static final ResourceType EOMODEL = new EOModelResourceType();
 
-	public static final ResourceType PROJECT_ONTOLOGY = new ProjectOntologyResourceType();
-	public static final ResourceType IMPORTED_ONTOLOGY = new ImportedOntologyResourceType();
+	public static final ResourceType OWL_ONTOLOGY = new OWLOntologyResourceType();
 	public static final ResourceType OE_SHEMA_LIBRARY = new OEShemaLibraryResourceType();
 	public static final ResourceType OE_SHEMA = new OEShemaResourceType();
 
@@ -246,6 +242,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType WEBSERVER = new WebServerResourceType();
 	public static final ResourceType BPEL = new BPELResourceType();
 	public static final ResourceType XSD = new XSDResourceType();
+	public static final ResourceType EMF = new EMFResourceType();
 
 	public static final ResourceType WS_LIBRARY = new WSLibraryResourceType();
 
@@ -296,7 +293,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getRMMapping();
 		}
 
@@ -328,7 +325,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getRMMapping();
 		}
 
@@ -360,7 +357,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -386,7 +383,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWorkflowMapping();
 		}
 
@@ -417,7 +414,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getComponentLibraryMapping();
 		}
 
@@ -449,7 +446,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getNavigationMenuMapping();
 		}
 
@@ -480,7 +477,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getNavigationMenuMapping();
 		}
 
@@ -511,7 +508,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWKFMapping();
 		}
 
@@ -543,7 +540,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -575,7 +572,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -607,7 +604,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -639,7 +636,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -671,7 +668,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -702,7 +699,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -728,7 +725,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -759,7 +756,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getIEMapping();
 		}
 
@@ -790,7 +787,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -816,7 +813,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -843,7 +840,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -870,7 +867,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getImplementationModelMapping();
 		}
 
@@ -897,7 +894,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getGeneratedCodeMapping();
 		}
 
@@ -924,7 +921,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -951,7 +948,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getDMMapping();
 		}
 
@@ -983,7 +980,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getDKVMapping();
 		}
 
@@ -1015,7 +1012,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1026,51 +1023,19 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	}
 
-	private static class ImportedOntologyResourceType extends ResourceType {
-		ImportedOntologyResourceType() {
+	private static class OWLOntologyResourceType extends ResourceType {
+		OWLOntologyResourceType() {
 			super();
 		}
 
 		@Override
 		public String getName() {
-			return "IMPORTED_ONTOLOGY";
+			return "OWL_ONTOLOGY";
 		}
 
 		@Override
 		public FileFormat getFormat() {
-			return IMPORTED_ONTOLOGY_FORMAT;
-		}
-
-		@Override
-		public boolean isFlexoXMLStorageResource() {
-			return false;
-		}
-
-		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
-			return null;
-		}
-
-		@Override
-		public Color getMainColor() {
-			return Color.BLUE.brighter();
-		}
-
-	}
-
-	private static class ProjectOntologyResourceType extends ResourceType {
-		ProjectOntologyResourceType() {
-			super();
-		}
-
-		@Override
-		public String getName() {
-			return "PROJECT_ONTOLOGY";
-		}
-
-		@Override
-		public FileFormat getFormat() {
-			return PROJECT_ONTOLOGY_FORMAT;
+			return OWL_ONTOLOGY_FORMAT;
 		}
 
 		@Override
@@ -1079,7 +1044,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1111,7 +1076,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getShemaLibraryMapping();
 		}
 
@@ -1143,7 +1108,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getShemaMapping();
 		}
 
@@ -1175,7 +1140,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1207,7 +1172,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1239,7 +1204,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1271,7 +1236,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1302,13 +1267,45 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
 		@Override
 		public Color getMainColor() {
 			return Color.ORANGE.brighter();
+		}
+
+	}
+
+	private static class EMFResourceType extends ResourceType {
+		EMFResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "EMF";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return FileFormat.UNKNOWN;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return false;
+		}
+
+		@Override
+		public XMLMapping getMapping(XMLSerializationService mappings) {
+			return null;
+		}
+
+		@Override
+		public Color getMainColor() {
+			return Color.MAGENTA.brighter();
 		}
 
 	}
@@ -1334,7 +1331,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return mappings.getWSMapping();
 		}
 
@@ -1365,7 +1362,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1397,7 +1394,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1423,7 +1420,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1449,7 +1446,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1475,7 +1472,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1501,7 +1498,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1527,7 +1524,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1554,7 +1551,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1581,7 +1578,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1608,7 +1605,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 
@@ -1635,7 +1632,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1672,7 +1669,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1698,7 +1695,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1724,7 +1721,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1750,7 +1747,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+		public XMLMapping getMapping(XMLSerializationService mappings) {
 			return null;
 		}
 	}
@@ -1776,7 +1773,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	public abstract boolean isFlexoXMLStorageResource();
 
-	public abstract XMLMapping getMapping(FlexoXMLMappings mappings);
+	public abstract XMLMapping getMapping(XMLSerializationService mappings);
 
 	/*protected static final ImageIcon PROJECT_ICON = new ImageIconResource("Resources/WKF/SmallFlexo.gif");
 	protected static final ImageIcon WORKFLOW_ICON = new ImageIconResource("Resources/Flexo/Library_WKF.gif");

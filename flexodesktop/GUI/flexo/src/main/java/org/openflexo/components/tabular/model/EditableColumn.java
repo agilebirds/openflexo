@@ -19,7 +19,7 @@
  */
 package org.openflexo.components.tabular.model;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Please comment this class
@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoModelObject;
  * @author sguerin
  * 
  */
-public interface EditableColumn<D extends FlexoModelObject, T> {
+public interface EditableColumn<D extends FlexoObject, T> {
 
 	public boolean isCellEditableFor(D object);
 

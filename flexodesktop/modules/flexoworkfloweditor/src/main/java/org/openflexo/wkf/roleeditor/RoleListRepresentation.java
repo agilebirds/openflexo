@@ -58,7 +58,9 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 
 	@Override
 	public void delete() {
-		getRoleList().deleteObserver(this);
+		if (getRoleList() != null) {
+			getRoleList().deleteObserver(this);
+		}
 		super.delete();
 	}
 

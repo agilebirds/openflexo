@@ -53,7 +53,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author gpolet
  * 
  */
-public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
+public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData<FlexoWSLibrary> {
 
 	private FlexoWSLibraryResource _resource;
 
@@ -124,7 +124,6 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		setWSLibrary(this);
 		externalWSServices = new Vector<ExternalWSService>();
 		internalWSServices = new Vector<InternalWSService>();
-		setProject(project);
 	}
 
 	/**
@@ -457,6 +456,16 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWSLibraryResource) resource;
+	}
+
+	@Override
+	public org.openflexo.foundation.resource.FlexoResource<FlexoWSLibrary> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoWSLibrary> resource) {
+		setFlexoResource((FlexoResource) resource);
 	}
 
 	public ExternalWSFolder getExternalWSFolder() {

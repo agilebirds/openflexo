@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>exec</artifactId>
-        <version>1.5-SNAPSHOT</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
     <artifactId>flexosemanticsplus</artifactId>
     <properties>
@@ -24,23 +24,17 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>org.openflexo</groupId>
-            <artifactId>flexovieweditor</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openflexo</groupId>
-            <artifactId>flexovieweditor</artifactId>
-            <classifier>resources</classifier>
-            <type>zip</type>
-        </dependency>
+		<dependency>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexosemantics</artifactId>
+			<scope>runtime</scope>
+			<type>pom</type>
+		</dependency>
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>flexoviewpointmodeler</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>flexoviewpointmodeler</artifactId>

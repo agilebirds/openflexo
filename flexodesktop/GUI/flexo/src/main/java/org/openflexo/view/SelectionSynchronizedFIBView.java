@@ -20,6 +20,7 @@
 package org.openflexo.view;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,17 +28,21 @@ import java.util.logging.Logger;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Please comment this class
+ * Default implementation for a FIBView which is synchronized with a {@link SelectionManager}
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
 public class SelectionSynchronizedFIBView extends FlexoFIBView implements SelectionListener, GraphicalFlexoObserver, FIBSelectionListener {
@@ -87,12 +92,12 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 	 * @param object
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (ignoreFiredSelectionEvents) {
 			return;
 		}
 		// logger.info("SELECTED: "+object);
-		getFIBView().getController().objectAddedToSelection(object);
+		getFIBView().getController().objectAddedToSelection(getRelevantObject(object));
 	}
 
 	/**
@@ -101,12 +106,12 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 	 * @param object
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (ignoreFiredSelectionEvents) {
 			return;
 		}
 		// logger.info("DESELECTED: "+object);
-		getFIBView().getController().objectRemovedFromSelection(object);
+		getFIBView().getController().objectRemovedFromSelection(getRelevantObject(object));
 	}
 
 	/**
@@ -150,10 +155,10 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 		if (selection == null) {
 			return;
 		}
-		Vector<FlexoModelObject> newSelection = new Vector<FlexoModelObject>();
+		Vector<FlexoObject> newSelection = new Vector<FlexoObject>();
 		for (Object o : selection) {
-			if (o instanceof FlexoModelObject) {
-				newSelection.add((FlexoModelObject) o);
+			if (o instanceof FlexoObject) {
+				newSelection.add(getRelevantObject((FlexoObject) o));
 			}
 		}
 		if (logger.isLoggable(Level.FINE)) {
@@ -166,4 +171,26 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 
 	private boolean ignoreFiredSelectionEvents = false;
 
+	/**
+	 * We manage here an indirection with resources: resource data is used instead of resource if resource is loaded
+	 * 
+	 * @param object
+	 * @return
+	 */
+	private FlexoObject getRelevantObject(FlexoObject object) {
+		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
+			try {
+				return (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		}
+		return object;
+	}
 }

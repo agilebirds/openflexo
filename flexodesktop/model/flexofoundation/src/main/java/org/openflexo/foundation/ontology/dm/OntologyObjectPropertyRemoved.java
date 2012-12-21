@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 
 public class OntologyObjectPropertyRemoved extends OEDataModification {
-	public OntologyObjectPropertyRemoved(OntologyObjectProperty objectProperty) {
+	public OntologyObjectPropertyRemoved(IFlexoOntologyObjectProperty objectProperty) {
 		super(objectProperty, null);
 	}
 }

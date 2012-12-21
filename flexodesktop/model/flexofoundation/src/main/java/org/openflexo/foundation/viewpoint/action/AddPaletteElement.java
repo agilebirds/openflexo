@@ -30,46 +30,46 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
-public class AddPaletteElement extends FlexoAction<AddPaletteElement, ViewPointPalette, ViewPointObject> {
+public class AddPaletteElement extends FlexoAction<AddPaletteElement, DiagramPalette, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(AddPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<AddPaletteElement, ViewPointPalette, ViewPointObject> actionType = new FlexoActionType<AddPaletteElement, ViewPointPalette, ViewPointObject>(
+	public static FlexoActionType<AddPaletteElement, DiagramPalette, ViewPointObject> actionType = new FlexoActionType<AddPaletteElement, DiagramPalette, ViewPointObject>(
 			"add_new_palette_element", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public AddPaletteElement makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new AddPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddPaletteElement.actionType, ViewPointPalette.class);
+		FlexoModelObject.addActionForClass(AddPaletteElement.actionType, DiagramPalette.class);
 	}
 
 	private String _newElementName;
-	private ViewPointPaletteElement _newElement;
+	private DiagramPaletteElement _newElement;
 	private Object _graphicalRepresentation;
 
-	AddPaletteElement(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	AddPaletteElement(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -88,7 +88,7 @@ public class AddPaletteElement extends FlexoAction<AddPaletteElement, ViewPointP
 		return null;
 	}
 
-	public ViewPointPaletteElement getNewElement() {
+	public DiagramPaletteElement getNewElement() {
 		return _newElement;
 	}
 

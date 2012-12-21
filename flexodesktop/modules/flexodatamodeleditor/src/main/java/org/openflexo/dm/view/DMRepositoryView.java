@@ -31,6 +31,7 @@ import org.openflexo.dm.model.DMReadOnlyEntityTableModel;
 import org.openflexo.dm.model.DMReadOnlyPackageTableModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
@@ -118,7 +119,7 @@ public class DMRepositoryView extends DMView<DMRepository> {
 
 	public DMPackage getSelectedDMPackage() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMPackage) {
 			return (DMPackage) selection.firstElement();
 		}
@@ -130,7 +131,7 @@ public class DMRepositoryView extends DMView<DMRepository> {
 
 	public DMEntity getSelectedDMEntity() {
 		SelectionManager sm = getDMController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}

@@ -36,7 +36,6 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.edge.WKFEdge;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -127,7 +126,7 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 	}
 
 	private void makeConnex(NodeCompound clone, Vector<PetriGraphNode> originalSelectedNodes, Vector<WKFArtefact> originalSelectedArtefacts) {
-		XMLMapping mapping = new FlexoXMLMappings().getWKFMapping();
+		XMLMapping mapping = getProject().getServiceManager().getXMLSerializationService().getWKFMapping();
 		HashSet<WKFEdge> embedded = new HashSet<WKFEdge>();
 		mapping.getEmbeddedObjectsForObject(clone, embedded, WKFEdge.class, true);
 		HashSet<WKFObject> originalSet = new HashSet<WKFObject>();

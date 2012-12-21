@@ -25,15 +25,18 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
 import org.openflexo.utils.WindowBoundsSaver;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Represent a JDialog showing inspector for the selection managed by an instance of ModuleInspectorController
@@ -103,9 +106,20 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
-			} else {
-				FIBInspector newInspector = inspectorController.inspectorForObject(object);
-				setTitle(newInspector.getParameter("title"));
+			} else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {
+				setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title"));
+			}
+			if (object instanceof FlexoObject) {
+				ImageIcon icon = FlexoController.statelessIconForObject(object);
+				if (icon != null) {
+					setIconImage(icon.getImage());
+				}
+				if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null
+						&& object.getClass() != getInspectorPanel().getCurrentlyDisplayedInspector().getDataClass()
+						&& !object.getClass().getSimpleName().contains("javassist")) {
+					setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title") + " : "
+							+ object.getClass().getSimpleName());
+				}
 			}
 		}
 	}

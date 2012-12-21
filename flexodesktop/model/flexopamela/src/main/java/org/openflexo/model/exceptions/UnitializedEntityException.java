@@ -1,6 +1,6 @@
 package org.openflexo.model.exceptions;
 
-import org.openflexo.model.factory.ModelEntity;
+import org.openflexo.model.ModelEntity;
 
 public class UnitializedEntityException extends ModelExecutionException {
 

@@ -6,35 +6,26 @@ import org.openflexo.antar.binding.CustomType;
 
 public class SubClassOfClass implements CustomType {
 
-	public static SubClassOfClass getSubClassOfClass(OntologyClass anOntologyClass) {
+	public static SubClassOfClass getSubClassOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (anOntologyClass == null) {
 			return null;
 		}
-		if (anOntologyClass.getOntologyLibrary() != null) {
-			if (anOntologyClass.getOntologyLibrary().subclassesOfClass.get(anOntologyClass) != null) {
-				return anOntologyClass.getOntologyLibrary().subclassesOfClass.get(anOntologyClass);
-			} else {
-				SubClassOfClass returned = new SubClassOfClass(anOntologyClass);
-				anOntologyClass.getOntologyLibrary().subclassesOfClass.put(anOntologyClass, returned);
-				return returned;
-			}
-		}
-		return null;
+		return anOntologyClass.getTechnologyAdapter().getTechnologyContextManager().getSubClassOfClass(anOntologyClass);
 	}
 
-	private OntologyClass ontologyClass;
+	private IFlexoOntologyClass ontologyClass;
 
-	private SubClassOfClass(OntologyClass anOntologyClass) {
+	public SubClassOfClass(IFlexoOntologyClass anOntologyClass) {
 		this.ontologyClass = anOntologyClass;
 	}
 
-	public OntologyClass getOntologyClass() {
+	public IFlexoOntologyClass getOntologyClass() {
 		return ontologyClass;
 	}
 
 	@Override
 	public Class getBaseClass() {
-		return OntologyClass.class;
+		return IFlexoOntologyClass.class;
 	}
 
 	@Override

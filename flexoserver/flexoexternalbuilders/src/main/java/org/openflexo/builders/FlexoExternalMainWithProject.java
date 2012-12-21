@@ -11,19 +11,25 @@ import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -92,6 +98,11 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		applicationContext = new ApplicationContext() {
 
 			@Override
+			protected XMLSerializationService createXMLSerializationService() {
+				return XMLSerializationService.createInstance();
+			}
+
+			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
 				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
 				builderEditor.setFactory(new FlexoProgressFactory() {
@@ -125,6 +136,28 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 				}
 				return null;
 			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				TechnologyAdapterService returned = DefaultTechnologyAdapterService.getNewInstance(resourceCenterService);
+				return returned;
+			}
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+				return null;
+			}
+
+			@Override
+			protected ViewPointLibrary createViewPointLibraryService() {
+				return new ViewPointLibrary();
+			}
+
+			@Override
+			protected InformationSpace createInformationSpace() {
+				return new InformationSpace();
+			}
+
 		};
 		try {
 			editor = loadProject(projectDirectory);
@@ -143,7 +176,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	@Override
-	public void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
+	public void handleActionFailed(FlexoAction<?, ? extends FlexoObject, ? extends FlexoObject> action) {
 		handleActionFailed(action, projectDirectory);
 	}
 
@@ -214,8 +247,8 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
-		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, applicationContext,
-				getResourceCenterService());
+		return (FlexoBuilderEditor) FlexoResourceManager
+				.initializeExistingProject(projectDirectory, applicationContext, applicationContext);
 	}
 
 }

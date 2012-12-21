@@ -1,4 +1,4 @@
-<inspector title = "Shape Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.ShapePatternRole">
+<inspector title = "Shape Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="graphicalRepresentation.foreground" label="foreground" widget="CUSTOM" constraint="6">

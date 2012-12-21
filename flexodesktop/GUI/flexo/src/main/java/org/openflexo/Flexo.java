@@ -55,6 +55,8 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -206,7 +208,8 @@ public class Flexo {
 		final SplashWindow splashWindow2 = splashWindow;
 		FlexoProperties.load();
 		initializeLoggingManager();
-		final ApplicationContext applicationContext = new ApplicationContext() {
+		final ApplicationContext applicationContext = new InteractiveApplicationContext();
+		/*final ApplicationContext applicationContext = new ApplicationContext() {
 
 			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
@@ -236,7 +239,15 @@ public class Flexo {
 					return new FullInteractiveProjectLoadingHandler(projectDirectory);
 				}
 			}
-		};
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				TechnologyAdapterControllerService returned = DefaultTechnologyAdapterControllerService.getNewInstance();
+				returned.setFlexoResourceCenterService(resourceCenterService);
+				returned.loadAvailableTechnologyAdapters();
+				return returned;
+			}
+		};*/
 		FlexoApplication.installEventQueue();
 		// Before starting the UI, we need to initialize localization
 		FlexoApplication.initialize(applicationContext.getModuleLoader());

@@ -21,17 +21,19 @@ package org.openflexo.components.browser.wkf;
 
 import java.util.Enumeration;
 
+import javax.swing.Icon;
+
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.icon.WKFIconLibrary;
 
 /**
  * Browser element representing the workflow
@@ -55,18 +57,27 @@ public class WorkflowElement extends BrowserElement {
 		if (getFlexoWorkflow().getImportedRoleList() != null) {
 			addToChilds(getFlexoWorkflow().getImportedRoleList());
 		}
-		if (getFlexoWorkflow().getProject().getProjectData() != null) {
+		/*if (getFlexoWorkflow().getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getFlexoWorkflow().getProject().getProjectData().getImportedProjects()) {
 				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-					addToChilds(ref.getReferredProject().getWorkflow().getRoleList());
+					addToChilds(ref.getReferredProject().getWorkflow());
 				}
 
 			}
-		}
+		}*/
 		// We add top-level processes
 		for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedTopLevelProcesses(); en.hasMoreElements();) {
 			FlexoProcess next = en.nextElement().getProcess();
 			addToChilds(next);
+		}
+	}
+
+	@Override
+	public Icon getIcon() {
+		if (!isRoot() && getParent().getElementType() == BrowserElementType.WORKFLOW) {
+			return WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON;
+		} else {
+			return super.getIcon();
 		}
 	}
 
@@ -82,7 +93,12 @@ public class WorkflowElement extends BrowserElement {
 
 	@Override
 	public void setName(String aName) throws FlexoException {
-		getFlexoWorkflow().setWorkflowName(aName);
+		try {
+			getFlexoWorkflow().setWorkflowName(aName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FlexoException(e);
+		}
 	}
 
 	public FlexoWorkflow getFlexoWorkflow() {

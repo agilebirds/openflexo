@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
@@ -107,7 +108,7 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEn
 	public Vector<DMEntity> getEntitiesToPutInTheDiagram() {
 		if (entitiesToPutInTheDiagram == null) {
 			entitiesToPutInTheDiagram = new Vector<DMEntity>();
-			for (FlexoModelObject o : getGlobalSelectionAndFocusedObject()) {
+			for (FlexoObject o : getGlobalSelectionAndFocusedObject()) {
 				if (o instanceof DMEntity) {
 					entitiesToPutInTheDiagram.add((DMEntity) o);
 				}

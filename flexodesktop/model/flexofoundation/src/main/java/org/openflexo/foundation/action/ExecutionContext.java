@@ -25,7 +25,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.logging.FlexoLogger;
 
 public class ExecutionContext {
@@ -33,30 +33,30 @@ public class ExecutionContext {
 	static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
 
 	FlexoAction<?, ?, ?> _action;
-	private Hashtable<String, FlexoModelObject> _objectsCreatedWhileExecutingAction;
-	private Hashtable<String, FlexoModelObject> _objectsDeletedWhileExecutingAction;
+	private Hashtable<String, FlexoObject> _objectsCreatedWhileExecutingAction;
+	private Hashtable<String, FlexoObject> _objectsDeletedWhileExecutingAction;
 
 	public ExecutionContext(FlexoAction<?, ?, ?> action) {
 		_action = action;
-		_objectsCreatedWhileExecutingAction = new Hashtable<String, FlexoModelObject>();
-		_objectsDeletedWhileExecutingAction = new Hashtable<String, FlexoModelObject>();
+		_objectsCreatedWhileExecutingAction = new Hashtable<String, FlexoObject>();
+		_objectsDeletedWhileExecutingAction = new Hashtable<String, FlexoObject>();
 		_singleProperties = new Vector<SingleProperty<?>>();
 		_vectorProperties = new Vector<VectorProperty<?>>();
 	}
 
-	public void objectCreated(String key, FlexoModelObject object) {
+	public void objectCreated(String key, FlexoObject object) {
 		_objectsCreatedWhileExecutingAction.put(key, object);
 	}
 
-	public void objectDeleted(String key, FlexoModelObject object) {
+	public void objectDeleted(String key, FlexoObject object) {
 		_objectsDeletedWhileExecutingAction.put(key, object);
 	}
 
-	public Hashtable<String, FlexoModelObject> getObjectsCreatedWhileExecutingAction() {
+	public Hashtable<String, FlexoObject> getObjectsCreatedWhileExecutingAction() {
 		return _objectsCreatedWhileExecutingAction;
 	}
 
-	public Hashtable<String, FlexoModelObject> getObjectsDeletedWhileExecutingAction() {
+	public Hashtable<String, FlexoObject> getObjectsDeletedWhileExecutingAction() {
 		return _objectsDeletedWhileExecutingAction;
 	}
 
@@ -72,8 +72,7 @@ public class ExecutionContext {
 			_value = (T) _action.objectForKey(propertyKey);
 			_originalValue = _value;
 			for (FlexoAction<?, ?, ?> a : previouslyExecutedActions) {
-				Hashtable<String, FlexoModelObject> objectsCreatedByAction = a.getExecutionContext()
-						.getObjectsCreatedWhileExecutingAction();
+				Hashtable<String, FlexoObject> objectsCreatedByAction = a.getExecutionContext().getObjectsCreatedWhileExecutingAction();
 				for (String k : objectsCreatedByAction.keySet()) {
 					if (objectsCreatedByAction.get(k).equals(_value)) {
 						_keyOfActionWhereThisValueWasInstanciated = k;
@@ -150,8 +149,7 @@ public class ExecutionContext {
 			int index = 0;
 			for (T value : _values) {
 				for (FlexoAction<?, ?, ?> a : previouslyExecutedActions) {
-					Hashtable<String, FlexoModelObject> objectsCreatedByAction = a.getExecutionContext()
-							.getObjectsCreatedWhileExecutingAction();
+					Hashtable<String, FlexoObject> objectsCreatedByAction = a.getExecutionContext().getObjectsCreatedWhileExecutingAction();
 					for (String k : objectsCreatedByAction.keySet()) {
 						if (objectsCreatedByAction.get(k).equals(value)) {
 							PersistentValue newPersistentValue = new PersistentValue();
@@ -258,8 +256,7 @@ public class ExecutionContext {
 		}
 	}
 
-	public void notifyExternalObjectCreatedByAction(FlexoModelObject object, FlexoAction<?, ?, ?> action, String key,
-			boolean considerAsOriginal) {
+	public void notifyExternalObjectCreatedByAction(FlexoObject object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 		for (SingleProperty sp : _singleProperties) {
 			sp.notifyExternalObjectCreatedByAction(object, action, key, considerAsOriginal);
 		}
@@ -268,8 +265,7 @@ public class ExecutionContext {
 		}
 	}
 
-	public void notifyExternalObjectDeletedByAction(FlexoModelObject object, FlexoAction<?, ?, ?> action, String key,
-			boolean considerAsOriginal) {
+	public void notifyExternalObjectDeletedByAction(FlexoObject object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 		for (SingleProperty sp : _singleProperties) {
 			sp.notifyExternalObjectDeletedByAction(object, action, key, considerAsOriginal);
 		}

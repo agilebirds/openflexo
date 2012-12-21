@@ -67,7 +67,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * 
  * 
  */
-public abstract class FlexoObservable extends FlexoObject implements HasPropertyChangeSupport {
+public abstract class FlexoObservable extends KVCFlexoObject implements HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FlexoObservable.class.getPackage().getName());
 

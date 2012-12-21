@@ -27,7 +27,6 @@ import java.util.Vector;
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
 import org.openflexo.drm.dm.DocResourceCenterIsSaved;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -35,7 +34,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
-public class DocResourceCenter extends DRMObject implements XMLStorageResourceData {
+public class DocResourceCenter extends DRMObject implements XMLStorageResourceData<DocResourceCenter> {
 
 	// Vector of Language objects
 	private Vector<Language> languages;
@@ -234,8 +233,17 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject) {
-		// TODO Auto-generated method stub
+	public org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.menu.FlexoMenuBar;
 
@@ -59,7 +60,7 @@ public class VPMSelectionManager extends SelectionManager {
 	 * @return FlexoModelObject
 	 */
 	@Override
-	public FlexoModelObject getRootFocusedObject() {
+	public FlexoObject getRootFocusedObject() {
 		return getCEDController().getCurrentDisplayedObjectAsModuleView();
 	}
 

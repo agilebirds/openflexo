@@ -22,60 +22,30 @@ package org.openflexo.foundation.view.action;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.owl.OWLClass;
-import org.openflexo.foundation.ontology.owl.OWLIndividual;
-import org.openflexo.foundation.ontology.owl.OWLObject;
-import org.openflexo.foundation.ontology.owl.OWLObjectProperty;
-import org.openflexo.foundation.ontology.owl.OWLProperty;
-import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewElement;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.AddDataPropertyStatement;
-import org.openflexo.foundation.viewpoint.AddEditionPattern.AddEditionPatternParameter;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddIsAStatement;
-import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
-import org.openflexo.foundation.viewpoint.AddRestrictionStatement;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.ConditionalAction;
-import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
-import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.GraphicalAction;
-import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.ListParameter;
-import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
@@ -84,6 +54,16 @@ import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.Vi
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * This abstract class is the root class for all actions which can be performed at conceptual or design level, generally on a view tool
+ * (such as a diagram).<br>
+ * An {@link EditionSchemeAction} represents the execution of an {@link EditionScheme}.<br>
+ * To be used and executed on Openflexo platform, it is wrapped in a {@link FlexoAction}.
+ * 
+ * @author sylvain
+ * 
+ * @param <A>
+ */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
 		implements BindingEvaluationContext{
 
@@ -144,6 +124,27 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return null;
 	}
 
+	/**
+	 * Calling this method will register a new variable in the run-time context provided by this {@link EditionSchemeAction} instance in the
+	 * context of its implementation of {@link BindingEvaluationContext}.<br>
+	 * Variable is initialized with supplied name and value
+	 * 
+	 * @param variableName
+	 * @param value
+	 */
+	public void declareVariable(String variableName, Object value) {
+		variables.put(variableName, value);
+	}
+
+	/**
+	 * Calling this method will dereference variable identified by supplied name
+	 * 
+	 * @param variableName
+	 */
+	public void dereferenceVariable(String variableName) {
+		variables.remove(variableName);
+	}
+
 	/*public String getStringParameter(String parameterName) {
 		System.out.println("OK, on me demande le parametre " + parameterName + ", je retourne " + parameterValues.get(parameterName));
 		return (String) parameterValues.get(parameterName);
@@ -190,8 +191,17 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
-	protected abstract View retrieveOEShema();
+	public View getView() {
+		return retrieveOEShema();
+	}
 
+	public abstract View retrieveOEShema();
+
+	/**
+	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control
+	 * graph of related {@link EditionScheme}<br>
+	 * Recursively invoke {@link #performAction(EditionAction, Hashtable)}
+	 */
 	protected void applyEditionActions() {
 		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
 
@@ -203,80 +213,19 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			// Otherwise, we just ignore the action
 		}
 
-		// Finalize shape creation at the end to be sure labels are now correctely bound
+		// Finalize actions
 		for (EditionAction action : performedActions.keySet()) {
-			if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
-				finalizePerformAddShape((org.openflexo.foundation.viewpoint.AddShape) action, (ViewShape) performedActions.get(action));
+			action.finalizePerformAction(this, performedActions.get(action));
 			}
-			if (action instanceof org.openflexo.foundation.viewpoint.AddConnector) {
-				finalizePerformAddConnector((org.openflexo.foundation.viewpoint.AddConnector) action,
-						(ViewConnector) performedActions.get(action));
-			}
-			if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
-				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action, (View) performedActions.get(action));
-			}
-		}
 
 	}
 
-	private Object performAction(EditionAction action, Hashtable<EditionAction, Object> performedActions) {
-		Object assignedObject = null;
-		if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
-			logger.info("Add shape " + action);
-			ViewShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape) action);
-			assignedObject = newShape;
-		} else if (action instanceof org.openflexo.foundation.viewpoint.AddConnector) {
-			logger.info("Add connector " + action);
-			ViewConnector newConnector = performAddConnector((org.openflexo.foundation.viewpoint.AddConnector) action);
-			assignedObject = newConnector;
-		} else if (action instanceof AddIndividual) {
-			logger.info("Add individual " + action);
-			OntologyIndividual newIndividual = performAddIndividual((AddIndividual) action);
-			assignedObject = newIndividual;
-		} else if (action instanceof AddClass) {
-			logger.info("Add class " + action);
-			OntologyClass newClass = performAddClass((AddClass) action);
-			assignedObject = newClass;
-		} else if (action instanceof AddObjectPropertyStatement) {
-			logger.info("Add object property " + action);
-			Object statement = performAddObjectPropertyStatement((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
-			assignedObject = statement;
-		} else if (action instanceof AddDataPropertyStatement) {
-			logger.info("Add data property " + action);
-			Object statement = performAddDataPropertyStatement((org.openflexo.foundation.viewpoint.AddDataPropertyStatement) action);
-			assignedObject = statement;
-		} else if (action instanceof AddIsAStatement) {
-			logger.info("Add isA property " + action);
-			Object statement = performAddIsAProperty((AddIsAStatement) action);
-			assignedObject = statement;
-		} else if (action instanceof AddRestrictionStatement) {
-			logger.info("Add restriction " + action);
-			Object statement = performAddRestriction((AddRestrictionStatement) action);
-			assignedObject = statement;
-		} else if (action instanceof DeclarePatternRole) {
-			logger.info("Declare object " + action);
-			FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
-			assignedObject = declaredObject;
-		} else if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
-			logger.info("Add shema " + action);
-			View newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
-			assignedObject = newShema;
-		} else if (action instanceof org.openflexo.foundation.viewpoint.AddEditionPattern) {
-			logger.info("Add EditionPattern " + action + " EP="
-					+ ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getEditionPatternType());
-			EditionPatternInstance newEP = performAddEditionPattern((org.openflexo.foundation.viewpoint.AddEditionPattern) action);
-			assignedObject = newEP;
-		} else if (action instanceof org.openflexo.foundation.viewpoint.DeleteAction) {
-			logger.info("Try to delete with action " + action);
-			FlexoModelObject deletedObject = performDeleteAction((org.openflexo.foundation.viewpoint.DeleteAction) action);
-			logger.info("Deleted object " + deletedObject);
-		} else if (action instanceof GraphicalAction) {
-			performGraphicalAction((GraphicalAction) action);
-		} else if (action instanceof ConditionalAction) {
-			performConditionalAction((ConditionalAction) action, performedActions);
-		} else if (action instanceof IterationAction) {
-			performIterationAction((IterationAction) action, performedActions);
-		}
+	/**
+	 * This is the internal code performing execution of a single {@link EditionAction} defined to be part of the execution control graph of
+	 * related {@link EditionScheme}<br>
+	 */
+	protected Object performAction(EditionAction action, Hashtable<EditionAction, Object> performedActions) {
+		Object assignedObject = action.performAction(this);
 
 		if (assignedObject != null) {
 			performedActions.put(action, assignedObject);
@@ -297,453 +246,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		}
 
 		return assignedObject;
-	}
-
-	protected void performConditionalAction(ConditionalAction conditionalAction, Hashtable<EditionAction, Object> performedActions) {
-		if (conditionalAction.evaluateCondition(this)) {
-			for (EditionAction action : conditionalAction.getActions()) {
-				if (action.evaluateCondition(this)) {
-					performAction(action, performedActions);
-				}
-			}
-		}
-	}
-
-	protected void performIterationAction(IterationAction iterationAction, Hashtable<EditionAction, Object> performedActions) {
-		List<?> items = iterationAction.evaluateIteration(this);
-		if (items != null) {
-			for (Object item : items) {
-				variables.put(iterationAction.getIteratorName(), item);
-				for (EditionAction action : iterationAction.getActions()) {
-					if (action.evaluateCondition(this)) {
-						performAction(action, performedActions);
-					}
-				}
-			}
-		}
-		variables.remove(iterationAction.getIteratorName());
-	}
-
-	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action) {
-		ViewShape newShape = new ViewShape(retrieveOEShema());
-
-		GraphicalRepresentation<?> grToUse = null;
-
-		// If an overriden graphical representation is defined, use it
-		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
-			grToUse = getOverridingGraphicalRepresentation(action.getPatternRole());
-		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
-			grToUse = action.getPatternRole().getGraphicalRepresentation();
-		}
-
-		ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
-		newGR.setsWith(grToUse);
-		newShape.setGraphicalRepresentation(newGR);
-
-		// Register reference
-		newShape.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-
-		ViewObject container = action.getContainer(this);
-
-		if (container == null) {
-			logger.warning("When adding shape, cannot find container for action " + action.getPatternRole() + " container="
-					+ action.getContainer());
-			return null;
-		}
-
-		container.addToChilds(newShape);
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Added shape " + newShape + " under " + container);
-		}
-		return newShape;
-	}
-
-	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape) {
-		// Be sure that the newly created shape is updated
-		newShape.update();
-		return newShape;
-	}
-
-	protected ViewConnector performAddConnector(org.openflexo.foundation.viewpoint.AddConnector action) {
-
-		ViewShape fromShape = action.getFromShape(this);
-		ViewShape toShape = action.getToShape(this);
-		ViewConnector newConnector = new ViewConnector(fromShape.getShema(), fromShape, toShape);
-		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
-		if (parent == null) {
-			throw new IllegalArgumentException("No common ancestor");
-		}
-
-		GraphicalRepresentation<?> grToUse = null;
-
-		// If an overriden graphical representation is defined, use it
-		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
-			grToUse = getOverridingGraphicalRepresentation(action.getPatternRole());
-		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
-			grToUse = action.getPatternRole().getGraphicalRepresentation();
-		}
-
-		ConnectorGraphicalRepresentation<ViewConnector> newGR = new ConnectorGraphicalRepresentation<ViewConnector>();
-		newGR.setsWith(grToUse);
-		newConnector.setGraphicalRepresentation(newGR);
-
-		parent.addToChilds(newConnector);
-
-		// Register reference
-		newConnector.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Added connector " + newConnector + " under " + parent);
-		}
-		return newConnector;
-	}
-
-	protected ViewConnector finalizePerformAddConnector(org.openflexo.foundation.viewpoint.AddConnector action, ViewConnector newConnector) {
-		// Be sure that the newly created shape is updated
-		newConnector.update();
-		return newConnector;
-	}
-
-	protected View performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
-		View initialShema = retrieveOEShema();
-		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
-		addDiagramAction.newViewTitle = action.getDiagramName(this);
-		addDiagramAction.viewpoint = action.getPatternRole().getViewpoint();
-		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
-		addDiagramAction.skipChoosePopup = true;
-		addDiagramAction.doAction();
-		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
-			View newDiagram = addDiagramAction.getNewDiagram().getView();
-			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
-			if (shapePatternRole == null) {
-				logger.warning("Sorry, shape pattern role is undefined");
-				return newShema;
-			}
-			// logger.info("Shape pattern role: " + shapePatternRole);
-			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-			ViewShape newShape = new ViewShape(newShema);
-			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof ViewShape) {
-				ViewShape primaryShape = (ViewShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
-				newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
-			} else if (shapePatternRole.getGraphicalRepresentation() != null) {
-				newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
-			}
-			// Register reference
-			newShape.registerEditionPatternReference(newEditionPatternInstance, shapePatternRole);
-			newShema.addToChilds(newShape);
-			newEditionPatternInstance.setObjectForPatternRole(newShape, shapePatternRole);
-			// Duplicates all other pattern roles
-			for (PatternRole role : getEditionPattern().getPatternRoles()) {
-				if (role != action.getPatternRole() && role != shapePatternRole) {
-					FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
-					logger.info("Duplicate pattern actor for role " + role + " value=" + patternActor);
-					newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
-					patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
-				}
-			}*/
-
-			return newDiagram;
-		}
-		return null;
-	}
-
-	protected View finalizePerformAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action, View newShema) {
-		return newShema;
-	}
-
-	protected OntologyIndividual performAddIndividual(AddIndividual action) {
-		OntologyClass father = action.getOntologyClass();
-		// OntologyObject father = action.getOntologyObject(getProject());
-		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
-		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = (String) action.getIndividualName().getBindingValue(this);
-		// System.out.println("individualName="+individualName);
-		OntologyIndividual newIndividual;
-		try {
-			newIndividual = getProject().getProjectOntology().createOntologyIndividual(individualName, father);
-			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
-			/*OntologyClass uneAutreClasses = getProject().getProjectOntology().createOntologyClass("UneClasseCommeCa", (OntologyClass)father);
-			OntologyIndividual unAutreIndividual = getProject().getProjectOntology().createOntologyIndividual("UnAutreIndividual", (OntologyClass)father);
-			OntologyObjectProperty objProp = getProject().getOntologyLibrary().getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI+"#"+"inRelationWith");
-			returned.getOntResource().addProperty(objProp.getOntProperty(), uneAutreClasses.getOntResource());
-			returned.getOntResource().addProperty(objProp.getOntProperty(), unAutreIndividual.getOntResource());*/
-
-			for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
-				if (dataPropertyAssertion.evaluateCondition(this)) {
-					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-					OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
-					logger.info("Property=" + property);
-					Object value = dataPropertyAssertion.getValue(this);
-					newIndividual.addPropertyStatement(property, value);
-				}
-			}
-			for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
-				if (objectPropertyAssertion.evaluateCondition(this)) {
-					// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
-					OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
-					// logger.info("Property="+property);
-					if (property instanceof OWLObjectProperty) {
-						if (((OWLObjectProperty) property).isLiteralRange()) {
-							Object value = objectPropertyAssertion.getValue(this);
-							newIndividual.addPropertyStatement(property, value);
-						} else {
-							OWLObject<?> assertionObject = (OWLObject<?>) objectPropertyAssertion.getAssertionObject(this);
-							if (assertionObject != null) {
-								((OWLIndividual) newIndividual).getOntResource().addProperty(
-										((OWLObjectProperty) property).getOntProperty(), assertionObject.getOntResource());
-							}
-						}
-					}
-					OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
-					// logger.info("assertionObject="+assertionObject);
-					/*OntologyObject assertionObject = null;
-						Object value = null;
-						if (objectPropertyAssertion.getObject() != null) value = getParameterValues().get(objectPropertyAssertion.getObject());
-						if (value instanceof OntologyObject) assertionObject = (OntologyObject)value;
-						if (assertionObject == null && getParent() instanceof OEShape) 
-							assertionObject = objectPropertyAssertion.getAssertionObject((OEShape)getParent(),editionPatternInstance);*/
-					if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
-							&& assertionObject instanceof OWLObject) {
-						((OWLIndividual) newIndividual).getOntResource().addProperty(((OWLProperty) property).getOntProperty(),
-								((OWLObject) assertionObject).getOntResource());
-					} else {
-						// logger.info("assertion objet is null");
-					}
-				}
-			}
-			if (newIndividual instanceof OWLIndividual) {
-				((OWLIndividual) newIndividual).updateOntologyStatements();
-			}
-
-			// Register reference
-			newIndividual.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-
-			return newIndividual;
-		} catch (DuplicateURIException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	// protected OntologyIndividual finalizePerformAddIndividual(AddIndividual action, OntologyIndividual newIndividual) {
-	/*for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
-		if (dataPropertyAssertion.evaluateCondition(this)) {
-			logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-			OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
-			logger.info("Property=" + property);
-			Object value = dataPropertyAssertion.getValue(this);
-			newIndividual.addLiteral(property, value);
-		}
-	}
-	for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
-		if (objectPropertyAssertion.evaluateCondition(this)) {
-			// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
-			OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
-			// logger.info("Property="+property);
-			if (property instanceof OntologyObjectProperty) {
-				if (((OntologyObjectProperty) property).isLiteralRange()) {
-					Object value = objectPropertyAssertion.getValue(this);
-					newIndividual.addLiteral(property, value);
-				} else {
-					OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
-					if (assertionObject != null) {
-						newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
-					}
-				}
-			}
-			OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
-			// logger.info("assertionObject="+assertionObject);
-			if (assertionObject != null) {
-				newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
-			} else {
-				// logger.info("assertion objet is null");
-			}
-		}
-	}
-	newIndividual.updateOntologyStatements();
-
-	// Register reference
-	newIndividual.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-	*/
-	/*
-			return newIndividual;
-		}*/
-
-	protected OntologyClass performAddClass(AddClass action) {
-		OntologyClass father = action.getOntologyClass();
-		String newClassName = (String) action.getClassName().getBindingValue(this);
-		OntologyClass newClass = null;
-		try {
-			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getProject().getProjectOntology().createOntologyClass(newClassName, father);
-			logger.info("Added class " + newClass.getName() + " as " + father);
-		} catch (DuplicateURIException e) {
-			e.printStackTrace();
-		}
-		return newClass;
-	}
-
-	/*	protected OntologyClass finalizePerformAddClass(AddClass action, OntologyClass newClass) {
-
-			// Register reference
-			newClass.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-
-			return newClass;
-		}*/
-
-	protected Object performAddObjectPropertyStatement(AddObjectPropertyStatement action) {
-		OntologyObjectProperty property = (OntologyObjectProperty) action.getObjectProperty();
-		OntologyObject subject = action.getPropertySubject(this);
-		OntologyObject object = action.getPropertyObject(this);
-		if (property == null) {
-			return null;
-		}
-		if (subject == null) {
-			return null;
-		}
-		if (object == null) {
-			return null;
-		}
-		return subject.addPropertyStatement(property, object);
-	}
-
-	/*protected ObjectPropertyStatement finalizePerformAddObjectPropertyStatement(AddObjectPropertyStatement action,
-			ObjectPropertyStatement newObjectPropertyStatement) {
-		return newObjectPropertyStatement;
-	}*/
-
-	protected Object performAddDataPropertyStatement(AddDataPropertyStatement action) {
-		OntologyDataProperty property = (OntologyDataProperty) action.getDataProperty();
-		OntologyObject subject = action.getPropertySubject(this);
-		Object value = action.getValue(this);
-		if (property == null) {
-			return null;
-		}
-		if (subject == null) {
-			return null;
-		}
-		if (value == null) {
-			return null;
-		}
-		return subject.addDataPropertyStatement(property, value);
-	}
-
-	/*protected DataPropertyStatement finalizePerformAddDataPropertyStatement(AddDataPropertyStatement action,
-			DataPropertyStatement newObjectPropertyStatement) {
-		return newObjectPropertyStatement;
-	}*/
-
-	protected FlexoModelObject performDeclarePatternRole(DeclarePatternRole action) {
-		return (FlexoModelObject) action.getDeclaredObject(this);
-	}
-
-	/*protected FlexoModelObject finalizePerformDeclarePatternRole(DeclarePatternRole action) {
-		FlexoModelObject object = (FlexoModelObject) action.getDeclaredObject(this);
-
-		// Register reference
-		object.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
-
-		return object;
-	}*/
-
-	protected Object performAddIsAProperty(AddIsAStatement action) {
-		OntologyObject subject = action.getPropertySubject(this);
-		OntologyObject father = action.getPropertyFather(this);
-		if (father instanceof OntologyClass) {
-			if (subject instanceof OntologyClass) {
-				return ((OntologyClass) subject).addSuperClass((OntologyClass) father);
-			} else if (subject instanceof OntologyIndividual) {
-				return ((OntologyIndividual) subject).addType((OntologyClass) father);
-			}
-		}
-		return null;
-	}
-
-	/*protected SubClassStatement finalizePerformAddIsAProperty(AddIsAStatement action, SubClassStatement subClassStatement) {
-		return subClassStatement;
-	}*/
-
-	protected Object performAddRestriction(AddRestrictionStatement action) {
-		// System.out.println("Add restriction");
-
-		OntologyProperty property = action.getObjectProperty();
-		OntologyObject subject = action.getPropertySubject(this);
-		OntologyObject object = action.getPropertyObject(this);
-
-		// System.out.println("property="+property+" "+property.getURI());
-		// System.out.println("subject="+subject+" "+subject.getURI());
-		// System.out.println("object="+object+" "+object.getURI());
-		// System.out.println("restrictionType="+getParameterValues().get(action.getRestrictionType()));
-		// System.out.println("cardinality="+getParameterValues().get(action.getCardinality()));
-
-		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
-			RestrictionType restrictionType = action.getRestrictionType(this);
-			int cardinality = action.getCardinality(this);
-			OntologyRestrictionClass restriction = getProject().getProjectOntology().createRestriction((OWLClass) subject,
-					(OWLProperty) property, restrictionType, cardinality, (OWLClass) object);
-
-			if (subject instanceof OWLClass) {
-				if (subject instanceof OWLClass) {
-					((OWLClass) subject).getOntResource().addSuperClass(restriction.getOntResource());
-				}
-				((OWLClass) subject).updateOntologyStatements();
-				return ((OWLClass) subject).getSubClassStatement(restriction);
-			}
-
-		}
-
-		return null;
-	}
-
-	/*protected RestrictionStatement finalizePerformAddRestriction(AddRestrictionStatement action, RestrictionStatement restrictionStatement) {
-		return restrictionStatement;
-	}*/
-
-	protected EditionPatternInstance performAddEditionPattern(org.openflexo.foundation.viewpoint.AddEditionPattern action) {
-		logger.info("Perform performAddEditionPattern " + action);
-		View view = action.getView(this);
-		logger.info("View: " + view);
-		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, this);
-		creationSchemeAction.setCreationScheme(action.getCreationScheme());
-		for (AddEditionPatternParameter p : action.getParameters()) {
-			EditionSchemeParameter param = p.getParam();
-			Object value = p.evaluateParameterValue(this);
-			logger.info("For parameter " + param + " value is " + value);
-			if (value != null) {
-				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(this));
-			}
-		}
-		creationSchemeAction.doAction();
-		if (creationSchemeAction.hasActionExecutionSucceeded()) {
-			logger.info("Successfully performed performAddEditionPattern " + action);
-			return creationSchemeAction.getEditionPatternInstance();
-		}
-		return null;
-	}
-
-	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
-		logger.info("Perform graphical action " + action);
-		ViewElement graphicalElement = action.getSubject(this);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Element is " + graphicalElement);
-			logger.fine("Feature is " + action.getGraphicalFeature());
-			logger.fine("Value is " + action.getValue().getBindingValue(this));
-		}
-		action.getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(),
-				action.getValue().getBindingValue(this));
-	}
-
-	protected FlexoModelObject performDeleteAction(DeleteAction action) {
-		FlexoModelObject objectToDelete = (FlexoModelObject) action.getObject().getBindingValue(this);
-		try {
-			logger.info("Delete object " + objectToDelete + " for object " + action.getObject() + " this=" + this);
-			objectToDelete.delete();
-		} catch (Exception e) {
-			logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return objectToDelete;
 	}
 
 	@Override

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
@@ -165,5 +166,10 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 			return getWorkflow().getArtefactMetricsDefinitions().contains(this);
 		}
 		return false;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 }

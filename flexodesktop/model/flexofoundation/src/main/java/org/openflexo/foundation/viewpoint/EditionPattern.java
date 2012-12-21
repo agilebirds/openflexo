@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,14 +29,19 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -46,6 +52,7 @@ import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -53,8 +60,6 @@ import org.openflexo.xmlcode.StringEncoder;
 public class EditionPattern extends EditionPatternObject implements StringConvertable<EditionPattern>, CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
-
-	private String name;
 
 	private Vector<PatternRole> patternRoles;
 	private Vector<EditionScheme> editionSchemes;
@@ -68,10 +73,21 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private EditionPattern parentEditionPattern = null;
 	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
 
+	private EditionPatternStructuralFacet structuralFacet;
+	private EditionPatternBehaviouralFacet behaviouralFacet;
+
+	/**
+	 * Stores a chained collections of objects which are involved in validation
+	 */
+	private ChainedCollection<ViewPointObject> validableObjects = null;
+
 	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return super.getDescription();
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
+			validableObjects.add(inspector);
+		}
+		return validableObjects;
 	}
 
 	public EditionPattern(ViewPointBuilder builder) {
@@ -81,6 +97,16 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		if (builder != null) {
 			setViewPoint(builder.getViewPoint());
 		}
+		structuralFacet = new EditionPatternStructuralFacet(this);
+		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+	}
+
+	public EditionPatternStructuralFacet getStructuralFacet() {
+		return structuralFacet;
+	}
+
+	public EditionPatternBehaviouralFacet getBehaviouralFacet() {
+		return behaviouralFacet;
 	}
 
 	@Override
@@ -108,17 +134,11 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public void setName(String name) {
 		if (name != null) {
 			// We prevent ',' so that we can use it as a delimiter in tags.
-			name = name.replace(",", "");
+			super.setName(name.replace(",", ""));
 		}
-		this.name = name;
 	}
 
 	public EditionScheme getEditionScheme(String editionSchemeName) {
@@ -208,14 +228,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return getPatternRoles(ClassPatternRole.class);
 	}
 
-	public List<ObjectPropertyStatementPatternRole> getObjectPropertyStatementPatternRoles() {
-		return getPatternRoles(ObjectPropertyStatementPatternRole.class);
-	}
-
-	public List<DataPropertyStatementPatternRole> getDataPropertyStatementPatternRoles() {
-		return getPatternRoles(DataPropertyStatementPatternRole.class);
-	}
-
 	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
 		return getPatternRoles(GraphicalElementPatternRole.class);
 	}
@@ -266,6 +278,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return testName;
 	}
 
+	@Deprecated
 	public PatternRole createShapePatternRole() {
 		ShapePatternRole newPatternRole = new ShapePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
@@ -273,6 +286,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public ConnectorPatternRole createConnectorPatternRole() {
 		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
@@ -280,6 +294,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public DiagramPatternRole createDiagramPatternRole() {
 		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
@@ -287,6 +302,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
 		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
@@ -294,6 +310,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	@Deprecated
 	public EditionPatternPatternRole createEditionPatternPatternRole() {
 		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
@@ -301,69 +318,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
-	public ClassPatternRole createClassPatternRole() {
-		ClassPatternRole newPatternRole = new ClassPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public IndividualPatternRole createIndividualPatternRole() {
-		IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("individual"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public PropertyPatternRole createPropertyPatternRole() {
-		PropertyPatternRole newPatternRole = new PropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
-		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public DataPropertyPatternRole createDataPropertyPatternRole() {
-		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public IsAStatementPatternRole createIsAStatementPatternRole() {
-		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
-		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
-		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
-		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
+	@Deprecated
 	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
@@ -567,7 +522,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
-			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole /*|| pr instanceof StatementPatternRole*/) {
 				rolesToDelete.add(pr);
 			}
 		}
@@ -630,22 +585,17 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		setViewPoint(viewPoint);
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.EDITION_PATTERN_INSPECTOR;
-	}
-
 	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {
-		private final FlexoResourceCenter _resourceCenter;
+		private final ViewPointLibrary viewPointLibrary;
 
-		public EditionPatternConverter(FlexoResourceCenter resourceCenter) {
+		public EditionPatternConverter(ViewPointLibrary viewPointLibrary) {
 			super(EditionPattern.class);
-			_resourceCenter = resourceCenter;
+			this.viewPointLibrary = viewPointLibrary;
 		}
 
 		@Override
 		public EditionPattern convertFromString(String value) {
-			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
+			return viewPointLibrary.getEditionPattern(value);
 		}
 
 		@Override
@@ -745,7 +695,10 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, this));
+			BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
+			if (bv != null) {
+				_bindingModel.addToBindingVariables(bv);
+			}
 		}
 		notifyBindingModelChanged();
 	}

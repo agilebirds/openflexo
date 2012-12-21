@@ -33,7 +33,7 @@ public class ImportResourceException extends LoadResourceException {
 
 	@Override
 	public String getMessage() {
-		return "ImportResourceException: resource " + _fileResource.getResourceIdentifier();
+		return "ImportResourceException: resource " + deprecatedFileResource.getResourceIdentifier();
 	}
 
 }

@@ -29,52 +29,81 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
-public class WelcomePanelEDITOR {
+public class WelcomePanelEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
+
+			@Override
+			protected XMLSerializationService createXMLSerializationService() {
+				return XMLSerializationService.createInstance();
+			}
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new InteractiveFlexoEditor(this, project);
+			}
+
+			@Override
+			public FlexoEditor createApplicationEditor() {
+				return new InteractiveFlexoEditor(this, null);
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return new DefaultProjectLoadingHandler();
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return null;
+			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				return null;
+			}
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+				return null;
+			}
+
+			@Override
+			protected ViewPointLibrary createViewPointLibraryService() {
+				return null;
+			}
+
+			@Override
+			protected InformationSpace createInformationSpace() {
+				return null;
+			}
+
+		});
+		return FIBAbstractEditor.makeArray(applicationData);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return WelcomeDialog.FIB_FILE;
+	}
 
 	public static void main(String[] args) {
-		// ModuleLoader.initializeModules(UserType.MAINTAINER, false);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
-
-					@Override
-					public FlexoEditor makeFlexoEditor(FlexoProject project) {
-						return new InteractiveFlexoEditor(this, project);
-					}
-
-					@Override
-					public FlexoEditor createApplicationEditor() {
-						return new InteractiveFlexoEditor(this, null);
-					}
-
-					@Override
-					protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-						return null;
-					}
-
-					@Override
-					public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-						return new DefaultProjectLoadingHandler();
-					}
-
-					@Override
-					protected FlexoResourceCenterService createResourceCenterService() {
-						return null;
-					}
-				});
-				return FIBAbstractEditor.makeArray(applicationData);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return WelcomeDialog.FIB_FILE;
-			}
-		};
-		editor.launch();
+		main(WelcomePanelEDITOR.class);
 	}
 }

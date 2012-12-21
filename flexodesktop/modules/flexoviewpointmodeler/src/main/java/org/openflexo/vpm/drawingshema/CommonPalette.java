@@ -36,7 +36,7 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -175,9 +175,9 @@ public class CommonPalette extends DrawingPalette {
 
 			@Override
 			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
-				if (containerGR.getDrawable() instanceof ExampleDrawingObject) {
+				if (containerGR.getDrawable() instanceof ExampleDiagramObject) {
 
-					ExampleDrawingObject container = (ExampleDrawingObject) containerGR.getDrawable();
+					ExampleDiagramObject container = (ExampleDiagramObject) containerGR.getDrawable();
 
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);

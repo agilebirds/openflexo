@@ -30,7 +30,7 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.utils.OperationCancelledException;
@@ -140,7 +140,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 		});
 		if (getEditor() != null && getController().getCurrentDisplayedObjectAsModuleView() == null) {
 			boolean selectDefaultObject = false;
-			FlexoModelObject defaultObjectToSelect = getController().getDefaultObjectToSelect(getEditor().getProject());
+			FlexoObject defaultObjectToSelect = getController().getDefaultObjectToSelect(getEditor().getProject());
 			if (defaultObjectToSelect != null
 					&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
 							.getCurrentDisplayedObjectAsModuleView() == defaultObjectToSelect)) {

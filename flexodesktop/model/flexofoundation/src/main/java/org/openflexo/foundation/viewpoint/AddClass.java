@@ -25,9 +25,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -36,11 +37,15 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddClass extends AddConcept {
+public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyClass> extends
+		AddConcept<M, MM, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	private String ontologyClassURI = null;
+
+	private ViewPointDataBinding className;
+	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
 
 	public AddClass(ViewPointBuilder builder) {
 		super(builder);
@@ -69,14 +74,9 @@ public class AddClass extends AddConcept {
 	}
 
 	@Override
-	public OntologyClass getOntologyClass() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
+	public IFlexoOntologyClass getOntologyClass() {
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+			return getViewPoint().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				return getPatternRole().getOntologicType();
@@ -85,8 +85,10 @@ public class AddClass extends AddConcept {
 		return null;
 	}
 
+	public abstract Class<T> getOntologyClassClass();
+
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -117,23 +119,6 @@ public class AddClass extends AddConcept {
 		this.ontologyClassURI = ontologyClassURI;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
-
-	private ViewPointDataBinding className;
-
-	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
-
 	public BindingDefinition getClassNameBindingDefinition() {
 		return CLASS_NAME;
 	}
@@ -155,7 +140,7 @@ public class AddClass extends AddConcept {
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyClass.class;
+			return IFlexoOntologyClass.class;
 		}
 		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}

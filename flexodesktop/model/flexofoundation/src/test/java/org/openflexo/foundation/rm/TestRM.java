@@ -19,15 +19,12 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
@@ -79,10 +76,6 @@ public class TestRM extends FlexoTestCase {
 	private static final String TEST_PARTIAL_COMPONENT = "TestPartialComponent";
 	private static final String TEST_STATUS = "TestANewStatus";
 
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-	private static File _projectDirectory;
-	private static String _projectIdentifier;
 	private static DebugBackwardSynchronizationHook _bsHook;
 
 	private static FlexoRMResource _rmResource;
@@ -122,19 +115,7 @@ public class TestRM extends FlexoTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_RM, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		resourceCenter = getNewResourceCenter(_projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenter);
-		_project = _editor.getProject();
+		createProject(TEST_RM);
 		logger.info("Project has been SUCCESSFULLY created");
 		_bsHook = new DebugBackwardSynchronizationHook();
 		FlexoResourceManager.setBackwardSynchronizationHook(_bsHook);
@@ -231,6 +212,29 @@ public class TestRM extends FlexoTestCase {
 		logger.info("SubProcessNode " + _subProcessNode.getName() + " successfully created");
 		assertDepends(_rootProcessResource, _subProcessResource);
 		saveProject();
+		try {
+			_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, serviceManager);
+		} catch (ProjectLoadingCancelledException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertNotNull(_rmResource = _project.getFlexoRMResource());
+		assertNotNull(_wkfResource = _project.getFlexoWorkflowResource());
+		assertNotNull(_dmResource = _project.getFlexoDMResource());
+		assertNotNull(_dkvResource = _project.getFlexoDKVResource());
+		assertNotNull(_clResource = _project.getFlexoComponentLibraryResource());
+		assertNotNull(_menuResource = _project.getFlexoNavigationMenuResource());
+		assertNotNull(_rootProcessResource = _project.getFlexoProcessResource(_projectIdentifier));
+		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
+		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
+		assertNotNull(_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS));
+
+		assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph()
+				.getSubProcessNodeNamed(TEST_SUB_PROCESS));
+		assertNotNull(_subProcessNode.getSubProcess());
 	}
 
 	/**
@@ -388,6 +392,8 @@ public class TestRM extends FlexoTestCase {
 		log("Done. Now check that no other back-synchro");
 		// Let eventual dependancies back-synchronize together
 		reloadProject(true); // This time, all must be not modified
+		assertDepends(_testOperationComponentResource, _partialComponentResource);
+		assertDepends(_testOperationComponentResource2, _partialComponentResource);
 		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
 			assertNotModified(resource);
 		}
@@ -465,6 +471,7 @@ public class TestRM extends FlexoTestCase {
 			_partialComponentResource.saveResourceData();
 			// And also, save the project so that the lastKnownMemoryUpdate of the partial component is properly serialized
 			_project.getFlexoResource().saveResourceData();
+			assertTrue(_partialComponentResource.getLastUpdate().after(_testOperationComponentResource.getLastUpdate()));
 		} catch (SaveXMLResourceException e) {
 			e.printStackTrace();
 			fail();
@@ -478,7 +485,8 @@ public class TestRM extends FlexoTestCase {
 
 		// And we reload the project
 		reloadProject(false);
-
+		// Force loading of workflow (and thus all its processes)
+		_project.getFlexoWorkflow();
 		// testOperationComponent is used in an OperationNode while testOperationComponent2 is not. Since we know that all processes are
 		// loaded at startup, the RM mechanism should see that the operation component is not up-to-date compared with the partial component
 		// and should therefore force the loading of the component so that it gets back-synched with its partial component (and so it gets
@@ -568,7 +576,7 @@ public class TestRM extends FlexoTestCase {
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		resetVariables();
 		_bsHook = null;
@@ -608,7 +616,7 @@ public class TestRM extends FlexoTestCase {
 		resetVariables();
 
 		try {
-			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, null));
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, serviceManager));
 			_project = _editor.getProject();
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
@@ -630,6 +638,7 @@ public class TestRM extends FlexoTestCase {
 		if (fullLoading) {
 			assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph()
 					.getSubProcessNodeNamed(TEST_SUB_PROCESS));
+			assertNotNull("Expecting sub process on sub process node but none was found", _subProcessNode.getSubProcess());
 		}
 		if (fullLoading) {
 			assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph()

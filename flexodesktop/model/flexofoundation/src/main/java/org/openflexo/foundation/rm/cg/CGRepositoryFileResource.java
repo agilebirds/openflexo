@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
@@ -51,6 +52,7 @@ import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.validation.Validable;
 
 /**
  * @author sylvain
@@ -665,4 +667,8 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 		}
 	}
 
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
 }

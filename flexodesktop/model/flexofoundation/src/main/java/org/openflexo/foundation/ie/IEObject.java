@@ -46,7 +46,6 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Superclass for all model classes. Holds all attributes for a model class. Notify observers when some attribute change (i.e. when put is
@@ -62,30 +61,12 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 
 	protected static final Vector<IObject> EMPTY_IOBJECT_VECTOR = EmptyVector.EMPTY_VECTOR(IObject.class);
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 	/**
 	 * This consrtuctor should never be called anywhre by anyone
 	 */
 	public IEObject(FlexoProject project) {
 		super(project);
 	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getIEMapping();
-	}
-
-	// ==========================================================================
-	// ============================= Instance Methods
-	// ===========================
-	// ==========================================================================
 
 	@Override
 	public void update(Observable observable, Object obj) {
@@ -97,11 +78,6 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	public void update(FlexoObservable observable, DataModification obj) {
 		// Ignored at this level: implements it in sub-classes
 	}
-
-	// ==========================================================================
-	// ============================== KeyValueCoding
-	// ============================
-	// ==========================================================================
 
 	protected void notifyModification(String key, Object oldValue, Object newValue) {
 		notifyModification(key, oldValue, newValue, false);
@@ -247,6 +223,11 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	 */
 	@Override
 	public abstract Vector<IObject> getEmbeddedIEObjects();
+
+	@Override
+	public Collection<IObject> getEmbeddedValidableObjects() {
+		return getEmbeddedIEObjects();
+	}
 
 	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects() {

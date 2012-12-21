@@ -19,17 +19,21 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -58,20 +62,40 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private String name;
 	private String label;
 	private String description;
-	private Vector<EditionAction> actions;
+	private Vector<EditionAction<?, ?, ?>> actions;
 	private Vector<EditionSchemeParameter> parameters;
 	private boolean skipConfirmationPanel = false;
 
 	private EditionPattern _editionPattern;
 
+	private EditionSchemeParameters editionSchemeParameters;
+
 	private boolean definePopupDefaultSize = false;
 	private int width = 800;
 	private int height = 600;
 
+	/**
+	 * Stores a chained collections of objects which are involved in validation
+	 */
+	private ChainedCollection<ViewPointObject> validableObjects = null;
+
 	public EditionScheme(ViewPointBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction>();
+		actions = new Vector<EditionAction<?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
+		editionSchemeParameters = new EditionSchemeParameters(this);
+	}
+
+	public EditionSchemeParameters getEditionSchemeParameters() {
+		return editionSchemeParameters;
+	}
+
+	@Override
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getActions(), getParameters());
+		}
+		return validableObjects;
 	}
 
 	@Override
@@ -90,16 +114,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public abstract EditionSchemeType getEditionSchemeType();
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getLabel() {
 		if (label == null || StringUtils.isEmpty(label) || label.equals(name)) {
@@ -123,38 +137,19 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/*public EditionAction getAction(PatternRole role) {
-		for (EditionAction a : getActions()) {
-			if (a.getPatternRole() == role) {
-				return a;
-			}
-		}
-		return null;
-	}*/
-
-	@Override
-	public Vector<EditionAction> getActions() {
+	public Vector<EditionAction<?, ?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction> actions) {
+	public void setActions(Vector<EditionAction<?, ?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction action) {
+	public void addToActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.add(action);
@@ -164,7 +159,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public void removeFromActions(EditionAction action) {
+	public void removeFromActions(EditionAction<?, ?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
@@ -303,6 +298,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return null;
 	}
 
+	/*
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape(null);
@@ -434,6 +430,20 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public DeleteAction createDeleteAction() {
 		DeleteAction newAction = new DeleteAction(null);
+		addToActions(newAction);
+		return newAction;
+	}*/
+
+	/**
+	 * Creates a new {@link EditionAction} of supplied class, and add it at the end of action list<br>
+	 * Delegates creation to model slot
+	 * 
+	 * @return newly created {@link EditionAction}
+	 */
+	@Override
+	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
+			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;
 	}

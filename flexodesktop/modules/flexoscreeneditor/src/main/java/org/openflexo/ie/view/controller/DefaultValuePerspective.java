@@ -21,7 +21,7 @@ package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.icon.IconLibrary;
@@ -72,7 +72,7 @@ class DefaultValuePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
+	public ComponentInstance getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof ComponentInstance) {
 			return (ComponentInstance) proposedObject;
 		}
@@ -80,12 +80,12 @@ class DefaultValuePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof ComponentInstance;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof ComponentInstance) {
 			return new IEExampleValuesView((IEController) controller, (ComponentInstance) object);
 		} else {

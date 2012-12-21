@@ -22,25 +22,25 @@ package org.openflexo.view.controller.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class AddFlexoPropertyActionizer extends ActionInitializer<AddFlexoProperty, FlexoModelObject, FlexoModelObject> {
+public class AddFlexoPropertyActionizer extends ActionInitializer<AddFlexoProperty, FlexoObject, FlexoObject> {
 
 	public AddFlexoPropertyActionizer(ControllerActionInitializer actionInitializer) {
 		super(AddFlexoProperty.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionVisibleCondition<AddFlexoProperty, FlexoModelObject, FlexoModelObject> getVisibleCondition() {
-		return new FlexoActionVisibleCondition<AddFlexoProperty, FlexoModelObject, FlexoModelObject>() {
+	protected FlexoActionVisibleCondition<AddFlexoProperty, FlexoObject, FlexoObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<AddFlexoProperty, FlexoObject, FlexoObject>() {
 			@Override
-			public boolean isVisible(FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject> actionType,
-					FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			public boolean isVisible(FlexoActionType<AddFlexoProperty, FlexoObject, FlexoObject> actionType, FlexoObject object,
+					Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 				return false;
 			}
 		};

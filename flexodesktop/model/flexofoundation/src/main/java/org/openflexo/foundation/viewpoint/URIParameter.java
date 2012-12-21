@@ -88,16 +88,27 @@ public class URIParameter extends EditionSchemeParameter {
 		if (StringUtils.isEmpty(proposedURI)) {
 			return false;
 		}
-		if (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(action.getProject().getProjectOntology().getURI(), proposedURI)) {
+		if (proposalIsNotUnique(action, proposedURI)) {
 			// declared_uri_must_be_unique_please_choose_an_other_uri
 			return false;
-		} else if (!action.getProject().getProjectOntologyLibrary()
-				.testValidURI(action.getProject().getProjectOntology().getURI(), proposedURI)) {
+		} else if (proposalIsWellFormed(action, proposedURI) == false) {
 			// declared_uri_is_not_well_formed_please_choose_an_other_uri
 			return false;
 		}
 
 		return true;
+	}
+
+	private String getActionOntologyURI(EditionSchemeAction<?> action) {
+		return action.getProject().getURI();
+	}
+
+	private boolean proposalIsNotUnique(EditionSchemeAction<?> action, String uriProposal) {
+		return action.getProject().isDuplicatedURI(getActionOntologyURI(action), uriProposal);
+	}
+
+	private boolean proposalIsWellFormed(EditionSchemeAction<?> action, String uriProposal) {
+		return action.getProject().testValidURI(getActionOntologyURI(action), uriProposal);
 	}
 
 	@Override
@@ -110,8 +121,7 @@ public class URIParameter extends EditionSchemeParameter {
 			baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;
 			Integer i = null;
-			while (action.getProject().getProjectOntologyLibrary()
-					.isDuplicatedURI(action.getProject().getProjectOntology().getURI(), proposal)) {
+			while (proposalIsNotUnique(action, proposal)) {
 				if (i == null) {
 					i = 1;
 				} else {

@@ -22,7 +22,7 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Interface implemented by all objects able to trigger FlexoAction
@@ -36,9 +36,9 @@ import org.openflexo.foundation.FlexoModelObject;
  */
 public interface FlexoActionSource {
 
-	public FlexoModelObject getFocusedObject();
+	public FlexoObject getFocusedObject();
 
-	public Vector<? extends FlexoModelObject> getGlobalSelection();
+	public Vector<? extends FlexoObject> getGlobalSelection();
 
 	public FlexoEditor getEditor();
 }

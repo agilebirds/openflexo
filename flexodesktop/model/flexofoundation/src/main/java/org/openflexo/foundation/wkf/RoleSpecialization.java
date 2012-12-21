@@ -20,6 +20,7 @@
 package org.openflexo.foundation.wkf;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -194,6 +195,11 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 	@Override
 	public String toString() {
 		return getFullyQualifiedName();
+	}
+
+	@Override
+	public Collection<Role> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	// ===================================================================

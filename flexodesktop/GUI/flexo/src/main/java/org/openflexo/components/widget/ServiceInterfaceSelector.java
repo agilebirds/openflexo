@@ -25,6 +25,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -144,7 +145,7 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 	}
 
 	@Override
-	public boolean isSelectable(FlexoModelObject object) {
+	public boolean isSelectable(FlexoObject object) {
 		if (object instanceof FlexoProcess) {
 			FlexoProcess p = (FlexoProcess) object;
 			return !p.isImported() || p.isTopLevelProcess();

@@ -6,6 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.openflexo.model.StringEncoder;
+import org.openflexo.model.factory.ModelFactory;
+
 /**
  * Annotation for a getter
  * 
@@ -52,6 +55,17 @@ public @interface Getter {
 	public String defaultValue() default UNDEFINED;
 
 	/**
+	 * Indicates that the type returned by this getter can be converted to a string using a {@link Converter}. Upon
+	 * serialization/deserialization, the {@link ModelFactory} will provide, through its {@link StringEncoder}, an appropriate
+	 * {@link Converter}. Failing to do that will result in an Exception
+	 * 
+	 * The default value is <code>false</code>
+	 * 
+	 * @return true if the type returned by this getter can be converted to a string.
+	 */
+	public boolean isStringConvertable() default false;
+
+	/**
 	 * Indicates that the type returned by this getter should not be included in the model. This flag allows to manipulate types that are
 	 * unknown to PAMELA. If set to true, PAMELA will not try to interpret those classes and will not be able to serialize them
 	 * 
@@ -64,13 +78,16 @@ public @interface Getter {
 		private final Cardinality cardinality;
 		private final String inverse;
 		private final String defaultValue;
+		private final boolean stringConvertable;
 		private final boolean ignoreType;
 
-		public GetterImpl(String value, Cardinality cardinality, String inverse, String defaultValue, boolean ignoreType) {
+		public GetterImpl(String value, Cardinality cardinality, String inverse, String defaultValue, boolean stringConvertable,
+				boolean ignoreType) {
 			this.value = value;
 			this.cardinality = cardinality;
 			this.inverse = inverse;
 			this.defaultValue = defaultValue;
+			this.stringConvertable = stringConvertable;
 			this.ignoreType = ignoreType;
 		}
 
@@ -97,6 +114,11 @@ public @interface Getter {
 		@Override
 		public String inverse() {
 			return inverse;
+		}
+
+		@Override
+		public boolean isStringConvertable() {
+			return stringConvertable;
 		}
 
 		@Override

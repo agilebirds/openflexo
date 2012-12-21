@@ -36,6 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -218,7 +219,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	}
 
 	protected boolean paletteSwitchRequested = false;
-	protected FlexoModelObject objectForPaletteSwitch;
+	protected FlexoObject objectForPaletteSwitch;
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
 		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {

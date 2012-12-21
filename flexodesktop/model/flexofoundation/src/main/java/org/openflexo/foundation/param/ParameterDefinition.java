@@ -22,7 +22,7 @@ package org.openflexo.foundation.param;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.inspector.model.ParamModel;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.DenaliWidget;
@@ -34,7 +34,7 @@ import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
  * 
  * @author sguerin
  */
-public abstract class ParameterDefinition<T> extends FlexoObject {
+public abstract class ParameterDefinition<T> extends KVCFlexoObject {
 
 	private String _name;
 	private String _label;

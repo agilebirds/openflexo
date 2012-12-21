@@ -32,6 +32,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -98,10 +99,6 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					}
 
 					FlexoProcess process = (FlexoProcess) v.firstElement();
-					if (process.isRootProcess()) {
-						FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
-						return false;
-					}
 					if (action.isNoConfirmation()) {
 						return true;
 					}
@@ -178,11 +175,11 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					}
 				}
 				if (doIt) {
-					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
+					Vector<FlexoObject> objects = action.getGlobalSelectionAndFocusedObject();
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
-					for (FlexoModelObject object : objects) {
-						if (!object.isDeleted()) {
-							for (FlexoModelObjectReference<?> ref : object.getReferencers()) {
+					for (FlexoObject object : objects) {
+						if (!object.isDeleted() && object instanceof FlexoModelObject) {
+							for (FlexoModelObjectReference<?> ref : ((FlexoModelObject) object).getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}
@@ -219,7 +216,8 @@ public class WKFDeleteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFDelete>() {
 			@Override
 			public boolean run(EventObject e, WKFDelete action) {
-				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())) {
+				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())
+						&& getProject().getRootFlexoProcess() != null) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(getProject().getRootFlexoProcess());
 				}
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null

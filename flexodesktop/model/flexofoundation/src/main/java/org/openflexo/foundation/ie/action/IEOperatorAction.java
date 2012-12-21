@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
@@ -41,7 +41,7 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 
 public abstract class IEOperatorAction extends FlexoAction {
 
-	public IEOperatorAction(FlexoActionType actionType, FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	public IEOperatorAction(FlexoActionType actionType, FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

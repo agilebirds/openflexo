@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.dkv;
 
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.Vector;
 
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.Inspectors;
@@ -227,7 +227,8 @@ public class Key extends DKVObject implements InspectableObject, Comparator, Sor
 	}
 
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		return null;
 	}
+
 }

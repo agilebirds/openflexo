@@ -52,15 +52,15 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public void notifyObjectCreated(FlexoModelObject object) {
+	public void notifyObjectCreated(FlexoObject object) {
 	}
 
 	@Override
-	public void notifyObjectDeleted(FlexoModelObject object) {
+	public void notifyObjectDeleted(FlexoObject object) {
 	}
 
 	@Override
-	public void notifyObjectChanged(FlexoModelObject object) {
+	public void notifyObjectChanged(FlexoObject object) {
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public void focusOn(FlexoModelObject object) {
+	public void focusOn(FlexoObject object) {
 		// Only interactive editor handle this
 	}
 
@@ -96,29 +96,31 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performActionType(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performUndoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performUndoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performRedoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performRedoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action,
-			EventObject e) {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performAction(A action, EventObject e) {
+		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
+			return null;
+		}
 		try {
 			return action.doActionInContext();
 		} catch (FlexoException e1) {
@@ -128,8 +130,8 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(
-			A action, EventObject e) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performUndoAction(A action,
+			EventObject e) {
 		try {
 			return action.undoActionInContext();
 		} catch (FlexoException e1) {
@@ -139,8 +141,8 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(
-			A action, EventObject e) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performRedoAction(A action,
+			EventObject e) {
 		try {
 			return action.redoActionInContext();
 		} catch (FlexoException e1) {
@@ -150,31 +152,31 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> KeyStroke getKeyStrokeFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionEnabled(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
+		return actionType.isEnabled(focusedObject, globalSelection);
+	}
+
+	@Override
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionVisible(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
 		return true;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
-			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
-		return true;
-	}
-
-	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getEnabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getDisabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}

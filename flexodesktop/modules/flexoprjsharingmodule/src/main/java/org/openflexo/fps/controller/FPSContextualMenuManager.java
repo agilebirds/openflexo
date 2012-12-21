@@ -22,7 +22,7 @@ package org.openflexo.fps.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.ContextualMenuManager;
 
 /**
@@ -41,7 +41,7 @@ public class FPSContextualMenuManager extends ContextualMenuManager {
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		// put some code here to detect focused object
 		// finally calls super's implementation
 		return super.getFocusedObject(focusedComponent, e);

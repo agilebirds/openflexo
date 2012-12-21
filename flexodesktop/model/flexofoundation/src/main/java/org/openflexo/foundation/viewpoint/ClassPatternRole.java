@@ -1,12 +1,14 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class ClassPatternRole extends OntologicObjectPatternRole {
+public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
 
 	public ClassPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -25,11 +27,6 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 		return "";
 	}
 
-	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyClass.class;
-	}
-
 	private String conceptURI;
 
 	public String _getConceptURI() {
@@ -40,18 +37,17 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getOntologicType() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-		}
-		return null;
+	public IFlexoOntologyClass getOntologicType() {
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
-	public void setOntologicType(OntologyClass ontologyClass) {
+	public void setOntologicType(IFlexoOntologyClass ontologyClass) {
 		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
 	}
 
 	public static class ClassPatternRoleMustDefineAValidConceptClass extends
@@ -70,4 +66,8 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 		}
 	}
 
+	@Override
+	public ConceptActorReference<IFlexoOntologyClass> makeActorReference(IFlexoOntologyClass object, EditionPatternReference epRef) {
+		return new ConceptActorReference<IFlexoOntologyClass>(object, this, epRef);
+	}
 }

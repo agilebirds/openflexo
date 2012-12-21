@@ -53,6 +53,7 @@ import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
@@ -512,7 +513,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		}
 
 		@Override
-		public boolean isSelectable(FlexoModelObject object) {
+		public boolean isSelectable(FlexoObject object) {
 			return object instanceof DMEntity;
 		}
 
@@ -1268,8 +1269,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			editionMode = EditionMode.COMPLEX_TYPE;
 			boolean showAgain = false;
 			if (_editedObject == null && _selectorPanel instanceof BasicDMTypeSelectorPanel) {
-				FlexoModelObject currentSelectedObject = ((BasicDMTypeSelectorPanel) _selectorPanel)._entitySelectorPanel
-						.getSelectedObject();
+				FlexoObject currentSelectedObject = ((BasicDMTypeSelectorPanel) _selectorPanel)._entitySelectorPanel.getSelectedObject();
 				// System.out.println("selected: "+currentSelectedObject);
 				if (currentSelectedObject instanceof DMEntity) {
 					_editedObject = DMType.makeResolvedDMType((DMEntity) currentSelectedObject);

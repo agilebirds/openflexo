@@ -24,6 +24,7 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProperty;
 
 public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoProperty, FlexoProperty> {
@@ -58,8 +59,8 @@ public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoP
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		Vector<FlexoModelObject> properties = getGlobalSelectionAndFocusedObject();
-		for (FlexoModelObject object : properties) {
+		Vector<FlexoObject> properties = getGlobalSelectionAndFocusedObject();
+		for (FlexoObject object : properties) {
 			if (object instanceof FlexoProperty) {
 				((FlexoProperty) object).delete();
 			}

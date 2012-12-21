@@ -30,6 +30,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.LevelledObject;
@@ -85,7 +86,7 @@ public class WKFSelectionManager extends SelectionManager {
 	public boolean performSelectionCut() {
 		_clipboard.performSelectionCut(getSelection());
 		FlexoPetriGraph parent = null;
-		for (FlexoModelObject o : new Vector<FlexoModelObject>(getSelection())) {
+		for (FlexoObject o : new Vector<FlexoObject>(getSelection())) {
 			if (o instanceof PetriGraphNode) {
 				PetriGraphNode node = (PetriGraphNode) o;
 				if (parent == null) {

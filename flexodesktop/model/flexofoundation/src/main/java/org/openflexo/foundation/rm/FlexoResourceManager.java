@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -181,15 +181,14 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoResourceCenterService resourceCenterService) throws ProjectInitializerException, ProjectLoadingCancelledException {
+			FlexoServiceManager serviceManager) throws ProjectInitializerException, ProjectLoadingCancelledException {
 		// Here implement a default handler that attempts to retrieve properly
-		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), null,
-				resourceCenterService);
+		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), null, serviceManager);
 	}
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader,
-			FlexoResourceCenterService resourceCenterService) throws ProjectInitializerException, ProjectLoadingCancelledException {
+			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader, FlexoServiceManager serviceManager)
+			throws ProjectInitializerException, ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -212,7 +211,7 @@ public class FlexoResourceManager {
 			FlexoRMResource rmRes;
 			try {
 				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
-				project = rmRes.loadProject(progress, loadingHandler, resourceCenterService);
+				project = rmRes.loadProject(progress, loadingHandler, serviceManager);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
 				throw new ProjectInitializerException(e1.getMessage(), aProjectDirectory);
@@ -249,12 +248,12 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenterService resourceCenter) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoServiceManager serviceManager) {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
-		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
+		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, serviceManager);
 		FlexoProject project = returned.getProject();
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
@@ -265,8 +264,8 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoResourceCenterService resourceCenter) {
-		return initializeNewProject(aProjectDirectory, null, editorFactory, null, resourceCenter);
+			FlexoServiceManager serviceManager) {
+		return initializeNewProject(aProjectDirectory, null, editorFactory, null, serviceManager);
 	}
 
 	public FlexoEditor getEditor() {

@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -61,11 +62,12 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.AbstractBinding.AbstractBindingStringConverter;
@@ -117,19 +119,23 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.ProjectOWLOntology;
-import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -151,10 +157,17 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -169,7 +182,7 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -178,6 +191,7 @@ import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.WRLocator;
 import org.openflexo.toolbox.ZipUtils;
@@ -199,7 +213,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author sguerin
  */
-public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
+public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData<FlexoProject>, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
 	private static final String REVISION = "revision";
@@ -220,9 +234,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private FlexoResourceManager resourceManagerInstance;
 
-	private FlexoXMLMappings xmlMappings;
+	private XMLSerializationService xmlMappings;
 
-	private FlexoResourceCenterService resourceCenterService;
+	// private FlexoResourceCenterService resourceCenterService;
+	private FlexoServiceManager serviceManager;
 
 	private FlexoObjectIDManager objectIDManager;
 
@@ -276,7 +291,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private ProjectStatistics statistics = null;
 
-	private String version = "1.0";
+	private FlexoVersion version = new FlexoVersion("1.0");
 
 	private long revision = 0;
 
@@ -319,6 +334,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private IModuleLoader moduleLoader;
 
+	private List<ModelSlotInstance> models;
+	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
 			super();
@@ -343,7 +361,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
-	public static interface FlexoProjectReferenceLoader {
+	public static interface FlexoProjectReferenceLoader extends FlexoService {
 
 		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException;
 	}
@@ -370,7 +388,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		@Override
 		public void _initialize() {
 			super._initialize();
-			FlexoObject.initialize(this);
+			KVCFlexoObject.initialize(this);
 			_addConverter(bindingValueConverter);
 			_addConverter(bindingExpressionConverter);
 			_addConverter(abstractBindingConverter);
@@ -385,9 +403,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	/**
 	 *
 	 */
-	private FlexoProject() {
+	private FlexoProject(FlexoServiceManager serviceManager) {
 		super(null);
-		xmlMappings = new FlexoXMLMappings();
+		this.serviceManager = serviceManager;
+		xmlMappings = serviceManager.getXMLSerializationService();
 		stringEncoder = new FlexoProjectStringEncoder();
 		stringEncoder._initialize();
 		// Just to be sure, we initialize them here
@@ -415,19 +434,19 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param builder
 	 */
 	public FlexoProject(FlexoProjectBuilder builder) {
-		this();
+		this(builder.serviceManager);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
-		setResourceCenter(builder.resourceCenterService);
+		setServiceManager(builder.serviceManager);
 		setProjectDirectory(builder.projectDirectory);
 		loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
 	}
 
-	protected FlexoProject(File aProjectDirectory) {
-		this();
+	protected FlexoProject(File aProjectDirectory, FlexoServiceManager serviceManager) {
+		this(serviceManager);
 		setProjectDirectory(aProjectDirectory);
 		projectName = aProjectDirectory.getName().replaceAll(BAD_CHARACTERS_REG_EXP, " ");
 		if (projectName.endsWith(".prj")) {
@@ -481,8 +500,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-		// Does nothing, since this is the project itself !!!
+	public org.openflexo.foundation.resource.FlexoResource<FlexoProject> getResource() {
+		return getFlexoResource();
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<FlexoProject> resource) {
+		try {
+			setFlexoResource((FlexoResource) resource);
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -565,9 +593,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					: Deflater.DEFAULT_COMPRESSION);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new SaveResourceException(null) {
-
-			};
+			throw new SaveResourceException((FlexoFileResource<?>) null);
 		}
 	}
 
@@ -679,9 +705,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				directoriesAreDifferent = !oldProjectDirectory.getCanonicalFile().equals(newProjectDirectory.getCanonicalFile());
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new SaveResourceException(null) {
-
-				};
+				throw new SaveResourceException((FlexoFileResource<?>) null);
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
@@ -722,7 +746,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-					throw new SaveResourcePermissionDeniedException(null);
+					throw new SaveResourcePermissionDeniedException((FlexoFileResource<?>) null);
 				}
 			}
 			setProjectDirectory(newProjectDirectory, useNewDirectoryFromNow);
@@ -784,7 +808,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	protected void writeDotVersion() {
-		writeDotVersion(FlexoXMLMappings.latestRelease());
+		writeDotVersion(XMLSerializationService.latestRelease());
 	}
 
 	private void writeDotVersion(FlexoVersion version) {
@@ -982,7 +1006,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		getDataModel().close();
 		_resource = null;
 		resources = null;
-		resourceCenterService = null;
+		serviceManager = null;
 		allRegisteredObjects.clear();
 		globalStatus.clear();
 		// resources.clear();
@@ -1270,12 +1294,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
-	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource() {
+	public FlexoViewLibraryResource getFlexoShemaLibraryResource() {
 		return getFlexoShemaLibraryResource(true);
 	}
 
-	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
-		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
+	public FlexoViewLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
+		FlexoViewLibraryResource returned = (FlexoViewLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
 		if (returned == null && createIfNotExist) {
 			ViewLibrary.createNewShemaLibrary(this);
 			return getFlexoShemaLibraryResource(false);
@@ -1823,10 +1847,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	// ==========================================================================
 
 	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
-			FlexoResourceCenterService resourceCenterService) {
+			FlexoServiceManager serviceManager) {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
-		FlexoProject project = new FlexoProject(aProjectDirectory);
-		project.setResourceCenter(resourceCenterService);
+		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
+		project.setServiceManager(serviceManager);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
 		if (logger.isLoggable(Level.INFO)) {
@@ -2012,11 +2036,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return xmlMappings.getRMMapping();
 	}
 
-	public FlexoXMLMappings getXmlMappings() {
+	public XMLSerializationService getXmlMappings() {
 		return xmlMappings;
 	}
 
-	public void setXmlMappings(FlexoXMLMappings xmlMappings) {
+	public void setXmlMappings(XMLSerializationService xmlMappings) {
 		this.xmlMappings = xmlMappings;
 	}
 
@@ -3161,16 +3185,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public OperationNode getFirstOperation() {
-		if (firstOperation == null && firstOperationFlexoID > -1) {
-			firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
-		}
-		if (firstOperation == null) {
-			List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
-			if (v.size() > 0) {
-				firstOperation = v.get(0);
-				setChanged();
-				notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
+		if (getRootFlexoProcess() != null) {
+			if (firstOperation == null && firstOperationFlexoID > -1) {
+				firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
+			}
+			if (firstOperation == null) {
+				List<OperationNode> v = getRootFlexoProcess().getAllOperationNodesWithComponent();
+				if (v.size() > 0) {
+					firstOperation = v.get(0);
+					setChanged();
+					notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
 
+				}
 			}
 		}
 		return firstOperation;
@@ -3298,13 +3324,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	/**
-	 * Overrides getAllEmbeddedValidableObjects
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
-	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);
 		for (FlexoStorageResource<? extends StorageResourceData> r : getLoadedStorageResources()) {
@@ -3839,6 +3860,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
+	public static final String RESOURCES = "resources";
 
 	public String getProjectVersionURI() {
 		return projectVersionURI;
@@ -3970,6 +3992,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
+	/*
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
@@ -3977,14 +4000,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private ProjectOntology createProjectOntology() {
 		// Temporary hack to select the type of the project ontology
 		// To be updated with model slots
-		return ProjectOWLOntology.createNewProjectOntology(this);
+		return OWLModel.createNewOWLModel(this);
 		// return ProjectXSOntology.createNewProjectOntology(this);
 	}
 
 	@SuppressWarnings("unchecked")
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource(boolean createIfNotExist) {
 		FlexoStorageResource<ProjectOntology> returned = (FlexoStorageResource<ProjectOntology>) resourceForKey(
-				ResourceType.PROJECT_ONTOLOGY, getProjectName());
+				ResourceType.OWL_ONTOLOGY, getProjectName());
 		if (returned == null && createIfNotExist) {
 			return createProjectOntology().getFlexoResource();
 		}
@@ -4002,8 +4025,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return resource.getResourceData();
 	}
+	*/
 
-	private ProjectOntologyLibrary ontologyLibrary = null;
+	/*private ProjectOntologyLibrary ontologyLibrary = null;
 
 	public ProjectOntologyLibrary getProjectOntologyLibrary() {
 		return getProjectOntologyLibrary(true);
@@ -4021,7 +4045,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		}
 		return ontologyLibrary;
-	}
+	}*/
 
 	/*
 	 * private CalcLibrary calcLibrary = null;
@@ -4041,19 +4065,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public RoleList getImportedRoleList() {
 		return getWorkflow().getImportedRoleList();
-	}
-
-	public FlexoLinksResource getFlexoLinksResource() {
-		FlexoLinksResource returned = (FlexoLinksResource) resourceForKey(ResourceType.LINKS, getProjectName());
-		if (returned == null) {
-			FlexoLinks.createLinks(this);
-			return getFlexoLinksResource();
-		}
-		return returned;
-	}
-
-	public FlexoLinks getFlexoLinks() {
-		return getFlexoLinksResource().getResourceData();
 	}
 
 	public boolean getIsLocalized() {
@@ -4107,16 +4118,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return objectIDManager;
 	}
 
-	public FlexoResourceCenterService getResourceCenter() {
-		if (resourceCenterService == null) {
-
-		}
-		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-		return resourceCenterService;
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
 	}
 
-	public void setResourceCenter(FlexoResourceCenterService resourceCenterService) {
-		if (resourceCenterService != null) {
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		/*if (resourceCenterService != null) {
 			if (resourceCenterService == this.resourceCenterService) {
 				logger.warning("Resource center is already set and the same as this new attempt. I will simply ignore the call.");
 				return;
@@ -4134,7 +4141,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.warning("#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
 					+ "I will try to find one.");
 			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
-		}
+		}*/
+
+		this.serviceManager = serviceManager;
+		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(serviceManager.getService(ViewPointLibrary.class));
+		getStringEncoder()._addConverter(editionPatternConverter);
 	}
 
 	public boolean isComputeDiff() {
@@ -4164,13 +4175,13 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, List<ConceptActorReference>>();
 
-	public void _retrievePendingEditionPatternReferences(OntologyObject object) {
+	public void _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
 		if (values == null) {
 			// No pending EditionPattern references for object
 			return;
 		} else {
-			List<ConceptActorReference> clonedValues = new ArrayList<EditionPatternReference.ConceptActorReference>(values);
+			List<ConceptActorReference> clonedValues = new ArrayList<ConceptActorReference>(values);
 			for (ConceptActorReference actorReference : clonedValues) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
 				if (instance == null) {
@@ -4179,10 +4190,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					logger.warning("Found null actorReference.getPatternReference(), please investigate");
 				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
 					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
-				} else {
-					PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+				} else if (object instanceof FlexoOntologyObjectImpl) {
+					PatternRole pr = actorReference.getPatternReference().getPatternRole();
 					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-					object.registerEditionPatternReference(instance, pr);
+					((FlexoOntologyObjectImpl) object).registerEditionPatternReference(instance, pr);
 				}
 			}
 			values.clear();
@@ -4192,10 +4203,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void resolvePendingEditionPatternReferences() {
 		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
 		for (String conceptURI : allKeys) {
-			OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
+			logger.warning("Unresolved ontology object " + conceptURI);
+			/*OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);
-			}
+			}*/
 		}
 	}
 
@@ -4207,15 +4219,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		this.moduleLoader = moduleLoader;
 	}
 
-	public String getVersion() {
+	public FlexoVersion getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(FlexoVersion version) {
 		if (version != null) {
-			version = version.replace("~", "");
+			version = new FlexoVersion(version.toString().replace("~", ""));
 		}
-		String old = this.version;
+		FlexoVersion old = this.version;
 		this.version = version;
 		setChanged();
 		notifyObservers(new DataModification(VERSION, old, version));
@@ -4238,6 +4250,262 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		} else {
 			return getProjectData().canImportProject(project);
 		}
+	}
+
+	public boolean hasImportedProjects() {
+		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
+	}
+
+	/*	public Set<FlexoOntology> getAllMetaModels() {
+			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
+			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+				allMetaModels.addAll(viewDefinition.getView().getAllMetaModels());
+			}
+			return allMetaModels;
+		}
+
+		public Set<ProjectOntology> getAllModels() {
+			Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
+			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+				allModels.addAll(viewDefinition.getView().getAllModels());
+			}
+			return allModels;
+		}
+
+		public Set<FlexoOntology> getAllOntologies() {
+			// TODO cache
+			Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
+			allOntologies.addAll(getAllMetaModels());
+			allOntologies.addAll(getAllModels());
+			return allOntologies;
+		}*/
+
+	/**
+	 * Retrieve object referenced by its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public Object getObject(String uri) {
+		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
+			Object o = m.getObject(uri);
+			if (o != null)
+				return o;
+		}
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			Object o = m.getObject(uri);
+			if (o != null)
+				return o;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObject getOntologyObject(String uri) {
+		Object returned = getObject(uri);
+		if (returned instanceof IFlexoOntologyObject) {
+			return (IFlexoOntologyObject) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology class from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyClass getOntologyClass(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyClass) {
+			return (IFlexoOntologyClass) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology individual from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyIndividual getOntologyIndividual(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyIndividual) {
+			return (IFlexoOntologyIndividual) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyStructuralProperty getOntologyProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyStructuralProperty) {
+			return (IFlexoOntologyStructuralProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyObjectProperty) {
+			return (IFlexoOntologyObjectProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyDataProperty getOntologyDataProperty(String uri) {
+		Object returned = getOntologyObject(uri);
+		if (returned instanceof IFlexoOntologyDataProperty) {
+			return (IFlexoOntologyDataProperty) returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean testValidURI(String ontologyURI, String conceptURI) {
+		if (StringUtils.isEmpty(conceptURI)) {
+			return false;
+		}
+		if (StringUtils.isEmpty(conceptURI.trim())) {
+			return false;
+		}
+		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
+	}
+
+	/**
+	 * Return true if URI is duplicated in the context of this project
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean isDuplicatedURI(String modelURI, String conceptURI) {
+		FlexoModel<?, ?> m = getModel(modelURI);
+		if (m != null) {
+			return m.getObject(modelURI + "#" + conceptURI) != null;
+		}
+		FlexoMetaModel<?> mm = getMetaModel(modelURI);
+		if (mm != null) {
+			return mm.getObject(modelURI + "#" + conceptURI) != null;
+		}
+		return false;
+	}
+
+	/**
+	 * Retrieve model or metamodel conform to {@link IFlexoOntology} and referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public IFlexoOntology getFlexoOntology(String modelURI) {
+		FlexoModel<?, ?> m = getModel(modelURI);
+		if (m instanceof IFlexoOntology) {
+			return (IFlexoOntology) m;
+		}
+		FlexoMetaModel<?> mm = getMetaModel(modelURI);
+		if (mm instanceof IFlexoOntology) {
+			return (IFlexoOntology) mm;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve model referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoModel<?, ?> getModel(String modelURI) {
+		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
+			if (m.getURI().equals(modelURI))
+				return m;
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all models used in the scope of current project<br>
+	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * 
+	 * @return
+	 */
+	public Set<FlexoModel<?, ?>> getAllReferencedModels() {
+		HashSet<FlexoModel<?, ?>> returned = new HashSet<FlexoModel<?, ?>>();
+		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
+			View v = vd.getView();
+			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+				returned.add(msi.getModel());
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Retrieve metamodel referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
+		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
+			if (m.getURI().equals(metaModelURI))
+				return m;
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all models used in the scope of current project<br>
+	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * 
+	 * @return
+	 */
+	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
+		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
+		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
+			View v = vd.getView();
+			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+				returned.add(msi.getModelSlot().getMetaModelResource().getMetaModelData());
+			}
+		}
+		return returned;
 	}
 
 }

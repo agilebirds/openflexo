@@ -47,6 +47,8 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
@@ -69,7 +71,7 @@ import org.openflexo.view.menu.ToolsMenu;
  * 
  * @author sguerin
  */
-public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
+public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IModuleLoader, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
@@ -200,7 +202,44 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			ProgressWindow.hideProgressWindow();
 		}
 		propertyChangeSupport.firePropertyChange(MODULE_LOADED, null, module);
+		getFlexoServiceManager().notify(this, new ModuleLoaded(flexoModule));
 		return flexoModule;
+	}
+
+	/**
+	 * Notification of a new Module being loaded
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class ModuleLoaded implements ServiceNotification {
+		private FlexoModule loadedModule;
+
+		public ModuleLoaded(FlexoModule loadedModule) {
+			this.loadedModule = loadedModule;
+		}
+
+		public FlexoModule getLoadedModule() {
+			return loadedModule;
+		}
+	}
+
+	/**
+	 * Notification of a new Module being loaded
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class ModuleActivated implements ServiceNotification {
+		private FlexoModule loadedModule;
+
+		public ModuleActivated(FlexoModule loadedModule) {
+			this.loadedModule = loadedModule;
+		}
+
+		public FlexoModule getLoadedModule() {
+			return loadedModule;
+		}
 	}
 
 	private class ModuleLoaderCallable implements Callable<FlexoModule> {
@@ -216,11 +255,11 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Loading module " + module.getName());
 			}
-			FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
+			FlexoModule flexoModule = null;
+			flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
 			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
 			return flexoModule;
 		}
-
 	}
 
 	private FlexoModule doInternalLoadModule(Module module) throws Exception {
@@ -317,6 +356,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
 			}
 			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
+			getFlexoServiceManager().notify(this, new ModuleActivated(activeModule));
 			return moduleInstance;
 		}
 		throw new ModuleLoadingException(module);
@@ -376,12 +416,12 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	private void proceedQuitWithoutConfirmation() {
 		if (activeModule != null) {
-			GeneralPreferences.setFavoriteModuleName(activeModule.getName());
+			GeneralPreferences.setFavoriteModuleName(activeModule.getModule().getName());
 			FlexoPreferences.savePreferences(true);
 		}
 
 		for (Enumeration<FlexoModule> en = loadedModules(); en.hasMoreElements();) {
-			en.nextElement().moduleWillClose();
+			en.nextElement().closeWithoutConfirmation(false);
 		}
 		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
@@ -476,4 +516,12 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		return _modules.size() == 1 && _modules.containsKey(module);
 	}
 
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		logger.info("ModuleLoader service received notification " + notification + " from " + caller);
+	}
+
+	@Override
+	public void initialize() {
+	}
 }

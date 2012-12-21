@@ -20,13 +20,18 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept extends AssignableAction {
+public abstract class AddConcept<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
@@ -34,11 +39,11 @@ public abstract class AddConcept extends AssignableAction {
 		super(builder);
 	}
 
-	public abstract OntologyClass getOntologyClass();
+	public abstract IFlexoOntologyClass getOntologyClass();
 
-	public abstract void setOntologyClass(OntologyClass ontologyClass);
+	public abstract void setOntologyClass(IFlexoOntologyClass ontologyClass);
 
-	/*public OntologyObject getOntologyObject(FlexoProject project)
+	/*public IFlexoOntologyConcept getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();
 		if (StringUtils.isEmpty(getConceptURI())) return null;
@@ -65,5 +70,20 @@ public abstract class AddConcept extends AssignableAction {
 
 	@Override
 	public abstract Type getAssignableType();
+
+	/**
+	 * Overrides parent method by returning default model slot if model slot is not defined for this action
+	 */
+	@Override
+	public ModelSlot<M, MM> getModelSlot() {
+		ModelSlot<M, MM> returned = super.getModelSlot();
+		if (returned == null && getViewPoint() != null) {
+			List<FlexoOntologyModelSlot> msList = getViewPoint().getModelSlots(FlexoOntologyModelSlot.class);
+			if (msList.size() > 0) {
+				return msList.get(0);
+			}
+		}
+		return returned;
+	}
 
 }

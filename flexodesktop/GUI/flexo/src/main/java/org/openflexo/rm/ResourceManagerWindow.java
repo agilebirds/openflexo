@@ -159,14 +159,14 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 						reviewer.saveSelection();
 					} catch (SaveResourcePermissionDeniedException e1) {
 						e1.printStackTrace();
-						if (e1.getFileResource().getFile().isDirectory()) {
+						if (e1.getDeprecatedFileResource().getFile().isDirectory()) {
 							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
-											+ e1.getFileResource().getFile().getAbsolutePath());
+											+ e1.getDeprecatedFileResource().getFile().getAbsolutePath());
 						} else {
 							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-											+ e1.getFileResource().getFile().getAbsolutePath());
+											+ e1.getDeprecatedFileResource().getFile().getAbsolutePath());
 						}
 					} catch (SaveResourceExceptionList e1) {
 						e1.printStackTrace();

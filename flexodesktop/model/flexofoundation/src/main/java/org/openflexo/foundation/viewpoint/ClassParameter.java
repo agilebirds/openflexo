@@ -24,17 +24,19 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class ClassParameter extends EditionSchemeParameter {
+public class ClassParameter extends InnerModelSlotParameter {
 
 	private String conceptURI;
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+			false);
 
 	public ClassParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -42,7 +44,7 @@ public class ClassParameter extends EditionSchemeParameter {
 
 	@Override
 	public Type getType() {
-		return OntologyClass.class;
+		return IFlexoOntologyClass.class;
 	};
 
 	@Override
@@ -58,12 +60,11 @@ public class ClassParameter extends EditionSchemeParameter {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getConcept() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+	public IFlexoOntologyClass getConcept() {
+		return getViewPoint().getOntologyClass(_getConceptURI());
 	}
 
-	public void setConcept(OntologyClass c) {
+	public void setConcept(IFlexoOntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
 
@@ -102,11 +103,22 @@ public class ClassParameter extends EditionSchemeParameter {
 		}
 	}
 
-	public OntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
 		if (getConceptValue().isValid()) {
-			return (OntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+			return (IFlexoOntologyClass) getConceptValue().getBindingValue(parameterRetriever);
 		}
 		return null;
+	}
+
+	@Override
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

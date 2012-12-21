@@ -115,10 +115,6 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return fibBrowserModel;
 	}
 
-	public FIBBrowserWidget getBrowserWidget() {
-		return getBrowserModel().getBrowserWidget();
-	}
-
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof FIBAttributeNotification && o == browserElementDefinition) {

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.kvc.KeyValueCoding;
@@ -41,7 +42,7 @@ import org.openflexo.xmlcode.KeyValueDecoder;
  * 
  * @author sguerin
  */
-public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> implements
+public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> implements
 		KeyValueCoding {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
@@ -197,6 +198,9 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	}
 
 	public A doActionInContext() throws FlexoException {
+		if (!getActionType().isEnabled(getFocusedObject(), getGlobalSelection())) {
+			throw new InactiveFlexoActionException(getActionType(), getFocusedObject(), getGlobalSelection());
+		}
 		try {
 			executionStatus = ExecutionStatus.EXECUTING_CORE;
 			doAction(getContext());
@@ -275,14 +279,13 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		}
 	}
 
-	public Vector<FlexoModelObject> getGlobalSelectionAndFocusedObject() {
+	public Vector<FlexoObject> getGlobalSelectionAndFocusedObject() {
 		return getGlobalSelectionAndFocusedObject(getFocusedObject(), getGlobalSelection());
 	}
 
-	public static Vector<FlexoModelObject> getGlobalSelectionAndFocusedObject(FlexoModelObject focusedObject,
-			Vector<? extends FlexoModelObject> globalSelection) {
-		Vector<FlexoModelObject> v = globalSelection != null ? new Vector<FlexoModelObject>(globalSelection.size() + 1)
-				: new Vector<FlexoModelObject>(1);
+	public static Vector<FlexoObject> getGlobalSelectionAndFocusedObject(FlexoObject focusedObject,
+			Vector<? extends FlexoObject> globalSelection) {
+		Vector<FlexoObject> v = globalSelection != null ? new Vector<FlexoObject>(globalSelection.size() + 1) : new Vector<FlexoObject>(1);
 		if (globalSelection != null) {
 			v.addAll(globalSelection);
 		}
@@ -320,13 +323,13 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		StringBuffer returned = new StringBuffer();
 		if (getExecutionContext() != null) {
 			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
-				FlexoModelObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "CREATED:" + key + "/" + o.getClass().getSimpleName() + "/" + o.getFlexoID());
+				FlexoObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
+				returned.append((isFirst ? "" : " ") + "CREATED:" + key + "/" + o);
 				isFirst = false;
 			}
 			for (String key : getExecutionContext().getObjectsDeletedWhileExecutingAction().keySet()) {
-				FlexoModelObject o = getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "DELETED:" + key + "/" + o.getClass().getSimpleName() + "/" + o.getFlexoID());
+				FlexoObject o = getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
+				returned.append((isFirst ? "" : " ") + "DELETED:" + key + "/" + o);
 				isFirst = false;
 			}
 		}

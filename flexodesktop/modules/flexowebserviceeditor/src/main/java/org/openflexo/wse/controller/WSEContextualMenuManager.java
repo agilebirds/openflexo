@@ -22,7 +22,7 @@ package org.openflexo.wse.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.action.AddServiceInterface;
 import org.openflexo.foundation.wkf.action.AddServiceOperation;
@@ -42,7 +42,7 @@ public class WSEContextualMenuManager extends ContextualMenuManager {
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		// put some code here to detect focused object
 		// finally calls super's implementation
 		return super.getFocusedObject(focusedComponent, e);

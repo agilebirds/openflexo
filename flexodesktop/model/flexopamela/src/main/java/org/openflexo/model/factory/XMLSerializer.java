@@ -17,13 +17,17 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelProperty;
+import org.openflexo.model.StringEncoder;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.xml.DefaultStringEncoder;
-import org.openflexo.model.xml.InvalidDataException;
+import org.openflexo.model.exceptions.RestrictiveSerializationException;
 
-public class XMLSerializer {
+class XMLSerializer {
 
 	public static final String ID = "id";
 	public static final String ID_REF = "idref";
@@ -42,19 +46,24 @@ public class XMLSerializer {
 	 */
 	private Map<Object, Object> alreadySerialized;
 
-	private DefaultStringEncoder stringEncoder;
-
 	private int id = 0;
+	private final ModelFactory modelFactory;
+	private final SerializationPolicy policy;
 
-	public XMLSerializer() {
-		this(new DefaultStringEncoder(null));
+	public XMLSerializer(ModelFactory modelFactory) {
+		this(modelFactory, SerializationPolicy.PERMISSIVE);
 	}
 
-	public XMLSerializer(DefaultStringEncoder stringEncoder) {
-		this.stringEncoder = stringEncoder;
+	public XMLSerializer(ModelFactory modelFactory, SerializationPolicy policy) {
+		this.modelFactory = modelFactory;
+		this.policy = policy;
 	}
 
-	public Document serializeDocument(Object object, OutputStream out) {
+	private StringEncoder getStringEncoder() {
+		return modelFactory.getStringEncoder();
+	}
+
+	public Document serializeDocument(Object object, OutputStream out) throws IOException {
 		Document builtDocument = new Document();
 		try {
 			id = 0;
@@ -69,6 +78,7 @@ public class XMLSerializer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			out.flush();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,8 +116,42 @@ public class XMLSerializer {
 		if (object instanceof ProxyObject) {
 			ProxyMethodHandler<I> handler = (ProxyMethodHandler<I>) ((ProxyObject) object).getHandler();
 			ModelEntity<I> modelEntity = handler.getModelEntity();
+			Class<I> implementedInterface = modelEntity.getImplementedInterface();
+			boolean serializeModelEntityName = false;
 			XMLElement xmlElement = modelEntity.getXMLElement();
 			String xmlTag = modelEntity.getXMLTag();
+			if (modelFactory.getModelContext().getModelEntity(implementedInterface) == null) {
+				serializeModelEntityName = true;
+				switch (policy) {
+				case EXTENSIVE:
+					List<ModelEntity<?>> upperEntities = modelFactory.getModelContext().getUpperEntities(object);
+					if (upperEntities.size() == 0) {
+						throw new ModelDefinitionException("Cannot serialize object of type: " + object.getClass().getName()
+								+ " in context " + context.xmlTag() + ". No model entity could be found in the model mapping");
+					} else if (upperEntities.size() > 1) {
+						throw new ModelDefinitionException("Ambiguous entity for object " + object.getClass().getName()
+								+ ". More than one entities are known in this model mapping.");
+					}
+					ModelEntity e = upperEntities.get(0);
+					xmlTag = e.getXMLTag();
+					modelEntity = ModelContextLibrary.getModelContext(implementedInterface).getModelEntity(implementedInterface);
+					break;
+				case PERMISSIVE:
+					upperEntities = modelFactory.getModelContext().getUpperEntities(object);
+					if (upperEntities.size() == 0) {
+						throw new ModelDefinitionException("Cannot serialize object of type: " + object.getClass().getName()
+								+ " in context " + context.xmlTag() + ". No model entity could be found in the model mapping");
+					} else if (upperEntities.size() > 1) {
+						throw new ModelDefinitionException("Ambiguous entity for object " + object.getClass().getName()
+								+ ". More than one entities are known in this model mapping.");
+					}
+					modelEntity = (ModelEntity<I>) upperEntities.get(0);
+					break;
+				case RESTRICTIVE:
+					throw new RestrictiveSerializationException("Entity of type " + implementedInterface.getName()
+							+ " cannot be serialized in this model context");
+				}
+			}
 			String contextString = context != null ? context.context() : "";
 			String elementName = contextString + xmlTag;
 			String namespace = null;
@@ -126,14 +170,17 @@ public class XMLSerializer {
 					reference = generateReference(object);
 					alreadySerialized.put(object, reference);
 
-					/*
-					 * Element returned = elements.get(object); if (returned == null) {
-					 */
 					if (xmlElement != null) {
 						returned = new Element(elementName, namespace);
 						returned.setAttribute(ID, reference.toString());
-						// elements.put(object, returned);
-
+						if (serializeModelEntityName) {
+							returned.setAttribute(PAMELAConstants.MODEL_ENTITY_ATTRIBUTE, handler.getModelEntity()
+									.getImplementedInterface().getName(), PAMELAConstants.NAMESPACE);
+							if (handler.getOverridingSuperClass() != null) {
+								returned.setAttribute(PAMELAConstants.CLASS_ATTRIBUTE, handler.getOverridingSuperClass().getName(),
+										PAMELAConstants.NAMESPACE);
+							}
+						}
 						Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
 						while (properties.hasNext()) {
 							ModelProperty<? super I> p = properties.next();
@@ -142,7 +189,7 @@ public class XMLSerializer {
 								if (oValue != null) {
 									String value;
 									try {
-										value = stringEncoder.toString(oValue);
+										value = getStringEncoder().toString(oValue);
 										returned.setAttribute(p.getXMLTag(), value);
 									} catch (InvalidDataException e) {
 										throw new ModelExecutionException(e);
@@ -174,10 +221,10 @@ public class XMLSerializer {
 								}
 							}
 						}
-					} else if (stringEncoder.isConvertable(modelEntity.getImplementedInterface())) {
+					} else if (getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
 						try {
 							returned = new Element(elementName, namespace);
-							returned.setText(stringEncoder.toString(object));
+							returned.setText(getStringEncoder().toString(object));
 							returned.setAttribute(ID, reference.toString());
 						} catch (InvalidDataException e) {
 							// This should not happen. If it does, then it is likely that the StringEncoder class is messed up by saying
@@ -211,10 +258,10 @@ public class XMLSerializer {
 				objectReferences.put(object, ref);
 			}
 			return returned;
-		} else if (stringEncoder.isConvertable(object.getClass())) {
+		} else if (getStringEncoder().isConvertable(object.getClass())) {
 			try {
 				returned = new Element(context.xmlTag(), context.namespace());
-				returned.setText(stringEncoder.toString(object));
+				returned.setText(getStringEncoder().toString(object));
 				return returned;
 			} catch (InvalidDataException e) {
 				throw new ModelDefinitionException(

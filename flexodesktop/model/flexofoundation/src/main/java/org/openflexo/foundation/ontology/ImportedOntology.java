@@ -1,6 +1,7 @@
 package org.openflexo.foundation.ontology;
 
-public interface ImportedOntology extends FlexoOntology {
+@Deprecated
+public interface ImportedOntology extends IFlexoOntology {
 
 	void setIsReadOnly(boolean b);
 

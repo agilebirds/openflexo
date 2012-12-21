@@ -20,8 +20,8 @@
 package org.openflexo.foundation.xml;
 
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 
 /**
  * Please comment this class

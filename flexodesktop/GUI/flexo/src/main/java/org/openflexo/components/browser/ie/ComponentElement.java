@@ -32,6 +32,7 @@ import org.openflexo.components.browser.ExpansionSynchronizedElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
@@ -162,7 +163,7 @@ public abstract class ComponentElement extends BrowserElement implements Expansi
 	}
 
 	@Override
-	public FlexoModelObject getSelectableObject() {
+	public FlexoObject getSelectableObject() {
 		if (getComponentDefinition() != null && getComponentDefinition().isLoaded()) {
 			return getComponentDefinition().getWOComponent();
 		} else {

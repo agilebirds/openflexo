@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * FlexoClipboard is intented to be the object working with the SelectionManager and storing copied, cutted and pasted objects. Handled
@@ -42,7 +42,7 @@ public abstract class FlexoClipboard {
 
 	protected SelectionManager _selectionManager;
 
-	protected Vector<? extends FlexoModelObject> _clipboardedObjects;
+	protected Vector<? extends FlexoObject> _clipboardedObjects;
 
 	protected JMenuItem _copyMenuItem;
 
@@ -112,7 +112,7 @@ public abstract class FlexoClipboard {
 		return _isPasteEnabled;
 	}
 
-	public boolean performSelectionCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	public boolean performSelectionCopy(Vector<? extends FlexoObject> currentlySelectedObjects) {
 		if (_isCopyEnabled) {
 			if (isCurrentSelectionValidForCopy(currentlySelectedObjects)) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -155,7 +155,7 @@ public abstract class FlexoClipboard {
 		}
 	}
 
-	public boolean performSelectionCut(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	public boolean performSelectionCut(Vector<? extends FlexoObject> currentlySelectedObjects) {
 		if (_isCutEnabled) {
 			return performSelectionCopy(currentlySelectedObjects);
 		} else {
@@ -166,10 +166,10 @@ public abstract class FlexoClipboard {
 		}
 	}
 
-	protected abstract void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext);
+	protected abstract void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext);
 
-	protected abstract boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects);
+	protected abstract boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoObject> currentlySelectedObjects);
 
-	protected abstract boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects);
+	protected abstract boolean performCopyOfSelection(Vector<? extends FlexoObject> currentlySelectedObjects);
 
 }

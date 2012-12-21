@@ -70,7 +70,7 @@ public class BindingModel {
 	public BindingVariable bindingVariableNamed(String variableName) {
 		for (int i = 0; i < getBindingVariablesCount(); i++) {
 			BindingVariable next = getBindingVariableAt(i);
-			if (next.getVariableName() != null && next.getVariableName().equals(variableName)) {
+			if (next != null && next.getVariableName() != null && next.getVariableName().equals(variableName)) {
 				return next;
 			}
 		}

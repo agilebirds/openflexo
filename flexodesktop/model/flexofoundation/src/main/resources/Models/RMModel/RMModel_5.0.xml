@@ -120,11 +120,9 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
-  <entity name="org.openflexo.foundation.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+  <entity name="org.openflexo.technologyadapter.owl.rm.OWLOntologyResource" xmlTag="ProjectOntology"/>
   
-  <entity name="org.openflexo.foundation.rm.FlexoXMLModelResource" xmlTag="XMLModel"/>
-
-  <entity name="org.openflexo.foundation.rm.FlexoOEShemaLibraryResource" xmlTag="ShemaLibrary"/>
+  <entity name="org.openflexo.foundation.rm.FlexoViewLibraryResource" xmlTag="ShemaLibrary"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
 	 <property name="name" xmlTag="name" attribute="YES"/> 	
@@ -193,8 +191,6 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
  
-  <entity name="org.openflexo.foundation.rm.FlexoLinksResource" xmlTag="LinksResource"/>
-  
   <entity name="org.openflexo.foundation.rm.cg.CGRepositoryFileResource" abstract="yes" genericTypingStoredIn="resourceClassName">
  	<property name="name" xmlTag="name" attribute="YES"/>
  	<property name="lastAcceptingDate" xmlTag="lastAcceptingDate" attribute="YES"/>

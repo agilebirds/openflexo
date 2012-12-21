@@ -19,7 +19,7 @@
  */
 package org.openflexo.components.browser;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 
 public class ConfigurableProjectBrowser extends ProjectBrowser {
@@ -47,7 +47,7 @@ public class ConfigurableProjectBrowser extends ProjectBrowser {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		if (_configuration != null) {
 			return _configuration.getDefaultRootObject();
 		}

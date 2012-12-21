@@ -36,6 +36,7 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.widget.MultipleObjectSelector.TabularBrowserConfiguration;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMSet;
 import org.openflexo.foundation.dm.DMSet.PackageReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
@@ -105,7 +106,7 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 
 		class UpdateClassesBrowserElementFactory implements BrowserElementFactory {
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 				if (object instanceof DMSet) {
 					return new ClassSetElement((DMSet) object, browser, parent);
 				} else if (object instanceof PackageReference) {
@@ -294,7 +295,7 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 		}
 
 		@Override
-		public boolean isSelectable(FlexoModelObject obj) {
+		public boolean isSelectable(FlexoObject obj) {
 			return true;
 		}
 

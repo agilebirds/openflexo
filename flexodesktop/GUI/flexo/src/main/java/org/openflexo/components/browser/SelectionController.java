@@ -19,15 +19,15 @@
  */
 package org.openflexo.components.browser;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 public abstract class SelectionController {
 
-	public abstract boolean isSelectable(FlexoModelObject o);
+	public abstract boolean isSelectable(FlexoObject o);
 
 	public static class DefaultSelectionController extends SelectionController {
 		@Override
-		public boolean isSelectable(FlexoModelObject o) {
+		public boolean isSelectable(FlexoObject o) {
 			return true;
 		}
 	}

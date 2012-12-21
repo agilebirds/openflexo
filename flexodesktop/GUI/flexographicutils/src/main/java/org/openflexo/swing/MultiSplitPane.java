@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -99,7 +100,6 @@ public class MultiSplitPane extends JPanel {
 
 		private void updateNodeForComponent(int offset, Node node, Component comp) {
 			if (node.getPercentage() < 0) {
-				System.err.println("Fixed" + node.getSize() + offset);
 				node.setSize(node.getSize() + offset);
 			} else {
 				int size;
@@ -431,8 +431,7 @@ public class MultiSplitPane extends JPanel {
 	protected static void initTestUI() throws ModelDefinitionException {
 		JFrame frame = new JFrame("Test multi split");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ModelFactory factory = new ModelFactory();
-		factory.importClass(Node.class);
+		ModelFactory factory = new ModelFactory(new ModelContext(Node.class));
 		Node root = factory.newInstance(Node.class);
 		root.setName("root");
 		root.setRowLayout(true);

@@ -6,13 +6,12 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
 
-public class EditionAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
-		AbstractAction {
+public class EditionAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends AbstractAction {
 
 	private FlexoActionSource actionSource;
 	private FlexoActionType<A, T1, T2> actionType;

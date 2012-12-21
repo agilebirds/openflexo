@@ -36,13 +36,13 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.foundation.xml.XMLUtils;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -215,7 +215,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	private FlexoProgress _loadProjectProgress;
 	private ProjectLoadingHandler _loadingHandler;
 
-	private FlexoXMLMappings xmlMappings;
+	private XMLSerializationService xmlMappings;
 
 	/**
 	 * Overrides getXmlMappings
@@ -223,13 +223,13 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#getXmlMappings()
 	 */
 	@Override
-	protected FlexoXMLMappings getXmlMappings() {
+	protected XMLSerializationService getXmlMappings() {
 		if (getProject() != null) {
 			xmlMappings = null; // just to be sure
 			return getProject().getXmlMappings();
 		} else {
 			if (xmlMappings == null) {
-				xmlMappings = new FlexoXMLMappings();
+				xmlMappings = getProject().getServiceManager().getXMLSerializationService();
 			}
 			return xmlMappings;
 		}
@@ -237,15 +237,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	private boolean isInitializingProject = false;
 
-	private FlexoResourceCenterService resourceCenterService;
+	private FlexoServiceManager serviceManager;
 
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
-	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler,
-			FlexoResourceCenterService resourceCenterService) throws RuntimeException, ProjectLoadingCancelledException {
-		this.resourceCenterService = resourceCenterService;
+	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoServiceManager serviceManager)
+			throws RuntimeException, ProjectLoadingCancelledException {
+		this.serviceManager = serviceManager;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -486,8 +486,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	/**
 	 * Overrides convertResourceFileFromVersionToVersion
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#convertResourceFileFromVersionToVersion(org.openflexo.foundation.xml.FlexoXMLMappings.Version,
-	 *      org.openflexo.foundation.xml.FlexoXMLMappings.Version)
+	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#convertResourceFileFromVersionToVersion(org.openflexo.foundation.xml.XMLSerializationService.Version,
+	 *      org.openflexo.foundation.xml.XMLSerializationService.Version)
 	 */
 	@Override
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
@@ -603,11 +603,11 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	 */
 	@Override
 	public FlexoProjectBuilder instanciateNewBuilder() {
-		FlexoProjectBuilder returned = new FlexoProjectBuilder();
+		FlexoProjectBuilder returned = new FlexoProjectBuilder(serviceManager);
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
-		returned.resourceCenterService = resourceCenterService;
+		returned.serviceManager = serviceManager;
 		return returned;
 	}
 
@@ -685,7 +685,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			out = new FileOutputStream(temporaryFile);
 			FlexoXMLSerializableObject dataToSerialize = getResourceData();
 			dataToSerialize.initializeSerialization();
-			XMLCoder.encodeObjectWithMapping(dataToSerialize, FlexoXMLMappings.getRMTSMapping(), out);
+			XMLCoder.encodeObjectWithMapping(dataToSerialize, XMLSerializationService.getRMTSMapping(), out);
 			dataToSerialize.finalizeSerialization();
 			out.flush();
 			out.close();
@@ -727,7 +727,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 		}
 		FlexoProject tempProject = null;
 		try {
-			XMLMapping mapping = FlexoXMLMappings.getRMTSMapping();
+			XMLMapping mapping = XMLSerializationService.getRMTSMapping();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Start loading RM/TS file " + getTSFile().getAbsolutePath());
 			}
@@ -743,13 +743,13 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			}
 			e.getTargetException().printStackTrace();
 			e.printStackTrace();
-			throw new LoadXMLResourceException(this, e.getTargetException().getMessage());
+			throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getTargetException().getMessage());
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("FAILED loading RM/TS file, Exception: " + e.getMessage());
 			}
 			e.printStackTrace();
-			throw new LoadXMLResourceException(this, e.getMessage());
+			throw new LoadXMLResourceException((FlexoXMLStorageResource) this, e.getMessage());
 		}
 	}
 
@@ -805,7 +805,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	/**
 	 * Overrides saveResourceData
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#saveResourceData(org.openflexo.foundation.xml.FlexoXMLMappings.Version)
+	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#saveResourceData(org.openflexo.foundation.xml.XMLSerializationService.Version)
 	 */
 	/*@Override
 	protected void saveResourceData(FlexoVersion version) throws SaveXMLResourceException

@@ -22,7 +22,7 @@ package org.openflexo.dm.view;
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMObject;
 
 public class DMTabularView extends TabularView {
@@ -36,7 +36,7 @@ public class DMTabularView extends TabularView {
 	}
 
 	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+	protected FlexoObject getParentObject(FlexoObject object) {
 		if (object instanceof DMObject) {
 			return ((DMObject) object).getParent();
 		}

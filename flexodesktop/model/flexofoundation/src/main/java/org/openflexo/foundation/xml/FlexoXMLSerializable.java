@@ -24,7 +24,7 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Please comment this class
+ * Interface implemented by all classes which can be serialized/deserialized from/into an XMLFile
  * 
  * @author sguerin
  * 
@@ -37,5 +37,23 @@ public interface FlexoXMLSerializable extends XMLSerializable {
 	public Object instanciateNewBuilder();
 
 	public FlexoXMLSerializable cloneUsingXMLMapping();
+
+	public void initializeSerialization();
+
+	public void finalizeSerialization();
+
+	public void initializeDeserialization(Object builder);
+
+	public void finalizeDeserialization(Object builder);
+
+	public boolean isSerializing();
+
+	public boolean isDeserializing();
+
+	public void initializeCloning();
+
+	public void finalizeCloning();
+
+	public boolean isBeingCloned();
 
 }

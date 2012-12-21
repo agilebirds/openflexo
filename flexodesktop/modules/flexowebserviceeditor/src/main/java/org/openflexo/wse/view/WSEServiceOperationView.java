@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.MessageDefinition;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
@@ -85,7 +85,7 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 
 	public MessageEntry getSelectedMessageEntry() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
@@ -95,7 +95,7 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 
 	public AbstractMessageDefinition getSelectedMessageDefinition() {
 		SelectionManager sm = getWSEController().getSelectionManager();
-		Vector<FlexoModelObject> selection = sm.getSelection();
+		Vector<FlexoObject> selection = sm.getSelection();
 		if (selection.size() == 1 && selection.firstElement() instanceof AbstractMessageDefinition) {
 			return (MessageDefinition) selection.firstElement();
 		}

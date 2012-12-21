@@ -19,9 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public abstract class OntologicObjectPatternRole extends PatternRole {
+public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
 	public OntologicObjectPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -55,4 +57,14 @@ public abstract class OntologicObjectPatternRole extends PatternRole {
 		setIsPrimaryConceptRole(isPrimary);
 	}
 
+	@Override
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			}
+		}
+		return returned;
+	}
 }

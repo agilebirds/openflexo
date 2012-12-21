@@ -1,5 +1,3 @@
-#English
-#Fri Nov 16 16:00:37 CET 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -213,6 +211,7 @@ logical_not=Logical NOT
 logical_or=Logical OR
 logs=Logs
 look_and_feel=Look and feel
+model_slot_must_have_an_non_empty_and_unique_name=model_slot_must_have_an_non_empty_and_unique_name
 modified=modified
 multiplication=multiplication
 name_is_valid=Name is valid
@@ -251,7 +250,11 @@ pattern_role_must_define_a_valid_object_property=Pattern role must define a vali
 pattern_role_must_define_a_valid_object_property_description=Pattern role must define a valid object property description
 pattern_role_must_have_a_name=Pattern role must have a name
 pattern_role_must_have_a_name_description=Pattern role must have a name
+pattern_role_must_have_an_non_empty_and_unique_name=pattern_role_must_have_an_non_empty_and_unique_name
 plain=Plain
+please_choose_a_model_slot=please_choose_a_model_slot
+please_choose_a_technology_adapter=please_choose_a_technology_adapter
+please_choose_a_valid_metamodel=please_choose_a_valid_metamodel
 power=power
 preferences=Preferences
 process=Process

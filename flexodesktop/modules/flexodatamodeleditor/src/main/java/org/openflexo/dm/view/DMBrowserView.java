@@ -23,7 +23,7 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.dm.view.controller.DMBrowser;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMObject;
 
 /**
@@ -40,11 +40,11 @@ public class DMBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (object instanceof DMObject) {
 			getController().selectAndFocusObject(object);
 		}

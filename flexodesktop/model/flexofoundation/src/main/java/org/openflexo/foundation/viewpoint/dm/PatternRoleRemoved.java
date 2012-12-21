@@ -28,7 +28,7 @@ public class PatternRoleRemoved extends OEDataModification {
 	private EditionPattern _parent;
 
 	public PatternRoleRemoved(PatternRole patternRole, EditionPattern parent) {
-		super(patternRole, null);
+		super("patternRoles", patternRole, null);
 		_parent = parent;
 	}
 

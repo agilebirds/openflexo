@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -311,11 +312,10 @@ public class PerformanceTest {
 
 	public static void main(String[] args) throws ModelDefinitionException {
 		PerformanceTest test = new PerformanceTest();
-		ModelFactory factory = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelContext mapping = new ModelContext(ModelObject.class);
+		ModelFactory factory = new ModelFactory(mapping);
 		factory.setListImplementationClass(ArrayList.class);
-		ModelFactory factory2 = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelFactory factory2 = new ModelFactory(mapping);
 		factory.setListImplementationClass(Vector.class);
 		test.testModel(new DumbModelRunnable(), factory, factory2);
 		test.testModel(new BuildBasicModelRunnable(), factory, factory2);

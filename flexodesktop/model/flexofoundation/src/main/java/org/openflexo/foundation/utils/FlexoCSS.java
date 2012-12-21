@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -36,7 +36,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class FlexoCSS extends FlexoObject implements StringConvertable<FlexoCSS>, ChoiceList {
+public abstract class FlexoCSS extends KVCFlexoObject implements StringConvertable<FlexoCSS>, ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(FlexoCSS.class.getPackage().getName());
 
