@@ -255,7 +255,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 				Resource emfResource = emfMetaModelResource.getResourceFactory().createResource(
 						URI.createFileURI(aModelFile.getAbsolutePath()));
 				// FIXME Utilisation de fichier FlexoProject
-				emfModelResource = new EMFModelResource(null, aModelFile, emfMetaModelResource, this);
+				emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this);
 
 				EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
 				emfContextManager.registerModel(emfModelResource);

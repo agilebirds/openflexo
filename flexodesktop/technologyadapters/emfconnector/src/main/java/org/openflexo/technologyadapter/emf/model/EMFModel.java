@@ -245,7 +245,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	 */
 	@Override
 	public IFlexoOntologyClass getRootConcept() {
-		return null;
+		return metaModel.getClass("http://www.eclipse.org/emf/2002/Ecore/EObject");
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	 */
 	@Override
 	public List<IFlexoOntology> getImportedOntologies() {
-		return Collections.emptyList();
+		return Collections.singletonList((IFlexoOntology) metaModel);
 	}
 
 	/**

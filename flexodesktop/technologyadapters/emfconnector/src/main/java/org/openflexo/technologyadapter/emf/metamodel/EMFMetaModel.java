@@ -220,7 +220,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public IFlexoOntologyClass getRootConcept() {
-		return getClass("http://");
+		return getClass("http://www.eclipse.org/emf/2002/Ecore/EObject");
 	}
 
 	/**

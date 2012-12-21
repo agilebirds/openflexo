@@ -97,9 +97,9 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @throws InvalidFileNameException
 	 * @throws DuplicateResourceException
 	 */
-	public EMFModelResource(FlexoProject project, File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter)
+	public EMFModelResource(File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter)
 			throws InvalidFileNameException, DuplicateResourceException {
-		super(project);
+		super((FlexoProject) null);
 		this.modelFile = file;
 		this.metaModelResource = metaModelResource;
 		this.adapter = adapter;
@@ -161,7 +161,17 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 */
 	@Override
 	public String getName() {
-		return getProject().getProjectName();
+		return modelFile.getAbsolutePath();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoFileResource#getFile()
+	 */
+	@Override
+	public File getFile() {
+		return modelFile;
 	}
 
 	/**
@@ -173,10 +183,16 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	@Override
 	protected EMFModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
-
-		// Here comes the code to read EMF model from disk
-
-		return null;
+		try {
+			Resource resource = metaModelResource.getResourceFactory().createResource(
+					org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
+			resource.load(null);
+			EMFModelConverter converter = new EMFModelConverter();
+			_resourceData = converter.convertModel(getMetaModel(), resource);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return _resourceData;
 	}
 
 	/**
@@ -213,16 +229,6 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 
 	@Override
 	public EMFModel getModelData() {
-		if (_resourceData == null) {
-			try {
-				Resource resource = metaModelResource.getResourceFactory().createResource(
-						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
-				resource.load(null);
-				_resourceData = new EMFModel(getMetaModel(), new EMFModelConverter(), resource);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		return _resourceData;
 	}
 }
