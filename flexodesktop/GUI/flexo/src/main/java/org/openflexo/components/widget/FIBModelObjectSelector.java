@@ -204,7 +204,9 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	@Override
 	public void delete() {
 		super.delete();
-		pcSupport.firePropertyChange(DELETED, false, true);
+		if (pcSupport != null) {
+			pcSupport.firePropertyChange(DELETED, false, true);
+		}
 		matchingValues.clear();
 		pcSupport = null;
 		selectedObject = null;
