@@ -1486,7 +1486,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		registeredMenuBar.clear();
 		if (PreferencesController.hasInstance()) {
-			PreferencesController.instance().getPreferencesWindow().dispose();
+			PreferencesController.instance().getPreferencesWindow().setVisible(false);
 		}
 		if (flexoFrame != null) {
 			flexoFrame.disposeAll();
