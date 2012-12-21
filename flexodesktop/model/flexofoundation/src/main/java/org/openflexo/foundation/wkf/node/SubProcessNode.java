@@ -193,6 +193,18 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		return getSubProcess() != null;
 	}
 
+	public boolean hasSubProcessReference() {
+		return _subProcess != null;
+	}
+
+	public FlexoProcess getSubProcess(boolean forceLoading) {
+		if (_subProcess != null) {
+			return _subProcess.getObject(forceLoading);
+		} else {
+			return null;
+		}
+	}
+
 	public FlexoProcess getSubProcess() {
 		if (_subProcess != null) {
 			return _subProcess.getObject();

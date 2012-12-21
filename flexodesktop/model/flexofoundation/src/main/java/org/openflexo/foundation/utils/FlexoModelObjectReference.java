@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoStorageResource.ResourceLoadingListener;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -141,12 +142,6 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				this.className = s[2];
 				serializeClassName = true;
 			}
-			if (getResource() == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Resource with id " + resourceIdentifier
-							+ " cannot be found! I doubt I will resolve the following object: " + modelObjectIdentifier);
-				}
-			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RuntimeException e) {
@@ -158,9 +153,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (getReferringProject() != null) {
 			getReferringProject().removeObjectReferences(this);
 		}
-		if (getResource() != null) {
-			getResource().removeResourceLoadingListener(this);
-			getResource().getPropertyChangeSupport().removePropertyChangeListener("name", this);
+		if (getResource(false) != null) {
+			getResource(false).removeResourceLoadingListener(this);
+			getResource(false).getPropertyChangeSupport().removePropertyChangeListener("name", this);
 		}
 		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
@@ -204,8 +199,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource() == null || getResource().isLoaded() && !getResource().getIsLoading()) {
-					if (getResource() == null) {
+				} else if (getResource(force) == null || getResource(force).isLoaded() && !getResource(force).getIsLoading()) {
+					if (getResource(force) == null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
@@ -218,8 +213,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	private O findObject(boolean force) {
-		if (getEnclosingProject() != null) {
-			FlexoXMLStorageResource res = getResource();
+		if (getEnclosingProject(force) != null) {
+			FlexoXMLStorageResource res = getResource(force);
 			if (res == null) {
 				return null;
 			}
@@ -227,21 +222,24 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				res.getResourceData();
 			}
 			if (res.isLoaded() && !res.getIsLoading()) {
-				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
+				return (O) getEnclosingProject(force).findObject(userIdentifier, flexoID);
 			}
 		}
 		return null;
 	}
 
-	public FlexoXMLStorageResource getResource() {
-		if (resourceIdentifier == null || getEnclosingProject() == null) {
+	public FlexoXMLStorageResource getResource(boolean force) {
+		if (resourceIdentifier == null || getEnclosingProject(force) == null) {
 			return null;
 		}
 		if (resource == null) {
-			resource = (FlexoXMLStorageResource) getEnclosingProject().resourceForKey(resourceIdentifier);
-			if (resource != null) {
-				resource.addResourceLoadingListener(this);
-				resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+			FlexoProject enclosingProject = getEnclosingProject(force);
+			if (enclosingProject != null) {
+				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				if (resource != null) {
+					resource.addResourceLoadingListener(this);
+					resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+				}
 			}
 		}
 		return resource;
@@ -255,7 +253,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		return null;
 	}
 
-	private FlexoProject getEnclosingProject() {
+	private FlexoProject getEnclosingProject(boolean force) {
 		if (modelObject != null) {
 			return modelObject.getProject();
 		} else {
@@ -266,7 +264,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 					}
 					ProjectData data = getReferringProject().getProjectData();
 					if (data != null) {
-						return data.getImportedProjectWithURI(enclosingProjectIdentifier);
+						FlexoProjectReference projectReference = data.getProjectReferenceWithURI(enclosingProjectIdentifier);
+						return projectReference.getReferredProject(force);
 					}
 				}
 			} else {
@@ -357,7 +356,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public ReferenceStatus getStatus() {
-		if (getResource() == null && (status == ReferenceStatus.RESOLVED || status == ReferenceStatus.UNRESOLVED)) {
+		if (getResource(false) == null && (status == ReferenceStatus.RESOLVED || status == ReferenceStatus.UNRESOLVED)) {
 			status = ReferenceStatus.RESOURCE_NOT_FOUND;
 		}
 		return status;

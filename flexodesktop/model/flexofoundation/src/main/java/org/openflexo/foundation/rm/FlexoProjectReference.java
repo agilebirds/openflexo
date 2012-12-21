@@ -1,7 +1,6 @@
 package org.openflexo.foundation.rm;
 
 import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Initializer;
@@ -71,11 +70,18 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	 * Returns the referred project, the project to which this reference refers to.
 	 * 
 	 * @return the referred project
-	 * @throws ProjectLoadingCancelledException
-	 *             in case the user cancels the loading of this project.
+	 * 
 	 */
 	@Getter(value = REFERRED_PROJECT, ignoreType = true)
 	public FlexoProject getReferredProject();
+
+	/**
+	 * Returns the referred project, the project to which this reference refers to.
+	 * 
+	 * @return the referred project
+	 * 
+	 */
+	public FlexoProject getReferredProject(boolean tryToLoadIfNotLoaded);
 
 	/**
 	 * Sets the referred project.

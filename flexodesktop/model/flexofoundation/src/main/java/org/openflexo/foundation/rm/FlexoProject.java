@@ -137,7 +137,6 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FixProposal;
@@ -318,6 +317,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoIEBIRTPalette birtPalette;
 
 	private IModuleLoader moduleLoader;
+	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -345,7 +345,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public static interface FlexoProjectReferenceLoader {
 
-		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException;
+		public FlexoProject loadProject(FlexoProjectReference reference);
+
 	}
 
 	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
@@ -420,10 +421,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
+		setProjectReferenceLoader(builder.getProjectReferenceLoader());
 		setResourceCenter(builder.resourceCenterService);
 		setProjectDirectory(builder.projectDirectory);
 		loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
+	}
+
+	private void setProjectReferenceLoader(FlexoProjectReferenceLoader projectReferenceLoader) {
+		this.projectReferenceLoader = projectReferenceLoader;
 	}
 
 	protected FlexoProject(File aProjectDirectory) {
@@ -859,8 +865,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				resourceSaved = true;
 			}
 		} finally {
-			if (resourceSaved || getFlexoRMResource().isModified()) {
+			if (resourceSaved) {
+				// Revision is incremented only if a FlexoStorageResource has been changed. This is allows essentially to track if the
+				// model of the project has changed.
 				revision++;
+			}
+			if (resourceSaved || getFlexoRMResource().isModified()) {
 				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
 				// duplication of flexoID's.
 				writeDotVersion();
@@ -4239,6 +4249,13 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public void removeObjectReferences(FlexoModelObjectReference<?> objectReference) {
 		objectReferences.remove(objectReference);
+	}
+
+	public FlexoProject loadProjectReference(FlexoProjectReference reference) {
+		if (projectReferenceLoader != null) {
+			return projectReferenceLoader.loadProject(reference);
+		}
+		return null;
 	}
 
 }

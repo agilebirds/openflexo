@@ -308,8 +308,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 	@Override
 	public boolean checkIntegrity() {
-		return getSourceReference() != null
-				&& (getModelObject() != null || sourceReference.getResource() != null && sourceReference.getResource().getIsLoading());
+		return getSourceReference() != null;
 	}
 
 	public FlexoModelObject getModelObject() {

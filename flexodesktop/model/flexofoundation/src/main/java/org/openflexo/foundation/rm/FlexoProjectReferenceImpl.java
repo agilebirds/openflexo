@@ -27,6 +27,15 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	}
 
 	@Override
+	public FlexoProject getReferredProject(boolean tryToLoadIfNotLoaded) {
+		FlexoProject project = getReferredProject();
+		if (project == null && tryToLoadIfNotLoaded) {
+			project = getReferringProject().loadProjectReference(this);
+		}
+		return project;
+	}
+
+	@Override
 	public void setReferredProject(FlexoProject project) {
 		if (project != null) {
 			String knownURI = (String) performSuperGetter(URI);
@@ -53,9 +62,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	public String getName() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getProjectName();
-		} else {
-			return (String) performSuperGetter(NAME);
 		}
+		return (String) performSuperGetter(NAME);
 	}
 
 	/**
@@ -65,9 +73,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	public String getURI() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getProjectURI();
-		} else {
-			return (String) performSuperGetter(URI);
 		}
+		return (String) performSuperGetter(URI);
 	}
 
 	/**
@@ -77,9 +84,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	public String getVersion() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getVersion();
-		} else {
-			return (String) performSuperGetter(VERSION);
 		}
+		return (String) performSuperGetter(VERSION);
 	}
 
 	/**
@@ -89,18 +95,16 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	public Long getRevision() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getRevision();
-		} else {
-			return (Long) performSuperGetter(REVISION);
 		}
+		return (Long) performSuperGetter(REVISION);
 	}
 
 	@Override
 	public File getFile() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getProjectDirectory();
-		} else {
-			return (File) performSuperGetter(FILE);
 		}
+		return (File) performSuperGetter(FILE);
 	}
 
 	@Override

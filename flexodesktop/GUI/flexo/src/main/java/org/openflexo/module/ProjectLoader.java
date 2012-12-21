@@ -116,6 +116,15 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		return editors.get(project);
 	}
 
+	public boolean hasEditorForProjectDirectory(File projectDirectory) {
+		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+			if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public FlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
 		return loadProject(projectDirectory, false);
 	}
@@ -163,13 +172,15 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			}
 			for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
 				if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
-					return e.getValue();
+					editor = e.getValue();
 				}
 			}
-			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
-					applicationContext.getResourceCenterService());
-			newEditor(editor);
+			if (editor == null) {
+				editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
+						applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
+						applicationContext.getResourceCenterService());
+				newEditor(editor);
+			}
 			if (!asImportedProject) {
 				addToRootProjects(editor.getProject());
 			}
@@ -423,9 +434,11 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 	}
 
 	private void addToRootProjects(FlexoProject project) {
-		rootProjects.add(project);
-		getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, project);
-		getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, null, project);
+		if (!rootProjects.contains(project)) {
+			rootProjects.add(project);
+			getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, project);
+			getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, null, project);
+		}
 	}
 
 	private void removeFromRootProjects(FlexoProject project) {
