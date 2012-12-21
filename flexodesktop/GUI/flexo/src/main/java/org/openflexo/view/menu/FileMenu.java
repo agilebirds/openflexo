@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -330,24 +331,29 @@ public class FileMenu extends FlexoMenu {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			Cursor c = FileMenu.this._controller.getFlexoFrame().getCursor();
-			FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
-			try {
-				getModuleLoader().saveModifiedProjects();
-			} catch (SaveResourceExceptionList e) {
-				e.printStackTrace();
-				FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
-						FlexoLocalization.localizedForKey("errors_during_saving"));
-			} catch (OperationCancelledException e) {
-				// User pressed cancel.
-				if (logger.isLoggable(Level.FINEST)) {
-					logger.log(Level.FINEST, "Cancelled saving", e);
-				}
-			}
-			FileMenu.this._controller.getFlexoFrame().setCursor(c);
+		public boolean isEnabled() {
+			return getController() != null && getController().getProject() != null;
 		}
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (getController() == null || getController().getProject() == null) {
+				return;
+			}
+			if (ProjectLoader.someResourcesNeedsSaving(getController().getProject())) {
+				Cursor c = FileMenu.this._controller.getFlexoFrame().getCursor();
+				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
+				try {
+					getProjectLoader().saveProjects(Arrays.asList(getController().getProject()));
+				} catch (SaveResourceExceptionList e) {
+					e.printStackTrace();
+					FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
+							FlexoLocalization.localizedForKey("errors_during_saving"));
+				} finally {
+					FileMenu.this._controller.getFlexoFrame().setCursor(c);
+				}
+			}
+		}
 	}
 
 	public class SaveAsProjectItem extends FlexoMenuItem {
