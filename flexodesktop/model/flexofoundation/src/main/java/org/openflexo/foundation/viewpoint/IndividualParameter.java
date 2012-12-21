@@ -27,10 +27,11 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class IndividualParameter extends EditionSchemeParameter {
+public class IndividualParameter extends InnerModelSlotParameter {
 
 	private String conceptURI;
 
@@ -132,6 +133,17 @@ public class IndividualParameter extends EditionSchemeParameter {
 	 */
 	public void setRenderer(String renderer) {
 		this.renderer = renderer;
+	}
+
+	@Override
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		if (returned == null) {
+			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

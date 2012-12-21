@@ -323,4 +323,9 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	public boolean isRootConcept() {
 		return getName().equalsIgnoreCase("EObject");
 	}
+
+	@Override
+	public boolean isOntologyClass() {
+		return true;
+	}
 }

@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
@@ -54,6 +56,10 @@ public class EMFIconLibrary {
 		} else if (EMFObjectIndividual.class.isAssignableFrom(objectClass)) {
 			return EMF_INDIVIDUAL_ICON;
 		} else if (EMFReferenceObjectProperty.class.isAssignableFrom(objectClass)) {
+			return EMF_REFERENCE_ICON;
+		} else if (EMFAttributeDataProperty.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFAttributeObjectProperty.class.isAssignableFrom(objectClass)) {
 			return EMF_ATTRIBUTE_ICON;
 		}
 		logger.warning("No icon for " + objectClass);

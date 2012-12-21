@@ -34,6 +34,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClassClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
@@ -47,6 +48,8 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 
+		actionInitializer.getController().getModuleInspectorController()
+				.loadDirectory(new FileResource("src/main/resources/Inspectors/EMF"));
 	}
 
 	/**

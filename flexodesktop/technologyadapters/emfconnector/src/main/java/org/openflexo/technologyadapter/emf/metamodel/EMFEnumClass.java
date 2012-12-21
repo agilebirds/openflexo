@@ -284,4 +284,10 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 	public boolean isRootConcept() {
 		return false;
 	}
+
+	@Override
+	public boolean isOntologyClass() {
+		return true;
+	}
+
 }

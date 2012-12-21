@@ -16,6 +16,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
@@ -29,6 +30,8 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 
+		actionInitializer.getController().getModuleInspectorController()
+				.loadDirectory(new FileResource("src/main/resources/Inspectors/XSD"));
 	}
 
 	/**

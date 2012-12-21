@@ -299,4 +299,10 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		System.out.println("Property Values can't be modified.");
 		return null;
 	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		return true;
+	}
+
 }

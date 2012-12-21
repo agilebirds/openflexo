@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="uri" localize="true" name="ViewPointURILabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewPointURI" data="data.resource.URI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.resource.version.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="model_version" localize="true" name="OpenflexoVersionLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.resource.modelVersion.toString" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
