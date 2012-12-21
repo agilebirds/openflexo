@@ -29,14 +29,16 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
+import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
@@ -169,6 +171,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 							}
 						}
 					}
+
+					EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+					emfContextManager.registerMetaModel(metaModelResource);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -186,9 +191,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 				}
 			}
 		}
-
-		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
-		emfContextManager.registerMetaModel(metaModelResource);
 
 		return metaModelResource;
 	}
@@ -227,30 +229,40 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * Follow the link.
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelURI(java.io.File,
-	 *      org.openflexo.foundation.resource.FlexoResourceCenter)
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public String retrieveModelURI(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		return retrieveModelResource(aModelFile, technologyContextManager).getURI();
+	public String retrieveModelURI(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		return retrieveModelResource(aModelFile, metaModelResource, technologyContextManager).getURI();
 	}
 
 	/**
-	 * 
 	 * Follow the link.
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelResource(java.io.File,
-	 *      org.openflexo.foundation.resource.FlexoResourceCenter)
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+	public FlexoResource<EMFModel> retrieveModelResource(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource emfModelResource = null;
-		// FIXME TODO
 		if (aModelFile.isFile()) {
-			new EMFModelResource((FlexoProjectBuilder) null);
-		}
+			try {
+				EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
+				Resource emfResource = emfMetaModelResource.getResourceFactory().createResource(
+						URI.createFileURI(aModelFile.getAbsolutePath()));
+				// FIXME Utilisation de fichier FlexoProject
+				emfModelResource = new EMFModelResource(null, aModelFile, emfMetaModelResource, this);
 
-		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
-		emfContextManager.registerModel(emfModelResource);
+				EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+				emfContextManager.registerModel(emfModelResource);
+			} catch (InvalidFileNameException e) {
+				e.printStackTrace();
+			} catch (DuplicateResourceException e) {
+				e.printStackTrace();
+			}
+		}
 
 		return emfModelResource;
 	}

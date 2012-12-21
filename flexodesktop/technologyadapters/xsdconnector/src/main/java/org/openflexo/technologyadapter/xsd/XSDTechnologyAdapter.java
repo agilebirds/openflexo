@@ -116,15 +116,14 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	}
 
 	/**
-	 * Retrieve and return URI for supplied model file
+	 * Follow the link.
 	 * 
-	 * @param aModelFile
-	 * @param rc
-	 *            TODO
-	 * @return
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelURI(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public String retrieveModelURI(File aModelFile, TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+	public String retrieveModelURI(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
+			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -161,14 +160,14 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	}
 
 	/**
-	 * Instantiate new model resource stored in supplied model file
+	 * Follow the link.
 	 * 
-	 * @param aMetaModelFile
-	 * 
-	 * @return
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelResource(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public XMLModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
+			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		logger.warning("Not implemented yet");
 		XMLModelResource xmlModelResource = new XMLModelResource((FlexoProjectBuilder) null);
 

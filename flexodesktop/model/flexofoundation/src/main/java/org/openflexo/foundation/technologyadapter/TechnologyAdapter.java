@@ -110,7 +110,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 *            TODO
 	 * @return
 	 */
-	public abstract String retrieveModelURI(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
+	public abstract String retrieveModelURI(File aModelFile, FlexoResource<MM> metaModelResource,
+			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Instantiate new model resource stored in supplied model file
@@ -121,7 +122,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * 
 	 * @return
 	 */
-	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, FlexoResource<MM> metaModelResource,
+			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Creates new model conform to the supplied meta model

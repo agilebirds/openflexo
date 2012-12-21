@@ -36,6 +36,7 @@ public class TestApplicationContext extends ApplicationContext {
 	}
 
 	public TestApplicationContext(File resourceCenterDirectory) {
+		super();
 		this.resourceCenterDirectory = resourceCenterDirectory;
 		getResourceCenterService().addToResourceCenters(new UserResourceCenter(resourceCenterDirectory));
 	}

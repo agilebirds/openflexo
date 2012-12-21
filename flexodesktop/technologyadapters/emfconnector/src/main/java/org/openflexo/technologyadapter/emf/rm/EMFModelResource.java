@@ -19,9 +19,12 @@
  */
 package org.openflexo.technologyadapter.emf.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 
+import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -34,11 +37,12 @@ import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.io.EMFModelConverter;
 
 /**
  * EMF Model Resource.
@@ -50,6 +54,15 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	/** Logger. */
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class.getPackage()
 			.getName());
+
+	/** Technological Adapter. */
+	protected EMFTechnologyAdapter adapter;
+
+	/** MetaModel Resource. */
+	protected final EMFMetaModelResource metaModelResource;
+
+	/** Model File. */
+	protected final File modelFile;
 
 	/**
 	 * Constructor.
@@ -68,6 +81,9 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 */
 	public EMFModelResource(FlexoProject aProject) {
 		super(aProject);
+		metaModelResource = null;
+		adapter = null;
+		modelFile = null;
 	}
 
 	/**
@@ -75,16 +91,16 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * 
 	 * @param project
 	 * @param newEMFModel
-	 * @param ontologyFile
+	 * @param file
 	 * @throws InvalidFileNameException
 	 * @throws DuplicateResourceException
 	 */
-	public EMFModelResource(FlexoProject project, EMFModel newEMFModel, FlexoProjectFile ontologyFile) throws InvalidFileNameException,
-			DuplicateResourceException {
+	public EMFModelResource(FlexoProject project, File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter)
+			throws InvalidFileNameException, DuplicateResourceException {
 		super(project);
-		_resourceData = newEMFModel;
-		newEMFModel.setFlexoResource(this);
-		this.setResourceFile(ontologyFile);
+		this.modelFile = file;
+		this.metaModelResource = metaModelResource;
+		this.adapter = adapter;
 	}
 
 	/**
@@ -174,30 +190,37 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 
 	@Override
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
+		return adapter;
 	}
 
 	@Override
 	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
-		// TODO Auto-generated method stub
+		if (technologyAdapter instanceof EMFTechnologyAdapter) {
+			adapter = (EMFTechnologyAdapter) technologyAdapter;
+		}
 	}
 
 	@Override
 	public EMFMetaModel getMetaModel() {
-		// TODO Auto-generated method stub
-		return null;
+		return metaModelResource.getMetaModelData();
 	}
 
 	@Override
 	public void setMetaModel(EMFMetaModel aMetaModel) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public EMFModel getModelData() {
-		// TODO Auto-generated method stub
-		return null;
+		if (_resourceData == null) {
+			try {
+				Resource resource = metaModelResource.getResourceFactory().createResource(
+						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
+				resource.load(null);
+				_resourceData = new EMFModel(getMetaModel(), new EMFModelConverter(), resource);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return _resourceData;
 	}
 }
