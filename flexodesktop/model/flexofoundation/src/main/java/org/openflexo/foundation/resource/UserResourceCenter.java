@@ -151,6 +151,18 @@ public class UserResourceCenter implements FlexoResourceCenter {
 		if (oldResource != null) {
 			storage.removeFromResources(oldResource);
 		}
+		if (resource instanceof FlexoFileResource) {
+			File file = ((FlexoFileResource<?>) resource).getFile();
+			if (file != null) {
+				for (FlexoResource<?> r : new ArrayList<FlexoResource<?>>(storage.getResources())) {
+					if (r instanceof FlexoFileResource) {
+						if (((FlexoFileResource<?>) r).getFile().equals(file)) {
+							storage.removeFromResources(r);
+						}
+					}
+				}
+			}
+		}
 		storage.addToResources(resource);
 		saveStorage();
 	}
