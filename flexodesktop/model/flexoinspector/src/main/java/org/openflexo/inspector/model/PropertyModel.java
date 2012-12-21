@@ -20,9 +20,11 @@
 package org.openflexo.inspector.model;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,17 +93,17 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		return hasValueForParameter("staticlist");
 	}
 
-	public Vector getStaticList() {
+	public List<String> getStaticList() {
 		if (hasStaticList()) {
 			String list = getValueForParameter("staticlist");
 			StringTokenizer strTok = new StringTokenizer(list, ",");
-			Vector<String> answer = new Vector<String>();
+			List<String> answer = new ArrayList<String>();
 			while (strTok.hasMoreTokens()) {
 				answer.add(strTok.nextToken());
 			}
 			return answer;
 		} else {
-			return new Vector<String>();
+			return Collections.emptyList();
 		}
 	}
 
@@ -109,21 +111,21 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		return hasValueForParameter("dynamiclist");
 	}
 
-	public Vector getDynamicList(InspectableObject object) {
+	public List<?> getDynamicList(InspectableObject object) {
 		if (hasDynamicList()) {
 			try {
 				String listAccessor = getValueForParameter("dynamiclist");
 				Object currentObject = getObjectForMultipleAccessors(object, listAccessor);
-				if (currentObject instanceof Vector) {
-					return (Vector) currentObject;
+				if (currentObject instanceof List) {
+					return (List) currentObject;
 				} else if (currentObject == null) {
-					return new Vector();
+					return Collections.emptyList();
 				} else {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Succeeded access to " + listAccessor + " but answer is not a Vector but a :"
+						logger.warning("Succeeded access to " + listAccessor + " but answer is not a List but a :"
 								+ currentObject.getClass().getName() + " value=" + currentObject);
 					}
-					return new Vector();
+					return Collections.emptyList();
 				}
 			} catch (Exception e) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -131,10 +133,10 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 							+ e.getMessage());
 				}
 				e.printStackTrace();
-				return new Vector();
+				return Collections.emptyList();
 			}
 		} else {
-			return new Vector();
+			return Collections.emptyList();
 		}
 	}
 

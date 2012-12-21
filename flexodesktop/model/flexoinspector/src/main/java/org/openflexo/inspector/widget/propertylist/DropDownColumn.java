@@ -20,9 +20,8 @@
 package org.openflexo.inspector.widget.propertylist;
 
 import java.awt.Component;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultCellEditor;
@@ -115,7 +114,7 @@ public abstract class DropDownColumn extends AbstractColumn implements EditableC
 
 	protected abstract String renderValue(Object value);
 
-	protected abstract Vector getAvailableValues(InspectableObject object);
+	protected abstract List<?> getAvailableValues(InspectableObject object);
 
 	/**
 	 * Must be overriden if required
@@ -187,14 +186,10 @@ public abstract class DropDownColumn extends AbstractColumn implements EditableC
 
 			protected DropDownComboBoxModel(InspectableObject element) {
 				super();
-				Vector v = getAvailableValues(element);
+				List<?> v = getAvailableValues(element);
 				if (v != null) {
-					for (Enumeration en = v.elements(); en.hasMoreElements();) {
-						addElement(en.nextElement());
-					}
-				} else {
-					for (Enumeration en = getAvailableValues(element).elements(); en.hasMoreElements();) {
-						addElement(en.nextElement());
+					for (Object o : v) {
+						addElement(o);
 					}
 				}
 			}
