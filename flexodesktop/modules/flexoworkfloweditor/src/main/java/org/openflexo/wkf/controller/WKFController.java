@@ -45,6 +45,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
@@ -178,9 +179,21 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	@Override
 	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		if (from != null && from.getProject() != null) {
+			manager.removeListener(FlexoProject.RESOURCES, this, from.getProject());
+			if (from.getProject().getProjectData() != null) {
+				manager.removeListener(ProjectData.IMPORTED_PROJECTS, this, from.getProject().getProjectData());
+			}
+		}
 		super.updateEditor(from, to);
-		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
-		_roleListBrowser.setRootObject(to != null && to.getProject() != null ? to.getProject().getWorkflow().getRoleList() : null);
+		if (to != null && to.getProject() != null) {
+			manager.removeListener(FlexoProject.RESOURCES, this, to.getProject());
+			if (to.getProject().getProjectData() != null) {
+				manager.removeListener(ProjectData.IMPORTED_PROJECTS, this, to.getProject().getProjectData());
+			}
+		}
+		getWorkflowBrowser().setRootObject(getProject());
+		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow().getRoleList() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
 		ROLE_EDITOR_PERSPECTIVE.setProject(getProject());
 	}
@@ -760,6 +773,17 @@ public class WKFController extends FlexoController implements PrintManagingContr
 				notifyEdgeRepresentationChanged();
 			} else if (propertyName.equals(WKFPreferences.CONNECTOR_ADJUSTABILITY)) {
 				notifyEdgeRepresentationChanged();
+			}
+		} else if (evt.getSource() == getProject()) {
+			if (evt.getPropertyName().equals(FlexoProject.RESOURCES)) {
+				if (evt.getNewValue() != null && evt.getNewValue() == getProject().getProjectDataResource()) {
+					manager.new PropertyChangeListenerRegistration(ProjectData.IMPORTED_PROJECTS, this, getProject().getProjectData());
+				}
+			}
+		} else if (getProject() != null && evt.getSource() == getProject().getProjectData()) {
+			if (evt.getPropertyName().equals(ProjectData.IMPORTED_PROJECTS)) {
+				PROCESS_EDITOR_PERSPECTIVE.updateMiddleLeftView();
+				ROLE_EDITOR_PERSPECTIVE.updateMiddleLeftView();
 			}
 		} else {
 			super.propertyChange(evt);

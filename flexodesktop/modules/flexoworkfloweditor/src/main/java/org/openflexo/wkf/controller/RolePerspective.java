@@ -146,7 +146,7 @@ public class RolePerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	private void updateMiddleLeftView() {
+	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
 			setMiddleLeftView(importedRoleView.getResultingJComponent());
 		} else {

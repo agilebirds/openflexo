@@ -157,7 +157,7 @@ public class ProcessPerspective extends FlexoPerspective {
 		}
 	}
 
-	private void updateMiddleLeftView() {
+	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
 			setMiddleLeftView(importedWorkflowView.getResultingJComponent());
 		} else {
