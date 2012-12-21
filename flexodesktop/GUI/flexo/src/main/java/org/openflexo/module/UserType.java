@@ -49,6 +49,8 @@ public abstract class UserType extends FlexoObject {
 
 	private static UserType currentUserType = null;
 
+	public static final Lite LITE = new Lite();
+
 	public static final Developer DEVELOPER = new Developer();
 
 	public static final Analyst ANALYST = new Analyst();
@@ -61,7 +63,7 @@ public abstract class UserType extends FlexoObject {
 
 	public static final SemanticsPlusUser SEMANTICS_PLUS_USER = new SemanticsPlusUser();
 
-	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER, SEMANTICS_USER, SEMANTICS_PLUS_USER };
+	private static final UserType[] knownUserType = { LITE, CUSTOMER, ANALYST, DEVELOPER, MAINTAINER, SEMANTICS_USER, SEMANTICS_PLUS_USER };
 
 	private Vector<DocItemFolder> documentationFolders = null;
 
@@ -164,6 +166,9 @@ public abstract class UserType extends FlexoObject {
 		if (SEMANTICS_PLUS_USER.getName().equalsIgnoreCase(userTypeName)) {
 			return SEMANTICS_PLUS_USER;
 		}
+		if (LITE.getName().equalsIgnoreCase(userTypeName)) {
+			return LITE;
+		}
 		if (MAINTAINER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
 		}
@@ -181,6 +186,9 @@ public abstract class UserType extends FlexoObject {
 		}
 		if (SEMANTICS_PLUS_USER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return SEMANTICS_PLUS_USER;
+		}
+		if (LITE.getIdentifier().equalsIgnoreCase(userTypeName)) {
+			return LITE;
 		}
 		return MAINTAINER;
 	}
@@ -478,6 +486,46 @@ public abstract class UserType extends FlexoObject {
 		@Override
 		public ImageIcon getIconImage() {
 			return IconLibrary.ENTERPRISE_32_ICON;
+		}
+
+	}
+
+	public static class Lite extends UserType {
+		@Override
+		public String getName() {
+			return "lite";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "LITE";
+		}
+
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.WKF_MODULE, Module.DE_MODULE);
+		}
+
+		@Override
+		protected void addModelItems() {
+			addModelItems(Inspectors.COMMON);
+			addModelItems(Inspectors.WKF);
+			addModelItems(Inspectors.DE);
+		}
+
+		@Override
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
+			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
+		}
+
+		@Override
+		public String getBusinessName2() {
+			return "Lite edition";
+		}
+
+		@Override
+		public ImageIcon getIconImage() {
+			return IconLibrary.BUSINESS_32_ICON;
 		}
 
 	}
