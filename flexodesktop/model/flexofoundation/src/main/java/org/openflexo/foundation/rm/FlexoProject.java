@@ -200,6 +200,7 @@ import org.openflexo.xmlcode.XMLMapping;
 public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
+	private static final String PROJECT_DATA = "projectData";
 	private static final String REVISION = "revision";
 	private static final String VERSION = "version";
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
@@ -3953,6 +3954,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			try {
 				returned = new FlexoPamelaResource<ProjectData>(this, ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
 				registerResource(returned);
+				getPropertyChangeSupport().firePropertyChange(PROJECT_DATA, null, returned.getResourceData());
 			} catch (Exception e1) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
