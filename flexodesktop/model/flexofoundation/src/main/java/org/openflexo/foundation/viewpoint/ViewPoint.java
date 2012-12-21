@@ -62,6 +62,12 @@ import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPoint extends ViewPointObject {
 
+	private static final String URI_XML_ATTRIBUTE_NAME = "uri";
+
+	private static final String VIEW_POINT_ELEMENT_XML_TAG = "ViewPoint";
+
+	private static final String VIEWPOINT_DIRECTORY_EXTENSION = ".viewpoint";
+
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
 	// TODO: We must find a better solution
@@ -90,10 +96,25 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
-	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
+	public static File getViewPointFile(File viewPointDirectory) {
+		return new File(viewPointDirectory, getViewPointBaseName(viewPointDirectory) + ".xml");
+	}
 
-		String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
-		File xmlFile = new File(viewpointDirectory, baseName + ".xml");
+	public static String getViewPointBaseName(File viewPointDirectory) {
+		return viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - VIEWPOINT_DIRECTORY_EXTENSION.length());
+	}
+
+	public static String getURI(File viewpointDirectory) throws JDOMException, IOException {
+		File viewPointFile = getViewPointFile(viewpointDirectory);
+		Document document = readXMLFile(viewPointFile);
+		Element element = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
+		return element.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
+	}
+
+	public static ViewPoint openViewPoint(File viewPointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
+
+		String baseName = getViewPointBaseName(viewPointDirectory);
+		File xmlFile = getViewPointFile(viewPointDirectory);
 
 		if (xmlFile.exists()) {
 
@@ -102,7 +123,7 @@ public class ViewPoint extends ViewPointObject {
 			FileInputStream inputStream = null;
 			try {
 				ViewPointBuilder builder = new ViewPointBuilder(viewPointOntology);
-				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewpointDirectory);
+				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 				inputStream = new FileInputStream(xmlFile);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Reading file " + xmlFile.getAbsolutePath());
@@ -112,7 +133,7 @@ public class ViewPoint extends ViewPointObject {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
 				}
-				returned.init(baseName, viewpointDirectory, xmlFile, library, viewPointOntology, folder);
+				returned.init(baseName, viewPointDirectory, xmlFile, library, viewPointOntology, folder);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -186,9 +207,9 @@ public class ViewPoint extends ViewPointObject {
 		try {
 			logger.fine("Try to find ontology for viewpoint" + viewPointFile);
 			document = readXMLFile(viewPointFile);
-			Element root = getElement(document, "ViewPoint");
+			Element root = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
 			owlFile = new File(viewPointFile.getParent(), root.getAttributeValue("owlFile"));
-			viewPointURI = root.getAttributeValue("uri");
+			viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -227,18 +248,18 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static Element getElement(Document document, String name) {
-		Iterator it = document.getDescendants(new ElementFilter(name));
+		Iterator<Element> it = document.getDescendants(new ElementFilter(name));
 		if (it.hasNext()) {
-			return (Element) it.next();
+			return it.next();
 		} else {
 			return null;
 		}
 	}
 
 	private static Element getElement(Element from, String name) {
-		Iterator it = from.getDescendants(new ElementFilter(name));
+		Iterator<Element> it = from.getDescendants(new ElementFilter(name));
 		if (it.hasNext()) {
-			return (Element) it.next();
+			return it.next();
 		} else {
 			return null;
 		}
