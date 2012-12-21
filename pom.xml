@@ -698,6 +698,12 @@
 			<!-- packaging -->
 			<dependency>
 				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexolite</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
 				<artifactId>flexobusiness</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>
