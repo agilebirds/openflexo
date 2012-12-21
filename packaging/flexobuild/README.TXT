@@ -10,3 +10,4 @@ To create a new packaging, you need to set up the followings:
   described above (userType, productSuffix (for Licence path), and maven.artifact.id (must match your pom.xml artifcatId))
 * In build.xml create a new target "package${userType}" and invoke it from target "package" in build.xml of project packaging/flexobuild
 * In the pom.xml file of packaging/flexobuild, add a dependency towards the pom of your new module
+* In the pom.xml file of openflexo, add the version dependency number of your new module (your should normally have a version equal to ${project.version}, literally)
