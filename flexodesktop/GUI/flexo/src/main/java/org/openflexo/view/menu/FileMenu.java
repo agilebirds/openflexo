@@ -117,7 +117,8 @@ public class FileMenu extends FlexoMenu {
 			add(saveAsProjectItem = new SaveAsProjectItem());
 			add(saveProjectForServerItem = new SaveProjectForServerItem());
 			add(sendProjectToFlexoServerItem = new SendProjectToFlexoServerItem());
-			add(reloadProjectItem = new ReloadProjectItem());
+			// TODO: repair reload project. this includes to also support close project.
+			// add(reloadProjectItem = new ReloadProjectItem());
 			addSeparator();
 			if (addImportItems()) {
 				add(importMenu);
