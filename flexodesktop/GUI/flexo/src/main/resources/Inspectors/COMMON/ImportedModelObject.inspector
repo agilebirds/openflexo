@@ -2,11 +2,13 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="flexo_id" localize="true" name="FlexoIDLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="1" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="FlexoID" readOnly="true" localize="true">
+      <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField index="1" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="FlexoID" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" />
+      <Label label="custom_properties" align="center" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" name="CustomPropertiesLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="CustomProperties" index="7" data="data.customProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" />
@@ -16,9 +18,9 @@
       </Table>
     </Tab>
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="3" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true" />
-      <Label label="description" localize="true" name="DescriptionLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <Label label="name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="3" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true" />
+      <Label label="description" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="DescriptionLabel" localize="true" />
       <HTMLEditor index="5" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)" name="Description" localize="true">
         <Line1Option index="0" name="ParagraphFormatComboBox" />
         <Line1Option index="1" name="TextEffectPanel" />
@@ -39,7 +41,7 @@
         <Line1Option index="5" name="MiscPanel" />
         <Line1Option index="17" name="MiscPanel.InsertImage" />
       </HTMLEditor>
-      <Label label="business_description" localize="true" name="BusinessDescriptionLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.businessDescription != null)" />
+      <Label label="business_description" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.businessDescription != null)" name="BusinessDescriptionLabel" localize="true" />
       <HTMLEditor index="7" data="data.businessDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;location=right)" visible="(data.businessDescription != null)" name="BusinessDescription" localize="true">
         <Line1Option index="0" name="ParagraphFormatComboBox" />
         <Line1Option index="1" name="TextEffectPanel" />
@@ -60,7 +62,7 @@
         <Line1Option index="5" name="MiscPanel" />
         <Line1Option index="17" name="MiscPanel.InsertImage" />
       </HTMLEditor>
-      <Label label="technical_description" localize="true" name="TechnicalDescriptionLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(data.technicalDescription != null)" />
+      <Label label="technical_description" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(data.technicalDescription != null)" name="TechnicalDescriptionLabel" localize="true" />
       <HTMLEditor index="9" data="data.technicalDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)" visible="(data.technicalDescription != null)" name="TechnicalDescription" localize="true">
         <Line1Option index="0" name="ParagraphFormatComboBox" />
         <Line1Option index="1" name="TextEffectPanel" />
@@ -81,7 +83,7 @@
         <Line1Option index="5" name="MiscPanel" />
         <Line1Option index="17" name="MiscPanel.InsertImage" />
       </HTMLEditor>
-      <Label label="user_manual_description" localize="true" name="UserManualDescriptionLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.userManualDescription != null)" />
+      <Label label="user_manual_description" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.userManualDescription != null)" name="UserManualDescriptionLabel" localize="true" />
       <HTMLEditor index="11" data="data.userManualDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;location=right)" visible="(data.userManualDescription != null)" name="UserManualDescription" localize="true">
         <Line1Option index="0" name="ParagraphFormatComboBox" />
         <Line1Option index="1" name="TextEffectPanel" />
@@ -131,4 +133,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="ImportedModelObject" />
 </Panel>
-
