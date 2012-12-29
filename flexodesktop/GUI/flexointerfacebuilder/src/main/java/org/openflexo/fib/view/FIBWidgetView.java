@@ -436,8 +436,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
+				componentEnabled = true;
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+				componentEnabled = true;
 			}
 		}
 		return componentEnabled;

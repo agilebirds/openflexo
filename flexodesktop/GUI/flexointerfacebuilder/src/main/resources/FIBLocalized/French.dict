@@ -3,6 +3,7 @@ arithmetic=Arithm\u00E9tique
 boolean=Bool\u00E9en
 cancel=Annuler
 cannot_evaluate=\u00C9valuation impossible
+cannot_parse=Impossible de parcourir
 choose=Choisir
 comparison=Comparaison
 connect=Connecter

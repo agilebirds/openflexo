@@ -140,6 +140,14 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			e.printStackTrace();
 			logger.info("Caused by:");
 			e.getTargetException().printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			Method m = getMethodDefinition().getMethod();
+			System.out.println("j'ai mon pb");
+			System.out.println("getMethodDefinition()=" + getMethodDefinition());
+			System.out.println("getMethodDefinition().getMethod()=" + getMethodDefinition().getMethod());
+
+			// System.exit(-1);
 		}
 		return null;
 

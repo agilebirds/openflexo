@@ -512,7 +512,15 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
-			getComponent().getSelected().setBindingValue(selectedObject, getController());
+			try {
+				getComponent().getSelected().setBindingValue(selectedObject, getController());
+			} catch (TypeMismatchException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		updateFont();

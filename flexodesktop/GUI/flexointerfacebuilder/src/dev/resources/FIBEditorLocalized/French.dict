@@ -42,6 +42,7 @@ ENUM=ENUM
 English=Anglais
 French=Fran\u00E7ais
 LITERAL=[LITTERAL]
+NullReferenceException=NullReferenceException
 Preferences=Pr\u00E9f\u00E9rences
 RECTANGLE=RECTANGLE
 STRING=[CHAINE DE CARACTERES]

@@ -489,8 +489,14 @@ public class BindingValue extends Expression {
 		if (getDataBinding() != null && getParsedBindingPath().size() > 0
 				&& getParsedBindingPath().get(0) instanceof NormalBindingPathElement) {
 			// Seems to be valid
-			bindingVariable = dataBinding.getOwner().getBindingModel()
-					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
+			try {
+				System.out.println("dataBinding.getOwner().getBindingModel()=" + dataBinding.getOwner().getBindingModel());
+				bindingVariable = dataBinding.getOwner().getBindingModel()
+						.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
+			} catch (NullPointerException e) {
+				System.out.println("Je tiens mon pb");
+				System.out.println("Je tiens mon pb");
+			}
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
 			if (bindingVariable == null) {
@@ -554,6 +560,9 @@ public class BindingValue extends Expression {
 		if (isValid()) {
 			Object current = context.getValue(getBindingVariable());
 			for (BindingPathElement e : getBindingPath()) {
+				if (current == null) {
+					throw new NullReferenceException();
+				}
 				current = e.getBindingValue(current, context);
 			}
 			return current;

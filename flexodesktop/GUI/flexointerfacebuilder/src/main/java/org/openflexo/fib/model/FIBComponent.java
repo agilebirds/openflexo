@@ -38,10 +38,6 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.expr.BindingValue;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -740,8 +736,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setVisible(DataBinding<Boolean> visible) {
 		if (visible != null) {
-			visible.setOwner(this);
-			visible.setBindingDefinition(VISIBLE);
+			visible = new DataBinding<Boolean>(visible.getUnparsedBinding(), this, Boolean.class, BindingDefinitionType.GET);
 		}
 		this.visible = visible;
 	}
@@ -1337,7 +1332,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			return;
 		}
 
-		List<BindingValue> primitives;
+		/*List<BindingValue> primitives;
 		try {
 			primitives = Expression.extractBindingValues(binding.getExpression());
 
@@ -1352,14 +1347,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 							for (BindingValue p : primitives) {
 								String primitiveValue = p.getVariableName();
 								if (primitiveValue != null && primitiveValue.startsWith(data)) {
-									// try {
 									declareDependantOf(next);
-									/*} catch (DependancyLoopException e) {
-										logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
-												+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
-												+ primitiveValue + " component: " + component + " dependancy: " + next + " data: "
-												+ data + " message: " + e.getMessage());
-									}*/
 								}
 							}
 
@@ -1370,14 +1358,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 							String primitiveValue = p.getVariableName();
 							if (primitiveValue != null && StringUtils.isNotEmpty(next.getName())
 									&& primitiveValue.startsWith(next.getName())) {
-								// try {
 								declareDependantOf(next);
-								/*} catch (DependancyLoopException e) {
-									logger.warning("DependancyLoopException raised while declaring dependancy (name lookup)"
-											+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
-											+ primitiveValue + " component: " + component + " dependancy: " + next + " message: "
-											+ e.getMessage());
-								}*/
 							}
 						}
 					}
@@ -1390,7 +1371,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		} catch (TypeMismatchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 

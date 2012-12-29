@@ -312,17 +312,18 @@ public class FIBCustom extends FIBWidget {
 			if (custom != null && variable != null) {
 				variable.decode();
 			}
-			if (variable.isValid()) {
+			System.out.println("Un truc a faire ici ???");
+			/*if (variable.isValid()) {
 				VALUE.setType(variable.getAnalyzedType());
 				if (value != null) {
 					value.setBindingDefinition(VALUE);
 				}
-			}
+			}*/
 		}
 
 		public DataBinding<Object> getValue() {
 			if (value == null) {
-				value = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+				value = new DataBinding<Object>(getCustom(), Object.class, BindingDefinitionType.GET);
 			}
 			return value;
 		}

@@ -111,7 +111,7 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 			if (returned == null) {
 				return false;

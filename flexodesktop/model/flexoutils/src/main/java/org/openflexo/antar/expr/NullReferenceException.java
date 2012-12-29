@@ -52,7 +52,12 @@ public class NullReferenceException extends TransformException {
 
 	@Override
 	public String getLocalizedMessage() {
-		return FlexoLocalization.localizedForKeyWithParams("NullReferenceException_on_operator_($0)", concernedOperator.getLocalizedName());
+		if (concernedOperator != null) {
+			return FlexoLocalization.localizedForKeyWithParams("NullReferenceException_on_operator_($0)",
+					concernedOperator.getLocalizedName());
+		} else {
+			return FlexoLocalization.localizedForKey("NullReferenceException");
+		}
 	}
 
 	public String getHTMLLocalizedMessage() {
