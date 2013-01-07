@@ -30,6 +30,7 @@ package org.openflexo.technologyadapter.emf.metamodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -37,6 +38,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
@@ -289,7 +291,16 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	@Override
 	@Deprecated
 	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		return Collections.emptySet();
+		Set<IFlexoOntologyFeature> result = new HashSet<IFlexoOntologyFeature>();
+		for (EAttribute attribute : object.getEAttributes()) {
+			result.add(ontology.getConverter().convertAttributeProperty(ontology, attribute));
+		}
+		for (EReference reference : object.getEReferences()) {
+			result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
+		}
+		for (EOperation operation : object.getEOperations()) {
+		}
+		return result;
 	}
 
 	/**
@@ -324,6 +335,12 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 		return getName().equalsIgnoreCase("EObject");
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyClass()
+	 */
 	@Override
 	public boolean isOntologyClass() {
 		return true;

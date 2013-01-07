@@ -285,6 +285,12 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 		return false;
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyClass()
+	 */
 	@Override
 	public boolean isOntologyClass() {
 		return true;

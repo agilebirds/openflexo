@@ -120,8 +120,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	@Override
 	@Deprecated
 	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
+		return getName();
 	}
 
 	/**

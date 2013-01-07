@@ -27,6 +27,8 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFEnumClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFEnumIndividual;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -42,6 +44,8 @@ public class EMFIconLibrary {
 	public static final ImageIconResource ECORE_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
 	public static final ImageIconResource EMF_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
 	public static final ImageIconResource EMF_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/EClass.gif");
+	public static final ImageIconResource EMF_ENUM_ICON = new ImageIconResource("src/main/resources/Icons/EEnum.gif");
+	public static final ImageIconResource EMF_ENUM_LITERAL_ICON = new ImageIconResource("src/main/resources/Icons/EEnumLiteral.gif");
 	public static final ImageIconResource EMF_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/EObject.gif");
 	public static final ImageIconResource EMF_REFERENCE_ICON = new ImageIconResource("src/main/resources/Icons/EReference.gif");
 	public static final ImageIconResource EMF_ATTRIBUTE_ICON = new ImageIconResource("src/main/resources/Icons/EAttribute.gif");
@@ -53,6 +57,10 @@ public class EMFIconLibrary {
 			return EMF_FILE_ICON;
 		} else if (EMFClassClass.class.isAssignableFrom(objectClass)) {
 			return EMF_CLASS_ICON;
+		} else if (EMFEnumClass.class.isAssignableFrom(objectClass)) {
+			return EMF_ENUM_ICON;
+		} else if (EMFEnumIndividual.class.isAssignableFrom(objectClass)) {
+			return EMF_ENUM_LITERAL_ICON;
 		} else if (EMFObjectIndividual.class.isAssignableFrom(objectClass)) {
 			return EMF_INDIVIDUAL_ICON;
 		} else if (EMFReferenceObjectProperty.class.isAssignableFrom(objectClass)) {

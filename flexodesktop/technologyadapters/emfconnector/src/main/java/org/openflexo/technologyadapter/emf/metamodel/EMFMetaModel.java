@@ -33,13 +33,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
@@ -103,8 +104,9 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
 	 */
 	@Override
+	@Deprecated
 	public String getFullyQualifiedName() {
-		return "EMFMetaModel." + getURI();
+		return getURI();
 	}
 
 	/**
@@ -220,7 +222,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public IFlexoOntologyClass getRootConcept() {
-		return getClass("http://www.eclipse.org/emf/2002/Ecore/EObject");
+		return getClass(EcorePackage.eNS_URI + "/" + EObject.class.getSimpleName());
 	}
 
 	/**
@@ -239,12 +241,8 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer#getSubContainers()
 	 */
 	@Override
-	public List<IFlexoOntologyContainer> getSubContainers() {
-		List<IFlexoOntologyContainer> result = new ArrayList<IFlexoOntologyContainer>();
-		for (IFlexoOntologyContainer container : converter.getPackages().values()) {
-			result.add(container);
-		}
-		return result;
+	public List<EMFPackageContainer> getSubContainers() {
+		return Collections.singletonList(converter.convertPackage(this, ePackage));
 	}
 
 	/**
@@ -281,7 +279,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public IFlexoOntologyConcept getDeclaredOntologyObject(String objectURI) {
-		return getOntologyObject(objectURI);
+		return null;
 	}
 
 	/**
@@ -374,7 +372,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public IFlexoOntologyClass getDeclaredClass(String classURI) {
-		return getClass(classURI);
+		return null;
 	}
 
 	/**
@@ -424,7 +422,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public IFlexoOntologyIndividual getDeclaredIndividual(String individualURI) {
-		return getIndividual(individualURI);
+		return null;
 	}
 
 	/**

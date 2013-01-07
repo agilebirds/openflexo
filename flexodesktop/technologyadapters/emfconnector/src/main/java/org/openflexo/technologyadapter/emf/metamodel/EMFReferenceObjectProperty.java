@@ -232,8 +232,7 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	public IFlexoOntologyConcept getDomain() {
-		// TODO Auto-generated method stub
-		return null;
+		return ontology.getConverter().convertClass(ontology, object.getEContainingClass());
 	}
 
 	/**
