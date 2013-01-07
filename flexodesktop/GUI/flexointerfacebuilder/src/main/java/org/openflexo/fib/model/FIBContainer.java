@@ -321,7 +321,7 @@ public abstract class FIBContainer extends FIBComponent {
 			};
 		});
 
-		Vector<FIBComponent> iterableSubComponents = new Vector<FIBComponent>();
+		List<FIBComponent> iterableSubComponents = new ArrayList<FIBComponent>();
 		for (FIBComponent c : subComponents) {
 			if (c.getIndex() > -1) {
 				iterableSubComponents.add(c);
