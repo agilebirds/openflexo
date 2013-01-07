@@ -236,7 +236,7 @@ public class FlexoResourceManager {
 					logger.fine("Found external repository " + repository + " DISCONNECTED, deactivate resources");
 				}
 				for (FlexoResource<?> resource : repository.getRelatedResources()) {
-					resource.desactivate();
+					resource.deactivate();
 				}
 			} else {
 				if (logger.isLoggable(Level.FINE)) {
