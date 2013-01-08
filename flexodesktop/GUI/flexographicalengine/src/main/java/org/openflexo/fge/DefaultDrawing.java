@@ -81,11 +81,23 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 	private DrawingTreeNode<M> _root;
 	private M model;
 
+	private boolean editable = true;
+
 	public DefaultDrawing(M aModel) {
 		model = aModel;
 		_hashMap = new Hashtable<Object, DrawingTreeNode<?>>();
 		_root = new DrawingTreeNode<M>(model, null);
 		_hashMap.put(model, _root);
+	}
+
+	@Override
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+
 	}
 
 	public <O> void updateDrawable(O aDrawable) {

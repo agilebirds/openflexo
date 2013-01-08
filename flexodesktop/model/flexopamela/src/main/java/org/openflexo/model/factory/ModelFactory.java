@@ -63,6 +63,7 @@ public class ModelFactory {
 			super.setSuperclass(implementingClass);
 			Class<?>[] interfaces = { modelEntity.getImplementedInterface() };
 			setInterfaces(interfaces);
+
 		}
 
 		public Class<?> getOverridingSuperClass() {

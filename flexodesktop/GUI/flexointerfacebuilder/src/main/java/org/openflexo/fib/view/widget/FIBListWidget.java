@@ -56,11 +56,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		if (model.getRowHeight() != null) {
 			_list.setFixedCellHeight(model.getRowHeight());
 		}
-
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
-
 		_list.addFocusListener(this);
-
 		_list.setBorder(BorderFactory.createEtchedBorder());
 
 		// _list.setMinimumSize(new Dimension(60,60));
@@ -69,7 +66,6 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		_list.repaint();
 
 		updateListModelWhenRequired();
-
 		updateFont();
 	}
 

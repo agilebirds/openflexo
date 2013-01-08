@@ -559,7 +559,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (returned != null) {
 			return returned;
 		} else {
-			Object defaultValue = property.getDefaultValue();
+			Object defaultValue;
+			try {
+				defaultValue = property.getDefaultValue(getModelFactory());
+			} catch (InvalidDataException e) {
+				throw new ModelExecutionException("Invalid default value '" + property.getGetter().defaultValue() + "' for property "
+						+ property + " with type " + property.getType(), e);
+			}
 			if (defaultValue != null) {
 				values.put(property.getPropertyIdentifier(), defaultValue);
 				return defaultValue;

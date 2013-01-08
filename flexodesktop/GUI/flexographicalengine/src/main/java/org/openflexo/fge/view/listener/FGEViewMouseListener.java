@@ -76,54 +76,57 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 		}
 		previousEvent = e;
-
+		boolean editable = getController().getDrawing().isEditable();
 		switch (getController().getCurrentTool()) {
 		case SelectionTool:
 
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
-
-			if (getController().hasEditedLabel()) {
-				if (handleEventForEditedLabel(e, focusedObject)) {
-					return;
-					// return;
-				}
-			}
-
-			if (focusedObject != null && getFocusRetriever().focusOnFloatingLabel(focusedObject, e) && getController().hasEditedLabel()
-					&& getController().getEditedLabel().getGraphicalRepresentation() == focusedObject) {
-				// Special case, do nothing, since we let the label live its life !!!
-				e.consume();
-				return;
-			}
-
-			if (focusedObject != null && e.getClickCount() == 2 && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
-				if (focusedObject instanceof ShapeGraphicalRepresentation) {
-					view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView().startEdition();
-					e.consume();
-					return;
-				} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
-					view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
-							.startEdition();
-					e.consume();
-					return;
-				}
-			}
-
-			if (focusedObject != null) {
-				ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
-				if (ca != null && ca.isClickable()) {
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Click on control area " + ca);
+			editable &= focusedObject != null && !focusedObject.getIsReadOnly();
+			if (editable) {
+				if (getController().hasEditedLabel()) {
+					if (handleEventForEditedLabel(e, focusedObject)) {
+						return;
+						// return;
 					}
-					Point clickedLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(),
-							view.getDrawingView());
-					FGEPoint clickedPoint = ca.getGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(
-							clickedLocationInDrawingView, view.getDrawingView().getGraphicalRepresentation(),
-							view.getDrawingView().getScale());
-					if (ca.clickOnPoint(clickedPoint, e.getClickCount())) {
-						// Event was successfully handled
+				}
+
+				if (focusedObject != null && getFocusRetriever().focusOnFloatingLabel(focusedObject, e) && getController().hasEditedLabel()
+						&& getController().getEditedLabel().getGraphicalRepresentation() == focusedObject) {
+					// Special case, do nothing, since we let the label live its life !!!
+					e.consume();
+					return;
+				}
+
+				if (focusedObject != null && e.getClickCount() == 2 && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
+					if (focusedObject instanceof ShapeGraphicalRepresentation) {
+						view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.startEdition();
 						e.consume();
 						return;
+					} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
+						view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.startEdition();
+						e.consume();
+						return;
+					}
+				}
+
+				if (focusedObject != null) {
+					ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
+					if (ca != null && ca.isClickable()) {
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Click on control area " + ca);
+						}
+						Point clickedLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(),
+								view.getDrawingView());
+						FGEPoint clickedPoint = ca.getGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(
+								clickedLocationInDrawingView, view.getDrawingView().getGraphicalRepresentation(),
+								view.getDrawingView().getScale());
+						if (ca.clickOnPoint(clickedPoint, e.getClickCount())) {
+							// Event was successfully handled
+							e.consume();
+							return;
+						}
 					}
 				}
 			}
@@ -138,7 +141,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 			// We have now performed all low-level possible actions, let's go for the registered mouse controls
 			for (MouseClickControl mouseClickControl : focusedObject.getMouseClickControls()) {
-				if (mouseClickControl.isApplicable(focusedObject, getController(), e)) {
+				if ((editable || !mouseClickControl.isModelEditionAction())
+						&& mouseClickControl.isApplicable(focusedObject, getController(), e)) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Applying " + mouseClickControl);
 					}
@@ -153,8 +157,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			break;
 
 		case DrawShapeTool:
-
-			getController().getDrawShapeToolController().mouseClicked(e);
+			if (editable) {
+				getController().getDrawShapeToolController().mouseClicked(e);
+			}
 
 		default:
 			break;
@@ -248,7 +253,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					e);
 		}
 
-		private void stopDragging(GraphicalRepresentation focusedGR) {
+		private void stopDragging(GraphicalRepresentation<?> focusedGR) {
 			controlArea.stopDragging(getController(), focusedGR);
 		}
 	}
@@ -308,46 +313,45 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
-
+		boolean editable = getController().getDrawing().isEditable();
 		GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 
 		if (focusedObject == null) {
 			focusedObject = graphicalRepresentation.getDrawing().getDrawingGraphicalRepresentation();
 		}
+		editable &= !focusedObject.getIsReadOnly();
 
-		if (getController().hasEditedLabel()) {
-			if (handleEventForEditedLabel(e, focusedObject)) {
-				// Special case, do nothing, since we let the label live its life !!!
-				return;
-			}
-		}
-		getController().stopEditionOfEditedLabelIfAny();
-		if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
-			currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
-					e.getPoint(), view.getDrawingView()));
-			e.consume();
-			return;
-		} else {
-			ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
-			if (ca != null && ca.isDraggable()) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Starting drag of control point " + ca);
+		if (editable) {
+			if (getController().hasEditedLabel()) {
+				if (handleEventForEditedLabel(e, focusedObject)) {
+					// Special case, do nothing, since we let the label live its life !!!
+					return;
 				}
-				currentControlAreaDrag = new ControlAreaDrag(ca, e);
+			}
+			getController().stopEditionOfEditedLabelIfAny();
+			if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
+				currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
+						e.getPoint(), view.getDrawingView()));
 				e.consume();
 				return;
+			} else {
+				ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
+				if (ca != null && ca.isDraggable()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Starting drag of control point " + ca);
+					}
+					currentControlAreaDrag = new ControlAreaDrag(ca, e);
+					e.consume();
+					return;
+				}
 			}
-		}
-
-		if (view.isDeleted()) {
-			return;
 		}
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
 		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
 		for (MouseDragControl mouseDragControl : focusedObject.getMouseDragControls()) {
-			if (mouseDragControl.isApplicable(focusedObject, getController(), e)) {
+			if ((editable || !mouseDragControl.isModelEditionAction()) && mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Found applicable " + mouseDragControl);
@@ -416,7 +420,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if (currentControlAreaDrag != null) {
-			GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+			GraphicalRepresentation<?> focusedGR = getFocusRetriever().getFocusedObject(e);
 			// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
 			currentControlAreaDrag.stopDragging(focusedGR);
 			currentControlAreaDrag = null;
@@ -442,38 +446,42 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
-		if (getController().hasEditedLabel()) {
-			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
-			if (handleEventForEditedLabel(e, focusedObject)) {
+
+		boolean editable = getController().getDrawing().isEditable();
+		if (editable) {
+			if (getController().hasEditedLabel()) {
+				GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
+				if (handleEventForEditedLabel(e, focusedObject)) {
+					return;
+				}
+				// Special case, do nothing, since we let the label live its life !!!
+				e.consume();
 				return;
 			}
+
+			/*if (getController().hasEditedLabel()) {
 			// Special case, do nothing, since we let the label live its life !!!
 			e.consume();
 			return;
-		}
+			}*/
 
-		/*if (getController().hasEditedLabel()) {
-		// Special case, do nothing, since we let the label live its life !!!
-		e.consume();
-		return;
-		}*/
+			if (currentFloatingLabelDrag != null) {
+				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+				currentFloatingLabelDrag.moveTo(newPointLocation);
+				e.consume();
+			}
 
-		if (currentFloatingLabelDrag != null) {
-			Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
-			currentFloatingLabelDrag.moveTo(newPointLocation);
-			e.consume();
-		}
-
-		if (currentControlAreaDrag != null) {
-			Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
-			boolean continueDragging = currentControlAreaDrag.moveTo(newPointLocation, e);
-			e.consume();
-			if (!continueDragging) {
-				GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
-				// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
-				currentControlAreaDrag.stopDragging(focusedGR);
-				logger.fine("OK, stopping dragging point");
-				currentControlAreaDrag = null;
+			if (currentControlAreaDrag != null) {
+				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+				boolean continueDragging = currentControlAreaDrag.moveTo(newPointLocation, e);
+				e.consume();
+				if (!continueDragging) {
+					GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+					// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
+					currentControlAreaDrag.stopDragging(focusedGR);
+					logger.fine("OK, stopping dragging point");
+					currentControlAreaDrag = null;
+				}
 			}
 		}
 
@@ -541,6 +549,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	 * @return
 	 */
 	private boolean handleEventForEditedLabel(MouseEvent e, GraphicalRepresentation<?> focusedObject) {
+		if (focusedObject == null || !focusedObject.getDrawing().isEditable()) {
+			return false;
+		}
 		LabelView<?> labelView = getController().getEditedLabel();
 		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
 		if (labelView.getGraphicalRepresentation() == focusedObject) {
@@ -581,9 +592,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		} else {
 			triggerMouseExitedIfNeeded(e, labelView, pointRelativeToTextComponent);
 		}
-
 		return false;
-
 	}
 
 	private void triggerMouseExitedIfNeeded(MouseEvent e, LabelView<?> labelView, Point pointRelativeToTextComponent) {

@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -193,18 +194,30 @@ public class FIBLibrary {
 
 	public static void save(FIBComponent component, File file) {
 		logger.info("Save to file " + file.getAbsolutePath());
+
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(file);
+			saveComponentToStream(component, file, out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+
+	}
+
+	public static void saveComponentToStream(FIBComponent component, File file, OutputStream stream) {
 		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
 		XMLCoder coder = new XMLCoder(getFIBMapping(), new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
-
 		try {
-			coder.encodeObject(component, new FileOutputStream(file));
+			coder.encodeObject(component, stream);
 			logger.info("Succeeded to save: " + file);
 			// System.out.println("> "+coder.encodeObject(component));
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-
 	}
 
 }

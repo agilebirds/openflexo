@@ -41,6 +41,7 @@ import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -290,6 +291,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			return;
 		}
 		if (observable == codeRepository || observable == codeRepository.getReaderRepository()) {
+			if (observable == codeRepository && dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getWarDirectory() != null ? codeRepository.getWarDirectory()
 						.getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));

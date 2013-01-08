@@ -152,7 +152,7 @@ public class SWLContainerControls extends ControlArea<FGERectangle> implements S
 
 	@Override
 	public boolean isClickable() {
-		return true;
+		return _containerGR.getDrawing().isEditable();
 	}
 
 	@Override

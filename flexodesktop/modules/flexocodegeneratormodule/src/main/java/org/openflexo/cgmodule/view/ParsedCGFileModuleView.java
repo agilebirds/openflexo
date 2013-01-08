@@ -46,6 +46,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
@@ -363,7 +364,11 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
 		}
-		updateView(false);
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else {
+			updateView(false);
+		}
 	}
 
 	@Override

@@ -81,12 +81,14 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	public void delete() {
-		if (getFlexoProcess().getProcessNode() != null) {
-			getFlexoProcess().getProcessNode().deleteObserver(this);
-		}
-		if (getFlexoProcess().getActivityPetriGraph() != null) {
-			getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
-			isObserving = false;
+		if (getFlexoProcess() != null) {
+			if (getFlexoProcess().getProcessNode() != null) {
+				getFlexoProcess().getProcessNode().deleteObserver(this);
+			}
+			if (getFlexoProcess().getActivityPetriGraph() != null) {
+				getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+				isObserving = false;
+			}
 		}
 		super.delete();
 	}

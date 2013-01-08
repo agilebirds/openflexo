@@ -392,8 +392,8 @@ No after login DA possible #end#end
 					#end
 					
 					#void(${operationName.append("${op.getAbstractActivityNode().getName()} : ${op.getName()}")})
-                    #if(${op.getAbstractActivityNode().getRoleName()})
-					  #void(${operationName.append(" (${op.getAbstractActivityNode().getRoleName()})")})
+                    #if(${op.getAbstractActivityNode().getRole().getName()})
+					  #void(${operationName.append(" (${op.getAbstractActivityNode().getRole().getName()})")})
                     #end
                     #set($opName = "$generator.escapeStringForJava($operationName.toString())")
 					

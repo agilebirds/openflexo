@@ -38,6 +38,11 @@
 	</build>
 	<dependencies>
 		<dependency>
+			<groupId>org.openflexo.utils</groupId>
+			<artifactId>macos_ui_simulation</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>jiraclient</artifactId>
 		</dependency>
@@ -96,11 +101,6 @@
 			<artifactId>flexofoundation</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.apple.common</groupId>
-			<artifactId>ui_simulation</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

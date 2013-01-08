@@ -127,13 +127,10 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 			modelObjectReference = null;
 		}
 		if (modelObject != null) {
-			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject);
+			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject, this);
+			modelObjectReference.setSerializeClassName(true);
 		} else {
 			modelObjectReference = null;
-		}
-		if (modelObjectReference != null) {
-			modelObjectReference.setOwner(this);
-			modelObjectReference.setSerializeClassName(true);
 		}
 	}
 

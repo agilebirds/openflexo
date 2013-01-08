@@ -41,6 +41,7 @@ import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.RectangleConverter;
 
 /**
@@ -555,6 +556,9 @@ public final class GeneralPreferences extends ContextPreferences {
 		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
 		if (file == null) {
 			file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+			if (file == null || file.isFile()) {
+				setLocalResourceCenterDirectory(file = new File(FileUtils.getApplicationDataDirectory(), "FlexoResourceCenter"));
+			}
 		}
 		return file;
 	}

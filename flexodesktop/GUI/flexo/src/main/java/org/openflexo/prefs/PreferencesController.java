@@ -124,9 +124,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	}
 
 	public static void register(ContextPreferences cp) {
-		if (hasInstance()) {
-			instance().importInspectorFile(cp.getName(), cp.getInspectorFile());
-		}
+		instance().importInspectorFile(cp.getName(), cp.getInspectorFile());
 	}
 
 	public boolean importInspectorFile(String name, File inspectorFile) {

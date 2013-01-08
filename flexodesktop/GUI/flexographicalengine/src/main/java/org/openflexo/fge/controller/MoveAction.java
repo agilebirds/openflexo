@@ -94,6 +94,7 @@ public class MoveAction extends MouseDragControlAction {
 		FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 		initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
 		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation && !graphicalRepresentation.getIsReadOnly()
+				&& graphicalRepresentation.getDrawing().isEditable()
 				&& ((ShapeGraphicalRepresentation<?>) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 			// Let's go for a move
 			currentMove = new MoveInfo((ShapeGraphicalRepresentation<?>) graphicalRepresentation, event, view, controller);

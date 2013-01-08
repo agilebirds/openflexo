@@ -96,52 +96,6 @@ public class StringConverterLibrary {
 
 	}
 
-	private static class EnumerationConverter<T> extends Converter<T> {
-		private String _stringRepresationMethodName;
-
-		private EnumerationConverter(Class<T> enumeration, String stringRepresentationMethodName) {
-			super(enumeration);
-			_stringRepresationMethodName = stringRepresentationMethodName;
-		}
-
-		@Override
-		public T convertFromString(String value, ModelFactory factory) {
-			if (value == null) {
-				return null;
-			}
-			for (int i = 0; i < converterClass.getEnumConstants().length; i++) {
-				if (value.equals(convertToString(converterClass.getEnumConstants()[i]))) {
-					return converterClass.getEnumConstants()[i];
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public String convertToString(T value) {
-			if (value == null) {
-				return null;
-			}
-			try {
-				Method m = value.getClass().getDeclaredMethod(_stringRepresationMethodName, (Class[]) null);
-				return (String) m.invoke(value, (Object[]) null);
-			} catch (NoSuchMethodException e) {
-				System.err.println(_stringRepresationMethodName + " doesn't exist on enum :" + value.getClass().getName());
-			} catch (InvocationTargetException e) {
-				System.err.println("Invocation of " + _stringRepresationMethodName + " on enum :" + value.getClass().getName()
-						+ " caused the following error : " + e.getMessage());
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-	}
-
 	/**
 	 * Class defining how to convert Boolean from/to String
 	 * 

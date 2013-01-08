@@ -53,7 +53,7 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		// TODO Auto-generated method stub
 
 	}

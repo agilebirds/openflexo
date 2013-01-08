@@ -45,6 +45,7 @@
 	<target name="package" depends="defineProperties">
 		<delete dir="${mac.app.dir}" failonerror="false" />
 		<mkdir dir="${mac.app.dir}" />
+		<antcall target="packageLite" />
 		<antcall target="packageCustomer" />
 		<antcall target="packageSemantics" />
 		<antcall target="packageSemanticsPlus" />
@@ -52,6 +53,11 @@
 		<antcall target="packageDeveloper" />
 	</target>
 
+	<target name="packageLite">
+		<loadproperties srcfile="lite.properties" />
+		<antcall target="createPackage" />
+	</target>
+	
 	<target name="packageSemantics">
 		<loadproperties srcfile="semantics.properties" />
 		<antcall target="createPackage" />

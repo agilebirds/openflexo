@@ -23,6 +23,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -46,7 +48,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMenu> {
+public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMenu>, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(FlexoMenuItemView.class.getPackage().getName());
 
@@ -58,11 +60,15 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 
 	private TargetOperationSelector operationSelector;
 
+	private MenuLabelPanel labelPanel;
+
 	public FlexoMenuItemView(FlexoItemMenu model, IEController ctrl) {
 		super(new VerticalLayout(5, 0, 0));
 		_model = model;
+		_model.getPropertyChangeSupport().addPropertyChangeListener(_model.getDeletedProperty(), this);
 		this.controller = ctrl;
-		add(new MenuLabelPanel());
+		labelPanel = new MenuLabelPanel();
+		add(labelPanel);
 		add(operationSelector = new TargetOperationSelector(this));
 	}
 
@@ -112,6 +118,10 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 			TitledBorder b = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder());
 			b.setTitle(FlexoLocalization.localizedForKey("label", b));
 			setBorder(b);
+		}
+
+		public void delete() {
+			_model.deleteObserver(this);
 		}
 
 		private void updateMenuLabel() {
@@ -171,8 +181,9 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 
 	@Override
 	public void deleteModuleView() {
+		labelPanel.delete();
+		operationSelector.delete();
 		controller.removeModuleView(this);
-		logger.warning("Not implemented !");
 	}
 
 	@Override
@@ -209,6 +220,13 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 	@Override
 	public boolean isAutoscrolled() {
 		return false;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
 	}
 
 }

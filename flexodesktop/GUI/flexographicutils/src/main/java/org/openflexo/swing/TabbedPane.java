@@ -180,8 +180,10 @@ public class TabbedPane<J> {
 					title.setToolTipText(tabHeaderRenderer.getTabHeaderTooltip(tab));
 				} else {
 					title.setIcon(null);
-					title.setText(((JComponent) tab).getName());
-					title.setToolTipText(((JComponent) tab).getToolTipText());
+					if (tab instanceof JComponent) {
+						title.setText(((JComponent) tab).getName());
+						title.setToolTipText(((JComponent) tab).getToolTipText());
+					}
 				}
 				TabHeaders.this.revalidate();
 			}
@@ -359,6 +361,8 @@ public class TabbedPane<J> {
 		@Override
 		public void doLayout() {
 			extraTabsPopup.removeAll();
+			xBorderEnd = 0;
+			xBorderStart = getWidth();
 			boolean moveToPopup = false;
 			if (tabs.size() > 0) {
 				TabHeader selectedHeader = selectedTab != null ? headerComponents.get(selectedTab) : null;
@@ -370,19 +374,20 @@ public class TabbedPane<J> {
 					J tab = tabs.get(i);
 					TabHeader tabHeader = headerComponents.get(tab);
 					if (!tabHeader.isVisible()) {
+						tabHeader.setBounds(0, 0, 0, 0);
 						selectedHeaderDone |= tabHeader == selectedHeader;
 						continue;
 					}
 					if (!moveToPopup) {
 						if (!selectedHeaderDone) {
-							if (tab != selectedTab && selectedTab != null) {
+							if (tab != selectedTab) {
 								if (i + 2 == tabs.size()) { // in this case, we only need to put the current tab and the selected tab
 									moveToPopup = availableWidth
 											- (tabHeader.getPreferredSize().width + selectedHeader.getPreferredSize().width) < 0;
 								} else {
 									moveToPopup = availableWidth
-											- (tabHeader.getWidth() + selectedHeader.getPreferredSize().width + extraTabsButton
-													.getPreferredSize().width) < 0;
+											- (tabHeader.getPreferredSize().width + selectedHeader.getPreferredSize().width + extraTabsButton
+													.getWidth()) < 0;
 								}
 							}
 							if (moveToPopup) {
@@ -426,6 +431,10 @@ public class TabbedPane<J> {
 					}
 					availableWidth = getWidth() - x;
 					selectedHeaderDone |= tab == selectedTab;
+				}
+				if (selectedHeader != null) {
+					xBorderEnd = selectedHeader.getX();
+					xBorderStart = xBorderEnd + selectedHeader.getWidth();
 				}
 			}
 			if (!moveToPopup) {
@@ -526,6 +535,13 @@ public class TabbedPane<J> {
 
 	public void setUseTabBody(boolean useTabBody) {
 		this.useTabBody = useTabBody;
+		if (useTabBody) {
+			for (J tab : tabs) {
+				if (tab != null && !JComponent.class.isAssignableFrom(tab.getClass())) {
+					throw new IllegalArgumentException("Cannot use tab body because " + tab + " is not a JComponent");
+				}
+			}
+		}
 	}
 
 	public TabHeaderRenderer<J> getTabHeaderRenderer() {
@@ -557,13 +573,13 @@ public class TabbedPane<J> {
 	}
 
 	public void addTab(J tab) {
-		if (!JComponent.class.isAssignableFrom(tab.getClass())) {
+		if (tab != null && useTabBody && !JComponent.class.isAssignableFrom(tab.getClass())) {
 			throw new IllegalArgumentException("Tab must be an instanceof JComponent but received a " + tab.getClass().getName());
 		}
 		if (!tabs.contains(tab)) {
 			tabs.add(tab);
 			tabHeaders.addTab(tab);
-			if (selectedTab == null) {
+			if (selectedTab == null && (tabHeaderRenderer == null || tabHeaderRenderer.isTabHeaderVisible(tab))) {
 				selectTab(tab);
 			}
 		}
@@ -575,10 +591,29 @@ public class TabbedPane<J> {
 			if (selectedTab == tab) {
 				// TODO: Handle removal of selected tab
 				if (tabs.size() > 0) {
-					if (indexOf >= tabs.size()) {
-						selectTab(tabs.get(tabs.size() - 1));
+					if (tabHeaderRenderer == null) {
+						if (indexOf >= tabs.size()) {
+							selectTab(tabs.get(tabs.size() - 1));
+						} else {
+							selectTab(tabs.get(indexOf));
+						}
 					} else {
-						selectTab(tabs.get(indexOf));
+						J tabToSelect = null;
+						for (int i = indexOf - 1; i > -1; i--) {
+							if (tabHeaderRenderer.isTabHeaderVisible(tabs.get(i))) {
+								tabToSelect = tabs.get(i);
+								break;
+							}
+						}
+						if (tabToSelect == null) {
+							for (int i = indexOf + 1; i < tabs.size(); i++) {
+								if (tabHeaderRenderer.isTabHeaderVisible(tabs.get(i))) {
+									tabToSelect = tabs.get(i);
+									break;
+								}
+							}
+						}
+						selectTab(tabToSelect);
 					}
 				} else {
 					selectTab(null);
@@ -596,7 +631,7 @@ public class TabbedPane<J> {
 		if (tab != null && !tabs.contains(tab)) {
 			throw new IllegalArgumentException("Tab must be added to the content pane first.");
 		}
-		if (selectedTab != null) {
+		if (useTabBody && selectedTab != null) {
 			tabBody.remove((JComponent) selectedTab);
 		}
 		selectedTab = tab;

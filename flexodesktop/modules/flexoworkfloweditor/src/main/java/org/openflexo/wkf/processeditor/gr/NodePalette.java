@@ -126,7 +126,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 
 	@Override
 	public boolean isDraggable() {
-		return true;
+		return nodeGR.getDrawing().isEditable();
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -279,7 +279,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
@@ -404,7 +404,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
 		DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, container, null, false);
-		if (drop.getObject() != null) {
+		if (drop.getObject() != null && drop.hasActionExecutionSucceeded()) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
 			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();
@@ -456,6 +456,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/nodeGR.isResizing() || nodeGR.isMoving()) {
+			return null;
+		}
+		if (!nodeGR.getDrawing().isEditable()) {
 			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(nodeGR, drawingGraphics.getGraphicalRepresentation());

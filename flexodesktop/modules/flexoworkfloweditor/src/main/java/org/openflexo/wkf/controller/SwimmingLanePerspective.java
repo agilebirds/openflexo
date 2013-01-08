@@ -122,12 +122,19 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
-		if (process instanceof FlexoProcess) {
-			return getControllerForProcess((FlexoProcess) process).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
+		if (object instanceof FlexoProcess) {
+			SwimmingLaneView drawingView = getControllerForProcess((FlexoProcess) object).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
+		return createModuleViewForObject(process, controller, true);
 	}
 
 	public SwimmingLaneView getCurrentProcessView() {

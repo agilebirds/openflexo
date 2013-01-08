@@ -439,6 +439,11 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 					return BackgroundStylePreviewPanel.this;
 				}
 
+				@Override
+				public boolean isEditable() {
+					return false;
+				}
+
 			};
 			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));

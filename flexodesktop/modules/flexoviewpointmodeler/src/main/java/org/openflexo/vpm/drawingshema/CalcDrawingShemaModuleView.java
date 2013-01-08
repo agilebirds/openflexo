@@ -21,6 +21,8 @@ package org.openflexo.vpm.drawingshema;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -30,7 +32,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDiagram> {
+public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDiagram>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
@@ -48,7 +50,7 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 		validate();
 
 		controller.getCEDController().manageResource(controller.getShema());
-
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	public CalcDrawingShemaController getController() {
@@ -57,6 +59,7 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		getController().delete();
 	}
 
@@ -84,4 +87,10 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 		getPerspective().focusOnExampleDiagram(getRepresentedObject());
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

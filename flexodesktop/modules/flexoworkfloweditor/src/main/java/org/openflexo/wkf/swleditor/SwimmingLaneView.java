@@ -20,6 +20,8 @@
 package org.openflexo.wkf.swleditor;
 
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -29,10 +31,11 @@ import org.openflexo.wkf.controller.SwimmingLanePerspective;
 import org.openflexo.wkf.swleditor.SWLDrawEdgeControl.SWLDrawEdgeAction;
 import org.openflexo.wkf.swleditor.gr.NodePalette;
 
-public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> implements ModuleView<FlexoProcess> {
+public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> implements ModuleView<FlexoProcess>, PropertyChangeListener {
 
 	public SwimmingLaneView(SwimmingLaneRepresentation aDrawing, SwimmingLaneEditorController controller) {
 		super(aDrawing, controller);
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
@@ -42,6 +45,7 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		getController().delete();
 	}
 
@@ -120,4 +124,10 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 		}
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

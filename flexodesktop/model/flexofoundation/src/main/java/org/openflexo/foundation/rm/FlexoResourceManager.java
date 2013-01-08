@@ -211,6 +211,7 @@ public class FlexoResourceManager {
 			FlexoRMResource rmRes;
 			try {
 				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
+				rmRes.setProjectReferenceLoader(projectReferenceLoader);
 				project = rmRes.loadProject(progress, loadingHandler, serviceManager);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
@@ -223,9 +224,6 @@ public class FlexoResourceManager {
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;
 		project.setResourceManagerInstance(resourceManager);
-		if (project.getProjectData() != null && project.getProjectData().getImportedProjects().size() > 0) {
-			projectReferenceLoader.loadProjects(project.getProjectData().getImportedProjects());
-		}
 		checkExternalRepositories(project);
 		return returned;
 	}

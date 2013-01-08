@@ -20,6 +20,9 @@
 package org.openflexo.inspector.model;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -213,7 +216,7 @@ public class PropertyListColumn extends PropertyModel {
 					}
 
 					@Override
-					public Vector getAvailableValues(InspectableObject object) {
+					public List<?> getAvailableValues(InspectableObject object) {
 
 						// logger.info("getAvailableValues() for "+object);
 
@@ -224,7 +227,7 @@ public class PropertyListColumn extends PropertyModel {
 						} else if (hasStaticList()) {
 							return getStaticList();
 						} else if (object.getTypeForKey(name) != null && object.getTypeForKey(name).isEnum()) {
-							Vector returned = new Vector();
+							List<Object> returned = new ArrayList<Object>();
 							for (Object e : object.getTypeForKey(name).getEnumConstants()) {
 								returned.add(e);
 							}
@@ -234,7 +237,7 @@ public class PropertyListColumn extends PropertyModel {
 								logger.warning("There is an error in some configuration file :\n the property named '" + name
 										+ "' is supposed to be a list, but it doesn't hold any list definition!");
 							}
-							return new Vector();
+							return Collections.emptyList();
 						}
 					}
 

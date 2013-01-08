@@ -72,4 +72,6 @@ public interface Drawing<M> {
 
 	public DrawingGraphicalRepresentation<M> getDrawingGraphicalRepresentation();
 
+	public boolean isEditable();
+
 }

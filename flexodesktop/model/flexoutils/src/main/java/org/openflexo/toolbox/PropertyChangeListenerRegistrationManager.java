@@ -2,6 +2,7 @@ package org.openflexo.toolbox;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,6 +12,17 @@ public class PropertyChangeListenerRegistrationManager {
 
 	public PropertyChangeListenerRegistrationManager() {
 		registrations = new Vector<PropertyChangeListenerRegistrationManager.PropertyChangeListenerRegistration>();
+	}
+
+	public boolean hasListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		for (PropertyChangeListenerRegistration registration : registrations) {
+			if (registration.hasPropertyChangeSupport == hasPropertyChangeSupport && registration.listener == listener
+					&& registration.propertyName == null && propertyName == null || registration.propertyName != null
+					&& registration.propertyName.equals(propertyName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void delete() {
@@ -40,7 +52,7 @@ public class PropertyChangeListenerRegistrationManager {
 			} else {
 				hasPropertyChangeSupport.getPropertyChangeSupport().addPropertyChangeListener(listener);
 			}
-
+			registrations.add(this);
 		}
 
 		public void removeListener() {
@@ -53,12 +65,14 @@ public class PropertyChangeListenerRegistrationManager {
 		}
 	}
 
-	public void removeListener(String property, PropertyChangeListener listener, HasPropertyChangeSupport next) {
-		for (PropertyChangeListenerRegistration r : registrations) {
-			if (r.hasPropertyChangeSupport == next
+	public void removeListener(String property, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		Iterator<PropertyChangeListenerRegistration> i = registrations.iterator();
+		while (i.hasNext()) {
+			PropertyChangeListenerRegistration r = i.next();
+			if (r.hasPropertyChangeSupport == hasPropertyChangeSupport
 					&& (r.propertyName == null && property == null || property != null && property.equals(r.propertyName))
 					&& r.listener == listener) {
-				r.removeListener();
+				i.remove();
 			}
 		}
 	}

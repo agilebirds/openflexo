@@ -1,2 +1,0 @@
-\flexooperation{}{<OPERATION_NAME>}{{\it <OPERATION_DESCRIPTION><GEN_IF(WO)>\par This operation uses the screen \path{<FORM_NAME>}.\par The functions available in this screen are defined hereunder.\par See section~\ref{<PAGE_REFERENCE>} on page~\pageref{<PAGE_REFERENCE>} for more details on the content of the screen.</GEN_IF(WO)>}}{<OPERATION_REF>}{<USER_ROLE>}
-<PAGE_DETAIL>

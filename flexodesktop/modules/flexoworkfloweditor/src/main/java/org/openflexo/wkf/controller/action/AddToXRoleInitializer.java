@@ -2,7 +2,7 @@ package org.openflexo.wkf.controller.action;
 
 import java.awt.Color;
 import java.util.EventObject;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -48,7 +48,7 @@ public abstract class AddToXRoleInitializer<A extends AddToXRole<A>> extends
 				String NEW = FlexoLocalization.localizedForKey("new_role");
 
 				FlexoWorkflow workflow = action.getFocusedObject().getWorkflow();
-				Vector<Role> availableRoles = getAvailableRoles(action.getFocusedObject());
+				List<Role> availableRoles = getAvailableRoles(action.getFocusedObject());
 				boolean hasRoles = availableRoles.size() > 0;
 				Role selectedValue = hasRoles ? availableRoles.get(0) : null;
 				ParameterDefinition[] parameters = new ParameterDefinition[5];
@@ -106,6 +106,6 @@ public abstract class AddToXRoleInitializer<A extends AddToXRole<A>> extends
 		};
 	}
 
-	public abstract Vector<Role> getAvailableRoles(AbstractActivityNode activity);
+	public abstract List<Role> getAvailableRoles(AbstractActivityNode activity);
 
 }

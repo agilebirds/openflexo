@@ -278,10 +278,8 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 				}
 			}
 
-			if (arg == null) {
-				_pcSupport.firePropertyChange(null, null, null);
-			} else {
-				_pcSupport.firePropertyChange(arg.propertyName(), arg.oldValue(), arg.newValue());
+			if (arg != null) {
+				_pcSupport.firePropertyChange(arg.propertyName() != null ? arg.propertyName() : "", arg.oldValue(), arg.newValue());
 			}
 		}
 

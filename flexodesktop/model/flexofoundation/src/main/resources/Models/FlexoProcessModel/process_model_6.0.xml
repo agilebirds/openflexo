@@ -265,7 +265,6 @@
     <property name="accountableRoleReferences" xmlTag="AccountableRoles" type="vector" description="Roles accoutable for this activity"/>
     <property name="consultedRoleReferences" xmlTag="ConsultedRoles" type="vector" description="Roles consulted for this activity"/>
     <property name="informedRoleReferences" xmlTag="InformedRoles" type="vector" description="Roles informed for this activity"/>
-    <property name="inheritedRoleName" xmlTag="inheritedRoleName" attribute="YES" description="Role name for this activity, when defined from a parent process"/> 
     <property name="acronym" xmlTag="acronym" attribute="YES" description="Short name for this activity"/>
     <property name="roleTextColor" xmlTag="roleTextColor" attribute="YES" description="Defines role text color"/> 
     <property name="cssSheet" xmlTag="CSS" description="The Css for the components used in this activity"/>

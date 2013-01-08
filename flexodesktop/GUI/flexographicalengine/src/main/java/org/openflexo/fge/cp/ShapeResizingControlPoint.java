@@ -296,7 +296,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (!isDraggable()) {
 			return;
 		}

@@ -80,12 +80,6 @@ public class ActivityNode extends AbstractActivityNode implements ApplicationHel
 		}
 	}
 
-	// Used for old models, deprecated now !
-	@Override
-	public void finalizeRoleLinking() {
-		super.finalizeRoleLinking();
-	}
-
 	/**
 	 * Overrides getClassNameKey
 	 * 

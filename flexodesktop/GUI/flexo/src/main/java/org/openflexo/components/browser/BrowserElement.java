@@ -358,11 +358,17 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 		}
 		if (_browser != null) {
+			if (dataModification instanceof ObjectDeleted) {
+				if (!isDeleted()) {
+					delete();
+				}
+				return;
+			}
 			if ((dataModification instanceof WKFDataModification || dataModification instanceof IEDataModification
 					|| dataModification instanceof DKVDataModification || dataModification instanceof DMDataModification
 					|| dataModification instanceof WSDataModification || dataModification instanceof OEDataModification
 					|| dataModification instanceof CGDataModification || dataModification instanceof SGDataModification
-					|| dataModification instanceof ObjectDeleted || dataModification instanceof TOCModification || dataModification instanceof NameChanged)
+					|| dataModification instanceof TOCModification || dataModification instanceof NameChanged)
 					&& !(dataModification instanceof ObjectLocationChanged)
 					&& !(dataModification instanceof ObjectSizeChanged)
 					&& !(dataModification instanceof ObjectNeedsRefresh)) {
