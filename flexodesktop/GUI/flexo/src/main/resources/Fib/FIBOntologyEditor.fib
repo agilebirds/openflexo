@@ -207,7 +207,7 @@
                 <LocalizedDictionary />
               </Label>
               <Label label="range" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-              <TextField data="DataPropertyDetails.data.rangeStatement.stringRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
+              <TextField data="DataPropertyDetails.data.range.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
               <LocalizedDictionary />
             </Panel>
           </Tab>

@@ -106,6 +106,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	@Override
 	@Deprecated
 	public String getFullyQualifiedName() {
+		// FIXME Tab Name
 		return getURI();
 	}
 

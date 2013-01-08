@@ -124,4 +124,13 @@ public enum BuiltInDataType implements W3URIDefinitions {
 		}
 		return null;
 	}
+
+	public static BuiltInDataType fromType(Class<?> aClass) {
+		for (BuiltInDataType dt : values()) {
+			if (dt.getAccessedType().equals(aClass)) {
+				return dt;
+			}
+		}
+		return null;
+	}
 }

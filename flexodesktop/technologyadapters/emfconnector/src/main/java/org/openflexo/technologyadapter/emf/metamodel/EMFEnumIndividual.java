@@ -261,7 +261,7 @@ public class EMFEnumIndividual extends AEMFMetaModelObjectImpl<EEnumLiteral> imp
 	 */
 	@Override
 	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property) {
-		// TODO Auto-generated method stub
+		System.out.println("No Property Values.");
 		return null;
 	}
 

@@ -127,8 +127,13 @@ public class EMFDataTypeDataType extends AEMFMetaModelObjectImpl<EDataType> impl
 	 */
 	@Override
 	public Class<?> getAccessedType() {
-		// TODO Auto-generated method stub
-		return null;
+		Class<?> result = null;
+		if (getBuiltInDataType() != null) {
+			result = getBuiltInDataType().getAccessedType();
+		} else {
+			result = object.getInstanceClass();
+		}
+		return result;
 	}
 
 	/**
@@ -138,7 +143,6 @@ public class EMFDataTypeDataType extends AEMFMetaModelObjectImpl<EDataType> impl
 	 */
 	@Override
 	public BuiltInDataType getBuiltInDataType() {
-		// TODO Auto-generated method stub
-		return null;
+		return BuiltInDataType.fromType(object.getInstanceClass());
 	}
 }

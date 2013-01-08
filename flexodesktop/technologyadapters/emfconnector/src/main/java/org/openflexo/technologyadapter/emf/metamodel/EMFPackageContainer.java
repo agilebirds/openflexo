@@ -115,7 +115,13 @@ public class EMFPackageContainer extends AEMFMetaModelObjectImpl<EPackage> imple
 	 */
 	@Override
 	public IFlexoOntologyConceptContainer getParent() {
-		return ontology.getConverter().convertPackage(ontology, object.getESuperPackage());
+		IFlexoOntologyConceptContainer result = null;
+		if (object.getESuperPackage() != null) {
+			result = ontology.getConverter().convertPackage(ontology, object.getESuperPackage());
+		} else {
+			result = ontology;
+		}
+		return result;
 	}
 
 	/**
@@ -350,5 +356,4 @@ public class EMFPackageContainer extends AEMFMetaModelObjectImpl<EPackage> imple
 		}
 		return Collections.unmodifiableList(dataTypes);
 	}
-
 }

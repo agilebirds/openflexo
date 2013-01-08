@@ -38,6 +38,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.openflexo.foundation.ontology.IFlexoOntology;
@@ -230,15 +231,57 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		Set<IFlexoOntologyStructuralProperty> result = new HashSet<IFlexoOntologyStructuralProperty>();
+		for (EObject crossReference : object.eCrossReferences()) {
+			if (crossReference instanceof EAttribute) {
+				result.add(ontology.getConverter().convertAttributeProperty(ontology, (EAttribute) crossReference));
+			} else if (crossReference instanceof EReference) {
+				result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, (EReference) crossReference));
+			}
+		}
+		return Collections.unmodifiableSet(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
+	 */
+	@Override
+	@Deprecated
+	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		Set<IFlexoOntologyFeature> result = new HashSet<IFlexoOntologyFeature>();
+		for (EAttribute attribute : object.getEAttributes()) {
+			result.add(ontology.getConverter().convertAttributeProperty(ontology, attribute));
+		}
+		for (EReference reference : object.getEReferences()) {
+			result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
+		}
+		for (EOperation operation : object.getEOperations()) {
+		}
+		return Collections.unmodifiableSet(result);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyClass#getSubClasses(org.openflexo.foundation.ontology.IFlexoOntology)
 	 */
 	@Override
 	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context) {
 		List<IFlexoOntologyClass> subClasses = new ArrayList<IFlexoOntologyClass>();
-		// FIXME biais a cause de chargement a la demande.
-		for (Entry<EClass, EMFClassClass> classEntry : ontology.getConverter().getClasses().entrySet()) {
-			if (classEntry.getKey().getESuperTypes().contains(object) && classEntry.getValue() != this) {
-				subClasses.add(classEntry.getValue());
+		if (context instanceof EMFMetaModel) {
+			for (Entry<EClass, EMFClassClass> classEntry : ontology.getConverter().getClasses().entrySet()) {
+				if (classEntry.getValue().getOntology() == context) {
+					if (classEntry.getKey().getESuperTypes().contains(object) && classEntry.getValue() != this) {
+						subClasses.add(classEntry.getValue());
+					}
+				}
 			}
 		}
 		return Collections.unmodifiableList(subClasses);
@@ -270,37 +313,6 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 			isSubClass = ((EMFClassClass) aClass).getObject().isSuperTypeOf(object);
 		}
 		return isSubClass;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
-	 */
-	@Override
-	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		return Collections.emptySet();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
-	 */
-	@Override
-	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		Set<IFlexoOntologyFeature> result = new HashSet<IFlexoOntologyFeature>();
-		for (EAttribute attribute : object.getEAttributes()) {
-			result.add(ontology.getConverter().convertAttributeProperty(ontology, attribute));
-		}
-		for (EReference reference : object.getEReferences()) {
-			result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
-		}
-		for (EOperation operation : object.getEOperations()) {
-		}
-		return result;
 	}
 
 	/**

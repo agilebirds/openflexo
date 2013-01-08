@@ -120,6 +120,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	@Override
 	@Deprecated
 	public String getFullyQualifiedName() {
+		// FIXME Tab Name
 		return getName();
 	}
 

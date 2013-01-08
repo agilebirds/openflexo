@@ -100,7 +100,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * @param o
 	 * @return
 	 */
-	public boolean equalsToConcept(IFlexoOntologyConcept o);
+	public boolean equalsToConcept(IFlexoOntologyConcept concept);
 
 	/**
 	 * Return all properties accessible in the scope of this ontology object, where declared range is this object
