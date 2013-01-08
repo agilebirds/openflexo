@@ -357,4 +357,9 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	public boolean isOntologyClass() {
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "EMFClassClass:" + getName();
+	}
 }

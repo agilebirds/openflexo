@@ -145,7 +145,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			modelRepositories.put(technologyAdapter, modelRepository);
 			exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
 					mmRepository);
-			exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+			exploreDirectoryLookingForModels(rootDirectory, modelRepository.getRootFolder(), technologyAdapter, technologyContextManager,
 					mmRepository, modelRepository);
 		}
 	}

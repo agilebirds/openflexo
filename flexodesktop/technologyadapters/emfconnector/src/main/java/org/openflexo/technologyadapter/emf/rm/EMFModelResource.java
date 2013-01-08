@@ -97,12 +97,13 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @throws InvalidFileNameException
 	 * @throws DuplicateResourceException
 	 */
-	public EMFModelResource(File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter)
+	public EMFModelResource(File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter, String uri)
 			throws InvalidFileNameException, DuplicateResourceException {
 		super((FlexoProject) null);
 		this.modelFile = file;
 		this.metaModelResource = metaModelResource;
 		this.adapter = adapter;
+		setURI(uri);
 	}
 
 	/**
@@ -231,4 +232,5 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	public EMFModel getModelData() {
 		return _resourceData;
 	}
+
 }
