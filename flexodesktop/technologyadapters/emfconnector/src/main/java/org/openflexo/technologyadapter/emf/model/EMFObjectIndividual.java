@@ -134,6 +134,7 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 	 */
 	@Override
 	public List<IFlexoOntologyAnnotation> getAnnotations() {
+		// FIXME
 		return Collections.emptyList();
 	}
 
@@ -221,21 +222,6 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#getPropertyValues()
-	 */
-	@Override
-	public List<IFlexoOntologyPropertyValue> getPropertyValues() {
-		List<IFlexoOntologyPropertyValue> propertyValues = new ArrayList<IFlexoOntologyPropertyValue>();
-		for (EStructuralFeature structuralFeature : object.eClass().getEAllStructuralFeatures()) {
-			// FIXME biais
-			propertyValues.add(ontology.getConverter().getPropertyValues().get(object).get(structuralFeature));
-		}
-		return Collections.unmodifiableList(propertyValues);
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
 	 */
 	@Override
@@ -268,12 +254,31 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 	/**
 	 * Follow the link.
 	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#getPropertyValues()
+	 */
+	@Override
+	public List<IFlexoOntologyPropertyValue> getPropertyValues() {
+		List<IFlexoOntologyPropertyValue> propertyValues = new ArrayList<IFlexoOntologyPropertyValue>();
+		for (EStructuralFeature structuralFeature : object.eClass().getEAllStructuralFeatures()) {
+			propertyValues.add(ontology.getConverter().getPropertyValues().get(object).get(structuralFeature));
+		}
+		return Collections.unmodifiableList(propertyValues);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyIndividual#getPropertyValue(org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty)
 	 */
 	@Override
 	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property) {
-		// TODO Auto-generated method stub
-		return null;
+		IFlexoOntologyPropertyValue result = null;
+		for (IFlexoOntologyPropertyValue propertyValue : getPropertyValues()) {
+			if (result == null && property.equalsToConcept(propertyValue.getProperty())) {
+				result = propertyValue;
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -300,6 +305,12 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		return null;
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.model.AEMFModelObjectImpl#isOntologyIndividual()
+	 */
 	@Override
 	public boolean isOntologyIndividual() {
 		return true;

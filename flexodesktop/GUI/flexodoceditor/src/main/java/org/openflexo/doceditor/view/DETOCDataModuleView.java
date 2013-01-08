@@ -34,6 +34,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
@@ -78,6 +79,10 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		updateView();
 	}
 

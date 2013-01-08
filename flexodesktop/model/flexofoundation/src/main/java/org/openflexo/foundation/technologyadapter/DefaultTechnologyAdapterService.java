@@ -171,8 +171,10 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
 		List<ModelRepository<?, ?, ?, ?>> returned = new ArrayList<ModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
-			if (rc.getModelRepository(technologyAdapter) != null && rc.getModelRepository(technologyAdapter).getSize() > 0)
+			if (rc.getModelRepository(technologyAdapter) != null && rc.getModelRepository(technologyAdapter).getSize() > 0) {
+				logger.fine("Adding ModelRepository for " + technologyAdapter.getName() + " and RC " + rc);
 				returned.add(rc.getModelRepository(technologyAdapter));
+			}
 		}
 		return returned;
 	}
@@ -197,8 +199,10 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
 		List<MetaModelRepository<?, ?, ?, ?>> returned = new ArrayList<MetaModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
-			if (rc.getMetaModelRepository(technologyAdapter) != null && rc.getMetaModelRepository(technologyAdapter).getSize() > 0)
+			if (rc.getMetaModelRepository(technologyAdapter) != null && rc.getMetaModelRepository(technologyAdapter).getSize() > 0) {
+				logger.fine("Adding MetaModelRepository for " + technologyAdapter.getName() + " and RC " + rc);
 				returned.add(rc.getMetaModelRepository(technologyAdapter));
+			}
 		}
 		return returned;
 	}

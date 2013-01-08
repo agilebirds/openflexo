@@ -108,8 +108,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	/*public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, FlexoVersion modelVersion) throws Exception {
 
-		String baseName = viewpointDirectory.getName().substring(0, viewpointDirectory.getName().length() - 10);
-		File xmlFile = new File(viewpointDirectory, baseName + ".xml");
+		String baseName = getViewPointBaseName(viewPointDirectory);
+		File xmlFile = getViewPointFile(viewPointDirectory);
 
 		if (xmlFile.exists()) {
 
@@ -118,7 +118,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			FileInputStream inputStream = null;
 			try {
 				ViewPointBuilder builder = new ViewPointBuilder(library, modelVersion);
-				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewpointDirectory);
+				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 				inputStream = new FileInputStream(xmlFile);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Reading file " + xmlFile.getAbsolutePath());
@@ -195,9 +195,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		try {
 			logger.fine("Try to find ontology for viewpoint" + viewPointFile);
 			document = readXMLFile(viewPointFile);
-			Element root = getElement(document, "ViewPoint");
+			Element root = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
 			owlFile = new File(viewPointFile.getParent(), root.getAttributeValue("owlFile"));
-			viewPointURI = root.getAttributeValue("uri");
+			viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -29,24 +29,6 @@ public class Modules {
 	}
 
 	/**
-	 * @param moduleClass
-	 *            a module implementation class
-	 * @return the Module definition for the given moduleImplementation class or null if the Module is not available for the currentUserType
-	 */
-	public Module getModule(Class<? extends FlexoModule> moduleClass) {
-		for (Module candidate : UserType.getCurrentUserType().getModules()) {
-			if (moduleClass.equals(candidate.getModuleClass())) {
-				return candidate;
-			}
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Module for " + moduleClass.getName() + " is not available in "
-					+ UserType.getCurrentUserType().getBusinessName2());
-		}
-		return null;
-	}
-
-	/**
 	 * @param moduleName
 	 *            the name of a module
 	 * @return the Module definition for the given moduleName or null if the Module is not available for the currentUserType or the module

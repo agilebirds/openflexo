@@ -8,7 +8,8 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="URI" data="data.URI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
       <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.resource.version.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-    </Tab>
+      <Label label="metamodel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="data.metaModel.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" text="TextField" />    </Tab>
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>

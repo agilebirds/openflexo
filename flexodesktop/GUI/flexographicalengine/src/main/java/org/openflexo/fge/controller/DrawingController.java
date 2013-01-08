@@ -566,7 +566,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		aGraphicalRepresentation.setIsFocused(false);
 	}
 
-	public void toogleFocusSelection(GraphicalRepresentation<?> aGraphicalRepresentation) {
+	public void toggleFocusSelection(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		if (aGraphicalRepresentation.getIsFocused()) {
 			removeFromFocusedObjects(aGraphicalRepresentation);
 		} else {
@@ -808,7 +808,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	 */
 	public boolean upKeyPressed() {
 		// System.out.println("Up");
-		return keyDrivenMove(0, -1);
+		return getDrawing().isEditable() && keyDrivenMove(0, -1);
 	}
 
 	/**
@@ -818,7 +818,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	 */
 	public boolean downKeyPressed() {
 		// System.out.println("Down");
-		return keyDrivenMove(0, 1);
+		return getDrawing().isEditable() && keyDrivenMove(0, 1);
 	}
 
 	/**
@@ -828,7 +828,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	 */
 	public boolean leftKeyPressed() {
 		// System.out.println("Left");
-		return keyDrivenMove(-1, 0);
+		return getDrawing().isEditable() && keyDrivenMove(-1, 0);
 	}
 
 	/**
@@ -838,7 +838,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	 */
 	public boolean rightKeyPressed() {
 		// System.out.println("Right");
-		return keyDrivenMove(1, 0);
+		return getDrawing().isEditable() && keyDrivenMove(1, 0);
 	}
 
 	private MoveInfo keyDrivenMovingSession;

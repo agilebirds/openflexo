@@ -68,8 +68,7 @@ public class EMFObjectIndividualReferenceObjectPropertyValue extends AEMFModelOb
 	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return reference.getName();
 	}
 
 	/**
@@ -80,8 +79,7 @@ public class EMFObjectIndividualReferenceObjectPropertyValue extends AEMFModelOb
 	@Override
 	@Deprecated
 	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
+		return getName();
 	}
 
 	/**

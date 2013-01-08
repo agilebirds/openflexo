@@ -1,7 +1,6 @@
 package org.openflexo.foundation.reuse;
 
 import java.io.File;
-import java.util.List;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceImpl;
@@ -36,11 +35,11 @@ public class TestProjectReuse extends FlexoTestCase {
 	class ProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
 		@Override
-		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException {
+		public FlexoProject loadProject(FlexoProjectReference reference) {
 			if (importedProject == null) {
 				importedProject = reloadProject(importedProjectDirectory).getProject();
 			}
-			references.get(0).setReferredProject(importedProject);
+			return importedProject;
 		}
 
 		@Override

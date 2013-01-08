@@ -1,3 +1,0 @@
-\item[$\bullet$ \textbf{Dropdown: <NAME>}]{(<ID>)\nopagebreak
-\par <GEN_IF(EXAMPLE)>Example values: </GEN_IF(EXAMPLE)> <GEN_IF(!EXAMPLE)>Values: </GEN_IF(!EXAMPLE)><EXAMPLE_VALUES>
-<GEN_IF(!EXAMPLE)>\par Default value: <DEFAULT_VALUE></GEN_IF(!EXAMPLE)>}

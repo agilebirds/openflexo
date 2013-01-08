@@ -208,8 +208,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_relativeWindows = new Vector<FlexoRelativeWindow>();
 		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
 		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
-		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_PERPSECTIVE, this);
-		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_OBJECT, this);
 		if (defaultFrame != null) {
 			disposeDefaultFrameWhenPossible();
 		}
@@ -292,10 +290,8 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		}
 		_relativeWindows.clear();
 		if (_controller != null) {
-			_controller.getControllerModel().getPropertyChangeSupport().removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 			_controller.getControllerModel().getPropertyChangeSupport()
-					.removePropertyChangeListener(ControllerModel.CURRENT_PERPSECTIVE, this);
-			_controller.getControllerModel().getPropertyChangeSupport().removePropertyChangeListener(ControllerModel.CURRENT_OBJECT, this);
+					.removePropertyChangeListener(ControllerModel.CURRENT_LOCATION, this);
 			if (_controller.getProject() != null) {
 				_controller.getProject().deleteObserver(this);
 			}
@@ -372,15 +368,17 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
-			FlexoEditor old = (FlexoEditor) evt.getOldValue();
-			FlexoEditor newValue = (FlexoEditor) evt.getNewValue();
-			if (old != null && old.getProject() != null) {
-				old.getProject().deleteObserver(this);
+			FlexoEditor oldEditor = (FlexoEditor) evt.getOldValue();
+			FlexoEditor newEditor = (FlexoEditor) evt.getNewValue();
+			if (oldEditor != newEditor) {
+				if (oldEditor != null && oldEditor.getProject() != null) {
+					oldEditor.getProject().deleteObserver(this);
+				}
+				if (newEditor != null && newEditor.getProject() != null) {
+					newEditor.getProject().addObserver(this);
+				}
+				updateTitle();
 			}
-			if (newValue != null && newValue.getProject() != null) {
-				newValue.getProject().addObserver(this);
-			}
-			updateTitle();
 		}
 	}
 

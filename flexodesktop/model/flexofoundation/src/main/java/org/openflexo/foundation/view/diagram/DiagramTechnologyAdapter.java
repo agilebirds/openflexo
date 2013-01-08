@@ -144,14 +144,27 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 		return null;
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelURI(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
+	 */
 	@Override
-	public String retrieveModelURI(File aModelFile, TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
+	public String retrieveModelURI(File aModelFile, FlexoResource<DiagramMetaModel> metaModelResource,
+			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelResource(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
+	 */
 	@Override
-	public FlexoResource<View> retrieveModelResource(File aModelFile,
+	public FlexoResource<View> retrieveModelResource(File aModelFile, FlexoResource<DiagramMetaModel> metaModelResource,
 			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;

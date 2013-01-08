@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoStorageResource.ResourceLoadingListener;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -92,6 +93,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	private FlexoXMLStorageResource resource;
 
+	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
+		this(object);
+		setOwner(owner);
+	}
+
 	public FlexoModelObjectReference(O object) {
 		this.modelObject = object;
 		this.modelObject.addToReferencers(this);
@@ -118,6 +124,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
+		if (referringProject != null) {
+			referringProject.addToObjectReferences(this);
+		}
 		try {
 			int indexOf = modelObjectIdentifier.indexOf(PROJECT_SEPARATOR);
 			if (indexOf > 0) {
@@ -133,12 +142,6 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				this.className = s[2];
 				serializeClassName = true;
 			}
-			if (getResource() == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Resource with id " + resourceIdentifier
-							+ " cannot be found! I doubt I will resolve the following object: " + modelObjectIdentifier);
-				}
-			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RuntimeException e) {
@@ -147,9 +150,12 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	}
 
 	public void delete() {
-		if (getResource() != null) {
-			getResource().removeResourceLoadingListener(this);
-			getResource().getPropertyChangeSupport().removePropertyChangeListener("name", this);
+		if (getReferringProject() != null) {
+			getReferringProject().removeObjectReferences(this);
+		}
+		if (getResource(false) != null) {
+			getResource(false).removeResourceLoadingListener(this);
+			getResource(false).getPropertyChangeSupport().removePropertyChangeListener("name", this);
 		}
 		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
@@ -193,8 +199,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource() == null || getResource().isLoaded() && !getResource().getIsLoading()) {
-					if (getResource() == null) {
+				} else if (getResource(force) == null || getResource(force).isLoaded() && !getResource(force).getIsLoading()) {
+					if (getResource(force) == null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
@@ -207,8 +213,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	}
 
 	private O findObject(boolean force) {
-		if (getEnclosingProject() != null) {
-			FlexoXMLStorageResource res = getResource();
+		if (getEnclosingProject(force) != null) {
+			FlexoXMLStorageResource res = getResource(force);
 			if (res == null) {
 				return null;
 			}
@@ -216,22 +222,24 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				res.getResourceData();
 			}
 			if (res.isLoaded() && !res.getIsLoading()) {
-				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
+				return (O) getEnclosingProject(force).findObject(userIdentifier, flexoID);
 			}
 		}
-		System.err.println("coucou");
 		return null;
 	}
 
-	public FlexoXMLStorageResource getResource() {
-		if (resourceIdentifier == null || getEnclosingProject() == null) {
+	public FlexoXMLStorageResource getResource(boolean force) {
+		if (resourceIdentifier == null || getEnclosingProject(force) == null) {
 			return null;
 		}
 		if (resource == null) {
-			resource = (FlexoXMLStorageResource) getEnclosingProject().resourceForKey(resourceIdentifier);
-			if (resource != null) {
-				resource.addResourceLoadingListener(this);
-				resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+			FlexoProject enclosingProject = getEnclosingProject(force);
+			if (enclosingProject != null) {
+				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				if (resource != null) {
+					resource.addResourceLoadingListener(this);
+					resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+				}
 			}
 		}
 		return resource;
@@ -245,7 +253,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		return null;
 	}
 
-	private FlexoProject getEnclosingProject() {
+	private FlexoProject getEnclosingProject(boolean force) {
 		if (modelObject != null) {
 			return modelObject.getProject();
 		} else {
@@ -256,7 +264,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 					}
 					ProjectData data = getReferringProject().getProjectData();
 					if (data != null) {
-						return data.getImportedProjectWithURI(enclosingProjectIdentifier);
+						FlexoProjectReference projectReference = data.getProjectReferenceWithURI(enclosingProjectIdentifier);
+						return projectReference.getReferredProject(force);
 					}
 				}
 			} else {
@@ -279,7 +288,15 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	}
 
 	public void setOwner(ReferenceOwner owner) {
-		this.owner = owner;
+		if (this.owner != owner) {
+			if (this.owner != null && this.owner.getProject() != null) {
+				this.owner.getProject().removeObjectReferences(this);
+			}
+			this.owner = owner;
+			if (this.owner != null && this.owner.getProject() != null) {
+				this.owner.getProject().addToObjectReferences(this);
+			}
+		}
 	}
 
 	public String getStringRepresentation() {
@@ -339,7 +356,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	}
 
 	public ReferenceStatus getStatus() {
-		if (getResource() == null && (status == ReferenceStatus.RESOLVED || status == ReferenceStatus.UNRESOLVED)) {
+		if (getResource(false) == null && (status == ReferenceStatus.RESOLVED || status == ReferenceStatus.UNRESOLVED)) {
 			status = ReferenceStatus.RESOURCE_NOT_FOUND;
 		}
 		return status;

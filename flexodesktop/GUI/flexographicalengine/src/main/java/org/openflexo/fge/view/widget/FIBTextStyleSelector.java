@@ -309,6 +309,11 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 					return TextStylePreviewPanel.this;
 				}
 
+				@Override
+				public boolean isEditable() {
+					return false;
+				}
+
 			};
 			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));

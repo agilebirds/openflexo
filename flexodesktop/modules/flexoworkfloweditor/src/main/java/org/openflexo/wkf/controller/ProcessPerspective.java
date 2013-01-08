@@ -115,12 +115,20 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
-		if (process instanceof FlexoProcess) {
-			return new ProcessEditorController(_controller, (FlexoProcess) process).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
+		if (object instanceof FlexoProcess) {
+			ProcessView drawingView = new ProcessEditorController(_controller, (FlexoProcess) object).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
 		} else {
 			return null;
 		}
+
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, true);
 	}
 
 	public ProcessView getCurrentProcessView() {
@@ -150,7 +158,7 @@ public class ProcessPerspective extends FlexoPerspective {
 		}
 	}
 
-	private void updateMiddleLeftView() {
+	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
 			setMiddleLeftView(importedWorkflowView.getResultingJComponent());
 		} else {

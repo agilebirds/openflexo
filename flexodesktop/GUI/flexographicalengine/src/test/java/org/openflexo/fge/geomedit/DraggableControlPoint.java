@@ -61,7 +61,7 @@ public abstract class DraggableControlPoint<O extends FGEArea> extends GeometryA
 			FGEPoint initialPoint, MouseEvent event);
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 	}
 
 	@Override

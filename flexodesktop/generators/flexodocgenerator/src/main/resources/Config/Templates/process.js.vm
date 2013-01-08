@@ -171,12 +171,12 @@
         descDiv.appendChild(h2Element);
         
         /*ROLE*/
-        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getRoleName()})
+        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getRole().getName()})
             var h3RoleElement = document.createElement('h3');
             h3RoleElement.appendChild(document.createTextNode('Role: '));
             var spanH3RoleContentElement = document.createElement('span');
             spanH3RoleContentElement.className = 'htmlDocHContent';
-            spanH3RoleContentElement.innerHTML = '${generator.escapeStringForHTML(${node.getRoleName()})}';
+            spanH3RoleContentElement.innerHTML = '${generator.escapeStringForHTML(${node.getRole().getName()})}';
             h3RoleElement.appendChild(spanH3RoleContentElement);
             
             descDiv.appendChild(h3RoleElement);

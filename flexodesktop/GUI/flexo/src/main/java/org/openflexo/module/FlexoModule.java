@@ -135,7 +135,9 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				getFlexoFrame().toFront();
+				if (controller != null) {
+					getFlexoFrame().toFront();
+				}
 			}
 		});
 		if (getEditor() != null && getController().getCurrentDisplayedObjectAsModuleView() == null) {

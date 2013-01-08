@@ -20,6 +20,8 @@
 package org.openflexo.wkf.view.doc;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -45,7 +47,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.controller.ProcessBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
-public class WKFDocumentationView extends JPanel implements SelectionSynchronizedModuleView<FlexoProcess> {
+public class WKFDocumentationView extends JPanel implements SelectionSynchronizedModuleView<FlexoProcess>, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WKFDocumentationView.class.getPackage().getName());
 
@@ -87,6 +89,7 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 		setLayout(new BorderLayout());
 		add(_treeTable, BorderLayout.CENTER);
 		validate();
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
@@ -96,6 +99,8 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		_treeTable.delete();
 		_controller.removeModuleView(this);
 		logger.warning("implements me !");
 	}
@@ -244,6 +249,13 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
 	}
 
 }

@@ -139,16 +139,16 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	public List<IFlexoOntologyAnnotation> getAnnotations() {
-		List<IFlexoOntologyAnnotation> annotations = null;
+		List<IFlexoOntologyAnnotation> result = null;
 		if (object.getEAnnotations() != null && object.getEAnnotations().size() != 0) {
-			annotations = new ArrayList<IFlexoOntologyAnnotation>();
+			result = new ArrayList<IFlexoOntologyAnnotation>();
 			for (EAnnotation annotation : object.getEAnnotations()) {
-				annotations.add(ontology.getConverter().convertAnnotation(ontology, annotation));
+				result.add(ontology.getConverter().convertAnnotation(ontology, annotation));
 			}
 		} else {
-			annotations = Collections.emptyList();
+			result = Collections.emptyList();
 		}
-		return annotations;
+		return result;
 	}
 
 	/**
@@ -208,11 +208,11 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	public List<IFlexoOntologyFeatureAssociation> getReferencingFeatureAssociations() {
-		List<IFlexoOntologyFeatureAssociation> referencingFeatureAssociation = new ArrayList<IFlexoOntologyFeatureAssociation>();
+		List<IFlexoOntologyFeatureAssociation> result = new ArrayList<IFlexoOntologyFeatureAssociation>();
 		if (ontology.getConverter().getReferenceAssociations().get(object) != null) {
-			referencingFeatureAssociation.add(ontology.getConverter().getReferenceAssociations().get(object));
+			result.add(ontology.getConverter().getReferenceAssociations().get(object));
 		}
-		return Collections.unmodifiableList(referencingFeatureAssociation);
+		return Collections.unmodifiableList(result);
 	}
 
 	/**
@@ -232,8 +232,8 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	public IFlexoOntologyConcept getDomain() {
-		// TODO Auto-generated method stub
-		return null;
+		// FIXME Pas de sens car ce lien ce fait plutot avec l'association (en EMF le lien est 1-1-1 donc pas de soucis.)
+		return ontology.getConverter().convertClass(ontology, object.getEContainingClass());
 	}
 
 	/**
@@ -296,5 +296,15 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	@Override
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyObjectProperty()
+	 */
+	@Override
+	public boolean isOntologyObjectProperty() {
+		return true;
 	}
 }

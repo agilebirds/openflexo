@@ -71,6 +71,7 @@ public abstract class DREView<O extends DRMObject> extends CompoundTabularView<O
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().deleteObserver(this);
 		getDREController().removeModuleView(this);
 	}
 

@@ -119,12 +119,19 @@ public class RolePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject roleList, FlexoController controller) {
-		if (roleList instanceof RoleList) {
-			return new RoleEditorController((RoleList) roleList, _controller).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
+		if (object instanceof RoleList) {
+			RoleEditorView drawingView = new RoleEditorController((RoleList) object, _controller).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, false);
 	}
 
 	@Override
@@ -140,7 +147,7 @@ public class RolePerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	private void updateMiddleLeftView() {
+	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
 			setMiddleLeftView(importedRoleView.getResultingJComponent());
 		} else {

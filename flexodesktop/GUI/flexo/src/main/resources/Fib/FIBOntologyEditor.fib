@@ -63,7 +63,7 @@
               <AddAction method="ClassDetails.data.createNewLabelAnnotation" name="add_label" />
               <RemoveAction method="ClassDetails.data.deleteAnnotation(selected)" name="delete_action" />
             </Table>
-            <TextArea validateOnReturn="true" columns="-1" rows="2" data="ClassAnnotationTable.selected.stringValue" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.3)" localize="true" />
+            <TextArea validateOnReturn="true" columns="-1" rows="2" data="ClassAnnotationTable.selected.stringValue" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.3)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
           </Tab>
         </TabPanel>
       </Panel>
@@ -207,7 +207,7 @@
                 <LocalizedDictionary />
               </Label>
               <Label label="range" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-              <TextField data="DataPropertyDetails.data.rangeStatement.stringRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
+              <TextField data="DataPropertyDetails.data.range.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
               <LocalizedDictionary />
             </Panel>
           </Tab>

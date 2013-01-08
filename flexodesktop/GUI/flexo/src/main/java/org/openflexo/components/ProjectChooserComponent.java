@@ -20,6 +20,7 @@
 package org.openflexo.components;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -120,39 +121,40 @@ public abstract class ProjectChooserComponent {
 		approveButtonText = text;
 	}
 
-	public Component getComponent() {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			return fileChooser;
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+	public Container getComponent() {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			return fileDialog;
+		} else {
+			return fileChooser;
 		}
-		return null;
+	}
+
+	public void setTitle(String title) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+			fileDialog.setTitle(title);
+		} else {
+			fileChooser.setDialogTitle(title);
+		}
 	}
 
 	public void setOpenMode() {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			fileDialog.setMode(FileDialog.LOAD);
+		} else {
+			fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		}
 	}
 
 	public void setSaveMode() {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			fileDialog.setMode(FileDialog.SAVE);
+		} else {
+			fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		}
 	}
 
 	public int showOpenDialog() throws HeadlessException {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-			if (approveButtonText != null) {
-				fileChooser.setApproveButtonText(approveButtonText);
-			}
-			return fileChooser.showDialog(owner, null);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			fileDialog.setMode(FileDialog.LOAD);
 			fileDialog.setVisible(true);
 			if (fileDialog.getFile() == null) {
@@ -161,18 +163,15 @@ public abstract class ProjectChooserComponent {
 				return JFileChooser.APPROVE_OPTION;
 			}
 		}
-		return JFileChooser.ERROR_OPTION;
+		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		if (approveButtonText != null) {
+			fileChooser.setApproveButtonText(approveButtonText);
+		}
+		return fileChooser.showDialog(owner, null);
 	}
 
 	public int showSaveDialog() throws HeadlessException {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			fileChooser.setDialogTitle(FlexoLocalization.localizedForKey("set_name_for_new_prj_in_selected_directory"));
-			if (approveButtonText != null) {
-				fileChooser.setApproveButtonText(approveButtonText);
-			}
-			return fileChooser.showDialog(owner, null);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			fileDialog.setMode(FileDialog.SAVE);
 			fileDialog.setTitle(FlexoLocalization.localizedForKey("set_name_for_new_prj_in_selected_directory"));
 			fileDialog.setVisible(true);
@@ -182,24 +181,28 @@ public abstract class ProjectChooserComponent {
 				return JFileChooser.APPROVE_OPTION;
 			}
 		}
-		return JFileChooser.ERROR_OPTION;
+		fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		fileChooser.setDialogTitle(FlexoLocalization.localizedForKey("set_name_for_new_prj_in_selected_directory"));
+		if (approveButtonText != null) {
+			fileChooser.setApproveButtonText(approveButtonText);
+		}
+		return fileChooser.showDialog(owner, null);
 	}
 
 	public File getSelectedFile() {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			return fileChooser.getSelectedFile();
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			if (fileDialog.getFile() != null) {
 				return new File(fileDialog.getDirectory(), fileDialog.getFile());
+			} else {
+				return null;
 			}
+		} else {
+			return fileChooser.getSelectedFile();
 		}
-		return null;
 	}
 
 	public void setSelectedFile(File selectedFile) {
-		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
-			fileChooser.setSelectedFile(selectedFile);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
+		if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			if (selectedFile != null) {
 				fileDialog.setDirectory(selectedFile.getParentFile().getAbsolutePath());
 				fileDialog.setFile(selectedFile.getName());
@@ -207,6 +210,8 @@ public abstract class ProjectChooserComponent {
 				fileDialog.setDirectory(null);
 				fileDialog.setFile(null);
 			}
+		} else {
+			fileChooser.setSelectedFile(selectedFile);
 		}
 	}
 }

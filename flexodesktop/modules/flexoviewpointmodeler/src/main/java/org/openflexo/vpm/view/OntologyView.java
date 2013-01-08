@@ -60,8 +60,13 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	}
 
 	@Override
+	public void deleteView() {
+		deleteModuleView();
+	}
+
+	@Override
 	public void deleteModuleView() {
-		deleteView();
+		super.deleteView();
 		getFlexoController().removeModuleView(this);
 	}
 

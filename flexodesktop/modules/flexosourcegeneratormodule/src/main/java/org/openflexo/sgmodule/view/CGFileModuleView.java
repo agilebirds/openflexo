@@ -51,6 +51,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
@@ -584,7 +585,9 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			});
 			return;
 		}
-		if (dataModification instanceof ContentRegenerated) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else if (dataModification instanceof ContentRegenerated) {
 			updateView(true);
 		} else {
 			updateView(false);

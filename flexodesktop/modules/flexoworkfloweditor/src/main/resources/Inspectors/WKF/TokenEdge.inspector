@@ -2,7 +2,9 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.TokenEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="increment" localize="true" name="TokenIncremLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <Label label="increment" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="TokenIncremLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
       <Number numberType="IntegerType" index="5" data="data.tokenIncrem" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="TokenIncrem" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Number>
@@ -16,4 +18,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Token edge" />
 </Panel>
-

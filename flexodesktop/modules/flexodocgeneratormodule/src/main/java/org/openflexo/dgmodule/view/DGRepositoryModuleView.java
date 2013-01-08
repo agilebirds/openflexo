@@ -51,6 +51,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
@@ -422,6 +423,10 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			return;
 		}
 		if (observable == codeRepository) {
+			if (dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("pdfDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getPostBuildDirectory() != null ? codeRepository.getPostBuildDirectory()
 						.getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));

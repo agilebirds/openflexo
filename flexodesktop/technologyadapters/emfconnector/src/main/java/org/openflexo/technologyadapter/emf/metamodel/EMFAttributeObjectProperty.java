@@ -232,8 +232,7 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 	 */
 	@Override
 	public IFlexoOntologyConcept getDomain() {
-		// TODO Auto-generated method stub
-		return null;
+		return ontology.getConverter().convertClass(ontology, object.getEContainingClass());
 	}
 
 	/**
@@ -298,6 +297,12 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 		return ontology.getTechnologyAdapter();
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyObjectProperty()
+	 */
 	@Override
 	public boolean isOntologyObjectProperty() {
 		return true;

@@ -43,6 +43,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
@@ -226,6 +227,10 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		DisplayContext previousDisplayContext = null;
 		if (_codeDisplayer != null) {
 			previousDisplayContext = _codeDisplayer.getDisplayContext();

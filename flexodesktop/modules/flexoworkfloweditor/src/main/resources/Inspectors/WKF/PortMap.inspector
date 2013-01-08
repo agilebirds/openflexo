@@ -2,20 +2,22 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.FlexoPortMap" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">
-      <Label label="index" localize="true" name="IndexLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
       <Number numberType="IntegerType" index="1" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Index" localize="true" />
     </Tab>
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
-      <Label label="hide_port_map" localize="true" name="IsHiddenLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <CheckBox selected="false" tooltipText="Hides this portmap" localize="true" name="IsHidden" index="3" data="data.isHidden" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" />
-      <Label label="has_input_message" localize="true" name="HasInputMessageLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="false" />
-      <CheckBox selected="false" localize="true" name="HasInputMessage" index="5" data="data.hasInputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="false" />
-      <Label label="has_output_message" localize="true" name="HasOutputMessageLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="false" />
-      <CheckBox selected="false" localize="true" name="HasOutputMessage" index="7" data="data.hasOutputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="false" />
-      <Label label="input_message" localize="true" name="InputMessageDefinitionnameLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.hasInputMessage = true)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" index="9" data="data.inputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)" visible="(data.hasInputMessage = true)" name="InputMessageDefinitionname" readOnly="true" localize="true">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="hide_port_map" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="IsHiddenLabel" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isHidden" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="IsHidden" tooltipText="Hides this portmap" localize="true" />
+      <Label label="has_input_message" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="false" name="HasInputMessageLabel" localize="true" />
+      <CheckBox selected="false" index="5" data="data.hasInputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="false" name="HasInputMessage" localize="true" />
+      <Label label="has_output_message" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="false" name="HasOutputMessageLabel" localize="true" />
+      <CheckBox selected="false" index="7" data="data.hasOutputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="false" name="HasOutputMessage" localize="true" />
+      <Label label="input_message" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.hasInputMessage = true)" name="InputMessageDefinitionnameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField index="9" data="data.inputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)" visible="(data.hasInputMessage = true)" name="InputMessageDefinitionname" readOnly="true" localize="true" validateOnReturn="true" columns="10">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InputMessageDefinitionentries" index="11" data="data.inputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;location=right)" visible="(data.hasInputMessage = true)">
@@ -24,8 +26,10 @@
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Table>
-      <Label label="output_message" localize="true" name="OutputMessageDefinitionnameLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsTop=5;location=left)" visible="(data.hasOutputMessage = true)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" index="13" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;location=right)" visible="(data.hasOutputMessage = true)" name="OutputMessageDefinitionname" readOnly="true" localize="true">
+      <Label label="output_message" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsTop=5;location=left)" visible="(data.hasOutputMessage = true)" name="OutputMessageDefinitionnameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField index="13" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;location=right)" visible="(data.hasOutputMessage = true)" name="OutputMessageDefinitionname" readOnly="true" localize="true" validateOnReturn="true" columns="10">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" index="15" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;location=right)" visible="(data.hasOutputMessage = true)">
@@ -62,4 +66,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="PortMap" />
 </Panel>
-

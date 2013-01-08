@@ -113,6 +113,14 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	@Override
+	public void delete() {
+		if (getTocRepositoryRef() != null) {
+			getTocRepositoryRef().delete();
+		}
+		super.delete();
+	}
+
+	@Override
 	protected void deleteExternalRepositories() {
 		if (getPostBuildRepository() != null) {
 			getProject().removeFromExternalRepositories(getPostBuildRepository());

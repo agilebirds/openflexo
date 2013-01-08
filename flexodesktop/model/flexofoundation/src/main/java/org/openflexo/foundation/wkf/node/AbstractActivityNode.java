@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoUtils;
@@ -41,6 +40,7 @@ import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
@@ -88,32 +88,27 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class AbstractActivityNode extends FatherNode implements MetricsValueOwner, FlexoObserver {
+public abstract class AbstractActivityNode extends FatherNode implements MetricsValueOwner, FlexoObserver, ReferenceOwner {
 
 	private static final Logger logger = Logger.getLogger(AbstractActivityNode.class.getPackage().getName());
 
-	private Role _role;
+	private FlexoModelObjectReference<Role> role;
 
-	private Role roleA;
-	private Role roleC;
-	private Role roleI;
+	private FlexoModelObjectReference<Role> roleA;
+	private FlexoModelObjectReference<Role> roleC;
+	private FlexoModelObjectReference<Role> roleI;
 
-	private Vector<Role> responsibleRoles;
-	private Vector<Role> accountableRoles;
-	private Vector<Role> consultedRoles;
-	private Vector<Role> informedRoles;
+	private List<FlexoModelObjectReference<Role>> responsibleRoles;
+	private List<FlexoModelObjectReference<Role>> accountableRoles;
+	private List<FlexoModelObjectReference<Role>> consultedRoles;
+	private List<FlexoModelObjectReference<Role>> informedRoles;
 
 	private String documentationUrl;
-	private FlexoProcess linkedProcess;
+	private FlexoModelObjectReference<FlexoProcess> linkedProcess;
 
 	private String _acronym;
 
 	private FlexoCSS cssSheet;
-
-	/**
-	 * Deprecated: kept for backward compatibility
-	 */
-	private String _roleName;
 
 	private transient AbstractActivityStatistics statistics;
 
@@ -138,11 +133,10 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	public AbstractActivityNode(FlexoProcess process) {
 		super(process);
 		metricsValues = new Vector<MetricsValue>();
-		this.responsibleRoles = new Vector<Role>();
-		this.accountableRoles = new Vector<Role>();
-		this.consultedRoles = new Vector<Role>();
-		this.informedRoles = new Vector<Role>();
-		_role = null;
+		this.responsibleRoles = new Vector<FlexoModelObjectReference<Role>>();
+		this.accountableRoles = new Vector<FlexoModelObjectReference<Role>>();
+		this.consultedRoles = new Vector<FlexoModelObjectReference<Role>>();
+		this.informedRoles = new Vector<FlexoModelObjectReference<Role>>();
 	}
 
 	static {
@@ -168,25 +162,6 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 			return super.getDefaultName();
 		} else {
 			return DEFAULT_ACTIVITY_NODE_NAME();
-		}
-	}
-
-	// Used for old models, deprecated now !
-	public void finalizeRoleLinking() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("finalizeRoleLinking() called");
-		}
-		if (_roleName != null) {
-			if (getProcess().getRoleList().roleWithName(_roleName) != null) {
-				_role = getProcess().getRoleList().roleWithName(_roleName);
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Role " + _roleName + " has been found and linked.");
-				}
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find Role " + _roleName + " in process " + getProcess().getName());
-				}
-			}
 		}
 	}
 
@@ -230,59 +205,16 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		setContainedPetriGraph(aPetriGraph);
 	}
 
-	public Role getRole() {
-		if (_role == null && !isDeserializing()) {
-			if (inheritedRoleName != null) {
-				_role = getProject().getWorkflow().getRoleList().roleWithName(inheritedRoleName);
-				if (_role == null) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not find Role " + inheritedRoleName + " in role list");
-					}
-				} else {
-					_role.addObserver(this);
-				}
-			}
-		}
-		return _role;
-	}
-
-	private String inheritedRoleName;
-
 	private Vector<MetricsValue> metricsValues;
-
-	/**
-	 * Kept for backward compatibility only
-	 * 
-	 * @return
-	 * @deprecated
-	 */
-	@Deprecated
-	public String getInheritedRoleName() {
-		return null;
-	}
-
-	/**
-	 * Kept for backward compatibility only
-	 * 
-	 * @deprecated
-	 */
-	@Deprecated
-	public void setInheritedRoleName(String aRoleName) {
-		this.inheritedRoleName = aRoleName;
-	}
 
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleReference() {
-		if (getRole() != null) {
-			return new FlexoModelObjectReference<Role>(getRole());
-		} else {
-			return null;
-		}
+		return role;
 	}
 
 	// Used when deserializing
 	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
-		setRole(aRoleReference.getObject(true));
+		this.role = aRoleReference;
 	}
 
 	public String getDocumentationUrl() {
@@ -294,85 +226,84 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	public FlexoProcess getLinkedProcess() {
-		return linkedProcess;
-	}
-
-	public void setLinkedProcess(FlexoProcess linkedProcess) {
-		this.linkedProcess = linkedProcess;
-	}
-
-	// Used when serializing
-	public FlexoModelObjectReference<FlexoModelObject> getLinkedProcessReference() {
-		if (getLinkedProcess() != null) {
-			return new FlexoModelObjectReference<FlexoModelObject>(getLinkedProcess());
+		if (linkedProcess != null) {
+			return linkedProcess.getObject();
 		} else {
 			return null;
 		}
 	}
 
+	public void setLinkedProcess(FlexoProcess linkedProcess) {
+		if (this.linkedProcess != null) {
+			this.linkedProcess.delete();
+			this.linkedProcess = null;
+		}
+		if (linkedProcess != null) {
+			this.linkedProcess = new FlexoModelObjectReference<FlexoProcess>(linkedProcess);
+			this.linkedProcess.setOwner(this);
+		}
+
+	}
+
+	// Used when serializing
+	public FlexoModelObjectReference<FlexoProcess> getLinkedProcessReference() {
+		return linkedProcess;
+	}
+
 	// Used when deserializing
 	public void setLinkedProcessReference(FlexoModelObjectReference<FlexoProcess> aProcessReference) {
-		if (aProcessReference.getResource().equals(getProcess().getFlexoResource())) {
-			setLinkedProcess(getProcess());
+		this.linkedProcess = aProcessReference;
+	}
+
+	public Role getRole() {
+		if (role != null) {
+			return role.getObject();
 		} else {
-			setLinkedProcess(aProcessReference.getObject(true));
+			return null;
 		}
 	}
 
 	public void setRole(Role aRole) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setRole() with " + aRole);
-		}
-		Role oldRole = _role;
+		Role oldRole = getRole();
 		if (oldRole != aRole) {
-			_role = aRole;
 			if (oldRole != null) {
 				oldRole.deleteObserver(this);
 			}
-			if (_role != null) {
-				_role.addObserver(this);
+			if (role != null) {
+				role.delete();
+				role = null;
+			}
+			if (aRole != null) {
+				aRole.addObserver(this);
+				role = new FlexoModelObjectReference<Role>(aRole);
+				role.setOwner(this);
 			}
 			setChanged();
 			notifyObservers(new RoleChanged(oldRole, aRole));
 		}
 	}
 
-	public String getRoleName() {
-		if (getRole() != null) {
-			return getRole().getName();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Deprecated: kept for backward compatibility during deserialization process from version 1.0
-	 * 
-	 * @deprecated
-	 */
-	@Deprecated
-	public void setRoleName(String aRoleName) {
-		_roleName = aRoleName;
-	}
-
 	// Roles Accountable, Consulted, Informed
 
 	public Role getRoleA() {
-		return roleA;
+		if (roleA != null) {
+			return roleA.getObject();
+		} else {
+			return null;
+		}
 	}
 
 	public void setRoleA(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleA() with " + aRole);
 		}
-		Role oldRole = roleA;
+		Role oldRole = getRoleA();
 		if (oldRole != aRole) {
-			roleA = aRole;
-			if (oldRole != null) {
-				oldRole.deleteObserver(this);
-			}
-			if (roleA != null) {
-				roleA.addObserver(this);
+			if (aRole != null) {
+				roleA = new FlexoModelObjectReference<Role>(aRole);
+				roleA.setOwner(this);
+			} else {
+				roleA = null;
 			}
 			notifyAttributeModification("roleA", oldRole, roleA);
 		}
@@ -380,34 +311,39 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleAReference() {
-		if (getRoleA() != null) {
-			return new FlexoModelObjectReference<Role>(getRoleA());
-		} else {
-			return null;
-		}
+		return roleA;
 	}
 
 	// Used when deserializing
 	public void setRoleAReference(FlexoModelObjectReference<Role> aRoleReference) {
-		setRoleA(aRoleReference.getObject(true));
+		this.roleA = aRoleReference;
 	}
 
 	public Role getRoleC() {
-		return roleC;
+		if (roleC != null) {
+			return roleC.getObject();
+		} else {
+			return null;
+		}
 	}
 
 	public void setRoleC(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleC() with " + aRole);
 		}
-		Role oldRole = roleC;
+		Role oldRole = getRoleC();
 		if (oldRole != aRole) {
-			roleC = aRole;
+			if (aRole != null) {
+				roleC = new FlexoModelObjectReference<Role>(aRole);
+				roleC.setOwner(this);
+			} else {
+				roleC = null;
+			}
 			if (oldRole != null) {
 				oldRole.deleteObserver(this);
 			}
-			if (roleC != null) {
-				roleC.addObserver(this);
+			if (aRole != null) {
+				aRole.addObserver(this);
 			}
 			notifyAttributeModification("roleC", oldRole, roleC);
 		}
@@ -415,178 +351,262 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleCReference() {
-		if (getRoleC() != null) {
-			return new FlexoModelObjectReference<Role>(getRoleC());
-		} else {
-			return null;
-		}
+		return roleC;
 	}
 
 	// Used when deserializing
 	public void setRoleCReference(FlexoModelObjectReference<Role> aRoleReference) {
-		setRoleC(aRoleReference.getObject(true));
+		this.roleC = aRoleReference;
 	}
 
 	public Role getRoleI() {
-		return roleI;
+		if (roleI != null) {
+			return roleI.getObject();
+		} else {
+			return null;
+		}
 	}
 
 	public void setRoleI(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleI() with " + aRole);
 		}
-		Role oldRole = roleI;
+		Role oldRole = getRoleI();
 		if (oldRole != aRole) {
-			roleI = aRole;
 			if (oldRole != null) {
 				oldRole.deleteObserver(this);
 			}
-			if (roleI != null) {
-				roleI.addObserver(this);
+			if (aRole != null) {
+				roleI = new FlexoModelObjectReference<Role>(aRole);
+				roleI.setOwner(this);
+			} else {
+				roleI = null;
 			}
-			setChanged();
+			if (aRole != null) {
+				aRole.addObserver(this);
+			}
 			notifyAttributeModification("roleI", oldRole, roleI);
 		}
 	}
 
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleIReference() {
-		if (getRoleI() != null) {
-			return new FlexoModelObjectReference<Role>(getRoleI());
-		} else {
-			return null;
-		}
+		return roleI;
 	}
 
 	// Used when deserializing
 	public void setRoleIReference(FlexoModelObjectReference<Role> aRoleReference) {
-		setRoleI(aRoleReference.getObject(true));
+		this.roleI = aRoleReference;
 	}
 
-	public Vector<Role> getResponsibleRoles() {
+	public List<Role> getResponsibleRoles() {
+		List<Role> roles = new ArrayList<Role>();
 		if (responsibleRoles.size() == 0 && getRole() != null) {
-			responsibleRoles.add(getRole());
-			// Maybe nullify role?
+			FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(getRole());
+			ref.setOwner(this);
+			responsibleRoles.add(ref);
 		}
-		return responsibleRoles;
+		for (FlexoModelObjectReference<Role> role : responsibleRoles) {
+			roles.add(role.getObject());
+		}
+		return roles;
 	}
 
-	public void setResponsibleRoles(Vector<Role> responsibleRoles) {
-		this.responsibleRoles = responsibleRoles;
+	public void setResponsibleRoles(List<Role> responsibleRoles) {
+		List<FlexoModelObjectReference<Role>> roles = new ArrayList<FlexoModelObjectReference<Role>>();
+		for (Role r : responsibleRoles) {
+			FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(r);
+			ref.setOwner(this);
+			roles.add(ref);
+		}
+
+		this.responsibleRoles = roles;
 	}
 
 	public void addToResponsibleRoles(Role role) {
-		if (!responsibleRoles.contains(role)) {
-			responsibleRoles.add(role);
-			setChanged();
-			notifyAttributeModification("responsibleRoles", null, responsibleRoles);
+		for (FlexoModelObjectReference<Role> r : responsibleRoles) {
+			if (r.getObject() == role) {
+				return;
+			}
 		}
+		FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(role);
+		responsibleRoles.add(ref);
+		setChanged();
+		notifyAttributeModification("responsibleRoles", null, responsibleRoles);
 	}
 
 	public void removeFromResponsibleRoles(Role role) {
-		responsibleRoles.remove(role);
+		for (FlexoModelObjectReference<Role> r : responsibleRoles) {
+			if (r.getObject() == role) {
+				responsibleRoles.remove(r);
+			}
+			break;
+		}
 		setChanged();
 		notifyAttributeModification("responsibleRoles", responsibleRoles, null);
 	}
 
-	public Vector<Role> getInformedRoles() {
+	public List<Role> getInformedRoles() {
+		List<Role> roles = new ArrayList<Role>();
 		if (informedRoles.size() == 0 && getRoleI() != null) {
-			informedRoles.add(getRoleI());
-			// Maybe nullify roleI?
+			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleI());
+			ref.setOwner(this);
+			informedRoles.add(ref);
 		}
-		return informedRoles;
+		for (FlexoModelObjectReference<Role> role : informedRoles) {
+			roles.add(role.getObject());
+		}
+		return roles;
 	}
 
-	public void setInformedRoles(Vector<Role> informedRoles) {
-		this.informedRoles = informedRoles;
+	public void setInformedRoles(List<Role> informedRoles) {
+		List<FlexoModelObjectReference<Role>> roles = new ArrayList<FlexoModelObjectReference<Role>>();
+		for (Role r : informedRoles) {
+			FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(r);
+			ref.setOwner(this);
+			roles.add(ref);
+		}
+
+		this.informedRoles = roles;
 	}
 
 	public void addToInformedRoles(Role role) {
-		if (!informedRoles.contains(role)) {
-			informedRoles.add(role);
-			setChanged();
-			notifyAttributeModification("informedRoles", null, informedRoles);
+		for (FlexoModelObjectReference<Role> r : informedRoles) {
+			if (r.getObject() == role) {
+				return;
+			}
 		}
+		FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(role);
+		informedRoles.add(ref);
+		setChanged();
+		notifyAttributeModification("informedRoles", null, informedRoles);
 	}
 
 	public void removeFromInformedRoles(Role role) {
-		informedRoles.remove(role);
+		for (FlexoModelObjectReference<Role> r : informedRoles) {
+			if (r.getObject() == role) {
+				informedRoles.remove(r);
+			}
+			break;
+		}
 		setChanged();
 		notifyAttributeModification("informedRoles", informedRoles, null);
 	}
 
-	public Vector<Role> getConsultedRoles() {
-		if (consultedRoles.size() == 0 && getRoleC() != null) {
-			consultedRoles.add(getRoleC());
-			// Maybe nullify roleC?
-		}
-		return consultedRoles;
-	}
-
-	public void setConsultedRoles(Vector<Role> consultedRoles) {
-		this.consultedRoles = consultedRoles;
-	}
-
-	public void addToConsultedRoles(Role role) {
-		if (!consultedRoles.contains(role)) {
-			consultedRoles.add(role);
-			setChanged();
-			notifyAttributeModification("consultedRoles", null, consultedRoles);
-		}
-	}
-
-	public void removeFromConsultedRoles(Role role) {
-		consultedRoles.remove(role);
-		setChanged();
-		notifyAttributeModification("consultedRoles", consultedRoles, null);
-	}
-
-	public Vector<Role> getAccountableRoles() {
+	public List<Role> getAccountableRoles() {
+		List<Role> roles = new ArrayList<Role>();
 		if (accountableRoles.size() == 0 && getRoleA() != null) {
-			accountableRoles.add(getRoleA());
-			// Maybe nullify roleA?
+			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleI());
+			ref.setOwner(this);
+			accountableRoles.add(ref);
 		}
-		return accountableRoles;
+		for (FlexoModelObjectReference<Role> role : accountableRoles) {
+			roles.add(role.getObject());
+		}
+		return roles;
 	}
 
-	public void setAccountableRoles(Vector<Role> accountableRoles) {
-		this.accountableRoles = accountableRoles;
+	public void setAccountableRoles(List<Role> accountableRoles) {
+		List<FlexoModelObjectReference<Role>> roles = new ArrayList<FlexoModelObjectReference<Role>>();
+		for (Role r : accountableRoles) {
+			FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(r);
+			ref.setOwner(this);
+			roles.add(ref);
+		}
+
+		this.accountableRoles = roles;
 	}
 
 	public void addToAccountableRoles(Role role) {
-		if (!accountableRoles.contains(role)) {
-			accountableRoles.add(role);
-			setChanged();
-			notifyAttributeModification("accountableRoles", null, accountableRoles);
+		for (FlexoModelObjectReference<Role> r : accountableRoles) {
+			if (r.getObject() == role) {
+				return;
+			}
 		}
+		FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(role);
+		accountableRoles.add(ref);
+		setChanged();
+		notifyAttributeModification("accountableRoles", null, accountableRoles);
 	}
 
 	public void removeFromAccountableRoles(Role role) {
-		accountableRoles.remove(role);
+		for (FlexoModelObjectReference<Role> r : accountableRoles) {
+			if (r.getObject() == role) {
+				accountableRoles.remove(r);
+			}
+			break;
+		}
 		setChanged();
 		notifyAttributeModification("accountableRoles", accountableRoles, null);
 	}
 
-	public Vector<Role> getAvailableResponsibleRoles() {
-		Vector<Role> roles = getWorkflow().getAllAssignableRoles();
+	public List<Role> getConsultedRoles() {
+		List<Role> roles = new ArrayList<Role>();
+		if (consultedRoles.size() == 0 && getRoleC() != null) {
+			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleI());
+			ref.setOwner(this);
+			consultedRoles.add(ref);
+		}
+		for (FlexoModelObjectReference<Role> role : consultedRoles) {
+			roles.add(role.getObject());
+		}
+		return roles;
+	}
+
+	public void setConsultedRoles(List<Role> consultedRoles) {
+		List<FlexoModelObjectReference<Role>> roles = new ArrayList<FlexoModelObjectReference<Role>>();
+		for (Role r : consultedRoles) {
+			FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(r);
+			ref.setOwner(this);
+			roles.add(ref);
+		}
+
+		this.consultedRoles = roles;
+	}
+
+	public void addToConsultedRoles(Role role) {
+		for (FlexoModelObjectReference<Role> r : consultedRoles) {
+			if (r.getObject() == role) {
+				return;
+			}
+		}
+		FlexoModelObjectReference<Role> ref = new FlexoModelObjectReference<Role>(role);
+		consultedRoles.add(ref);
+		setChanged();
+		notifyAttributeModification("consultedRoles", null, consultedRoles);
+	}
+
+	public void removeFromConsultedRoles(Role role) {
+		for (FlexoModelObjectReference<Role> r : consultedRoles) {
+			if (r.getObject() == role) {
+				consultedRoles.remove(r);
+			}
+			break;
+		}
+		setChanged();
+		notifyAttributeModification("consultedRoles", consultedRoles, null);
+	}
+
+	public List<Role> getAvailableResponsibleRoles() {
+		List<Role> roles = new ArrayList<Role>(getWorkflow().getAllAssignableRoles());
 		roles.removeAll(getResponsibleRoles());
 		return roles;
 	}
 
-	public Vector<Role> getAvailableAccountableRoles() {
-		Vector<Role> roles = getWorkflow().getAllAssignableRoles();
+	public List<Role> getAvailableAccountableRoles() {
+		List<Role> roles = new ArrayList<Role>(getWorkflow().getAllAssignableRoles());
 		roles.removeAll(getAccountableRoles());
 		return roles;
 	}
 
-	public Vector<Role> getAvailableConsultedRoles() {
-		Vector<Role> roles = getWorkflow().getAllAssignableRoles();
+	public List<Role> getAvailableConsultedRoles() {
+		List<Role> roles = new ArrayList<Role>(getWorkflow().getAllAssignableRoles());
 		roles.removeAll(getConsultedRoles());
 		return roles;
 	}
 
-	public Vector<Role> getAvailableInformedRoles() {
-		Vector<Role> roles = getWorkflow().getAllAssignableRoles();
+	public List<Role> getAvailableInformedRoles() {
+		List<Role> roles = new ArrayList<Role>(getWorkflow().getAllAssignableRoles());
 		roles.removeAll(getInformedRoles());
 		return roles;
 	}
@@ -639,34 +659,31 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		}
 	}
 
-	public Vector<FlexoModelObjectReference<Role>> getResponsibleRoleReferences() {
-		if (getResponsibleRoles() != null && getResponsibleRoles().size() > 0) {
-			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
-			for (Role role : getResponsibleRoles()) {
-				roles.add(new FlexoModelObjectReference<Role>(role));
-			}
-			return roles;
-		}
-		return null;
+	public List<FlexoModelObjectReference<Role>> getResponsibleRoleReferences() {
+		return responsibleRoles;
 	}
 
-	public void setResponsibleRoleReferences(Vector<FlexoModelObjectReference<Role>> responsibleRoleReferences) {
+	public void setResponsibleRoleReferences(List<FlexoModelObjectReference<Role>> responsibleRoleReferences) {
 		for (FlexoModelObjectReference<Role> role : responsibleRoleReferences) {
 			addToResponsibleRoleReferences(role);
 		}
 	}
 
 	public void addToResponsibleRoleReferences(FlexoModelObjectReference<Role> role) {
-		addToResponsibleRoles(role.getObject(true));
+		responsibleRoles.add(role);
+		setChanged();
+		notifyAttributeModification("responsibleRoles", null, responsibleRoles);
 	}
 
 	public void removeFromResponsibleRoleReferences(FlexoModelObjectReference<Role> role) {
-		// Unused
+		responsibleRoles.remove(role);
+		setChanged();
+		notifyAttributeModification("responsibleRoles", null, responsibleRoles);
 	}
 
-	public Vector<FlexoModelObjectReference<Role>> getAccountableRoleReferences() {
+	public List<FlexoModelObjectReference<Role>> getAccountableRoleReferences() {
 		if (getAccountableRoles() != null && getAccountableRoles().size() > 0) {
-			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
+			List<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getAccountableRoles()) {
 				roles.add(new FlexoModelObjectReference<Role>(role));
 			}
@@ -675,21 +692,25 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return null;
 	}
 
-	public void setAccountableRoleReferences(Vector<FlexoModelObjectReference<Role>> accountableRoleReferences) {
+	public void setAccountableRoleReferences(List<FlexoModelObjectReference<Role>> accountableRoleReferences) {
 		for (FlexoModelObjectReference<Role> role : accountableRoleReferences) {
 			addToAccountableRoleReferences(role);
 		}
 	}
 
 	public void addToAccountableRoleReferences(FlexoModelObjectReference<Role> role) {
-		addToAccountableRoles(role.getObject(true));
+		accountableRoles.add(role);
+		setChanged();
+		notifyAttributeModification("accountableRoles", null, accountableRoles);
 	}
 
 	public void removeFromAccountableRoleReferences(FlexoModelObjectReference<Role> role) {
-		// Unused
+		accountableRoles.add(role);
+		setChanged();
+		notifyAttributeModification("accountableRoles", null, accountableRoles);
 	}
 
-	public Vector<FlexoModelObjectReference<Role>> getConsultedRoleReferences() {
+	public List<FlexoModelObjectReference<Role>> getConsultedRoleReferences() {
 		if (getConsultedRoles() != null && getConsultedRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getConsultedRoles()) {
@@ -700,21 +721,25 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return null;
 	}
 
-	public void setConsultedRoleReferences(Vector<FlexoModelObjectReference<Role>> consultedRoleReferences) {
+	public void setConsultedRoleReferences(List<FlexoModelObjectReference<Role>> consultedRoleReferences) {
 		for (FlexoModelObjectReference<Role> role : consultedRoleReferences) {
 			addToConsultedRoleReferences(role);
 		}
 	}
 
 	public void addToConsultedRoleReferences(FlexoModelObjectReference<Role> role) {
-		addToConsultedRoles(role.getObject(true));
+		consultedRoles.add(role);
+		setChanged();
+		notifyAttributeModification("consultedRoles", null, consultedRoles);
 	}
 
 	public void removeFromConsultedRoleReferences(FlexoModelObjectReference<Role> role) {
-		// Unused
+		consultedRoles.remove(role);
+		setChanged();
+		notifyAttributeModification("consultedRoles", null, consultedRoles);
 	}
 
-	public Vector<FlexoModelObjectReference<Role>> getInformedRoleReferences() {
+	public List<FlexoModelObjectReference<Role>> getInformedRoleReferences() {
 		if (getInformedRoles() != null && getInformedRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getInformedRoles()) {
@@ -725,18 +750,22 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return null;
 	}
 
-	public void setInformedRoleReferences(Vector<FlexoModelObjectReference<Role>> informedRoleReferences) {
+	public void setInformedRoleReferences(List<FlexoModelObjectReference<Role>> informedRoleReferences) {
 		for (FlexoModelObjectReference<Role> role : informedRoleReferences) {
 			addToInformedRoleReferences(role);
 		}
 	}
 
 	public void addToInformedRoleReferences(FlexoModelObjectReference<Role> role) {
-		addToInformedRoles(role.getObject(true));
+		informedRoles.add(role);
+		setChanged();
+		notifyAttributeModification("informedRoles", null, informedRoles);
 	}
 
 	public void removeFromInformedRoleReferences(FlexoModelObjectReference<Role> role) {
-		// Unused
+		informedRoles.remove(role);
+		setChanged();
+		notifyAttributeModification("informedRoles", null, informedRoles);
 	}
 
 	@Override
@@ -1095,6 +1124,44 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return false;
 	}
 
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+		setChanged();
+	}
+
+	@Override
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		if (role == reference) {
+			setRole(null);
+		} else if (roleA == reference) {
+			setRoleA(null);
+		} else if (roleC == reference) {
+			setRoleC(null);
+		} else if (roleI == reference) {
+			setRoleI(null);
+		} else if (responsibleRoles.contains(reference)) {
+			removeFromResponsibleRoleReferences((FlexoModelObjectReference<Role>) reference);
+		} else if (informedRoles.contains(reference)) {
+			removeFromInformedRoleReferences((FlexoModelObjectReference<Role>) reference);
+		} else if (accountableRoles.contains(reference)) {
+			removeFromAccountableRoleReferences((FlexoModelObjectReference<Role>) reference);
+		} else if (consultedRoles.contains(reference)) {
+			removeFromConsultedRoleReferences((FlexoModelObjectReference<Role>) reference);
+		}
+	}
+
 	public AbstractActivityStatistics getStatistics() {
 		if (statistics == null) {
 			statistics = new AbstractActivityStatistics(this);
@@ -1106,22 +1173,20 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		getStatistics().refresh();
 	}
 
-	private Role representationRole = null;
-
 	public String getRACICodeForRole(Role aRole) {
 		if (aRole == null) {
 			return "";
 		}
-		if (aRole.equals(_role) || getResponsibleRoles().contains(aRole)) {
+		if (aRole.equals(getRole()) || getResponsibleRoles().contains(aRole)) {
 			return "R";
 		}
-		if (aRole.equals(roleA) || getAccountableRoles().contains(aRole)) {
+		if (aRole.equals(getRoleA()) || getAccountableRoles().contains(aRole)) {
 			return "A";
 		}
-		if (aRole.equals(roleC) || getConsultedRoles().contains(aRole)) {
+		if (aRole.equals(getRoleC()) || getConsultedRoles().contains(aRole)) {
 			return "C";
 		}
-		if (aRole.equals(roleI) || getInformedRoles().contains(aRole)) {
+		if (aRole.equals(getRoleI()) || getInformedRoles().contains(aRole)) {
 			return "I";
 		}
 
@@ -1143,6 +1208,38 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		for (EventNode boundaryEvent : getAllBoundaryEvents()) {
 			boundaryEvent.delete();
 		}
+		if (role != null) {
+			role.delete();
+			role = null;
+		}
+		if (roleA != null) {
+			roleA.delete();
+			roleA = null;
+		}
+		if (roleI != null) {
+			roleI.delete();
+			roleI = null;
+		}
+		if (roleC != null) {
+			roleC.delete();
+			roleC = null;
+		}
+		for (FlexoModelObjectReference<Role> ref : responsibleRoles) {
+			ref.delete();
+		}
+		responsibleRoles.clear();
+		for (FlexoModelObjectReference<Role> ref : accountableRoles) {
+			ref.delete();
+		}
+		accountableRoles.clear();
+		for (FlexoModelObjectReference<Role> ref : informedRoles) {
+			ref.delete();
+		}
+		informedRoles.clear();
+		for (FlexoModelObjectReference<Role> ref : consultedRoles) {
+			ref.delete();
+		}
+		consultedRoles.clear();
 		super.delete();
 	}
 }

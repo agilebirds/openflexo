@@ -53,7 +53,7 @@ public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess, Sub
 
 		@Override
 		public boolean isEnabledForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
-			return object != null && object.getSubProcess() != null;
+			return object != null;
 		}
 
 	};

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.OperationNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.OperationNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="8" title="Operation Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="OperationMetricsTab">
-      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+    <Tab title="Operation Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="OperationMetricsTab">
+      <Label label="metrics" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="MetricsValuesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
@@ -11,18 +11,18 @@
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="5" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
-      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
-      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
-      <Label label="# actions" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <Label label="# actions" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
+      <Label label="include_begin_end" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
+      <CheckBox selected="false" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
+      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
+      <TextField data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
+      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
+      <TextField data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
     </Tab>
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="bindings" align="center" localize="true" name="ComponentInstancebindingsLabel" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=false)" visible="(data.operationComponent != null)" />
-      <Table iteratorClassName="org.openflexo.foundation.ie.ComponentInstanceBinding" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.componentInstance.bindings" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=true)" visible="(data.operationComponent != null)" name="ComponentInstancebindings" localize="true" manageDynamicModel="true">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
+      <Label label="bindings" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;location=center)" visible="(data.operationComponent != null)" name="ComponentInstancebindingsLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.ie.ComponentInstanceBinding" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ComponentInstancebindings" data="data.componentInstance.bindings" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)" visible="(data.operationComponent != null)">
         <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.project" value="iterator.project" />
@@ -37,31 +37,41 @@
         <RemoveAction method="data.componentInstance.deleteBinding(selected)" isAvailable="data.componentInstance.isBindingDeletable(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="2" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
-      <Label label="acronym" localize="true" name="AcronymLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" localize="true" name="Acronym" data="data.acronym" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">
+      <Label label="acronym" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" name="AcronymLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)" name="Acronym" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
     </Tab>
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="component_instance_id" localize="true" name="ComponentInstanceflexoIDLabel" constraints="twocols(location=left;index=30;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="ComponentInstanceflexoID" data="data.componentInstance.flexoID.toString" constraints="twocols(location=right;index=31;expandHorizontally=true;expandVertically=false)">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="component_instance_id" constraints="twocols(expandHorizontally=false;expandVertically=false;index=30;location=left)" name="ComponentInstanceflexoIDLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField data="data.componentInstance.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=31;location=right)" name="ComponentInstanceflexoID" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=32;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=33;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
+      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=32;location=left)" name="CssSheetLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <DropDown data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=33;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </DropDown>
-      <Label label="last_update" localize="true" name="LastUpdateAsStringLabel" constraints="twocols(location=left;index=34;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="LastUpdateAsString" data="data.lastUpdateAsString" constraints="twocols(location=right;index=35;expandHorizontally=true;expandVertically=false)">
+      <Label label="last_update" constraints="twocols(expandHorizontally=false;expandVertically=false;index=34;location=left)" name="LastUpdateAsStringLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField data="data.lastUpdateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=35;location=right)" name="LastUpdateAsString" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="selectedTab" localize="true" name="TabComponentLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" />
-      <DropDown format="object.name" localize="true" name="TabComponent" data="data.tabComponent" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" list="data.availableTabs" iteratorClassName="org.openflexo.foundation.ie.cl.TabComponentDefinition" />
-      <Label label="is_synchronized" localize="true" name="IsSynchronizedLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="IsSynchronized" data="data.isSynchronized" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="selectedTab" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" name="TabComponentLabel" localize="true" />
+      <DropDown data="data.tabComponent" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" name="TabComponent" format="object.name" localize="true" list="data.availableTabs" iteratorClassName="org.openflexo.foundation.ie.cl.TabComponentDefinition" autoSelectFirstRow="false" />
+      <Label label="is_synchronized" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="IsSynchronizedLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <CheckBox selected="false" data="data.isSynchronized" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="IsSynchronized" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </CheckBox>
     </Tab>

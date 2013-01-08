@@ -74,11 +74,8 @@ import org.openflexo.drm.action.AddToRelatedToItem;
 import org.openflexo.drm.action.RemoveEmbeddingChildItem;
 import org.openflexo.drm.action.RemoveInheritanceChildItem;
 import org.openflexo.drm.action.RemoveRelatedToItem;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
@@ -92,7 +89,7 @@ import org.openflexo.wysiwyg.FlexoWysiwygLight;
  * @author yourname
  * 
  */
-public abstract class AbstractDocItemView extends JPanel implements GraphicalFlexoObserver {
+public abstract class AbstractDocItemView extends JPanel {
 
 	protected static final Logger logger = Logger.getLogger(AbstractDocItemView.class.getPackage().getName());
 
@@ -984,11 +981,6 @@ public abstract class AbstractDocItemView extends JPanel implements GraphicalFle
 
 	public static String getTitleForDocItem(DocItem docItem) {
 		return docItem.getIdentifier();
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		// TODO: Implements this
 	}
 
 	public void updateViewFromModel() {

@@ -229,7 +229,12 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	public boolean isDisplayable(IFlexoOntologyObject object) {
 
+		if (object instanceof IFlexoOntology) {
+			return true;
+		}
+
 		boolean returned = false;
+
 		if (object instanceof IFlexoOntologyClass && showClasses) {
 			if (getRootClass() != null && object instanceof IFlexoOntologyConcept) {
 				returned = getRootClass().isSuperConceptOf((IFlexoOntologyConcept) object);
@@ -418,9 +423,15 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			appendOntologyContents(getContext(), null);
 
 		} else {
+			System.out.println("computeNonHierarchicalStructure()");
+			System.out.println("context=" + getContext());
+			System.out.println("imported ontologies: " + getContext().getImportedOntologies());
+			System.out.println("all imported ontologies: " + OntologyUtils.getAllImportedOntologies(getContext()));
+
 			roots.add(getContext());
 			appendOntologyContents(getContext(), getContext());
 			for (IFlexoOntology o : OntologyUtils.getAllImportedOntologies(getContext())) {
+				System.out.println("Hop " + o + " displayable: " + isDisplayable(o));
 				if (o != getContext() && isDisplayable(o)) {
 					appendOntologyContents(o, getContext());
 				}
@@ -511,6 +522,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 				individuals.addAll(retrieveDisplayableIndividuals(o));
 			}
 		}
+
 		if (getDisplayPropertiesInClasses()) {
 			for (IFlexoOntologyStructuralProperty p : properties) {
 				List<IFlexoOntologyClass> preferredLocations = getPreferredStorageLocations(p, null);
@@ -596,8 +608,11 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		// First we look if property has a defined domain
 		if (p.getDomain() instanceof IFlexoOntologyClass) {
 			// Return the most specialized definition
-			IFlexoOntologyClass c = (searchedOntology != null ? searchedOntology : getContext()).getClass(((IFlexoOntologyClass) p
-					.getDomain()).getURI());
+			IFlexoOntology ontology = (searchedOntology != null ? searchedOntology : getContext());
+			IFlexoOntologyClass c = ontology.getClass(((IFlexoOntologyClass) p.getDomain()).getURI());
+			if (c == null) {
+				c = (IFlexoOntologyClass) p.getDomain();
+			}
 			if (c != null && (searchedOntology == null || c.getOntology() == searchedOntology)) {
 				potentialStorageClasses.add(c);
 				return potentialStorageClasses;
@@ -624,6 +639,8 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 				IFlexoOntologyClass returned = getContext().getClass(c.getURI());
 				if (returned != null) {
 					return returned;
+				} else {
+					return c;
 				}
 			}
 		}

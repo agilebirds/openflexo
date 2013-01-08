@@ -121,7 +121,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	@Override
 	public boolean isDraggable() {
-		return true;
+		return shapeGR.getDrawing().isEditable();
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -270,7 +270,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
@@ -550,6 +550,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving()) {
+			return null;
+		}
+		if (!shapeGR.getDrawing().isEditable()) {
 			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(shapeGR, drawingGraphics.getGraphicalRepresentation());

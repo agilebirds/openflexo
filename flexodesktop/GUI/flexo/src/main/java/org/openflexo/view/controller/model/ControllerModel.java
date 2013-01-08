@@ -3,10 +3,10 @@ package org.openflexo.view.controller.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -14,9 +14,8 @@ import java.util.logging.Level;
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -34,6 +33,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayoutTypeAdapterFactory;
+import org.openflexo.toolbox.ExtendedSet;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 
 import com.google.gson.Gson;
@@ -45,49 +45,61 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			.getName());
 
 	public static final String RIGHT_VIEW_VISIBLE = "rightViewVisible";
-
 	public static final String LEFT_VIEW_VISIBLE = "leftViewVisible";
-
+	public static final String LOCATIONS = "locations";
 	public static final String PERSPECTIVES = "perspectives";
 	public static final String EDITORS = "editors";
-	public static final String OBJECTS = "objects";
-	public static final String HISTORY = "history";
-	public static final String CURRENT_PERPSECTIVE = "currentPerspective";
-	public static final String CURRENT_EDITOR = "currentEditor";
-	public static final String CURRENT_PROJECT = "currentProject";
-	public static final String CURRENT_OBJECT = "currentObject";
-	public static final String CURRENT_LOCATION = "currentLocation";
 
+	public static final String CURRENT_LOCATION = "currentLocation";
+	public static final String CURRENT_OBJECT = "currentObject";
+	public static final String CURRENT_EDITOR = "currentEditor";
+	public static final String CURRENT_PERSPECTIVE = "currentPerspective";
+
+	private static final Location NO_LOCATION = new Location(null, null, null);
+
+	/** Gson instance used to serialize and deserialize layouts of the mainpane multisplitpane */
 	private Gson gsonLayout;
 
+	/** Flag that indicates the current state of the left view */
 	private boolean leftViewVisible = true;
 
+	/** Flag that indicates the current state of the right view */
 	private boolean rightViewVisible = true;
 
-	private FlexoEditor currentEditor;
-
-	private FlexoPerspective currentPerspective;
-
+	/** The list of all the available perspectives */
 	private List<FlexoPerspective> perspectives;
 
-	private List<FlexoEditor> editors;
-
+	/** List of objects that are represented. This list allows to track observed objects. */
 	private List<FlexoObject> objects;
 
-	private Stack<HistoryLocation> previousHistory;
-	private Stack<HistoryLocation> nextHistory;
-	private HistoryLocation currentLocation;
+	/** Set of locations that are opened. This set represents all the currently opened module views. */
+	private ExtendedSet<Location> locations;
 
+	/** The stack of locations that were visited */
+	private Stack<Location> previousHistory;
+
+	/**
+	 * The stack of locations that are ahead of the current location. This is only used when the user goes back in history. Whenever the
+	 * users bypasses history navigation, this stack is reset
+	 */
+	private Stack<Location> nextHistory;
+
+	/** The current location in the history */
+	private Location currentLocation = NO_LOCATION;
+
+	/** Internal flag that indicates if we are currently moving forward in the history */
 	private boolean isGoingForward = false;
 
+	/** Internal flag that indicates if we are currently moving backward in the history */
 	private boolean isGoingBackward = false;
 
-	private Map<FlexoPerspective, FlexoObject> lastEditedObjectsForPerspective;
-
+	/** The application context of this controller model */
 	private ApplicationContext context;
 
+	/** The module in which this controller model was created (mainly used to save module specific preferences) */
 	private FlexoModule module;
 
+	/** A property change listener registration manager that keeps track of all the registered {@link PropertyChangeListener} */
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
 	public ControllerModel(ApplicationContext context, FlexoModule module) {
@@ -96,14 +108,13 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		leftViewVisible = GeneralPreferences.getShowLeftView(module.getShortName());
 		rightViewVisible = GeneralPreferences.getShowRightView(module.getShortName());
-		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_ADDED, this, context.getProjectLoader());
+		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.PROJECT_OPENED, this, context.getProjectLoader());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_REMOVED, this, context.getProjectLoader());
-		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoObject>();
 		objects = new ArrayList<FlexoObject>();
+		locations = new ExtendedSet<Location>();
 		perspectives = new Vector<FlexoPerspective>();
-		editors = new ArrayList<FlexoEditor>();
-		previousHistory = new Stack<HistoryLocation>();
-		nextHistory = new Stack<HistoryLocation>();
+		previousHistory = new Stack<Location>();
+		nextHistory = new Stack<Location>();
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -124,13 +135,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			p.delete();
 		}
 		perspectives.clear();
-		lastEditedObjectsForPerspective.clear();
-		editors.clear();
 		registrationManager.delete();
-		currentPerspective = null;
-		currentEditor = null;
-		currentLocation = null;
 		super.delete();
+		currentLocation = NO_LOCATION;
 	}
 
 	/***************
@@ -143,39 +150,21 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	 * @return the current perspective
 	 */
 	public FlexoPerspective getCurrentPerspective() {
-		return currentPerspective;
+		if (currentLocation != null) {
+			return currentLocation.getPerspective();
+		} else {
+			return null;
+		}
 	}
 
 	public void setCurrentPerspective(FlexoPerspective currentPerspective) {
-		setCurrentPerspective(currentPerspective, true);
-	}
-
-	private void setCurrentPerspective(FlexoPerspective currentPerspective, boolean switchCurrentObjectIfNeeded) {
-		if (this.currentPerspective != currentPerspective) {
-			FlexoObject newEditedObject = getCurrentObject();
-
-			if (currentPerspective == null || getCurrentObject() != null && !currentPerspective.hasModuleViewForObject(getCurrentObject())) {
-				newEditedObject = null;
+		FlexoObject object = getCurrentObject();
+		if (currentPerspective != null) {
+			if (object == null || !currentPerspective.hasModuleViewForObject(object)) {
+				object = currentPerspective.getDefaultObject(object != null ? object : getCurrentProject());
 			}
-
-			if (newEditedObject == null || switchCurrentObjectIfNeeded) {
-				HistoryLocation lastHistoryLocationForPerspective = getLastHistoryLocation(currentPerspective, getCurrentProject());
-				if (lastHistoryLocationForPerspective != null) {
-					newEditedObject = lastHistoryLocationForPerspective.getObject();
-				} else {
-					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject() != null ? getCurrentObject()
-							: getCurrentProject());
-				}
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
-						+ (newEditedObject != null ? " of " + newEditedObject.getClass().getSimpleName() : ""));
-			}
-			FlexoPerspective oldValue = this.currentPerspective;
-			this.currentPerspective = currentPerspective;
-			getPropertyChangeSupport().firePropertyChange(CURRENT_PERPSECTIVE, oldValue, currentPerspective);
-			setCurrentObject(newEditedObject);
 		}
+		setCurrentLocation(getCurrentEditor(), object, currentPerspective);
 	}
 
 	public List<FlexoPerspective> getPerspectives() {
@@ -188,7 +177,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		perspectives.add(perspective);
 		getPropertyChangeSupport().firePropertyChange(PERSPECTIVES, null, perspective);
-		if (currentPerspective == null) {
+		if (getCurrentPerspective() == null) {
 			setCurrentPerspective(perspective);
 		}
 	}
@@ -204,7 +193,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public FlexoEditor getCurrentEditor() {
 		if (requiresProject()) {
-			return currentEditor;
+			return currentLocation.getEditor();
 		} else {
 			return context.getApplicationEditor();
 		}
@@ -214,49 +203,17 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return module.getModule().requireProject();
 	}
 
-	public void setCurrentEditor(FlexoEditor projectEditor) {
-		setCurrentEditor(projectEditor, true);
-	}
-
-	private void setCurrentEditor(FlexoEditor projectEditor, boolean switchObject) {
-		if (this.currentEditor == projectEditor) {
-			return;
-		}
-		if (requiresProject() && projectEditor == null && canGoBack()) {
-			historyBack();
-			return;
-		}
-		FlexoEditor old = currentEditor;
-		currentEditor = projectEditor;
-		if (currentEditor != null && switchObject) {
-			HistoryLocation hl = getLastHistoryLocation(getCurrentPerspective(), currentEditor.getProject());
-			if (hl != null) {
-				setCurrentObjectAndPerspective(hl.getObject(), hl.getPerspective());
-			} else {
-				if (getCurrentPerspective() != null && getCurrentPerspective().getDefaultObject(projectEditor.getProject()) != null) {
-					setCurrentObject(getCurrentPerspective().getDefaultObject(projectEditor.getProject()));
+	public void setCurrentEditor(FlexoEditor currentEditor) {
+		if (currentEditor != getCurrentEditor()) {
+			if (currentEditor == null || currentEditor.getProject() == null || isSelectableProject(currentEditor.getProject())) {
+				Location location = getLastLocationForEditor(currentEditor, null);
+				if (location != null) {
+					setCurrentLocation(location);
 				} else {
-					setCurrentObject(null);
+					setCurrentLocation(currentEditor, null, getCurrentPerspective());
 				}
 			}
 		}
-		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
-		getPropertyChangeSupport().firePropertyChange(CURRENT_PROJECT, old != null ? old.getProject() : null,
-				projectEditor != null ? projectEditor.getProject() : null);
-	}
-
-	public void addToEditors(FlexoEditor editor) {
-		editors.add(editor);
-		getPropertyChangeSupport().firePropertyChange(EDITORS, null, editor);
-	}
-
-	public void removeFromEditors(FlexoEditor editor) {
-		editors.remove(editor);
-		getPropertyChangeSupport().firePropertyChange(EDITORS, editor, null);
-	}
-
-	public List<FlexoEditor> getEditors() {
-		return editors;
 	}
 
 	public FlexoProject getCurrentProject() {
@@ -264,16 +221,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentProject(FlexoProject project) {
-		setCurrentProject(project, true);
+		setCurrentEditor(project != null ? context.getProjectLoader().getEditorForProject(project) : null);
 	}
 
-	private void setCurrentProject(FlexoProject project, boolean switchObject) {
-		setCurrentEditor(context.getProjectLoader().getEditorForProject(project), switchObject);
-	}
-
-	public void setCurrentObjectAndPerspective(FlexoObject currentObject, FlexoPerspective perspective) {
-		setCurrentPerspective(perspective, false);
-		setCurrentObject(currentObject);
+	public boolean isSelectableProject(FlexoProject project) {
+		return context.getProjectLoader().getRootProjects().contains(project);
 	}
 
 	/**********************
@@ -284,63 +236,123 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return currentLocation != null ? currentLocation.getObject() : null;
 	}
 
-	public void setCurrentObject(FlexoObject currentObject) {
-		if (currentObject != null) {
-			if (currentPerspective != null) {
-				// _history.add(moduleView.getRepresentedObject());
-				if (currentLocation == null || currentLocation.getObject() != currentObject) {
-					if (!isGoingForward && !isGoingBackward) {
-						if (currentLocation != null) {
-							previousHistory.push(currentLocation);
-						}
-						nextHistory.clear();
-						// Little block to change the currentPerspective if the
-						// current perspective can handle this object
-						if (!getCurrentPerspective().hasModuleViewForObject(currentObject)) {
-							for (FlexoPerspective p : getPerspectives()) {
-								if (p == null) {
-									continue;
-								}
-								if (p.hasModuleViewForObject(currentObject)) {
-									setCurrentPerspective(p);
-									break;
-								}
-							}
-						}
-					}
-					if (!objects.remove(currentObject)) {
-						registrationManager.new PropertyChangeListenerRegistration(FlexoObservable.DELETED_PROPERTY, this, currentObject);
-					}
-					objects.add(currentObject);
-					HistoryLocation old = currentLocation;
-					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
-					if (currentLocation.getObject() instanceof FlexoProjectObject) {
-						setCurrentProject(((FlexoProjectObject) currentLocation.getObject()).getProject(), false);
-					}
-					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
-					getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentObject);
-				} else if (currentLocation.getPerspective() != currentPerspective) {
-					previousHistory.push(currentLocation);
-					HistoryLocation old = currentLocation;
-					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
-					if (currentLocation.getObject() instanceof FlexoProjectObject) {
-						setCurrentProject(((FlexoProjectObject) currentLocation.getObject()).getProject(), false);
-					}
-					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
+	public void setCurrentObject(FlexoObject object) {
+		// Little block to change the currentPerspective if the
+		// current perspective can't handle this object
+		FlexoPerspective perspective = getCurrentPerspective();
+		if (!perspective.hasModuleViewForObject(object)) {
+			for (FlexoPerspective p : getPerspectives()) {
+				if (p == null) {
+					continue;
+				}
+				if (p.hasModuleViewForObject(object)) {
+					perspective = p;
+					break;
 				}
 			}
-		} else {
-			currentLocation = null;
-			getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, null, currentLocation);
-			getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, null, currentObject);
+		}
+		setCurrentLocation(getCurrentEditor(), object, perspective);
+	}
+
+	public Location getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public void setCurrentLocation(Location location) {
+		if (location != null && location.equals(getCurrentLocation())) {
+			return;
+		} else if (location != null) {
+			setCurrentLocation(location.getEditor(), location.getObject(), location.getPerspective());
 		}
 	}
 
-	public Stack<HistoryLocation> getNextHistory() {
+	public Set<Location> getLocations() {
+		return Collections.unmodifiableSet(locations);
+	}
+
+	/**
+	 * Adds the specified location to the set of locations if it is not yet in the set. The method returns a location which is equal to the
+	 * specified location and which is in the set (ie, if the location was not yet in the set, it returns the specified location, else it
+	 * returns the locations that was previously contained).
+	 * 
+	 * @param location
+	 *            the location to add.
+	 * @return the location which is contained in the set.
+	 */
+	public Location addToLocations(Location location) {
+		Location existing = locations.get(location);
+		if (existing == null) {
+			locations.add(existing = location);
+			getPropertyChangeSupport().firePropertyChange(LOCATIONS, null, existing = location);
+		}
+		return existing;
+	}
+
+	public boolean removeFromLocations(Location location) {
+		boolean removed = locations.remove(location);
+		if (removed) {
+			if (location != null && location.equals(currentLocation)) {
+				setCurrentLocation(getLastLocationForEditor(getCurrentEditor(), getCurrentPerspective()));
+			}
+			getPropertyChangeSupport().firePropertyChange(LOCATIONS, location, null);
+		}
+		return removed;
+	}
+
+	public void setCurrentLocation(FlexoEditor editor, FlexoObject object, FlexoPerspective perspective) {
+		if (isDeleted()) {
+			return;
+		}
+		if (editor == null) {
+			editor = getCurrentEditor();
+		}
+		if (perspective == null) {
+			perspective = getCurrentPerspective();
+		}
+		if (object == null && perspective != null && editor != null) {
+			object = perspective.getDefaultObject(editor.getProject());
+		}
+		if (!isGoingForward && !isGoingBackward) {
+			if (currentLocation != null && currentLocation != NO_LOCATION) {
+				previousHistory.push(currentLocation);
+			}
+			nextHistory.clear();
+		}
+		if (object != null) {
+			if (getCurrentObject() != object) {
+				if (!objects.contains(object)) {
+					registrationManager.new PropertyChangeListenerRegistration(object.getDeletedProperty(), this, object);
+					objects.add(object);
+				}
+			}
+		}
+		Location old = currentLocation;
+		currentLocation = addToLocations(new Location(editor, object, perspective));
+		notifyLocationChange(old, currentLocation);
+	}
+
+	private void notifyLocationChange(Location old, Location newLocation) {
+		getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
+		if (old == null || old.getEditor() != currentLocation.getEditor()) {
+			getPropertyChangeSupport()
+					.firePropertyChange(CURRENT_EDITOR, old != null ? old.getEditor() : null, currentLocation.getEditor());
+		}
+		if (old == null || old.getPerspective() != currentLocation.getPerspective()) {
+			getPropertyChangeSupport().firePropertyChange(CURRENT_PERSPECTIVE, old != null ? old.getPerspective() : null,
+					currentLocation.getPerspective());
+		}
+		if (old == null || old.getObject() != currentLocation.getObject()) {
+			getPropertyChangeSupport()
+					.firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentLocation.getObject());
+		}
+
+	}
+
+	public Stack<Location> getNextHistory() {
 		return nextHistory;
 	}
 
-	public Stack<HistoryLocation> getPreviousHistory() {
+	public Stack<Location> getPreviousHistory() {
 		return previousHistory;
 	}
 
@@ -356,7 +368,37 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return getCurrentObject() != null && getParent(getCurrentObject()) != null;
 	}
 
-	private FlexoObject getParent(FlexoObject object) {
+	private Location getLastLocationForEditor(FlexoEditor editor, FlexoPerspective perspective) {
+		if (perspective != null) {
+			for (int i = previousHistory.size() - 1; i > -1; i--) {
+				Location location = previousHistory.get(i);
+				if ((editor == null || location.getEditor() == editor) && location.getPerspective() == perspective
+						&& locations.contains(location)) {
+					return location;
+				}
+			}
+			for (Location location : nextHistory) {
+				if ((editor == null || location.getEditor() == editor) && location.getPerspective() == perspective
+						&& locations.contains(location)) {
+					return location;
+				}
+			}
+		}
+		for (int i = previousHistory.size() - 1; i > -1; i--) {
+			Location location = previousHistory.get(i);
+			if (editor == null || location.getEditor() == editor && locations.contains(location)) {
+				return location;
+			}
+		}
+		for (Location location : nextHistory) {
+			if (editor == null || location.getEditor() == editor && locations.contains(location)) {
+				return location;
+			}
+		}
+		return null;
+	}
+
+	private FlexoModelObject getParent(FlexoObject object) {
 		if (object instanceof DMObject) {
 			return ((DMObject) object).getParent();
 		} else if (object instanceof FlexoProcess) {
@@ -395,8 +437,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					logger.fine("Back to " + previousHistory.peek());
 				}
 				nextHistory.push(currentLocation);
-				HistoryLocation nextLocation = previousHistory.pop();
-				setCurrentObjectAndPerspective(nextLocation.getObject(), nextLocation.getPerspective());
+				Location nextLocation = previousHistory.pop();
+				setCurrentLocation(nextLocation);
 			} finally {
 				isGoingBackward = false;
 			}
@@ -411,8 +453,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					logger.fine("Forward to " + nextHistory.peek());
 				}
 				previousHistory.push(currentLocation);
-				HistoryLocation nextLocation = nextHistory.pop();
-				setCurrentObjectAndPerspective(nextLocation.getObject(), nextLocation.getPerspective());
+				Location nextLocation = nextHistory.pop();
+				setCurrentLocation(nextLocation);
 			} finally {
 				isGoingForward = false;
 			}
@@ -425,36 +467,42 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 	}
 
-	private HistoryLocation getLastHistoryLocation(FlexoPerspective perspective, FlexoProject project) {
-		for (int i = previousHistory.size() - 1; i > -1; i--) {
-			HistoryLocation location = previousHistory.get(i);
-			if (location != null && currentLocation != null && location.getPerspective() == perspective
-					&& currentLocation.getObject() instanceof FlexoProjectObject
-					&& ((FlexoProjectObject) currentLocation.getObject()).getProject() == project) {
-				return location;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getProjectLoader()) {
-			if (evt.getPropertyName().equals(ProjectLoader.EDITOR_ADDED)) {
-				addToEditors((FlexoEditor) evt.getNewValue());
-			} else if (evt.getPropertyName().equals(ProjectLoader.EDITOR_REMOVED)) {
-				removeFromEditors((FlexoEditor) evt.getOldValue());
-				if (getCurrentEditor() == evt.getOldValue()) {
-					setCurrentEditor(null);
-				}
+			if (evt.getPropertyName().equals(ProjectLoader.PROJECT_OPENED)) {
+				setCurrentProject((FlexoProject) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(ProjectLoader.PROJECT_CLOSED)) {
+				handleProjectRemoval((FlexoProject) evt.getOldValue());
+				setCurrentProject(null);
 			}
-		} else if (evt.getPropertyName().equals(FlexoObservable.DELETED_PROPERTY)) {
-			FlexoObject deletedObject = (FlexoObject) evt.getOldValue();
-			handleObjectDeletion(deletedObject);
+		} else if (evt.getOldValue() instanceof FlexoModelObject
+				&& evt.getPropertyName().equals(((FlexoModelObject) evt.getOldValue()).getDeletedProperty())) {
+			handleObjectDeletion((FlexoModelObject) evt.getOldValue());
 		}
 	}
 
-	private void handleObjectDeletion(FlexoObject deletedObject) {
+	private void handleProjectRemoval(FlexoProject removedProject) {
+		updateHistoryForProjectRemoval(previousHistory, removedProject);
+		updateHistoryForProjectRemoval(nextHistory, removedProject);
+		for (Location location : new ArrayList<Location>(locations)) {
+			if (location.getEditor() == removedProject) {
+				removeFromLocations(location);
+			}
+		}
+	}
+
+	private void updateHistoryForProjectRemoval(Stack<Location> history, FlexoProject removedProject) {
+		Iterator<Location> i = history.iterator();
+		while (i.hasNext()) {
+			Location hl = i.next();
+			if (hl.getEditor().getProject() == removedProject) {
+				i.remove();
+			}
+		}
+	}
+
+	private void handleObjectDeletion(FlexoModelObject deletedObject) {
 		while (objects.remove(deletedObject)) {
 			;
 		}
@@ -467,13 +515,13 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				setCurrentObject(null);
 			}
 		}
-		registrationManager.removeListener(FlexoObservable.DELETED_PROPERTY, this, deletedObject);
+		registrationManager.removeListener(deletedObject.getDeletedProperty(), this, deletedObject);
 	}
 
-	private void updateHistoryForDeletedObject(Stack<HistoryLocation> history, FlexoObject deletedObject) {
-		Iterator<HistoryLocation> i = history.iterator();
+	private void updateHistoryForDeletedObject(Stack<Location> history, FlexoModelObject deletedObject) {
+		Iterator<Location> i = history.iterator();
 		while (i.hasNext()) {
-			HistoryLocation hl = i.next();
+			Location hl = i.next();
 			if (hl.getObject() == deletedObject) {
 				i.remove();
 			}
@@ -506,7 +554,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (gsonLayout == null) {
 			GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(new MultiSplitLayoutTypeAdapterFactory());
 			gsonLayout = builder.create();
-
 		}
 		return gsonLayout;
 	}
@@ -536,4 +583,5 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
+
 }

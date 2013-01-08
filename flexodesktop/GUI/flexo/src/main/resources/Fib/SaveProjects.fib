@@ -12,8 +12,8 @@
     <Panel layout="flow" hGap="5" vGap="5" flowAlignment="RIGHT" borderTitle="Panel"  darkLevel="0" constraints="border(index=0;location=south)">
       <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="flow(index=0;location=center)">
         <Button action="data.selectAll()" buttonType="Trigger" label="select_all" constraints="grid(x=0;y=0)" name="SelectAll" localize="true" manageDynamicModel="true" />
-        <Button action="data.deselectAll()" buttonType="Trigger" label="deselect_all" constraints="grid(x=1;y=0)" name="DeselectAll" localize="true" manageDynamicModel="true" default = "true"/>
-        <Button action="controller.chooseYesAndDispose()" buttonType="Trigger" label="Ok" constraints="grid(x=0;y=1)" localize="true" />
+        <Button action="data.deselectAll()" buttonType="Trigger" label="deselect_all" constraints="grid(x=1;y=0)" name="DeselectAll" localize="true" manageDynamicModel="true"/>
+        <Button action="controller.chooseYesAndDispose()" buttonType="Trigger" label="Save" constraints="grid(x=0;y=1)" localize="true" default = "true"/>
         <Button action="controller.chooseNoAndDispose()" buttonType="Trigger" label="Cancel" constraints="grid(x=1;y=1)" localize="true" />
       </Panel>
     </Panel>

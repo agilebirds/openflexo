@@ -322,6 +322,11 @@ public class TestDrawing {
 			list2.add(circle);
 		}
 
+		@Override
+		public boolean isEditable() {
+			return true;
+		}
+
 		public class MyShapeGraphicalRepresentation<O extends MyShape> extends ShapeGraphicalRepresentation<O> {
 			public MyShapeGraphicalRepresentation(ShapeType shapeType, O aDrawable, MyDrawing aDrawing) {
 				super(shapeType, aDrawable, aDrawing);

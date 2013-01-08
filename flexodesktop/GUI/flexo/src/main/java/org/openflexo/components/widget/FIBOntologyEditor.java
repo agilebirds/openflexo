@@ -19,6 +19,7 @@
  */
 package org.openflexo.components.widget;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.SelectionSynchronizedFIBView;
 import org.openflexo.view.controller.FlexoController;
@@ -87,7 +89,15 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntology(IFlexoOntology context) {
+		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
+			((HasPropertyChangeSupport) this.ontology).getPropertyChangeSupport().removePropertyChangeListener(
+					((HasPropertyChangeSupport) ontology).getDeletedProperty(), this);
+		}
 		this.ontology = context;
+		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
+			((HasPropertyChangeSupport) this.ontology).getPropertyChangeSupport().addPropertyChangeListener(
+					((HasPropertyChangeSupport) ontology).getDeletedProperty(), this);
+		}
 		// ontology.loadWhenUnloaded();
 		update();
 	}
@@ -362,4 +372,11 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		getFIBController().objectAddedToSelection(selectedValue);
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == this.ontology && ((HasPropertyChangeSupport) ontology).getDeletedProperty().equals(evt.getPropertyName())) {
+			deleteView();
+		}
+		super.propertyChange(evt);
+	}
 }

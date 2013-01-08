@@ -134,6 +134,13 @@ public class MouseClickControl extends MouseControl {
 		}
 	}
 
+	@Override
+	public boolean isModelEditionAction() {
+		return getActionType() != MouseClickControlActionType.SELECTION
+				&& getActionType() != MouseClickControlActionType.MULTIPLE_SELECTION
+				&& getActionType() != MouseClickControlActionType.CONTINUOUS_SELECTION;
+	}
+
 	public MouseClickControlActionType getActionType() {
 		if (action != null) {
 			return action.getActionType();

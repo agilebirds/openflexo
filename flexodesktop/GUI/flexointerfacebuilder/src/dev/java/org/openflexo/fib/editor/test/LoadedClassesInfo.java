@@ -23,8 +23,10 @@ import java.net.URL;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -59,7 +61,7 @@ public class LoadedClassesInfo extends Observable {
 		instance = new LoadedClassesInfo();
 	}
 
-	private final Hashtable<Package, PackageInfo> packages;
+	private final Map<Package, PackageInfo> packages;
 	private Vector<PackageInfo> packageList;
 	private boolean needsReordering = true;
 
@@ -67,7 +69,7 @@ public class LoadedClassesInfo extends Observable {
 
 	private LoadedClassesInfo() {
 		classesForName = new Hashtable<String, Vector<ClassInfo>>();
-		packages = new Hashtable<Package, PackageInfo>() {
+		packages = Collections.synchronizedMap(new HashMap<Package, PackageInfo>() {
 			@Override
 			public synchronized PackageInfo put(Package key, PackageInfo value) {
 				PackageInfo returned = super.put(key, value);
@@ -76,7 +78,7 @@ public class LoadedClassesInfo extends Observable {
 				notifyObservers();
 				return returned;
 			};
-		};
+		});
 		for (Package p : Package.getPackages()) {
 			registerPackage(p);
 		}
@@ -153,7 +155,9 @@ public class LoadedClassesInfo extends Observable {
 		private boolean needsReordering = true;
 
 		public PackageInfo(Package aPackage) {
-			packageName = aPackage.getName();
+			if (aPackage != null) {
+				packageName = aPackage.getName();
+			}
 		}
 
 		public List<ClassInfo> getClasses() {
@@ -176,6 +180,9 @@ public class LoadedClassesInfo extends Observable {
 		public boolean isFiltered() {
 			if (getFilteredPackageName() == null || StringUtils.isEmpty(getFilteredPackageName())) {
 				return false;
+			}
+			if (packageName == null) {
+				return true;
 			}
 			if (packageName.startsWith(getFilteredPackageName())) {
 				return false;
@@ -226,7 +233,9 @@ public class LoadedClassesInfo extends Observable {
 			}
 			listOfClassesWithThatName.add(this);
 			className = aClass.getSimpleName();
-			packageName = aClass.getPackage().getName();
+			if (aClass.getPackage() != null) {
+				packageName = aClass.getPackage().getName();
+			}
 			fullQualifiedName = aClass.getName();
 			clazz = aClass;
 			logger.fine("Instanciate new ClassInfo for " + aClass);
@@ -245,7 +254,7 @@ public class LoadedClassesInfo extends Observable {
 		public List<ClassInfo> getMemberClasses() {
 			if (needsReordering) {
 				memberClassesList = new Vector<ClassInfo>();
-				for (Class c : memberClasses.keySet()) {
+				for (Class<?> c : memberClasses.keySet()) {
 					memberClassesList.add(memberClasses.get(c));
 				}
 				Collections.sort(memberClassesList, new Comparator<ClassInfo>() {

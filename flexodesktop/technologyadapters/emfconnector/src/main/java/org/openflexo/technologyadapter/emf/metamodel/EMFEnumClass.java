@@ -30,11 +30,15 @@ package org.openflexo.technologyadapter.emf.metamodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
@@ -239,7 +243,15 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 	@Override
 	@Deprecated
 	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		return Collections.emptySet();
+		Set<IFlexoOntologyStructuralProperty> result = new HashSet<IFlexoOntologyStructuralProperty>();
+		for (EObject crossReference : object.eCrossReferences()) {
+			if (crossReference instanceof EAttribute) {
+				result.add(ontology.getConverter().convertAttributeProperty(ontology, (EAttribute) crossReference));
+			} else if (crossReference instanceof EReference) {
+				result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, (EReference) crossReference));
+			}
+		}
+		return Collections.unmodifiableSet(result);
 	}
 
 	/**
@@ -285,6 +297,12 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 		return false;
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyClass()
+	 */
 	@Override
 	public boolean isOntologyClass() {
 		return true;

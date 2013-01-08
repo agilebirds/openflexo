@@ -163,6 +163,9 @@ public class TreeDropTarget implements DropTargetListener {
 		DropTargetContext dtc = dtde.getDropTargetContext();
 		JTree tree = (JTree) dtc.getComponent();
 		TreePath parentpath = tree.getClosestPathForLocation(pt.x, pt.y);
+		if (parentpath == null) {
+			return;
+		}
 		BrowserElement destination = (BrowserElement) parentpath.getLastPathComponent();
 		try {
 			Transferable transferable = dtde.getTransferable();

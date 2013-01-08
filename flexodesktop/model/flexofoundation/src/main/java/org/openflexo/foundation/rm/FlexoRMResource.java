@@ -38,6 +38,7 @@ import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -238,6 +239,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	private boolean isInitializingProject = false;
 
 	private FlexoServiceManager serviceManager;
+
+	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	public boolean isInitializingProject() {
 		return isInitializingProject;
@@ -608,6 +611,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
 		returned.serviceManager = serviceManager;
+		returned.setProjectReferenceLoader(projectReferenceLoader);
 		return returned;
 	}
 
@@ -821,6 +825,10 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		return false;
+	}
+
+	public void setProjectReferenceLoader(FlexoProjectReferenceLoader projectReferenceLoader) {
+		this.projectReferenceLoader = projectReferenceLoader;
 	}
 
 }

@@ -115,10 +115,15 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelResource(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
+	 */
 	@Override
-	public OWLOntologyResource retrieveModelResource(File aModelFile,
+	public FlexoResource<OWLOntology> retrieveModelResource(File aModelFile, FlexoResource<OWLOntology> metaModelResource,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
-
 		// logger.info("Retrieving OWL ModelResource for " + aModelFile.getAbsolutePath());
 
 		/*OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
@@ -202,8 +207,15 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		return new OWLOntologyLibrary(this, resourceCenterService);
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelURI(java.io.File,
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
+	 */
 	@Override
-	public String retrieveModelURI(File aModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+	public String retrieveModelURI(File aModelFile, FlexoResource<OWLOntology> metaModelResource,
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		return OWLOntology.findOntologyURI(aModelFile);
 	}
 

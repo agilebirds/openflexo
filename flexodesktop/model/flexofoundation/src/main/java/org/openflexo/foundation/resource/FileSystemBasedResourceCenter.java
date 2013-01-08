@@ -145,7 +145,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			modelRepositories.put(technologyAdapter, modelRepository);
 			exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
 					mmRepository);
-			exploreDirectoryLookingForModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
+			exploreDirectoryLookingForModels(rootDirectory, modelRepository.getRootFolder(), technologyAdapter, technologyContextManager,
 					mmRepository, modelRepository);
 		}
 	}
@@ -217,7 +217,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
 					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
-						MR modelRes = (MR) technologyAdapter.retrieveModelResource(f, technologyContextManager);
+						MR modelRes = (MR) technologyAdapter.retrieveModelResource(f, metaModelResource, technologyContextManager);
 						if (modelRes != null) {
 							logger.fine("TechnologyAdapter "
 									+ technologyAdapter.getName()

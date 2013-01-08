@@ -38,6 +38,7 @@ import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.toolbox.FileResource;
@@ -140,6 +141,10 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 					update(observable, dataModification);
 				}
 			});
+			return;
+		}
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
 			return;
 		}
 		if (observable instanceof TOCEntry && ((TOCEntry) observable).getRepository() == codeRepository) {

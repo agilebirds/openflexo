@@ -13,8 +13,8 @@ public enum WorkflowComponentInstance
 	None(null, "", "", "")
 	#foreach( $process in ${project.getAllFlexoProcesses()} )
         #foreach( $ci in $process.getAllComponentInstances())
-			#if(${ci.getOperationNode().getAbstractActivityNode().getRoleName()})
-				#set($role = "$quote$!generator.escapeStringForJava($!{ci.getOperationNode().getAbstractActivityNode().getRoleName()})$quote")
+			#if(${ci.getOperationNode().getAbstractActivityNode().getRole().getName()})
+				#set($role = "$quote$!generator.escapeStringForJava($!{ci.getOperationNode().getAbstractActivityNode().getRole().getName()})$quote")
 			#else
 				#set($role = "$quote$quote")
 			#end

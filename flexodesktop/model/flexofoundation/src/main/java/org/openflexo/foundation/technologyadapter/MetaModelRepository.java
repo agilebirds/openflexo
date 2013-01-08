@@ -54,6 +54,8 @@ public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>,
 		this.technologyAdapter = technologyAdapter;
 		this.resourceCenter = resourceCenter;
 		getRootFolder().setName(resourceCenter.getName());
+		getRootFolder().setDescription(
+				"MetaModelRepository for technology " + technologyAdapter.getName() + " resource center: " + resourceCenter);
 	}
 
 	/**

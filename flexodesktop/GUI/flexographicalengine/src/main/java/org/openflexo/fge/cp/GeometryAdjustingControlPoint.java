@@ -66,7 +66,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 	}
 
 	public abstract void update(O geometricObject);

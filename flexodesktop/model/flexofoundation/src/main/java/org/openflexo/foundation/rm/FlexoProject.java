@@ -144,7 +144,6 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FixProposal;
@@ -216,6 +215,7 @@ import org.openflexo.xmlcode.XMLMapping;
 public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData<FlexoProject>, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
+	private static final String PROJECT_DATA = "projectData";
 	private static final String REVISION = "revision";
 	private static final String VERSION = "version";
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
@@ -241,6 +241,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private FlexoObjectIDManager objectIDManager;
 
+	private List<FlexoModelObjectReference> objectReferences = new ArrayList<FlexoModelObjectReference>();
 	/**
 	 * These variable are here to replace old static references.
 	 */
@@ -333,6 +334,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoIEBIRTPalette birtPalette;
 
 	private IModuleLoader moduleLoader;
+	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ModelSlotInstance> models;
 	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
@@ -363,7 +365,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public static interface FlexoProjectReferenceLoader extends FlexoService {
 
-		public void loadProjects(List<FlexoProjectReference> references) throws ProjectLoadingCancelledException;
+		public FlexoProject loadProject(FlexoProjectReference reference);
+
 	}
 
 	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
@@ -439,10 +442,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
+		setProjectReferenceLoader(builder.getProjectReferenceLoader());
 		setServiceManager(builder.serviceManager);
 		setProjectDirectory(builder.projectDirectory);
 		loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
+	}
+
+	private void setProjectReferenceLoader(FlexoProjectReferenceLoader projectReferenceLoader) {
+		this.projectReferenceLoader = projectReferenceLoader;
 	}
 
 	protected FlexoProject(File aProjectDirectory, FlexoServiceManager serviceManager) {
@@ -888,8 +896,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				resourceSaved = true;
 			}
 		} finally {
-			if (resourceSaved || getFlexoRMResource().isModified()) {
+			if (resourceSaved) {
+				// Revision is incremented only if a FlexoStorageResource has been changed. This is allows essentially to track if the
+				// model of the project has changed.
 				revision++;
+			}
+			if (resourceSaved || getFlexoRMResource().isModified()) {
 				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
 				// duplication of flexoID's.
 				writeDotVersion();
@@ -1288,6 +1300,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		FlexoComponentLibraryResource returned = (FlexoComponentLibraryResource) resourceForKey(ResourceType.COMPONENT_LIBRARY,
 				getProjectName());
 		if (returned == null && create) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Create ComponentLibrary");
+			}
 			FlexoComponentLibrary.createNewComponentLibrary(this);
 			return getFlexoComponentLibraryResource(false);
 		}
@@ -1560,9 +1575,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public FlexoComponentLibrary getFlexoComponentLibrary(boolean create) {
 		if (getFlexoComponentLibraryResource(create) != null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Create ComponentLibrary");
-			}
 			return getFlexoComponentLibraryResource(create).getResourceData();
 		}
 		return null;
@@ -3967,6 +3979,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			try {
 				returned = new FlexoPamelaResource<ProjectData>(this, ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
 				registerResource(returned);
+				getPropertyChangeSupport().firePropertyChange(PROJECT_DATA, null, returned.getResourceData());
 			} catch (Exception e1) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
@@ -4255,6 +4268,26 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public boolean hasImportedProjects() {
 		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
 	}
+
+	public List<FlexoModelObjectReference> getObjectReferences() {
+		return objectReferences;
+	}
+
+	public void addToObjectReferences(FlexoModelObjectReference<?> objectReference) {
+		objectReferences.add(objectReference);
+	}
+
+	public void removeObjectReferences(FlexoModelObjectReference<?> objectReference) {
+		objectReferences.remove(objectReference);
+	}
+
+	public FlexoProject loadProjectReference(FlexoProjectReference reference) {
+		if (projectReferenceLoader != null) {
+			return projectReferenceLoader.loadProject(reference);
+		}
+		return null;
+	}
+
 
 	/*	public Set<FlexoOntology> getAllMetaModels() {
 			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();

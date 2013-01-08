@@ -33,6 +33,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
@@ -91,7 +92,11 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 			});
 			return;
 		}
-		updateView();
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else {
+			updateView();
+		}
 	}
 
 	@Override
