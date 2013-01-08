@@ -87,6 +87,8 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			}
 		}
 
+		System.exit(-1);
+
 		for (Class c : inspectors.keySet()) {
 			FIBInspector inspector = inspectors.get(c);
 			inspector.appendSuperInspectors(this);

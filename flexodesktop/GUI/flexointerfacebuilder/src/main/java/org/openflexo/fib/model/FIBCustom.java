@@ -312,7 +312,7 @@ public class FIBCustom extends FIBWidget {
 			if (custom != null && variable != null) {
 				variable.decode();
 			}
-			System.out.println("Un truc a faire ici ???");
+			logger.warning("Please check that something is not missing HERE");
 			/*if (variable.isValid()) {
 				VALUE.setType(variable.getAnalyzedType());
 				if (value != null) {

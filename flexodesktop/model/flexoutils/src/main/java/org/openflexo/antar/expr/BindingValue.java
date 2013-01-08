@@ -246,7 +246,7 @@ public class BindingValue extends Expression {
 	public boolean isLastBindingPathElement(BindingPathElement element) {
 
 		if (bindingPath.size() == 0) {
-			return (element.equals(getBindingVariable()));
+			return element.equals(getBindingVariable());
 		}
 
 		return bindingPath.get(bindingPath.size() - 1).equals(element);
@@ -476,10 +476,17 @@ public class BindingValue extends Expression {
 
 	@Override
 	public int hashCode() {
-		return (toString()).hashCode();
+		return toString().hashCode();
 	}
 
 	public boolean buildBindingPathFromParsedBindingPath(DataBinding<?> dataBinding) {
+
+		if (dataBinding.getOwner().getBindingModel() == null) {
+			logger.warning("Found DataBinding owner with null BindingModel: " + dataBinding.getOwner());
+			System.out.println("dataBinding=" + dataBinding);
+			System.exit(-1);
+			return false;
+		}
 
 		boolean pathDecodingSucceeded = false;
 		needsParsing = false;
@@ -489,14 +496,9 @@ public class BindingValue extends Expression {
 		if (getDataBinding() != null && getParsedBindingPath().size() > 0
 				&& getParsedBindingPath().get(0) instanceof NormalBindingPathElement) {
 			// Seems to be valid
-			try {
-				System.out.println("dataBinding.getOwner().getBindingModel()=" + dataBinding.getOwner().getBindingModel());
-				bindingVariable = dataBinding.getOwner().getBindingModel()
-						.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
-			} catch (NullPointerException e) {
-				System.out.println("Je tiens mon pb");
-				System.out.println("Je tiens mon pb");
-			}
+			bindingVariable = dataBinding.getOwner().getBindingModel()
+					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
+
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
 			if (bindingVariable == null) {

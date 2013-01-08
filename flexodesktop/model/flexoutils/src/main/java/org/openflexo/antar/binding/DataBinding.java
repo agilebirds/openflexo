@@ -338,11 +338,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public boolean isBindingValue() {
-		return getExpression() != null && (getExpression() instanceof BindingValue);
+		return getExpression() != null && getExpression() instanceof BindingValue;
 	}
 
 	public boolean isConstant() {
-		return getExpression() != null && (getExpression() instanceof Constant);
+		return getExpression() != null && getExpression() instanceof Constant;
 	}
 
 	public boolean isCompoundBinding() {
@@ -374,7 +374,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		if (getOwner() != null) {
 			try {
-				System.out.println("Je parse a nouveau " + getUnparsedBinding());
+				logger.info("Parsing " + getUnparsedBinding());
 				expression = ExpressionParser.parse(getUnparsedBinding());
 			} catch (ParseException e1) {
 				// parse error
