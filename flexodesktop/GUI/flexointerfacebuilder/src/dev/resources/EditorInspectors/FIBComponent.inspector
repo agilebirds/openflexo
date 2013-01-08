@@ -10,7 +10,7 @@
 			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
 			
 				<Label name="dataLabel" label="data" constraints="twocols(location=left)"/>
-				<Custom name="dataValue" data="data.data.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15" valueChangedAction="data.notifyBindingChanged(data.data)">
+				<Custom name="dataValue" data="data.data" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15" valueChangedAction="data.notifyBindingChanged(data.data)">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.dataBindingDefinition"/>
 				</Custom>
@@ -25,7 +25,7 @@
 				<Custom data="data.controllerClass" componentClassName="org.openflexo.fib.utils.ClassSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15" visible="data.isRootComponent"/>
 
 				<Label name="visibleLabel" label="visible" constraints="twocols(location=left)"/>
-				<Custom name="visibleValue" data="data.visible.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Custom name="visibleValue" data="data.visible" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.VISIBLE"/>
 				</Custom>

@@ -479,7 +479,24 @@ public class BindingValue extends Expression {
 		return (toString()).hashCode();
 	}
 
+	/**
+	 * Called to perform analysis of a parsed binding path in the particular context provided by the {@link DataBinding} this
+	 * {@link BindingValue} is related to.
+	 * 
+	 * @param dataBinding
+	 * @return
+	 */
 	public boolean buildBindingPathFromParsedBindingPath(DataBinding<?> dataBinding) {
+
+		if (dataBinding.getOwner() == null) {
+			logger.warning("DataBinding " + dataBinding + " has no owner");
+			return false;
+		}
+
+		if (dataBinding.getOwner().getBindingModel() == null) {
+			logger.warning("DataBinding owner has no binding model, binding=" + dataBinding + " owner=" + dataBinding.getOwner());
+			return false;
+		}
 
 		boolean pathDecodingSucceeded = false;
 		needsParsing = false;
@@ -489,14 +506,8 @@ public class BindingValue extends Expression {
 		if (getDataBinding() != null && getParsedBindingPath().size() > 0
 				&& getParsedBindingPath().get(0) instanceof NormalBindingPathElement) {
 			// Seems to be valid
-			try {
-				System.out.println("dataBinding.getOwner().getBindingModel()=" + dataBinding.getOwner().getBindingModel());
-				bindingVariable = dataBinding.getOwner().getBindingModel()
-						.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
-			} catch (NullPointerException e) {
-				System.out.println("Je tiens mon pb");
-				System.out.println("Je tiens mon pb");
-			}
+			bindingVariable = dataBinding.getOwner().getBindingModel()
+					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
 			if (bindingVariable == null) {
@@ -557,14 +568,20 @@ public class BindingValue extends Expression {
 	}
 
 	public Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+
+		// System.out.println("  > evaluate BindingValue " + this + " in context " + context);
 		if (isValid()) {
 			Object current = context.getValue(getBindingVariable());
+			BindingPathElement previous = getBindingVariable();
 			for (BindingPathElement e : getBindingPath()) {
 				if (current == null) {
-					throw new NullReferenceException();
+					throw new NullReferenceException("NullReferenceException while evaluating " + this + ": null occured when evaluating "
+							+ previous);
 				}
 				current = e.getBindingValue(current, context);
+				previous = e;
 			}
+			// System.out.println("  > return "+current);
 			return current;
 		}
 		return null;

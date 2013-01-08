@@ -33,6 +33,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
+@Deprecated
 public class BindingDefinition extends Observable {
 
 	static final Logger logger = Logger.getLogger(BindingDefinition.class.getPackage().getName());

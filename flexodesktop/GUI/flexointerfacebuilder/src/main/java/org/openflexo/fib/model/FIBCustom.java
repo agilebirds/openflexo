@@ -105,9 +105,9 @@ public class FIBCustom extends FIBWidget {
 
 	@Override
 	public Type getDataType() {
-		if (getData() != null && getData().isSet() && getData().isValid()) {
+		/*if (getData() != null && getData().isSet() && getData().isValid()) {
 			return getData().getAnalyzedType();
-		}
+		}*/
 		return getDefaultDataClass();
 
 	}

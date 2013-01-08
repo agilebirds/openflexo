@@ -12,7 +12,7 @@
 				<TextField data="data.label" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
 	
 				<Label label="button_icon" constraints="twocols(location=left)"/>
-				<Custom data="data.buttonIcon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Custom data="data.buttonIcon" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.BUTTON_ICON"/>
 				</Custom>
@@ -28,7 +28,7 @@
 			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
 			
 				<Label label="action" constraints="twocols(location=left)"/>
-				<Custom data="data.action.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Custom data="data.action" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.ACTION"/>
 				</Custom>

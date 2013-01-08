@@ -59,7 +59,7 @@ public abstract class Constant<V> extends Expression {
 			} else if (value instanceof DurationValue) {
 			return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
 			}*/
-		return new Constant.StringConstant("?");
+		return new Constant.ObjectConstant(value);
 	}
 
 	/*@Override
@@ -142,6 +142,30 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		public void setValue(String value) {
+			this.value = value;
+		}
+
+	}
+
+	public static class ObjectConstant extends Constant<Object> {
+		private Object value;
+
+		@Override
+		public EvaluationType getEvaluationType() {
+			return EvaluationType.LITERAL;
+		}
+
+		public ObjectConstant(Object value) {
+			super();
+			this.value = value;
+		}
+
+		@Override
+		public Object getValue() {
+			return value;
+		}
+
+		public void setValue(Object value) {
 			this.value = value;
 		}
 

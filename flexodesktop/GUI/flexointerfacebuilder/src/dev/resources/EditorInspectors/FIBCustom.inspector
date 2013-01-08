@@ -14,11 +14,11 @@
 				<Label label="assignments" align="center" constraints="twocols(location=center;expandHorizontally=true)" columns="15"/>
 
 				<Table name="AssignmentsTable" iteratorClassName="org.openflexo.fib.model.FIBCustom$FIBCustomAssignment" data="data.assignments" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)" visibleRowCount="5" rowHeight="20">
-					<CustomColumn title="Variable" data="iterator.variable.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<CustomColumn title="Variable" data="iterator.variable" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 						<ColumnAssignment variable="component.bindable" value="iterator"/>
 						<ColumnAssignment variable="component.bindingDefinition" value="iterator.VARIABLE"/>
 					</CustomColumn>
-					<CustomColumn title="Value" data="iterator.value.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<CustomColumn title="Value" data="iterator.value" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 						<ColumnAssignment variable="component.bindable" value="data"/>
 						<ColumnAssignment variable="component.bindingDefinition" value="iterator.VALUE"/>
 					</CustomColumn>

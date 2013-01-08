@@ -91,6 +91,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		} else if (possiblyMatchingMethods.size() == 1) {
 			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
 		} else {
+			logger.warning("Cannot find method named " + methodName + " with args=" + args + " for type " + parentType);
 			return null;
 		}
 	}
@@ -108,7 +109,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 
-		System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
+		//System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
 		Object[] args = new Object[getFunction().getArguments().size()];
 		int i = 0;

@@ -33,7 +33,7 @@
 		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
 
 			<Label label="selected" constraints="twocols(location=left)"/>
-			<Custom data="data.selected.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+			<Custom data="data.selected" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 				<Assignment variable="component.bindable" value="data"/>
 				<Assignment variable="component.bindingDefinition" value="data.selectedBindingDefinition"/>
 			</Custom>

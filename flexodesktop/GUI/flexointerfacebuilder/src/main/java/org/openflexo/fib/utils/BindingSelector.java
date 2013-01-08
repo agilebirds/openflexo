@@ -383,7 +383,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void setEditedObject(DataBinding dataBinding) {
-		logger.info("set edited object " + dataBinding);
 		setEditedObject(dataBinding, true);
 		if (dataBinding != null && dataBinding.isValid()) {
 			isConnected = true;
@@ -721,7 +720,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		}*/
 		else {
 			// When creating use normal mode
-			if (editedObject.isConstant()) {
+			if (editedObject == null || editedObject.isConstant()) {
 				editionMode = EditionMode.NORMAL_BINDING;
 			}
 			_selectorPanel = new BindingSelectorPanel(this);

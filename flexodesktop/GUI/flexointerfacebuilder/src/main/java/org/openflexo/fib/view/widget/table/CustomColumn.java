@@ -71,9 +71,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		super(columnModel, tableModel, controller);
 		_customColumn = columnModel;
 		_viewCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
-				(Class<T>) columnModel.getDataClass());
+				TypeUtils.getBaseClass(columnModel.getDataClass()));
 		_editCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
-				(Class<T>) columnModel.getDataClass());
+				TypeUtils.getBaseClass(columnModel.getDataClass()));
 		if (_editCustomWidget != null) {
 			_editCustomWidget.addApplyCancelListener(this);
 		}

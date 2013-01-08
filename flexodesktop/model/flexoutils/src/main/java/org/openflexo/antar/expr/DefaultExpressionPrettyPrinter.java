@@ -29,6 +29,7 @@ import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.toolbox.Duration;
@@ -115,6 +116,11 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	@Override
 	protected final String makeStringRepresentation(EnumConstant constant) {
 		return constant.getName();
+	}
+
+	@Override
+	protected String makeStringRepresentation(ObjectConstant constant) {
+		return "[Object:" + constant.getValue().toString() + "]";
 	}
 
 	@Override

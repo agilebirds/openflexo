@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
@@ -16,6 +17,8 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
  */
 public abstract class FunctionPathElement extends Observable implements BindingPathElement {
 
+	private static final Logger logger = Logger.getLogger(FunctionPathElement.class.getPackage().getName());
+
 	private BindingPathElement parent;
 	private Function function;
 	private Type type;
@@ -24,16 +27,20 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	public FunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> paramValues) {
 		this.parent = parent;
 		this.function = function;
-		this.type = function.getReturnType();
 		parameters = new HashMap<Function.FunctionArgument, DataBinding<?>>();
-		if (paramValues != null) {
-			int i = 0;
-			for (Function.FunctionArgument arg : function.getArguments()) {
-				if (i < paramValues.size()) {
-					DataBinding<?> paramValue = paramValues.get(i);
-					setParameter(arg, paramValue);
+		if (function == null) {
+			logger.warning("FunctionPathElement called with null function");
+		} else {
+			this.type = function.getReturnType();
+			if (paramValues != null) {
+				int i = 0;
+				for (Function.FunctionArgument arg : function.getArguments()) {
+					if (i < paramValues.size()) {
+						DataBinding<?> paramValue = paramValues.get(i);
+						setParameter(arg, paramValue);
+					}
+					i++;
 				}
-				i++;
 			}
 		}
 	}
@@ -77,13 +84,17 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	public String getSerializationRepresentation() {
 		if (serializationRepresentation == null) {
 			StringBuffer returned = new StringBuffer();
-			returned.append(getFunction().getName());
-			returned.append("(");
-			boolean isFirst = true;
-			for (Function.FunctionArgument a : getFunction().getArguments()) {
-				returned.append((isFirst ? "" : ",") + getParameter(a));
+			if (getFunction() != null) {
+				returned.append(getFunction().getName());
+				returned.append("(");
+				boolean isFirst = true;
+				for (Function.FunctionArgument a : getFunction().getArguments()) {
+					returned.append((isFirst ? "" : ",") + getParameter(a));
+				}
+				returned.append(")");
+			} else {
+				returned.append("unknown_function()");
 			}
-			returned.append(")");
 			serializationRepresentation = returned.toString();
 		}
 		return serializationRepresentation;

@@ -111,22 +111,23 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	@Override
 	public String toString() {
 		if (expression != null) {
-			if (StringUtils.isEmpty(expression.toString())) {
+			/*if (StringUtils.isEmpty(expression.toString())) {
 				System.out.println("Pourquoi ya rien ?");
 				System.out.println("l'expression est une " + expression.getClass());
 				if (expression instanceof BindingValue) {
 					BindingValue bv = (BindingValue) expression;
 					bv.debug();
 				}
-			}
+			}*/
 			return expression.toString();
 		}
 		if (StringUtils.isEmpty(unparsedBinding)) {
-			System.out.println("Pourquoi ya rien 2?");
+			return "null";
 		}
 		return unparsedBinding;
 	}
 
+	@Deprecated
 	public BindingDefinition getBindingDefinition() {
 		if (bindingDefinition == null) {
 			bindingDefinition = new BindingDefinition("unamed", declaredType, bdType, false);
@@ -134,6 +135,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		return bindingDefinition;
 	}
 
+	@Deprecated
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
 		declaredType = bindingDefinition.getType();
@@ -157,7 +159,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}*/
 
 	public void setExpression(Expression value) {
-		logger.info("setExpression() with " + value);
+		// logger.info("setExpression() with " + value);
 		needsParsing = false;
 		Expression oldValue = this.expression;
 		if (oldValue == null) {
@@ -257,6 +259,16 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		invalidBindingReason = "unknown";
 
+		if (getOwner() == null) {
+			invalidBindingReason = "null owner";
+			return false;
+		}
+
+		if (getOwner().getBindingModel() == null) {
+			invalidBindingReason = "owner has null BindingModel";
+			return false;
+		}
+
 		if (getExpression() == null) {
 			invalidBindingReason = "null expression";
 			return false;
@@ -293,7 +305,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return false;
 		}
 
-		if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) {
+		if (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET) {
 			// Only BindingValue may be settable
 			if (!(getExpression() instanceof BindingValue) || !((BindingValue) getExpression()).isSettable()) {
 				invalidBindingReason = "Invalid binding because binding definition declared as settable and definition cannot satisfy it";
@@ -304,19 +316,17 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			}
 		}
 
-		if (getBindingDefinition().getType() != null
-				&& TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAnalyzedType(), true)) {
+		if (getDeclaredType() != null && TypeUtils.isTypeAssignableFrom(getDeclaredType(), getAnalyzedType(), true)) {
 			// System.out.println("getBindingDefinition().getType()="+getBindingDefinition().getType());
 			// System.out.println("getAccessedType()="+getAccessedType());
 			invalidBindingReason = "valid binding";
 			return true;
 		}
 
-		invalidBindingReason = "Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
+		invalidBindingReason = "Invalid binding because types are not matching searched " + getDeclaredType() + " having "
 				+ getAnalyzedType();
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
-					+ getAnalyzedType());
+			logger.fine("Invalid binding because types are not matching searched " + getDeclaredType() + " having " + getAnalyzedType());
 		}
 		return false;
 	}
@@ -354,9 +364,15 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public void setUnparsedBinding(String unparsedBinding) {
-		this.unparsedBinding = unparsedBinding;
-		expression = null;
-		needsParsing = true;
+		if (unparsedBinding.equals("null")) {
+			this.unparsedBinding = null;
+			expression = null;
+			needsParsing = false;
+		} else {
+			this.unparsedBinding = unparsedBinding;
+			expression = null;
+			needsParsing = true;
+		}
 	}
 
 	public Bindable getOwner() {
@@ -367,6 +383,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		this.owner = owner;
 	}
 
+	/**
+	 * This method is called whenever we need to parse the binding using string encoded in unparsedBinding field.<br>
+	 * Syntaxic checking of the binding is performed here. This phase is followed by the semantics analysis as performed by
+	 * {@link #analyseExpressionAfterParsing()} method
+	 * 
+	 * @return
+	 */
 	private Expression parseExpression() {
 		if (getUnparsedBinding() == null) {
 			return expression = null;
@@ -374,7 +397,6 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		if (getOwner() != null) {
 			try {
-				System.out.println("Je parse a nouveau " + getUnparsedBinding());
 				expression = ExpressionParser.parse(getUnparsedBinding());
 			} catch (ParseException e1) {
 				// parse error
@@ -387,6 +409,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			analyseExpressionAfterParsing();
 		}
 		needsParsing = false;
+
+		if (!isValid()) {
+			logger.warning("Invalid binding " + getUnparsedBinding() + " reason: " + invalidBindingReason());
+		}
 
 		return expression;
 	}
@@ -413,7 +439,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	private void notifyBindingChanged(Expression oldValue, Expression newValue) {
 		getOwner().notifiedBindingChanged(this);
-		logger.info(">>>>>>>>>>>>> Le binding change de " + oldValue + " a " + newValue);
+		// logger.info("notifyBindingChanged from " + oldValue + " to " + newValue + " of " + newValue.getClass());
 	}
 
 	private void notifyBindingDecoded() {
@@ -433,6 +459,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+
+		// System.out.println("Evaluating " + this + " in context " + context);
 		if (isValid()) {
 			try {
 				Expression resolvedExpression = expression.transform(new ExpressionTransformer() {
@@ -449,6 +477,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				Expression evaluatedExpression = resolvedExpression.evaluate();
 
 				if (evaluatedExpression instanceof Constant) {
+					// System.out.println("Returning " + ((Constant) evaluatedExpression).getValue());
 					return (T) ((Constant) evaluatedExpression).getValue();
 				}
 
@@ -542,7 +571,14 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	@Override
 	public DataBinding<T> clone() {
 		DataBinding<T> returned = new DataBinding(getOwner(), getDeclaredType(), getBindingDefinitionType());
-		returned.setUnparsedBinding(toString());
+		/*if (!isSet()) {
+			System.out.println("On essaie de me cloner alors que je suis null");
+			Thread.dumpStack();
+			System.exit(-1);
+		}*/
+		if (isSet()) {
+			returned.setUnparsedBinding(toString());
+		}
 		returned.decode();
 		return returned;
 	}

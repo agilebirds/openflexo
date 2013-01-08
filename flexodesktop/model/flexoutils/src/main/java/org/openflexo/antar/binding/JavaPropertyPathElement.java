@@ -26,7 +26,7 @@ public class JavaPropertyPathElement extends SimplePathElement {
 		if (keyValueProperty != null) {
 			setType(keyValueProperty.getType());
 		} else {
-			logger.warning("cannot find property " + propertyName + " for " + parent);
+			logger.warning("cannot find property " + propertyName + " for " + parent + " which type is " + parent.getType());
 		}
 	}
 

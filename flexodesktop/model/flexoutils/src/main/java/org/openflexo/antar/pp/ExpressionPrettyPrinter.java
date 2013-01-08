@@ -33,6 +33,7 @@ import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionGrammar;
@@ -111,6 +112,8 @@ public abstract class ExpressionPrettyPrinter {
 			return makeStringRepresentation((DurationConstant) constant);
 		} else if (constant instanceof EnumConstant) {
 			return makeStringRepresentation((EnumConstant) constant);
+		} else if (constant instanceof ObjectConstant) {
+			return makeStringRepresentation((ObjectConstant) constant);
 		}
 		return "???";
 	}
@@ -134,6 +137,8 @@ public abstract class ExpressionPrettyPrinter {
 	protected abstract String makeStringRepresentation(DurationConstant constant);
 
 	protected abstract String makeStringRepresentation(EnumConstant constant);
+
+	protected abstract String makeStringRepresentation(ObjectConstant constant);
 
 	protected abstract String makeStringRepresentation(UnaryOperatorExpression expression);
 

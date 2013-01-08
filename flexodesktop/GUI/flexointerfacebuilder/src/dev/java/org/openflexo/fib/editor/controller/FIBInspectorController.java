@@ -72,6 +72,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			}
 		})) {
 			// System.out.println("Read "+f.getAbsolutePath());
+			logger.info("Loading " + f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				if (inspector.getDataClass() != null) {

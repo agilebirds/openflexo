@@ -39,6 +39,11 @@ public class NullReferenceException extends TransformException {
 		message = "NullReferenceException";
 	}
 
+	public NullReferenceException(String additionalMessage) {
+		super();
+		message = "NullReferenceException: " + additionalMessage;
+	}
+
 	public NullReferenceException(Operator operator) {
 		super();
 		concernedOperator = operator;

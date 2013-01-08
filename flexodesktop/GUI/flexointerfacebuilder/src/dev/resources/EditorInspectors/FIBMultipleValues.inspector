@@ -12,13 +12,13 @@
 				<TextField data="data.staticList" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
 
 				<Label label="list" constraints="twocols(location=left)"/>
-				<Custom data="data.list.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Custom data="data.list" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.LIST"/>
 				</Custom>
 		
 				<Label label="array" constraints="twocols(location=left)"/>
-				<Custom data="data.array.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Custom data="data.array" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.ARRAY"/>
 				</Custom>
@@ -42,7 +42,7 @@
 				<Label label="show_icon" constraints="twocols(location=right;expandHorizontally=true)"/>
 
 				<Label label="icon" constraints="twocols(location=left)" visible="data.showIcon"/>
-				<Custom data="data.icon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15"  visible="data.showIcon">
+				<Custom data="data.icon" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15"  visible="data.showIcon">
 					<Assignment variable="component.bindable" value="data.formatter"/>
 					<Assignment variable="component.bindingDefinition" value="data.ICON"/>
 				</Custom>
