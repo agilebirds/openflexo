@@ -778,8 +778,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public FGERectangle getRequiredBoundsForContents() {
 		FGERectangle requiredBounds = null;
-		if (getContainedGraphicalRepresentations() == null)
+		if (getContainedGraphicalRepresentations() == null) {
 			return new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
+		}
 		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
