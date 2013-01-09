@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
@@ -430,9 +429,9 @@ public class BindingExpression extends AbstractBinding {
 
 	public static class BindingValueVariable extends Expression {
 		private Variable variable;
-		private BindingValue bindingValue;
+		private org.openflexo.foundation.bindings.BindingValue bindingValue;
 
-		public BindingValueVariable(BindingValue variableAsBindingValue) {
+		public BindingValueVariable(org.openflexo.foundation.bindings.BindingValue variableAsBindingValue) {
 			super();
 			variable = new Variable(variableAsBindingValue.getStringRepresentation());
 			bindingValue = variableAsBindingValue;
@@ -576,11 +575,11 @@ public class BindingExpression extends AbstractBinding {
 						newExp = new BindingValueConstant((StaticBinding) binding);
 					} else if (binding instanceof BindingExpression) {
 						newExp = ((BindingExpression) binding).getExpression();
-					} else if (binding instanceof BindingValue) {
-						if (((BindingValue) binding).isCompoundBinding()) {
-							newExp = new BindingValueFunction((BindingValue) binding);
+					} else if (binding instanceof org.openflexo.foundation.bindings.BindingValue) {
+						if (((org.openflexo.foundation.bindings.BindingValue) binding).isCompoundBinding()) {
+							newExp = new BindingValueFunction((org.openflexo.foundation.bindings.BindingValue) binding);
 						} else {
-							newExp = new BindingValueVariable((BindingValue) binding);
+							newExp = new BindingValueVariable((org.openflexo.foundation.bindings.BindingValue) binding);
 						}
 					}
 					args.add(newExp);
@@ -901,8 +900,8 @@ public class BindingExpression extends AbstractBinding {
 				public Expression performTransformation(Expression e) throws TransformException {
 					if (e instanceof Constant) {
 						return new BindingValueConstant((Constant) e, bindable);
-					} else if (e instanceof BindingValue) {
-						return new BindingValueVariable(((BindingValue) e).toString(), bindable);
+					} else if (e instanceof org.openflexo.antar.expr.BindingValue) {
+						return new BindingValueVariable(((org.openflexo.antar.expr.BindingValue) e).toString(), bindable);
 					}
 					return e;
 				}
