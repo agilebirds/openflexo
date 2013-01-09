@@ -30,9 +30,13 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
@@ -85,8 +89,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 				return name.endsWith(".inspector");
 			}
 		})) {
+			logger.fine("Loading: " + f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
+				appendVisibleFor(inspector);
 				if (inspector.getDataClass() != null) {
 					// try {
 					inspectors.put(inspector.getDataClass(), inspector);
@@ -104,14 +110,12 @@ public class ModuleInspectorController extends Observable implements Observer {
 			}
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
+		for (FIBInspector inspector : inspectors.values()) {
+			logger.fine("Merging inspector: " + inspector);
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
-			inspector.recursivelyReorderComponents();
+		for (FIBInspector inspector : inspectors.values()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Initialized inspector for " + inspector.getDataClass());
 			}
@@ -119,6 +123,32 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 		setChanged();
 		notifyObservers(new NewInspectorsLoaded());
+	}
+
+	private void appendVisibleFor(FIBComponent component) {
+		String visibleForParam = component.getParameter("visibleFor");
+		if (visibleForParam != null) {
+			String[] s = visibleForParam.split("[;,\"]");
+			if (s.length > 0) {
+				UserType userType = UserType.getCurrentUserType();
+				boolean ok = false;
+				for (String string : s) {
+					ok |= userType.getName().equalsIgnoreCase(string);
+					ok |= userType.getIdentifier().equalsIgnoreCase(string);
+					if (ok) {
+						break;
+					}
+				}
+				if (!ok) {
+					component.getVisible().setBinding(new BooleanStaticBinding(false));
+				}
+			}
+		}
+		if (component instanceof FIBContainer) {
+			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
+				appendVisibleFor(child);
+			}
+		}
 	}
 
 	protected FIBInspector inspectorForObject(Object object) {

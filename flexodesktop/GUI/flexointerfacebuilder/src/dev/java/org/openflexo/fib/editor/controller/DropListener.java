@@ -31,10 +31,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
-
+import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
+import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.Focusable;
 
 /**
  * DTListener a listener that tracks the state of the operation
@@ -47,13 +48,18 @@ public class DropListener implements DropTargetListener {
 	static final Logger logger = FlexoLogger.getLogger(DropListener.class.getPackage().getName());
 
 	private int acceptableActions = DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE;
-	private JComponent _dropContainer;
-	private FIBEditorController _controller;
 
-	public DropListener(JComponent dropContainer, FIBEditorController controller) {
-		super();
-		_dropContainer = dropContainer;
-		_controller = controller;
+	private final FIBEditableView<?, ?> editableView;
+
+	private final PlaceHolder placeHolder;
+
+	public DropListener(FIBEditableView<?, ?> editableView, PlaceHolder placeHolder) {
+		this.editableView = editableView;
+		this.placeHolder = placeHolder;
+	}
+
+	public Focusable getTargetComponent() {
+		return placeHolder != null ? placeHolder : editableView.getDelegate();
 	}
 
 	/**
@@ -65,7 +71,7 @@ public class DropListener implements DropTargetListener {
 	 */
 	private boolean isDragFlavorSupported(DropTargetDragEvent e) {
 		boolean ok = false;
-		if (e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
+		if (e.isDataFlavorSupported(ElementDrag.DEFAULT_FLAVOR)) {
 			ok = true;
 		}
 		return ok;
@@ -79,8 +85,8 @@ public class DropListener implements DropTargetListener {
 	 * @return the chosen DataFlavor or null if none match
 	 */
 	private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
-		if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
-			return ElementDrag.defaultFlavor();
+		if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ElementDrag.DEFAULT_FLAVOR)) {
+			return ElementDrag.DEFAULT_FLAVOR;
 		}
 		return null;
 	}
@@ -93,7 +99,7 @@ public class DropListener implements DropTargetListener {
 	 * @return whether the flavor and operation is ok
 	 */
 	private boolean isDragOk(DropTargetDragEvent e) {
-		if (isDragFlavorSupported(e) == false) {
+		if (!isDragFlavorSupported(e)) {
 			return false;
 		}
 
@@ -104,7 +110,7 @@ public class DropListener implements DropTargetListener {
 		}
 
 		try {
-			FIBDraggable element = (FIBDraggable) e.getTransferable().getTransferData(ElementDrag.defaultFlavor());
+			FIBDraggable element = (FIBDraggable) e.getTransferable().getTransferData(ElementDrag.DEFAULT_FLAVOR);
 			if (element == null) {
 				return false;
 			}
@@ -136,17 +142,32 @@ public class DropListener implements DropTargetListener {
 	 */
 	@Override
 	public void dragEnter(DropTargetDragEvent e) {
-		if (e.getSource() instanceof FIBDropTarget) {
-			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			ElementDrag<?> drag = (ElementDrag<?>) _controller.getDragSourceContext().getTransferable();
-			drag.setController(dt.getFIBEditorController());
-			drag.enterComponent(dt.getFIBComponent(), dt.getPlaceHolder(), e.getLocation());
-		}
-		if (!isDragOk(e)) {
+		if (isDragOk(e)) {
+			System.err.println("Enter for " + getTargetComponent());
+			editableView.getDelegate().addToPlaceHolderVisibleRequesters(getTargetComponent());
+			getTargetComponent().setFocused(true);
+			/* Some explanations required here
+			 * What may happen is that making place holders visible will
+			 * place current cursor location inside a newly displayed place
+			 * holder, and cause a subsequent exitComponent() event to the
+			 * current component, and then a big blinking. We test here that
+			 * case and ignore following exitComponent()
+			 * SGU/ I'm not sure this behaviour is platform independant
+			 * please check...
+			 * 
+			 */
+			if (placeHolder == null && editableView.getPlaceHolders() != null) {
+				for (PlaceHolder ph2 : editableView.getPlaceHolders()) {
+					if (ph2.getBounds().contains(e.getLocation())) {
+						editableView.getDelegate().addToPlaceHolderVisibleRequesters(ph2);
+					}
+				}
+			}
+			e.acceptDrag(e.getDropAction());
+		} else {
 			e.rejectDrag();
 			return;
 		}
-		e.acceptDrag(e.getDropAction());
 	}
 
 	/**
@@ -161,43 +182,26 @@ public class DropListener implements DropTargetListener {
 		 * getController().getDrawingView().paintDraggedNode
 		 * (e,_controller.getDrawingView().getActivePalette().getPaletteView());
 		 */
-		if (!isDragOk(e)) {
-			if (_controller.getDragSourceContext() == null) {
-				logger.warning("dragSourceContext should NOT be null ");
-			} else {
-				_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
-			}
-			e.rejectDrag();
-			return;
-		}
-		if (_controller.getDragSourceContext() == null) {
-			logger.warning("dragSourceContext should NOT be null");
+		if (isDragOk(e)) {
+			e.acceptDrag(e.getDropAction());
 		} else {
-			_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
+			e.rejectDrag();
 		}
-		e.acceptDrag(e.getDropAction());
 	}
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent e) {
-		if (!isDragOk(e)) {
+		if (isDragOk(e)) {
+			e.acceptDrag(e.getDropAction());
+		} else {
 			e.rejectDrag();
-			return;
 		}
-		e.acceptDrag(e.getDropAction());
 	}
 
 	@Override
 	public void dragExit(DropTargetEvent e) {
-		if (e.getSource() instanceof FIBDropTarget) {
-			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			ElementDrag<?> drag = (ElementDrag<?>) _controller.getDragSourceContext().getTransferable();
-			// System.out.println("dragExit() from "+dt+" focused="+drag.getCurrentlyFocusedComponent()+
-			// " isPlaceHolder="+dt.isPlaceHolder());
-			drag.exitComponent(dt.getFIBComponent(), dt.getPlaceHolder());
-		}
-		// interface method
-		// getController().getDrawingView().resetCapturedNode();
+		editableView.getDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
+		getTargetComponent().setFocused(false);
 	}
 
 	/**
@@ -209,6 +213,8 @@ public class DropListener implements DropTargetListener {
 	 */
 	@Override
 	public void drop(DropTargetDropEvent e) {
+		editableView.getDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
+		getTargetComponent().setFocused(false);
 		try {
 			DataFlavor chosen = chooseDropFlavor(e);
 			if (chosen == null) {

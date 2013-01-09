@@ -102,22 +102,26 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 
 				@Override
 				public Number getCellEditorValue() {
-					switch (getColumnModel().getNumberType()) {
-					case ByteType:
-						return Byte.parseByte((String) super.getCellEditorValue());
-					case ShortType:
-						return Short.parseShort((String) super.getCellEditorValue());
-					case IntegerType:
-						return Integer.parseInt((String) super.getCellEditorValue());
-					case LongType:
-						return Long.parseLong((String) super.getCellEditorValue());
-					case FloatType:
-						return Float.parseFloat((String) super.getCellEditorValue());
-					case DoubleType:
-						return Double.parseDouble((String) super.getCellEditorValue());
-					default:
-						return null;
+					Object cellEditorValue = super.getCellEditorValue();
+					if (cellEditorValue != null) {
+						switch (getColumnModel().getNumberType()) {
+						case ByteType:
+							return Byte.parseByte((String) cellEditorValue);
+						case ShortType:
+							return Short.parseShort((String) cellEditorValue);
+						case IntegerType:
+							return Integer.parseInt((String) cellEditorValue);
+						case LongType:
+							return Long.parseLong((String) cellEditorValue);
+						case FloatType:
+							return Float.parseFloat((String) cellEditorValue);
+						case DoubleType:
+							return Double.parseDouble((String) cellEditorValue);
+						default:
+							return null;
+						}
 					}
+					return null;
 				}
 			};
 		}

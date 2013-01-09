@@ -139,7 +139,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		public abstract int getPolicy();
 	}
 
-	private int index = -1;
+	private Integer index;
 	private DataBinding<?> data;
 	private DataBinding<Boolean> visible;
 
@@ -697,11 +697,16 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}*/
 
-	public int getIndex() {
+	public Integer getIndex() {
+		if (index == null) {
+			if (getConstraints() != null && getConstraints().hasIndex()) {
+				return getConstraints().getIndex();
+			}
+		}
 		return index;
 	}
 
-	public void setIndex(int index) {
+	public void setIndex(Integer index) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
 		if (notification != null) {
 			this.index = index;

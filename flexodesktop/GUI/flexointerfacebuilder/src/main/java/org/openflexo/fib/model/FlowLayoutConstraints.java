@@ -29,11 +29,6 @@ public class FlowLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	public FlowLayoutConstraints(int index) {
-		super();
-		setIndex(index);
-	}
-
 	protected FlowLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}

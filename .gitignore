@@ -10,3 +10,4 @@ target
 *.log
 .DS_Store
 *.hprof.index
+.vmweb-config.xml

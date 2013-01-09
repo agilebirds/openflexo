@@ -32,7 +32,7 @@ import org.openflexo.xmlcode.XMLCoder;
 
 public class FIBInspector extends FIBPanel {
 
-	private boolean superInspectorWereAppened = false;
+	private boolean superInspectorWereAppended = false;
 
 	protected void appendSuperInspectors(FIBInspectorController controller) {
 		if (getDataType() == null) {
@@ -53,7 +53,7 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected void appendSuperInspector(FIBInspector superInspector) {
-		if (!superInspectorWereAppened) {
+		if (!superInspectorWereAppended) {
 			// System.out.println("Append "+superInspector+" to "+this);
 			/*try {
 				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
@@ -72,7 +72,7 @@ public class FIBInspector extends FIBPanel {
 				e.printStackTrace();
 			}*/
 			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
-			superInspectorWereAppened = true;
+			superInspectorWereAppended = true;
 		}
 	}
 

@@ -37,7 +37,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -45,12 +47,12 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.controller.DraggedFIBComponent;
-import org.openflexo.fib.editor.controller.ElementDrag;
 import org.openflexo.fib.editor.controller.ExistingElementDrag;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
@@ -78,13 +80,16 @@ import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.Focusable;
+import org.openflexo.swing.NoInsetsBorder;
 
-public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements Observer, MouseListener, FocusListener {
+public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements Observer, MouseListener, FocusListener,
+		Focusable {
 
 	static final Logger logger = FlexoLogger.getLogger(FIBEditableViewDelegate.class.getPackage().getName());
 
-	private Border focusBorder = BorderFactory.createLineBorder(Color.RED);
-	private Border selectedBorder = BorderFactory.createLineBorder(Color.BLUE);
+	private static final Border focusBorder = new NoInsetsBorder(BorderFactory.createLineBorder(Color.RED));
+	private static final Border selectedBorder = new NoInsetsBorder(BorderFactory.createLineBorder(Color.BLUE));
 
 	private boolean isFocused = false;
 	private boolean isSelected = false;
@@ -188,6 +193,12 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		return view.getComponent();
 	}
 
+	@Override
+	public boolean isFocused() {
+		return isFocused;
+	}
+
+	@Override
 	public void setFocused(boolean aFlag) {
 		if (isSelected) {
 			return;
@@ -239,14 +250,40 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		}
 	}
 
-	public void setPlaceHoldersAreVisible(boolean aFlag) {
-		if (view.getPlaceHolders() != null) {
-			for (PlaceHolder ph : view.getPlaceHolders()) {
-				ph.setVisible(aFlag);
-				// if (aFlag) System.out.println("PlaceHolder "+ph+" becomes visible with "+ph.getBounds());
-			}
-		}
+	private List<Object> placeHolderVisibleRequesters = new ArrayList<Object>();
 
+	public void addToPlaceHolderVisibleRequesters(Object requester) {
+		if (!placeHolderVisibleRequesters.contains(requester)) {
+			placeHolderVisibleRequesters.add(requester);
+			updatePlaceHoldersVisibility();
+		}
+	}
+
+	public void removeFromPlaceHolderVisibleRequesters(Object requester) {
+		if (placeHolderVisibleRequesters.remove(requester)) {
+			updatePlaceHoldersVisibility();
+		}
+	}
+
+	private boolean updatePlaceHoldersVisibilityRequested = false;
+
+	private void updatePlaceHoldersVisibility() {
+		if (updatePlaceHoldersVisibilityRequested) {
+			return;
+		}
+		updatePlaceHoldersVisibilityRequested = true;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				boolean visible = placeHolderVisibleRequesters.size() > 0;
+				if (view.getPlaceHolders() != null) {
+					for (PlaceHolder ph : view.getPlaceHolders()) {
+						ph.setVisible(visible);
+					}
+				}
+				updatePlaceHoldersVisibilityRequested = false;
+			}
+		});
 	}
 
 	@Override
@@ -447,14 +484,14 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 		public FIBDropTarget(FIBEditableView editableView) {
 			super(editableView.getJComponent(), DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, editableView.getEditorController()
-					.buildPaletteDropListener(editableView.getJComponent(), editableView.getEditorController()), true);
+					.buildPaletteDropListener(editableView, null), true);
 			this.editableView = editableView;
 			logger.fine("Made FIBDropTarget for " + getFIBComponent());
 		}
 
 		public FIBDropTarget(PlaceHolder placeHolder) {
 			super(placeHolder, DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, placeHolder.getView().getEditorController()
-					.buildPaletteDropListener(placeHolder, placeHolder.getView().getEditorController()), true);
+					.buildPaletteDropListener(placeHolder.getView(), placeHolder), true);
 			this.placeHolder = placeHolder;
 			this.editableView = placeHolder.getView();
 			logger.fine("Made FIBDropTarget for " + getFIBComponent());
@@ -538,10 +575,6 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 			System.out.println("dragDropEnd in MoveDSListener");
 
-			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag) {
-				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
-			}
-
 			// getDrawingView().resetCapturedNode();
 			if (!e.getDropSuccess()) {
 				if (logger.isLoggable(Level.INFO)) {
@@ -583,10 +616,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		 */
 		@Override
 		public void dragOver(DragSourceDragEvent e) {
-			// interface
-			getEditorController().setDragSourceContext(e.getDragSourceContext());
-			DragSourceContext context = e.getDragSourceContext();
-			// System.out.println("dragOver() with "+context+" component="+e.getSource());
+
 		}
 
 		/**
@@ -595,12 +625,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		 */
 		@Override
 		public void dragExit(DragSourceEvent e) {
-			DragSourceContext context = e.getDragSourceContext();
-			// System.out.println("dragExit() with "+context+" component="+e.getSource());
-			// interface
-			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag) {
-				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
-			}
+
 		}
 
 		/**

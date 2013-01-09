@@ -360,6 +360,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 						// Might happen when a structural modification will call parent's nodeChanged()
 						// An Exception might be raised here
 						// We should investigate further, but since no real consequences are raised here, we just ignore exception
+						e.printStackTrace();
 						logger.warning("Unexpected " + e.getClass().getSimpleName()
 								+ " when refreshing browser, no severity but please investigate");
 					}
@@ -389,11 +390,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				// Might happen when a structural modification will call parent's nodeChanged()
 				// An ArrayIndexOutOfBoundsException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
+				e.printStackTrace();
 				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
 			} catch (NullPointerException e) {
 				// Might happen when a structural modification will call parent's nodeChanged()
 				// An NullPointerException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
+				e.printStackTrace();
 				logger.warning("Unexpected NullPointerException when refreshing browser, no severity but please investigate");
 			}
 
@@ -410,6 +413,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 					// Might happen when a structural modification will call parent's nodeChanged()
 					// An Exception might be raised here
 					// We should investigate further, but since no real consequences are raised here, we just ignore exception
+					e.printStackTrace();
 					logger.warning("Unexpected " + e.getClass().getSimpleName()
 							+ " when refreshing browser, no severity but please investigate");
 				}

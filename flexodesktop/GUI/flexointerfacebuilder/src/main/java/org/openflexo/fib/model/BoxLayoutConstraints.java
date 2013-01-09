@@ -40,11 +40,6 @@ public class BoxLayoutConstraints extends ComponentConstraints {
 		super(someConstraints);
 	}
 
-	public BoxLayoutConstraints(int index) {
-		super();
-		setIndex(index);
-	}
-
 	@Override
 	protected Layout getType() {
 		return Layout.box;

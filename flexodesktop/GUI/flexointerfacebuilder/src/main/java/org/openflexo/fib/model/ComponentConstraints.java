@@ -266,17 +266,14 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 	public abstract void performConstrainedAddition(JComponent container, JComponent contained);
 
 	public final int getIndex() {
-		return getIntValue(INDEX, 0);
+		if (hasIndex()) {
+			return getIntValue(INDEX, 0);
+		}
+		return 0;
 	}
 
 	public final void setIndex(int x) {
 		setIntValue(INDEX, x);
-	}
-
-	public final void setIndexNoNotification(int x) {
-		ignoreNotif = true;
-		setIntValue(INDEX, x);
-		ignoreNotif = false;
 	}
 
 	public final boolean hasIndex() {

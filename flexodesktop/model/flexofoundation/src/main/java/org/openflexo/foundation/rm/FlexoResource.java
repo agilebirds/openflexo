@@ -895,6 +895,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		userIdentifier = aUserIdentifier;
 	}
 
+	public String getURI() {
+		if (getProject() != null) {
+			return getProject().getURI() + "#" + getResourceIdentifier();
+		} else {
+			return null;
+		}
+	}
+
 	private boolean isActive = true;
 
 	public void activate() {
@@ -902,7 +910,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		notifyResourceStatusChanged();
 	}
 
-	public void desactivate() {
+	public void deactivate() {
 		isActive = false;
 		notifyResourceStatusChanged();
 	}
