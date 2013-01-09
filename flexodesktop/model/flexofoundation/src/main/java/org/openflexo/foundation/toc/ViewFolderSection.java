@@ -1,5 +1,6 @@
 package org.openflexo.foundation.toc;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
@@ -30,7 +31,7 @@ public class ViewFolderSection extends ModelObjectSection<ViewFolder> {
 	}
 
 	@Override
-	public void setValue(TOCDataBinding value) {
+	public void setValue(DataBinding<Object> value) {
 		super.setValue(value);
 	}
 

@@ -5,20 +5,24 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class IterationSection extends ControlSection {
 
+	private static Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
+
 	private String iteratorName;
 	private ConditionalOwner conditionalOwner;
+	private DataBinding<List<?>> iteration;
+	private DataBinding<Boolean> condition;
 
 	public class ConditionalOwner implements Bindable {
 		@Override
@@ -29,6 +33,14 @@ public class IterationSection extends ControlSection {
 		@Override
 		public BindingModel getBindingModel() {
 			return IterationSection.this.getInferedBindingModel();
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 		}
 	}
 
@@ -42,58 +54,40 @@ public class IterationSection extends ControlSection {
 		conditionalOwner = new ConditionalOwner();
 	}
 
-	private TOCDataBinding iteration;
-
-	private Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
-
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", LIST_BINDING_TYPE, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getIterationBindingDefinition() {
-		return ITERATION;
-	}
-
 	@Override
 	public boolean isIteration() {
 		return true;
 	}
 
-	public TOCDataBinding getIteration() {
+	public DataBinding<List<?>> getIteration() {
 		if (iteration == null) {
-			iteration = new TOCDataBinding(this, ControlSectionBindingAttribute.iteration, getIterationBindingDefinition());
+			iteration = new DataBinding<List<?>>(this, LIST_BINDING_TYPE, BindingDefinitionType.GET);
 		}
 		return iteration;
 	}
 
-	public void setIteration(TOCDataBinding iteration) {
+	public void setIteration(DataBinding<List<?>> iteration) {
 		if (iteration != null) {
 			iteration.setOwner(this);
-			iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
-			iteration.setBindingDefinition(getIterationBindingDefinition());
+			iteration.setDeclaredType(LIST_BINDING_TYPE);
+			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.iteration = iteration;
 		rebuildInferedBindingModel();
 	}
 
-	private TOCDataBinding condition;
-
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getConditionBindingDefinition() {
-		return CONDITION;
-	}
-
-	public TOCDataBinding getCondition() {
+	public DataBinding<Boolean> getCondition() {
 		if (condition == null) {
-			condition = new TOCDataBinding(conditionalOwner, ControlSectionBindingAttribute.condition, getConditionBindingDefinition());
+			condition = new DataBinding<Boolean>(conditionalOwner, Boolean.class, BindingDefinitionType.GET);
 		}
 		return condition;
 	}
 
-	public void setCondition(TOCDataBinding condition) {
+	public void setCondition(DataBinding<Boolean> condition) {
 		if (condition != null) {
 			condition.setOwner(conditionalOwner);
-			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
-			condition.setBindingDefinition(getConditionBindingDefinition());
+			condition.setDeclaredType(Boolean.class);
+			condition.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.condition = condition;
 	}
@@ -107,8 +101,8 @@ public class IterationSection extends ControlSection {
 	}
 
 	public Type getItemType() {
-		if (getIteration() != null && getIteration().hasBinding()) {
-			Type accessedType = getIteration().getBinding().getAccessedType();
+		if (getIteration().isSet()) {
+			Type accessedType = getIteration().getAnalyzedType();
 			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
 				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
 			}
@@ -123,7 +117,7 @@ public class IterationSection extends ControlSection {
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
+		returned.addToBindingVariables(new BindingVariable(getIteratorName(), getItemType()) {
 			@Override
 			public Object getBindingValue(Object target, BindingEvaluationContext context) {
 				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
@@ -135,8 +129,8 @@ public class IterationSection extends ControlSection {
 				return getItemType();
 			}
 		});
-		getIteration().finalizeDeserialization();
-		getCondition().finalizeDeserialization();
+		getIteration().decode();
+		getCondition().decode();
 		return returned;
 	}
 
@@ -161,8 +155,8 @@ public class IterationSection extends ControlSection {
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		getIteration().finalizeDeserialization();
-		getCondition().finalizeDeserialization();
+		getIteration().decode();
+		getCondition().decode();
 	}
 
 }

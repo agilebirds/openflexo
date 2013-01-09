@@ -24,11 +24,13 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
@@ -384,14 +386,15 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ConditionalSection createConditionalSection(String title, TOCDataBinding condition) {
+	public ConditionalSection createConditionalSection(String title, DataBinding<Boolean> condition) {
 		ConditionalSection reply = new ConditionalSection(getData());
 		reply.setTitle(title);
 		reply.setCondition(condition);
 		return reply;
 	}
 
-	public IterationSection createIterationSection(String title, String iteratorName, TOCDataBinding iteration, TOCDataBinding condition) {
+	public IterationSection createIterationSection(String title, String iteratorName, DataBinding<List<?>> iteration,
+			DataBinding<Boolean> condition) {
 		IterationSection reply = new IterationSection(getData());
 		reply.setTitle(title);
 		reply.setIteratorName(iteratorName);
@@ -401,7 +404,7 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public ProcessSection createProcessSection(String title, FlexoProcess process, ProcessSection.ProcessDocSectionSubType subType,
-			TOCDataBinding value) {
+			DataBinding<Object> value) {
 		ProcessSection reply = new ProcessSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(process);
@@ -410,7 +413,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ViewSection createViewSection(String title, ViewDefinition view, TOCDataBinding value) {
+	public ViewSection createViewSection(String title, ViewDefinition view, DataBinding<Object> value) {
 		ViewSection reply = new ViewSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(view);
@@ -418,7 +421,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ViewFolderSection createViewFolderSection(String title, ViewFolder folder, TOCDataBinding value) {
+	public ViewFolderSection createViewFolderSection(String title, ViewFolder folder, DataBinding<Object> value) {
 		ViewFolderSection reply = new ViewFolderSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(folder);
@@ -426,7 +429,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public RoleSection createRoleSection(String title, Role role, TOCDataBinding value) {
+	public RoleSection createRoleSection(String title, Role role, DataBinding<Object> value) {
 		RoleSection reply = new RoleSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(role);
@@ -434,7 +437,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public EntitySection createEntitySection(String title, DMEntity entity, TOCDataBinding value) {
+	public EntitySection createEntitySection(String title, DMEntity entity, DataBinding<Object> value) {
 		EntitySection reply = new EntitySection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(entity);
@@ -443,7 +446,7 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public OperationScreenSection createOperationScreenSection(String title, OperationComponentDefinition operationScreen,
-			TOCDataBinding value) {
+			DataBinding<Object> value) {
 		OperationScreenSection reply = new OperationScreenSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(operationScreen);
@@ -451,7 +454,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ERDiagramSection createERDiagramSection(String title, ERDiagram diagram, TOCDataBinding value) {
+	public ERDiagramSection createERDiagramSection(String title, ERDiagram diagram, DataBinding<Object> value) {
 		ERDiagramSection reply = new ERDiagramSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(diagram);
@@ -476,7 +479,7 @@ public class TOCRepository extends TOCEntry {
 
 	protected BindingModel buildBindingModel() {
 		BindingModel returned = new BindingModel();
-		returned.addToBindingVariables(new BindingVariableImpl(this, "project", FlexoProject.class) {
+		returned.addToBindingVariables(new BindingVariable("project", FlexoProject.class) {
 			@Override
 			public Object getBindingValue(Object target, BindingEvaluationContext context) {
 				logger.info("What should i return for project ? target " + target + " context=" + context);

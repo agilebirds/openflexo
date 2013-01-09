@@ -1,11 +1,13 @@
 package org.openflexo.foundation.toc;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class ConditionalSection extends ControlSection {
+
+	private DataBinding<Boolean> condition;
 
 	public ConditionalSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
@@ -21,41 +23,33 @@ public class ConditionalSection extends ControlSection {
 		return true;
 	}
 
-	private TOCDataBinding condition;
-
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getConditionBindingDefinition() {
-		return CONDITION;
-	}
-
-	public TOCDataBinding getCondition() {
+	public DataBinding<Boolean> getCondition() {
 		if (condition == null) {
-			condition = new TOCDataBinding(this, ControlSectionBindingAttribute.condition, getConditionBindingDefinition());
+			condition = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
 		}
 		return condition;
 	}
 
-	public void setCondition(TOCDataBinding condition) {
+	public void setCondition(DataBinding<Boolean> condition) {
 		if (condition != null) {
 			condition.setOwner(this);
-			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
-			condition.setBindingDefinition(getConditionBindingDefinition());
-			this.condition = condition;
+			condition.setDeclaredType(Boolean.class);
+			condition.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
+		this.condition = condition;
 	}
 
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
-		getCondition().finalizeDeserialization();
+		getCondition().decode();
 		return returned;
 	}
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		getCondition().finalizeDeserialization();
+		getCondition().decode();
 	}
 
 }
