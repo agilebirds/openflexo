@@ -1,96 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.FlexoProcess" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
-      <Label label="width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="WidthswlLabel" localize="true" />
-      <Number numberType="DoubleType" columns="10" data="data.getWidth(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Widthswl" localize="true" />
-      <Label label="text_color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="TextColorswlLabel" localize="true" />
-      <Color data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="TextColorswl" localize="true" />
-      <Label label="back_color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" name="BgColorswlLabel" localize="true" />
-      <Color data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="BgColorswl" localize="true" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="parent_process" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ParentProcessLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" localize="true" manageDynamicModel="true" name="ParentProcess" index="3" data="data.parentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableAsParentProcess(ParentProcess.customComponent.candidateValue)&quot;" />
+        <Assignment variable="component.project" value="data.project" />
+      </Custom>
+      <Label label="css_sheet" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="CssSheetLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <DropDown index="5" data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </DropDown>
     </Tab>
-    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
-      <Label label="width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="WidthbpeLabel" localize="true" />
-      <Number numberType="DoubleType" columns="10" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Widthbpe" localize="true" />
-      <Label label="height" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="HeightbpeLabel" localize="true" />
-      <Number numberType="DoubleType" columns="10" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Heightbpe" localize="true" />
-      <Label label="text_color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="TextColorbpeLabel" localize="true" />
-      <Color data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="TextColorbpe" localize="true" />
-      <Label label="back_color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" name="BgColorbpeLabel" localize="true" />
-      <Color data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="BgColorbpe" localize="true" />
-      <Label label="aligned_on_grid" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" name="IsAlignedOnGridbpeLabel" localize="true" />
-      <CheckBox selected="false" data="data.getIsAlignedOnGrid(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" name="IsAlignedOnGridbpe" localize="true" />
-      <Label label="grid_size" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;location=left)" name="GridSizebpeLabel" localize="true" />
-      <Number numberType="IntegerType" data="data.getGridSize(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" name="GridSizebpe" localize="true" />
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+      <Label label="preferred_representation" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="GraphicalPropertyForKeypreferredRepresentationLabel" localize="true" />
+      <DropDown index="1" data="data._graphicalPropertyForKey(&quot;preferredRepresentation&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="GraphicalPropertyForKeypreferredRepresentation" localize="true" iteratorClassName="org.openflexo.wkf.WKFModule$ProcessRepresentation" autoSelectFirstRow="false" />
+      <Label label="index" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.processNode.parentFolder = null)" name="IndexLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="3" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.processNode.parentFolder = null)" name="Index" localize="true" />
+      <Label label="index" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.processNode.parentFolder != null)" name="VectorIndexLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="5" data="data.vectorIndex" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.processNode.parentFolder != null)" name="VectorIndex" localize="true" />
+    </Tab>
+    <Tab title="Status" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="StatusTab">
+      <Label label="statuses_for_process" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="SortedStatusesVectorLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Status" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="SortedStatusesVector" index="1" data="data.sortedStatusesVector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addStatus" name="new" />
+        <RemoveAction method="data.deleteStatus(selected)" isAvailable="data.statusList.isStatusDeletable(selected)" name="delete" />
+      </Table>
+      <Label label="default_status" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="StatusListdefaultStatusLabel" localize="true" />
+      <DropDown index="3" data="data.statusList.defaultStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="StatusListdefaultStatus" format="object.name" localize="true" list="data.statusList.status" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
+      <Parameter name="visibleFor" value="LITE,CUSTOMER,ANALYST,DEVELOPER,MAINTAINER" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="variable_name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BusinessDataVariableNameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Label>
+      <TextField index="1" data="data.businessDataVariableName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BusinessDataVariableName" localize="true" validateOnReturn="true" columns="10">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </TextField>
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
+    </Tab>
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" index="0" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="200" height="35" name="StatisticsinfoLabel" localize="true" />
+      <Label label="include_begin_end" index="1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
+      <CheckBox selected="false" index="2" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
+      <Label label="# activities_in_process" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCountLabel" localize="true" />
+      <Label label="# activities_in_process" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCountLabel" localize="true" />
+      <TextField index="5" data="data.statistics.activityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCount" readOnly="true" localize="true" />
+      <TextField index="6" data="data.statistics.realActivityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCount" readOnly="true" localize="true" />
+      <Label label="# operations_in_process" index="7" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCountLabel" localize="true" />
+      <Label label="# operations_in_process" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCountLabel" localize="true" />
+      <TextField index="9" data="data.statistics.realOperationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCount" readOnly="true" localize="true" />
+      <TextField index="10" data="data.statistics.operationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCount" readOnly="true" localize="true" />
+      <Label label="# actions_in_process" index="11" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
+      <Label label="# actions_in_process" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
+      <TextField index="13" data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
+      <TextField index="14" data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
+      <Parameter name="visibleFor" value="CUSTOMER,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
     <Tab title="Process Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ProcessMetricsTab">
-      <Label label="metrics" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="MetricsValuesLabel" localize="true" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
+      <Label label="metrics" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="MetricsValuesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" index="1" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
         <AddAction method="data.addMetrics" name="new" />
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
+      <Parameter name="visibleFor" value="LITE,CUSTOMER,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="StatsTab">
-      <Label align="center" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
-      <Label label="include_begin_end" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
-      <CheckBox selected="false" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
-      <Label label="# activities_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCountLabel" localize="true" />
-      <TextField data="data.statistics.activityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCount" readOnly="true" localize="true" />
-      <Label label="# activities_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCountLabel" localize="true" />
-      <TextField data="data.statistics.realActivityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCount" readOnly="true" localize="true" />
-      <Label label="# operations_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCountLabel" localize="true" />
-      <TextField data="data.statistics.realOperationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCount" readOnly="true" localize="true" />
-      <Label label="# operations_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCountLabel" localize="true" />
-      <TextField data="data.statistics.operationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCount" readOnly="true" localize="true" />
-      <Label label="# actions_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
-      <TextField data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
-      <Label label="# actions_in_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
-      <TextField data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+      <Label label="width" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="WidthbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="1" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthbpe" localize="true" />
+      <Label label="height" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HeightbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="3" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightbpe" localize="true" />
+      <Label label="text_color" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorbpeLabel" localize="true" />
+      <Color index="5" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
+      <Label label="back_color" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
+      <Color index="7" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
+      <Label label="aligned_on_grid" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsAlignedOnGridbpeLabel" localize="true" />
+      <CheckBox selected="false" index="9" data="data.getIsAlignedOnGrid(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsAlignedOnGridbpe" localize="true" />
+      <Label label="grid_size" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="GridSizebpeLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="11" data="data.getGridSize(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="GridSizebpe" localize="true" />
     </Tab>
-    <Tab title="Status" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="StatusTab">
-      <Label label="statuses_for_process" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="SortedStatusesVectorLabel" localize="true" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Status" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="SortedStatusesVector" data="data.sortedStatusesVector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
-        <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
-        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
-        <AddAction method="data.addStatus" name="new" />
-        <RemoveAction method="data.deleteStatus(selected)" isAvailable="data.statusList.isStatusDeletable(selected)" name="delete" />
-      </Table>
-      <Label label="default_status" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="StatusListdefaultStatusLabel" localize="true" />
-      <DropDown data="data.statusList.defaultStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="StatusListdefaultStatus" format="object.name" localize="true" list="data.statusList.status" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
-    </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">
-      <Label label="preferred_representation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" name="GraphicalPropertyForKeypreferredRepresentationLabel" localize="true" />
-      <DropDown data="data._graphicalPropertyForKey(&quot;preferredRepresentation&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="GraphicalPropertyForKeypreferredRepresentation" localize="true" iteratorClassName="org.openflexo.wkf.WKFModule$ProcessRepresentation" autoSelectFirstRow="false" />
-      <Label label="index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" visible="(data.processNode.parentFolder = null)" name="IndexLabel" localize="true" />
-      <Number numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" visible="(data.processNode.parentFolder = null)" name="Index" localize="true" />
-      <Label label="index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;location=left)" visible="(data.processNode.parentFolder != null)" name="VectorIndexLabel" localize="true" />
-      <Number numberType="IntegerType" data="data.vectorIndex" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" visible="(data.processNode.parentFolder != null)" name="VectorIndex" localize="true" />
-    </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="variable_name" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="BusinessDataVariableNameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
-      </Label>
-      <TextField data="data.businessDataVariableName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="BusinessDataVariableName" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
-      </TextField>
-    </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="NameLabel" localize="true" />
-      <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
-      <Label label="parent_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="ParentProcessLabel" localize="true" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" localize="true" manageDynamicModel="true" name="ParentProcess" data="data.parentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)">
-        <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableAsParentProcess(ParentProcess.customComponent.candidateValue)&quot;" />
-        <Assignment variable="component.project" value="data.project" />
-      </Custom>
-      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="CssSheetLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </Label>
-      <DropDown data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </DropDown>
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="width" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="WidthswlLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="1" data="data.getWidth(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthswl" localize="true" />
+      <Label label="text_color" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
+      <Color index="3" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Label label="back_color" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
+      <Color index="5" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorswl" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -163,6 +167,45 @@
     <Localized key="css_sheet" lang="English">CSS sheet</Localized>
     <Localized key="css_sheet" lang="French">Feuille de style</Localized>
     <Localized key="css_sheet" lang="Dutch">CSS sheet</Localized>
+    <Localized key="BASIC_EDITOR" lang="English">Basic Editor</Localized>
+    <Localized key="BASIC_EDITOR" lang="French">Editeur de base</Localized>
+    <Localized key="BASIC_EDITOR" lang="Dutch">Basic Editor</Localized>
+    <Localized key="SWIMMING_LANE" lang="English">Swimming Lane</Localized>
+    <Localized key="SWIMMING_LANE" lang="French">Swimming lane</Localized>
+    <Localized key="SWIMMING_LANE" lang="Dutch">Swimming Lane</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="Default" lang="English">Default</Localized>
+    <Localized key="Default" lang="French">Défaut</Localized>
+    <Localized key="Default" lang="Dutch">Default</Localized>
+    <Localized key="unit" lang="English">Unit</Localized>
+    <Localized key="unit" lang="French">Unité</Localized>
+    <Localized key="unit" lang="Dutch">Unit</Localized>
+    <Localized key="additional_info" lang="English">Additional info</Localized>
+    <Localized key="additional_info" lang="French">Info supplémentaire</Localized>
+    <Localized key="additional_info" lang="Dutch">Additional info</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="Status" lang="English">Status</Localized>
+    <Localized key="Status" lang="Dutch">Status</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Stats" lang="English">Stats</Localized>
+    <Localized key="Stats" lang="French">Stats</Localized>
+    <Localized key="Stats" lang="Dutch">Stats</Localized>
+    <Localized key="Défaut" lang="English">Défaut</Localized>
+    <Localized key="Défaut" lang="French">Défaut</Localized>
+    <Localized key="Défaut" lang="Dutch">Défaut</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Process" />
 </Panel>

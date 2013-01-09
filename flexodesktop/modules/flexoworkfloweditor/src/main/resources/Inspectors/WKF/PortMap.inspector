@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.FlexoPortMap" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">
-      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
-      <Number numberType="IntegerType" index="1" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Index" localize="true" />
-    </Tab>
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
       <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
       <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
@@ -38,6 +34,10 @@
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Table>
+    </Tab>
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">
+      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
+      <Number numberType="IntegerType" index="1" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Index" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

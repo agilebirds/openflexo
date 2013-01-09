@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.InOutPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
     <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
-      <Label label="output_message" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="OutputMessageDefinitionnameLabel" localize="true">
+      <Label label="output_message" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="OutputMessageDefinitionnameLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Label>
-      <TextField index="5" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="OutputMessageDefinitionname" localize="true" validateOnReturn="true" columns="10">
+      <TextField index="5" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="OutputMessageDefinitionname" localize="true" validateOnReturn="true" columns="10">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </TextField>
-      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" index="7" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;location=right)">
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" index="7" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.variableName" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.project" value="iterator.project" />
@@ -19,8 +20,8 @@
         <RemoveAction method="data.outputMessageDefinition.deleteMessageEntry(selected)" isAvailable="data.outputMessageDefinition.isMessageEntryDeletable(selected)" name="delete" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Table>
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Data" lang="French">Donnée</Localized>

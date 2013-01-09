@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.EventNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="representation_role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" visible="(data.isInRootPetriGraph = true)" name="RoleLabel" localize="true" />
-      <DropDown data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" visible="(data.isInRootPetriGraph = true)" name="Role" format="object.name" localize="true" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
-    </Tab>
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="new_status" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" name="NewStatusLabel" localize="true" />
-      <DropDown showReset="true" data="data.newStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="NewStatus" format="object.nameAndProcess" localize="true" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
-      <Label label="docUrl" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" visible="(data.isStartOrEnd = true)" name="DocumentationUrlLabel" localize="true" />
-      <TextField data="data.documentationUrl" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)" visible="(data.isStartOrEnd = true)" name="DocumentationUrl" localize="true" />
-      <Label label="trigger_process" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;location=left)" visible="(data.isStartOrEnd = true)" name="LinkedProcessLabel" localize="true" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" localize="true" manageDynamicModel="true" name="LinkedProcess" data="data.linkedProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;location=right)" visible="(data.isStartOrEnd = true)">
+      <Label label="new_status" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NewStatusLabel" localize="true" />
+      <DropDown showReset="true" index="1" data="data.newStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="NewStatus" format="object.nameAndProcess" localize="true" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
+      <Label label="docUrl" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isStartOrEnd = true)" name="DocumentationUrlLabel" localize="true" />
+      <TextField index="3" data="data.documentationUrl" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isStartOrEnd = true)" name="DocumentationUrl" localize="true" />
+      <Label label="trigger_process" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isStartOrEnd = true)" name="LinkedProcessLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" localize="true" manageDynamicModel="true" name="LinkedProcess" index="5" data="data.linkedProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isStartOrEnd = true)">
         <Assignment variable="component.project" value="data.project" />
       </Custom>
-      <Label label="from" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;location=left)" visible="(data.isMessageSent = true)" name="FromAddressLabel" localize="true" />
-      <TextField data="data.fromAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;location=right)" visible="(data.isMessageSent = true)" name="FromAddress" localize="true" columns="10" />
-      <Label label="date" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;location=left)" visible="(data.isTriggerTimer = true)" name="DateBindingLabel" localize="true">
+      <Label label="from" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" name="FromAddressLabel" localize="true" />
+      <TextField index="7" data="data.fromAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isMessageSent = true)" name="FromAddress" localize="true" columns="10" />
+      <Label label="date" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isTriggerTimer = true)" name="DateBindingLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Label>
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="DateBinding" data="data.dateBinding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;location=right)" visible="(data.isTriggerTimer = true)">
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="DateBinding" index="9" data="data.dateBinding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isTriggerTimer = true)">
         <Assignment variable="component.bindingDefinition" value="data.dateBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>
-      <Label label="to" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;location=left)" visible="(data.isMessageSent = true)" name="ToAddressLabel" localize="true" />
-      <TextField data="data.toAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;location=right)" visible="(data.isMessageSent = true)" name="ToAddress" localize="true" columns="10" />
-      <Label label="subject" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;location=left)" visible="(data.isMessageSent = true)" name="MailSubjectLabel" localize="true" />
-      <TextField data="data.mailSubject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;location=right)" visible="(data.isMessageSent = true)" name="MailSubject" localize="true" columns="10" />
-      <Label label="body" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;location=left)" visible="(data.isMessageSent = true)" name="MailBodyLabel" localize="true" />
-      <TextArea rows="8" data="data.mailBody" constraints="twocols(expandHorizontally=true;expandVertically=true;index=25;location=right)" visible="(data.isMessageSent = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MailBody" localize="true" />
+      <Label label="to" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" name="ToAddressLabel" localize="true" />
+      <TextField index="11" data="data.toAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isMessageSent = true)" name="ToAddress" localize="true" columns="10" />
+      <Label label="subject" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" name="MailSubjectLabel" localize="true" />
+      <TextField index="13" data="data.mailSubject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isMessageSent = true)" name="MailSubject" localize="true" columns="10" />
+      <Label label="body" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" name="MailBodyLabel" localize="true" />
+      <TextArea rows="8" index="15" data="data.mailBody" constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isMessageSent = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MailBody" localize="true" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="representation_role" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isInRootPetriGraph = true)" name="RoleLabel" localize="true" />
+      <DropDown index="1" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isInRootPetriGraph = true)" name="Role" format="object.name" localize="true" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+      <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
