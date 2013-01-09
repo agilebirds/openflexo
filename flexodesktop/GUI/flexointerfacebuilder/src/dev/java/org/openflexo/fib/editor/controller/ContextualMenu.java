@@ -78,6 +78,7 @@ public class ContextualMenu {
 				FIBPanel newPanel = new FIBPanel();
 				newPanel.setLayout(Layout.border);
 				newPanel.setBorder(Border.titled);
+				newPanel.finalizeDeserialization();
 				parent.addToSubComponents(newPanel, component.getConstraints());
 				newPanel.addToSubComponents(component, new BorderLayoutConstraints(BorderLayoutLocation.center));
 				return parent;

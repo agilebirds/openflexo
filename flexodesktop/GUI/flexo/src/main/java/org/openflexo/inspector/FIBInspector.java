@@ -584,6 +584,7 @@ public class FIBInspector extends FIBPanel {
 			widget.setReadOnly(entry.getIsReadOnly());
 
 		}
+		newTab.finalizeDeserialization();
 		return newTab;
 	}
 

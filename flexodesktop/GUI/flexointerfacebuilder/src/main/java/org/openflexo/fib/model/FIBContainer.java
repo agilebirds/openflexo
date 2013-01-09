@@ -82,7 +82,9 @@ public abstract class FIBContainer extends FIBComponent {
 			aComponent.getConstraints().ignoreNotif = false;
 		}
 		subComponents.add(subComponentIndex, aComponent);
-		reorderComponents();
+		if (deserializationPerformed) {
+			reorderComponents();
+		}
 		if (aComponent instanceof FIBWidget && ((FIBWidget) aComponent).getManageDynamicModel()) {
 			if (deserializationPerformed) {
 				updateBindingModel();
@@ -191,7 +193,6 @@ public abstract class FIBContainer extends FIBComponent {
 				 * a null index are considered to be consecutive)
 				 */
 
-				child.setParent(this);
 				int indexInsertion;
 				if (child.getIndex() == null) {
 					indexInsertion = getSubComponents().size();
@@ -237,7 +238,7 @@ public abstract class FIBContainer extends FIBComponent {
 					indexInsertion = getSubComponents().size();
 					for (int j = 0; j < getSubComponents().size(); j++) {
 						FIBComponent c = getSubComponents().get(j);
-						if (c.getIndex() != null && c.getIndex() > -1 && c.getIndex() > child.getIndex()) {
+						if (c.getIndex() != null && c.getIndex() > -1 && c.getIndex() >= child.getIndex()) {
 							indexInsertion = j;
 							if (j > 0) {
 								// This is a complex case
@@ -265,14 +266,18 @@ public abstract class FIBContainer extends FIBComponent {
 					}
 				}
 				boolean insert = true;
+				int startIndex = child.getIndex();
 				while (insert) {
+					child.setParent(this);
 					subComponents.add(indexInsertion, child);
 					indexInsertion++;
 					if (i + 1 < container.getSubComponents().size()) {
 						Integer previousInteger = child.getIndex();
 						child = container.getSubComponents().get(i + 1);
-						insert = previousInteger == null && child.getIndex() == null || previousInteger != null && child.getIndex() != null
-								&& previousInteger + 1 == child.getIndex() && !mergedComponents.contains(child);
+						insert = (previousInteger == null && child.getIndex() == null || previousInteger != null
+								&& child.getIndex() != null && previousInteger + 1 == child.getIndex() || child.getIndex() != null
+								&& child.getIndex() == startIndex)
+								&& !mergedComponents.contains(child);
 						if (insert) {
 							i++;
 						} else {

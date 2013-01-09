@@ -367,7 +367,7 @@ public class FIBEditor implements FIBGenericEditor {
 	public void newFIB() {
 		FIBPanel fibComponent = new FIBPanel();
 		fibComponent.setLayout(Layout.border);
-
+		fibComponent.finalizeDeserialization();
 		EditedFIB newEditedFIB = new EditedFIB("New.fib", new File("NewComponent.fib"), fibComponent);
 
 		editorController = new FIBEditorController(fibComponent, this);

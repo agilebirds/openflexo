@@ -211,6 +211,7 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 					FIBTab newTabComponent = new FIBTab();
 					newTabComponent.setLayout(Layout.border);
 					newTabComponent.setTitle("NewTab");
+					newTabComponent.finalizeDeserialization();
 					((FIBTabPanel) targetComponent).addToSubComponents(newTabComponent);
 					return true;
 				} else {
