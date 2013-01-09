@@ -360,11 +360,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public boolean isBindingValue() {
-		return getExpression() != null && (getExpression() instanceof BindingValue);
+		return getExpression() != null && getExpression() instanceof BindingValue;
 	}
 
 	public boolean isConstant() {
-		return getExpression() != null && (getExpression() instanceof Constant);
+		return getExpression() != null && getExpression() instanceof Constant;
 	}
 
 	public boolean isCompoundBinding() {
