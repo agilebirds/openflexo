@@ -240,22 +240,14 @@ public class FIBEditor implements FIBGenericEditor {
 			e.printStackTrace();
 		}
 
-		FIBEditor editor = new FIBEditor();
-		editor.showPanel();
-
-		/*(new Thread(new Runnable() {
-			public void run()
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				logger.info("Stopping application");
-				System.exit(-1);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				FIBEditor editor = new FIBEditor();
+				editor.showPanel();
 			}
-		})).start();*/
+		});
+
 	}
 
 	private final JFrame frame;
