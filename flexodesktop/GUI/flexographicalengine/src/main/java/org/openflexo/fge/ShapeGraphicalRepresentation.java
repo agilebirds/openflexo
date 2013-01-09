@@ -33,9 +33,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -1588,85 +1590,93 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// * Geometry constraints *
 	// *******************************************************************************
 
-	public static BindingDefinition X_CONSTRAINTS = new BindingDefinition("xConstraints", Double.class, BindingDefinitionType.GET, false);
+	/*public static BindingDefinition X_CONSTRAINTS = new BindingDefinition("xConstraints", Double.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition Y_CONSTRAINTS = new BindingDefinition("yConstraints", Double.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition WIDTH_CONSTRAINTS = new BindingDefinition("widthConstraints", Double.class, BindingDefinitionType.GET,
 			false);
 	public static BindingDefinition HEIGHT_CONSTRAINTS = new BindingDefinition("heightConstraints", Double.class,
-			BindingDefinitionType.GET, false);
+			BindingDefinitionType.GET, false);*/
 
-	private DataBinding xConstraints;
-	private DataBinding yConstraints;
-	private DataBinding widthConstraints;
-	private DataBinding heightConstraints;
+	private DataBinding<Double> xConstraints;
+	private DataBinding<Double> yConstraints;
+	private DataBinding<Double> widthConstraints;
+	private DataBinding<Double> heightConstraints;
 
-	public DataBinding getXConstraints() {
+	public DataBinding<Double> getXConstraints() {
 		if (xConstraints == null) {
-			xConstraints = new DataBinding(this, Parameters.xConstraints, X_CONSTRAINTS);
+			xConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
 		}
 		return xConstraints;
 	}
 
-	public void setXConstraints(DataBinding xConstraints) {
+	public void setXConstraints(DataBinding<Double> xConstraints) {
 		FGENotification notification = requireChange(Parameters.xConstraints, xConstraints);
 		if (notification != null) {
-			xConstraints.setOwner(this);
-			xConstraints.setBindingAttribute(Parameters.xConstraints);
-			xConstraints.setBindingDefinition(X_CONSTRAINTS);
+			if (xConstraints != null) {
+				xConstraints.setOwner(this);
+				xConstraints.setDeclaredType(Double.class);
+				xConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
 			this.xConstraints = xConstraints;
 			hasChanged(notification);
 		}
 	}
 
-	public DataBinding getYConstraints() {
+	public DataBinding<Double> getYConstraints() {
 		if (yConstraints == null) {
-			yConstraints = new DataBinding(this, Parameters.yConstraints, Y_CONSTRAINTS);
+			yConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
 		}
 		return yConstraints;
 	}
 
-	public void setYConstraints(DataBinding yConstraints) {
+	public void setYConstraints(DataBinding<Double> yConstraints) {
 		FGENotification notification = requireChange(Parameters.yConstraints, yConstraints);
 		if (notification != null) {
-			yConstraints.setOwner(this);
-			yConstraints.setBindingAttribute(Parameters.yConstraints);
-			yConstraints.setBindingDefinition(Y_CONSTRAINTS);
+			if (yConstraints != null) {
+				yConstraints.setOwner(this);
+				yConstraints.setDeclaredType(Double.class);
+				yConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
 			this.yConstraints = yConstraints;
 			hasChanged(notification);
 		}
 	}
 
-	public DataBinding getWidthConstraints() {
+	public DataBinding<Double> getWidthConstraints() {
 		if (widthConstraints == null) {
-			widthConstraints = new DataBinding(this, Parameters.widthConstraints, WIDTH_CONSTRAINTS);
+			widthConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
 		}
 		return widthConstraints;
 	}
 
-	public void setWidthConstraints(DataBinding widthConstraints) {
+	public void setWidthConstraints(DataBinding<Double> widthConstraints) {
 		FGENotification notification = requireChange(Parameters.widthConstraints, widthConstraints);
 		if (notification != null) {
-			widthConstraints.setOwner(this);
-			widthConstraints.setBindingAttribute(Parameters.widthConstraints);
-			widthConstraints.setBindingDefinition(WIDTH_CONSTRAINTS);
+			if (widthConstraints != null) {
+				widthConstraints.setOwner(this);
+				widthConstraints.setDeclaredType(Double.class);
+				widthConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
 			this.widthConstraints = widthConstraints;
 			hasChanged(notification);
 		}
 	}
 
-	public DataBinding getHeightConstraints() {
+	public DataBinding<Double> getHeightConstraints() {
 		if (heightConstraints == null) {
-			heightConstraints = new DataBinding(this, Parameters.heightConstraints, HEIGHT_CONSTRAINTS);
+			heightConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
 		}
 		return heightConstraints;
 	}
 
-	public void setHeightConstraints(DataBinding heightConstraints) {
+	public void setHeightConstraints(DataBinding<Double> heightConstraints) {
 		FGENotification notification = requireChange(Parameters.heightConstraints, heightConstraints);
 		if (notification != null) {
-			heightConstraints.setOwner(this);
-			heightConstraints.setBindingAttribute(Parameters.heightConstraints);
-			heightConstraints.setBindingDefinition(HEIGHT_CONSTRAINTS);
+			if (heightConstraints != null) {
+				heightConstraints.setOwner(this);
+				heightConstraints.setDeclaredType(Double.class);
+				heightConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
 			this.heightConstraints = heightConstraints;
 			hasChanged(notification);
 		}
@@ -1674,23 +1684,47 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public void finalizeConstraints() {
 		if (xConstraints != null && xConstraints.isValid()) {
-			xConstraints.finalizeDeserialization();
-			setX((Double) TypeUtils.castTo(xConstraints.getBindingValue(this), Double.class));
+			xConstraints.decode();
+			try {
+				setX((Double) TypeUtils.castTo(xConstraints.getBindingValue(this), Double.class));
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			setLocationConstraints(LocationConstraints.UNMOVABLE);
 		}
 		if (yConstraints != null && yConstraints.isValid()) {
-			yConstraints.finalizeDeserialization();
-			setY((Double) TypeUtils.castTo(yConstraints.getBindingValue(this), Double.class));
+			yConstraints.decode();
+			try {
+				setY((Double) TypeUtils.castTo(yConstraints.getBindingValue(this), Double.class));
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			setLocationConstraints(LocationConstraints.UNMOVABLE);
 		}
 		if (widthConstraints != null && widthConstraints.isValid()) {
-			widthConstraints.finalizeDeserialization();
-			setWidth((Double) TypeUtils.castTo(widthConstraints.getBindingValue(this), Double.class));
+			widthConstraints.decode();
+			try {
+				setWidth((Double) TypeUtils.castTo(widthConstraints.getBindingValue(this), Double.class));
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		}
 		if (heightConstraints != null && heightConstraints.isValid()) {
-			heightConstraints.finalizeDeserialization();
-			setHeight((Double) TypeUtils.castTo(heightConstraints.getBindingValue(this), Double.class));
+			heightConstraints.decode();
+			try {
+				setHeight((Double) TypeUtils.castTo(heightConstraints.getBindingValue(this), Double.class));
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		}
 	}
@@ -1737,49 +1771,73 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	private void updateXPosition() {
-		Number n = (Number) xConstraints.getBindingValue(this);
-		if (n != null) {
-			// System.out.println("New value for x is now: " + newValue);
-			setX(n.doubleValue());
+		try {
+			Double n = xConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for x is now: " + newValue);
+				setX(n.doubleValue());
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void updateYPosition() {
-		Number n = (Number) yConstraints.getBindingValue(this);
-		if (n != null) {
-			// System.out.println("New value for y is now: " + newValue);
-			setY(n.doubleValue());
+		try {
+			Double n = yConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for y is now: " + newValue);
+				setY(n.doubleValue());
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void updateWidthPosition() {
-		Number n = (Number) widthConstraints.getBindingValue(this);
-		if (n != null) {
-			// System.out.println("New value for width is now: " + newValue);
-			setWidth(n.doubleValue());
+		try {
+			Double n = widthConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for width is now: " + newValue);
+				setWidth(n.doubleValue());
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void updateHeightPosition() {
-		Number n = (Number) heightConstraints.getBindingValue(this);
-		if (n != null) {
-			// System.out.println("New value for height is now: " + newValue);
-			setHeight(n.doubleValue());
+		try {
+			Double n = heightConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for height is now: " + newValue);
+				setHeight(n.doubleValue());
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void constraintChanged(DataBinding constraint) {
-		// logger.info(">>>>>>> OK, constraint "+constraint+" changed for "+constraint.getBindingAttribute());
-		constraint.updateDependancies();
-		if (constraint.getBindingAttribute() == Parameters.xConstraints && xConstraints != null && xConstraints.isValid()) {
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+		System.out.println("Binding changed to " + dataBinding);
+
+		super.notifiedBindingChanged(dataBinding);
+		if (dataBinding == getXConstraints() && dataBinding.isValid()) {
 			updateXPosition();
-		} else if (constraint.getBindingAttribute() == Parameters.yConstraints && yConstraints != null && yConstraints.isValid()) {
+		} else if (dataBinding == getYConstraints() && dataBinding.isValid()) {
 			updateYPosition();
-		} else if (constraint.getBindingAttribute() == Parameters.widthConstraints && widthConstraints != null
-				&& widthConstraints.isValid()) {
+		} else if (dataBinding == getWidthConstraints() && dataBinding.isValid()) {
 			updateWidthPosition();
-		} else if (constraint.getBindingAttribute() == Parameters.heightConstraints && heightConstraints != null
-				&& heightConstraints.isValid()) {
+		} else if (dataBinding == getHeightConstraints() && dataBinding.isValid()) {
 			updateHeightPosition();
 		}
 	}

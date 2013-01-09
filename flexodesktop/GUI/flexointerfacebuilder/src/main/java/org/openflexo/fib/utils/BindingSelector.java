@@ -522,7 +522,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void fireEditedObjectChanged() {
-		if (!getEditedObject().isValid()) {
+		if (getEditedObject() == null || !getEditedObject().isValid()) {
 			disconnect();
 		}
 		updateCustomPanel(getEditedObject());

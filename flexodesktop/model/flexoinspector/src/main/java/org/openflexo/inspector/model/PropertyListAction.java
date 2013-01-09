@@ -22,11 +22,8 @@ package org.openflexo.inspector.model;
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.oldparser.ParseException;
 
 public class PropertyListAction extends ParametersContainerModelObject {
 	public static final String ADD_TYPE = "ADD";
@@ -80,9 +77,11 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return method;
 	}
 
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	public void _setMethod(String method) {
 		this.method = method;
-		DefaultExpressionParser parser = new DefaultExpressionParser();
+		/*DefaultExpressionParser parser = new DefaultExpressionParser();
 		try {
 			methodExpression = parser.parse(method, null);
 		} catch (ParseException e) {
@@ -92,20 +91,22 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		if (methodExpression instanceof Function) {
 			// System.out.println("Parsed "+method+" as a function");
 			methodExpressionArgs = ((Function) methodExpression).getArgs();
-		}
+		}*/
 	}
 
 	public Expression getMethodExpression() {
 		return methodExpression;
 	}
 
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	public String getMethodName() {
 		if (methodExpression instanceof Variable) {
 			return ((Variable) methodExpression).getName();
 		}
-		if (methodExpression instanceof Function) {
+		/*if (methodExpression instanceof Function) {
 			return ((Function) methodExpression).getName();
-		}
+		}*/
 		return method;
 	}
 
@@ -117,32 +118,36 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return isAvailable;
 	}
 
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	public void _setIsAvailable(String isAvailable) {
 		this.isAvailable = isAvailable;
-		DefaultExpressionParser parser = new DefaultExpressionParser();
-		try {
-			isAvailableExpression = parser.parse(isAvailable, null);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		/*	DefaultExpressionParser parser = new DefaultExpressionParser();
+			try {
+				isAvailableExpression = parser.parse(isAvailable, null);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 
-		if (isAvailableExpression instanceof Function) {
-			// System.out.println("Parsed "+isAvailable+" as a function");
-			isAvailableExpressionArgs = ((Function) isAvailableExpression).getArgs();
-		}
+			if (isAvailableExpression instanceof Function) {
+				// System.out.println("Parsed "+isAvailable+" as a function");
+				isAvailableExpressionArgs = ((Function) isAvailableExpression).getArgs();
+			}*/
 	}
 
 	public Expression getIsAvailableExpression() {
 		return isAvailableExpression;
 	}
 
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	public String getIsAvailableMethodName() {
 		if (isAvailableExpression instanceof Variable) {
 			return ((Variable) isAvailableExpression).getName();
 		}
-		if (isAvailableExpression instanceof Function) {
+		/*if (isAvailableExpression instanceof Function) {
 			return ((Function) isAvailableExpression).getName();
-		}
+		}*/
 		return isAvailable;
 	}
 

@@ -28,10 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
-import org.openflexo.antar.expr.Constant.StringConstant;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyListAction;
 import org.openflexo.kvc.KeyValueCoding;
@@ -155,11 +151,12 @@ public class PropertyListActionListener implements ActionListener {
 		_model = model;
 	}
 
-	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	protected void performAction() {
 		if (getActionMethod(getSelectedObject()) != null) {
 			Object[] params;
-			if (_plAction.getMethodExpression() instanceof Function) {
+			/*if (_plAction.getMethodExpression() instanceof Function) {
 				params = new Object[_plAction.getMethodExpressionArgs().size()];
 				for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 					Expression arg = _plAction.getMethodExpressionArgs().get(i);
@@ -171,9 +168,9 @@ public class PropertyListActionListener implements ActionListener {
 						params[i] = getSelectedObject();
 					}
 				}
-			} else {
-				params = new Object[0];
-			}
+			} else {*/
+			params = new Object[0];
+			// }
 			try {
 				Object targetObject = getTargetObject(getModel(), _plAction.getMethodName());
 				if (logger.isLoggable(Level.FINE)) {
@@ -204,7 +201,8 @@ public class PropertyListActionListener implements ActionListener {
 		}
 	}
 
-	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	protected void performAction(InspectableObject paramObject, Vector<InspectableObject> selectedObjects) {
 		if (selectedObjects == null) {
 			selectedObjects = new Vector<InspectableObject>();
@@ -215,7 +213,7 @@ public class PropertyListActionListener implements ActionListener {
 		for (InspectableObject object : selectedObjects) {
 			if (getActionMethod(paramObject) != null) {
 				Object[] params;
-				if (_plAction.getMethodExpression() instanceof Function) {
+				/*if (_plAction.getMethodExpression() instanceof Function) {
 					params = new Object[_plAction.getMethodExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getMethodExpressionArgs().get(i);
@@ -227,10 +225,10 @@ public class PropertyListActionListener implements ActionListener {
 							params[i] = paramObject;
 						}
 					}
-				} else {
-					params = new Object[1];
-					params[0] = object;
-				}
+				} else {*/
+				params = new Object[1];
+				params[0] = object;
+				// }
 				try {
 					Object targetObject = getTargetObject(getModel(), _plAction.getMethodName());
 					if (logger.isLoggable(Level.FINE)) {
@@ -268,7 +266,8 @@ public class PropertyListActionListener implements ActionListener {
 
 	private Method _actionMethod;
 
-	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	private Method getActionMethod(InspectableObject paramObject) {
 		if (_actionMethod == null) {
 			String methodName = getLastAccessor(_plAction.getMethodName());
@@ -279,7 +278,7 @@ public class PropertyListActionListener implements ActionListener {
 				}
 				Class targetClass = targetObject.getClass();
 				Class[] methodClassParams = null;
-				if (_plAction.getMethodExpression() instanceof Function) {
+				/*if (_plAction.getMethodExpression() instanceof Function) {
 					methodClassParams = new Class[_plAction.getMethodExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getMethodExpressionArgs().get(i);
@@ -291,17 +290,16 @@ public class PropertyListActionListener implements ActionListener {
 							methodClassParams[i] = paramObject.getClass();
 						}
 					}
-				} else {
-					if (_plAction.type.equals(PropertyListAction.ADD_TYPE) || _plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
-						methodClassParams = new Class[0];
-					} else if (_plAction.type.equals(PropertyListAction.DELETE_TYPE)
-							|| _plAction.type.equals(PropertyListAction.ACTION_TYPE)) {
-						if (paramObject != null) {
-							methodClassParams = new Class[1];
-							methodClassParams[0] = paramObject.getClass();
-						}
+				} else {*/
+				if (_plAction.type.equals(PropertyListAction.ADD_TYPE) || _plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
+					methodClassParams = new Class[0];
+				} else if (_plAction.type.equals(PropertyListAction.DELETE_TYPE) || _plAction.type.equals(PropertyListAction.ACTION_TYPE)) {
+					if (paramObject != null) {
+						methodClassParams = new Class[1];
+						methodClassParams[0] = paramObject.getClass();
 					}
 				}
+				// }
 				if (methodClassParams != null) {
 					try {
 						_actionMethod = lookupMethod(targetClass, methodName, methodClassParams);
@@ -327,7 +325,8 @@ public class PropertyListActionListener implements ActionListener {
 
 	private Method _isAvailableMethod;
 
-	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	private Method getAvailableMethod(InspectableObject paramObject) {
 		if (_isAvailableMethod == null) {
 			String methodName = getLastAccessor(_plAction.getIsAvailableMethodName());
@@ -342,7 +341,7 @@ public class PropertyListActionListener implements ActionListener {
 				}
 				Class targetClass = targetObject.getClass();
 				Class[] methodClassParams = null;
-				if (_plAction.getIsAvailableExpression() instanceof Function) {
+				/*if (_plAction.getIsAvailableExpression() instanceof Function) {
 					methodClassParams = new Class[_plAction.getIsAvailableExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getIsAvailableExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getIsAvailableExpressionArgs().get(i);
@@ -354,14 +353,14 @@ public class PropertyListActionListener implements ActionListener {
 							methodClassParams[i] = paramObject.getClass();
 						}
 					}
-				} else {
-					if (_plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
-						methodClassParams = new Class[0];
-					} else if (paramObject != null) {
-						methodClassParams = new Class[1];
-						methodClassParams[0] = paramObject.getClass();
-					}
+				} else {*/
+				if (_plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
+					methodClassParams = new Class[0];
+				} else if (paramObject != null) {
+					methodClassParams = new Class[1];
+					methodClassParams[0] = paramObject.getClass();
 				}
+				// }
 
 				try {
 					_isAvailableMethod = lookupMethod(targetClass, methodName, methodClassParams);
@@ -387,13 +386,14 @@ public class PropertyListActionListener implements ActionListener {
 		return _isAvailableMethod;
 	}
 
-	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
+	@Deprecated
+	// Not working anymore since related code in AnTAR has disappeared
 	private boolean isAvailable(InspectableObject paramObject) {
 		if (getAvailableMethod(paramObject) != null) {
 			// System.out.println("Available "+getAvailableMethod(paramObject));
 			Object[] params;
 
-			if (_plAction.getIsAvailableExpression() instanceof Function) {
+			/*if (_plAction.getIsAvailableExpression() instanceof Function) {
 				params = new Object[_plAction.getIsAvailableExpressionArgs().size()];
 				for (int i = 0; i < _plAction.getIsAvailableExpressionArgs().size(); i++) {
 					Expression arg = _plAction.getIsAvailableExpressionArgs().get(i);
@@ -405,17 +405,17 @@ public class PropertyListActionListener implements ActionListener {
 						params[i] = paramObject;
 					}
 				}
-			} else {
+			} else {*/
 
-				if (getAvailableMethod(paramObject).getParameterTypes().length == 0) {
-					params = new Object[0];
-				} else if (getAvailableMethod(paramObject).getParameterTypes().length == 1) {
-					params = new Object[1];
-					params[0] = paramObject;
-				} else {
-					return false;
-				}
+			if (getAvailableMethod(paramObject).getParameterTypes().length == 0) {
+				params = new Object[0];
+			} else if (getAvailableMethod(paramObject).getParameterTypes().length == 1) {
+				params = new Object[1];
+				params[0] = paramObject;
+			} else {
+				return false;
 			}
+			// }
 			try {
 				Object targetObject = getTargetObject(getModel(), _plAction.getIsAvailableMethodName());
 				if (logger.isLoggable(Level.FINE)) {
