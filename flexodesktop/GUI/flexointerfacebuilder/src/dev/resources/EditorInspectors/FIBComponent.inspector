@@ -44,7 +44,7 @@
 
 				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='flow'"> 
 					<Label label="index" constraints="twocols(location=left)"/>
-					<Number name="flowConstraintsIndex" data="FlowConstraints.data.index" constraints="twocols(location=right)"/>
+					<Number name="flowConstraintsIndex" data="data.index" constraints="twocols(location=right)"/>
 				</Panel>
 
 				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='border'"> 

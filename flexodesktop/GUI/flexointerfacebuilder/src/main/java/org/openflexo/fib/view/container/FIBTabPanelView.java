@@ -19,8 +19,6 @@
  */
 package org.openflexo.fib.view.container;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -103,13 +101,6 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 				allTabs.add((FIBTab) subComponent);
 			}
 		}
-
-		Collections.sort(allTabs, new Comparator<FIBTab>() {
-			@Override
-			public int compare(FIBTab o1, FIBTab o2) {
-				return o1.getIndex() - o2.getIndex();
-			}
-		});
 
 		for (FIBTab tab : allTabs) {
 			// logger.info("!!!!!!!!!!!!!!!!!!!! Build view for tab " + tab);

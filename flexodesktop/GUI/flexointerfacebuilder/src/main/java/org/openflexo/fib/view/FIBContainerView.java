@@ -189,16 +189,26 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	protected void registerComponentWithConstraints(JComponent component, Object constraint) {
+		registerComponentWithConstraints(component, constraint, -1);
+	}
+
+	protected void registerComponentWithConstraints(JComponent component, Object constraint, int index) {
 		logger.fine("Register component: " + component + " constraint=" + constraint);
-		subComponents.add(component);
+		if (index < 0 || index > subComponents.size()) {
+			index = subComponents.size();
+		}
+		subComponents.add(index, component);
 		if (constraint != null) {
 			constraints.put(component, constraint);
 		}
 	}
 
+	protected void registerComponentWithConstraints(JComponent component, int index) {
+		registerComponentWithConstraints(component, null, index);
+	}
+
 	protected void registerComponentWithConstraints(JComponent component) {
-		logger.fine("Register component: " + component + " without any constraint");
-		subComponents.add(component);
+		registerComponentWithConstraints(component, null, -1);
 	}
 
 	/*protected void registerComponentWithConstraints(JComponent component, int index)

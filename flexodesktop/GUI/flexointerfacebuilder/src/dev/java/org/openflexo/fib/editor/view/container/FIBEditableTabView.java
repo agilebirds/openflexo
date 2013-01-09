@@ -20,8 +20,6 @@
 package org.openflexo.fib.editor.view.container;
 
 import java.awt.BorderLayout;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -37,7 +35,6 @@ import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.BoxLayoutConstraints;
-import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBModelNotification;
@@ -102,17 +99,17 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 
 			// FlowLayout
 			if (getComponent().getLayout() == Layout.flow) {
-				final FlowLayoutConstraints beginPlaceHolderConstraints = new FlowLayoutConstraints(-1);
+				final FlowLayoutConstraints beginPlaceHolderConstraints = new FlowLayoutConstraints();
 				PlaceHolder beginPlaceHolder = new PlaceHolder(this, "<begin>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints, 0);
 					}
 				};
-				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints);
+				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints, 0);
 				placeholders.add(beginPlaceHolder);
 				beginPlaceHolder.setVisible(false);
-				final FlowLayoutConstraints endPlaceHolderConstraints = new FlowLayoutConstraints(getComponent().getSubComponents().size());
+				final FlowLayoutConstraints endPlaceHolderConstraints = new FlowLayoutConstraints();
 				PlaceHolder endPlaceHolder = new PlaceHolder(this, "<end>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
@@ -127,17 +124,17 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 			// BoxLayout
 
 			if (getComponent().getLayout() == Layout.box) {
-				final BoxLayoutConstraints beginPlaceHolderConstraints = new BoxLayoutConstraints(-1);
+				final BoxLayoutConstraints beginPlaceHolderConstraints = new BoxLayoutConstraints();
 				PlaceHolder beginPlaceHolder = new PlaceHolder(this, "<begin>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints, 0);
 					}
 				};
-				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints);
+				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints, 0);
 				placeholders.add(beginPlaceHolder);
 				beginPlaceHolder.setVisible(false);
-				final BoxLayoutConstraints endPlaceHolderConstraints = new BoxLayoutConstraints(getComponent().getSubComponents().size());
+				final BoxLayoutConstraints endPlaceHolderConstraints = new BoxLayoutConstraints();
 				PlaceHolder endPlaceHolder = new PlaceHolder(this, "<end>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
@@ -183,32 +180,21 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 
 			if (getComponent().getLayout() == Layout.twocols) {
 				final TwoColsLayoutConstraints beginCenterPlaceHolderConstraints = new TwoColsLayoutConstraints(
-						TwoColsLayoutLocation.center, true, false, -3);
+						TwoColsLayoutLocation.center, true, false);
 				PlaceHolder beginCenterPlaceHolder = new PlaceHolder(this, "<center>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginCenterPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginCenterPlaceHolderConstraints, 0);
 					}
 				};
-				registerComponentWithConstraints(beginCenterPlaceHolder, beginCenterPlaceHolderConstraints);
+				registerComponentWithConstraints(beginCenterPlaceHolder, beginCenterPlaceHolderConstraints, 0);
 				placeholders.add(beginCenterPlaceHolder);
 				beginCenterPlaceHolder.setVisible(false);
 
 				final TwoColsLayoutConstraints beginLeftPlaceHolderConstraints = new TwoColsLayoutConstraints(TwoColsLayoutLocation.left,
-						true, false, -2);
+						true, false);
 				final TwoColsLayoutConstraints beginRightPlaceHolderConstraints = new TwoColsLayoutConstraints(TwoColsLayoutLocation.right,
-						true, false, -1);
-				PlaceHolder beginLeftPlaceHolder = new PlaceHolder(this, "<left>") {
-					@Override
-					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent()
-								.addToSubComponents(new FIBLabel("<right>"), beginRightPlaceHolderConstraints);
-						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints);
-					}
-				};
-				registerComponentWithConstraints(beginLeftPlaceHolder, beginLeftPlaceHolderConstraints);
-				placeholders.add(beginLeftPlaceHolder);
-				beginLeftPlaceHolder.setVisible(false);
+						true, false);
 
 				PlaceHolder beginRightPlaceHolder = new PlaceHolder(this, "<right>") {
 					@Override
@@ -217,12 +203,24 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<left>"), beginLeftPlaceHolderConstraints);
 					}
 				};
-				registerComponentWithConstraints(beginRightPlaceHolder, beginRightPlaceHolderConstraints);
+				registerComponentWithConstraints(beginRightPlaceHolder, beginRightPlaceHolderConstraints, 0);
 				placeholders.add(beginRightPlaceHolder);
 				beginRightPlaceHolder.setVisible(false);
 
+				PlaceHolder beginLeftPlaceHolder = new PlaceHolder(this, "<left>") {
+					@Override
+					public void insertComponent(FIBComponent newComponent) {
+						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints, 0);
+						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<right>"),
+								beginRightPlaceHolderConstraints, 0);
+					}
+				};
+				registerComponentWithConstraints(beginLeftPlaceHolder, beginLeftPlaceHolderConstraints, 0);
+				placeholders.add(beginLeftPlaceHolder);
+				beginLeftPlaceHolder.setVisible(false);
+
 				final TwoColsLayoutConstraints endCenterPlaceHolderConstraints = new TwoColsLayoutConstraints(TwoColsLayoutLocation.center,
-						true, false, getComponent().getSubComponents().size() + 3);
+						true, false);
 				PlaceHolder endCenterPlaceHolder = new PlaceHolder(this, "<center>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
@@ -234,9 +232,9 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 				endCenterPlaceHolder.setVisible(false);
 
 				final TwoColsLayoutConstraints endLeftPlaceHolderConstraints = new TwoColsLayoutConstraints(TwoColsLayoutLocation.left,
-						true, false, getComponent().getSubComponents().size() + 1);
+						true, false);
 				final TwoColsLayoutConstraints endRightPlaceHolderConstraints = new TwoColsLayoutConstraints(TwoColsLayoutLocation.right,
-						true, false, getComponent().getSubComponents().size() + 2);
+						true, false);
 				PlaceHolder endLeftPlaceHolder = new PlaceHolder(this, "<left>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
@@ -264,18 +262,17 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 			// GridBagLayout
 
 			if (getComponent().getLayout() == Layout.gridbag) {
-				final GridBagLayoutConstraints beginPlaceHolderConstraints = new GridBagLayoutConstraints(-1);
+				final GridBagLayoutConstraints beginPlaceHolderConstraints = new GridBagLayoutConstraints();
 				PlaceHolder beginPlaceHolder = new PlaceHolder(this, "<begin>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginPlaceHolderConstraints, 0);
 					}
 				};
-				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints);
+				registerComponentWithConstraints(beginPlaceHolder, beginPlaceHolderConstraints, 0);
 				placeholders.add(beginPlaceHolder);
 				beginPlaceHolder.setVisible(false);
-				final GridBagLayoutConstraints endPlaceHolderConstraints = new GridBagLayoutConstraints(getComponent().getSubComponents()
-						.size());
+				final GridBagLayoutConstraints endPlaceHolderConstraints = new GridBagLayoutConstraints();
 				PlaceHolder endPlaceHolder = new PlaceHolder(this, "<end>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
@@ -285,24 +282,6 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 				registerComponentWithConstraints(endPlaceHolder);
 				placeholders.add(endPlaceHolder);
 				endPlaceHolder.setVisible(false);
-			}
-
-			// Now, we sort again subComponents, since we may have added some placeholders
-			if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
-					|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
-				Collections.sort(getSubComponents(), new Comparator<JComponent>() {
-					@Override
-					public int compare(JComponent o1, JComponent o2) {
-						Object c1 = getConstraints().get(o1);
-						Object c2 = getConstraints().get(o2);
-						if (c1 instanceof ComponentConstraints && c2 instanceof ComponentConstraints) {
-							ComponentConstraints cc1 = (ComponentConstraints) c1;
-							ComponentConstraints cc2 = (ComponentConstraints) c2;
-							return cc1.getIndex() - cc2.getIndex();
-						}
-						return 0;
-					}
-				});
 			}
 
 			// logger.info("******** Set DropTargets");
