@@ -216,7 +216,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	public abstract Class<? extends TechnologyAdapter<M, MM>> getTechnologyAdapterClass();
 
-	public abstract BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container);
+	public abstract BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container);
 
 	/*public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
 		if (pr instanceof OntologicObjectPatternRole) {
