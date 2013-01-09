@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -36,6 +35,8 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.FIBGenericEditor;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.editor.view.FIBEditableView;
+import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.editor.view.container.FIBEditablePanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabPanelView;
@@ -367,16 +368,8 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 		}
 	}
 
-	public DragSourceContext getDragSourceContext() {
-		return dragSourceContext;
-	}
-
-	public void setDragSourceContext(DragSourceContext dragSourceContext) {
-		this.dragSourceContext = dragSourceContext;
-	}
-
-	public DropListener buildPaletteDropListener(JComponent dropContainer, FIBEditorController controller) {
-		return new DropListener(dropContainer, controller);
+	public DropListener buildPaletteDropListener(FIBEditableView<?, ?> editableView, PlaceHolder placeHolder) {
+		return new DropListener(editableView, placeHolder);
 	}
 
 }
