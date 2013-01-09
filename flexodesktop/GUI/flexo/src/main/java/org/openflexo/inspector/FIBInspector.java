@@ -329,7 +329,7 @@ public class FIBInspector extends FIBPanel {
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
 			tf.setValidateOnReturn(true); // Avoid to many ontologies manipulations
-			newTab.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return tf;
 		} else if (entry instanceof TextAreaInspectorEntry) {
 			FIBTextArea ta = new FIBTextArea();
@@ -337,16 +337,16 @@ public class FIBInspector extends FIBPanel {
 			ta.setUseScrollBar(true);
 			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			newTab.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
+			newTab.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true), index);
 			return ta;
 		} else if (entry instanceof CheckboxInspectorEntry) {
 			FIBCheckBox cb = new FIBCheckBox();
-			newTab.addToSubComponents(cb, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(cb, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return cb;
 		} else if (entry instanceof IntegerInspectorEntry) {
 			FIBNumber number = new FIBNumber();
 			number.setNumberType(NumberType.IntegerType);
-			newTab.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return number;
 		} else if (entry instanceof IndividualInspectorEntry) {
 			IndividualInspectorEntry individualEntry = (IndividualInspectorEntry) entry;
@@ -392,7 +392,7 @@ public class FIBInspector extends FIBPanel {
 						}, true));
 			}
 
-			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return individualSelector;
 		} else if (entry instanceof ClassInspectorEntry) {
 			ClassInspectorEntry classEntry = (ClassInspectorEntry) entry;
@@ -427,7 +427,7 @@ public class FIBInspector extends FIBPanel {
 							}
 						}, true));
 			}
-			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return classSelector;
 		} else if (entry instanceof PropertyInspectorEntry) {
 			PropertyInspectorEntry propertyEntry = (PropertyInspectorEntry) entry;
@@ -498,7 +498,7 @@ public class FIBInspector extends FIBPanel {
 							return entry.getBindingFactory();
 						}
 					}, true));*/
-			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return propertySelector;
 		} else if (entry instanceof FlexoObjectInspectorEntry) {
 			FlexoObjectInspectorEntry foEntry = (FlexoObjectInspectorEntry) entry;
@@ -508,43 +508,43 @@ public class FIBInspector extends FIBPanel {
 				processSelector.setComponentClass(org.openflexo.components.widget.FIBProcessSelector.class);
 				processSelector.addToAssignments(new FIBCustomAssignment(processSelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				newTab.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 				return processSelector;
 			case ProcessFolder:
 				FIBCustom processFolderSelector = new FIBCustom();
 				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
 				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false,
-						index));
+				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false),
+						index);
 				return processFolderSelector;
 			case Role:
 				FIBCustom roleSelector = new FIBCustom();
 				roleSelector.setComponentClass(org.openflexo.components.widget.FIBRoleSelector.class);
 				roleSelector.addToAssignments(new FIBCustomAssignment(roleSelector, new DataBinding("component.project"), new DataBinding(
 						"data.project"), true));
-				newTab.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				newTab.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 				return roleSelector;
 			case Activity:
 				FIBCustom activitySelector = new FIBCustom();
 				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
 				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				newTab.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 				return activitySelector;
 			case Operation:
 				FIBCustom operationSelector = new FIBCustom();
 				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
 				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				newTab.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 				return operationSelector;
 			case Action:
 				FIBCustom actionSelector = new FIBCustom();
 				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
 				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 				return actionSelector;
 
 			default:
@@ -554,7 +554,7 @@ public class FIBInspector extends FIBPanel {
 
 		FIBLabel unknown = new FIBLabel();
 		unknown.setLabel("???");
-		newTab.addToSubComponents(unknown, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+		newTab.addToSubComponents(unknown, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 		return unknown;
 
 	}
@@ -563,7 +563,6 @@ public class FIBInspector extends FIBPanel {
 		// logger.info("makeFIBTab " + refIndex + " for " + ep);
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
-		newTab.setIndex(-1);
 		newTab.setLayout(Layout.twocols);
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
@@ -574,7 +573,7 @@ public class FIBInspector extends FIBPanel {
 		for (final InspectorEntry entry : ep.getInspector().getEntries()) {
 			FIBLabel label = new FIBLabel();
 			label.setLabel(entry.getLabel());
-			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
+			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
 			FIBWidget widget = makeWidget(entry, newTab, index++);
 			widget.setData(new DataBinding(epIdentifier + "." + entry.getData().toString()) {
 				@Override
