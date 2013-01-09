@@ -588,6 +588,11 @@ public class BindingValue extends Expression {
 	}
 
 	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+
+		// logger.info("setBindingValue() for " + this + " with " + value + " context=" + context);
+		// logger.info("valid=" + isValid());
+		// logger.info("isSettable=" + isSettable());
+
 		if (!isValid()) {
 			return;
 		}
@@ -623,6 +628,7 @@ public class BindingValue extends Expression {
 
 			if (getLastBindingPathElement() instanceof SettableBindingPathElement
 					&& ((SettableBindingPathElement) getLastBindingPathElement()).isSettable()) {
+				System.out.println("Et finalement on applique " + getLastBindingPathElement() + " sur " + returned);
 				((SettableBindingPathElement) getLastBindingPathElement()).setBindingValue(value, returned, context);
 			} else {
 				logger.warning("Binding " + this + " is not settable");

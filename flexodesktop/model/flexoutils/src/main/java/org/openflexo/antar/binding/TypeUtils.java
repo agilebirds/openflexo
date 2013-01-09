@@ -73,6 +73,22 @@ public class TypeUtils {
 				return getBaseClass(upperBounds[0]);
 			}
 		}
+		if (aType instanceof TypeVariable) {
+			TypeVariable tv = (TypeVariable) aType;
+			StringBuffer upperBounds = new StringBuffer();
+			boolean isFirst = true;
+			for (Type upperBound : tv.getBounds()) {
+				upperBounds.append((isFirst ? "" : ",") + upperBound.toString());
+				isFirst = false;
+			}
+			logger.warning("Unresolved TypeVariable: " + tv.getName() + " " + tv.getGenericDeclaration() + " bounds=" + upperBounds);
+			if (tv.getBounds().length > 0) {
+				return getBaseClass(tv.getBounds()[0]);
+			} else {
+				return Object.class;
+			}
+
+		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
 	}

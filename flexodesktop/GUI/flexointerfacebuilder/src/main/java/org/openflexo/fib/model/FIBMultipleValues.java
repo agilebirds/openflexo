@@ -387,10 +387,6 @@ public abstract class FIBMultipleValues extends FIBWidget {
 			return object.getList();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBMultipleValues object) {
-			return object.LIST;
-		}
 	}
 
 	public static class ArrayBindingMustBeValid extends BindingMustBeValid<FIBMultipleValues> {
@@ -401,11 +397,6 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		@Override
 		public DataBinding getBinding(FIBMultipleValues object) {
 			return object.getArray();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(FIBMultipleValues object) {
-			return object.ARRAY;
 		}
 
 	}

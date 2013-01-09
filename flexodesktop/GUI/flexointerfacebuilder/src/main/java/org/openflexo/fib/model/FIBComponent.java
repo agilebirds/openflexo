@@ -1302,11 +1302,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			return object.getData();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBComponent object) {
-			return object.getDataBindingDefinition();
-		}
-
 	}
 
 	public static class VisibleBindingMustBeValid extends BindingMustBeValid<FIBComponent> {
@@ -1317,11 +1312,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		@Override
 		public DataBinding getBinding(FIBComponent object) {
 			return object.getVisible();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(FIBComponent object) {
-			return VISIBLE;
 		}
 
 	}

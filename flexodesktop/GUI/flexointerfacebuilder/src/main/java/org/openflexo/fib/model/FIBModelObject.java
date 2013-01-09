@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
@@ -424,7 +423,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 		public abstract DataBinding<?> getBinding(C object);
 
-		public abstract BindingDefinition getBindingDefinition(C object);
+		// public abstract BindingDefinition getBindingDefinition(C object);
 
 		@Override
 		public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {

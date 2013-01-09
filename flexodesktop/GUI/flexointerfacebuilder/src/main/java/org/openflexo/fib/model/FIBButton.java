@@ -151,10 +151,6 @@ public class FIBButton extends FIBWidget {
 			return object.getAction();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBButton object) {
-			return ACTION;
-		}
 	}
 
 }

@@ -734,6 +734,29 @@ public class FIBBrowserElement extends FIBModelObject {
 			}
 		}
 
+		public ImageIcon getImageIcon() {
+			if (getBaseClass() == null) {
+				return null;
+			}
+			FIBBrowserElement e = getBrowser().elementForClass(getBaseClass());
+			if (e != null) {
+				return e.getImageIcon();
+			}
+			return null;
+		}
+
+		public Class getBaseClass() {
+			Type accessedType = getAccessedType();
+			if (accessedType == null) {
+				return null;
+			}
+			if (isMultipleAccess()) {
+				return TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
+			} else {
+				return TypeUtils.getBaseClass(getAccessedType());
+			}
+		}
+
 		public Type getAccessedType() {
 			if (data != null && data.isSet()) {
 				return data.getAnalyzedType();

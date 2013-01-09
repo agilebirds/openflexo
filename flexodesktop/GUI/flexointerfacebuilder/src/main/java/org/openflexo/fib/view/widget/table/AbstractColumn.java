@@ -174,8 +174,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 			e.printStackTrace();
 			return null;
 		} catch (NullReferenceException e) {
-			logger.warning("Unexpected " + e.getMessage());
-			e.printStackTrace();
+			// logger.warning("Unexpected " + e.getMessage());
+			// e.printStackTrace();
 			return null;
 		}
 	}

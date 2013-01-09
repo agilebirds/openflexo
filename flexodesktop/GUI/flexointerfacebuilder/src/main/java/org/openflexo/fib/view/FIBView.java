@@ -225,7 +225,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		if (!componentVisible) {

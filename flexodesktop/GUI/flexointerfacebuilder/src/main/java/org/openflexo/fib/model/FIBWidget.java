@@ -609,10 +609,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getTooltip();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return TOOLTIP;
-		}
 	}
 
 	public static class EnableBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -625,10 +621,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getEnable();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return ENABLE;
-		}
 	}
 
 	public static class FormatBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -641,10 +633,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getFormat();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return FORMAT;
-		}
 	}
 
 	public static class IconBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -657,10 +645,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getIcon();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return ICON;
-		}
 	}
 
 	public static class ClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -673,10 +657,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getClickAction();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return CLICK_ACTION;
-		}
 	}
 
 	public static class DoubleClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -689,10 +669,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getDoubleClickAction();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return DOUBLE_CLICK_ACTION;
-		}
 	}
 
 	public static class RightClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -705,10 +681,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getRightClickAction();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return RIGHT_CLICK_ACTION;
-		}
 	}
 
 	public static class ValueChangeActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
@@ -721,10 +693,6 @@ public abstract class FIBWidget extends FIBComponent {
 			return object.getValueChangedAction();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBWidget object) {
-			return VALUE_CHANGED_ACTION;
-		}
 	}
 
 }

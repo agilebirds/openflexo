@@ -2,6 +2,7 @@ package org.openflexo.fib.editor.controller;
 
 import java.awt.event.MouseEvent;
 import java.util.Observer;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
@@ -23,6 +24,8 @@ import org.openflexo.fib.model.FIBTextField;
 
 public class FIBBrowserController extends FIBController implements Observer {
 
+	private static final Logger logger = Logger.getLogger(FIBBrowserController.class.getPackage().getName());
+
 	private FIBEditorController editorController;
 
 	public FIBBrowserController(FIBComponent rootComponent, FIBEditorController editorController) {
@@ -36,6 +39,7 @@ public class FIBBrowserController extends FIBController implements Observer {
 	}
 
 	public void setSelectedComponent(FIBComponent selectedComponent) {
+		logger.info("setSelectedComponent with " + selectedComponent);
 		editorController.setSelectedObject(selectedComponent);
 	}
 

@@ -474,15 +474,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	public synchronized void valueChanged(TreeSelectionEvent e) {
 		Vector<Object> oldSelection = new Vector<Object>();
 		oldSelection.addAll(selection);
-		/*System.out.println("Selection: "+e);
+		// System.out.println("Selection: " + e);
 
-		System.out.println("Paths="+e.getPaths());
+		/*System.out.println("Paths=" + e.getPaths());
 		for (TreePath tp : e.getPaths()) {
-			System.out.println("> "+tp.getLastPathComponent()+" added="+e.isAddedPath(tp));
+			System.out.println("> " + tp.getLastPathComponent() + " added=" + e.isAddedPath(tp));
 		}
-		System.out.println("New LEAD="+(e.getNewLeadSelectionPath()!=null?e.getNewLeadSelectionPath().getLastPathComponent():"null"));
-		System.out.println("Old LEAD="+(e.getOldLeadSelectionPath()!=null?e.getOldLeadSelectionPath().getLastPathComponent():"null"));
-		*/
+		System.out.println("New LEAD="
+				+ (e.getNewLeadSelectionPath() != null ? e.getNewLeadSelectionPath().getLastPathComponent() : "null"));
+		System.out.println("Old LEAD="
+				+ (e.getOldLeadSelectionPath() != null ? e.getOldLeadSelectionPath().getLastPathComponent() : "null")); */
+
 		if (e.getNewLeadSelectionPath() == null || (BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent() == null) {
 			selectedObject = null;
 		} else {
@@ -509,6 +511,11 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 		getDynamicModel().selection = selection;
 		notifyDynamicModelChanged();
+
+		/*System.out.println("selectedObject=" + selectedObject);
+		System.out.println("getComponent().getSelected()=" + getComponent().getSelected() + " of "
+				+ getComponent().getSelected().getClass());
+		System.out.println("getComponent().getSelected().isValid()=" + getComponent().getSelected().isValid());*/
 
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);

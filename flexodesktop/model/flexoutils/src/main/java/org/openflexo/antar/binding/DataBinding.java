@@ -122,7 +122,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return expression.toString();
 		}
 		if (StringUtils.isEmpty(unparsedBinding)) {
-			return "null";
+			return "";
 		}
 		return unparsedBinding;
 	}
@@ -364,7 +364,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public void setUnparsedBinding(String unparsedBinding) {
-		if (unparsedBinding.equals("null")) {
+		if (StringUtils.isEmpty(unparsedBinding)) {
 			this.unparsedBinding = null;
 			expression = null;
 			needsParsing = false;
@@ -499,7 +499,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		// TODO
+		if (isSettable()) {
+			if (isBindingValue()) {
+				// At this time, only BindingValue is settable
+				((BindingValue) getExpression()).setBindingValue(value, context);
+			}
+		}
 	}
 
 	public void execute(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
