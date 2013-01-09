@@ -162,7 +162,12 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c;
 			if (isSelected && hasFocus || useCustomViewForCellRendering) {
-				c = getViewCustomWidget(elementAt(row)).getJComponent();
+				FIBCustomComponent<T, ?> customWidgetView = getViewCustomWidget(elementAt(row));
+				if (customWidgetView != null) {
+					c = customWidgetView.getJComponent();
+				} else {
+					c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				}
 				Color fg = null;
 				Color bg = null;
 				if (isSelected) {

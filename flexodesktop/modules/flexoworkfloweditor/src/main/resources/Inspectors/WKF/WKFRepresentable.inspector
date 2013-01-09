@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.WKFObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
-      <Label label="x" localize="true" name="XswlLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="1" data="data.getX(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Xswl" localize="true" />
-      <Label label="y" localize="true" name="YswlLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="3" data="data.getY(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Yswl" localize="true" />
-      <Label label="width" localize="true" name="Widthswl80Label" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;swl&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Widthswl80" localize="true" />
-      <Label label="height" localize="true" name="Heightswl40Label" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;swl&quot;,40)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Heightswl40" localize="true" />
-      <Label label="back_color" localize="true" name="BgColorswlLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
-      <Color index="9" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="BgColorswl" localize="true" />
-      <Label label="text_color" localize="true" name="TextColorswlLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
-      <Color index="11" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="TextColorswl" localize="true" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+      <Parameter name="visibleFor" value="SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
     <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
-      <Label label="x" localize="true" name="XbpeLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="1" data="data.getX(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Xbpe" localize="true" />
-      <Label label="y" localize="true" name="YbpeLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="3" data="data.getY(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Ybpe" localize="true" />
-      <Label label="width" localize="true" name="WidthbpeLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Widthbpe" localize="true" />
-      <Label label="height" localize="true" name="HeightbpeLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <Number numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Heightbpe" localize="true" />
-      <Label label="back_color" localize="true" name="BgColorbpeLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
-      <Color index="9" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="BgColorbpe" localize="true" />
-      <Label label="text_color" localize="true" name="TextColorbpeLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
-      <Color index="11" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" name="TextColorbpe" localize="true" />
+      <Label label="x" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="XbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="1" data="data.getX(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Xbpe" localize="true" />
+      <Label label="y" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="YbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="3" data="data.getY(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Ybpe" localize="true" />
+      <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="WidthbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthbpe" localize="true" />
+      <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HeightbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightbpe" localize="true" />
+      <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
+      <Color index="9" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
+      <Label label="text_color" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorbpeLabel" localize="true" />
+      <Color index="11" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="x" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="XswlLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="1" data="data.getX(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Xswl" localize="true" />
+      <Label label="y" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="YswlLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="3" data="data.getY(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Yswl" localize="true" />
+      <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Widthswl80Label" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;swl&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthswl80" localize="true" />
+      <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Heightswl40Label" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;swl&quot;,40)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightswl40" localize="true" />
+      <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
+      <Color index="9" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorswl" localize="true" />
+      <Label label="text_color" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
+      <Color index="11" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+    </Tab>
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Graphics_SWL" lang="English">Graphics</Localized>
@@ -57,7 +59,8 @@
     <Localized key="Graphics_BPE" lang="French">Graphisme</Localized>
     <Localized key="Graphics_BPE" lang="Dutch">Graphics</Localized>
     <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="WKFRepresentable" />
 </Panel>
-

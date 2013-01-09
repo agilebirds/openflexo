@@ -49,6 +49,7 @@ import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.view.FIBView;
@@ -171,8 +172,8 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 	@Override
 	public boolean elementDragged(FIBDropTarget target, Point pt) {
 		logger.info("Element dragged with component: " + target.getFIBComponent() + " place holder: " + target.getPlaceHolder());
-
-		if (target.getPlaceHolder() == null) {
+		boolean isTabInsertion = modelComponent instanceof FIBPanel && target.getFIBComponent() instanceof FIBTabPanel;
+		if (!isTabInsertion && target.getPlaceHolder() == null) {
 			boolean deleteIt = JOptionPane.showConfirmDialog(_palette.getEditorController().getEditor().getFrame(),
 					target.getFIBComponent() + ": really delete this component (undoable operation) ?", "information",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION;
@@ -186,7 +187,7 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		newComponent.clearParameters();
 
 		try {
-			if (target.getPlaceHolder() != null) {
+			if (!isTabInsertion && target.getPlaceHolder() != null) {
 				target.getPlaceHolder().willDelete();
 				target.getPlaceHolder().insertComponent(newComponent);
 				target.getPlaceHolder().hasDeleted();
@@ -205,12 +206,13 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 					return false;
 				}
 
-				if (targetComponent.getParent() instanceof FIBTabPanel && newComponent instanceof FIBPanel) {
+				if (isTabInsertion) {
 					// Special case where a new tab is added to a FIBTabPanel
 					FIBTab newTabComponent = new FIBTab();
+					newTabComponent.setLayout(Layout.border);
 					newTabComponent.setTitle("NewTab");
-					newTabComponent.setIndex(((FIBTabPanel) targetComponent.getParent()).getSubComponents().size());
-					((FIBTabPanel) targetComponent.getParent()).addToSubComponents(newTabComponent);
+					newTabComponent.finalizeDeserialization();
+					((FIBTabPanel) targetComponent).addToSubComponents(newTabComponent);
 					return true;
 				} else {
 					// Normal case, we replace targetComponent by newComponent
@@ -261,6 +263,7 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 			try {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(FIBEditorPalette.dropKO, transferable, dsListener);
+
 				FIBEditorPalette.logger.info("Starting drag for " + _palette);
 				// getDrawingView().captureDraggedNode(PaletteElementView.this, e);
 			} catch (Exception idoe) {
@@ -286,9 +289,6 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		 */
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
-				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
-			}
 
 			// getDrawingView().resetCapturedNode();
 			if (e.getDropSuccess() == false) {
@@ -333,8 +333,6 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		@Override
 		public void dragOver(DragSourceDragEvent e) {
 			// interface
-			_palette.getEditorController().setDragSourceContext(e.getDragSourceContext());
-			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragOver() with "+context+" component="+e.getSource());
 		}
 
@@ -344,12 +342,8 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		 */
 		@Override
 		public void dragExit(DragSourceEvent e) {
-			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragExit() with "+context+" component="+e.getSource());
 			// interface
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
-				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
-			}
 		}
 
 		/**
@@ -360,6 +354,7 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		 */
 		@Override
 		public void dropActionChanged(DragSourceDragEvent e) {
+
 			DragSourceContext context = e.getDragSourceContext();
 			context.setCursor(DragSource.DefaultCopyNoDrop);
 		}

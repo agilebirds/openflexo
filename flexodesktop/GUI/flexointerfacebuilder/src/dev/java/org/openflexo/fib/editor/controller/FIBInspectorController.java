@@ -87,14 +87,11 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			}
 		}
 
-		for (Class c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
+		for (FIBInspector inspector : inspectors.values()) {
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
-			inspector.recursivelyReorderComponents();
+		for (FIBInspector inspector : inspectors.values()) {
 
 			FIBView inspectorView = FIBController.makeView(inspector, FIBAbstractEditor.LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);

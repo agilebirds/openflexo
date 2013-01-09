@@ -356,7 +356,7 @@ public abstract class GenerationRepository extends CGObject {
 		isConnected = false;
 		for (CGFile file : getFiles()) {
 			if (file.getResource() != null) {
-				file.getResource().desactivate();
+				file.getResource().deactivate();
 			}
 		}
 		setChanged();

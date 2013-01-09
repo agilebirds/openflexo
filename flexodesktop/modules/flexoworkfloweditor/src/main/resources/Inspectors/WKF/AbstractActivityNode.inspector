@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.AbstractActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="roleR" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleLabel" localize="true" />
+      <DropDown showReset="true" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Role" format="object.nameForInspector" localize="true" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+      <Label label="roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleALabel" localize="true" />
+      <DropDown showReset="true" data="data.roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="RoleA" format="object.nameForInspector" localize="true" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+      <Label label="roleC" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" name="ConsultedRolesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConsultedRoles" data="data.consultedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addConsultedRole" name="add" />
+        <RemoveAction method="data.removeConsultedRole(selected)" name="remove" />
+      </Table>
+      <Label label="roleI" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" name="InformedRolesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InformedRoles" data="data.informedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addInformedRole" name="add" />
+        <RemoveAction method="data.removeInformedRole(selected)" name="remove" />
+      </Table>
+    </Tab>
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+      <Label label="acronym" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AcronymLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <TextField data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Acronym" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Label>
+      <DropDown showReset="true" data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="csssheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </DropDown>
+      <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
+    </Tab>
     <Tab title="Activity Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab">
-      <Label label="metrics" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="MetricsValuesLabel" localize="true" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
+      <Label label="metrics" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="MetricsValuesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
         <AddAction method="data.addMetrics" name="new" />
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
-    </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
-      <Label label="acronym" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="AcronymLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </Label>
-      <TextField data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Acronym" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </TextField>
-    </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="roleR" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="RoleLabel" localize="true" />
-      <DropDown showReset="true" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Role" format="object.nameForInspector" localize="true" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
-      <Label label="roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="RoleALabel" localize="true" />
-      <DropDown showReset="true" data="data.roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="RoleA" format="object.nameForInspector" localize="true" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
-      <Label label="roleC" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;location=center)" name="ConsultedRolesLabel" localize="true" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConsultedRoles" data="data.consultedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;location=right)">
-        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
-        <AddAction method="data.addConsultedRole" name="add" />
-        <RemoveAction method="data.removeConsultedRole(selected)" name="remove" />
-      </Table>
-      <Label label="roleI" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;location=center)" name="InformedRolesLabel" localize="true" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InformedRoles" data="data.informedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)">
-        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
-        <AddAction method="data.addInformedRole" name="add" />
-        <RemoveAction method="data.removeInformedRole(selected)" name="remove" />
-      </Table>
-      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" name="CssSheetLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </Label>
-      <DropDown data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </DropDown>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -70,6 +72,39 @@
     <Localized key="css_sheet" lang="English">CSS sheet</Localized>
     <Localized key="css_sheet" lang="French">Feuille de style</Localized>
     <Localized key="css_sheet" lang="Dutch">CSS sheet</Localized>
+    <Localized key="role" lang="English">Role</Localized>
+    <Localized key="role" lang="French">Rôle</Localized>
+    <Localized key="role" lang="Dutch">Role</Localized>
+    <Localized key="add" lang="English">Add</Localized>
+    <Localized key="add" lang="French">Ajouter</Localized>
+    <Localized key="add" lang="Dutch">Add</Localized>
+    <Localized key="remove" lang="English">Remove</Localized>
+    <Localized key="remove" lang="French">Supprimer</Localized>
+    <Localized key="remove" lang="Dutch">Remove</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="unit" lang="English">Unit</Localized>
+    <Localized key="unit" lang="French">Unité</Localized>
+    <Localized key="unit" lang="Dutch">Unit</Localized>
+    <Localized key="additional_info" lang="English">Additional info</Localized>
+    <Localized key="additional_info" lang="French">Info supplémentaire</Localized>
+    <Localized key="additional_info" lang="Dutch">Additional info</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Activity Metrics" lang="English">Activity Metrics</Localized>
+    <Localized key="Activity Metrics" lang="Dutch">Activity Metrics</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="AbstractActivityNode" />
 </Panel>

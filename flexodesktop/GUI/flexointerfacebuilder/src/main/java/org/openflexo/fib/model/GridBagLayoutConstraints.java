@@ -129,29 +129,9 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 		super(someConstraints);
 	}
 
-	public GridBagLayoutConstraints(int index) {
-		super();
-		setIndex(index);
-		setGridX(GridBagConstraints.RELATIVE);
-		setGridY(GridBagConstraints.RELATIVE);
-		setGridWidth(1);
-		setGridHeight(1);
-		setWeightX(0);
-		setWeightY(0);
-		setAnchor(AnchorType.center);
-		setFill(FillType.none);
-		setInsetsTop(0);
-		setInsetsBottom(0);
-		setInsetsLeft(0);
-		setInsetsRight(0);
-		setPadX(0);
-		setPadY(0);
-	}
-
-	public GridBagLayoutConstraints(int index, int gridX, int gridY, int gridWidth, int gridHeight, double weightX, double weightY,
+	public GridBagLayoutConstraints(int gridX, int gridY, int gridWidth, int gridHeight, double weightX, double weightY,
 			AnchorType anchorType, FillType fillType, int insetsTop, int insetsBottom, int insetsLeft, int insetsRight, int padX, int padY) {
 		super();
-		setIndex(index);
 		setGridX(gridX);
 		setGridY(gridY);
 		setGridWidth(gridWidth);

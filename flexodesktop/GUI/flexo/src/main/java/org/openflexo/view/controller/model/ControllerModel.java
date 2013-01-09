@@ -109,7 +109,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		leftViewVisible = GeneralPreferences.getShowLeftView(module.getShortName());
 		rightViewVisible = GeneralPreferences.getShowRightView(module.getShortName());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.PROJECT_OPENED, this, context.getProjectLoader());
-		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.EDITOR_REMOVED, this, context.getProjectLoader());
+		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.PROJECT_CLOSED, this, context.getProjectLoader());
 		objects = new ArrayList<FlexoObject>();
 		locations = new ExtendedSet<Location>();
 		perspectives = new Vector<FlexoPerspective>();
@@ -207,7 +207,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (currentEditor != getCurrentEditor()) {
 			if (currentEditor == null || currentEditor.getProject() == null || isSelectableProject(currentEditor.getProject())) {
 				Location location = getLastLocationForEditor(currentEditor, null);
-				if (location != null) {
+				if (location != null && location != NO_LOCATION) {
 					setCurrentLocation(location);
 				} else {
 					setCurrentLocation(currentEditor, null, getCurrentPerspective());
@@ -395,7 +395,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				return location;
 			}
 		}
-		return null;
+		return NO_LOCATION;
 	}
 
 	private FlexoModelObject getParent(FlexoObject object) {

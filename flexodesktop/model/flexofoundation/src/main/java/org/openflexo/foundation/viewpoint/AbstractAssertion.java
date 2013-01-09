@@ -92,7 +92,8 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	private ViewPointDataBinding conditional;
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private static final BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET,
+			false);
 
 	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;

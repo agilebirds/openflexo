@@ -101,12 +101,11 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	public TwoColsLayoutConstraints(TwoColsLayoutLocation location, boolean expandHorizontally, boolean expandVertically, int index) {
+	public TwoColsLayoutConstraints(TwoColsLayoutLocation location, boolean expandHorizontally, boolean expandVertically) {
 		super();
 		setLocation(location);
 		setExpandHorizontally(expandHorizontally);
 		setExpandVertically(expandVertically);
-		setIndex(index);
 		if (location == TwoColsLayoutLocation.left) {
 			setInsetsTop(5);
 		}

@@ -49,14 +49,16 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 		// logger.info("Called performSetIsVisible " + isVisible + " on TabComponent " + getComponent().getTitle());
 
 		super.performSetIsVisible(isVisible);
-
+		// We need to perform this additional operation here, because JTabbedPane already plays with the "visible" flag to handle the
+		// currently selected/visible tab
 		if (getParentView() instanceof FIBTabPanelView) {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
 			if (isVisible) {
 				int newIndex = 0;
-				for (FIBView v : getParentView().getSubViews()) {
+				for (FIBView<?, ?> v : getParentView().getSubViews()) {
 					if (v instanceof FIBTabView && v.isComponentVisible()) {
-						if (getComponent().getIndex() > ((FIBTabView<?>) v).getComponent().getIndex()) {
+						FIBTab tab = ((FIBTabView<?>) v).getComponent();
+						if (getComponent().getParent().getIndex(getComponent()) > tab.getParent().getIndex(tab)) {
 							newIndex = parent.getJComponent().indexOfComponent(v.getResultingJComponent()) + 1;
 						}
 					}

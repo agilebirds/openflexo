@@ -26,8 +26,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -218,21 +216,6 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 		if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
 				|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
-
-			Collections.sort(allSubComponents, new Comparator<FIBComponent>() {
-				@Override
-				public int compare(FIBComponent o1, FIBComponent o2) {
-					ComponentConstraints c1 = o1.getConstraints();
-					ComponentConstraints c2 = o2.getConstraints();
-					return c1.getIndex() - c2.getIndex();
-				}
-			});
-
-			int i = 0;
-			for (FIBComponent subComponent : allSubComponents) {
-				subComponent.getConstraints().setIndexNoNotification(i);
-				i++;
-			}
 
 			/*System.out.println("Apres le retrieve: ");
 			for (FIBComponent c : allSubComponents) {
