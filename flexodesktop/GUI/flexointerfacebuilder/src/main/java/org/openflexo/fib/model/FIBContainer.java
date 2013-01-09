@@ -266,7 +266,10 @@ public abstract class FIBContainer extends FIBComponent {
 					}
 				}
 				boolean insert = true;
-				int startIndex = child.getIndex();
+				Integer startIndex = child.getIndex();
+				if (startIndex == null) {
+					startIndex = 0;
+				}
 				while (insert) {
 					child.setParent(this);
 					subComponents.add(indexInsertion, child);

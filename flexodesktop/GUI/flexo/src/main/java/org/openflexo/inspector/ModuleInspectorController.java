@@ -89,6 +89,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 				return name.endsWith(".inspector");
 			}
 		})) {
+			logger.fine("Loading: " + f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				appendVisibleFor(inspector);
@@ -110,6 +111,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 
 		for (FIBInspector inspector : inspectors.values()) {
+			logger.fine("Merging inspector: " + inspector);
 			inspector.appendSuperInspectors(this);
 		}
 
