@@ -96,7 +96,7 @@
               <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.bgColorBindingDefinition" />
             </Custom>
             <Label label="action" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-            <Panel name="buttonColumn" layout="border" dataClassName="org.openflexo.fib.model.FIBButtonColumn" data="ColumnsTable.selected" visible="ColumnsTable.selected.getClass().getSimpleName().equals(&quot;FIBButtonColumn&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" >
+            <Panel name="buttonColumn" layout="border" dataClassName="org.openflexo.fib.model.FIBButtonColumn" data="($org.openflexo.fib.model.FIBButtonColumn)ColumnsTable.selected" visible="ColumnsTable.selected.getClass().getSimpleName().equals(&quot;FIBButtonColumn&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" >
                 <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="buttonColumn.data.action" title="action" resizable="true" name="actionvalue" constraints="border(location=center)"  manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="buttonColumn.data" />
                   <Assignment variable="component.bindingDefinition" value="buttonColumn.data.actionBindingDefinition" />

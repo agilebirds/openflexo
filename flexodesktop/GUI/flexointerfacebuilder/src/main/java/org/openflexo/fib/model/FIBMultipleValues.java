@@ -242,6 +242,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> binding) {
 		// logger.info("******* notifyBindingChanged with "+binding);
+		super.notifiedBindingChanged(binding);
 		if (binding == getList()) {
 			if (getList() != null) {
 				Type accessedType = getList().getAnalyzedType();

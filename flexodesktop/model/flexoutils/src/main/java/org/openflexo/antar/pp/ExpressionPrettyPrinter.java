@@ -25,6 +25,7 @@ import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
+import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
@@ -40,6 +41,7 @@ import org.openflexo.antar.expr.ExpressionGrammar;
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.SymbolicConstant;
+import org.openflexo.antar.expr.TypeReference;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 
@@ -91,6 +93,9 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression instanceof ConditionalExpression) {
 			return makeStringRepresentation((ConditionalExpression) expression);
 		}
+		if (expression instanceof CastExpression) {
+			return makeStringRepresentation((CastExpression) expression);
+		}
 		// return "<unknown " + expression.getClass().getSimpleName() + ">";
 		return expression.toString();
 	}
@@ -117,6 +122,8 @@ public abstract class ExpressionPrettyPrinter {
 		}
 		return "???";
 	}
+
+	protected abstract String makeStringRepresentation(TypeReference tr);
 
 	protected abstract String makeStringRepresentation(BindingValue bv);
 
@@ -145,5 +152,7 @@ public abstract class ExpressionPrettyPrinter {
 	protected abstract String makeStringRepresentation(BinaryOperatorExpression expression);
 
 	protected abstract String makeStringRepresentation(ConditionalExpression expression);
+
+	protected abstract String makeStringRepresentation(CastExpression expression);
 
 }

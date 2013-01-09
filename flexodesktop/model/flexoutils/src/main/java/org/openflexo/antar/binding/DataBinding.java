@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
@@ -216,6 +217,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		if (getExpression() != null) {
 			if (getExpression() instanceof BindingValue) {
 				return ((BindingValue) getExpression()).getAccessedTypeNoValidityCheck();
+			} else if (getExpression() instanceof CastExpression) {
+				return ((CastExpression) getExpression()).getCastType().getType();
 			} else {
 				try {
 					/*System.out.println("****** expression=" + getExpression());

@@ -438,7 +438,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				e.printStackTrace();
 				componentEnabled = true;
 			} catch (NullReferenceException e) {
-				e.printStackTrace();
+				// NullReferenceException is allowed, in this case, default enability is true
 				componentEnabled = true;
 			}
 		}

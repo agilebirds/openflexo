@@ -319,6 +319,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> binding) {
 		logger.fine("notifyBindingChanged with " + binding);
+		super.notifiedBindingChanged(binding);
 		if (binding == getData()) {
 			if (getData() != null) {
 				Type accessedType = getData().getAnalyzedType();

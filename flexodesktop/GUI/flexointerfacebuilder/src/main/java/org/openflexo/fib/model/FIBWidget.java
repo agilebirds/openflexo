@@ -370,6 +370,7 @@ public abstract class FIBWidget extends FIBComponent {
 
 		@Override
 		public void notifiedBindingChanged(DataBinding<?> binding) {
+			super.notifiedBindingChanged(binding);
 			if (binding == getFormat()) {
 				FIBWidget.this.notifiedBindingChanged(binding);
 			}
@@ -420,6 +421,7 @@ public abstract class FIBWidget extends FIBComponent {
 
 		@Override
 		public void notifiedBindingChanged(DataBinding<?> binding) {
+			super.notifiedBindingChanged(binding);
 			if (binding == getClickAction() || binding == getDoubleClickAction() || binding == getRightClickAction()) {
 				FIBWidget.this.notifiedBindingChanged(binding);
 			}

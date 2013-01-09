@@ -173,4 +173,24 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 				+ " : " + getStringRepresentation(expression.getElseExpression()) + ")";
 	}
 
+	@Override
+	protected String makeStringRepresentation(CastExpression expression) {
+		return "(" + makeStringRepresentation(expression.getCastType()) + ")" + getStringRepresentation(expression.getArgument());
+	}
+
+	@Override
+	protected String makeStringRepresentation(TypeReference tr) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("$" + tr.getBaseType());
+		if (tr.getParameters().size() > 0) {
+			sb.append("<");
+			boolean isFirst = true;
+			for (TypeReference param : tr.getParameters()) {
+				sb.append((isFirst ? "" : ",") + makeStringRepresentation(param));
+				isFirst = false;
+			}
+			sb.append(">");
+		}
+		return sb.toString();
+	}
 }

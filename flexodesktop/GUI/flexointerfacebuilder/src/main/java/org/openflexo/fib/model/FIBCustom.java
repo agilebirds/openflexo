@@ -312,7 +312,6 @@ public class FIBCustom extends FIBWidget {
 			if (custom != null && variable != null) {
 				variable.decode();
 			}
-			System.out.println("Un truc a faire ici ???");
 			/*if (variable.isValid()) {
 				VALUE.setType(variable.getAnalyzedType());
 				if (value != null) {

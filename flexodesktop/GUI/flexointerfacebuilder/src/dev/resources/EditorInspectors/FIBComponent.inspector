@@ -10,7 +10,7 @@
 			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
 			
 				<Label name="dataLabel" label="data" constraints="twocols(location=left)"/>
-				<Custom name="dataValue" data="data.data" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15" valueChangedAction="data.notifyBindingChanged(data.data)">
+				<Custom name="dataValue" data="data.data" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
 					<Assignment variable="component.bindingDefinition" value="data.dataBindingDefinition"/>
 				</Custom>
@@ -39,20 +39,20 @@
 
 			<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" useScrollBar="true" >
 			
-				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='none'"> 
+				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="($org.openflexo.fib.model.NoneLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='none'"> 
 				</Panel>
 
-				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='flow'"> 
+				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="($org.openflexo.fib.model.FlowLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='flow'"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="flowConstraintsIndex" data="FlowConstraints.data.index" constraints="twocols(location=right)"/>
 				</Panel>
 
-				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='border'"> 
+				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="($org.openflexo.fib.model.BorderLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='border'"> 
 					<Label label="location" constraints="twocols(location=left)"/>
 					<DropDown data="BorderConstraints.data.location" constraints="twocols(location=right)" showReset="false"/>
 				</Panel>
 
-				<Panel name="GridConstraints" border="titled" borderTitle="grid_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='grid'"> 
+				<Panel name="GridConstraints" border="titled" borderTitle="grid_layout_constraints" data="($org.openflexo.fib.model.GridLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='grid'"> 
 					<Panel layout="flow" hGap="5" vGap="0">
 				        <Label label="column"/>
 				        <Number name="gridConstraintsX" numberType="IntegerType" data="GridConstraints.data.x" columns="3"/>
@@ -61,7 +61,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="BoxConstraints" border="titled" borderTitle="box_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='box'"> 
+				<Panel name="BoxConstraints" border="titled" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='box'"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="boxConstraintsIndex" data="BoxConstraints.data.index" constraints="twocols(location=right)"/>
 					<Panel layout="flow" hGap="5" vGap="0">
@@ -72,7 +72,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="TwoColsConstraints" border="titled" borderTitle="two_cols_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="data.parent.layout='twocols'"> 
+				<Panel name="TwoColsConstraints" border="titled" borderTitle="two_cols_layout_constraints" data="($org.openflexo.fib.model.TwoColsLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="data.parent.layout='twocols'"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="twoColsConstraintsIndex" data="TwoColsConstraints.data.index" constraints="twocols(location=right)"/>
 					<Label label="location" constraints="twocols(location=left)"/>
@@ -94,7 +94,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='gridbag'"> 
+				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="($org.openflexo.fib.model.GridBagLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='gridbag'"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="gridBagConstraintsIndex" data="GridBagConstraints.data.index" constraints="twocols(location=right)"/>
 				    <Label label="gridX" constraints="twocols(location=left)"/>
@@ -183,7 +183,7 @@
   			     </Panel>
  		       </Panel>
 
-				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='split'"> 
+				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="($org.openflexo.fib.model.SplitLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='split'"> 
                    <Label label="identifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
                    <DropDown index="1" data="SplitLayoutConstraints.data.splitLeaf" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" format="object.name" localize="true" list="SplitLayoutConstraints.data.availableLeaves" iteratorClassName="org.openflexo.swing.layout.MultiSplitLayout$Leaf" autoSelectFirstRow="true" />
                    <Label label="weight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />

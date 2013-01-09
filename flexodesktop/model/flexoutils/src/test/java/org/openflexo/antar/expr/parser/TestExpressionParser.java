@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
+import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
@@ -134,8 +135,7 @@ public class TestExpressionParser extends TestCase {
 	}
 
 	public void testBindingValue6() {
-		tryToParse("i.am.a(1,2+3,7.8,'foo').little.test(1)", "i.am.a(1,5,7.8,\"foo\").little.test(1)", BindingValue.class,
-				null, false);
+		tryToParse("i.am.a(1,2+3,7.8,'foo').little.test(1)", "i.am.a(1,5,7.8,\"foo\").little.test(1)", BindingValue.class, null, false);
 	}
 
 	public void testNumericValue1() {
@@ -370,4 +370,23 @@ public class TestExpressionParser extends TestCase {
 				"[" + localeDateFormat.toPattern() + "," + localeDateFormat.format(date) + "]", false);
 	}
 	*/
+
+	public void testCast() {
+		tryToParse("($java.lang.Integer)2", "($java.lang.Integer)2", CastExpression.class, null, false);
+	}
+
+	public void testInvalidCast() {
+		tryToParse("(java.lang.Integer)2", "", CastExpression.class, null, true);
+	}
+
+	public void testParameteredCast() {
+		tryToParse("($java.util.List<$java.lang.String>)data.list", "($java.util.List<$java.lang.String>)data.list", CastExpression.class,
+				null, false);
+	}
+
+	public void testParameteredCast2() {
+		tryToParse("($java.util.Hashtable<$java.lang.String,$java.util.List<$java.lang.String>>)data.map",
+				"($java.util.Hashtable<$java.lang.String,$java.util.List<$java.lang.String>>)data.map", CastExpression.class, null, false);
+	}
+
 }

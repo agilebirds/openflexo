@@ -536,6 +536,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		// logger.info("Created binding model at root component level:\n"+_bindingModel);
 	}
 
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		super.notifiedBindingChanged(binding);
+		if (binding == getData()) {
+			logger.info("notified data changed");
+		}
+	}
+
 	public void notifiedBindingModelRecreated() {
 	}
 
