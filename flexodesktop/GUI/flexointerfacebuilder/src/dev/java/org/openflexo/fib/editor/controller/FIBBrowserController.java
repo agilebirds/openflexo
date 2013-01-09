@@ -44,6 +44,9 @@ public class FIBBrowserController extends FIBController implements Observer {
 	}
 
 	public ImageIcon iconFor(FIBComponent component) {
+		if (component == null) {
+			return null;
+		}
 		if (component.isRootComponent()) {
 			return FIBEditorIconLibrary.ROOT_COMPONENT_ICON;
 		} else if (component instanceof FIBTabPanel) {
@@ -78,6 +81,9 @@ public class FIBBrowserController extends FIBController implements Observer {
 	}
 
 	public String textFor(FIBComponent component) {
+		if (component == null) {
+			return null;
+		}
 		if (component.getName() != null) {
 			return component.getName() + " (" + component.getClass().getSimpleName() + ")";
 		} else if (component.getIdentifier() != null) {

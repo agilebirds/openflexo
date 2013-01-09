@@ -87,6 +87,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	private Type declaredType = null;
 	private BindingDefinitionType bdType = null;
+	private boolean mandatory = false;
 
 	private boolean needsParsing = false;
 	private boolean isSuccessfullyParsed = false;
@@ -189,6 +190,14 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public boolean isSettable() {
 		return isBindingValue() && ((BindingValue) getExpression()).isSettable();
+	}
+
+	public boolean isMandatory() {
+		return mandatory;
+	}
+
+	public void setMandatory(boolean mandatory) {
+		this.mandatory = mandatory;
 	}
 
 	public Type getDeclaredType() {
@@ -409,6 +418,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				return null;
 			}
 			isSuccessfullyParsed = true;
+			needsParsing = false;
 			analyseExpressionAfterParsing();
 		}
 		needsParsing = false;
@@ -479,8 +489,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				});
 				Expression evaluatedExpression = resolvedExpression.evaluate();
 
+				if (evaluatedExpression instanceof CastExpression) {
+					if (((CastExpression) evaluatedExpression).getArgument() instanceof Constant) {
+						return (T) ((Constant) ((CastExpression) evaluatedExpression).getArgument()).getValue();
+					}
+				}
+
 				if (evaluatedExpression instanceof Constant) {
-					// System.out.println("Returning " + ((Constant) evaluatedExpression).getValue());
 					return (T) ((Constant) evaluatedExpression).getValue();
 				}
 
@@ -590,4 +605,5 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		returned.decode();
 		return returned;
 	}
+
 }

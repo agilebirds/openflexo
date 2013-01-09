@@ -72,7 +72,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 				if (accessedList instanceof List) {
 					list = (List) accessedList;

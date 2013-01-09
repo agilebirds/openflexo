@@ -117,7 +117,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return null;
 	}

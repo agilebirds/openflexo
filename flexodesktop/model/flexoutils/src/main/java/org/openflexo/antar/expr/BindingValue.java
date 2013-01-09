@@ -628,7 +628,7 @@ public class BindingValue extends Expression {
 
 			if (getLastBindingPathElement() instanceof SettableBindingPathElement
 					&& ((SettableBindingPathElement) getLastBindingPathElement()).isSettable()) {
-				System.out.println("Et finalement on applique " + getLastBindingPathElement() + " sur " + returned);
+				// System.out.println("Et finalement on applique " + getLastBindingPathElement() + " sur " + returned);
 				((SettableBindingPathElement) getLastBindingPathElement()).setBindingValue(value, returned, context);
 			} else {
 				logger.warning("Binding " + this + " is not settable");

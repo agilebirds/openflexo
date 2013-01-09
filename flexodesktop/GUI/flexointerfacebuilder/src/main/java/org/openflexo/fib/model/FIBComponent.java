@@ -38,6 +38,8 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -1330,46 +1332,21 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			return;
 		}
 
-		/*List<BindingValue> primitives;
-		try {
-			primitives = Expression.extractBindingValues(binding.getExpression());
-
-			FIBComponent rootComponent = getRootComponent();
-			Iterator<FIBComponent> subComponents = rootComponent.subComponentIterator();
-			while (subComponents.hasNext()) {
-				FIBComponent next = subComponents.next();
-				if (next != this) {
-					if (next instanceof FIBWidget && ((FIBWidget) next).getData() != null && ((FIBWidget) next).getData().isSet()) {
-						String data = ((FIBWidget) next).getData().toString();
-						if (data != null) {
-							for (BindingValue p : primitives) {
-								String primitiveValue = p.getVariableName();
-								if (primitiveValue != null && primitiveValue.startsWith(data)) {
-									declareDependantOf(next);
-								}
-							}
-
-						}
-					}
-					if (next.getName() != null) {
-						for (BindingValue p : primitives) {
-							String primitiveValue = p.getVariableName();
-							if (primitiveValue != null && StringUtils.isNotEmpty(next.getName())
-									&& primitiveValue.startsWith(next.getName())) {
-								declareDependantOf(next);
-							}
-						}
+		if (binding.getExpression() != null) {
+			// System.out.println("For binding " + binding);
+			for (BindingValue e : binding.getExpression().getAllBindingValues()) {
+				// System.out.println(" > binding variable " + e.getBindingVariable() + " of " + e.getBindingVariable().getType());
+				if (TypeUtils.isTypeAssignableFrom(FIBComponentDynamicModel.class, e.getBindingVariable().getType())) {
+					FIBComponent c = getRootComponent().getComponentNamed(e.getBindingVariable().getVariableName());
+					if (c != null) {
+						// System.out.println("Component " + toString() + " depends of " + c.toString());
+						declareDependantOf(c);
+					} else {
+						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName());
 					}
 				}
 			}
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TypeMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		}
 
 	}
 

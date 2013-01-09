@@ -890,7 +890,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			logger.fine("update with " + binding);
 		}
 
-		System.out.println("Update in BindingSelectorPanel with binding of " + binding.getExpression().getClass());
+		System.out.println("Update in BindingSelectorPanel with binding of " + (binding != null ? binding.getExpression() : "null"));
 
 		if (binding == null || binding.isConstant()) {
 			clearColumns();
@@ -1771,10 +1771,13 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		DataBinding dataBinding = bindingSelector.getEditedObject();
 		if (dataBinding.getExpression() == null) {
 			if (bindingSelector.getBindingDefinition() != null && bindingSelector.getBindable() != null) {
-				dataBinding.setExpression(bindingSelector.makeBinding());
+				BindingValue newBindingValue = new BindingValue();
+				newBindingValue.setBindingVariable(getSelectedBindingVariable());
+				System.out.println("getSelectedBindingVariable()=" + getSelectedBindingVariable());
+				dataBinding.setExpression(newBindingValue /*bindingSelector.makeBinding()*/);
 				// bindingValue.setBindingVariable(getSelectedBindingVariable());
 				// setEditedObject(bindingValue);
-				bindingSelector.fireEditedObjectChanged();
+				// bindingSelector.fireEditedObjectChanged();
 			} else {
 				return;
 			}

@@ -188,7 +188,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			logger.warning("Widget " + getWidget() + " TypeMismatchException: " + e.getMessage());
 			return null;
 		} catch (NullReferenceException e) {
-			logger.warning("Widget " + getWidget() + " NullReferenceException: " + e.getMessage());
+			// logger.warning("Widget " + getWidget() + " NullReferenceException: " + e.getMessage());
 			return null;
 		}
 

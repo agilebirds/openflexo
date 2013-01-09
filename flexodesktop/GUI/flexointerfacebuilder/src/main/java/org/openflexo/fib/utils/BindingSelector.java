@@ -432,21 +432,27 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		EditionMode oldEditionMode = editionMode;
 		EditionMode newEditionMode = editionMode;
 
-		if (object.isConstant()) {
-			newEditionMode = EditionMode.STATIC_BINDING;
-		} else if (object.isBindingValue()) {
-			if (((BindingValue) object.getExpression()).isCompoundBinding() || getBindingDefinition() != null
-					&& getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-				newEditionMode = EditionMode.COMPOUND_BINDING;
-			} else if (oldEditionMode != EditionMode.NORMAL_BINDING && oldEditionMode != EditionMode.COMPOUND_BINDING) {
+		if (object.isSet()) {
+			if (object.isConstant()) {
+				newEditionMode = EditionMode.STATIC_BINDING;
+			} else if (object.isBindingValue()) {
+				if (((BindingValue) object.getExpression()).isCompoundBinding() || getBindingDefinition() != null
+						&& getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+					newEditionMode = EditionMode.COMPOUND_BINDING;
+				} else if (oldEditionMode != EditionMode.NORMAL_BINDING && oldEditionMode != EditionMode.COMPOUND_BINDING) {
+					newEditionMode = EditionMode.NORMAL_BINDING;
+				}
+			} else {
+				newEditionMode = EditionMode.BINDING_EXPRESSION;
+			}
+			if (returned == null) {
 				newEditionMode = EditionMode.NORMAL_BINDING;
 			}
 		} else {
-			newEditionMode = EditionMode.BINDING_EXPRESSION;
-		}
-		if (returned == null) {
 			newEditionMode = EditionMode.NORMAL_BINDING;
 		}
+
+		logger.info("DISPLAY_MODE was: " + oldEditionMode + " is now " + newEditionMode);
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("DISPLAY_MODE was: " + oldEditionMode + " is now " + newEditionMode);
@@ -753,17 +759,21 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
-		if (getBindingDefinition() != null && getBindingDefinition().getIsMandatory() && getEditedObject() == null) {
-			getLabel().setVisible(true);
-			getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
-		} else if (getEditedObject() != null && !getEditedObject().isValid()) {
-			getLabel().setVisible(true);
-			getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
-		} else if (getEditedObject() != null && getEditedObject().isValid()) {
-			getLabel().setVisible(true);
-			getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+		if (editedObject.isSet()) {
+			if (editedObject.isValid()) {
+				getLabel().setVisible(true);
+				getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+			} else {
+				getLabel().setVisible(true);
+				getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
+			}
 		} else {
-			getLabel().setVisible(false);
+			if (editedObject.isMandatory()) {
+				getLabel().setVisible(true);
+				getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
+			} else {
+				getLabel().setVisible(false);
+			}
 		}
 	}
 
@@ -1247,7 +1257,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				return (Constant) e;
 			}
 		} catch (ParseException e1) {
-			e1.printStackTrace();
+			// e1.printStackTrace();
 		}
 		return null;
 	}
