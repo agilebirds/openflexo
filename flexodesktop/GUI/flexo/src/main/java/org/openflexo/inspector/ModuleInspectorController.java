@@ -114,14 +114,11 @@ public class ModuleInspectorController extends Observable implements Observer {
 			}
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
+		for (FIBInspector inspector : inspectors.values()) {
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
-			inspector.recursivelyReorderComponents();
+		for (FIBInspector inspector : inspectors.values()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Initialized inspector for " + inspector.getDataClass());
 			}
