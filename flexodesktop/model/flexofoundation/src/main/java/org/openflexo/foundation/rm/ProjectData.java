@@ -12,7 +12,6 @@ import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
-import org.openflexo.model.annotations.ReturnedValue;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
@@ -20,18 +19,9 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
 @XMLElement
-public interface ProjectData extends StorageResourceData, AccessibleProxyObject {
+public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourceData {
 
-	public static final String FLEXO_RESOURCE = "flexoResource";
-	public static final String PROJECT = "project";
 	public static final String IMPORTED_PROJECTS = "importedProjects";
-
-	@Override
-	@Getter(value = FLEXO_RESOURCE, ignoreType = true)
-	public FlexoStorageResource getFlexoResource();
-
-	@Setter(FLEXO_RESOURCE)
-	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
 
 	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.URI, isMultiValued = false)
 	public FlexoProjectReference getProjectReferenceWithURI(String uri);
@@ -39,14 +29,6 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 	public FlexoProject getImportedProjectWithURI(String uri);
 
 	public FlexoProject getImportedProjectWithURI(String projectURI, boolean searchRecursively);
-
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException;
-
-	@Override
-	@Getter(value = PROJECT, ignoreType = true)
-	@ReturnedValue(FLEXO_RESOURCE + ".project")
-	public FlexoProject getProject();
 
 	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
@@ -66,21 +48,11 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	public void removeFromImportedProjects(FlexoProject project);
 
-	public static abstract class ProjectDataImpl implements ProjectData, AccessibleProxyObject {
+	public static abstract class ProjectDataImpl extends PAMELAStorageResourceDataImpl implements ProjectData, AccessibleProxyObject {
 
 		@Override
 		public FlexoProject getImportedProjectWithURI(String projectURI) {
 			return getImportedProjectWithURI(projectURI, true);
-		}
-
-		@Override
-		public FlexoProject getProject() {
-			return getFlexoResource().getProject();
-		}
-
-		@Override
-		public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-			setFlexoStorageResource((FlexoStorageResource) resource);
 		}
 
 		@Override
@@ -151,15 +123,6 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 					removeFromImportedProjects(ref);
 					break;
 				}
-			}
-		}
-
-		@Override
-		public void setModified(boolean modified) {
-			boolean old = isModified();
-			performSuperSetModified(modified);
-			if (modified && !old) {
-				getFlexoResource().notifyResourceStatusChanged();
 			}
 		}
 
