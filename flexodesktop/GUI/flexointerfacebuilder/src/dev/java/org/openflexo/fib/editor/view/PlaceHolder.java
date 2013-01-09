@@ -31,13 +31,15 @@ import javax.swing.border.Border;
 
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.Focusable;
+import org.openflexo.swing.NoInsetsBorder;
 
-public abstract class PlaceHolder extends JPanel {
+public abstract class PlaceHolder extends JPanel implements Focusable {
 
 	static final Logger logger = FlexoLogger.getLogger(PlaceHolder.class.getPackage().getName());
 
-	private Border focusBorder = BorderFactory.createLineBorder(Color.RED);
-	private Border nonFocusBorder = BorderFactory.createEtchedBorder();
+	private static final Border focusBorder = new NoInsetsBorder(BorderFactory.createLineBorder(Color.RED));
+	private static final Border nonFocusBorder = new NoInsetsBorder(BorderFactory.createEtchedBorder());
 
 	private boolean isFocused = false;
 
@@ -53,19 +55,21 @@ public abstract class PlaceHolder extends JPanel {
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setVerticalAlignment(SwingConstants.CENTER);
 		add(label, BorderLayout.CENTER);
-		setBorder(BorderFactory.createEtchedBorder());
+		setBorder(nonFocusBorder);
 	}
 
+	@Override
 	public void setFocused(boolean aFlag) {
 		if (aFlag) {
 			isFocused = true;
-			setBorder(BorderFactory.createCompoundBorder(focusBorder, nonFocusBorder));
+			setBorder(focusBorder);
 		} else {
 			isFocused = false;
 			setBorder(nonFocusBorder);
 		}
 	}
 
+	@Override
 	public boolean isFocused() {
 		return isFocused;
 	}
