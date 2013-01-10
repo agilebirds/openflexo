@@ -19,6 +19,8 @@
  */
 package org.openflexo.inspector;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.GeneralPreferences;
 import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
@@ -68,6 +71,21 @@ public class ModuleInspectorController extends Observable implements Observer {
 		this.flexoController = flexoController;
 		inspectors = new Hashtable<Class<?>, FIBInspector>();
 		inspectorDialog = new FIBInspectorDialog(this);
+		Boolean visible = GeneralPreferences.getPreferences().getBooleanProperty("FIBInspector.visible");
+		inspectorDialog.setVisible(visible == null || visible);
+		inspectorDialog.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.TRUE);
+				GeneralPreferences.save();
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.FALSE);
+				GeneralPreferences.save();
+			};
+		});
 		File inspectorsDir = new FileResource("Inspectors/COMMON");
 		loadDirectory(inspectorsDir);
 	}
