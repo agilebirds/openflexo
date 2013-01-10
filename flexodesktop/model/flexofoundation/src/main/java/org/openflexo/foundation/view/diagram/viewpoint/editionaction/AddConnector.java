@@ -24,9 +24,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
@@ -46,7 +47,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
  * This edition primitive addresses the creation of a new connector linking two shapes in a diagram
@@ -92,7 +92,14 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 		} else {
-			return (ViewShape) getFromShape().getBindingValue(action);
+			try {
+				return getFromShape().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
 
@@ -101,7 +108,14 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 		} else {
-			return (ViewShape) getToShape().getBindingValue(action);
+			try {
+				return getToShape().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
 
@@ -128,53 +142,45 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		super.setPatternRole(patternRole);
 	}*/
 
-	private ViewPointDataBinding fromShape;
-	private ViewPointDataBinding toShape;
+	private DataBinding<ViewShape> fromShape;
+	private DataBinding<ViewShape> toShape;
 
-	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, DataBinding.BindingDefinitionType.GET, true);
-
-	public BindingDefinition getFromShapeBindingDefinition() {
-		return FROM_SHAPE;
-	}
-
-	public ViewPointDataBinding getFromShape() {
+	public DataBinding<ViewShape> getFromShape() {
 		if (fromShape == null) {
-			fromShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.fromShape, getFromShapeBindingDefinition());
+			fromShape = new DataBinding<ViewShape>(this, ViewShape.class, BindingDefinitionType.GET);
+			fromShape.setBindingName("fromShape");
 		}
 		return fromShape;
 	}
 
-	public void setFromShape(ViewPointDataBinding fromShape) {
+	public void setFromShape(DataBinding<ViewShape> fromShape) {
 		if (fromShape != null) {
 			fromShape.setOwner(this);
-			fromShape.setBindingAttribute(EditionActionBindingAttribute.fromShape);
-			fromShape.setBindingDefinition(getFromShapeBindingDefinition());
+			fromShape.setBindingName("fromShape");
+			fromShape.setDeclaredType(ViewShape.class);
+			fromShape.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.fromShape = fromShape;
-		notifyBindingChanged(this.fromShape);
+		notifiedBindingChanged(this.fromShape);
 	}
 
-	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, DataBinding.BindingDefinitionType.GET, true);
-
-	public BindingDefinition getToShapeBindingDefinition() {
-		return TO_SHAPE;
-	}
-
-	public ViewPointDataBinding getToShape() {
+	public DataBinding<ViewShape> getToShape() {
 		if (toShape == null) {
-			toShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.toShape, getToShapeBindingDefinition());
+			toShape = new DataBinding<ViewShape>(this, ViewShape.class, BindingDefinitionType.GET);
+			toShape.setBindingName("toShape");
 		}
 		return toShape;
 	}
 
-	public void setToShape(ViewPointDataBinding toShape) {
+	public void setToShape(DataBinding<ViewShape> toShape) {
 		if (toShape != null) {
 			toShape.setOwner(this);
-			toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);
-			toShape.setBindingDefinition(getToShapeBindingDefinition());
+			toShape.setBindingName("toShape");
+			toShape.setDeclaredType(ViewShape.class);
+			toShape.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.toShape = toShape;
-		notifyBindingChanged(this.toShape);
+		notifiedBindingChanged(this.toShape);
 	}
 
 	@Override
@@ -262,7 +268,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -312,7 +318,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<ViewShape>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -339,7 +345,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<ViewShape>(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -389,7 +395,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setToShape(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setToShape(new DataBinding<ViewShape>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -416,7 +422,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setToShape(new DataBinding<ViewShape>(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

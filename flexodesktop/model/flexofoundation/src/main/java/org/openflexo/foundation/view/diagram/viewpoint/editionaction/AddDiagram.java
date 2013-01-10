@@ -22,9 +22,9 @@ package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -32,7 +32,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddDiagram extends DiagramAction<View> {
 
@@ -60,31 +59,34 @@ public class AddDiagram extends DiagramAction<View> {
 	}
 
 	public String getDiagramName(EditionSchemeAction action) {
-		return (String) getDiagramName().getBindingValue(action);
+		try {
+			return getDiagramName().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding diagramName;
+	private DataBinding<String> diagramName;
 
-	private BindingDefinition DIAGRAM_NAME = new BindingDefinition("diagramName", String.class, DataBinding.BindingDefinitionType.GET, false);
-
-	public BindingDefinition getDiagramNameBindingDefinition() {
-		return DIAGRAM_NAME;
-	}
-
-	public ViewPointDataBinding getDiagramName() {
+	public DataBinding<String> getDiagramName() {
 		if (diagramName == null) {
-			diagramName = new ViewPointDataBinding(this, EditionActionBindingAttribute.diagramName, getDiagramNameBindingDefinition());
+			diagramName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			diagramName.setBindingName("diagramName");
 		}
 		return diagramName;
 	}
 
-	public void setDiagramName(ViewPointDataBinding aDiagramName) {
-		if (aDiagramName != null) {
-			aDiagramName.setOwner(this);
-			aDiagramName.setBindingAttribute(EditionActionBindingAttribute.diagramName);
-			aDiagramName.setBindingDefinition(getDiagramNameBindingDefinition());
+	public void setDiagramName(DataBinding<String> diagramName) {
+		if (diagramName != null) {
+			diagramName.setOwner(this);
+			diagramName.setDeclaredType(String.class);
+			diagramName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			diagramName.setBindingName("diagramName");
 		}
-		this.diagramName = aDiagramName;
+		this.diagramName = diagramName;
 	}
 
 	public ViewPoint getViewpoint() {

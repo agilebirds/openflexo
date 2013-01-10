@@ -9,7 +9,6 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
@@ -18,10 +17,8 @@ import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class GraphicalElementPatternRole<T extends ViewElement> extends PatternRole<T> implements Bindable {
 
@@ -83,12 +80,12 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	}
 
 	// Convenient method to access spec for label feature
-	public ViewPointDataBinding getLabel() {
+	public DataBinding<String> getLabel() {
 		return getGraphicalElementSpecification(LABEL_FEATURE).getValue();
 	}
 
 	// Convenient method to access spec for label feature
-	public void setLabel(ViewPointDataBinding label) {
+	public void setLabel(DataBinding<String> label) {
 		getGraphicalElementSpecification(LABEL_FEATURE).setValue(label);
 	}
 
