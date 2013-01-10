@@ -21,7 +21,7 @@ public @interface Modify {
 
 	/**
 	 * Wheter this entity should watch the "modified" state of the value of the property defined by {@link Modify#forward()} and resynch
-	 * itself with it, whenever it is changed from <code>true</code> to <code>false</code>
+	 * itself with it, whenever it is changed from <code>true</code> to <code>false</code>. Default value is <code>true</code>
 	 * 
 	 * @return true if this model entity "modified" state should be synch with the property defined by the {@link Modify#forward()}.
 	 */

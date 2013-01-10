@@ -56,11 +56,13 @@ public interface PAMELAStorageResourceData extends StorageResourceData, Accessib
 			boolean old = isModified();
 			performSuperSetModified(modified);
 			lastMemoryUpdate = new Date();
-			if (modified && !old) {
+			if (modified && !old && !isDeserializing()) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info(">>>>>>>> PAMELA resource " + getFlexoResource() + " has been modified");
 				}
-				getFlexoResource().notifyResourceStatusChanged();
+				if (getFlexoResource() != null) {
+					getFlexoResource().notifyResourceStatusChanged();
+				}
 			}
 		}
 	}
