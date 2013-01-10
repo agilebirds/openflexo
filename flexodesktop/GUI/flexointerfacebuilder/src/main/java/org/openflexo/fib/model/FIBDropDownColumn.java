@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
@@ -42,10 +42,10 @@ public class FIBDropDownColumn extends FIBTableColumn {
 
 	@Deprecated
 	public static BindingDefinition LIST = new BindingDefinition("list", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(
-			Object.class)), BindingDefinitionType.GET, false);
+			Object.class)), DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
 	public static BindingDefinition ARRAY = new BindingDefinition("array", new GenericArrayTypeImpl(new WilcardTypeImpl(Object.class)),
-			BindingDefinitionType.GET, false);
+			DataBinding.BindingDefinitionType.GET, false);
 
 	public String staticList;
 
@@ -58,7 +58,7 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	public DataBinding<List<?>> getList() {
 		if (list == null) {
 			list = new DataBinding<List<?>>(this, new TypeToken<List<?>>() {
-			}.getType(), BindingDefinitionType.GET);
+			}.getType(), DataBinding.BindingDefinitionType.GET);
 		}
 		return list;
 	}
@@ -68,7 +68,7 @@ public class FIBDropDownColumn extends FIBTableColumn {
 			list.setOwner(this);
 			list.setDeclaredType(new TypeToken<List<?>>() {
 			}.getType());
-			list.setBindingDefinitionType(BindingDefinitionType.GET);
+			list.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.list = list;
 	}
@@ -76,7 +76,7 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	public DataBinding<Object[]> getArray() {
 		if (array == null) {
 			array = new DataBinding<Object[]>(this, new TypeToken<Object[]>() {
-			}.getType(), BindingDefinitionType.GET);
+			}.getType(), DataBinding.BindingDefinitionType.GET);
 		}
 		return array;
 	}
@@ -86,7 +86,7 @@ public class FIBDropDownColumn extends FIBTableColumn {
 			array.setOwner(this);
 			array.setDeclaredType(new TypeToken<Object[]>() {
 			}.getType());
-			array.setBindingDefinitionType(BindingDefinitionType.GET);
+			array.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.array = array;
 	}

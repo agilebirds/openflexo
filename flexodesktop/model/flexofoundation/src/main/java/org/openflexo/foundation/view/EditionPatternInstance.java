@@ -26,11 +26,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -188,14 +189,14 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	public Object evaluate(String expression) {
 		ViewPointDataBinding vpdb = new ViewPointDataBinding(expression);
 		vpdb.setOwner(getPattern());
-		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
+		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, DataBinding.BindingDefinitionType.GET, false));
 		return vpdb.getBindingValue(this);
 	}
 
 	public boolean setBindingValue(String binding, Object value) {
 		ViewPointDataBinding vpdb = new ViewPointDataBinding(binding);
 		vpdb.setOwner(getPattern());
-		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.SET, false));
+		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, DataBinding.BindingDefinitionType.SET, false));
 		if (vpdb.getBinding().isBindingValid() && vpdb.getBinding().isSettable()) {
 			vpdb.setBindingValue(value, this);
 			return true;

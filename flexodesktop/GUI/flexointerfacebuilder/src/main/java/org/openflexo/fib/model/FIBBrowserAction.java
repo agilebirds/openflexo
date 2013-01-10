@@ -24,10 +24,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -49,9 +49,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	private DataBinding<Boolean> isAvailable;
 
 	@Deprecated
-	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	public FIBBrowserElement getBrowserElement() {
 		return element;
@@ -71,7 +71,7 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 
 	public DataBinding<Object> getMethod() {
 		if (method == null) {
-			method = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
+			method = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return method;
 	}
@@ -80,14 +80,14 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 		if (method != null) {
 			method.setOwner(this);
 			method.setDeclaredType(Object.class);
-			method.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+			method.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.method = method;
 	}
 
 	public DataBinding<Boolean> getIsAvailable() {
 		if (isAvailable == null) {
-			isAvailable = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+			isAvailable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return isAvailable;
 	}
@@ -96,7 +96,7 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 		if (isAvailable != null) {
 			isAvailable.setOwner(this);
 			isAvailable.setDeclaredType(Boolean.class);
-			isAvailable.setBindingDefinitionType(BindingDefinitionType.GET);
+			isAvailable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.isAvailable = isAvailable;
 	}

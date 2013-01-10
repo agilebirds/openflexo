@@ -7,8 +7,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
@@ -67,13 +68,13 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 
 	public BindingDefinition getLabelBindingDefinition() {
 		if (LABEL == null) {
-			LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET_SET, false) {
+			LABEL = new BindingDefinition("label", String.class, DataBinding.BindingDefinitionType.GET_SET, false) {
 				@Override
-				public BindingDefinitionType getBindingDefinitionType() {
+				public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 					if (getReadOnlyLabel()) {
-						return BindingDefinitionType.GET;
+						return DataBinding.BindingDefinitionType.GET;
 					} else {
-						return BindingDefinitionType.GET_SET;
+						return DataBinding.BindingDefinitionType.GET_SET;
 					}
 				}
 			};

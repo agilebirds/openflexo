@@ -22,12 +22,11 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -40,19 +39,7 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());
 
-	private ViewPointDataBinding assignation;
-
-	private BindingDefinition ASSIGNATION = new BindingDefinition("assignation", Object.class, BindingDefinitionType.GET_SET, false) {
-		@Override
-		public java.lang.reflect.Type getType() {
-			return getAssignableType();
-		};
-
-		@Override
-		public boolean getIsMandatory() {
-			return isAssignationRequired();
-		};
-	};
+	private DataBinding<Object> assignation;
 
 	public AssignableAction(ViewPointBuilder builder) {
 		super(builder);
@@ -67,25 +54,25 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	public abstract Type getAssignableType();
 
-	public BindingDefinition getAssignationBindingDefinition() {
-		return ASSIGNATION;
-	}
-
-	public ViewPointDataBinding getAssignation() {
+	public DataBinding<Object> getAssignation() {
 		if (assignation == null) {
-			assignation = new ViewPointDataBinding(this, EditionActionBindingAttribute.assignation, getAssignationBindingDefinition());
+			assignation = new DataBinding<Object>(this, getAssignableType(), DataBinding.BindingDefinitionType.GET_SET);
+			assignation.setBindingName("assignation");
+			assignation.setMandatory(isAssignationRequired());
 		}
 		return assignation;
 	}
 
-	public void setAssignation(ViewPointDataBinding assignation) {
+	public void setAssignation(DataBinding<Object> assignation) {
 		if (assignation != null) {
 			assignation.setOwner(this);
-			assignation.setBindingAttribute(EditionActionBindingAttribute.assignation);
-			assignation.setBindingDefinition(getAssignationBindingDefinition());
+			assignation.setBindingName("assignation");
+			assignation.setDeclaredType(getAssignableType());
+			assignation.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+			assignation.setMandatory(isAssignationRequired());
 		}
 		this.assignation = assignation;
-		notifyBindingChanged(this.assignation);
+		notifiedBindingChanged(this.assignation);
 	}
 
 	public PatternRole getPatternRole() {
@@ -117,13 +104,8 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AssignableAction object) {
+		public DataBinding<Object> getBinding(AssignableAction object) {
 			return object.getAssignation();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AssignableAction object) {
-			return object.getAssignationBindingDefinition();
 		}
 
 	}

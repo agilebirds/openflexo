@@ -29,10 +29,10 @@ import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.WilcardTypeImpl;
@@ -51,7 +51,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
@@ -230,7 +230,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 
 	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
+			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
@@ -239,7 +239,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		if (selected != null) {
 			selected.setOwner(this);
 			selected.setDeclaredType(getIteratorClass());
-			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
 		}
 		this.selected = selected;
 	}

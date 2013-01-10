@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -57,7 +58,7 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 
 	private ViewPointDataBinding iteration;
 
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, BindingDefinitionType.GET, true);
+	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getIterationBindingDefinition() {
 		return ITERATION;

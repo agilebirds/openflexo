@@ -33,8 +33,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -1605,7 +1605,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public DataBinding<Double> getXConstraints() {
 		if (xConstraints == null) {
-			xConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
+			xConstraints = new DataBinding<Double>(this, Double.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return xConstraints;
 	}
@@ -1616,7 +1616,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			if (xConstraints != null) {
 				xConstraints.setOwner(this);
 				xConstraints.setDeclaredType(Double.class);
-				xConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+				xConstraints.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.xConstraints = xConstraints;
 			hasChanged(notification);
@@ -1625,7 +1625,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public DataBinding<Double> getYConstraints() {
 		if (yConstraints == null) {
-			yConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
+			yConstraints = new DataBinding<Double>(this, Double.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return yConstraints;
 	}
@@ -1636,7 +1636,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			if (yConstraints != null) {
 				yConstraints.setOwner(this);
 				yConstraints.setDeclaredType(Double.class);
-				yConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+				yConstraints.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.yConstraints = yConstraints;
 			hasChanged(notification);
@@ -1645,7 +1645,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public DataBinding<Double> getWidthConstraints() {
 		if (widthConstraints == null) {
-			widthConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
+			widthConstraints = new DataBinding<Double>(this, Double.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return widthConstraints;
 	}
@@ -1656,7 +1656,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			if (widthConstraints != null) {
 				widthConstraints.setOwner(this);
 				widthConstraints.setDeclaredType(Double.class);
-				widthConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+				widthConstraints.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.widthConstraints = widthConstraints;
 			hasChanged(notification);
@@ -1665,7 +1665,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	public DataBinding<Double> getHeightConstraints() {
 		if (heightConstraints == null) {
-			heightConstraints = new DataBinding<Double>(this, Double.class, BindingDefinitionType.GET);
+			heightConstraints = new DataBinding<Double>(this, Double.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return heightConstraints;
 	}
@@ -1676,7 +1676,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			if (heightConstraints != null) {
 				heightConstraints.setOwner(this);
 				heightConstraints.setDeclaredType(Double.class);
-				heightConstraints.setBindingDefinitionType(BindingDefinitionType.GET);
+				heightConstraints.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.heightConstraints = heightConstraints;
 			hasChanged(notification);

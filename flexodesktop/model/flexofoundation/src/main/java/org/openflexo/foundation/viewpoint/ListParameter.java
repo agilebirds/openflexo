@@ -23,7 +23,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
@@ -45,7 +46,7 @@ public class ListParameter extends EditionSchemeParameter {
 		super(builder);
 	}
 
-	private BindingDefinition LIST = new BindingDefinition("list", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition LIST = new BindingDefinition("list", Object.class, DataBinding.BindingDefinitionType.GET, false) {
 		@Override
 		public Type getType() {
 			return ListParameter.this.getType();

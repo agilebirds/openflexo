@@ -25,7 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
@@ -88,7 +89,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 
 	private ViewPointDataBinding container;
 
-	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, BindingDefinitionType.GET, true);
+	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getContainerBindingDefinition() {
 		return CONTAINER;

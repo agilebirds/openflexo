@@ -24,16 +24,16 @@ import java.lang.reflect.Type;
 import javax.swing.Icon;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.model.validation.ValidationReport;
 
 public class FIBButton extends FIBWidget {
 
 	@Deprecated
-	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	public static enum ButtonType {
 		Trigger, Toggle
@@ -69,7 +69,7 @@ public class FIBButton extends FIBWidget {
 
 	public DataBinding<Object> getAction() {
 		if (action == null) {
-			action = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
+			action = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return action;
 	}
@@ -78,7 +78,7 @@ public class FIBButton extends FIBWidget {
 		if (action != null) {
 			action.setOwner(this);
 			action.setDeclaredType(Void.TYPE);
-			action.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+			action.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.action = action;
 	}
@@ -121,7 +121,7 @@ public class FIBButton extends FIBWidget {
 
 	public DataBinding<Icon> getButtonIcon() {
 		if (buttonIcon == null) {
-			buttonIcon = new DataBinding<Icon>(this, Icon.class, BindingDefinitionType.GET);
+			buttonIcon = new DataBinding<Icon>(this, Icon.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return buttonIcon;
 	}
@@ -130,7 +130,7 @@ public class FIBButton extends FIBWidget {
 		if (buttonIcon != null) {
 			buttonIcon.setOwner(this);
 			buttonIcon.setDeclaredType(Icon.class);
-			buttonIcon.setBindingDefinitionType(BindingDefinitionType.GET);
+			buttonIcon.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.buttonIcon = buttonIcon;
 	}

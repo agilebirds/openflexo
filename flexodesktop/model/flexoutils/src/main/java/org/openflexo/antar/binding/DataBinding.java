@@ -27,7 +27,6 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
@@ -46,7 +45,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Representation of a data binding.<br>
- * A data binding is defined as an symbolic expression defined on a model abstraction (the binding model), which can be evaluated given a
+ * A data binding is defined as a symbolic expression defined on a model abstraction (the binding model), which can be evaluated given a
  * {@link BindingEvaluationContext}.
  * 
  * @author sylvain
@@ -56,6 +55,22 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
 public class DataBinding<T> extends Observable implements StringConvertable<DataBinding> {
 
 	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
+
+	/**
+	 * Defines the access type of a binding, which is generally related to the purpose of the binding
+	 * <ul>
+	 * <li>GET: a binding used to retrieve a data</li>
+	 * <li>SET: a binding used to set a data</li>
+	 * <li>GET_SET: a binding used to retrieve and set a data</li>
+	 * <li>EXECUTE: a binding used to execute some code</li>
+	 * </ul>
+	 */
+	public static enum BindingDefinitionType {
+		GET, /* GET: a binding used to retrieve a data */
+		SET, /* SET: a binding used to set a data */
+		GET_SET, /* GET_SET: a binding used to retrieve and set a data */
+		EXECUTE /* */
+	}
 
 	public static DataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
 
@@ -86,13 +101,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	private Expression expression;
 
 	private Type declaredType = null;
-	private BindingDefinitionType bdType = null;
+	private DataBinding.BindingDefinitionType bdType = null;
 	private boolean mandatory = false;
 
 	private boolean needsParsing = false;
-	private boolean isSuccessfullyParsed = false;
+	private String bindingName;
 
-	public DataBinding(Bindable owner, Type declaredType, BindingDefinitionType bdType) {
+	public DataBinding(Bindable owner, Type declaredType, DataBinding.BindingDefinitionType bdType) {
 		super();
 		setOwner(owner);
 		this.declaredType = declaredType;
@@ -100,7 +115,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		// setBindingDefinition(new BindingDefinition("unnamed", declaredType, bdType, true));
 	}
 
-	public DataBinding(String unparsed, Bindable owner, Type declaredType, BindingDefinitionType bdType) {
+	public DataBinding(String unparsed, Bindable owner, Type declaredType, DataBinding.BindingDefinitionType bdType) {
 		this(owner, declaredType, bdType);
 		setUnparsedBinding(unparsed);
 	}
@@ -200,6 +215,14 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		this.mandatory = mandatory;
 	}
 
+	public String getBindingName() {
+		return bindingName;
+	}
+
+	public void setBindingName(String bindingName) {
+		this.bindingName = bindingName;
+	}
+
 	public Type getDeclaredType() {
 		return declaredType;
 	}
@@ -211,11 +234,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		}
 	}
 
-	public BindingDefinitionType getBindingDefinitionType() {
+	public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 		return bdType;
 	}
 
-	public void setBindingDefinitionType(BindingDefinitionType aBDType) {
+	public void setBindingDefinitionType(DataBinding.BindingDefinitionType aBDType) {
 		bdType = aBDType;
 		if (bindingDefinition != null) {
 			bindingDefinition.setBindingDefinitionType(aBDType);
@@ -317,7 +340,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return false;
 		}
 
-		if (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET) {
+		if (getBindingDefinitionType() == DataBinding.BindingDefinitionType.SET
+				|| getBindingDefinitionType() == DataBinding.BindingDefinitionType.GET_SET) {
 			// Only BindingValue may be settable
 			if (!(getExpression() instanceof BindingValue) || !((BindingValue) getExpression()).isSettable()) {
 				invalidBindingReason = "Invalid binding because binding definition declared as settable and definition cannot satisfy it";
@@ -353,6 +377,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public boolean isUnset() {
 		return unparsedBinding == null && getExpression() == null;
+	}
+
+	public void reset() {
+		unparsedBinding = null;
+		expression = null;
 	}
 
 	public boolean isExpression() {
@@ -412,12 +441,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				expression = ExpressionParser.parse(getUnparsedBinding());
 			} catch (ParseException e1) {
 				// parse error
-				isSuccessfullyParsed = false;
 				expression = null;
 				logger.warning(e1.getMessage());
 				return null;
 			}
-			isSuccessfullyParsed = true;
 			needsParsing = false;
 			analyseExpressionAfterParsing();
 		}

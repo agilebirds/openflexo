@@ -22,7 +22,8 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -54,7 +55,7 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
+	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;

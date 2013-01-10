@@ -1,8 +1,8 @@
 package org.openflexo.foundation.toc;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class ConditionalSection extends ControlSection {
@@ -25,7 +25,7 @@ public class ConditionalSection extends ControlSection {
 
 	public DataBinding<Boolean> getCondition() {
 		if (condition == null) {
-			condition = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+			condition = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return condition;
 	}
@@ -34,7 +34,7 @@ public class ConditionalSection extends ControlSection {
 		if (condition != null) {
 			condition.setOwner(this);
 			condition.setDeclaredType(Boolean.class);
-			condition.setBindingDefinitionType(BindingDefinitionType.GET);
+			condition.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.condition = condition;
 	}

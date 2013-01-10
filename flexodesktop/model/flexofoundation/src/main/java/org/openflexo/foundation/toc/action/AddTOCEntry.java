@@ -28,11 +28,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
@@ -155,7 +155,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	private DataBinding<Object> value;
 
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, false) {
 		@Override
 		public Type getType() {
 			return getModelObjectType().getType();
@@ -306,7 +306,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public DataBinding<Object> getValue() {
 		if (value == null && getFocusedObject() instanceof TOCEntry) {
-			value = new DataBinding<Object>((TOCEntry) getFocusedObject(), getModelObjectType().getType(), BindingDefinitionType.GET);
+			value = new DataBinding<Object>((TOCEntry) getFocusedObject(), getModelObjectType().getType(), DataBinding.BindingDefinitionType.GET);
 		}
 		return value;
 	}
@@ -315,14 +315,14 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		if (value != null && getFocusedObject() instanceof TOCEntry) {
 			value.setOwner((TOCEntry) getFocusedObject());
 			value.setDeclaredType(getModelObjectType().getType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
+			value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.value = value;
 	}
 
 	public DataBinding<Boolean> getCondition() {
 		if (condition == null && getFocusedObject() instanceof TOCEntry) {
-			condition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class, BindingDefinitionType.GET);
+			condition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return condition;
 	}
@@ -331,7 +331,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		if (condition != null && getFocusedObject() instanceof TOCEntry) {
 			condition.setOwner((TOCEntry) getFocusedObject());
 			condition.setDeclaredType(Boolean.class);
-			condition.setBindingDefinitionType(BindingDefinitionType.GET);
+			condition.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			this.condition = condition;
 		}
 	}
@@ -347,7 +347,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public DataBinding<List<?>> getIteration() {
 		if (iteration == null && getFocusedObject() instanceof TOCEntry) {
-			iteration = new DataBinding<List<?>>((TOCEntry) getFocusedObject(), LIST_BINDING_TYPE, BindingDefinitionType.GET);
+			iteration = new DataBinding<List<?>>((TOCEntry) getFocusedObject(), LIST_BINDING_TYPE, DataBinding.BindingDefinitionType.GET);
 		}
 		return iteration;
 	}
@@ -356,14 +356,14 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		if (iteration == null && getFocusedObject() instanceof TOCEntry) {
 			iteration.setOwner((TOCEntry) getFocusedObject());
 			iteration.setDeclaredType(LIST_BINDING_TYPE);
-			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
+			iteration.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.iteration = iteration;
 	}
 
 	public DataBinding<Boolean> getIterationCondition() {
 		if (iterationCondition == null && getFocusedObject() instanceof TOCEntry) {
-			iterationCondition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class, BindingDefinitionType.GET);
+			iterationCondition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return iterationCondition;
 	}
@@ -372,7 +372,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		if (iterationCondition != null && getFocusedObject() instanceof TOCEntry) {
 			iterationCondition.setOwner((TOCEntry) getFocusedObject());
 			iterationCondition.setDeclaredType(Boolean.class);
-			iterationCondition.setBindingDefinitionType(BindingDefinitionType.GET);
+			iterationCondition.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			this.iterationCondition = iterationCondition;
 			inferedBindingModel = null;
 		}

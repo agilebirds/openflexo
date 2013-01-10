@@ -23,7 +23,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -53,7 +54,7 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 
 	private ViewPointDataBinding father;
 
-	private BindingDefinition FATHER = new BindingDefinition("father", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
+	private BindingDefinition FATHER = new BindingDefinition("father", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public BindingDefinition getFatherBindingDefinition() {
 		return FATHER;

@@ -50,8 +50,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
@@ -586,7 +586,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				logger.fine("Build new ExpressionInnerPanel with " + (expression != null ? expression.toString() : "null"));
 			}
 			_representedExpression = expression;
-			innerDataBinding = new DataBinding<Object>(dataBinding.getOwner(), Object.class, BindingDefinitionType.GET);
+			innerDataBinding = new DataBinding<Object>(dataBinding.getOwner(), Object.class, DataBinding.BindingDefinitionType.GET);
 			innerDataBinding.setExpression(_representedExpression);
 			update();
 			// addFocusListeners();

@@ -25,7 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
@@ -130,7 +131,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 	private ViewPointDataBinding fromShape;
 	private ViewPointDataBinding toShape;
 
-	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, BindingDefinitionType.GET, true);
+	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getFromShapeBindingDefinition() {
 		return FROM_SHAPE;
@@ -153,7 +154,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		notifyBindingChanged(this.fromShape);
 	}
 
-	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, BindingDefinitionType.GET, true);
+	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getToShapeBindingDefinition() {
 		return TO_SHAPE;

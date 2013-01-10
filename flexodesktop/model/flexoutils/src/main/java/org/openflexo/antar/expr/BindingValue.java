@@ -26,11 +26,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SettableBindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
@@ -534,7 +534,7 @@ public class BindingValue extends Expression {
 						int argIndex = 0;
 						for (Expression arg : methodCall.args) {
 							DataBinding<?> argDataBinding = new DataBinding<Object>("arg" + argIndex, dataBinding.getOwner(), Object.class,
-									BindingDefinitionType.GET);
+									DataBinding.BindingDefinitionType.GET);
 							argDataBinding.setExpression(arg);
 							argDataBinding.setDeclaredType(argDataBinding.getAnalyzedType());
 							args.add(argDataBinding);

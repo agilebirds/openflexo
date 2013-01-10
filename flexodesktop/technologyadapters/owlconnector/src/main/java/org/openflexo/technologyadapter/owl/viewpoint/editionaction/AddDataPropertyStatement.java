@@ -24,7 +24,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
@@ -131,7 +132,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	private ViewPointDataBinding value;
 
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getDataProperty() != null) {

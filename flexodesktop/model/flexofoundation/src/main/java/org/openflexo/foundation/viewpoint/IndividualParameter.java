@@ -22,8 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -35,7 +36,7 @@ public class IndividualParameter extends InnerModelSlotParameter {
 
 	private ViewPointDataBinding conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET,
 			false);
 
 	private String renderer;

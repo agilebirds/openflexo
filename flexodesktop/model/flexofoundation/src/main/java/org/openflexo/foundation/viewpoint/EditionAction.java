@@ -24,8 +24,9 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -99,7 +100,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	private ViewPointDataBinding conditional;
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 
 	private ActionContainer actionContainer;
 

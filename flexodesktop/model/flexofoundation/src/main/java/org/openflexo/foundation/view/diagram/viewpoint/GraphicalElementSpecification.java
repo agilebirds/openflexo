@@ -5,9 +5,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
@@ -47,13 +48,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		this.patternRole = patternRole;
 		this.feature = feature;
 		this.readOnly = readOnly;
-		BD = new BindingDefinition(feature.getName(), feature.getType(), BindingDefinitionType.GET_SET, mandatory) {
+		BD = new BindingDefinition(feature.getName(), feature.getType(), DataBinding.BindingDefinitionType.GET_SET, mandatory) {
 			@Override
-			public BindingDefinitionType getBindingDefinitionType() {
+			public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 				if (getReadOnly()) {
-					return BindingDefinitionType.GET;
+					return DataBinding.BindingDefinitionType.GET;
 				} else {
-					return BindingDefinitionType.GET_SET;
+					return DataBinding.BindingDefinitionType.GET_SET;
 				}
 			}
 		};

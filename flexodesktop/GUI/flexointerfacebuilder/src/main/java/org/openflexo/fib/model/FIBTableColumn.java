@@ -27,10 +27,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 
 public abstract class FIBTableColumn extends FIBModelObject {
 
@@ -48,18 +48,18 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	@Deprecated
-	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
 	private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
-			BindingDefinitionType.EXECUTE, false);
+			DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	private DataBinding<Object> data;
 	private DataBinding<String> format;
@@ -122,7 +122,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	public DataBinding<Object> getData() {
 		if (data == null) {
-			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return data;
 	}
@@ -131,7 +131,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (data != null) {
 			data.setOwner(this);
 			data.setDeclaredType(Object.class);
-			data.setBindingDefinitionType(BindingDefinitionType.GET);
+			data.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.data = data;
 	}
@@ -246,7 +246,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	public DataBinding<String> getFormat() {
 		if (format == null) {
-			format = new DataBinding<String>(formatter, String.class, BindingDefinitionType.GET);
+			format = new DataBinding<String>(formatter, String.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return format;
 	}
@@ -255,7 +255,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (format != null) {
 			format.setOwner(formatter);
 			format.setDeclaredType(String.class);
-			format.setBindingDefinitionType(BindingDefinitionType.GET);
+			format.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.format = format;
 	}
@@ -318,7 +318,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	public DataBinding<String> getTooltip() {
 		if (tooltip == null) {
-			tooltip = new DataBinding<String>(this, String.class, BindingDefinitionType.GET);
+			tooltip = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return tooltip;
 	}
@@ -327,14 +327,14 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (tooltip != null) {
 			tooltip.setOwner(this);
 			tooltip.setDeclaredType(String.class);
-			tooltip.setBindingDefinitionType(BindingDefinitionType.GET);
+			tooltip.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.tooltip = tooltip;
 	}
 
 	public DataBinding<Color> getColor() {
 		if (color == null) {
-			color = new DataBinding<Color>(this, Color.class, BindingDefinitionType.GET);
+			color = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return color;
 	}
@@ -343,14 +343,14 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (color != null) {
 			color.setOwner(this);
 			color.setDeclaredType(Color.class);
-			color.setBindingDefinitionType(BindingDefinitionType.GET);
+			color.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.color = color;
 	}
 
 	public DataBinding<Color> getBgColor() {
 		if (bgColor == null) {
-			bgColor = new DataBinding<Color>(this, Color.class, BindingDefinitionType.GET);
+			bgColor = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return bgColor;
 	}
@@ -359,14 +359,14 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (bgColor != null) {
 			bgColor.setOwner(this);
 			bgColor.setDeclaredType(Color.class);
-			bgColor.setBindingDefinitionType(BindingDefinitionType.GET);
+			bgColor.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.bgColor = bgColor;
 	}
 
 	public DataBinding<Void> getValueChangedAction() {
 		if (valueChangedAction == null) {
-			valueChangedAction = new DataBinding<Void>(this, Void.class, BindingDefinitionType.EXECUTE);
+			valueChangedAction = new DataBinding<Void>(this, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return valueChangedAction;
 	}
@@ -375,7 +375,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (valueChangedAction != null) {
 			valueChangedAction.setOwner(this);
 			valueChangedAction.setDeclaredType(Void.class);
-			valueChangedAction.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+			valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.valueChangedAction = valueChangedAction;
 	}

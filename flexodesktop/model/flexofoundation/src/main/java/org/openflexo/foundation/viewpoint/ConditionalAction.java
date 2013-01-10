@@ -22,7 +22,8 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -53,7 +54,7 @@ public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	private ViewPointDataBinding condition;
 
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, true);
+	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getConditionBindingDefinition() {
 		return CONDITION;

@@ -23,7 +23,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -56,7 +57,7 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
+	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;

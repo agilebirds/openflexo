@@ -33,10 +33,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
@@ -58,7 +58,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public static Color DISABLED_COLOR = Color.GRAY;
 
 	@Deprecated
-	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
 	private BindingDefinition DATA;
 
@@ -67,7 +67,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	@Deprecated
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
-			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET, false);
+			DATA = new BindingDefinition("data", getDefaultDataClass(), DataBinding.BindingDefinitionType.GET, false);
 		}
 		return DATA;
 	}
@@ -719,7 +719,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public DataBinding<?> getData() {
 		if (data == null) {
-			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET) {
+			data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET) {
 				@Override
 				public Type getDeclaredType() {
 					return getDataType();
@@ -744,14 +744,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public DataBinding<Boolean> getVisible() {
 		if (visible == null) {
-			visible = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+			visible = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return visible;
 	}
 
 	public void setVisible(DataBinding<Boolean> visible) {
 		if (visible != null) {
-			visible = new DataBinding<Boolean>(visible.getUnparsedBinding(), this, Boolean.class, BindingDefinitionType.GET);
+			visible = new DataBinding<Boolean>(visible.getUnparsedBinding(), this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		this.visible = visible;
 	}

@@ -2,8 +2,8 @@ package org.openflexo.foundation.toc;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
@@ -77,7 +77,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 
 	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new DataBinding<Object>(this, getModelObjectType().getType(), BindingDefinitionType.GET);
+			value = new DataBinding<Object>(this, getModelObjectType().getType(), DataBinding.BindingDefinitionType.GET);
 		}
 		return value;
 	}
@@ -86,7 +86,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		if (value != null) {
 			value.setOwner(this);
 			value.setDeclaredType(getModelObjectType().getType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
+			value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.value = value;
 	}

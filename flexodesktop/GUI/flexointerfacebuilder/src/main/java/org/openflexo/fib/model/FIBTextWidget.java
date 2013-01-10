@@ -3,13 +3,13 @@ package org.openflexo.fib.model;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 
 public abstract class FIBTextWidget extends FIBWidget {
 
 	@Deprecated
-	public static BindingDefinition EDITABLE = new BindingDefinition("editable", Boolean.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition EDITABLE = new BindingDefinition("editable", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public static enum Parameters implements FIBModelAttribute {
 		editable;
@@ -22,7 +22,7 @@ public abstract class FIBTextWidget extends FIBWidget {
 
 	public DataBinding<Boolean> getEditable() {
 		if (editable == null) {
-			editable = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+			editable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return editable;
 	}
@@ -31,7 +31,7 @@ public abstract class FIBTextWidget extends FIBWidget {
 		if (editable != null) {
 			editable.setOwner(this);
 			editable.setDeclaredType(Boolean.class);
-			editable.setBindingDefinitionType(BindingDefinitionType.GET);
+			editable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.editable = editable;
 	}

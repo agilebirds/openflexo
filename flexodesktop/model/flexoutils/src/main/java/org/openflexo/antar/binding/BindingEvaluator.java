@@ -1,6 +1,6 @@
 package org.openflexo.antar.binding;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
 import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
@@ -37,7 +37,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	private BindingEvaluator(Object object) {
 		this.object = object;
-		bindingDefinition = new BindingDefinition("object", object.getClass(), BindingDefinitionType.GET, true);
+		bindingDefinition = new BindingDefinition("object", object.getClass(), DataBinding.BindingDefinitionType.GET, true);
 		bindingModel = new BindingModel();
 		bindingModel.addToBindingVariables(new BindingVariable("object", object.getClass()));
 	}
@@ -101,7 +101,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException {
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
 		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		DataBinding binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, BindingDefinitionType.GET);
+		DataBinding binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, DataBinding.BindingDefinitionType.GET);
 		binding.setBindingDefinition(bindingDefinition);
 		System.out.println("Binding = " + binding + " valid=" + binding.isValid() + " as " + binding.getClass());
 		if (!binding.isValid()) {

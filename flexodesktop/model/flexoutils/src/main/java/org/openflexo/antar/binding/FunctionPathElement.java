@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 
 /**
  * Modelize a compound path element in a binding path, which is the symbolic representation of a call to a function and with a given amount
@@ -49,13 +49,13 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 		for (Function.FunctionArgument arg : function.getArguments()) {
 			DataBinding<?> parameter = getParameter(arg);
 			if (parameter == null) {
-				parameter = new DataBinding<Object>(bindable, arg.getArgumentType(), BindingDefinitionType.GET);
+				parameter = new DataBinding<Object>(bindable, arg.getArgumentType(), DataBinding.BindingDefinitionType.GET);
 				parameter.setUnparsedBinding("");
 				setParameter(arg, parameter);
 			} else {
 				parameter.setOwner(bindable);
 				parameter.setDeclaredType(arg.getArgumentType());
-				parameter.setBindingDefinitionType(BindingDefinitionType.GET);
+				parameter.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 		}
 	}

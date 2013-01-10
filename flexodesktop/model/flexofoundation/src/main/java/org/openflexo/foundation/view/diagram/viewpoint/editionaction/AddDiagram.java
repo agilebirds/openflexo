@@ -23,7 +23,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -64,7 +65,7 @@ public class AddDiagram extends DiagramAction<View> {
 
 	private ViewPointDataBinding diagramName;
 
-	private BindingDefinition DIAGRAM_NAME = new BindingDefinition("diagramName", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DIAGRAM_NAME = new BindingDefinition("diagramName", String.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public BindingDefinition getDiagramNameBindingDefinition() {
 		return DIAGRAM_NAME;

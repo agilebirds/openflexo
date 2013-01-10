@@ -44,13 +44,9 @@ public class BindingDefinition extends Observable {
 
 	private boolean isMandatory;
 
-	private BindingDefinitionType _bindingDefinitionType = BindingDefinitionType.GET;
+	private DataBinding.BindingDefinitionType _bindingDefinitionType = DataBinding.BindingDefinitionType.GET;
 
-	public static enum BindingDefinitionType {
-		GET, SET, GET_SET, EXECUTE
-	}
-
-	public BindingDefinition(String variableName, Type type, BindingDefinitionType bindingType, boolean mandatory) {
+	public BindingDefinition(String variableName, Type type, DataBinding.BindingDefinitionType bindingType, boolean mandatory) {
 		super();
 		this.variableName = variableName;
 		this.type = type;
@@ -91,7 +87,7 @@ public class BindingDefinition extends Observable {
 	}
 
 	public boolean getIsSettable() {
-		return getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET;
+		return getBindingDefinitionType() == DataBinding.BindingDefinitionType.SET || getBindingDefinitionType() == DataBinding.BindingDefinitionType.GET_SET;
 	}
 
 	public Type getType() {
@@ -143,11 +139,11 @@ public class BindingDefinition extends Observable {
 
 	}
 
-	public BindingDefinitionType getBindingDefinitionType() {
+	public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 		return _bindingDefinitionType;
 	}
 
-	public void setBindingDefinitionType(BindingDefinitionType bdType) {
+	public void setBindingDefinitionType(DataBinding.BindingDefinitionType bdType) {
 		_bindingDefinitionType = bdType;
 	}
 

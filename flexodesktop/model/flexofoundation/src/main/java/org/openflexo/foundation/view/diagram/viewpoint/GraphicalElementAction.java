@@ -22,8 +22,9 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
@@ -68,7 +69,7 @@ public class GraphicalElementAction extends EditionPatternObject {
 		this.graphicalElementPatternRole = graphicalElementPatternRole;
 	}
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;

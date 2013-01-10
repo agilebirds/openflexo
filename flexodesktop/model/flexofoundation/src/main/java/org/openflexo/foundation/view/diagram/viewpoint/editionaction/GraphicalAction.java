@@ -25,7 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -52,7 +53,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private ViewPointDataBinding value;
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getGraphicalFeature() != null) {
@@ -170,7 +171,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, BindingDefinitionType.GET, true);
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, DataBinding.BindingDefinitionType.GET, true);
 
 	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;

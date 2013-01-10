@@ -24,19 +24,17 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends EditionSchemeObject implements InspectorBindingAttribute {
+public abstract class EditionSchemeParameter extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
@@ -96,8 +94,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public abstract WidgetType getWidget();
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET,
+			false);
+	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, DataBinding.BindingDefinitionType.GET,
+			false) {
 		@Override
 		public Type getType() {
 			return EditionSchemeParameter.this.getType();
@@ -211,8 +211,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
-				: null;
+		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
 		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {

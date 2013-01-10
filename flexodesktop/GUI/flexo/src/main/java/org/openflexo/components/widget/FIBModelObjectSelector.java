@@ -44,7 +44,7 @@ import javax.swing.event.DocumentListener;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
@@ -102,7 +102,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 
 	private boolean showReset = true;
 
-	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, org.openflexo.antar.binding.DataBinding.BindingDefinitionType.GET, false);
 
 	public FIBModelObjectSelector(T editedObject) {
 		super(editedObject);

@@ -20,8 +20,9 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -64,7 +65,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 
 	private ViewPointDataBinding value;
 
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {

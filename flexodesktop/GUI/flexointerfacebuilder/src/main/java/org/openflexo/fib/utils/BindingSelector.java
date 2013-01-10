@@ -53,7 +53,6 @@ import javax.swing.event.DocumentListener;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingDefinitionTypeChanged;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
@@ -61,6 +60,7 @@ import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.JavaBindingFactory;
@@ -437,7 +437,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				newEditionMode = EditionMode.STATIC_BINDING;
 			} else if (object.isBindingValue()) {
 				if (((BindingValue) object.getExpression()).isCompoundBinding() || getBindingDefinition() != null
-						&& getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+						&& getBindingDefinition().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE) {
 					newEditionMode = EditionMode.COMPOUND_BINDING;
 				} else if (oldEditionMode != EditionMode.NORMAL_BINDING && oldEditionMode != EditionMode.COMPOUND_BINDING) {
 					newEditionMode = EditionMode.NORMAL_BINDING;
@@ -559,7 +559,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	public boolean areBindingExpressionsAllowed() {
 		if (getBindingDefinition() != null
-				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
+				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE)) {
 			return false;
 		}
 		return _allowsBindingExpressions;
@@ -577,7 +577,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	public boolean areStaticValuesAllowed() {
 		if (getBindingDefinition() != null
-				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
+				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE)) {
 			return false;
 		}
 		return _allowsStaticValues;
@@ -1347,7 +1347,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		Bindable testBindable = new TestBindable();
 
 		BindingFactory factory = new JavaBindingFactory();
-		DataBinding binding = new DataBinding<String>("aString.toString", testBindable, String.class, BindingDefinitionType.GET);
+		DataBinding binding = new DataBinding<String>("aString.toString", testBindable, String.class, DataBinding.BindingDefinitionType.GET);
 
 		BindingSelector _selector = new BindingSelector(null) {
 			@Override

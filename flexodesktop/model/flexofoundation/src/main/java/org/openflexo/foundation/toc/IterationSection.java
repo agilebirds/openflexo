@@ -5,12 +5,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -61,7 +61,7 @@ public class IterationSection extends ControlSection {
 
 	public DataBinding<List<?>> getIteration() {
 		if (iteration == null) {
-			iteration = new DataBinding<List<?>>(this, LIST_BINDING_TYPE, BindingDefinitionType.GET);
+			iteration = new DataBinding<List<?>>(this, LIST_BINDING_TYPE, DataBinding.BindingDefinitionType.GET);
 		}
 		return iteration;
 	}
@@ -70,7 +70,7 @@ public class IterationSection extends ControlSection {
 		if (iteration != null) {
 			iteration.setOwner(this);
 			iteration.setDeclaredType(LIST_BINDING_TYPE);
-			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
+			iteration.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.iteration = iteration;
 		rebuildInferedBindingModel();
@@ -78,7 +78,7 @@ public class IterationSection extends ControlSection {
 
 	public DataBinding<Boolean> getCondition() {
 		if (condition == null) {
-			condition = new DataBinding<Boolean>(conditionalOwner, Boolean.class, BindingDefinitionType.GET);
+			condition = new DataBinding<Boolean>(conditionalOwner, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return condition;
 	}
@@ -87,7 +87,7 @@ public class IterationSection extends ControlSection {
 		if (condition != null) {
 			condition.setOwner(conditionalOwner);
 			condition.setDeclaredType(Boolean.class);
-			condition.setBindingDefinitionType(BindingDefinitionType.GET);
+			condition.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.condition = condition;
 	}

@@ -22,8 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -35,7 +36,7 @@ public class ObjectPropertyParameter extends PropertyParameter {
 
 	private ViewPointDataBinding rangeValue;
 
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public ObjectPropertyParameter(ViewPointBuilder builder) {
 		super(builder);

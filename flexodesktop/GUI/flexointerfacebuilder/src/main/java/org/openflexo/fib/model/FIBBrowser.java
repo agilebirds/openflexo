@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
@@ -48,7 +48,7 @@ public class FIBBrowser extends FIBWidget {
 	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", Object.class, BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", Object.class, DataBinding.BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
@@ -56,7 +56,7 @@ public class FIBBrowser extends FIBWidget {
 	@Deprecated
 	public BindingDefinition getRootBindingDefinition() {
 		if (ROOT == null) {
-			ROOT = new BindingDefinition("root", getIteratorClass(), BindingDefinitionType.GET, false);
+			ROOT = new BindingDefinition("root", getIteratorClass(), DataBinding.BindingDefinitionType.GET, false);
 		}
 		return ROOT;
 	}
@@ -142,7 +142,7 @@ public class FIBBrowser extends FIBWidget {
 
 	public DataBinding<Object> getRoot() {
 		if (root == null) {
-			root = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET);
+			root = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET);
 		}
 		return root;
 	}
@@ -151,14 +151,14 @@ public class FIBBrowser extends FIBWidget {
 		if (root != null) {
 			root.setOwner(this);
 			root.setDeclaredType(getIteratorClass());
-			root.setBindingDefinitionType(BindingDefinitionType.GET);
+			root.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.root = root;
 	}
 
 	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
+			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
@@ -167,7 +167,7 @@ public class FIBBrowser extends FIBWidget {
 		if (selected != null) {
 			selected.setOwner(this);
 			selected.setDeclaredType(getIteratorClass());
-			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
 		}
 		this.selected = selected;
 	}

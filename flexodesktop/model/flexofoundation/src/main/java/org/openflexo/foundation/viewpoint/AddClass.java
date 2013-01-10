@@ -23,8 +23,7 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -34,7 +33,6 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyClass> extends
@@ -44,8 +42,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	private String ontologyClassURI = null;
 
-	private ViewPointDataBinding className;
-	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
+	private DataBinding<String> className;
 
 	public AddClass(ViewPointBuilder builder) {
 		super(builder);
@@ -119,21 +116,21 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		this.ontologyClassURI = ontologyClassURI;
 	}
 
-	public BindingDefinition getClassNameBindingDefinition() {
-		return CLASS_NAME;
-	}
-
-	public ViewPointDataBinding getClassName() {
+	public DataBinding<String> getClassName() {
 		if (className == null) {
-			className = new ViewPointDataBinding(this, EditionActionBindingAttribute.className, getClassNameBindingDefinition());
+			className = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			className.setBindingName("className");
 		}
 		return className;
 	}
 
-	public void setClassName(ViewPointDataBinding className) {
-		className.setOwner(this);
-		className.setBindingAttribute(EditionActionBindingAttribute.className);
-		className.setBindingDefinition(getClassNameBindingDefinition());
+	public void setClassName(DataBinding<String> className) {
+		if (className != null) {
+			className.setOwner(this);
+			className.setDeclaredType(String.class);
+			className.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			className.setBindingName("className");
+		}
 		this.className = className;
 	}
 
@@ -178,8 +175,8 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 			@Override
 			protected void fixAction() {
-				AddClass action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				AddClass<?, ?, ?> action = getObject();
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -191,13 +188,8 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddClass object) {
+		public DataBinding<String> getBinding(AddClass object) {
 			return object.getClassName();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddClass object) {
-			return object.getClassNameBindingDefinition();
 		}
 
 	}

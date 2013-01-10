@@ -24,8 +24,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
@@ -76,7 +76,7 @@ public class FIBList extends FIBMultipleValues {
 
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
@@ -116,7 +116,7 @@ public class FIBList extends FIBMultipleValues {
 
 	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorClass(), BindingDefinitionType.GET_SET);
+			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
@@ -125,7 +125,7 @@ public class FIBList extends FIBMultipleValues {
 		if (selected != null) {
 			selected.setOwner(this);
 			selected.setDeclaredType(getIteratorClass());
-			selected.setBindingDefinitionType(BindingDefinitionType.GET_SET);
+			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
 		}
 		this.selected = selected;
 	}

@@ -25,9 +25,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.CompoundIssue;
@@ -41,7 +42,6 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		AssignableAction<M, MM, EditionPatternInstance> {
@@ -61,53 +61,33 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		return EditionActionType.AddEditionPattern;
 	}
 
-	/*@Override
-	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
-	}*/
-
 	public View getView(EditionSchemeAction action) {
-		return (View) getView().getBindingValue(action);
-	}
-
-	/*@Override
-	public EditionPatternPatternRole getPatternRole() {
 		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
+			return getView().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
-	}*/
-
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddEditionPattern)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(EditionPatternPatternRole patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
-
-	private ViewPointDataBinding view;
-
-	private BindingDefinition VIEW = new BindingDefinition("view", View.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getViewBindingDefinition() {
-		return VIEW;
+		return null;
 	}
 
-	public ViewPointDataBinding getView() {
+	private DataBinding<View> view;
+
+	public DataBinding<View> getView() {
 		if (view == null) {
-			view = new ViewPointDataBinding(this, EditionActionBindingAttribute.view, getViewBindingDefinition());
+			view = new DataBinding<View>(this, View.class, DataBinding.BindingDefinitionType.GET);
+			view.setBindingName("view");
 		}
 		return view;
 	}
 
-	public void setView(ViewPointDataBinding aView) {
+	public void setView(DataBinding<View> aView) {
 		if (aView != null) {
 			aView.setOwner(this);
-			aView.setBindingAttribute(EditionActionBindingAttribute.view);
-			aView.setBindingDefinition(getViewBindingDefinition());
+			aView.setBindingName("view");
+			aView.setDeclaredType(View.class);
+			aView.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.view = aView;
 	}
@@ -242,8 +222,7 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 		private EditionSchemeParameter param;
 		private String paramName;
-		private ViewPointDataBinding value;
-		private BindingDefinition BD;
+		private DataBinding<Object> value;
 
 		// Use it only for deserialization
 		public AddEditionPatternParameter(ViewPointBuilder builder) {
@@ -253,7 +232,6 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		public AddEditionPatternParameter(EditionSchemeParameter param) {
 			super(null);
 			this.param = param;
-			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
 		}
 
 		public EditionSchemeParameter getParameter() {
@@ -276,28 +254,27 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 			return null;
 		}
 
-		public ViewPointDataBinding getValue() {
+		public DataBinding<Object> getValue() {
 			if (value == null) {
-				value = new ViewPointDataBinding(this, param, getBindingDefinition());
-			}
-			if (value.getBindingDefinition() == null) {
-				value.setBindingDefinition(getBindingDefinition());
+				value = new DataBinding<Object>(this, param.getType(), DataBinding.BindingDefinitionType.GET);
+				value.setBindingName(param.getName());
 			}
 			return value;
 		}
 
-		public void setValue(ViewPointDataBinding value) {
+		public void setValue(DataBinding<Object> value) {
 			if (value != null) {
 				value.setOwner(this);
-				value.setBindingAttribute(param);
-				value.setBindingDefinition(getBindingDefinition());
+				value.setBindingName(param.getName());
+				value.setDeclaredType(param.getType());
+				value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.value = value;
 		}
 
 		public Object evaluateParameterValue(EditionSchemeAction action) {
 			if (getValue() == null || getValue().isUnset()) {
-				/*logger.info("Le binding for " + param.getName() + " is not set");
+				/*logger.info("Binding for " + param.getName() + " is not set");
 				if (param instanceof URIParameter) {
 					logger.info("C'est une URI, de base " + ((URIParameter) param).getBaseURI());
 					logger.info("Je retourne " + ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action));
@@ -310,19 +287,18 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 				}*/
 				return null;
 			} else if (getValue().isValid()) {
-				return getValue().getBindingValue(action);
+				try {
+					return getValue().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
+				return null;
 			} else {
-				logger.warning("Invalid binding: " + getValue());
-				getValue().getBinding().debugIsBindingValid();
+				logger.warning("Invalid binding: " + getValue() + " Reason: " + getValue().invalidBindingReason());
 			}
 			return null;
-		}
-
-		public BindingDefinition getBindingDefinition() {
-			if (BD == null && getParam() != null) {
-				BD = new BindingDefinition(getParam().getName(), getParam().getType(), BindingDefinitionType.GET, true);
-			}
-			return BD;
 		}
 
 		@Override
@@ -427,8 +403,7 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 							}
 						} else if (!p.getValue().isValid()) {
 							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
-									+ p.action.getFullyQualifiedName() + ". Reason follows.");
-							p.getValue().getBinding().debugIsBindingValid();
+									+ p.action.getFullyQualifiedName() + ". Reason: " + p.getValue().invalidBindingReason());
 							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + p.getParam().getName()));
 						}
 					}
@@ -452,13 +427,8 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddEditionPattern object) {
+		public DataBinding<View> getBinding(AddEditionPattern object) {
 			return object.getView();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddEditionPattern object) {
-			return object.getViewBindingDefinition();
 		}
 
 	}

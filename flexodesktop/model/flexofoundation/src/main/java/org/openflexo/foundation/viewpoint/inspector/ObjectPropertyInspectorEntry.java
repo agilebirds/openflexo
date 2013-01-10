@@ -20,8 +20,9 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -39,7 +40,7 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private ViewPointDataBinding rangeValue;
 
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public ObjectPropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);

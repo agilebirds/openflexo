@@ -6,7 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -199,7 +199,7 @@ public class TestBinding extends TestCase {
 
 		System.out.println("Evaluate " + bindingPath);
 
-		DataBinding<?> dataBinding = new DataBinding<Object>(bindingPath, BINDING_CONTEXT, expectedType, BindingDefinitionType.GET);
+		DataBinding<?> dataBinding = new DataBinding<Object>(bindingPath, BINDING_CONTEXT, expectedType, DataBinding.BindingDefinitionType.GET);
 
 		/*	BINDING_FACTORY.setBindable(BINDING_CONTEXT);
 			AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath);

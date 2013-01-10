@@ -28,12 +28,12 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -162,7 +162,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 				bindingModel.removeFromBindingVariables(bindingModel.bindingVariableNamed(variableName));
 			}
 			bindingModel.addToBindingVariables(newPathElement);
-			DataBinding<String> db = new DataBinding<String>(expression, this, String.class, BindingDefinitionType.GET);
+			DataBinding<String> db = new DataBinding<String>(expression, this, String.class, DataBinding.BindingDefinitionType.GET);
 			renderers.put(type, db);
 		}
 	}

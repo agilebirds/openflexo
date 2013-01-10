@@ -25,8 +25,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
@@ -49,18 +50,18 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 		data, conditional, domainValue, rangeValue, parentClassValue, conceptValue
 	}
 
-	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
 
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
-			DATA = new BindingDefinition("data", getType(), BindingDefinitionType.GET_SET, true) {
+			DATA = new BindingDefinition("data", getType(), DataBinding.BindingDefinitionType.GET_SET, true) {
 				@Override
-				public BindingDefinitionType getBindingDefinitionType() {
+				public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 					if (getIsReadOnly()) {
-						return BindingDefinitionType.GET;
+						return DataBinding.BindingDefinitionType.GET;
 					} else {
-						return BindingDefinitionType.GET_SET;
+						return DataBinding.BindingDefinitionType.GET_SET;
 					}
 				}
 

@@ -23,7 +23,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -76,7 +77,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
@@ -98,7 +99,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private ViewPointDataBinding restrictionType;
 
-	private BindingDefinition RESTRICTION_TYPE = new BindingDefinition("restrictionType", RestrictionType.class, BindingDefinitionType.GET,
+	private BindingDefinition RESTRICTION_TYPE = new BindingDefinition("restrictionType", RestrictionType.class, DataBinding.BindingDefinitionType.GET,
 			false);
 
 	public BindingDefinition getRestrictionTypeBindingDefinition() {
@@ -130,7 +131,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private ViewPointDataBinding cardinality;
 
-	private BindingDefinition CARDINALITY = new BindingDefinition("cardinality", Integer.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CARDINALITY = new BindingDefinition("cardinality", Integer.class, DataBinding.BindingDefinitionType.GET, false);
 
 	public BindingDefinition getCardinalityBindingDefinition() {
 		return CARDINALITY;
