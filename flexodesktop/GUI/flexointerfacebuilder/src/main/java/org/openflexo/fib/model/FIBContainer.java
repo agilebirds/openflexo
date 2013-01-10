@@ -155,7 +155,6 @@ public abstract class FIBContainer extends FIBComponent {
 		// logger.info(toString()+" append "+container);
 
 		// if (this instanceof FIBTab && ())
-
 		List<FIBComponent> addedComponents = new ArrayList<FIBComponent>();
 		List<FIBComponent> mergedComponents = new ArrayList<FIBComponent>();
 		for (int i = container.getSubComponents().size() - 1; i >= 0; i--) {
@@ -284,6 +283,9 @@ public abstract class FIBContainer extends FIBComponent {
 										&& startIndex.equals(child.getIndex())) && !mergedComponents.contains(child);
 						if (insert) {
 							i++;
+							overridingComponent = getSubComponentNamed(child.getName());
+							insert &= overridingComponent == null || overridingComponent.getParameter("hidden") != null
+									&& overridingComponent.getParameter("hidden").equalsIgnoreCase("true");
 						} else {
 							break;
 						}
