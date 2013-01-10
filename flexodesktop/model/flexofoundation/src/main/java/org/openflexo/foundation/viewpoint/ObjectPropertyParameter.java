@@ -25,18 +25,20 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ObjectPropertyParameter extends PropertyParameter {
 
 	private String rangeURI;
 
-	private ViewPointDataBinding rangeValue;
+	private DataBinding<IFlexoOntologyClass> rangeValue;
 
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET, false);
+	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class,
+			DataBinding.BindingDefinitionType.GET, false);
 
 	public ObjectPropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -72,18 +74,20 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		return RANGE_VALUE;
 	}
 
-	public ViewPointDataBinding getRangeValue() {
+	public DataBinding<IFlexoOntologyClass> getRangeValue() {
 		if (rangeValue == null) {
-			rangeValue = new ViewPointDataBinding(this, ParameterBindingAttribute.rangeValue, getRangeValueBindingDefinition());
+			rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			rangeValue.setBindingName("rangeValue");
 		}
 		return rangeValue;
 	}
 
-	public void setRangeValue(ViewPointDataBinding rangeValue) {
+	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue) {
 		if (rangeValue != null) {
 			rangeValue.setOwner(this);
-			rangeValue.setBindingAttribute(ParameterBindingAttribute.rangeValue);
-			rangeValue.setBindingDefinition(getRangeValueBindingDefinition());
+			rangeValue.setBindingName("rangeValue");
+			rangeValue.setDeclaredType(IFlexoOntologyClass.class);
+			rangeValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.rangeValue = rangeValue;
 	}
@@ -105,7 +109,13 @@ public class ObjectPropertyParameter extends PropertyParameter {
 
 	public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
 		if (getRangeValue().isValid()) {
-			return (IFlexoOntologyClass) getRangeValue().getBindingValue(parameterRetriever);
+			try {
+				return getRangeValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

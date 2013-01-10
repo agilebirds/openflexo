@@ -30,8 +30,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
@@ -57,7 +58,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
@@ -713,7 +713,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (EditionPattern ep : getEditionPatterns()) {
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
+			// _bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
+			_bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), ep));
 		}
 	}
 
@@ -817,8 +818,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		for (FlexoMetaModel<?> mm : getAllReferencedMetaModels()) {
 			if (mm != null) {
 				Object o = mm.getObject(uri);
-				if (o != null)
+				if (o != null) {
 					return o;
+				}
 			}
 		}
 		return null;
@@ -953,8 +955,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 */
 	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
-			if (m.getURI().equals(metaModelURI))
+			if (m.getURI().equals(metaModelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}

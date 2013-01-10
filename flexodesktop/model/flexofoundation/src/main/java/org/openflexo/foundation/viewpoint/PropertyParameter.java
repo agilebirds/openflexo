@@ -25,21 +25,22 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class PropertyParameter extends InnerModelSlotParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
 
-	private ViewPointDataBinding domainValue;
+	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET,
-			false);
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class,
+			DataBinding.BindingDefinitionType.GET, false);
 
 	public PropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -71,22 +72,20 @@ public class PropertyParameter extends InnerModelSlotParameter {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getDomainValueBindingDefinition() {
-		return DOMAIN_VALUE;
-	}
-
-	public ViewPointDataBinding getDomainValue() {
+	public DataBinding<IFlexoOntologyClass> getDomainValue() {
 		if (domainValue == null) {
-			domainValue = new ViewPointDataBinding(this, ParameterBindingAttribute.domainValue, getDomainValueBindingDefinition());
+			domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			domainValue.setBindingName("domainValue");
 		}
 		return domainValue;
 	}
 
-	public void setDomainValue(ViewPointDataBinding domainValue) {
+	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
 		if (domainValue != null) {
 			domainValue.setOwner(this);
-			domainValue.setBindingAttribute(ParameterBindingAttribute.domainValue);
-			domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+			domainValue.setBindingName("domainValue");
+			domainValue.setDeclaredType(IFlexoOntologyClass.class);
+			domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.domainValue = domainValue;
 	}
@@ -108,7 +107,13 @@ public class PropertyParameter extends InnerModelSlotParameter {
 
 	public IFlexoOntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
 		if (getDomainValue().isValid()) {
-			return (IFlexoOntologyClass) getDomainValue().getBindingValue(parameterRetriever);
+			try {
+				return getDomainValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -123,7 +128,7 @@ public class PropertyParameter extends InnerModelSlotParameter {
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
 		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
-		}
+	}
 
 	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;

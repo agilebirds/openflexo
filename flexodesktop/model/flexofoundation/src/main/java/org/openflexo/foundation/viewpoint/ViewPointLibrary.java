@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
@@ -39,7 +40,6 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
@@ -81,7 +81,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 			calc.loadWhenUnloaded();
 		}*/
 
-		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 		// StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}

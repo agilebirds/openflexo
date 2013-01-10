@@ -22,16 +22,16 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ListParameter extends EditionSchemeParameter {
 
@@ -40,21 +40,10 @@ public class ListParameter extends EditionSchemeParameter {
 	}
 
 	private ListType listType;
-	private ViewPointDataBinding list;
+	private DataBinding<List<?>> list;
 
 	public ListParameter(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	private BindingDefinition LIST = new BindingDefinition("list", Object.class, DataBinding.BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return ListParameter.this.getType();
-		};
-	};
-
-	public BindingDefinition getListBindingDefinition() {
-		return LIST;
 	}
 
 	@Override
@@ -89,25 +78,32 @@ public class ListParameter extends EditionSchemeParameter {
 		this.listType = listType;
 	}
 
-	public ViewPointDataBinding getList() {
+	public DataBinding<List<?>> getList() {
 		if (list == null) {
-			list = new ViewPointDataBinding(this, ParameterBindingAttribute.list, getListBindingDefinition());
+			list = new DataBinding<List<?>>(this, getType(), BindingDefinitionType.GET);
 		}
 		return list;
 	}
 
-	public void setList(ViewPointDataBinding list) {
+	public void setList(DataBinding<List<?>> list) {
 		if (list != null) {
 			list.setOwner(this);
-			list.setBindingAttribute(ParameterBindingAttribute.defaultValue);
-			list.setBindingDefinition(getDefaultValueBindingDefinition());
+			list.setBindingName("list");
+			list.setDeclaredType(getType());
+			list.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.list = list;
 	}
 
 	public Object getList(EditionSchemeAction<?> action) {
 		if (getList().isValid()) {
-			return getList().getBindingValue(action);
+			try {
+				return getList().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

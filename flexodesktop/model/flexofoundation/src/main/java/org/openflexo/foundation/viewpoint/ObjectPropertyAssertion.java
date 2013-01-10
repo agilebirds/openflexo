@@ -21,16 +21,15 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ObjectPropertyAssertion extends AbstractAssertion {
 
@@ -63,30 +62,35 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		return getEditionScheme().getBindingModel();
 	}
 
-	private ViewPointDataBinding object;
+	private DataBinding<IFlexoOntologyConcept> object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, false);
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
-	}
-
-	public ViewPointDataBinding getObject() {
+	public DataBinding<IFlexoOntologyConcept> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<IFlexoOntologyConcept>(this, IFlexoOntologyConcept.class, BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<IFlexoOntologyConcept> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(IFlexoOntologyConcept.class);
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
 	public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action) {
-		Object value = getObject().getBindingValue(action);
+		Object value = null;
+		try {
+			value = getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		if (value instanceof IFlexoOntologyConcept) {
 			return (IFlexoOntologyConcept) value;
 		}
@@ -94,7 +98,14 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	}
 
 	public Object getValue(EditionSchemeAction action) {
-		return getObject().getBindingValue(action);
+		try {
+			return getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

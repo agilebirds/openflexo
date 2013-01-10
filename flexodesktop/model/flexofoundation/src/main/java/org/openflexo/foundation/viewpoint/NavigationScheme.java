@@ -19,22 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public class NavigationScheme extends AbstractActionScheme {
 
-	private ViewPointDataBinding targetObject;
-
-	public static enum NavigationSchemeBindingAttribute implements InspectorBindingAttribute {
-		targetObject
-	}
+	private DataBinding<Object> targetObject;
 
 	public NavigationScheme(ViewPointBuilder builder) {
 		super(builder);
@@ -45,30 +40,33 @@ public class NavigationScheme extends AbstractActionScheme {
 		return EditionSchemeType.NavigationScheme;
 	}
 
-	private BindingDefinition TARGET_OBJECT = new BindingDefinition("targetObject", FlexoModelObject.class, DataBinding.BindingDefinitionType.GET,
-			false);
-
-	public BindingDefinition getTargetObjectBindingDefinition() {
-		return TARGET_OBJECT;
-	}
-
-	public ViewPointDataBinding getTargetObject() {
+	public DataBinding<Object> getTargetObject() {
 		if (targetObject == null) {
-			targetObject = new ViewPointDataBinding(this, NavigationSchemeBindingAttribute.targetObject, getTargetObjectBindingDefinition());
+			targetObject = new DataBinding<Object>(this, FlexoModelObject.class, BindingDefinitionType.GET);
+			targetObject.setBindingName("targetObject");
 		}
 		return targetObject;
 	}
 
-	public void setTargetObject(ViewPointDataBinding targetObject) {
-		targetObject.setOwner(this);
-		targetObject.setBindingAttribute(NavigationSchemeBindingAttribute.targetObject);
-		targetObject.setBindingDefinition(getTargetObjectBindingDefinition());
+	public void setTargetObject(DataBinding<Object> targetObject) {
+		if (targetObject != null) {
+			targetObject.setOwner(this);
+			targetObject.setBindingName("targetObject");
+			targetObject.setDeclaredType(FlexoModelObject.class);
+			targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.targetObject = targetObject;
 	}
 
 	public FlexoModelObject evaluateTargetObject(EditionPatternReference editionPatternReference) {
 		if (getTargetObject().isValid()) {
-			return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternReference);
+			try {
+				return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternReference);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
