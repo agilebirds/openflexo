@@ -26,10 +26,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.components.widget.FIBIndividualSelector;
 import org.openflexo.components.widget.FIBPropertySelector;
 import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyClassPathElement;
