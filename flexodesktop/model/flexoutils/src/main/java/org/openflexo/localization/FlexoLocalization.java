@@ -426,7 +426,7 @@ public class FlexoLocalization {
 					}
 				}
 			} catch (NumberFormatException e) {
-				m.appendReplacement(returned, valueForKeyAndObject(suffix, object));
+				m.appendReplacement(returned, valueForKeyAndObject(suffix, object[0]));
 			}
 		}
 		m.appendTail(returned);
