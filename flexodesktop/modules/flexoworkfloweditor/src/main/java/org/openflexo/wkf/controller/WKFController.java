@@ -169,6 +169,19 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 	}
 
+	@Override
+	public boolean displayInspectorTabForContext(String context) {
+		if ("METRICS".equals(context)) {
+			return WKFPreferences.getShowLeanTabs();
+		} else if ("BPE".equals(context)) {
+			return getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE;
+		} else if ("SWL".equals(context)) {
+			return getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE;
+		} else {
+			return super.displayInspectorTabForContext(context);
+		}
+	}
+
 	public WorkflowBrowserView getWkfBrowserView() {
 		return wkfBrowserView;
 	}
@@ -597,49 +610,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	 */
 
 	public void notifyShowLeanTabHasChanged() {
-		if (WKFPreferences.getShowLeanTabs()) {
-			getSelectionManager().setInspectionContext("METRICS", true);
-			/*
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
-			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
-			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
-			 */
-		} else {
-			getSelectionManager().removeInspectionContext("METRICS");
-			/*
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
-			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
-			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
-			 */
-		}
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}

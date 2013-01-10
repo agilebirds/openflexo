@@ -43,6 +43,7 @@ import org.openflexo.inspector.ModuleInspectorController.InspectorSwitching;
 import org.openflexo.inspector.ModuleInspectorController.MultipleSelectionActivated;
 import org.openflexo.inspector.ModuleInspectorController.NewInspectorsLoaded;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Represent a JDialog showing inspector for the selection managed by an instance of ModuleInspectorController
@@ -111,6 +112,10 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private FIBView<?, ?> buildViewFor(FIBInspector inspector) {
 
 		FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+		FIBController controller = inspectorView.getController();
+		if (controller instanceof FlexoFIBController) {
+			((FlexoFIBController) controller).setFlexoController(inspectorController.getFlexoController());
+		}
 		// TODO: See with Sylvain the purpose of the next line.
 		// ((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
 		FlexoLocalization.addToLocalizationListeners(inspectorView);
