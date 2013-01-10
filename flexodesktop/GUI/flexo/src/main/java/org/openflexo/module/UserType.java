@@ -140,6 +140,14 @@ public abstract class UserType extends FlexoObject {
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isLite() {
+		return LITE == currentUserType;
+	}
+
+	/**
 	 * Search a userType matching userTypeName. Make a case insensitive comparison against known userType name's and known userType id's. If
 	 * there is no match it returns Maintainer user type.
 	 * 
