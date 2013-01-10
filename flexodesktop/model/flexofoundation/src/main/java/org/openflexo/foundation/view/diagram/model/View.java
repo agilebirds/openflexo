@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,13 +34,16 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -389,8 +393,24 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
 		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
-			model = modelSlot.createEmptyModel(this, modelSlot.getMetaModelResource().getMetaModelData());
-			setModel(modelSlot, model);
+			try {
+				org.openflexo.foundation.resource.FlexoResource<M> modelResource = modelSlot.createEmptyModel(this,
+						modelSlot.getMetaModelResource());
+				model = modelResource.getResourceData(null);
+				setModel(modelSlot, model);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return model;
 	}

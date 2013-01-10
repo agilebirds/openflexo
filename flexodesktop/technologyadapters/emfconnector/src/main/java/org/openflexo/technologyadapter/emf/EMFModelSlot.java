@@ -33,9 +33,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
-import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClassClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 
 /**
@@ -44,11 +42,9 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectI
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class), // Instances
-		@DeclarePatternRole(EMFClassClassPatternRole.class) // Classes
+@DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class) // Instances
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class), // Add instance
-		@DeclareEditionAction(AddEMFClassClass.class) // Add class
+@DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class) // Add instance
 })
 public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel> {
 
@@ -90,9 +86,7 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 	 */
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFClassClassPatternRole(null);
-		} else if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new EMFObjectIndividualPatternRole(null);
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
@@ -101,9 +95,7 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "class";
-		} else if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "individual";
 		}
 		return super.defaultPatternRoleName(patternRoleClass);

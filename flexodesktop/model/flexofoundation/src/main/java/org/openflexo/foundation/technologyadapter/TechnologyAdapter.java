@@ -132,7 +132,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	 * @param metaModel
 	 * @return
 	 */
-	public abstract M createEmptyModel(FlexoProject project, MM metaModel, TechnologyContextManager<M, MM> technologyContextManager);
+	public abstract FlexoResource<M> createEmptyModel(FlexoProject project, FlexoResource<MM> metaModelResource,
+			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}

@@ -135,7 +135,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
-	public OWLOntology createEmptyModel(FlexoProject project, OWLOntology metaModel,
+	public OWLOntologyResource createEmptyModel(FlexoProject project, FlexoResource<OWLOntology> metaModel,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewOWLModel(), project=" + project);
@@ -188,7 +188,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 			e1.printStackTrace();
 		}
 
-		return newOntology;
+		return ontologyRes;
 	}
 
 	@Override
