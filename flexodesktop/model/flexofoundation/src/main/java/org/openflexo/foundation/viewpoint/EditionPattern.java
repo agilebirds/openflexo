@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -43,8 +44,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -552,7 +551,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		});
 		for (PatternRole pr : rolesToDelete) {
 			DeleteAction a = new DeleteAction(null);
-			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
+			a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
 			newDeletionScheme.addToActions(a);
 		}
 		addToEditionSchemes(newDeletionScheme);
@@ -695,10 +694,11 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
+			_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getClass()));
+			/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
 			if (bv != null) {
 				_bindingModel.addToBindingVariables(bv);
-			}
+			}*/
 		}
 		notifyBindingModelChanged();
 	}

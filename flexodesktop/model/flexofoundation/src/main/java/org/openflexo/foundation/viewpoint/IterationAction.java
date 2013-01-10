@@ -24,17 +24,17 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
 
@@ -56,34 +56,29 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		return getEditionPattern().getPatternRoles();
 	}*/
 
-	private ViewPointDataBinding iteration;
+	private DataBinding<List<?>> iteration;
 
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, DataBinding.BindingDefinitionType.GET, true);
-
-	public BindingDefinition getIterationBindingDefinition() {
-		return ITERATION;
-	}
-
-	public ViewPointDataBinding getIteration() {
+	public DataBinding<List<?>> getIteration() {
 		if (iteration == null) {
-			iteration = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getIterationBindingDefinition());
+			iteration = new DataBinding<List<?>>(this, List.class, BindingDefinitionType.GET);
 		}
 		return iteration;
 	}
 
-	public void setIteration(ViewPointDataBinding iteration) {
+	public void setIteration(DataBinding<List<?>> iteration) {
 		if (iteration != null) {
 			iteration.setOwner(this);
-			iteration.setBindingAttribute(EditionActionBindingAttribute.iteration);
-			iteration.setBindingDefinition(getIterationBindingDefinition());
+			iteration.setBindingName("iteration");
+			iteration.setDeclaredType(List.class);
+			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.iteration = iteration;
 		rebuildInferedBindingModel();
 	}
 
 	@Override
-	public void notifyBindingChanged(ViewPointDataBinding binding) {
-		super.notifyBindingChanged(binding);
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		super.notifiedBindingChanged(binding);
 		if (binding == iteration) {
 			rebuildInferedBindingModel();
 		}
@@ -99,8 +94,8 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	}
 
 	public Type getItemType() {
-		if (getIteration() != null && getIteration().hasBinding()) {
-			Type accessedType = getIteration().getBinding().getAccessedType();
+		if (getIteration() != null && getIteration().isSet()) {
+			Type accessedType = getIteration().getAnalyzedType();
 			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
 				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
 			}
@@ -111,7 +106,7 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
+		returned.addToBindingVariables(new BindingVariable(getIteratorName(), getItemType()) {
 			@Override
 			public Object getBindingValue(Object target, BindingEvaluationContext context) {
 				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
@@ -128,7 +123,13 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 
 	public List<?> evaluateIteration(EditionSchemeAction action) {
 		if (getIteration().isValid()) {
-			return (List<?>) getIteration().getBindingValue(action);
+			try {
+				return getIteration().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -160,13 +161,8 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(IterationAction object) {
+		public DataBinding<List<?>> getBinding(IterationAction object) {
 			return object.getIteration();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(IterationAction object) {
-			return object.getIterationBindingDefinition();
 		}
 
 	}

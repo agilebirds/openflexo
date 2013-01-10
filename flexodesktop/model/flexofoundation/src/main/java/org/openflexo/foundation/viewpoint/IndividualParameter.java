@@ -21,24 +21,21 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class IndividualParameter extends InnerModelSlotParameter {
 
 	private String conceptURI;
-
-	private ViewPointDataBinding conceptValue;
-
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", IFlexoOntologyClass.class, DataBinding.BindingDefinitionType.GET,
-			false);
-
+	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private String renderer;
 
 	public IndividualParameter(ViewPointBuilder builder) {
@@ -74,22 +71,20 @@ public class IndividualParameter extends InnerModelSlotParameter {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getConceptValueBindingDefinition() {
-		return CONCEPT_VALUE;
-	}
-
-	public ViewPointDataBinding getConceptValue() {
+	public DataBinding<IFlexoOntologyClass> getConceptValue() {
 		if (conceptValue == null) {
-			conceptValue = new ViewPointDataBinding(this, ParameterBindingAttribute.conceptValue, getConceptValueBindingDefinition());
+			conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			conceptValue.setBindingName("conceptValue");
 		}
 		return conceptValue;
 	}
 
-	public void setConceptValue(ViewPointDataBinding conceptValue) {
+	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
 		if (conceptValue != null) {
 			conceptValue.setOwner(this);
-			conceptValue.setBindingAttribute(ParameterBindingAttribute.conceptValue);
-			conceptValue.setBindingDefinition(getConceptValueBindingDefinition());
+			conceptValue.setBindingName("conceptValue");
+			conceptValue.setDeclaredType(IFlexoOntologyClass.class);
+			conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.conceptValue = conceptValue;
 	}
@@ -111,7 +106,13 @@ public class IndividualParameter extends InnerModelSlotParameter {
 
 	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
 		if (getConceptValue().isValid()) {
-			return (IFlexoOntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+			try {
+				return getConceptValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

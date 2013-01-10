@@ -20,18 +20,19 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
-import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
@@ -613,19 +614,25 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private final void createBindingModel() {
 		_bindingModel = new BindingModel();
-		_bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
+		_bindingModel.addToBindingVariables(new BindingVariable("parameters", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(
+				EditionSchemeParameter.class))));
+		// _bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				BindingVariable<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
-				_bindingModel.addToBindingVariables(newPathElement);
+			for (PatternRole role : getEditionPattern().getPatternRoles()) {
+				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getClass()));
+				/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
+				if (bv != null) {
+					_bindingModel.addToBindingVariables(bv);
+				}*/
 			}
 		}
 		notifyBindingModelChanged();
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
+		bindingModel.addToBindingVariables(new BindingVariable(TOP_LEVEL, View.class));
+		// bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
 	}
 
 	/**

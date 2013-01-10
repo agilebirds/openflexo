@@ -23,10 +23,10 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -34,8 +34,6 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -71,36 +69,13 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		Conditional
 	}
 
-	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
-		conditional,
-		assignation,
-		individualName,
-		className,
-		container,
-		fromShape,
-		toShape,
-		object,
-		subject,
-		father,
-		value,
-		restrictionType,
-		cardinality,
-		target,
-		diagramName,
-		view,
-		condition,
-		iteration
-	}
-
 	private ModelSlot<M, MM> modelSlot;
 
 	// private EditionScheme _scheme;
 	private String description;
 	// private String patternRole;
 
-	private ViewPointDataBinding conditional;
-
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+	private DataBinding<Boolean> conditional;
 
 	private ActionContainer actionContainer;
 
@@ -158,7 +133,13 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(action);
+			try {
+				return getConditional().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -252,25 +233,22 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return returned;
 	}
 
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
+	public void setConditional(DataBinding<Boolean> conditional) {
 		if (conditional != null) {
 			conditional.setOwner(this);
-			conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
-			conditional.setBindingDefinition(getConditionalBindingDefinition());
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		this.conditional = conditional;
-		notifyBindingChanged(this.conditional);
 	}
 
 	public String getStringRepresentation() {
@@ -428,13 +406,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(EditionAction object) {
+		public DataBinding<Boolean> getBinding(EditionAction object) {
 			return object.getConditional();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(EditionAction object) {
-			return object.getConditionalBindingDefinition();
 		}
 
 	}
