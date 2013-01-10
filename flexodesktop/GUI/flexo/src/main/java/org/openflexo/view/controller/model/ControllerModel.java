@@ -310,6 +310,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		if (object == null && perspective != null && editor != null) {
 			object = perspective.getDefaultObject(editor.getProject());
+			if (object == getCurrentObject()) {
+				// This is to handle a very specific case when we are closing the last tab
+				// a perspective
+				object = null;
+			}
 		}
 		if (!isGoingForward && !isGoingBackward) {
 			if (currentLocation != null && currentLocation != NO_LOCATION) {
