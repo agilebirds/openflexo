@@ -56,6 +56,7 @@ import javax.imageio.ImageIO;
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
@@ -137,7 +138,6 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
@@ -399,7 +399,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
 			_addConverter(imageFileConverter);
-			_addConverter(TOCDataBinding.CONVERTER);
+			_addConverter(DataBinding.CONVERTER);
 		}
 	}
 
@@ -4288,7 +4288,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return null;
 	}
 
-
 	/*	public Set<FlexoOntology> getAllMetaModels() {
 			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
 			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
@@ -4323,13 +4322,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public Object getObject(String uri) {
 		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
 			Object o = m.getObject(uri);
-			if (o != null)
+			if (o != null) {
 				return o;
+			}
 		}
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
 			Object o = m.getObject(uri);
-			if (o != null)
+			if (o != null) {
 				return o;
+			}
 		}
 		return null;
 	}
@@ -4486,8 +4487,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public FlexoModel<?, ?> getModel(String modelURI) {
 		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
-			if (m.getURI().equals(modelURI))
+			if (m.getURI().equals(modelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}
@@ -4518,8 +4520,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
-			if (m.getURI().equals(metaModelURI))
+			if (m.getURI().equals(metaModelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}
