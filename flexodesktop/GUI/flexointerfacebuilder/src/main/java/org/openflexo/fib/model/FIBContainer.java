@@ -266,7 +266,7 @@ public abstract class FIBContainer extends FIBComponent {
 					}
 				}
 				boolean insert = true;
-				int startIndex = child.getIndex();
+				Integer startIndex = child.getIndex();
 				while (insert) {
 					child.setParent(this);
 					subComponents.add(indexInsertion, child);
@@ -274,10 +274,14 @@ public abstract class FIBContainer extends FIBComponent {
 					if (i + 1 < container.getSubComponents().size()) {
 						Integer previousInteger = child.getIndex();
 						child = container.getSubComponents().get(i + 1);
-						insert = (previousInteger == null && child.getIndex() == null || previousInteger != null
-								&& child.getIndex() != null && previousInteger + 1 == child.getIndex() || child.getIndex() != null
-								&& child.getIndex() == startIndex)
-								&& !mergedComponents.contains(child);
+						insert = previousInteger == null
+								&& child.getIndex() == null
+								|| previousInteger != null
+								&& child.getIndex() != null
+								&& previousInteger + 1 == child.getIndex()
+								|| child.getIndex() != null
+								&& (startIndex == null && child.getIndex() == startIndex || startIndex != null
+										&& startIndex.equals(child.getIndex())) && !mergedComponents.contains(child);
 						if (insert) {
 							i++;
 						} else {
