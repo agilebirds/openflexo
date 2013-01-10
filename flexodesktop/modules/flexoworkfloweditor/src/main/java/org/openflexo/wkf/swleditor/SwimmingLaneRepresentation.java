@@ -102,6 +102,7 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.gr.AbstractActionNodeGR;
 import org.openflexo.wkf.swleditor.gr.AbstractActivityNodeGR;
@@ -188,7 +189,8 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 					&& ((PetriGraphNode) targetObject).getParentPetriGraph() == targetObject.getProcess().getActivityPetriGraph()) {
 				return true;
 			} else if (targetObject instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) targetObject).getIsVisible() && isVisible(((FlexoPetriGraph) targetObject).getContainer());
+				return (!UserType.isLite() || ((FlexoPetriGraph) targetObject).isRootPetriGraph())
+						&& ((FlexoPetriGraph) targetObject).getIsVisible() && isVisible(((FlexoPetriGraph) targetObject).getContainer());
 			} else if (targetObject instanceof PortRegistery) {
 				return ((PortRegistery) targetObject).getIsVisible();
 			} else if (targetObject instanceof WKFEdge) {
