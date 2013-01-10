@@ -66,12 +66,14 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 			if (searchRecursively) {
 				for (FlexoProjectReference ref : getImportedProjects()) {
 					FlexoProject projectWithURI = null;
-					ProjectData projectData = ref.getReferredProject().getProjectData();
-					if (projectData != null) {
-						projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
-					}
-					if (projectWithURI != null) {
-						return projectWithURI;
+					if (ref.getReferredProject() != null) {
+						ProjectData projectData = ref.getReferredProject().getProjectData();
+						if (projectData != null) {
+							projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
+						}
+						if (projectWithURI != null) {
+							return projectWithURI;
+						}
 					}
 
 				}
