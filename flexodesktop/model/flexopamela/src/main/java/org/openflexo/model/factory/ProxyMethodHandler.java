@@ -789,6 +789,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		if (!list.contains(value)) {
 			list.add(value);
+			firePropertyChange(property.getPropertyIdentifier(), null, value);
 			// Handle inverse property for new value
 			if (property.getInverseProperty() != null) {
 				switch (property.getInverseProperty().getCardinality()) {
