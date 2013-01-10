@@ -1,6 +1,7 @@
 package org.openflexo.foundation.rm;
 
 import java.util.Date;
+import java.util.logging.Level;
 
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
