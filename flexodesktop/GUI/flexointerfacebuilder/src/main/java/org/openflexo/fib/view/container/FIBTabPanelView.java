@@ -59,32 +59,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 
 	@Override
 	protected JTabbedPane createJComponent() {
-		tabbedPane = new JTabbedPane()/*
-										* {
-										* 
-										* @Override public Component add(String
-										* title, Component component) {
-										* logger.info("Add "+component); return
-										* super.add(title, component); }
-										* 
-										* @Override public Component add(Component
-										* component) {
-										* logger.info("Add "+component); return
-										* super.add(component); }
-										* 
-										* @Override public void add(Component
-										* component, Object constraints) {
-										* logger.info("Add "+component);
-										* super.add(component, constraints); }
-										* 
-										* @Override public void add(Component
-										* component, Object constraints, int index)
-										* { logger.info("Add "+component);
-										* super.add(component, constraints, index);
-										* }
-										* 
-										* }
-										*/;
+		tabbedPane = new JTabbedPane();
 		return tabbedPane;
 	}
 
@@ -116,7 +91,6 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 	// TODO: optimize it
 	@Override
 	public synchronized void updateLayout() {
-
 		int index = tabbedPane.getSelectedIndex();
 		for (FIBView v : getSubViews()) {
 			v.delete();
