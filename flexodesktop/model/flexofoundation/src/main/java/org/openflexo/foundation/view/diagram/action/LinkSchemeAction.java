@@ -40,7 +40,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
@@ -163,13 +162,11 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
-				return getFromShape().getEditionPatternInstance();
-			}
-			if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
-				return getToShape().getEditionPatternInstance();
-			}
+		if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
+			return getFromShape().getEditionPatternInstance();
+		}
+		if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
+			return getToShape().getEditionPatternInstance();
 		}
 		return super.getValue(variable);
 	}

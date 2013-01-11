@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -40,7 +41,6 @@ import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -328,9 +328,9 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		dependingObjectsAreComputed = true;
 	}
 
-	protected synchronized void appendToDependingObjects(ViewPointDataBinding binding, List<TargetObject> returned) {
+	protected synchronized void appendToDependingObjects(DataBinding<?> binding, List<TargetObject> returned) {
 		if (binding.isSet()) {
-			List<TargetObject> list = binding.getBinding().getTargetObjects(getEditionPatternInstance());
+			List<TargetObject> list = binding.getTargetObjects(getEditionPatternInstance());
 			/*for (String patternRole : getEditionPatternInstance().getActors().keySet()) {
 				list.add(new TargetObject(target, patternRole));
 			}*/
@@ -450,6 +450,14 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	protected void notifyIndexChange() {
 		refreshGraphicalRepresentation();
+	}
+
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 
 }

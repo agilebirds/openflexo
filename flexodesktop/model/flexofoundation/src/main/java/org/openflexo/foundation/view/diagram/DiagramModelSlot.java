@@ -21,8 +21,6 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.GraphicalElementPatternRolePathElement.ConnectorPatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.GraphicalElementPatternRolePathElement.ShapePatternRolePathElement;
 
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
@@ -63,14 +61,15 @@ public class DiagramModelSlot extends ModelSlot<View, DiagramMetaModel> {
 	}
 
 	@Override
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		if (pr instanceof ShapePatternRole) {
+	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+		/*if (pr instanceof ShapePatternRole) {
 			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);
 		} else if (pr instanceof ConnectorPatternRole) {
 			return new ConnectorPatternRolePathElement((ConnectorPatternRole) pr, container);
 		} else {
 			return null;
-		}
+		}*/
+		return null;
 	}
 
 	@Override

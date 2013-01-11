@@ -45,7 +45,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
@@ -232,13 +231,10 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
-				if (getParent() instanceof ViewShape) {
-					return ((ViewShape) getParent()).getEditionPatternInstance();
-				}
+		if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
+			if (getParent() instanceof ViewShape) {
+				return ((ViewShape) getParent()).getEditionPatternInstance();
 			}
-			return parameterValues;
 		}
 		return super.getValue(variable);
 	}
