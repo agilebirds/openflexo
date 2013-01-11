@@ -30,7 +30,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BooleanStaticBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
@@ -140,7 +140,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 					}
 				}
 				if (!ok) {
-					component.getVisible().setBinding(new BooleanStaticBinding(false));
+					component.setVisible(new DataBinding<Boolean>("false"));
 				}
 			}
 		}

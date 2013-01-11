@@ -56,7 +56,15 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public String getStringRepresentation(Expression expression) {
 			if (expression instanceof BindingValueFunction) {
-				return makeStringRepresentation(((BindingValueFunction) expression).getFunction());
+				StringBuffer sb = new StringBuffer();
+				sb.append(((BindingValueFunction) expression).getFunction().getName());
+				sb.append("(");
+				boolean isFirst = true;
+				for (Expression arg : ((BindingValueFunction) expression).getFunction().getArgs()) {
+					sb.append((isFirst ? "" : ",") + getStringRepresentation(arg));
+				}
+				sb.append(")");
+				return sb.toString();
 			} else if (expression instanceof BindingValueVariable) {
 				return makeStringRepresentation(((BindingValueVariable) expression).getVariable());
 			} else if (expression instanceof BindingValueConstant) {

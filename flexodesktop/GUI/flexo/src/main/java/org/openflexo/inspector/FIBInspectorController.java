@@ -34,7 +34,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
 
@@ -62,11 +62,11 @@ public class FIBInspectorController extends FlexoFIBController {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionPatternInstancePathElement) {
+		if (variable instanceof EditionPatternInstanceBindingVariable) {
 			if (getDataObject() instanceof FlexoModelObject) {
 				Vector<EditionPatternReference> refs = ((FlexoModelObject) getDataObject()).getEditionPatternReferences();
-				if (refs != null && ((EditionPatternInstancePathElement) variable).getIndex() < refs.size()) {
-					return refs.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
+				if (refs != null && ((EditionPatternInstanceBindingVariable) variable).getIndex() < refs.size()) {
+					return refs.get(((EditionPatternInstanceBindingVariable) variable).getIndex()).getEditionPatternInstance();
 				}
 			}
 		}

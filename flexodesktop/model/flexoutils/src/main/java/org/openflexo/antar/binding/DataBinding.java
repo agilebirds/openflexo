@@ -633,4 +633,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		return returned;
 	}
 
+	public static DataBinding<Boolean> makeTrueBinding() {
+		return new DataBinding<Boolean>("true");
+	}
+
+	public static DataBinding<Boolean> makeFalseBinding() {
+		return new DataBinding<Boolean>("false");
+	}
 }

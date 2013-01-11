@@ -37,6 +37,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -75,18 +76,66 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private EditionPatternStructuralFacet structuralFacet;
 	private EditionPatternBehaviouralFacet behaviouralFacet;
 
+	private EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
+
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	@Override
-	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
-		if (validableObjects == null) {
-			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
-			validableObjects.add(inspector);
+	/**
+	 * Represent the type of a EditionPatternInstance of a given EditionPattern
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static class EditionPatternInstanceType implements CustomType {
+
+		public static EditionPatternInstanceType getEditionPatternInstanceType(EditionPattern anEditionPattern) {
+			if (anEditionPattern == null) {
+				return null;
+			}
+			return anEditionPattern.getInstanceType();
 		}
-		return validableObjects;
+
+		private EditionPattern editionPattern;
+
+		public EditionPatternInstanceType(EditionPattern anEditionPattern) {
+			this.editionPattern = anEditionPattern;
+		}
+
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
+		}
+
+		@Override
+		public Class getBaseClass() {
+			return EditionPatternInstance.class;
+		}
+
+		@Override
+		public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+			// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
+			if (aType instanceof EditionPatternInstanceType) {
+				return editionPattern.isAssignableFrom(((EditionPatternInstanceType) aType).getEditionPattern());
+			}
+			return false;
+		}
+
+		@Override
+		public String simpleRepresentation() {
+			return "EditionPatternInstanceType" + ":" + editionPattern;
+		}
+
+		@Override
+		public String fullQualifiedRepresentation() {
+			return "EditionPatternInstanceType" + ":" + editionPattern;
+		}
+
+		@Override
+		public String toString() {
+			return simpleRepresentation();
+		}
 	}
 
 	public EditionPattern(ViewPointBuilder builder) {
@@ -98,6 +147,19 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		}
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+	}
+
+	@Override
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
+			validableObjects.add(inspector);
+		}
+		return validableObjects;
+	}
+
+	private EditionPatternInstanceType getInstanceType() {
+		return instanceType;
 	}
 
 	public EditionPatternStructuralFacet getStructuralFacet() {
@@ -769,6 +831,9 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		if (aType instanceof EditionPattern) {
+			return isAssignableFrom((EditionPattern) aType);
+		}
 		return aType == this;
 	}
 
