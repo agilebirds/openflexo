@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.TOCRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
-      <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=50;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=51;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="doc_title" localize="true" name="DocTitleLabel" constraints="twocols(location=left;index=52;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="DocTitle" data="data.docTitle" constraints="twocols(location=right;index=53;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="customer" localize="true" name="CustomerLabel" constraints="twocols(location=left;index=54;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="Customer" data="data.customer" constraints="twocols(location=right;index=55;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=56;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="Version" data="data.version" constraints="twocols(location=right;index=57;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="author" localize="true" name="AuthorLabel" constraints="twocols(location=left;index=58;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="Author" data="data.author" constraints="twocols(location=right;index=59;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="reviewer" localize="true" name="ReviewerLabel" constraints="twocols(location=left;index=60;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="Reviewer" data="data.reviewer" constraints="twocols(location=right;index=61;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="app_name" localize="true" name="SystemNameLabel" constraints="twocols(location=left;index=62;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="SystemName" data="data.systemName" constraints="twocols(location=right;index=63;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="app_version" localize="true" name="SystemVersionLabel" constraints="twocols(location=left;index=64;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" localize="true" name="SystemVersion" data="data.systemVersion" constraints="twocols(location=right;index=65;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Label label="make_separate_section_for_events" localize="true" name="UseEmbeddedEventsLabel" constraints="twocols(location=left;index=66;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <CheckBox selected="false" localize="true" name="UseEmbeddedEvents" data="data.useEmbeddedEvents" constraints="twocols(location=right;index=67;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.toc.TOCRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="title" index="50" constraints="twocols(expandHorizontally=false;expandVertically=false;index=50;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TitleLabel" localize="true" />
+      <TextField index="51" data="data.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=51;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Title" localize="true" />
+      <Label label="doc_title" index="52" constraints="twocols(expandHorizontally=false;expandVertically=false;index=52;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DocTitleLabel" localize="true" />
+      <TextField index="53" data="data.docTitle" constraints="twocols(expandHorizontally=true;expandVertically=false;index=53;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DocTitle" localize="true" />
+      <Label label="customer" index="54" constraints="twocols(expandHorizontally=false;expandVertically=false;index=54;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="CustomerLabel" localize="true" />
+      <TextField index="55" data="data.customer" constraints="twocols(expandHorizontally=true;expandVertically=false;index=55;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Customer" localize="true" />
+      <Label label="version" index="56" constraints="twocols(expandHorizontally=false;expandVertically=false;index=56;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="VersionLabel" localize="true" />
+      <TextField index="57" data="data.version" constraints="twocols(expandHorizontally=true;expandVertically=false;index=57;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Version" localize="true" />
+      <Label label="author" index="58" constraints="twocols(expandHorizontally=false;expandVertically=false;index=58;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AuthorLabel" localize="true" />
+      <TextField index="59" data="data.author" constraints="twocols(expandHorizontally=true;expandVertically=false;index=59;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Author" localize="true" />
+      <Label label="reviewer" index="60" constraints="twocols(expandHorizontally=false;expandVertically=false;index=60;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ReviewerLabel" localize="true" />
+      <TextField index="61" data="data.reviewer" constraints="twocols(expandHorizontally=true;expandVertically=false;index=61;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Reviewer" localize="true" />
+      <Label label="app_name" index="62" constraints="twocols(expandHorizontally=false;expandVertically=false;index=62;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="SystemNameLabel" localize="true" />
+      <TextField index="63" data="data.systemName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=63;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="SystemName" localize="true" />
+      <Label label="app_version" index="64" constraints="twocols(expandHorizontally=false;expandVertically=false;index=64;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="SystemVersionLabel" localize="true" />
+      <TextField index="65" data="data.systemVersion" constraints="twocols(expandHorizontally=true;expandVertically=false;index=65;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="SystemVersion" localize="true" />
+      <Label label="make_separate_section_for_events" index="66" constraints="twocols(expandHorizontally=false;expandVertically=false;index=66;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="UseEmbeddedEventsLabel" localize="true" />
+      <CheckBox selected="false" index="67" data="data.useEmbeddedEvents" constraints="twocols(expandHorizontally=false;expandVertically=false;index=67;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="UseEmbeddedEvents" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -54,4 +54,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="TOCRepository" />
 </Panel>
-

@@ -11,7 +11,7 @@
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Custom>
-      <Parameter name="invisibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

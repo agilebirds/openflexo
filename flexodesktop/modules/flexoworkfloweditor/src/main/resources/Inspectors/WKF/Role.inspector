@@ -5,7 +5,7 @@
       <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NameLabel" localize="true" />
       <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
       <Label label="color" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
-      <Color index="3" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
+      <Color allowsNull="false" index="3" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
       <Label label="system_role" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsSystemRoleLabel" localize="true" />
       <CheckBox selected="false" index="5" data="data.isSystemRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsSystemRole" localize="true" />
       <Label label="is_assignable" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsAssignableLabel" localize="true" />
@@ -19,8 +19,8 @@
       </Table>
     </Tab>
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
-      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
-      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="1" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
+      <Label label="index" index="23" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="24" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
       <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true" />
@@ -35,9 +35,9 @@
       <Label label="index" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlIndex80Label" localize="true" />
       <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" index="5" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlIndex80" localize="true" />
       <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
-      <Color index="13" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
       <Label label="back_color" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
-      <Color index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
+      <Color allowsNull="false" index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
     </Tab>
     <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="22" visible="controller.displayInspectorTabForContext(&quot;ROLE_EDITOR&quot;)" font="SansSerif,0,11" name="GraphicsTab">
       <Label label="x" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="XdefaultLabel" localize="true" />
@@ -53,9 +53,9 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Number>
       <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColordefaultLabel" localize="true" />
-      <Color index="13" data="data.getTextColor(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColordefault" localize="true" />
+      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColordefault" localize="true" />
       <Label label="back_color" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
-      <Color index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
+      <Color allowsNull="false" index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -91,9 +91,9 @@
     <Localized key="system_role" lang="English">System role</Localized>
     <Localized key="system_role" lang="French">Rôle système</Localized>
     <Localized key="system_role" lang="Dutch">System role</Localized>
-    <Localized key="specializes_following_roles" lang="English">This role is specializing following roles</Localized>
-    <Localized key="specializes_following_roles" lang="French">Ce rôle spécialise les rôles suivants</Localized>
-    <Localized key="specializes_following_roles" lang="Dutch">This role is specializing following roles</Localized>
+    <Localized key="specializes_following_roles" lang="English">This role is also playing the following roles</Localized>
+    <Localized key="specializes_following_roles" lang="French">Ce rôle joue aussi les rôles suivants</Localized>
+    <Localized key="specializes_following_roles" lang="Dutch">This role is also playing the following roles</Localized>
     <Localized key="Graphics" lang="French">Graphisme</Localized>
     <Localized key="x" lang="English">Position x</Localized>
     <Localized key="x" lang="French">Abscisse</Localized>
@@ -107,9 +107,9 @@
     <Localized key="height" lang="English">Height</Localized>
     <Localized key="height" lang="French">Hauteur</Localized>
     <Localized key="height" lang="Dutch">Height</Localized>
-    <Localized key="is_assignable" lang="English">is assignable</Localized>
-    <Localized key="is_assignable" lang="French">est assignable</Localized>
-    <Localized key="is_assignable" lang="Dutch">Is assignable</Localized>
+    <Localized key="is_assignable" lang="English">Assignable</Localized>
+    <Localized key="is_assignable" lang="French">Attribuable</Localized>
+    <Localized key="is_assignable" lang="Dutch">Assignable</Localized>
     <Localized key="Annotation" lang="English">Annotation</Localized>
     <Localized key="Annotation" lang="French">Annotation</Localized>
     <Localized key="Annotation" lang="Dutch">Annotation</Localized>

@@ -20,9 +20,9 @@
     <Localized key="role" lang="English">Role</Localized>
     <Localized key="role" lang="French">Rôle</Localized>
     <Localized key="role" lang="Dutch">Role</Localized>
-    <Localized key="specialize" lang="English">Specialize</Localized>
-    <Localized key="specialize" lang="French">Spécialiser</Localized>
-    <Localized key="specialize" lang="Dutch">Specialize</Localized>
+    <Localized key="specialize" lang="English">Includes</Localized>
+    <Localized key="specialize" lang="French">Inclut</Localized>
+    <Localized key="specialize" lang="Dutch">Includes</Localized>
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
     <Localized key="Graphics" lang="English">Graphics</Localized>
