@@ -21,7 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
@@ -36,11 +35,9 @@ public class PropertyParameter extends InnerModelSlotParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
+	private boolean isDynamicDomainValueSet = false;
 
 	private DataBinding<IFlexoOntologyClass> domainValue;
-
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class,
-			DataBinding.BindingDefinitionType.GET, false);
 
 	public PropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -89,8 +86,6 @@ public class PropertyParameter extends InnerModelSlotParameter {
 		}
 		this.domainValue = domainValue;
 	}
-
-	private boolean isDynamicDomainValueSet = false;
 
 	public boolean getIsDynamicDomainValue() {
 		return getDomainValue().isSet() || isDynamicDomainValueSet;

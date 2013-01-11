@@ -21,7 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
@@ -34,11 +33,8 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 public class ObjectPropertyParameter extends PropertyParameter {
 
 	private String rangeURI;
-
 	private DataBinding<IFlexoOntologyClass> rangeValue;
-
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class,
-			DataBinding.BindingDefinitionType.GET, false);
+	private boolean isDynamicRangeValueSet = false;
 
 	public ObjectPropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -70,10 +66,6 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getRangeValueBindingDefinition() {
-		return RANGE_VALUE;
-	}
-
 	public DataBinding<IFlexoOntologyClass> getRangeValue() {
 		if (rangeValue == null) {
 			rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
@@ -91,8 +83,6 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		}
 		this.rangeValue = rangeValue;
 	}
-
-	private boolean isDynamicRangeValueSet = false;
 
 	public boolean getIsDynamicRangeValue() {
 		return getRangeValue().isSet() || isDynamicRangeValueSet;

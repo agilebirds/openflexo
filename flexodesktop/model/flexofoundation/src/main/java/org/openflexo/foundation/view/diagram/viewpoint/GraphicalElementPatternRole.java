@@ -26,7 +26,6 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
 
 	private boolean readOnlyLabel;
-	private ViewPointDataBinding label;
 
 	private String exampleLabel = "label";
 
@@ -56,10 +55,6 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	public abstract void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation);
 
 	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation);
-
-	public static enum GraphicalElementBindingAttribute implements InspectorBindingAttribute {
-		label
-	}
 
 	private BindingDefinition LABEL;
 

@@ -35,6 +35,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
@@ -301,9 +302,9 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Add connector action
 				AddConnector newAddConnector = new AddConnector(builder);
 				newAddConnector.setAssignation(new DataBinding<Object>(newConnectorPatternRole.getPatternRoleName()));
-				newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
+				newAddConnector.setFromShape(new DataBinding<ViewShape>(EditionScheme.FROM_TARGET + "."
 						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-				newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."
+				newAddConnector.setToShape(new DataBinding<ViewShape>(EditionScheme.TO_TARGET + "."
 						+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 
 				newLinkScheme.addToActions(newAddConnector);
@@ -325,7 +326,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 									newInspectorEntry.setName(e.property.getName());
 									newInspectorEntry.setLabel(e.label);
 									newInspectorEntry.setIsReadOnly(true);
-									newInspectorEntry.setData(new ViewPointDataBinding(e.property.getName() + ".uriName"));
+									newInspectorEntry.setData(new DataBinding<Object>(e.property.getName() + ".uriName"));
 									inspector.addToEntries(newInspectorEntry);
 								}
 							} else if (e.property instanceof IFlexoOntologyDataProperty) {
@@ -353,7 +354,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								if (newInspectorEntry != null) {
 									newInspectorEntry.setName(e.property.getName());
 									newInspectorEntry.setLabel(e.label);
-									newInspectorEntry.setData(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+									newInspectorEntry.setData(new DataBinding<Object>(getIndividualPatternRoleName() + "."
 											+ e.property.getName()));
 									inspector.addToEntries(newInspectorEntry);
 								}

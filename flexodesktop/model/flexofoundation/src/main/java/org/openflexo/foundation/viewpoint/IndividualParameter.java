@@ -37,6 +37,7 @@ public class IndividualParameter extends InnerModelSlotParameter {
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private String renderer;
+	private boolean isDynamicConceptValueSet = false;
 
 	public IndividualParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -88,8 +89,6 @@ public class IndividualParameter extends InnerModelSlotParameter {
 		}
 		this.conceptValue = conceptValue;
 	}
-
-	private boolean isDynamicConceptValueSet = false;
 
 	public boolean getIsDynamicConceptValue() {
 		return getConceptValue().isSet() || isDynamicConceptValueSet;
