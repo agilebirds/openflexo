@@ -61,18 +61,18 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		public synchronized Object apply(Object arg0) {
 			child = arg0;
 			try {
-			Object result = null;
-			try {
-				result = children.getCast().getBindingValue(this);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			}
+				Object result = null;
+				try {
+					result = children.getCast().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				return result;
 			} finally {
-			child = null;
-		}
+				child = null;
+			}
 		}
 
 		@Override
@@ -252,7 +252,11 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		if (browserElementDefinition.getVisible().isSet()) {
 			iteratorObject = object;
 			try {
-				return browserElementDefinition.getVisible().getBindingValue(this);
+				Boolean returned = browserElementDefinition.getVisible().getBindingValue(this);
+				if (returned != null) {
+					return returned;
+				}
+				return true;
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 				return true;
