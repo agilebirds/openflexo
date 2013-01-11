@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -57,7 +59,16 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
 		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
 		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = (String) getIndividualName().getBindingValue(action);
+		String individualName = null;
+		try {
+			individualName = getIndividualName().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// System.out.println("individualName="+individualName);
 		EMFObjectIndividual newIndividual = null;
 		// try {

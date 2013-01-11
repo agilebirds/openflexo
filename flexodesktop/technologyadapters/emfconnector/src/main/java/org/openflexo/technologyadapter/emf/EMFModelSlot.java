@@ -35,7 +35,6 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
-import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFClassClass;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 
 /**
@@ -47,8 +46,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectI
 @DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class), // Instances
 		@DeclarePatternRole(EMFClassClassPatternRole.class) // Classes
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class), // Add instance
-		@DeclareEditionAction(AddEMFClassClass.class) // Add class
+@DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class) // Add instance
 })
 public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel> {
 
@@ -110,7 +108,8 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 	}
 
 	@Override
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+	@Deprecated
+	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		return null;
 	}
 
