@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
@@ -100,13 +100,13 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 			return;
 		}
 		if (!browser.getClickAction().isSet() || !browser.getClickAction().isValid()) {
-			browser.setClickAction(new DataBinding("controller.singleClick(" + browser.getName() + ".selected)"));
+			browser.setClickAction(new DataBinding<Object>("controller.singleClick(" + browser.getName() + ".selected)"));
 		}
 		if (!browser.getDoubleClickAction().isSet() || !browser.getDoubleClickAction().isValid()) {
-			browser.setDoubleClickAction(new DataBinding("controller.doubleClick(" + browser.getName() + ".selected)"));
+			browser.setDoubleClickAction(new DataBinding<Object>("controller.doubleClick(" + browser.getName() + ".selected)"));
 		}
 		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
-			browser.setRightClickAction(new DataBinding("controller.rightClick(" + browser.getName() + ".selected,event)"));
+			browser.setRightClickAction(new DataBinding<Object>("controller.rightClick(" + browser.getName() + ".selected,event)"));
 		}
 		/*
 		for (FIBBrowserElement el : browser.getElements()) {

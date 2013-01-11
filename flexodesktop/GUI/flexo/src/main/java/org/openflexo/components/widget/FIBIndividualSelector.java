@@ -33,15 +33,13 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyUtils;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
 
@@ -156,7 +154,8 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 			if (renderers.get(type) != null) {
 				logger.info("Was " + renderers.get(type).toString() + " now " + expression);
 			}
-			OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null);
+			// OntologyIndividualPathElement newPathElement = new OntologyIndividualPathElement(variableName, type, null);
+			BindingVariable newPathElement = new BindingVariable(variableName, IndividualOfClass.getIndividualOfClass(type));
 			if (bindingModel.bindingVariableNamed(variableName) != null) {
 				logger.warning("Duplicated binding variable " + variableName);
 				bindingModel.removeFromBindingVariables(bindingModel.bindingVariableNamed(variableName));
@@ -351,10 +350,11 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	}
 
 	@Override
-	public void setProject(FlexoProject project) {
-		super.setProject(project);
-		// With model slots, setContext has to be called explicitly
-		// if (project != null) {setContext(project.getProjectOntology());}
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 
 	// Please uncomment this for a live test

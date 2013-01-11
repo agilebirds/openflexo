@@ -32,7 +32,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -56,7 +55,8 @@ public abstract class FIBWidget extends FIBComponent {
 	public static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition CLICK_ACTION = new BindingDefinition("clickAction", Void.class, DataBinding.BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition CLICK_ACTION = new BindingDefinition("clickAction", Void.class,
+			DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
 	public static BindingDefinition DOUBLE_CLICK_ACTION = new BindingDefinition("doubleClickAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
@@ -93,11 +93,11 @@ public abstract class FIBWidget extends FIBComponent {
 	private Boolean readOnly = false;
 	private Boolean localize = true;
 	private String tooltipText;
-	private DataBinding<Void> clickAction;
-	private DataBinding<Void> doubleClickAction;
-	private DataBinding<Void> rightClickAction;
-	private DataBinding<Void> enterPressedAction;
-	private DataBinding<Void> valueChangedAction;
+	private DataBinding<?> clickAction;
+	private DataBinding<?> doubleClickAction;
+	private DataBinding<?> rightClickAction;
+	private DataBinding<?> enterPressedAction;
+	private DataBinding<?> valueChangedAction;
 
 	private final FIBFormatter formatter;
 	private final FIBEventListener eventListener;
@@ -434,17 +434,17 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 	}
 
-	public DataBinding<Void> getValueChangedAction() {
+	public DataBinding<?> getValueChangedAction() {
 		if (valueChangedAction == null) {
-			valueChangedAction = new DataBinding<Void>(this, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			valueChangedAction = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return valueChangedAction;
 	}
 
-	public void setValueChangedAction(DataBinding<Void> valueChangedAction) {
+	public void setValueChangedAction(DataBinding<?> valueChangedAction) {
 		if (valueChangedAction != null) {
 			valueChangedAction.setOwner(this);
-			valueChangedAction.setDeclaredType(Void.class);
+			valueChangedAction.setDeclaredType(Object.class);
 			valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.valueChangedAction = valueChangedAction;
@@ -454,17 +454,17 @@ public abstract class FIBWidget extends FIBComponent {
 		return clickAction != null && clickAction.isValid();
 	}
 
-	public final DataBinding<Void> getClickAction() {
+	public final DataBinding<?> getClickAction() {
 		if (clickAction == null) {
-			clickAction = new DataBinding<Void>(eventListener, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			clickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return clickAction;
 	}
 
-	public final void setClickAction(DataBinding<Void> clickAction) {
+	public final void setClickAction(DataBinding<?> clickAction) {
 		if (clickAction != null) {
 			clickAction.setOwner(eventListener);
-			clickAction.setDeclaredType(Void.class);
+			clickAction.setDeclaredType(Object.class);
 			clickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.clickAction = clickAction;
@@ -474,17 +474,17 @@ public abstract class FIBWidget extends FIBComponent {
 		return doubleClickAction != null && doubleClickAction.isValid();
 	}
 
-	public DataBinding<Void> getDoubleClickAction() {
+	public DataBinding<?> getDoubleClickAction() {
 		if (doubleClickAction == null) {
-			doubleClickAction = new DataBinding<Void>(eventListener, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			doubleClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return doubleClickAction;
 	}
 
-	public void setDoubleClickAction(DataBinding<Void> doubleClickAction) {
+	public void setDoubleClickAction(DataBinding<?> doubleClickAction) {
 		if (doubleClickAction != null) {
 			doubleClickAction.setOwner(eventListener);
-			doubleClickAction.setDeclaredType(Void.class);
+			doubleClickAction.setDeclaredType(Object.class);
 			doubleClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.doubleClickAction = doubleClickAction;
@@ -494,17 +494,17 @@ public abstract class FIBWidget extends FIBComponent {
 		return rightClickAction != null && rightClickAction.isValid();
 	}
 
-	public DataBinding<Void> getRightClickAction() {
+	public DataBinding<?> getRightClickAction() {
 		if (rightClickAction == null) {
-			rightClickAction = new DataBinding<Void>(eventListener, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			rightClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return rightClickAction;
 	}
 
-	public void setRightClickAction(DataBinding<Void> rightClickAction) {
+	public void setRightClickAction(DataBinding<?> rightClickAction) {
 		if (rightClickAction != null) {
 			rightClickAction.setOwner(eventListener);
-			rightClickAction.setDeclaredType(Void.class);
+			rightClickAction.setDeclaredType(Object.class);
 			rightClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.rightClickAction = rightClickAction;
@@ -514,17 +514,17 @@ public abstract class FIBWidget extends FIBComponent {
 		return enterPressedAction != null && enterPressedAction.isValid();
 	}
 
-	public DataBinding<Void> getEnterPressedAction() {
+	public DataBinding<?> getEnterPressedAction() {
 		if (enterPressedAction == null) {
-			enterPressedAction = new DataBinding<Void>(eventListener, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			enterPressedAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return enterPressedAction;
 	}
 
-	public void setEnterPressedAction(DataBinding<Void> enterPressedAction) {
+	public void setEnterPressedAction(DataBinding<?> enterPressedAction) {
 		if (enterPressedAction != null) {
 			enterPressedAction.setOwner(eventListener);
-			enterPressedAction.setDeclaredType(Void.class);
+			enterPressedAction.setDeclaredType(Object.class);
 			enterPressedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		this.enterPressedAction = enterPressedAction;

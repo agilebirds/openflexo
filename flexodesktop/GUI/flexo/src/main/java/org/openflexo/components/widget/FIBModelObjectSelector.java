@@ -43,11 +43,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
@@ -101,8 +102,6 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	private boolean isFiltered = false;
 
 	private boolean showReset = true;
-
-	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, org.openflexo.antar.binding.DataBinding.BindingDefinitionType.GET, false);
 
 	public FIBModelObjectSelector(T editedObject) {
 		super(editedObject);
@@ -684,19 +683,19 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	}
 
 	private String _selectableConditionAsString = null;
-	private DataBinding _selectableCondition;
+	private DataBinding<Boolean> _selectableCondition;
 
-	public DataBinding getSelectableConditionDataBinding() {
+	public DataBinding<Boolean> getSelectableConditionDataBinding() {
 		if (_selectableCondition != null) {
 			return _selectableCondition;
 		}
 		if (_selectableConditionAsString == null || StringUtils.isEmpty(_selectableConditionAsString)) {
 			return null;
 		}
-		_selectableCondition = new DataBinding(_selectableConditionAsString);
+		_selectableCondition = new DataBinding<Boolean>(_selectableConditionAsString);
 		_selectableCondition.setOwner(component);
-		_selectableCondition.setBindingAttribute(null);
-		_selectableCondition.setBindingDefinition(SELECTABLE);
+		_selectableCondition.setDeclaredType(Boolean.class);
+		_selectableCondition.setBindingDefinitionType(BindingDefinitionType.GET);
 		// System.out.println("setSelectableCondition with "+_selectableCondition+" valid ? "+_selectableCondition.isValid());
 		return _selectableCondition;
 	}
@@ -716,7 +715,14 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			return true;
 		}
 		setCandidateValue(candidateValue);
-		boolean returned = (Boolean) getSelectableConditionDataBinding().getBindingValue(controller);
+		boolean returned = true;
+		try {
+			returned = getSelectableConditionDataBinding().getBindingValue(controller);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		return returned;
 	}
 
