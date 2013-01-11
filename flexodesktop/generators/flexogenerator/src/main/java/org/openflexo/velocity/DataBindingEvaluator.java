@@ -23,16 +23,19 @@ import org.apache.velocity.util.introspection.VelMethod;
 import org.apache.velocity.util.introspection.VelPropertyGet;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.logging.FlexoLogger;
 
-public class VPBindingEvaluator implements VelPropertyGet, VelMethod {
+public class DataBindingEvaluator implements VelPropertyGet, VelMethod {
+
+	private static final java.util.logging.Logger logger = FlexoLogger.getLogger(DataBindingEvaluator.class.getPackage().getName());
 
 	private static final String PARAM = "evaluatedParam";
 
 	private static final String OBJECT = "object";
 
-	public static ViewPointDataBinding buildBindingForMethodAndParams(String methodName, Object[] args) {
+	public static DataBinding<?> buildBindingForMethodAndParams(String methodName, Object[] args) {
 		StringBuilder binding = new StringBuilder();
 		binding.append(OBJECT).append('.').append(methodName).append('(');
 		for (int i = 0; i < args.length; i++) {
@@ -42,23 +45,20 @@ public class VPBindingEvaluator implements VelPropertyGet, VelMethod {
 			binding.append(PARAM).append(i);
 		}
 		binding.append(')');
-		return new ViewPointDataBinding(binding.toString());
+		return new DataBinding<Object>(binding.toString());
 	}
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(VPBindingEvaluator.class
-			.getPackage().getName());
-
-	private final ViewPointDataBinding viewPointDataBinding;
+	private final DataBinding<?> dataBinding;
 	private final BindingEvaluationContext evaluationContext;
 
-	public VPBindingEvaluator(ViewPointDataBinding viewPointDataBinding, BindingEvaluationContext evaluationContext) {
-		this.viewPointDataBinding = viewPointDataBinding;
+	public DataBindingEvaluator(DataBinding<?> dataBinding, BindingEvaluationContext evaluationContext) {
+		this.dataBinding = dataBinding;
 		this.evaluationContext = evaluationContext;
 	}
 
 	@Override
 	public Object invoke(Object o) throws Exception {
-		return viewPointDataBinding.getBindingValue(evaluationContext);
+		return dataBinding.getBindingValue(evaluationContext);
 	}
 
 	@Override
@@ -68,13 +68,13 @@ public class VPBindingEvaluator implements VelPropertyGet, VelMethod {
 
 	@Override
 	public String getMethodName() {
-		return viewPointDataBinding.toString();
+		return dataBinding.toString();
 	}
 
 	@Override
 	public Object invoke(final Object object, final Object[] params) throws Exception {
 
-		return viewPointDataBinding.getBindingValue(new BindingEvaluationContext() {
+		return dataBinding.getBindingValue(new BindingEvaluationContext() {
 
 			@Override
 			public Object getValue(BindingVariable variable) {
@@ -97,7 +97,7 @@ public class VPBindingEvaluator implements VelPropertyGet, VelMethod {
 
 	@Override
 	public Class<?> getReturnType() {
-		return TypeUtils.getBaseClass(viewPointDataBinding.getBinding().getAccessedType());
+		return TypeUtils.getBaseClass(dataBinding.getAnalyzedType());
 	}
 
 }

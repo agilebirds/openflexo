@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
@@ -58,7 +60,14 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
 		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
 		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = (String) getIndividualName().getBindingValue(action);
+		String individualName = null;
+		try {
+			individualName = getIndividualName().getBindingValue(action);
+		} catch (TypeMismatchException e1) {
+			e1.printStackTrace();
+		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		}
 		// System.out.println("individualName="+individualName);
 		XSOntIndividual newIndividual = null;
 		try {
