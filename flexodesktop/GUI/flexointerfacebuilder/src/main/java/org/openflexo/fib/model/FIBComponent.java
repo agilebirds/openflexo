@@ -658,11 +658,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public Iterator<FIBComponent> getMayDependsIterator() {
-		return mayDepends.iterator();
+		return new ArrayList<FIBComponent>(mayDepends).iterator();
 	}
 
 	public Iterator<FIBComponent> getMayAltersIterator() {
-		return mayAlters.iterator();
+		return new ArrayList<FIBComponent>(mayAlters).iterator();
 	}
 
 	public void declareDependantOf(FIBComponent aComponent) /*throws DependancyLoopException*/{
