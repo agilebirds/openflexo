@@ -610,8 +610,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	 */
 
 	public void notifyShowLeanTabHasChanged() {
-		if (getInspectorWindow() != null) {
-			getInspectorWindow().getContent().refresh();
+		if (getModuleInspectorController() != null) {
+			getModuleInspectorController().refreshComponentVisibility();
 		}
 	}
 

@@ -223,6 +223,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 		return inspectorDialog;
 	}
 
+	public void refreshComponentVisibility() {
+		inspectorDialog.getInspectorPanel().refreshComponentVisibility();
+	}
+
 	protected void switchToEmptyContent() {
 		// System.out.println("switchToEmptyContent()");
 		currentInspectedObject = null;
