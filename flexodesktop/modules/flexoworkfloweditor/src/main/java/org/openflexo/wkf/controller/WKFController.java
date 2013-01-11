@@ -603,12 +603,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 	}
 
-	/*
-	 * private static final String WORKFLOW_LEAN_TAB_NAME="Metrics Definition"; private static final String
-	 * PROCESS_LEAN_TAB_NAME="Process Metrics"; private static final String ACTIVITY_LEAN_TAB_NAME="Activity Metrics"; private static final
-	 * String OPERATION_LEAN_TAB_NAME="Operation Metrics"; private static final String EDGE_LEAN_TAB_NAME="Edge Metrics";
-	 */
-
 	public void notifyShowLeanTabHasChanged() {
 		if (getModuleInspectorController() != null) {
 			getModuleInspectorController().refreshComponentVisibility();
