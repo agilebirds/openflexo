@@ -37,7 +37,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
@@ -241,7 +240,8 @@ public class FIBCustom extends FIBWidget {
 
 	public static class FIBCustomAssignment extends FIBModelObject {
 		@Deprecated
-		public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class, DataBinding.BindingDefinitionType.GET_SET, true);
+		public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class,
+				DataBinding.BindingDefinitionType.GET_SET, true);
 		@Deprecated
 		public BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true);
 
@@ -251,8 +251,8 @@ public class FIBCustom extends FIBWidget {
 
 		private FIBCustom custom;
 
-		private DataBinding<Object> variable;
-		private DataBinding<Object> value;
+		private DataBinding<?> variable;
+		private DataBinding<?> value;
 
 		private boolean mandatory = true;
 
@@ -264,7 +264,7 @@ public class FIBCustom extends FIBWidget {
 		public FIBCustomAssignment() {
 		}
 
-		public FIBCustomAssignment(FIBCustom custom, DataBinding<Object> variable, DataBinding<Object> value, boolean mandatory) {
+		public FIBCustomAssignment(FIBCustom custom, DataBinding<?> variable, DataBinding<?> value, boolean mandatory) {
 			this();
 			this.custom = custom;
 			this.mandatory = mandatory;
@@ -295,14 +295,14 @@ public class FIBCustom extends FIBWidget {
 			return null;
 		}
 
-		public DataBinding<Object> getVariable() {
+		public DataBinding<?> getVariable() {
 			if (variable == null) {
 				variable = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
 			}
 			return variable;
 		}
 
-		public void setVariable(DataBinding<Object> variable) {
+		public void setVariable(DataBinding<?> variable) {
 			if (variable != null) {
 				variable.setOwner(this);
 				variable.setDeclaredType(Object.class);
@@ -320,14 +320,14 @@ public class FIBCustom extends FIBWidget {
 			}*/
 		}
 
-		public DataBinding<Object> getValue() {
+		public DataBinding<?> getValue() {
 			if (value == null) {
 				value = new DataBinding<Object>(getCustom(), Object.class, DataBinding.BindingDefinitionType.GET);
 			}
 			return value;
 		}
 
-		public void setValue(DataBinding<Object> value) {
+		public void setValue(DataBinding<?> value) {
 			if (value != null) {
 				value.setOwner(getCustom()); // Warning, still null while deserializing
 				value.setDeclaredType(Object.class);

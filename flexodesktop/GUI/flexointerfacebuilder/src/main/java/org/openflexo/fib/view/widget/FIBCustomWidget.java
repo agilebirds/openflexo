@@ -185,8 +185,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	private void performAssignments() {
 		for (FIBCustomAssignment assign : getWidget().getAssignments()) {
-			DataBinding<Object> variableDB = assign.getVariable();
-			DataBinding<Object> valueDB = assign.getValue();
+			DataBinding<?> variableDB = assign.getVariable();
+			DataBinding<?> valueDB = assign.getValue();
 			if (valueDB != null && valueDB.isValid()) {
 				Object value = null;
 				try {
