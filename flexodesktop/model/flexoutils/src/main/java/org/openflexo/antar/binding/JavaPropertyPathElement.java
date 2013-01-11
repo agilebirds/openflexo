@@ -50,7 +50,7 @@ public class JavaPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public boolean isSettable() {
-		return keyValueProperty.isSettable();
+		return keyValueProperty != null && keyValueProperty.isSettable();
 	}
 
 	@Override

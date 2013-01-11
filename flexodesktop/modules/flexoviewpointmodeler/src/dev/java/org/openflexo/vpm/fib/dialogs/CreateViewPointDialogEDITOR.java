@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.toolbox.FileResource;
@@ -35,8 +36,9 @@ public class CreateViewPointDialogEDITOR extends FIBAbstractEditor {
 		TestApplicationContext testApplicationContext = new TestApplicationContext(
 				new FileResource("src/test/resources/TestResourceCenter"));
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
+		FlexoResourceCenter rc = testApplicationContext.getResourceCenterService().getResourceCenters().get(0);
 
-		CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(viewPointLibrary, null, null);
+		CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(rc.getViewPointRepository().getRootFolder(), null, null);
 		return makeArray(action);
 	}
 

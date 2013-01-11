@@ -60,7 +60,6 @@ import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.JavaBindingFactory;
@@ -964,7 +963,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	protected Expression makeBinding() {
 
-		return new BindingValue();
+		BindingValue newBindingValue = new BindingValue();
+		newBindingValue.setDataBinding(getEditedObject());
+		return newBindingValue;
 
 		/*Expression returned = null;
 		if (editionMode == EditionMode.BINDING_EXPRESSION) {
@@ -1059,8 +1060,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				getTextField().setSelectedTextColor(Color.RED);
 			}
 			_revertBindingValue = dataBinding.clone();
-		} else {
-			_revertBindingValue = null;
 		}
 		updateTextFieldProgrammaticaly();
 		if (popupIsShown()) {

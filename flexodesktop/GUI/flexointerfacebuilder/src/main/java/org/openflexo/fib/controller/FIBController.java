@@ -215,7 +215,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		if (variable.getVariableName().equals("controller")) {
 			return this;
 		}
-		return variable.getBindingValue(null, this);
+		return null;
 	}
 
 	public FIBComponent getRootComponent() {

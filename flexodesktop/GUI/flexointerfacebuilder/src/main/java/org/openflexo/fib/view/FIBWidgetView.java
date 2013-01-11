@@ -175,8 +175,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (getDataObject() == null) {
 			return null;
 		}
+
+		Object value = null;
+
 		try {
-			T returned = (T) getWidget().getData().getBindingValue(getController());
+			value = getWidget().getData().getBindingValue(getController());
+			T returned = (T) value;
 			if (getDynamicModel() != null) {
 				getDynamicModel().setData(returned);
 			}
@@ -348,7 +352,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 			return true;
 		} catch (Exception e) {
-			logger.warning("Unexpected exception: " + e.getMessage());
+			logger.warning("Unexpected exception while updating FIBWidgetView: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}

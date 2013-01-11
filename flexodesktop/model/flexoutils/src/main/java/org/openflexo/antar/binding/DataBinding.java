@@ -40,6 +40,7 @@ import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
@@ -538,6 +539,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				logger.warning("Unexpected TransformException while evaluating " + expression + " " + e1.getMessage());
 				e1.printStackTrace();
 				return null;
+			} catch (InvalidObjectSpecificationException e1) {
+				System.out.println("j'ai mon probleme, binding: " + this);
+				System.out.println("valid=" + isValid());
+				for (BindingValue bv : getExpression().getAllBindingValues()) {
+					System.out.println("bv=" + bv + " valid=" + bv.isValid() + " reason " + bv.invalidBindingReason());
+				}
+				System.out.println("On s'arrete");
 			}
 		}
 		return null;

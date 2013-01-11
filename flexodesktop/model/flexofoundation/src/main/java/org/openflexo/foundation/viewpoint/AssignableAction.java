@@ -23,7 +23,6 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -56,7 +55,8 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	public DataBinding<Object> getAssignation() {
 		if (assignation == null) {
-			assignation = new DataBinding<Object>(this, getAssignableType(), DataBinding.BindingDefinitionType.GET_SET);
+			assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
+			assignation.setDeclaredType(getAssignableType());
 			assignation.setBindingName("assignation");
 			assignation.setMandatory(isAssignationRequired());
 		}

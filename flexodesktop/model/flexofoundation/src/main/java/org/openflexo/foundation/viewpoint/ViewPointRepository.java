@@ -21,8 +21,9 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileResourceRepository;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 
@@ -32,7 +33,7 @@ import org.openflexo.foundation.technologyadapter.ModelRepository;
  * @author sylvain
  * 
  */
-public class ViewPointRepository extends ResourceRepository<ViewPointResource> {
+public class ViewPointRepository extends FileResourceRepository<ViewPointResource> {
 
 	private static final Logger logger = Logger.getLogger(ModelRepository.class.getPackage().getName());
 
@@ -40,7 +41,8 @@ public class ViewPointRepository extends ResourceRepository<ViewPointResource> {
 	private ViewPointLibrary viewPointLibrary;
 
 	public ViewPointRepository(FlexoResourceCenter resourceCenter, ViewPointLibrary vpLibrary) {
-		super();
+		super(resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory()
+				: null);
 		this.resourceCenter = resourceCenter;
 		this.viewPointLibrary = vpLibrary;
 		getRootFolder().setName(resourceCenter.getName());
@@ -54,4 +56,7 @@ public class ViewPointRepository extends ResourceRepository<ViewPointResource> {
 		this.resourceCenter = resourceCenter;
 	}
 
+	public ViewPointLibrary getViewPointLibrary() {
+		return viewPointLibrary;
+	}
 }

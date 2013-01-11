@@ -231,17 +231,18 @@ public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCus
 		return editedObject.getSimpleName();
 	}
 
-	/*public static void main(String[] args)
-	{
+	/*public static void main(String[] args) {
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData() { 
-				return
-				FIBAbstractEditor.makeArray(LoadedClassesInfo.instance(java.lang.Object.class)); 
-			} 
+			public Object[] getData() {
+				return FIBAbstractEditor.makeArray(LoadedClassesInfo.instance(java.lang.Object.class));
+			}
+
 			@Override
-			public File getFIBFile() { return FIB_FILE; }
+			public File getFIBFile() {
+				return FIB_FILE;
+			}
 		};
 
 		editor.launch();

@@ -210,9 +210,9 @@ public abstract class FIBWidget extends FIBComponent {
 
 	@Override
 	public Type getDataType() {
-		if (getData() != null && getData().isSet()) {
+		/*if (getData() != null && getData().isSet()) {
 			return getData().getAnalyzedType();
-		}
+		}*/
 		return getDefaultDataClass();
 
 	}

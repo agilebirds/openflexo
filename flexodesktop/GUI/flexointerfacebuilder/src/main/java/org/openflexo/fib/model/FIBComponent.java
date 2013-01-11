@@ -36,7 +36,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
@@ -1337,7 +1336,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			return;
 		}
 
-		if (binding.getExpression() != null) {
+		if (binding.isValid() && binding.getExpression() != null) {
 			// System.out.println("For binding " + binding);
 			for (BindingValue e : binding.getExpression().getAllBindingValues()) {
 				// System.out.println(" > binding variable " + e.getBindingVariable() + " of " + e.getBindingVariable().getType());

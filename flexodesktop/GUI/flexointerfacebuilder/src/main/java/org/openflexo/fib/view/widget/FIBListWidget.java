@@ -171,7 +171,6 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				e.printStackTrace();
 			}
 		}
 		if (objectToSelect == null && getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {

@@ -30,7 +30,6 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SettableBindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
@@ -108,7 +107,8 @@ public class BindingValue extends Expression {
 	private BindingVariable bindingVariable;
 	private ArrayList<BindingPathElement> bindingPath;
 
-	private boolean needsParsing = true;
+	private boolean needsAnalysing = true;
+	private boolean analysingSuccessfull = true;
 
 	private DataBinding<?> dataBinding;
 
@@ -121,7 +121,8 @@ public class BindingValue extends Expression {
 		this.parsedBindingPath = aBindingPath;
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();
-		needsParsing = true;
+		needsAnalysing = true;
+		analysingSuccessfull = true;
 	}
 
 	public BindingValue(String stringToParse) throws ParseException {
@@ -135,10 +136,6 @@ public class BindingValue extends Expression {
 		} else {
 			throw new ParseException("Not parseable as a BindingValue: " + stringToParse);
 		}
-	}
-
-	public boolean needsParsing() {
-		return needsParsing;
 	}
 
 	public DataBinding<?> getDataBinding() {
@@ -277,6 +274,7 @@ public class BindingValue extends Expression {
 		this.bindingVariable = bindingVariable;
 		bindingPath.clear();
 		parsedBindingPath.clear();
+		analysingSuccessfull = true;
 	}
 
 	public Type getAccessedType() {
@@ -385,7 +383,7 @@ public class BindingValue extends Expression {
 		return false;
 	}
 
-	private String invalidBindingReason;
+	private String invalidBindingReason = "not analyzed yet";
 
 	public boolean isValid() {
 		return isValid(getDataBinding());
@@ -393,16 +391,18 @@ public class BindingValue extends Expression {
 
 	public boolean isValid(DataBinding<?> dataBinding) {
 
-		invalidBindingReason = "unknown";
-
 		setDataBinding(dataBinding);
 		if (dataBinding == null) {
 			invalidBindingReason = "binding value has no referenced data binding";
 			return false;
 		}
 
-		if (needsParsing) {
+		if (needsAnalysing) {
 			buildBindingPathFromParsedBindingPath(dataBinding);
+		}
+
+		if (!analysingSuccessfull) {
+			return false;
 		}
 
 		if (logger.isLoggable(Level.FINE)) {
@@ -498,8 +498,7 @@ public class BindingValue extends Expression {
 			return false;
 		}
 
-		boolean pathDecodingSucceeded = false;
-		needsParsing = false;
+		needsAnalysing = false;
 		setDataBinding(dataBinding);
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();
@@ -511,7 +510,9 @@ public class BindingValue extends Expression {
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
 			if (bindingVariable == null) {
-				pathDecodingSucceeded = false;
+				invalidBindingReason = "cannot find binding variable "
+						+ ((NormalBindingPathElement) getParsedBindingPath().get(0)).property;
+				analysingSuccessfull = false;
 				return false;
 			}
 			int i = 0;
@@ -525,7 +526,9 @@ public class BindingValue extends Expression {
 							current = newPathElement;
 							// System.out.println("> SIMPLE " + pathElement);
 						} else {
-							pathDecodingSucceeded = false;
+							analysingSuccessfull = false;
+							invalidBindingReason = "cannot find property " + ((NormalBindingPathElement) pathElement).property
+									+ " for type " + TypeUtils.simpleRepresentation(current.getType());
 							return false;
 						}
 					} else if (pathElement instanceof MethodCallBindingPathElement) {
@@ -547,24 +550,27 @@ public class BindingValue extends Expression {
 							current = newPathElement;
 							// System.out.println("> FUNCTION " + pathElement);
 						} else {
-							pathDecodingSucceeded = false;
+							invalidBindingReason = "cannot find method " + ((MethodCallBindingPathElement) pathElement).method
+									+ " for type " + TypeUtils.simpleRepresentation(current.getType());
+							analysingSuccessfull = false;
 							return false;
 						}
 					} else {
 						logger.warning("Unexpected " + pathElement);
-						pathDecodingSucceeded = false;
+						invalidBindingReason = "unexpected path element: " + pathElement;
+						analysingSuccessfull = false;
 						return false;
 					}
 				}
 				i++;
 			}
-			pathDecodingSucceeded = true;
+			analysingSuccessfull = true;
 		} else {
 			logger.warning("Invalid binding value");
-			pathDecodingSucceeded = false;
+			analysingSuccessfull = false;
 		}
 
-		return pathDecodingSucceeded;
+		return analysingSuccessfull;
 	}
 
 	public Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
@@ -730,6 +736,7 @@ public class BindingValue extends Expression {
 		System.out.println("parsedBindingPath=" + parsedBindingPath);
 		System.out.println("bvar=" + bindingVariable);
 		System.out.println("bpath=" + bindingPath);
-		System.out.println("needsParsing=" + needsParsing);
+		System.out.println("needsAnalysing=" + needsAnalysing);
+		System.out.println("analysingSuccessfull=" + analysingSuccessfull);
 	}
 }

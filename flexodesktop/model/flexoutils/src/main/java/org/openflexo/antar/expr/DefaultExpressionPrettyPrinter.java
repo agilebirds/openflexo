@@ -125,7 +125,7 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(BindingValue bv) {
-		if (!bv.needsParsing()) {
+		if (bv.isValid()) {
 			StringBuffer sb = new StringBuffer();
 			if (bv.getBindingVariable() != null) {
 				sb.append(bv.getBindingVariable().getVariableName());

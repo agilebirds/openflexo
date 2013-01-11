@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.icon.VPMIconLibrary;
@@ -35,7 +35,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoint, FlexoObject, ViewPointObject> {
+public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoint, RepositoryFolder, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

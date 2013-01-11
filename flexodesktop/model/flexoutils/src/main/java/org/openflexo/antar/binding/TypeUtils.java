@@ -29,6 +29,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -646,9 +647,11 @@ public class TypeUtils {
 			} else if (gd instanceof Method) {
 				return type;
 			}
-			logger.warning("Not found type variable " + tv + " in context " + context + " GenericDeclaration=" + tv.getGenericDeclaration());
-			// throw new InvalidKeyValuePropertyException("Not found type variable "+tv+" in context "+context);
-			return type;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Not found type variable " + tv + " in context " + context + " GenericDeclaration="
+						+ tv.getGenericDeclaration() + " bounds=" + (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class));
+			}
+			return (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class);
 		}
 
 		if (type instanceof WildcardType) {

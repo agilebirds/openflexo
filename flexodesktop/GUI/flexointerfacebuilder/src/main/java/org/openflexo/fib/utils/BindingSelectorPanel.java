@@ -449,7 +449,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		resetButton = _controlPanel.addButton("reset", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bindingSelector.setEditedObject(null);
+				bindingSelector.getEditedObject().reset();
 				bindingSelector.apply();
 			}
 		});
@@ -1773,6 +1773,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			if (bindingSelector.getBindingDefinition() != null && bindingSelector.getBindable() != null) {
 				BindingValue newBindingValue = new BindingValue();
 				newBindingValue.setBindingVariable(getSelectedBindingVariable());
+				newBindingValue.setDataBinding(dataBinding);
 				System.out.println("getSelectedBindingVariable()=" + getSelectedBindingVariable());
 				dataBinding.setExpression(newBindingValue /*bindingSelector.makeBinding()*/);
 				// bindingValue.setBindingVariable(getSelectedBindingVariable());

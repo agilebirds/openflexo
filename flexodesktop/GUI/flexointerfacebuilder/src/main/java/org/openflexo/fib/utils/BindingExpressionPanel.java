@@ -51,7 +51,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
@@ -331,6 +330,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			Expression newExpression;
 			if (expressionTA.getText().trim().equals("")) {
 				newExpression = new BindingValue();
+				((BindingValue) newExpression).setDataBinding(dataBinding);
 				// newExpression = new BindingExpression.BindingValueVariable("", _bindingExpression.getOwner());
 			} else {
 				newExpression = ExpressionParser.parse(expressionTA.getText());
@@ -1172,6 +1172,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		// System.out.println("appendBinaryOperator " + operator);
 		if (focusReceiver != null) {
 			BindingValue variable = new BindingValue();
+			variable.setDataBinding(dataBinding);
 			Expression newExpression = new BinaryOperatorExpression(operator, focusReceiver.getRepresentedExpression(), variable);
 			/*logger.info("variable="+variable.getBindingValue());
 			logger.info("owner="+variable.getBindingValue().getOwner());
@@ -1192,7 +1193,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		// System.out.println("appendConditional");
 		if (focusReceiver != null) {
 			BindingValue condition = new BindingValue();
+			condition.setDataBinding(dataBinding);
 			BindingValue elseExpression = new BindingValue();
+			elseExpression.setDataBinding(dataBinding);
 			Expression newExpression = new ConditionalExpression(condition, focusReceiver.getRepresentedExpression(), elseExpression);
 			focusReceiver.setRepresentedExpression(newExpression);
 		}
