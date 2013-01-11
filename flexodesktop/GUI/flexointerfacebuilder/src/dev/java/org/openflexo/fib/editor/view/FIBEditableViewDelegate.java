@@ -275,13 +275,15 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				boolean visible = placeHolderVisibleRequesters.size() > 0;
-				if (view.getPlaceHolders() != null) {
-					for (PlaceHolder ph : view.getPlaceHolders()) {
-						ph.setVisible(visible);
+				if (view != null) {
+					boolean visible = placeHolderVisibleRequesters.size() > 0;
+					if (view.getPlaceHolders() != null) {
+						for (PlaceHolder ph : view.getPlaceHolders()) {
+							ph.setVisible(visible);
+						}
 					}
+					updatePlaceHoldersVisibilityRequested = false;
 				}
-				updatePlaceHoldersVisibilityRequested = false;
 			}
 		});
 	}
