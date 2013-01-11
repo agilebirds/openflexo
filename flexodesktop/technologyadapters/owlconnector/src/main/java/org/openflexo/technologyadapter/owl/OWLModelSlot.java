@@ -21,10 +21,6 @@ import org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
-import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRolePathElement.DataPropertyStatementPatternRolePathElement;
-import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRolePathElement.IsAStatementPatternRolePathElement;
-import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRolePathElement.ObjectPropertyStatementPatternRolePathElement;
-import org.openflexo.technologyadapter.owl.viewpoint.OntologicStatementPatternRolePathElement.RestrictionStatementPatternRolePathElement;
 import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
@@ -68,8 +64,8 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	}
 
 	@Override
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		if (pr instanceof SubClassStatementPatternRole) {
+	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+		/*if (pr instanceof SubClassStatementPatternRole) {
 			return new IsAStatementPatternRolePathElement((SubClassStatementPatternRole) pr, container);
 		} else if (pr instanceof ObjectPropertyStatementPatternRole) {
 			return new ObjectPropertyStatementPatternRolePathElement((ObjectPropertyStatementPatternRole) pr, container);
@@ -80,7 +76,8 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 		} else {
 			logger.warning("Unexpected " + pr);
 			return null;
-		}
+		}*/
+		return null;
 	}
 
 	/**

@@ -22,14 +22,14 @@ package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
@@ -43,7 +43,14 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 	}
 
 	public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {
-		return (OWLConcept<?>) getSubject().getBindingValue(action);
+		try {
+			return (OWLConcept<?>) getSubject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/*@Override
@@ -64,35 +71,26 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		super.setPatternRole(patternRole);
 	}*/
 
-	private ViewPointDataBinding subject;
-
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, true) {
-		@Override
-		public Type getType() {
-			return getSubjectType();
-		}
-	};
+	private DataBinding<Object> subject;
 
 	public Type getSubjectType() {
 		return IFlexoOntologyConcept.class;
 	}
 
-	public BindingDefinition getSubjectBindingDefinition() {
-		return SUBJECT;
-	}
-
-	public ViewPointDataBinding getSubject() {
+	public DataBinding<Object> getSubject() {
 		if (subject == null) {
-			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
+			subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET);
+			subject.setBindingName("subject");
 		}
 		return subject;
 	}
 
-	public void setSubject(ViewPointDataBinding subject) {
+	public void setSubject(DataBinding<Object> subject) {
 		if (subject != null) {
 			subject.setOwner(this);
-			subject.setBindingAttribute(EditionActionBindingAttribute.subject);
-			subject.setBindingDefinition(getSubjectBindingDefinition());
+			subject.setBindingName("subject");
+			subject.setDeclaredType(getSubjectType());
+			subject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.subject = subject;
 	}
@@ -103,13 +101,8 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddStatement object) {
+		public DataBinding<IFlexoOntologyConcept> getBinding(AddStatement object) {
 			return object.getSubject();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddStatement object) {
-			return object.getSubjectBindingDefinition();
 		}
 
 	}

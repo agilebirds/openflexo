@@ -22,13 +22,13 @@ package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -49,28 +49,33 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 	}
 
 	public OWLConcept<?> getPropertyFather(EditionSchemeAction action) {
-		return (OWLConcept<?>) getFather().getBindingValue(action);
+		try {
+			return (OWLConcept<?>) getFather().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding father;
+	private DataBinding<IFlexoOntologyConcept> father;
 
-	private BindingDefinition FATHER = new BindingDefinition("father", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, false);
-
-	public BindingDefinition getFatherBindingDefinition() {
-		return FATHER;
-	}
-
-	public ViewPointDataBinding getFather() {
+	public DataBinding<IFlexoOntologyConcept> getFather() {
 		if (father == null) {
-			father = new ViewPointDataBinding(this, EditionActionBindingAttribute.father, getFatherBindingDefinition());
+			father = new DataBinding<IFlexoOntologyConcept>(this, IFlexoOntologyConcept.class, BindingDefinitionType.GET);
+			father.setBindingName("father");
 		}
 		return father;
 	}
 
-	public void setFather(ViewPointDataBinding father) {
-		father.setOwner(this);
-		father.setBindingAttribute(EditionActionBindingAttribute.father);
-		father.setBindingDefinition(getFatherBindingDefinition());
+	public void setFather(DataBinding<IFlexoOntologyConcept> father) {
+		if (father != null) {
+			father.setOwner(this);
+			father.setBindingName("father");
+			father.setDeclaredType(IFlexoOntologyConcept.class);
+			father.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.father = father;
 	}
 

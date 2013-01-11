@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -26,8 +27,11 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
@@ -62,21 +66,30 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		return getEditionScheme().getBindingModel();
 	}
 
-	private DataBinding<IFlexoOntologyConcept> object;
+	private DataBinding<Object> object;
 
-	public DataBinding<IFlexoOntologyConcept> getObject() {
+	public Type getObjectType() {
+		if (getOntologyProperty() instanceof IFlexoOntologyObjectProperty
+				&& ((IFlexoOntologyObjectProperty) getOntologyProperty()).getRange() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getOntologyProperty())
+					.getRange());
+		}
+		return IFlexoOntologyConcept.class;
+	}
+
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new DataBinding<IFlexoOntologyConcept>(this, IFlexoOntologyConcept.class, BindingDefinitionType.GET);
+			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
 			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(DataBinding<IFlexoOntologyConcept> object) {
+	public void setObject(DataBinding<Object> object) {
 		if (object != null) {
 			object.setOwner(this);
 			object.setBindingName("object");
-			object.setDeclaredType(IFlexoOntologyConcept.class);
+			object.setDeclaredType(getObjectType());
 			object.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.object = object;

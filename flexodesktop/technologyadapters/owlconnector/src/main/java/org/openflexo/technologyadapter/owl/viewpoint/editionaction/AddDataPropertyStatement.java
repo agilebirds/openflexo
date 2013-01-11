@@ -23,9 +23,10 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
@@ -37,7 +38,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
@@ -49,6 +49,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
 	private String dataPropertyURI = null;
+	private DataBinding<Object> value;
 
 	public AddDataPropertyStatement(ViewPointBuilder builder) {
 		super(builder);
@@ -127,36 +128,38 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	}
 
 	public Object getValue(EditionSchemeAction action) {
-		return getValue().getBindingValue(action);
+		try {
+			return getValue().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding value;
-
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true) {
-		@Override
-		public java.lang.reflect.Type getType() {
-			if (getDataProperty() != null) {
-				return ((IFlexoOntologyDataProperty) getDataProperty()).getRange().getAccessedType();
-			}
-			return Object.class;
-		};
+	public Type getType() {
+		if (getDataProperty() != null) {
+			return ((IFlexoOntologyDataProperty) getDataProperty()).getRange().getAccessedType();
+		}
+		return Object.class;
 	};
 
-	public BindingDefinition getValueBindingDefinition() {
-		return VALUE;
-	}
-
-	public ViewPointDataBinding getValue() {
+	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
+			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
+			value.setBindingName("value");
 		}
 		return value;
 	}
 
-	public void setValue(ViewPointDataBinding value) {
-		value.setOwner(this);
-		value.setBindingAttribute(EditionActionBindingAttribute.value);
-		value.setBindingDefinition(getValueBindingDefinition());
+	public void setValue(DataBinding<Object> value) {
+		if (value != null) {
+			value.setOwner(this);
+			value.setBindingName("value");
+			value.setDeclaredType(getType());
+			value.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.value = value;
 	}
 
@@ -232,7 +235,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 			@Override
 			protected void fixAction() {
 				AddDataPropertyStatement action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -244,13 +247,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddDataPropertyStatement object) {
+		public DataBinding<Object> getBinding(AddDataPropertyStatement object) {
 			return object.getValue();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddDataPropertyStatement object) {
-			return object.getValueBindingDefinition();
 		}
 
 	}

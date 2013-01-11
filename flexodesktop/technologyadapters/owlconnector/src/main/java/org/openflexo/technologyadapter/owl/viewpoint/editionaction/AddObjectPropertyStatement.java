@@ -23,9 +23,10 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
@@ -38,7 +39,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
@@ -128,38 +128,42 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	}
 
 	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
-		return (OWLConcept<?>) getObject().getBindingValue(action);
-	}
-
-	private ViewPointDataBinding object;
-
-	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, DataBinding.BindingDefinitionType.GET, true) {
-		@Override
-		public Type getType() {
-			if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
-					&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty())
-						.getRange());
-			}
-			return IFlexoOntologyConcept.class;
+		try {
+			return (OWLConcept<?>) getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
-	};
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
+		return null;
 	}
 
-	public ViewPointDataBinding getObject() {
+	private DataBinding<Object> object;
+
+	public Type getObjectType() {
+		if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
+				&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty())
+					.getRange());
+		}
+		return IFlexoOntologyConcept.class;
+	}
+
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<Object> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(getObjectType());
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
@@ -235,7 +239,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			@Override
 			protected void fixAction() {
 				AddObjectPropertyStatement action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -247,13 +251,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddObjectPropertyStatement object) {
+		public DataBinding<Object> getBinding(AddObjectPropertyStatement object) {
 			return object.getObject();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddObjectPropertyStatement object) {
-			return object.getObjectBindingDefinition();
 		}
 
 	}
