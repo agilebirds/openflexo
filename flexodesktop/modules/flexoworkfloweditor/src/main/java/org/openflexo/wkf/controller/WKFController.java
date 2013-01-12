@@ -177,6 +177,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			return getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE;
 		} else if ("SWL".equals(context)) {
 			return getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE;
+		} else if ("ROLE_EDITOR".equals(context)) {
+			return getCurrentPerspective() == ROLE_EDITOR_PERSPECTIVE;
 		} else {
 			return super.displayInspectorTabForContext(context);
 		}
