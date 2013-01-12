@@ -382,6 +382,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void setEditedObject(DataBinding dataBinding) {
+
+		// logger.info("setEditedObject in BindingSelector with " + dataBinding);
+
 		setEditedObject(dataBinding, true);
 		if (dataBinding != null && dataBinding.isValid()) {
 			isConnected = true;
@@ -450,8 +453,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		} else {
 			newEditionMode = EditionMode.NORMAL_BINDING;
 		}
-
-		logger.info("DISPLAY_MODE was: " + oldEditionMode + " is now " + newEditionMode);
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("DISPLAY_MODE was: " + oldEditionMode + " is now " + newEditionMode);
@@ -1046,7 +1047,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			_selectorPanel.willApply();
 		}
 		DataBinding dataBinding = getEditedObject();
-		// System.out.println("Apply with " + dataBinding + " valid=" + dataBinding.isValid());
 		if (dataBinding != null) {
 			if (dataBinding.isValid()) {
 				/*if (bindingValue instanceof BindingValue) {

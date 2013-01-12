@@ -162,6 +162,7 @@ public class BindingValue extends Expression {
 	public Type addBindingPathElement(BindingPathElement element) {
 		int index = bindingPath.size();
 		setBindingPathElementAtIndex(element, index);
+		analysingSuccessfull = _checkBindingPathValid();
 		return element.getType();
 	}
 
@@ -192,6 +193,7 @@ public class BindingValue extends Expression {
 				logger.warning("Could not set property at index " + i);
 			}
 		}
+		analysingSuccessfull = _checkBindingPathValid();
 		parsedBindingPath.clear();
 	}
 
@@ -215,10 +217,12 @@ public class BindingValue extends Expression {
 			bindingPath.remove(bindingPath.size() - 1);
 			removeBindingPathElementAfter(requestedLast);
 		}
+		analysingSuccessfull = _checkBindingPathValid();
 	}
 
 	public void removeBindingPathAt(int index) {
 		bindingPath.remove(index);
+		analysingSuccessfull = _checkBindingPathValid();
 	}
 
 	/**
@@ -274,7 +278,7 @@ public class BindingValue extends Expression {
 		this.bindingVariable = bindingVariable;
 		bindingPath.clear();
 		parsedBindingPath.clear();
-		analysingSuccessfull = true;
+		analysingSuccessfull = _checkBindingPathValid();
 	}
 
 	public Type getAccessedType() {

@@ -42,7 +42,31 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		return encoder;
 	}
 
-	public static ViewPointResource makeViewPointResource(File viewPointDirectory, ViewPointLibrary viewPointLibrary) {
+	public static ViewPointResource makeViewPointResource(String name, String uri, File viewPointDirectory,
+			ViewPointLibrary viewPointLibrary) {
+		try {
+			ModelFactory factory = new ModelFactory(ViewPointResource.class);
+			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
+			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
+			returned.setName(name);
+			returned.setURI(uri);
+			returned.setVersion(new FlexoVersion("0.1"));
+			returned.setFile(xmlFile);
+			returned.setDirectory(viewPointDirectory);
+			returned.setViewPointLibrary(viewPointLibrary);
+			viewPointLibrary.registerViewPoint(returned);
+			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
+
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static ViewPointResource retrieveViewPointResource(File viewPointDirectory, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);

@@ -39,7 +39,7 @@ public class FIBBrowserController extends FIBController implements Observer {
 	}
 
 	public void setSelectedComponent(FIBComponent selectedComponent) {
-		logger.info("setSelectedComponent with " + selectedComponent);
+		// logger.info("setSelectedComponent with " + selectedComponent);
 		editorController.setSelectedObject(selectedComponent);
 	}
 

@@ -890,7 +890,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			logger.fine("update with " + binding);
 		}
 
-		System.out.println("Update in BindingSelectorPanel with binding of " + (binding != null ? binding.getExpression() : "null"));
+		// logger.info("Update in BindingSelectorPanel with binding " + binding);
 
 		if (binding == null || binding.isConstant()) {
 			clearColumns();

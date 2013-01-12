@@ -45,6 +45,7 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -166,10 +167,15 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public static ViewPoint newViewPoint(String baseName, String viewpointURI/*, File owlFile*/, File viewpointDir,
 			ViewPointLibrary library/*, ViewPointFolder folder*/) {
-		File xmlFile = new File(viewpointDir, baseName + ".xml");
+		ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(baseName, viewpointURI, viewpointDir, library);
 		ViewPoint viewpoint = new ViewPoint();
+		vpRes.setResourceData(viewpoint);
+		viewpoint.setResource(vpRes);
 		// viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
+
+		// And register it to the library
+		library.registerViewPoint(vpRes);
 
 		// ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 

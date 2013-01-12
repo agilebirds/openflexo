@@ -82,7 +82,7 @@ public class TypeUtils {
 				upperBounds.append((isFirst ? "" : ",") + upperBound.toString());
 				isFirst = false;
 			}
-			logger.warning("Unresolved TypeVariable: " + tv.getName() + " " + tv.getGenericDeclaration() + " bounds=" + upperBounds);
+			// logger.warning("Unresolved TypeVariable: " + tv.getName() + " " + tv.getGenericDeclaration() + " bounds=" + upperBounds);
 			if (tv.getBounds().length > 0) {
 				return getBaseClass(tv.getBounds()[0]);
 			} else {

@@ -730,7 +730,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setData(DataBinding<?> data) {
 		if (data != null) {
-			this.data = new DataBinding<Object>(data.getUnparsedBinding(), this, data.getDeclaredType(), data.getBindingDefinitionType()) {
+			this.data = new DataBinding<Object>(data.toString(), this, data.getDeclaredType(), data.getBindingDefinitionType()) {
 				@Override
 				public Type getDeclaredType() {
 					return getDataType();
@@ -750,7 +750,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setVisible(DataBinding<Boolean> visible) {
 		if (visible != null) {
-			visible = new DataBinding<Boolean>(visible.getUnparsedBinding(), this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			visible = new DataBinding<Boolean>(visible.toString(), this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		this.visible = visible;
 	}

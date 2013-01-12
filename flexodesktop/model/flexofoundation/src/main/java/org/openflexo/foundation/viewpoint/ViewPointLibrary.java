@@ -108,7 +108,10 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	 * @return
 	 */
 	public ViewPoint getViewPoint(String viewpointURI) {
-		return map.get(viewpointURI).getViewPoint();
+		if (getViewPointResource(viewpointURI) != null) {
+			return getViewPointResource(viewpointURI).getViewPoint();
+		}
+		return null;
 	}
 
 	/**

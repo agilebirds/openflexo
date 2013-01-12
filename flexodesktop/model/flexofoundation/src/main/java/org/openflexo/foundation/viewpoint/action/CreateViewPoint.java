@@ -32,8 +32,6 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -46,7 +44,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 	private static final Logger logger = Logger.getLogger(CreateViewPoint.class.getPackage().getName());
 
 	public static FlexoActionType<CreateViewPoint, RepositoryFolder, ViewPointObject> actionType = new FlexoActionType<CreateViewPoint, RepositoryFolder, ViewPointObject>(
-			"create_view_point", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+			"create_view_definition", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
@@ -83,14 +81,19 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 	private String _newViewPointDescription;
 	private ViewPoint newViewPoint;
 
-	private RepositoryFolder folder;
-
 	public Vector<IFlexoOntology> importedOntologies = new Vector<IFlexoOntology>();
 
 	// private boolean createsOntology = false;
 
 	CreateViewPoint(RepositoryFolder focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public ViewPointLibrary getViewPointLibrary() {
+		if (!(getFocusedObject().getResourceRepository() instanceof ViewPointRepository)) {
+			return null;
+		}
+		return ((ViewPointRepository) getFocusedObject().getResourceRepository()).getViewPointLibrary();
 	}
 
 	@Override
@@ -102,7 +105,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 
 		logger.info("Create new viewpoint");
 
-		ViewPointLibrary viewPointLibrary = ((ViewPointRepository) getFocusedObject().getResourceRepository()).getViewPointLibrary();
+		ViewPointLibrary viewPointLibrary = getViewPointLibrary();
+		ViewPointRepository vpRepository = (ViewPointRepository) getFocusedObject().getResourceRepository();
 
 		File newViewPointDir = getViewPointDir();
 
@@ -125,12 +129,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 		// Instanciate new ViewPoint
 		newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewViewPointURI(), newViewPointDir, viewPointLibrary);
 		newViewPoint.setDescription(getNewViewPointDescription());
-		ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(new File(newViewPointDir, getBaseName() + ".viewpoint"),
-				viewPointLibrary);
-		vpRes.setResourceData(newViewPoint);
 
-		// And register it to the library
-		viewPointLibrary.registerViewPoint(vpRes);
+		vpRepository.registerResource(newViewPoint.getResource(), getFocusedObject());
+
 	}
 
 	/*private OWLMetaModel buildOntology() {
@@ -165,10 +166,6 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 	}
 
 	public String getNewViewPointURI() {
-		if (StringUtils.isEmpty(_newViewPointURI) /*&& getOntologyFile() != null*/) {
-			// return OWLOntology.findOntologyURI(getOntologyFile());
-			return "http://to.be.implemented";
-		}
 		return _newViewPointURI;
 	}
 
@@ -204,19 +201,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 		}*/
 
 	public RepositoryFolder getViewPointFolder() {
-		/*if (folder == null) {
-			if (getFocusedObject() instanceof ViewPointFolder) {
-				return _ViewPointFolder = (ViewPointFolder) getFocusedObject();
-			} else if (getFocusedObject() instanceof ViewPointLibrary) {
-				return _ViewPointFolder = ((ViewPointLibrary) getFocusedObject()).getRootFolder();
-			}
-			return null;
-		}*/
-		return folder;
-	}
-
-	public void setViewPointFolder(RepositoryFolder viewPointFolder) {
-		folder = viewPointFolder;
+		return getFocusedObject();
 	}
 
 	public boolean isNewViewPointNameValid() {
@@ -238,10 +223,10 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 			errorMessage = "malformed_uri";
 			return false;
 		}
-		if (!getNewViewPointURI().endsWith(".owl")) {
-			errorMessage = "malformed_uri";
-			return false;
+		if (getViewPointLibrary().getViewPointResource(getNewViewPointURI()) != null) {
+			errorMessage = "already_existing_viewpoint_uri";
 		}
+
 		return true;
 	}
 

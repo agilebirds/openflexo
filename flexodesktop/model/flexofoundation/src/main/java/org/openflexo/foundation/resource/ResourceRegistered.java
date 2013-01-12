@@ -17,27 +17,21 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.model;
+package org.openflexo.foundation.resource;
 
+import org.openflexo.foundation.ontology.dm.OEDataModification;
 
-public class FIBTextField extends FIBTextWidget {
+public class ResourceRegistered extends OEDataModification {
 
-	private boolean passwd = false;
+	private RepositoryFolder<?> folder;
 
-	public FIBTextField() {
+	public ResourceRegistered(FlexoResource<?> resource, RepositoryFolder<?> folder) {
+		super("resources", null, resource);
+		this.folder = folder;
 	}
 
-	@Override
-	protected String getBaseName() {
-		return "TextField";
-	}
-
-	public boolean isPasswd() {
-		return passwd;
-	}
-
-	public void setPasswd(boolean passwd) {
-		this.passwd = passwd;
+	public RepositoryFolder<?> getFolder() {
+		return folder;
 	}
 
 }

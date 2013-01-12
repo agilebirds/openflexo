@@ -67,6 +67,8 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 
 	public void addToResources(R resource) {
 		resources.add(resource);
+		setChanged();
+		notifyObservers(new ResourceRegistered(resource, this));
 	}
 
 	public void removeFromResources(R resource) {

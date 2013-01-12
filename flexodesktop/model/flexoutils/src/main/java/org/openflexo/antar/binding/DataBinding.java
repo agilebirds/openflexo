@@ -353,6 +353,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			}
 		}
 
+		// NO need to check target type for EXECUTE bindings (we don't need return type nor value)
+		if (getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE) {
+			return true;
+		}
+
 		if (getDeclaredType() != null && TypeUtils.isTypeAssignableFrom(getDeclaredType(), getAnalyzedType(), true)) {
 			// System.out.println("getBindingDefinition().getType()="+getBindingDefinition().getType());
 			// System.out.println("getAccessedType()="+getAccessedType());
