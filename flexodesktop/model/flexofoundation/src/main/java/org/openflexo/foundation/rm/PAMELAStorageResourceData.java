@@ -1,5 +1,8 @@
 package org.openflexo.foundation.rm;
 
+import java.util.Date;
+import java.util.logging.Level;
+
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.ReturnedValue;
@@ -28,6 +31,11 @@ public interface PAMELAStorageResourceData extends StorageResourceData, Accessib
 	public FlexoProject getProject();
 
 	public static abstract class PAMELAStorageResourceDataImpl implements PAMELAStorageResourceData {
+
+		private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger
+				.getLogger(PAMELAStorageResourceDataImpl.class.getPackage().getName());
+		private Date lastMemoryUpdate;
+
 		@Override
 		public FlexoProject getProject() {
 			return getFlexoResource().getProject();
@@ -39,11 +47,22 @@ public interface PAMELAStorageResourceData extends StorageResourceData, Accessib
 		}
 
 		@Override
+		public Date lastMemoryUpdate() {
+			return lastMemoryUpdate;
+		}
+
+		@Override
 		public void setModified(boolean modified) {
 			boolean old = isModified();
 			performSuperSetModified(modified);
-			if (modified && !old) {
-				getFlexoResource().notifyResourceStatusChanged();
+			lastMemoryUpdate = new Date();
+			if (modified && !old && !isDeserializing()) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info(">>>>>>>> PAMELA resource " + getFlexoResource() + " has been modified");
+				}
+				if (getFlexoResource() != null) {
+					getFlexoResource().notifyResourceStatusChanged();
+				}
 			}
 		}
 	}

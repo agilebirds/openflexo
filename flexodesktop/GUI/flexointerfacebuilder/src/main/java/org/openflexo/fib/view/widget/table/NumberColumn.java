@@ -90,7 +90,10 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
 					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-					textfield.setText(((Number) value).toString());
+					if (value != null) {
+						textfield.setText(((Number) value).toString());
+					} else
+						textfield.setText("");
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {

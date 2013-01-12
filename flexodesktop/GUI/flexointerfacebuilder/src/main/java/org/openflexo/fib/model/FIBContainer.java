@@ -81,6 +81,7 @@ public abstract class FIBContainer extends FIBComponent {
 			aComponent.getConstraints().putAll(someConstraints);
 			aComponent.getConstraints().ignoreNotif = false;
 		}
+		updateComponentIndexForInsertionIndex(aComponent, subComponentIndex);
 		subComponents.add(subComponentIndex, aComponent);
 		if (deserializationPerformed) {
 			reorderComponents();
@@ -92,6 +93,50 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBComponent>(Parameters.subComponents, aComponent));
+	}
+
+	private void updateComponentIndexForInsertionIndex(FIBComponent component, int insertionIndex) {
+		if (subComponents.size() > 0) {
+			FIBComponent previous = null;
+			FIBComponent next = null;
+			if (insertionIndex < subComponents.size()) {
+				next = subComponents.get(insertionIndex);
+			}
+			if (insertionIndex > 0) {
+				previous = subComponents.get(insertionIndex - 1);
+			}
+
+			if (previous != null) {
+				if (previous.getIndex() == null) {
+					if (component.getIndex() != null && component.getIndex() < 0) {
+						component.setIndex(null);
+					}
+				} else if (previous.getIndex() < 0) {
+					if (component.getIndex() != null && component.getIndex() < previous.getIndex()) {
+						component.setIndex(previous.getIndex());
+					}
+				} else {
+					if (component.getIndex() == null || component.getIndex() < previous.getIndex()) {
+						component.setIndex(previous.getIndex());
+					}
+				}
+			}
+			if (next != null) {
+				if (next.getIndex() == null) {
+					if (component.getIndex() != null && component.getIndex() >= 0) {
+						component.setIndex(null);
+					}
+				} else if (next.getIndex() < 0) {
+					if (component.getIndex() == null || component.getIndex() > next.getIndex()) {
+						component.setIndex(next.getIndex());
+					}
+				} else {
+					if (component.getIndex() != null && component.getIndex() > next.getIndex()) {
+						component.setIndex(next.getIndex());
+					}
+				}
+			}
+		}
 	}
 
 	public FIBComponent getSubComponentNamed(String name) {
@@ -336,26 +381,34 @@ public abstract class FIBContainer extends FIBComponent {
 
 	public void componentFirst(FIBComponent c) {
 		subComponents.remove(c);
+		updateComponentIndexForInsertionIndex(c, 0);
 		subComponents.insertElementAt(c, 0);
 		notifyComponentIndexChanged(c);
 	}
 
 	public void componentUp(FIBComponent c) {
 		int index = subComponents.indexOf(c);
-		subComponents.remove(c);
-		subComponents.insertElementAt(c, index - 1);
-		notifyComponentIndexChanged(c);
+		if (index > 0) {
+			subComponents.remove(c);
+			updateComponentIndexForInsertionIndex(c, index - 1);
+			subComponents.insertElementAt(c, index - 1);
+			notifyComponentIndexChanged(c);
+		}
 	}
 
 	public void componentDown(FIBComponent c) {
 		int index = subComponents.indexOf(c);
-		subComponents.remove(c);
+		if (index < subComponents.size() - 1) {
+			subComponents.remove(c);
+		}
+		updateComponentIndexForInsertionIndex(c, index + 1);
 		subComponents.insertElementAt(c, index + 1);
 		notifyComponentIndexChanged(c);
 	}
 
 	public void componentLast(FIBComponent c) {
 		subComponents.remove(c);
+		updateComponentIndexForInsertionIndex(c, subComponents.size());
 		subComponents.add(c);
 		notifyComponentIndexChanged(c);
 	}
@@ -364,6 +417,11 @@ public abstract class FIBContainer extends FIBComponent {
 		FIBAttributeNotification<ComponentConstraints> notification = new FIBAttributeNotification<ComponentConstraints>(
 				FIBComponent.Parameters.constraints, component.getConstraints(), component.getConstraints());
 		component.notify(notification);
+		setChanged();
+		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
+	}
+
+	private void notifySubcomponentsIndexChanged() {
 		setChanged();
 		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
 	}
@@ -400,6 +458,7 @@ public abstract class FIBContainer extends FIBComponent {
 				}
 			}
 		});
+		notifySubcomponentsIndexChanged();
 	}
 
 }

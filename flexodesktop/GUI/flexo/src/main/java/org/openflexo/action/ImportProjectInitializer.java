@@ -26,9 +26,13 @@ import javax.swing.Icon;
 
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.rm.ProjectImportLoopException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
@@ -44,6 +48,35 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 
 	public ImportProjectInitializer(ControllerActionInitializer actionInitializer) {
 		super(ImportProject.actionType, actionInitializer);
+	}
+
+	@Override
+	protected FlexoExceptionHandler<ImportProject> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<ImportProject>() {
+
+			@Override
+			public boolean handleException(FlexoException exception, ImportProject action) {
+				if (action.getThrownException() instanceof ProjectImportLoopException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("project_already_imported") + " "
+							+ action.getProjectToImport().getName());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<ImportProject> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ImportProject>() {
+			@Override
+			public boolean run(EventObject event, ImportProject action) {
+				if (action.hasActionExecutionSucceeded()) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("successfully_imported_project") + " "
+							+ action.getProjectToImport().getName());
+				}
+				return true;
+			}
+		};
 	}
 
 	@Override
