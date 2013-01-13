@@ -275,6 +275,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 				@Override
 				public void setValue(Function.FunctionArgument arg, DataBinding aValue) {
+					logger.info("setValue in BindingValueColumn with " + aValue);
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Sets value " + arg + " to be " + aValue);
 					}
@@ -350,7 +351,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 		@Override
 		public void setModel(FunctionPathElement model) {
-			System.out.println("On set le modele avec " + model);
+			// logger.info("On set le modele du MethodCallBindingsModel avec " + model);
 			if (model != null) {
 				model.instanciateParameters(bindingSelector.getBindable());
 			}
@@ -774,7 +775,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					+ " _selectedPathElementIndex=" + _selectedPathElementIndex);
 		}
 		if (bindingSelector.editionMode == EditionMode.COMPOUND_BINDING && bindingSelector.getEditedObject().isBindingValue()) {
-			System.out.println("On se met le method call panel a jour");
+			// logger.info("On se met le method call panel a jour...");
 			if (((BindingValue) bindingSelector.getEditedObject().getExpression()).isCompoundBinding() && _selectedPathElementIndex == -1) {
 				_selectedPathElementIndex = ((BindingValue) bindingSelector.getEditedObject().getExpression()).getBindingPathElementCount();
 			}
@@ -787,23 +788,25 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			} else if (_selectedPathElementIndex > bindingValue.getBindingPath().size()) {
 				_selectedPathElementIndex = -1;
 			}
-			System.out.println("Ici avec _selectedPathElementIndex=" + _selectedPathElementIndex);
+			// logger.info("Ici avec _selectedPathElementIndex=" + _selectedPathElementIndex + " bindingValue=" + bindingValue);
 			if (_selectedPathElementIndex > -1 && bindingValue != null) {
 				JList list = _lists.get(_selectedPathElementIndex);
 				int newSelectedIndex = list.getSelectedIndex();
 				if (newSelectedIndex > 0) {
-					System.out.println("newSelectedIndex=" + newSelectedIndex);
+					// logger.info("newSelectedIndex=" + newSelectedIndex);
 					BindingColumnElement selectedValue = (BindingColumnElement) list.getSelectedValue();
+					// logger.info("selectedValue.getElement()=" + selectedValue.getElement() + " of " +
+					// selectedValue.getElement().getClass());
 					if (selectedValue.getElement() instanceof FunctionPathElement) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
 						if (currentElement instanceof FunctionPathElement
 								&& ((FunctionPathElement) currentElement).getFunction().equals(
 										((FunctionPathElement) selectedValue.getElement()).getFunction())) {
-							System.out.println("On y arrive");
+							// logger.info("On y arrive");
 							getMethodCallBindingsModel().setModel((FunctionPathElement) currentElement);
 							return;
 						} else {
-							System.out.println("On y arrive pas");
+							// logger.info("On y arrive pas");
 						}
 					}
 				}
@@ -1277,12 +1280,23 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		}
 
 		public BindingColumnElement getElementFor(BindingPathElement element) {
+			// logger.info("getElementFor() " + element + " of " + element.getClass());
 			/*if (element instanceof MethodCall) {
 				element = ((MethodCall) element).getMethodDefinition();
 			}*/
 			for (int i = 0; i < getSize(); i++) {
+				// logger.info("getElementAt(i)=" + getElementAt(i).getElement() + " of " + getElementAt(i).getElement().getClass());
 				if (getElementAt(i).getElement().equals(element)) {
 					return getElementAt(i);
+				}
+				if ((element instanceof FunctionPathElement) && (getElementAt(i).getElement() instanceof FunctionPathElement)) {
+					// Special equals, we try to find a FunctionPathElement even if parameters are different
+					FunctionPathElement f1 = (FunctionPathElement) element;
+					FunctionPathElement f2 = (FunctionPathElement) getElementAt(i).getElement();
+					if (f1.getFunction().equals(f2.getFunction())) {
+						return getElementAt(i);
+					}
+
 				}
 			}
 			logger.info("I cannot find " + element + " of " + (element != null ? element.getClass() : null));

@@ -58,6 +58,7 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 	private void updateSelectorWith(BindingSelector selector, D rowObject, DataBinding<?> value) {
 		DataBinding oldBV = selector.getEditedObject();
 		if (oldBV == null || !oldBV.equals(value)) {
+			// logger.info("updateSelectorWith value=" + (value != null ? value + " (" + value.getBindingName() + ")" : "null"));
 			// selector.setEditedObjectAndUpdateBDAndOwner(value);
 			selector.setEditedObject(value);
 			selector.setRevertValue(value != null ? value.clone() : null);
@@ -134,6 +135,7 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 			};
 			_editSelector.setFont(NORMAL_FONT);
 		}
+		logger.info("Build EditSelector for " + rowObject + " value=" + value);
 		updateSelectorWith(_editSelector, rowObject, value);
 		return _editSelector;
 	}

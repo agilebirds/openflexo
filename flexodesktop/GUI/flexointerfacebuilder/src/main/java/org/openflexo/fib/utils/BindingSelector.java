@@ -190,6 +190,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					boolean requestFocus = getTextField().hasFocus();
 					openPopup();
 					if (requestFocus) {
+						logger.info("Request focus in " + getTextField());
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
@@ -320,7 +321,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			DataBinding newEditedBinding = makeBindingFromString(textValue);
 
 			if (newEditedBinding != null) {
-				logger.fine("Decoding binding as " + newEditedBinding);
+				logger.info("Decoding binding as " + newEditedBinding + " valid=" + newEditedBinding.isValid());
 				// if (newEditedBinding instanceof BindingValue) logger.info("BV="+((BindingValue)newEditedBinding).getBindingVariable());
 				if (newEditedBinding.isValid()) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -333,8 +334,12 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 							logger.fine("This is a new one, i take this");
 						}
 						setEditedObject(newEditedBinding);
+						fireEditedObjectChanged();
 						return;
 					} else {
+						// Anyway, in case of it is the same object, but with changes, we always fire fireEditedObjectChanged()
+						checkIfDisplayModeShouldChange(newEditedBinding, true);
+						fireEditedObjectChanged();
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Skipping as it represents the same binding");
 						}
@@ -357,6 +362,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Couldn't decode as binding, trying to synchronize panel anyway");
 				}
+				logger.info("Couldn't decode as binding, trying to synchronize panel anyway");
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
 				if (_selectorPanel != null) {
@@ -384,6 +390,13 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	public void setEditedObject(DataBinding dataBinding) {
 
 		// logger.info("setEditedObject in BindingSelector with " + dataBinding);
+
+		if (dataBinding == null) {
+			// Mais des fois, c'est autorise quand meme, il faut donc tracer tous les appels pour voir ceux qui sont legaux (sylvain)
+			logger.warning("Il est interdit de faire un setEditedObject(null) !!!");
+			// Thread.dumpStack();
+			return;
+		}
 
 		setEditedObject(dataBinding, true);
 		if (dataBinding != null && dataBinding.isValid()) {
@@ -425,7 +438,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			getTextField().setForeground(Color.RED);
 			getTextField().setSelectedTextColor(Color.RED);
 		}
-
 	}
 
 	DataBinding<?> checkIfDisplayModeShouldChange(DataBinding<?> object, boolean setValueAsNewEditedValue) {
@@ -642,10 +654,11 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				showAgain = true;
 				closePopup(false);
 			}
-			if (getEditedObject() != null && !(getEditedObject().isBindingValue())) {
+			// sylvain: i don't understand this code, i suppressed it
+			/*if (getEditedObject() != null && !(getEditedObject().isBindingValue())) {
 				getEditedObject().setExpression(makeBinding()); // I dont want to notify it !!!
 				fireEditedObjectChanged();
-			}
+			}*/
 			deleteCustomPanel();
 			if (showAgain) {
 				openPopup();
@@ -759,7 +772,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
-		if (editedObject.isSet()) {
+		if (editedObject != null && editedObject.isSet()) {
 			if (editedObject.isValid()) {
 				getLabel().setVisible(true);
 				getLabel().setIcon(UtilsIconLibrary.OK_ICON);
@@ -1103,10 +1116,14 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	}
 
 	protected void valueSelected(int index, JList list, DataBinding binding) {
+
+		boolean bindingRecreated = false;
+
 		if (!(binding.isBindingValue())) {
+
 			editionMode = EditionMode.NORMAL_BINDING;
 			binding.setExpression(makeBinding()); // Should create a BindingValue instance !!!
-			fireEditedObjectChanged();
+			bindingRecreated = true;
 			if (!(binding.isBindingValue())) {
 				logger.severe("Should never happen: valueSelected() called for a non-BindingValue instance !");
 				return;
@@ -1139,9 +1156,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				}
 			} else if (selectedValue.getElement() instanceof FunctionPathElement && editionMode == EditionMode.COMPOUND_BINDING) {
 				BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(index - 1);
-				System.out.println("selectedValue.getElement()=" + selectedValue.getElement() + " of "
+				/*System.out.println("selectedValue.getElement()=" + selectedValue.getElement() + " of "
 						+ selectedValue.getElement().getClass());
-				System.out.println("currentElement=" + currentElement + " of " + currentElement.getClass());
+				System.out.println("currentElement=" + currentElement + " of " + currentElement != null ? currentElement.getClass() : null);*/
 
 				if (!(currentElement instanceof FunctionPathElement)
 						|| (!((FunctionPathElement) currentElement).getFunction().equals(

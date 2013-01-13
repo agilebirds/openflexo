@@ -540,8 +540,9 @@ public class BindingValue extends Expression {
 						List<DataBinding<?>> args = new ArrayList<DataBinding<?>>();
 						int argIndex = 0;
 						for (Expression arg : methodCall.args) {
-							DataBinding<?> argDataBinding = new DataBinding<Object>("arg" + argIndex, dataBinding.getOwner(), Object.class,
+							DataBinding<?> argDataBinding = new DataBinding<Object>(dataBinding.getOwner(), Object.class,
 									DataBinding.BindingDefinitionType.GET);
+							argDataBinding.setBindingName("arg" + argIndex);
 							argDataBinding.setExpression(arg);
 							argDataBinding.setDeclaredType(argDataBinding.getAnalyzedType());
 							args.add(argDataBinding);
@@ -570,7 +571,8 @@ public class BindingValue extends Expression {
 			}
 			analysingSuccessfull = true;
 		} else {
-			logger.warning("Invalid binding value");
+			logger.warning("Invalid binding value " + this);
+			// Thread.dumpStack();
 			analysingSuccessfull = false;
 		}
 
