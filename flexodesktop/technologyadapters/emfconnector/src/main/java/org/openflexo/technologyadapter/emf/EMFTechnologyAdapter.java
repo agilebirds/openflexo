@@ -282,12 +282,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		EMFModelResource result = null;
 		try {
 			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
-			File modelFile = File
-					.createTempFile(
-							emfMetaModelResource.getModelFileExtension(),
-							"." + emfMetaModelResource.getModelFileExtension(),
-							new File(
-									"D:/Documents and Settings/gbesancon/Application Data/OpenFlexo/FlexoResourceCenter/Ontologies/EMF/Model/parameters"));
+			File modelFile = File.createTempFile(emfMetaModelResource.getModelFileExtension(),
+					"." + emfMetaModelResource.getModelFileExtension(), new File(
+							"D:/Documents and Settings/gbesancon/Mes documents/FlexoUserResourceCenter/Ontologies/EMF/Model/parameters"));
 			result = (EMFModelResource) retrieveModelResource(modelFile, metaModelResource, technologyContextManager);
 			result.getEMFResource().save(null);
 		} catch (IOException e) {

@@ -110,6 +110,15 @@ public class TestEMFModelEdition {
 			EMFObjectIndividualAttributeDataPropertyValue intParameterNameParameter = addIntParameterName.performAction(null);
 			addIntParameterName.finalizePerformAction(null, intParameterNameParameter);
 
+			AddEMFObjectIndividualAttributeDataPropertyValue<Integer> addIntParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Integer>(
+					null);
+			addIntParameterValue.setObjectIndividual(intParameter);
+			addIntParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
+					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/IntParameterValue/value"));
+			addIntParameterValue.setValue(Integer.valueOf(12));
+			EMFObjectIndividualAttributeDataPropertyValue intParameterValueParameter = addIntParameterValue.performAction(null);
+			addIntParameterValue.finalizePerformAction(null, intParameterValueParameter);
+
 			AddEMFObjectIndividual addDoubleParameter = new AddEMFObjectIndividual(null);
 			addDoubleParameter.setEMFModelResource(emfModelResource);
 			addDoubleParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue");
@@ -124,6 +133,15 @@ public class TestEMFModelEdition {
 			addDoubleParameterName.setValue("DoubleParameter Name");
 			EMFObjectIndividualAttributeDataPropertyValue doubleParameterNameParameter = addDoubleParameterName.performAction(null);
 			addDoubleParameterName.finalizePerformAction(null, doubleParameterNameParameter);
+
+			AddEMFObjectIndividualAttributeDataPropertyValue<Double> addDoubleParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Double>(
+					null);
+			addDoubleParameterValue.setObjectIndividual(doubleParameter);
+			addDoubleParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
+					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue/value"));
+			addDoubleParameterValue.setValue(Double.valueOf(42.12));
+			EMFObjectIndividualAttributeDataPropertyValue doubleParameterValueParameter = addDoubleParameterValue.performAction(null);
+			addDoubleParameterValue.finalizePerformAction(null, doubleParameterValueParameter);
 
 			AddEMFObjectIndividual addBoolParameter = new AddEMFObjectIndividual(null);
 			addBoolParameter.setEMFModelResource(emfModelResource);
@@ -140,6 +158,15 @@ public class TestEMFModelEdition {
 			EMFObjectIndividualAttributeDataPropertyValue boolParameterNameParameter = addBoolParameterName.performAction(null);
 			addBoolParameterName.finalizePerformAction(null, boolParameterNameParameter);
 
+			AddEMFObjectIndividualAttributeDataPropertyValue<Boolean> addBoolParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Boolean>(
+					null);
+			addBoolParameterValue.setObjectIndividual(boolParameter);
+			addBoolParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
+					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/BoolParameterValue/value"));
+			addBoolParameterValue.setValue(Boolean.TRUE);
+			EMFObjectIndividualAttributeDataPropertyValue boolParameterValueParameter = addBoolParameterValue.performAction(null);
+			addBoolParameterValue.finalizePerformAction(null, boolParameterValueParameter);
+
 			AddEMFObjectIndividual addStringParameter = new AddEMFObjectIndividual(null);
 			addStringParameter.setEMFModelResource(emfModelResource);
 			addStringParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/StringParameterValue");
@@ -154,6 +181,15 @@ public class TestEMFModelEdition {
 			addStringParameterName.setValue("StringParameter Name");
 			EMFObjectIndividualAttributeDataPropertyValue stringParameterNameParameter = addStringParameterName.performAction(null);
 			addStringParameterName.finalizePerformAction(null, stringParameterNameParameter);
+
+			AddEMFObjectIndividualAttributeDataPropertyValue<String> addStringParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
+					null);
+			addStringParameterValue.setObjectIndividual(stringParameter);
+			addStringParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
+					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/StringParameterValue/value"));
+			addStringParameterValue.setValue("StringParameter Value");
+			EMFObjectIndividualAttributeDataPropertyValue stringParameterValueParameter = addStringParameterValue.performAction(null);
+			addStringParameterValue.finalizePerformAction(null, stringParameterValueParameter);
 
 			AddEMFObjectIndividualReferenceObjectPropertyValue<EObject> addParameterSetParameters = new AddEMFObjectIndividualReferenceObjectPropertyValue<EObject>(
 					null);
