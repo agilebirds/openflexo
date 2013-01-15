@@ -305,7 +305,7 @@ public class VPMIconLibrary extends IconLibrary {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
-		} else if (object instanceof OntologicObjectPatternRole) {
+		} else if (object instanceof OntologicObjectPatternRole && ((OntologicObjectPatternRole<?>) object).getModelSlot() != null) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
