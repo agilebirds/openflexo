@@ -23,6 +23,7 @@ import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
@@ -90,8 +91,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 				ProjectChooserComponent chooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
 				};
 				while (true) {
-					chooser.showOpenDialog();
-					if (chooser.getSelectedFile() != null) {
+					if (chooser.showOpenDialog() == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						FlexoEditor editor = null;
 						try {
 							editor = getController().getApplicationContext().getProjectLoader()
