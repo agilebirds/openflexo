@@ -37,7 +37,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
@@ -78,10 +77,11 @@ public class FIBBrowserElement extends FIBModelObject {
 	@Deprecated
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
 	@Deprecated
-	public static BindingDefinition EDITABLE_LABEL = new BindingDefinition("editableLabel", String.class, DataBinding.BindingDefinitionType.GET_SET,
-			false);
+	public static BindingDefinition EDITABLE_LABEL = new BindingDefinition("editableLabel", String.class,
+			DataBinding.BindingDefinitionType.GET_SET, false);
 	@Deprecated
-	public static BindingDefinition DYNAMIC_FONT = new BindingDefinition("dynamicFont", Font.class, DataBinding.BindingDefinitionType.GET, false);
+	public static BindingDefinition DYNAMIC_FONT = new BindingDefinition("dynamicFont", Font.class, DataBinding.BindingDefinitionType.GET,
+			false);
 
 	private Class dataClass;
 
@@ -588,7 +588,8 @@ public class FIBBrowserElement extends FIBModelObject {
 		@Deprecated
 		public static BindingDefinition DATA = new BindingDefinition("data", Object.class, DataBinding.BindingDefinitionType.GET, false);
 		@Deprecated
-		public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+		public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, DataBinding.BindingDefinitionType.GET,
+				false);
 		@Deprecated
 		public static BindingDefinition CAST = new BindingDefinition("cast", Object.class, DataBinding.BindingDefinitionType.GET, false);
 

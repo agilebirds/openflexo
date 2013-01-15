@@ -322,6 +322,10 @@ public class TypeUtils {
 			return false;
 		}
 
+		if (aType.equals(anOtherType)) {
+			return true;
+		}
+
 		// Everything could be assigned to Object
 		if (isObject(aType)) {
 			return true;

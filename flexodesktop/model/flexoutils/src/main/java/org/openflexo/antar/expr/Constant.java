@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.expr;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Vector;
 
@@ -88,6 +89,10 @@ public abstract class Constant<V> extends Expression {
 	}
 
 	public abstract V getValue();
+
+	public Type getType() {
+		return getEvaluationType().getType();
+	}
 
 	public static abstract class BooleanConstant extends Constant<Boolean> {
 		public static BooleanConstant get(boolean value) {
@@ -167,6 +172,11 @@ public abstract class Constant<V> extends Expression {
 
 		public void setValue(Object value) {
 			this.value = value;
+		}
+
+		@Override
+		public Type getType() {
+			return getValue().getClass();
 		}
 
 	}
@@ -439,6 +449,7 @@ public abstract class Constant<V> extends Expression {
 			// TODO
 			return null;
 		}
+
 	}
 
 }

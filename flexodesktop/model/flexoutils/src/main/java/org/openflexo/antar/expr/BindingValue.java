@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function.FunctionArgument;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SettableBindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
@@ -454,6 +455,24 @@ public class BindingValue extends Expression {
 
 		for (int i = 0; i < bindingPath.size(); i++) {
 			BindingPathElement element = bindingPath.get(i);
+			if (element instanceof FunctionPathElement) {
+				// We have to check that all arguments are valid
+				FunctionPathElement functionPathElement = (FunctionPathElement) element;
+				if (functionPathElement.getFunction() == null) {
+					invalidBindingReason = "invalid function";
+					return false;
+				} else {
+					for (FunctionArgument arg : functionPathElement.getFunction().getArguments()) {
+						DataBinding<?> argValue = functionPathElement.getParameter(arg);
+						// System.out.println("Checking " + argValue + " valid=" + argValue.isValid());
+						if (!argValue.isValid()) {
+							invalidBindingReason = "Parameter value for function: " + functionPathElement.getFunction() + " : "
+									+ "invalid argument " + arg.getArgumentName() + " reason=" + argValue.invalidBindingReason();
+							return false;
+						}
+					}
+				}
+			}
 			if (!TypeUtils.isTypeAssignableFrom(currentElement.getType(), element.getParent().getType(), true)) {
 				invalidBindingReason = "Mismatched: " + currentElement.getType() + " and " + element.getParent().getType();
 				return false;
@@ -544,7 +563,7 @@ public class BindingValue extends Expression {
 									DataBinding.BindingDefinitionType.GET);
 							argDataBinding.setBindingName("arg" + argIndex);
 							argDataBinding.setExpression(arg);
-							argDataBinding.setDeclaredType(argDataBinding.getAnalyzedType());
+							argDataBinding.setDeclaredType(Object.class/*argDataBinding.getAnalyzedType()*/);
 							args.add(argDataBinding);
 							argIndex++;
 						}

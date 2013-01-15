@@ -249,9 +249,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	public Type getAnalyzedType() {
 		if (getExpression() != null) {
 			if (getExpression() instanceof BindingValue) {
-				return ((BindingValue) getExpression()).getAccessedTypeNoValidityCheck();
+				// return ((BindingValue) getExpression()).getAccessedTypeNoValidityCheck();
+				return ((BindingValue) getExpression()).getAccessedType();
 			} else if (getExpression() instanceof CastExpression) {
 				return ((CastExpression) getExpression()).getCastType().getType();
+			} else if (expression instanceof Constant) {
+				return ((Constant) expression).getType();
 			} else {
 				try {
 					/*System.out.println("****** expression=" + getExpression());
@@ -317,7 +320,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					public void visit(Expression e) throws InvalidBindingValue {
 						if (e instanceof BindingValue) {
 							if (!((BindingValue) e).isValid(DataBinding.this)) {
+								// System.out.println("Invalid binding " + e);
 								throw new InvalidBindingValue((BindingValue) e);
+							} else {
+								// System.out.println("Valid binding " + e);
 							}
 						}
 					}
@@ -365,10 +371,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return true;
 		}
 
-		invalidBindingReason = "Invalid binding because types are not matching searched " + getDeclaredType() + " having "
+		invalidBindingReason = "Invalid binding " + this + " because types are not matching searched " + getDeclaredType() + " having "
 				+ getAnalyzedType();
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Invalid binding because types are not matching searched " + getDeclaredType() + " having " + getAnalyzedType());
+			logger.fine("Invalid binding " + this + " because types are not matching searched " + getDeclaredType() + " having "
+					+ getAnalyzedType());
 		}
 		return false;
 	}

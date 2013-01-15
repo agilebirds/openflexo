@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Function.FunctionArgument;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -41,7 +42,12 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	public JavaMethodPathElement(BindingPathElement parent, String methodName, List<DataBinding<?>> args) {
 		super(parent, retrieveMethod(parent.getType(), methodName, args), args);
-
+		if (getFunction() != null) {
+			for (FunctionArgument arg : getFunction().getArguments()) {
+				DataBinding<?> argValue = getParameter(arg);
+				argValue.setDeclaredType(arg.getArgumentType());
+			}
+		}
 		if (getMethodDefinition() == null) {
 			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType());
 		} else {
@@ -109,7 +115,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 
-		//System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
+		// System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
 		Object[] args = new Object[getFunction().getArguments().size()];
 		int i = 0;
