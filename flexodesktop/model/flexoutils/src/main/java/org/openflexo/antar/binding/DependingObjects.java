@@ -22,6 +22,8 @@ public class DependingObjects {
 
 	public static interface HasDependencyBinding extends Observer, PropertyChangeListener {
 		public List<AbstractBinding> getDependencyBindings();
+
+		public List<TargetObject> getChainedBindings(AbstractBinding binding, TargetObject object);
 	}
 
 	private List<TargetObject> dependingObjects;
@@ -35,6 +37,10 @@ public class DependingObjects {
 		this.dependingObjectsAreComputed = false;
 	}
 
+	protected void addToDependingObjects(TargetObject object) {
+		dependingObjects.add(object);
+	}
+
 	public synchronized void refreshObserving(BindingEvaluationContext context/*, boolean debug*/) {
 
 		/*if (debug) {
@@ -46,6 +52,13 @@ public class DependingObjects {
 			List<TargetObject> targetObjects = binding.getTargetObjects(context);
 			if (targetObjects != null) {
 				updatedDependingObjects.addAll(targetObjects);
+				if (targetObjects.size() > 0) {
+					List<TargetObject> chainedBindings = observerObject.getChainedBindings(binding,
+							targetObjects.get(targetObjects.size() - 1));
+					if (chainedBindings != null) {
+						updatedDependingObjects.addAll(chainedBindings);
+					}
+				}
 			}
 		}
 		Set<HasPropertyChangeSupport> set = new HashSet<HasPropertyChangeSupport>();

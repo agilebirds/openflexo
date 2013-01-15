@@ -43,6 +43,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
@@ -228,15 +229,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	}
 
-	private synchronized void updateDependingObjects() {
-
+	protected void updateDependingObjects() {
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController() /*
-															* ,getWidget().getName() != null &&
-															* getWidget().getName().equals("InspectorPropertyTable")
-															*/);
+		dependingObjects.refreshObserving(getController());
 	}
 
 	@Override
@@ -300,6 +297,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		appendToDependingObjects(getWidget().getVisible(), returned);
 		appendToDependingObjects(getWidget().getEnable(), returned);
 		return returned;
+	}
+
+	@Override
+	public List<TargetObject> getChainedBindings(AbstractBinding binding, TargetObject object) {
+		return null;
 	}
 
 	/**
