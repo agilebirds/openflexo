@@ -184,7 +184,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return
 	 */
-	public FlexoProject getProject() {
+	public final FlexoProject getProject() {
 		return project;
 	}
 
