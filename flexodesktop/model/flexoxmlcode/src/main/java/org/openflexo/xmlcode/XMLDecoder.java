@@ -95,7 +95,7 @@ public class XMLDecoder {
 	 * 
 	 * instance coding the unique identifier of the object
 	 */
-	private Hashtable alreadyDeserialized;
+	private Map<Object, Object> alreadyDeserialized;
 
 	/**
 	 * This the variable used to encode objects as strings. If it is not set, the default instance will be used.
@@ -874,8 +874,7 @@ public class XMLDecoder {
 	private void runDecodingFinalization(Object rootObject) throws AccessorInvocationException {
 		// Debugging.debug("Run decoding finalization");
 		Object[] params = { builder };
-		for (Enumeration e = alreadyDeserialized.elements(); e.hasMoreElements();) {
-			Object next = e.nextElement();
+		for (Object next : alreadyDeserialized.values()) {
 			if (next != rootObject) {
 				// Gros truc degeulasse a modifier plus tard,
 				// quand on aura repondu a la question:
@@ -885,10 +884,7 @@ public class XMLDecoder {
 			}
 		}
 		runDecodingFinalizationForObject(rootObject, params);
-		for (Enumeration e = alreadyDeserialized.keys(); e.hasMoreElements();) {
-			Object next = e.nextElement();
-			alreadyDeserialized.remove(next);
-		}
+		alreadyDeserialized.clear();
 	}
 
 	private void runDecodingFinalizationForObject(Object next, Object[] params) throws AccessorInvocationException {
@@ -1111,8 +1107,8 @@ public class XMLDecoder {
 			alreadyDeserialized.put(currentDeserializedReference, returnedObject);
 		}
 
-		for (Enumeration e = modelEntity.getModelProperties(); e.hasMoreElements();) {
-			ModelProperty modelProperty = (ModelProperty) e.nextElement();
+		for (Enumeration<ModelProperty> e = modelEntity.getModelProperties(); e.hasMoreElements();) {
+			ModelProperty modelProperty = e.nextElement();
 			setPropertyForObject(node, returnedObject, returnedObjectClass, modelProperty, modelEntity);
 		}
 
