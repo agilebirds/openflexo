@@ -1953,12 +1953,14 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public String getProjectURI() {
-		return projectURI;
+		if (isCache()) {
+			return getFlexoResource().getProjectURI();
+		} else {
+			return getProject().getURI();
+		}
 	}
 
-	public void setProjectURI(String projectURI) {
-		this.projectURI = projectURI;
-		setChanged();
+	public boolean isCache() {
+		return getFlexoResource().isCache();
 	}
-
 }
