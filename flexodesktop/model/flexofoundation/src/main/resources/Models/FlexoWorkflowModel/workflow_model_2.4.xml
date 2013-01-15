@@ -82,6 +82,7 @@
 
   <entity name="org.openflexo.foundation.wkf.FlexoWorkflow" xmlTag="FlexoWorkflow" finalizer="finalizeDeserialization">
     <property name="workflowName" xmlTag="name" attribute="YES"/> 
+    <property name="projectURI" xmlTag="projectURI" attribute="YES"/>
     <property name="topLevelNodeProcesses" xmlTag="FlexoProcess" type="vector" primary="yes"/> 
     <property name="importedRootNodeProcesses" contains="org.openflexo.foundation.wkf.FlexoProcessNode" context="Imported" type="vector" primary="yes"/>
     <property name="rootProcessNode" contains="org.openflexo.foundation.wkf.FlexoProcessNode" context="Root"/> 

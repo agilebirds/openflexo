@@ -242,4 +242,5 @@
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
+  
 </versions>
