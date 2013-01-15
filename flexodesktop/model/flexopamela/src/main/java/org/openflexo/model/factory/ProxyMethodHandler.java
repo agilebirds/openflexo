@@ -417,18 +417,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			// 4. we invoke the super deleter (if any)
 			entity = entity.getSuperEntity();
 		}*/
-		// 5. we set the deleted property (which in turns will notify observers)
-		// TODO: verify if this is ok or we should use another option
-		String deletedProperty;
-		while (!deletedProperties.isEmpty()) {
-			deletedProperty = deletedProperties.pop();
-			ModelProperty<? super I> p = getModelEntity().getModelProperty(deletedProperty);
-			if (p.getSetter() != null) {
-				invokeSetter(p, Boolean.TRUE);
-			} else {
-				internallyInvokeSetter(p, Boolean.TRUE);
-			}
-		}
+
 		propertyChangeSupport = null;
 	}
 
