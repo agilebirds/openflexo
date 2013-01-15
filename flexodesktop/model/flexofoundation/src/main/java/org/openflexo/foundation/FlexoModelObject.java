@@ -162,6 +162,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		specificDescriptions = new TreeMap<String, String>();
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
+		registerObject(project);
+	}
+
+	protected void registerObject(FlexoProject project) {
 		if (project != null) {
 			/*
 			 * if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) { flexoID = project.getNewFlexoID();
