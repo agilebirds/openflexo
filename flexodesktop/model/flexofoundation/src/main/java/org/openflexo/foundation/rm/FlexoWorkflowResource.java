@@ -146,28 +146,34 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_processes"));
 			progress.resetSecondaryProgress(project.getFlexoWorkflow().allLocalProcessesCount());
 		}
-		loadProcesses(progress, workflow, workflow.allImportedProcessNodes());
-		loadProcesses(progress, workflow, workflow.allLocalProcessNodes());
-		for (Enumeration<FlexoProcessNode> e = workflow.allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode nextProcessNode = e.nextElement();
-			FlexoProcess next = nextProcessNode.getProcess();
-			if (next != null) {
-				if (next.getProcessDMEntity() != null) {
-					next.getProcessDMEntity().updateParentProcessPropertyIfRequired();
+		if (!isCache()) {
+			loadProcesses(progress, workflow, workflow.allImportedProcessNodes());
+			loadProcesses(progress, workflow, workflow.allLocalProcessNodes());
+			for (Enumeration<FlexoProcessNode> e = workflow.allLocalProcessNodes(); e.hasMoreElements();) {
+				FlexoProcessNode nextProcessNode = e.nextElement();
+				FlexoProcess next = nextProcessNode.getProcess();
+				if (next != null) {
+					if (next.getProcessDMEntity() != null) {
+						next.getProcessDMEntity().updateParentProcessPropertyIfRequired();
+					}
+					next.finalizeProcessBindings();
+					next.resolveObjectReferences();
+					next.clearIsModified(true);
+					next.setLastUpdate(null);// resets last update date.
+				} else {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("No FlexoProcess linked with processsNode : '" + nextProcessNode.getName()
+								+ "' !!! Could not load process, removing process node !");
+					}
+					nextProcessNode.delete();
 				}
-				next.finalizeProcessBindings();
-				next.resolveObjectReferences();
-				next.clearIsModified(true);
-				next.setLastUpdate(null);// resets last update date.
-			} else {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("No FlexoProcess linked with processsNode : '" + nextProcessNode.getName()
-							+ "' !!! Could not load process, removing process node !");
-				}
-				nextProcessNode.delete();
 			}
 		}
 		return workflow;
+	}
+
+	public boolean isCache() {
+		return getProjectURI() != null && !getProjectURI().equals(getProject().getURI());
 	}
 
 	/**
