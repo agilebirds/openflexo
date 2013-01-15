@@ -1202,7 +1202,23 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public final void setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
+	@Deprecated
+	public final void setObjectAsModuleView(Object object) {
+		// This hack is introduced to support double click in imported workflow tree.
+		// This should be removed and imported wofklow tree should be updated to support casting
+		if (object instanceof FlexoModelObject) {
+			setCurrentEditedObjectAsModuleView((FlexoModelObject) object);
+		}
+	}
+
+	/**
+	 * Sets supplied object to be the main object represented as the current view for this module (for example the process for WKF module).
+	 * Does nothing if supplied object is not representable in this module
+	 * 
+	 * @param object
+	 * @return an initialized ModuleView instance
+	 */
+	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
 		getControllerModel().setCurrentObject(object);
 	}
 
@@ -1833,4 +1849,5 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
+
 }

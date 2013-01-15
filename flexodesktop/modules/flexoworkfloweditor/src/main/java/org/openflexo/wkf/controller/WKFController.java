@@ -50,6 +50,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
@@ -343,14 +344,35 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
+	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
+		if (object instanceof FlexoProcessNode) {
+			object = ((FlexoProcessNode) object).getProcess(true);
+			if (object == null) {
+				return;
+			}
+		}
+		if (object instanceof RoleList || object instanceof FlexoProcess) {
+			super.setCurrentEditedObjectAsModuleView(object);
+		}
+	}
+
+	@Override
 	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+		if (object instanceof FlexoProcessNode) {
+			object = ((FlexoProcessNode) object).getProcess(true);
+			if (object == null) {
+				return;
+			}
+		}
 		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
 			return;
 		}
-		super.setCurrentEditedObjectAsModuleView(object, perspective);
+		if (object instanceof RoleList || object instanceof FlexoProcess) {
+			super.setCurrentEditedObjectAsModuleView(object, perspective);
+		}
 	}
 
 	public void setCurrentImportedProcess(FlexoProcess subProcess) {
