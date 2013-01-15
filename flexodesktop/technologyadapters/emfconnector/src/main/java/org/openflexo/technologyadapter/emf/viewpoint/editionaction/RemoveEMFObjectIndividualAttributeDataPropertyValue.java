@@ -34,27 +34,27 @@ import java.util.List;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
 
 /**
- * Add an Instance value to the reference of an object.
+ * Remove a simple DataType value from the attribute of an object.
  * 
  * @author gbesancon
  * 
  */
-public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
-		AssignableAction<EMFModel, EMFMetaModel, EMFObjectIndividualReferenceObjectPropertyValue> {
+public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
+		AssignableAction<EMFModel, EMFMetaModel, EMFObjectIndividualAttributeDataPropertyValue> {
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualReferenceObjectPropertyValue(ViewPointBuilder builder) {
+	public RemoveEMFObjectIndividualAttributeDataPropertyValue(ViewPointBuilder builder) {
 		super(builder);
 	}
 
@@ -65,7 +65,7 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddObjectPropertyStatement;
+		return EditionActionType.AddDataPropertyStatement;// FIXME
 	}
 
 	/**
@@ -84,16 +84,16 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 * @see org.openflexo.foundation.viewpoint.EditionAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
 	 */
 	@Override
-	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
+	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFModel model = (EMFModel) objectIndividual.getOntology();
-		if (referenceObjectProperty.getObject().getUpperBound() != 1) {
-			List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
-			values.add(value);
+		if (attributeDataProperty.getObject().getUpperBound() != 1) {
+			List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
+			values.remove((Object) value);
 		} else {
-			objectIndividual.getObject().eSet(referenceObjectProperty.getObject(), value);
+			objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
 		}
-		return model.getConverter().convertObjectIndividualReferenceObjectPropertyValue(model, objectIndividual.getObject(),
-				referenceObjectProperty.getObject());
+		return model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+				attributeDataProperty.getObject());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 *      java.lang.Object)
 	 */
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualReferenceObjectPropertyValue initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeDataPropertyValue initialContext) {
 	}
 
 	protected EMFObjectIndividual objectIndividual;
@@ -118,16 +118,16 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 		this.objectIndividual = objectIndividual;
 	}
 
-	protected EMFReferenceObjectProperty referenceObjectProperty;
+	protected EMFAttributeDataProperty attributeDataProperty;
 
 	/**
-	 * Setter of referenceObjectProperty.
+	 * Setter of attributeDataProperty.
 	 * 
-	 * @param referenceObjectProperty
-	 *            the referenceObjectProperty to set
+	 * @param attributeDataProperty
+	 *            the attributeDataProperty to set
 	 */
-	public void setReferenceObjectProperty(EMFReferenceObjectProperty referenceObjectProperty) {
-		this.referenceObjectProperty = referenceObjectProperty;
+	public void setAttributeDataProperty(EMFAttributeDataProperty attributeDataProperty) {
+		this.attributeDataProperty = attributeDataProperty;
 	}
 
 	protected T value;

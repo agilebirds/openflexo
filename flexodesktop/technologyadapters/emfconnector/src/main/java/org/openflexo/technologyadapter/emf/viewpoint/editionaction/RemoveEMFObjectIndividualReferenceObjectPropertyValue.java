@@ -41,7 +41,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
 
 /**
- * Assign an Enum value to the attribute of an object.
+ * Remove an Instance value from the reference of an object.
  * 
  * @author gbesancon
  * 
@@ -65,7 +65,7 @@ public class RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddObjectPropertyStatement;
+		return EditionActionType.AddObjectPropertyStatement;// FIXME
 	}
 
 	/**

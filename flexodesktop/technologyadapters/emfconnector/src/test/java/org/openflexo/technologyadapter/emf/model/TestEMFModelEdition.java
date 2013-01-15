@@ -28,10 +28,12 @@
  */
 package org.openflexo.technologyadapter.emf.model;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.emf.ecore.EObject;
 import org.junit.Test;
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
@@ -44,6 +46,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
@@ -51,7 +54,12 @@ import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeObjectPropertyValue;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualReferenceObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualAttributeDataPropertyValue;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualAttributeObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualReferenceObjectPropertyValue;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -66,7 +74,8 @@ public class TestEMFModelEdition {
 	@Test
 	public void test() {
 		try {
-			ApplicationContext applicationContext = new TestApplicationContext(new FileResource("D:/gbe/work/EMF"));
+			ApplicationContext applicationContext = new TestApplicationContext(new FileResource(
+					new File("src/test/resources").getAbsolutePath()));
 			EMFTechnologyAdapter technologicalAdapter = applicationContext.getTechnologyAdapterService().getTechnologyAdapter(
 					EMFTechnologyAdapter.class);
 
@@ -76,141 +85,23 @@ public class TestEMFModelEdition {
 					.getMetaModelRepository(technologicalAdapter);
 
 			EMFMetaModelRepository emfMetaModelRepository = (EMFMetaModelRepository) metaModelRepository;
-			EMFMetaModelResource metaModelResource = emfMetaModelRepository.getResource("http://www.thalesgroup.com/parameters/1.0");
-			EMFModelResource emfModelResource = technologicalAdapter.createEmptyModel(null, metaModelResource,
+			EMFMetaModelResource emfMetaModelResource = emfMetaModelRepository.getResource("http://www.thalesgroup.com/parameters/1.0");
+			EMFModelResource emfModelResource = technologicalAdapter.createEmptyModel(null, emfMetaModelResource,
 					technologicalAdapter.getTechnologyContextManager());
 
-			AddEMFObjectIndividual addParameterSet = new AddEMFObjectIndividual(null);
-			addParameterSet.setEMFModelResource(emfModelResource);
-			addParameterSet.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/ParameterSet");
-			EMFObjectIndividual parameterSet = addParameterSet.performAction(null);
-			addParameterSet.finalizePerformAction(null, parameterSet);
+			EMFObjectIndividual intParameter = createIntParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name",
+					Integer.valueOf(12));
 
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addParameterSetName = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addParameterSetName.setObjectIndividual(parameterSet);
-			addParameterSetName.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/ParameterSet/name"));
-			addParameterSetName.setValue("ParameterSet Name");
-			EMFObjectIndividualAttributeDataPropertyValue parameterSetNameParameter = addParameterSetName.performAction(null);
-			addParameterSetName.finalizePerformAction(null, parameterSetNameParameter);
+			EMFObjectIndividual doubleParameter = createDoubleParameter(emfModelResource, emfMetaModelResource, "StringParameter Name",
+					Double.valueOf(42.12));
 
-			AddEMFObjectIndividual addIntParameter = new AddEMFObjectIndividual(null);
-			addIntParameter.setEMFModelResource(emfModelResource);
-			addIntParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/IntParameterValue");
-			EMFObjectIndividual intParameter = addIntParameter.performAction(null);
-			addIntParameter.finalizePerformAction(null, intParameter);
+			EMFObjectIndividual boolParameter = createBoolParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name", true);
 
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addIntParameterName = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addIntParameterName.setObjectIndividual(intParameter);
-			addIntParameterName.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/GenericParameter/name"));
-			addIntParameterName.setValue("IntParameter Name");
-			EMFObjectIndividualAttributeDataPropertyValue intParameterNameParameter = addIntParameterName.performAction(null);
-			addIntParameterName.finalizePerformAction(null, intParameterNameParameter);
+			EMFObjectIndividual stringParameter = createStringParameter(emfModelResource, emfMetaModelResource, "StringParameter Name",
+					"StringParameter Value");
 
-			AddEMFObjectIndividualAttributeDataPropertyValue<Integer> addIntParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Integer>(
-					null);
-			addIntParameterValue.setObjectIndividual(intParameter);
-			addIntParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/IntParameterValue/value"));
-			addIntParameterValue.setValue(Integer.valueOf(12));
-			EMFObjectIndividualAttributeDataPropertyValue intParameterValueParameter = addIntParameterValue.performAction(null);
-			addIntParameterValue.finalizePerformAction(null, intParameterValueParameter);
-
-			AddEMFObjectIndividual addDoubleParameter = new AddEMFObjectIndividual(null);
-			addDoubleParameter.setEMFModelResource(emfModelResource);
-			addDoubleParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue");
-			EMFObjectIndividual doubleParameter = addDoubleParameter.performAction(null);
-			addDoubleParameter.finalizePerformAction(null, doubleParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addDoubleParameterName = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addDoubleParameterName.setObjectIndividual(doubleParameter);
-			addDoubleParameterName.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/GenericParameter/name"));
-			addDoubleParameterName.setValue("DoubleParameter Name");
-			EMFObjectIndividualAttributeDataPropertyValue doubleParameterNameParameter = addDoubleParameterName.performAction(null);
-			addDoubleParameterName.finalizePerformAction(null, doubleParameterNameParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<Double> addDoubleParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Double>(
-					null);
-			addDoubleParameterValue.setObjectIndividual(doubleParameter);
-			addDoubleParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue/value"));
-			addDoubleParameterValue.setValue(Double.valueOf(42.12));
-			EMFObjectIndividualAttributeDataPropertyValue doubleParameterValueParameter = addDoubleParameterValue.performAction(null);
-			addDoubleParameterValue.finalizePerformAction(null, doubleParameterValueParameter);
-
-			AddEMFObjectIndividual addBoolParameter = new AddEMFObjectIndividual(null);
-			addBoolParameter.setEMFModelResource(emfModelResource);
-			addBoolParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/BoolParameterValue");
-			EMFObjectIndividual boolParameter = addBoolParameter.performAction(null);
-			addBoolParameter.finalizePerformAction(null, boolParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addBoolParameterName = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addBoolParameterName.setObjectIndividual(boolParameter);
-			addBoolParameterName.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/GenericParameter/name"));
-			addBoolParameterName.setValue("BoolParameter Name");
-			EMFObjectIndividualAttributeDataPropertyValue boolParameterNameParameter = addBoolParameterName.performAction(null);
-			addBoolParameterName.finalizePerformAction(null, boolParameterNameParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<Boolean> addBoolParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<Boolean>(
-					null);
-			addBoolParameterValue.setObjectIndividual(boolParameter);
-			addBoolParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/BoolParameterValue/value"));
-			addBoolParameterValue.setValue(Boolean.TRUE);
-			EMFObjectIndividualAttributeDataPropertyValue boolParameterValueParameter = addBoolParameterValue.performAction(null);
-			addBoolParameterValue.finalizePerformAction(null, boolParameterValueParameter);
-
-			AddEMFObjectIndividual addStringParameter = new AddEMFObjectIndividual(null);
-			addStringParameter.setEMFModelResource(emfModelResource);
-			addStringParameter.setEMFClassURI("http://www.thalesgroup.com/parameters/1.0/StringParameterValue");
-			EMFObjectIndividual stringParameter = addStringParameter.performAction(null);
-			addStringParameter.finalizePerformAction(null, stringParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addStringParameterName = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addStringParameterName.setObjectIndividual(stringParameter);
-			addStringParameterName.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/GenericParameter/name"));
-			addStringParameterName.setValue("StringParameter Name");
-			EMFObjectIndividualAttributeDataPropertyValue stringParameterNameParameter = addStringParameterName.performAction(null);
-			addStringParameterName.finalizePerformAction(null, stringParameterNameParameter);
-
-			AddEMFObjectIndividualAttributeDataPropertyValue<String> addStringParameterValue = new AddEMFObjectIndividualAttributeDataPropertyValue<String>(
-					null);
-			addStringParameterValue.setObjectIndividual(stringParameter);
-			addStringParameterValue.setAttributeDataProperty((EMFAttributeDataProperty) metaModelResource.getResourceData(null)
-					.getDataProperty("http://www.thalesgroup.com/parameters/1.0/StringParameterValue/value"));
-			addStringParameterValue.setValue("StringParameter Value");
-			EMFObjectIndividualAttributeDataPropertyValue stringParameterValueParameter = addStringParameterValue.performAction(null);
-			addStringParameterValue.finalizePerformAction(null, stringParameterValueParameter);
-
-			AddEMFObjectIndividualReferenceObjectPropertyValue<EObject> addParameterSetParameters = new AddEMFObjectIndividualReferenceObjectPropertyValue<EObject>(
-					null);
-			addParameterSetParameters.setObjectIndividual(parameterSet);
-			addParameterSetParameters.setReferenceObjectProperty((EMFReferenceObjectProperty) metaModelResource.getResourceData(null)
-					.getObjectProperty("http://www.thalesgroup.com/parameters/1.0/ParameterSet/ownedParameters"));
-			addParameterSetParameters.setValue(intParameter.getObject());
-			EMFObjectIndividualReferenceObjectPropertyValue parameterSetParameters = addParameterSetParameters.performAction(null);
-			addParameterSetParameters.finalizePerformAction(null, parameterSetParameters);
-
-			addParameterSetParameters.setValue(doubleParameter.getObject());
-			parameterSetParameters = addParameterSetParameters.performAction(null);
-			addParameterSetParameters.finalizePerformAction(null, parameterSetParameters);
-
-			addParameterSetParameters.setValue(boolParameter.getObject());
-			parameterSetParameters = addParameterSetParameters.performAction(null);
-			addParameterSetParameters.finalizePerformAction(null, parameterSetParameters);
-
-			addParameterSetParameters.setValue(stringParameter.getObject());
-			parameterSetParameters = addParameterSetParameters.performAction(null);
-			addParameterSetParameters.finalizePerformAction(null, parameterSetParameters);
+			EMFObjectIndividual parameterSet = createParameterSet(emfModelResource, emfMetaModelResource, "ParameterSet Name",
+					Arrays.asList(intParameter, doubleParameter, boolParameter, stringParameter));
 
 			emfModelResource.saveResourceData();
 		} catch (SaveResourceException e) {
@@ -229,5 +120,187 @@ public class TestEMFModelEdition {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	protected EMFObjectIndividual addEMFObjectIndividual(EMFModelResource emfModelResource, String classURI) {
+		EMFObjectIndividual result = null;
+		AddEMFObjectIndividual addObject = new AddEMFObjectIndividual(null);
+		addObject.setEMFModelResource(emfModelResource);
+		addObject.setEMFClassURI(classURI);
+		result = addObject.performAction(null);
+		addObject.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected EMFObjectIndividual removeEMFObjectIndividual(EMFModelResource emfModelResource, EMFObjectIndividual objectIndividual) {
+		EMFObjectIndividual result = null;
+		RemoveEMFObjectIndividual removeObject = new RemoveEMFObjectIndividual(null);
+		removeObject.setEMFModelResource(emfModelResource);
+		removeObject.setObjectIndividual(objectIndividual);
+		removeObject.performAction(null);
+		result = objectIndividual;
+		removeObject.finalizePerformAction(null, null);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualAttributeDataPropertyValue addEMFObjectIndividualAttributeDataPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualAttributeDataPropertyValue result = null;
+		AddEMFObjectIndividualAttributeDataPropertyValue<T> addName = new AddEMFObjectIndividualAttributeDataPropertyValue<T>(null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setAttributeDataProperty((EMFAttributeDataProperty) emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualAttributeDataPropertyValue removeEMFObjectIndividualAttributeDataPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualAttributeDataPropertyValue result = null;
+		RemoveEMFObjectIndividualAttributeDataPropertyValue<T> addName = new RemoveEMFObjectIndividualAttributeDataPropertyValue<T>(null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setAttributeDataProperty((EMFAttributeDataProperty) emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualAttributeObjectPropertyValue addEMFObjectIndividualAttributeObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualAttributeObjectPropertyValue result = null;
+		AddEMFObjectIndividualAttributeObjectPropertyValue<T> addName = new AddEMFObjectIndividualAttributeObjectPropertyValue<T>(null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
+				propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualAttributeObjectPropertyValue removeEMFObjectIndividualAttributeObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualAttributeObjectPropertyValue result = null;
+		RemoveEMFObjectIndividualAttributeObjectPropertyValue<T> addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue<T>(
+				null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
+				propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualReferenceObjectPropertyValue addEMFObjectIndividualReferenceObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualReferenceObjectPropertyValue result = null;
+		AddEMFObjectIndividualReferenceObjectPropertyValue<T> addName = new AddEMFObjectIndividualReferenceObjectPropertyValue<T>(null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
+				propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected <T> EMFObjectIndividualReferenceObjectPropertyValue removeEMFObjectIndividualReferenceObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividualReferenceObjectPropertyValue result = null;
+		RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue<T>(
+				null);
+		addName.setObjectIndividual(objectIndividual);
+		addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
+				propertyURI));
+		addName.setValue(value);
+		result = addName.performAction(null);
+		addName.finalizePerformAction(null, result);
+		return result;
+	}
+
+	protected EMFObjectIndividual createParameterSet(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
+			String name, List<EMFObjectIndividual> ownedParameters) throws FileNotFoundException, ResourceLoadingCancelledException,
+			ResourceDependencyLoopException, FlexoException {
+		EMFObjectIndividual result = null;
+		// ParameterSet object
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/ParameterSet");
+		// Name parameter
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/ParameterSet/name", name);
+		// OwnedParameters parameter
+		for (EMFObjectIndividual ownedParameter : ownedParameters) {
+			addEMFObjectIndividualReferenceObjectPropertyValue(emfMetaModelResource, result,
+					"http://www.thalesgroup.com/parameters/1.0/ParameterSet/ownedParameters", ownedParameter.getObject());
+		}
+		return result;
+	}
+
+	protected EMFObjectIndividual createIntParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
+			String name, Integer value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FlexoException {
+		EMFObjectIndividual result = null;
+		// IntParameter object
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/IntParameterValue");
+		// Name parameter
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+		// Value parameter.
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/IntParameterValue/value", value);
+		return result;
+	}
+
+	protected EMFObjectIndividual createDoubleParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
+			String name, Double value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FlexoException {
+		EMFObjectIndividual result = null;
+		// DoubleParameter object
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue");
+		// Name parameter
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+		// Value parameter.
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue/value", value);
+		return result;
+	}
+
+	protected EMFObjectIndividual createBoolParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
+			String name, Boolean value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FlexoException {
+		EMFObjectIndividual result = null;
+		// BoolParameter object
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/BoolParameterValue");
+		// Name parameter
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+		// Value parameter.
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/BoolParameterValue/value", value);
+		return result;
+	}
+
+	protected EMFObjectIndividual createStringParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
+			String name, String value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FlexoException {
+		EMFObjectIndividual result = null;
+		// StringParameter object
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/StringParameterValue");
+		// Name parameter
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+		// Value parameter.
+		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
+				"http://www.thalesgroup.com/parameters/1.0/StringParameterValue/value", value);
+		return result;
 	}
 }
