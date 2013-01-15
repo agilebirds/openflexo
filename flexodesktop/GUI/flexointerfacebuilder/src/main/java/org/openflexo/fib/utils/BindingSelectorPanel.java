@@ -1293,7 +1293,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					// Special equals, we try to find a FunctionPathElement even if parameters are different
 					FunctionPathElement f1 = (FunctionPathElement) element;
 					FunctionPathElement f2 = (FunctionPathElement) getElementAt(i).getElement();
-					if (f1.getFunction().equals(f2.getFunction())) {
+					if (f1.getFunction() != null && f1.getFunction().equals(f2.getFunction())) {
 						return getElementAt(i);
 					}
 

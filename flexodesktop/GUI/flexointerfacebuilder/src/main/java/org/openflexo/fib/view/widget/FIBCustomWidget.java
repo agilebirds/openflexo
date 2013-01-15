@@ -198,7 +198,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 		}

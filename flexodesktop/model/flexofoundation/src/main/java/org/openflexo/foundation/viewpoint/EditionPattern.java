@@ -39,7 +39,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
@@ -337,54 +336,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 			index++;
 		}
 		return testName;
-	}
-
-	@Deprecated
-	public PatternRole createShapePatternRole() {
-		ShapePatternRole newPatternRole = new ShapePatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public ConnectorPatternRole createConnectorPatternRole() {
-		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public DiagramPatternRole createDiagramPatternRole() {
-		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
-		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public EditionPatternPatternRole createEditionPatternPatternRole() {
-		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public PrimitivePatternRole createPrimitivePatternRole() {
-		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
 	}
 
 	public PatternRole deletePatternRole(PatternRole aPatternRole) {

@@ -173,7 +173,7 @@ public class BindingValue extends Expression {
 	 */
 	public void setBindingPathElementAtIndex(BindingPathElement element, int i) {
 
-		logger.info("setBindingPathElementAtIndex " + element + " index=" + i);
+		// logger.info("setBindingPathElementAtIndex " + element + " index=" + i);
 
 		if (i < bindingPath.size() && bindingPath.get(i) == element) {
 			return;
@@ -481,9 +481,9 @@ public class BindingValue extends Expression {
 			currentType = currentElement.getType();
 		}
 
-		if (!TypeUtils.isResolved(currentType)) {
+		/*if (!TypeUtils.isResolved(currentType)) {
 			return false;
-		}
+		}*/
 
 		return true;
 	}
@@ -513,11 +513,13 @@ public class BindingValue extends Expression {
 
 		if (dataBinding.getOwner() == null) {
 			logger.warning("DataBinding " + dataBinding + " has no owner");
+			invalidBindingReason = "DataBinding " + dataBinding + " has no owner";
 			return false;
 		}
 
 		if (dataBinding.getOwner().getBindingModel() == null) {
 			logger.warning("DataBinding owner has no binding model, binding=" + dataBinding + " owner=" + dataBinding.getOwner());
+			invalidBindingReason = "DataBinding owner has no binding model, binding=" + dataBinding + " owner=" + dataBinding.getOwner();
 			return false;
 		}
 

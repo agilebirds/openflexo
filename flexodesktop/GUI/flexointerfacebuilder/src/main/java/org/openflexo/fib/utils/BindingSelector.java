@@ -772,21 +772,34 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
-		if (editedObject != null && editedObject.isSet()) {
-			if (editedObject.isValid()) {
-				getLabel().setVisible(true);
-				getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+		if (editedObject != null) {
+			if (editedObject.isSet()) {
+				if (editedObject.isValid()) {
+					getLabel().setVisible(true);
+					getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+				} else {
+					logger.info("Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
+					if (editedObject.isBindingValue()) {
+						BindingValue bv = (BindingValue) (editedObject.getExpression());
+						System.out.println("BV=" + bv);
+						System.out.println("valid=" + bv.isValid());
+						System.out.println("reason=" + bv.invalidBindingReason());
+						System.out.println("on debuggue");
+					}
+					getLabel().setVisible(true);
+					getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
+				}
 			} else {
-				getLabel().setVisible(true);
-				getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
+				if (editedObject.isMandatory()) {
+					getLabel().setVisible(true);
+					getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
+				} else {
+					getLabel().setVisible(false);
+				}
 			}
 		} else {
-			if (editedObject.isMandatory()) {
-				getLabel().setVisible(true);
-				getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
-			} else {
-				getLabel().setVisible(false);
-			}
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
 		}
 	}
 
@@ -1130,8 +1143,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			}
 		}
 		BindingValue bindingValue = (BindingValue) binding.getExpression();
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Value selected: index=" + index + " list=" + list + " bindingValue=" + bindingValue);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Value selected: index=" + index + " list=" + list + " bindingValue=" + bindingValue);
 		}
 		BindingSelectorPanel.BindingColumnElement selectedValue = (BindingSelectorPanel.BindingColumnElement) list.getSelectedValue();
 		if (selectedValue == null) {

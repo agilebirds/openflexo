@@ -585,7 +585,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public void addToEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(this);
+		pattern.setViewPoint(this);
 		editionPatterns.add(pattern);
 		_allEditionPatternWithDropScheme = null;
 		_allEditionPatternWithLinkScheme = null;
@@ -594,7 +594,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public void removeFromEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(null);
+		pattern.setViewPoint(null);
 		editionPatterns.remove(pattern);
 		setChanged();
 		notifyObservers(new EditionPatternDeleted(pattern));

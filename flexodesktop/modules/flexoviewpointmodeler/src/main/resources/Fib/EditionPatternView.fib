@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" borderTitle="Panel" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" name="main">
+<Panel layout="border" borderTitle="Panel" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" name="main">
   <SplitPanel constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
     <ColSplit name="ColSplit" weight="1.0">
       <RowSplit name="RowSplit" weight="0.0">
@@ -22,22 +22,8 @@
       <DropDownColumn data="iterator.type" title="kind" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
       <LabelColumn data="iterator.preciseType" title="type" columnWidth="110" resizable="true" displayTitle="true" name="label" />
       <CheckBoxColumn data="iterator.isPrimaryRole" title="" columnWidth="20" resizable="true" displayTitle="true" name="checkbox" />
-      <AddAction method="data.createShapePatternRole" name="add_shape" />
-      <AddAction method="data.createConnectorPatternRole" name="add_connector" />
-      <AddAction method="data.createFlexoModelObjectPatternRole" name="add_flexo_model_object" />
-      <AddAction method="data.createPrimitivePatternRole" name="add_primitive" />
-      <AddAction method="data.createDiagramPatternRole" name="add_diagram" />
-      <AddAction method="data.createClassPatternRole" name="add_class" />
-      <AddAction method="data.createIndividualPatternRole" name="add_individual" />
-      <AddAction method="data.createObjectPropertyPatternRole" name="add_object_property" />
-      <AddAction method="data.createDataPropertyPatternRole" name="add_data_property" />
-      <AddAction method="data.createObjectPropertyStatementPatternRole" name="add_object_property_statement" />
-      <AddAction method="data.createDataPropertyStatementPatternRole" name="add_data_property_statement" />
-      <AddAction method="data.createIsAStatementPatternRole" name="add_is_a_statement" />
-      <AddAction method="data.createRestrictionStatementPatternRole" name="add_restriction_statement" />
       <RemoveAction method="data.deletePatternRole(selected)" name="delete" />
-      <AddAction method="data.createEditionPatternPatternRole" name="add_edition_pattern" />
-      <AddAction method="data.createPropertyPatternRole" name="add_property" />
+      <AddAction method="controller.createPatternRole(data)" name="createPatternRole" />
     </Table>
     <TabPanel name="MainTabPanel" constraints="split(index=1;location=center;splitIdentifier=details)">
       <Tab title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" name="EditionSchemeTab">

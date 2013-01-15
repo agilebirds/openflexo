@@ -32,33 +32,36 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
+import org.openflexo.foundation.viewpoint.EditionPatternStructuralFacet;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPattern, ViewPointObject> {
+public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPatternObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreatePatternRole.class.getPackage().getName());
 
-	public static FlexoActionType<CreatePatternRole, EditionPattern, ViewPointObject> actionType = new FlexoActionType<CreatePatternRole, EditionPattern, ViewPointObject>(
+	public static FlexoActionType<CreatePatternRole, EditionPatternObject, ViewPointObject> actionType = new FlexoActionType<CreatePatternRole, EditionPatternObject, ViewPointObject>(
 			"create_pattern_role", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreatePatternRole makeNewAction(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public CreatePatternRole makeNewAction(EditionPatternObject focusedObject, Vector<ViewPointObject> globalSelection,
+				FlexoEditor editor) {
 			return new CreatePatternRole(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(EditionPatternObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(EditionPatternObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
@@ -66,6 +69,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	static {
 		FlexoModelObject.addActionForClass(CreatePatternRole.actionType, EditionPattern.class);
+		FlexoModelObject.addActionForClass(CreatePatternRole.actionType, EditionPatternStructuralFacet.class);
 	}
 
 	private String patternRoleName;
@@ -75,14 +79,21 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	private PatternRole newPatternRole;
 
-	CreatePatternRole(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreatePatternRole(EditionPatternObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 
 	}
 
+	public EditionPattern getEditionPattern() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getEditionPattern();
+		}
+		return null;
+	}
+
 	public String getPatternRoleName() {
 		if (StringUtils.isEmpty(patternRoleName) && modelSlot != null && patternRoleClass != null) {
-			return getFocusedObject().getAvailableRoleName(modelSlot.defaultPatternRoleName(patternRoleClass));
+			return getEditionPattern().getAvailableRoleName(modelSlot.defaultPatternRoleName(patternRoleClass));
 		}
 		return patternRoleName;
 	}
@@ -107,7 +118,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			newPatternRole.setPatternRoleName(getPatternRoleName());
 			newPatternRole.setModelSlot(modelSlot);
 			newPatternRole.setDescription(description);
-			getFocusedObject().addToPatternRoles(newPatternRole);
+			getEditionPattern().addToPatternRoles(newPatternRole);
 		}
 
 	}
@@ -130,7 +141,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		if (StringUtils.isEmpty(getPatternRoleName())) {
 			validityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getPatternRole(getPatternRoleName()) != null) {
+		} else if (getEditionPattern().getPatternRole(getPatternRoleName()) != null) {
 			validityMessage = DUPLICATED_NAME;
 			return false;
 		} else if (modelSlot == null) {
