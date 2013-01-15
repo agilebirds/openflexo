@@ -3980,6 +3980,58 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
+	public FlexoWorkflowResource getImportedWorkflowResource(FlexoProjectReference ref) {
+		return getImportedWorkflowResource(ref, false);
+	}
+
+	public FlexoWorkflowResource getImportedWorkflowResource(FlexoProjectReference ref, boolean createIfNotExist) {
+		FlexoWorkflowResource returned = null;
+		for (FlexoWorkflowResource wkfRes : getResourcesOfClass(FlexoWorkflowResource.class)) {
+			if (ref.getURI().equals(wkfRes.getProjectURI())) {
+				returned = wkfRes;
+				break;
+			}
+		}
+		if (returned == null && createIfNotExist && ref.getReferredProject() != null) {
+			File xml = ProjectRestructuration.getExpectedCacheDir(this);
+			String base = FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(ref.getName());
+			String attempt = base;
+			FlexoProjectFile attemptFile = new FlexoProjectFile(new File(xml, attempt + ProjectRestructuration.CACHE_EXTENSION), this);
+			int i = 1;
+			while (resourceForFileName(attemptFile) != null || resourceForKey(ResourceType.CACHE, attempt) != null) {
+				attempt = base + "-" + i++;
+				attemptFile = new FlexoProjectFile(new File(xml, attempt + ProjectRestructuration.CACHE_EXTENSION), this);
+			}
+
+			try {
+				returned = new FlexoWorkflowResource(this, ref.getReferredProject().getWorkflow(), attemptFile, ResourceType.CACHE, attempt);
+				returned.setProjectURI(ref.getURI());
+				registerResource(returned);
+			} catch (Exception e1) {
+				// Warns about the exception
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+				}
+				e1.printStackTrace();
+			}
+
+		}
+		return returned;
+	}
+
+	public FlexoWorkflow getImportedWorkflow(FlexoProjectReference ref) {
+		return getImportedWorkflow(ref, false);
+	}
+
+	public FlexoWorkflow getImportedWorkflow(FlexoProjectReference ref, boolean createIfNotExist) {
+		FlexoWorkflowResource importedWorkflowResource = getImportedWorkflowResource(ref, createIfNotExist);
+		if (importedWorkflowResource != null) {
+			return importedWorkflowResource.getResourceData();
+		} else {
+			return null;
+		}
+	}
+
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
@@ -4255,7 +4307,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public FlexoProject loadProjectReference(FlexoProjectReference reference) {
 		if (projectReferenceLoader != null) {
-			return projectReferenceLoader.loadProject(reference);
+			FlexoProject loadProject = projectReferenceLoader.loadProject(reference);
+			if (loadProject != null) {
+				setChanged();
+				notifyObservers(new ImportedProjectLoaded(loadProject));
+			}
+			return loadProject;
 		}
 		return null;
 	}

@@ -1,6 +1,7 @@
 package org.openflexo.foundation.rm;
 
 import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Initializer;
@@ -22,11 +23,6 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	public static final String REFERRING_PROJECT = "referringProject";
 	public static final String REFERRED_PROJECT = "referredProject";
 	public static final String PROJECT = "project";
-	public static final String STATUS = "status";
-
-	public enum ReferenceStatus {
-		RESOLVED, UNRESOLVED;
-	}
 
 	@Initializer
 	public FlexoProjectReference init(@Parameter(REFERRED_PROJECT) FlexoProject referredProject);
@@ -59,14 +55,6 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	public FlexoProject getReferringProject();
 
 	/**
-	 * The status of this reference.
-	 * 
-	 * @return the status of this reference
-	 */
-	@Getter(STATUS)
-	public ReferenceStatus getStatus();
-
-	/**
 	 * Returns the referred project, the project to which this reference refers to.
 	 * 
 	 * @return the referred project
@@ -88,5 +76,11 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	 */
 	@Setter(value = REFERRED_PROJECT)
 	public void setReferredProject(FlexoProject project);
+
+	/**
+	 * Returns the FlexoWorkflow of this project reference. This can either be a cached value or the live object (if the corresponding
+	 * project has been loaded and set)
+	 */
+	public FlexoWorkflow getWorkflow();
 
 }

@@ -47,6 +47,14 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 
 	private static final Logger logger = Logger.getLogger(FlexoWorkflowResource.class.getPackage().getName());
 
+	private String projectURI;
+
+	private ResourceType resourceType = ResourceType.WORKFLOW;
+
+	private String name;
+
+	private boolean useProjectName;
+
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
 	 * 
@@ -57,30 +65,64 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoWorkflowResource(FlexoProject aProject) {
+	private FlexoWorkflowResource(FlexoProject aProject) {
 		super(aProject);
-	}
-
-	public FlexoWorkflowResource(FlexoProject aProject, FlexoProjectFile workflowFile) throws InvalidFileNameException {
-		this(aProject);
-		setResourceFile(workflowFile);
 	}
 
 	public FlexoWorkflowResource(FlexoProject aProject, FlexoWorkflow workflow, FlexoProjectFile workflowFile)
 			throws InvalidFileNameException {
-		this(aProject, workflowFile);
+		this(aProject);
 		_resourceData = workflow;
+		setResourceFile(workflowFile);
 		workflow.setFlexoResource(this);
+	}
+
+	public FlexoWorkflowResource(FlexoProject aProject, FlexoWorkflow workflow, FlexoProjectFile workflowFile, ResourceType resourceType,
+			String name) throws InvalidFileNameException {
+		this(aProject);
+		this.resourceType = resourceType;
+		this.name = name;
+		this._resourceData = workflow;
+		setResourceFile(workflowFile);
+
 	}
 
 	@Override
 	public ResourceType getResourceType() {
-		return ResourceType.WORKFLOW;
+		return resourceType;
+	}
+
+	public void setResourceType(ResourceType resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public void replaceWithWorkflow(FlexoWorkflow workflow) {
+		_resourceData = workflow;
+		setChanged();
 	}
 
 	@Override
 	public String getName() {
+		if (name != null) {
+			return name;
+		}
 		return getProject().getProjectName();
+	}
+
+	@Override
+	public void setName(String aName) {
+		this.name = aName;
+	}
+
+	public boolean isUseProjectName() {
+		return useProjectName;
+	}
+
+	public void setUseProjectName(boolean useProjectName) {
+		this.useProjectName = useProjectName;
+		if (useProjectName) {
+			name = null;
+		}
 	}
 
 	@Override
@@ -150,7 +192,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	 * 
 	 * @param v1
 	 * @param v2
-	 * @return boolean indicating if conversion was sucessfull
+	 * @return boolean indicating if conversion was successful
 	 */
 	@Override
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion vers1, FlexoVersion vers2) {
@@ -220,6 +262,14 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		return false;
+	}
+
+	public String getProjectURI() {
+		return projectURI;
+	}
+
+	public void setProjectURI(String projectURI) {
+		this.projectURI = projectURI;
 	}
 
 }
