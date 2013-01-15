@@ -47,7 +47,10 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public IFlexoOntologyStructuralProperty getOntologyProperty() {
-		return getViewPoint().getOntologyProperty(_getDataPropertyURI());
+		if (getViewPoint() != null) {
+			return getViewPoint().getOntologyProperty(_getDataPropertyURI());
+		}
+		return null;
 	}
 
 	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {

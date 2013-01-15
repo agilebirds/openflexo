@@ -265,8 +265,8 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		public void setValue(DataBinding<Object> value) {
 			if (value != null) {
 				value.setOwner(this);
-				value.setBindingName(param.getName());
-				value.setDeclaredType(param.getType());
+				value.setBindingName(param != null ? param.getName() : "param");
+				value.setDeclaredType(param != null ? param.getType() : Object.class);
 				value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 			}
 			this.value = value;

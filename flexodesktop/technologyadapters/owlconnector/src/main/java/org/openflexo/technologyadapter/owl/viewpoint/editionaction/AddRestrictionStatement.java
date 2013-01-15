@@ -67,7 +67,10 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	}
 
 	public OWLProperty getObjectProperty() {
-		return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		if (getViewPoint() != null) {
+			return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		}
+		return null;
 	}
 
 	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {
