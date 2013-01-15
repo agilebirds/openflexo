@@ -260,9 +260,9 @@ public class JIRAIssueReportDialog {
 			}
 			issue.setPriority(major);
 		}
-		sendSystemProperties = true;
+		sendSystemProperties = false;
 		sendScreenshots = false;
-		sendLogs = e != null;
+		sendLogs = true;
 		if (e != null) {
 			issue.setStacktrace(e.getClass().getName() + ": " + e.getMessage() + "\n" + ToolBox.getStackTraceAsString(e));
 		}
