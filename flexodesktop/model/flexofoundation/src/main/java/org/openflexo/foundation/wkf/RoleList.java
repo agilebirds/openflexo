@@ -42,7 +42,6 @@ import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.DeleteRole;
 import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -89,17 +88,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	/**
-	 * Constructor used during deserialization
-	 * 
-	 * @deprecated (used before version 1.2.1)
-	 */
-	@Deprecated
-	public RoleList(FlexoProcessBuilder builder) {
-		this(builder.getProject(), null);
-		initializeDeserialization(builder);
-	}
-
-	/**
 	 * Default constructor
 	 */
 	public RoleList(FlexoProject project, FlexoWorkflow workflow) {
@@ -132,14 +120,11 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	public Role roleWithName(String aName) {
-		for (Enumeration e = getRoles().elements(); e.hasMoreElements();) {
-			Role temp = (Role) e.nextElement();
-			if (temp.getName() != null && temp.getName().equals(aName)) {
-				return temp;
+		for (Role role : getRoles()) {
+			if (role.getName() != null && role.getName().equals(aName)) {
+				return role;
 			}
 		}
-		// if (logger.isLoggable(Level.WARNING)) logger.warning ("Could not find
-		// role named "+aName);
 		return null;
 	}
 

@@ -438,7 +438,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			processResFile.fixName();
 		}
 
-		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName, processResFile.getRelativePath(), newProcess, workflow);
+		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName, newProcess, workflow);
 		if (parentProcess == null) {
 			if (isImported) {
 				workflow.addToImportedRootNodeProcesses(newProcessNode);

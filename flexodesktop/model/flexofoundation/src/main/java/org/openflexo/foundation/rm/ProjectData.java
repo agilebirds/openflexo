@@ -2,7 +2,6 @@ package org.openflexo.foundation.rm;
 
 import java.util.List;
 
-import org.openflexo.foundation.rm.FlexoProjectReference.ReferenceStatus;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
@@ -26,9 +25,7 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.URI, isMultiValued = false)
 	public FlexoProjectReference getProjectReferenceWithURI(String uri);
 
-	public FlexoProject getImportedProjectWithURI(String uri);
-
-	public FlexoProject getImportedProjectWithURI(String projectURI, boolean searchRecursively);
+	public FlexoProjectReference getProjectReferenceWithURI(String projectURI, boolean searchRecursively);
 
 	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
@@ -51,25 +48,18 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 	public static abstract class ProjectDataImpl extends PAMELAStorageResourceDataImpl implements ProjectData, AccessibleProxyObject {
 
 		@Override
-		public FlexoProject getImportedProjectWithURI(String projectURI) {
-			return getImportedProjectWithURI(projectURI, true);
-		}
-
-		@Override
-		public FlexoProject getImportedProjectWithURI(String projectURI, boolean searchRecursively) {
-			for (FlexoProjectReference ref : getImportedProjects()) {
-				if (ref.getURI().equals(projectURI)) {
-					return ref.getReferredProject();
-
-				}
+		public FlexoProjectReference getProjectReferenceWithURI(String projectURI, boolean searchRecursively) {
+			FlexoProjectReference ref = getProjectReferenceWithURI(projectURI);
+			if (ref != null) {
+				return ref;
 			}
 			if (searchRecursively) {
-				for (FlexoProjectReference ref : getImportedProjects()) {
-					FlexoProject projectWithURI = null;
-					if (ref.getReferredProject() != null) {
-						ProjectData projectData = ref.getReferredProject().getProjectData();
+				for (FlexoProjectReference ref2 : getImportedProjects()) {
+					FlexoProjectReference projectWithURI = null;
+					if (ref2.getReferredProject() != null) {
+						ProjectData projectData = ref2.getReferredProject().getProjectData();
 						if (projectData != null) {
-							projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
+							projectWithURI = projectData.getProjectReferenceWithURI(projectURI, searchRecursively);
 						}
 						if (projectWithURI != null) {
 							return projectWithURI;
@@ -93,8 +83,9 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 				}
 			}
 			performSuperAdder(IMPORTED_PROJECTS, projectReference);
-			if (!isDeserializing() && projectReference.getStatus() == ReferenceStatus.RESOLVED) {
+			if (!isDeserializing() && projectReference.getReferredProject() != null) {
 				getProject().getFlexoRMResource().addToDependentResources(projectReference.getReferredProject().getFlexoRMResource());
+				getProject().getImportedWorkflow(projectReference, true);
 			}
 		}
 
@@ -109,11 +100,8 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 			if (project.getProjectURI().equals(getProject().getProjectURI())) {
 				return FlexoLocalization.localizedForKey("cannot_import_itself");
 			}
-			if (getImportedProjectWithURI(project.getProjectURI(), false) != null) {
+			if (getProjectReferenceWithURI(project.getProjectURI()) != null) {
 				return FlexoLocalization.localizedForKey("project_already_imported");
-			}
-			if (getImportedProjectWithURI(getProject().getProjectURI()) != null) {
-				return FlexoLocalization.localizedForKey("imported_project_depends_of_this_project");
 			}
 			return null;
 		}

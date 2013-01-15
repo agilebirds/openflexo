@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -263,15 +262,16 @@ public abstract class FlexoTestCase extends TestCase {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
 					new DefaultProjectLoadingHandler(), projectReferenceLoader, getResourceCenterService(resourceCenterService)));
-			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
+			// The next line is really a trouble maker and eventually causes more problems than solutions. FlexoProject can't be renamed on
+			// the fly
+			// without having a severe impact on many resources and importer projects. I therefore now comment this line which made me lost
+			// hundreds of hours
+			// _editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProjectLoadingCancelledException e) {
-			e.printStackTrace();
-			fail();
-		} catch (InvalidNameException e) {
 			e.printStackTrace();
 			fail();
 		}

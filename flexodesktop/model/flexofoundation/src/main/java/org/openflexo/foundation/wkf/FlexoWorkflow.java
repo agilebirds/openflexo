@@ -148,6 +148,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private List<Role> allAssignableRoles;
 
+	private String projectURI;
+
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addProcessMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addActivityMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addOperationMetricsDefinitionActionizer;
@@ -155,10 +157,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addArtefactMetricsDefinitionActionizer;
 
 	public static FlexoActionizer<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition> deleteMetricsDefinitionActionizer;
-
-	// ==========================================================
-	// ================= Constructor ============================
-	// ==========================================================
 
 	public FlexoWorkflow(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
@@ -171,7 +169,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * Create a new FlexoWorkflow.
 	 */
 	public FlexoWorkflow(FlexoProject project) {
-		super(project);
+		super(project, null);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();
@@ -213,7 +211,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	@Override
-	public FlexoWorkflow getFlexoWorkflow() {
+	public FlexoWorkflow getWorkflow() {
 		return this;
 	}
 
@@ -1307,11 +1305,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return returned;
 	}
 
-	// ==========================================================================
-	// ============================= Validation
-	// =================================
-	// ==========================================================================
-
 	public static class WorkflowMustHaveARootProcess extends ValidationRule<WorkflowMustHaveARootProcess, FlexoWorkflow> {
 		public WorkflowMustHaveARootProcess() {
 			super(FlexoWorkflow.class, "workflow_must_have_a_root_process");
@@ -1957,6 +1950,15 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		} else if (!alwaysDefined && found != null && found.getValue() == null) {
 			found.delete();
 		}
+	}
+
+	public String getProjectURI() {
+		return projectURI;
+	}
+
+	public void setProjectURI(String projectURI) {
+		this.projectURI = projectURI;
+		setChanged();
 	}
 
 }

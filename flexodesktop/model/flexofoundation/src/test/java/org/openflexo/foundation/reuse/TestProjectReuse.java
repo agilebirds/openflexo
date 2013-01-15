@@ -14,6 +14,7 @@ import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -81,17 +82,39 @@ public class TestProjectReuse extends FlexoTestCase {
 		importProject.setProjectToImport(importedProject);
 		importProject.doAction();
 		assertTrue("Import project action failed", importProject.hasActionExecutionSucceeded());
+		ImportProject importProjectThatShouldFail = ImportProject.actionType.makeNewAction(rootProject, null, rootEditor);
+		importProjectThatShouldFail.setProjectToImport(importedProject);
+		importProjectThatShouldFail.doAction();
+		assertFalse("Import project action succeeded while it should have failed",
+				importProjectThatShouldFail.hasActionExecutionSucceeded());
 		importedProject.save();
 		rootProject.save();
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootEditor = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader());
+		rootProject = rootEditor.getProject();
+		assertEquals(1, rootProject.getProjectData().getImportedProjects().size());
+		importProjectThatShouldFail = ImportProject.actionType.makeNewAction(rootProject, null, rootEditor);
+		importProjectThatShouldFail
+				.setProjectToImport(reloadProject(importedProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject());
+		importProjectThatShouldFail.doAction();
+		assertFalse("Import project action succeeded while it should have failed",
+				importProjectThatShouldFail.hasActionExecutionSucceeded());
+		FlexoProjectReference importedProjectReference = rootProject.getProjectData().getImportedProjects().get(0);
+		FlexoWorkflow workflow = importedProjectReference.getWorkflow();
+		assertNotNull(workflow);
+		FlexoWorkflow resourceWorkflow = rootProject.getImportedWorkflow(importedProjectReference, false);
+		assertNotNull(resourceWorkflow);
+		assertSame(resourceWorkflow, workflow);
+		importedProjectReference.getReferredProject(true);
+		assertNotNull(rootProject.getProjectData(false));
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 		// loader
-		assertNotNull(rootProject.getProjectData(false));
+		assertSame(importedProject.getWorkflow(), importedProjectReference.getWorkflow());
+		assertNotSame(importedProject.getWorkflow(), workflow);
 		assertEquals(1, rootProject.getProjectData().getImportedProjects().size());
-		assertEquals(importedProject, rootProject.getProjectData().getImportedProjects().get(0).getReferredProject());
+		assertEquals(importedProject, importedProjectReference.getReferredProject());
 	}
 
 	public void testReuseProcess() throws SaveResourceException {
@@ -109,6 +132,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		importedProject.close();
 		importedProject = null;
 		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
+		rootProject.getProjectData().getImportedProjects().get(0).getReferredProject(true);
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 										// loader
 		subProcess = importedProject.getWorkflow().getLocalFlexoProcessWithName(SUB_PROCESS_NAME);

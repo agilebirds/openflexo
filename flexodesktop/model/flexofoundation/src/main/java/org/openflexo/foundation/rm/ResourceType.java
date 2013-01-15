@@ -50,16 +50,15 @@ import org.openflexo.xmlcode.XMLMapping;
 public abstract class ResourceType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
 	protected static final Logger logger = FlexoLogger.getLogger(ResourceType.class.getPackage().getName());
 
-	public static TextFileFormat RM_FORMAT, LINKS_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT,
-			PROCESS_FORMAT, OPERATION_COMPONENT_FORMAT, TAB_COMPONENT_FORMAT, MONITORING_SCREEN_FORMAT, MONITORING_COMPONENT_FORMAT,
-			GENERATED_CODE_FORMAT, GENERATED_SOURCES_FORMAT, GENERATED_DOC_FORMAT, IMPLEMENTATION_MODEL_FORMAT, TOC_FORMAT,
-			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, PROJECT_ONTOLOGY_FORMAT, IMPORTED_ONTOLOGY_FORMAT,
-			OE_SHEMA_LIBRARY_FORMAT, OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
+	public static TextFileFormat RM_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT, PROCESS_FORMAT,
+			OPERATION_COMPONENT_FORMAT, TAB_COMPONENT_FORMAT, MONITORING_SCREEN_FORMAT, MONITORING_COMPONENT_FORMAT, GENERATED_CODE_FORMAT,
+			GENERATED_SOURCES_FORMAT, GENERATED_DOC_FORMAT, IMPLEMENTATION_MODEL_FORMAT, TOC_FORMAT, REUSABLE_COMPONENT_FORMAT,
+			POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, PROJECT_ONTOLOGY_FORMAT, IMPORTED_ONTOLOGY_FORMAT, OE_SHEMA_LIBRARY_FORMAT,
+			OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
 	public static DirectoryFormat PALETTE_FORMAT, TEMPLATES_FORMAT, INSPECTORS_FORMAT;
 
 	static {
 		RM_FORMAT = FileFormat.registerTextFileFormat("RM", "application/flexo/rmxml", TextSyntax.XML, "rmxml");
-		LINKS_FORMAT = FileFormat.registerTextFileFormat("LINKS", "application/openflexo/rmxml", TextSyntax.XML, "links");
 		WORKFLOW_FORMAT = FileFormat.registerTextFileFormat("WORKFLOW", "application/openflexo/wkf", TextSyntax.XML, "wkf");
 		COMPONENT_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("COMPONENT_LIBRARY", "application/openflexo/wolib", TextSyntax.XML,
 				"wolib");
@@ -171,12 +170,13 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 			availableValues.add(CSS_FILE);
 			availableValues.add(PAMELA_RESOURCE);
 			availableValues.add(PROJECT_DATA);
+			availableValues.add(CACHE);
 		}
 		return availableValues;
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<ResourceType> getConverter() {
 		return resourceTypeConverter;
 	}
 
@@ -190,8 +190,6 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	}
 
 	public static final ResourceType RM = new RMResourceType();
-
-	public static final ResourceType LINKS = new LinksResourceType();
 
 	public static final ResourceType WORKFLOW = new WorkflowResourceType();
 
@@ -271,6 +269,8 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	public static final ResourceType PROJECT_DATA = new ProjectDataResourceType();
 
+	public static final ResourceType CACHE = new CacheFileResourceType();
+
 	protected ResourceType() {
 		super();
 	}
@@ -288,38 +288,6 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		@Override
 		public FileFormat getFormat() {
 			return RM_FORMAT;
-		}
-
-		@Override
-		public boolean isFlexoXMLStorageResource() {
-			return true;
-		}
-
-		@Override
-		public XMLMapping getMapping(FlexoXMLMappings mappings) {
-			return mappings.getRMMapping();
-		}
-
-		@Override
-		public Color getMainColor() {
-			return Color.GRAY;
-		}
-
-	}
-
-	private static class LinksResourceType extends ResourceType {
-		LinksResourceType() {
-			super();
-		}
-
-		@Override
-		public String getName() {
-			return "LINKS";
-		}
-
-		@Override
-		public FileFormat getFormat() {
-			return LINKS_FORMAT;
 		}
 
 		@Override
@@ -1614,6 +1582,32 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	}
 
+	private static class CacheFileResourceType extends ResourceType {
+		CacheFileResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "CACHE_FILE";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return FileFormat.XML;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return false;
+		}
+
+		@Override
+		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+			return null;
+		}
+	}
+
 	private static class AntFileResourceType extends ResourceType {
 		AntFileResourceType() {
 			super();
@@ -1746,7 +1740,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 		@Override
 		public boolean isFlexoXMLStorageResource() {
-			return true;
+			return false;
 		}
 
 		@Override

@@ -214,6 +214,7 @@ public class TestRM extends FlexoTestCase {
 		saveProject();
 		try {
 			_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, getResourceCenterService(null));
+			_project = _editor.getProject();
 		} catch (ProjectLoadingCancelledException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

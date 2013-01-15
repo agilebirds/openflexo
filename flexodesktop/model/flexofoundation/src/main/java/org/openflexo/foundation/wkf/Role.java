@@ -53,7 +53,6 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.OperatorNode;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -72,11 +71,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	private static final Logger logger = Logger.getLogger(Role.class.getPackage().getName());
 
 	private String roleName;
-	// private FlexoColor roleColor;
 	private int index = -1;
-
-	// private int posX = 0;
-	// private int posY = 0;
 
 	private boolean isSystemRole = false;
 	private boolean isAssignable = true;
@@ -85,27 +80,11 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	public static FlexoActionizer<AddRoleSpecialization, Role, WorkflowModelObject> addParentRoleActionizer;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	/**
 	 * Constructor used during deserialization
 	 */
 	public Role(FlexoWorkflowBuilder builder) {
 		this(builder.getProject(), builder.workflow);
-		initializeDeserialization(builder);
-	}
-
-	/**
-	 * Constructor used during deserialization
-	 * 
-	 * @deprecated (used before version 1.2.1)
-	 */
-	@Deprecated
-	public Role(FlexoProcessBuilder builder) {
-		this(builder.getProject(), null);
 		initializeDeserialization(builder);
 	}
 
@@ -306,7 +285,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public static Role createImportedRoleFromRole(RoleList roleList, PPMRole role) {
-		Role fir = new Role(roleList.getFlexoWorkflow(), role.getName());
+		Role fir = new Role(roleList.getWorkflow(), role.getName());
 		fir.isImported = true;
 		fir.updateFromObject(role);
 		return fir;
