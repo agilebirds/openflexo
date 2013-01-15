@@ -65,12 +65,16 @@ public class PropertyChangeListenerRegistrationManager {
 		}
 	}
 
-	public void removeListener(String property, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+	public void addListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		new PropertyChangeListenerRegistration(propertyName, listener, hasPropertyChangeSupport);
+	}
+
+	public void removeListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
 		Iterator<PropertyChangeListenerRegistration> i = registrations.iterator();
 		while (i.hasNext()) {
 			PropertyChangeListenerRegistration r = i.next();
 			if (r.hasPropertyChangeSupport == hasPropertyChangeSupport
-					&& (r.propertyName == null && property == null || property != null && property.equals(r.propertyName))
+					&& (r.propertyName == null && propertyName == null || propertyName != null && propertyName.equals(r.propertyName))
 					&& r.listener == listener) {
 				i.remove();
 			}
