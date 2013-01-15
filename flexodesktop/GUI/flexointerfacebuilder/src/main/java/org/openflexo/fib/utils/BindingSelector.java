@@ -393,7 +393,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 		if (dataBinding == null) {
 			// Mais des fois, c'est autorise quand meme, il faut donc tracer tous les appels pour voir ceux qui sont legaux (sylvain)
-			logger.warning("Il est interdit de faire un setEditedObject(null) !!!");
+			// logger.warning("forbidden setEditedObject(null) !!!");
 			// Thread.dumpStack();
 			return;
 		}

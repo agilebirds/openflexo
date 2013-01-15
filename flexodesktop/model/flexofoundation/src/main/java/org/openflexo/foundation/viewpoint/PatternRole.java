@@ -43,6 +43,7 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
 
+	@Deprecated
 	public static enum PatternRoleType {
 		Shape,
 		Connector,
