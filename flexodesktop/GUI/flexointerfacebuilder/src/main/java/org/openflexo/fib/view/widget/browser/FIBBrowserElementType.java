@@ -165,7 +165,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return returned;
 	}
 
-	public synchronized String getLabelFor(final Object object) {
+	public String getLabelFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return "???" + object.toString();
 		}
@@ -176,7 +176,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return object.toString();
 	}
 
-	public synchronized String getTooltipFor(final Object object) {
+	public String getTooltipFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return "???" + object.toString();
 		}
@@ -187,7 +187,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return browserElementDefinition.getName();
 	}
 
-	public synchronized Icon getIconFor(final Object object) {
+	public Icon getIconFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return null;
 		}
@@ -203,7 +203,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	public synchronized boolean isEnabled(final Object object) {
+	public boolean isEnabled(final Object object) {
 		if (browserElementDefinition == null) {
 			return false;
 		}
@@ -219,7 +219,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	public synchronized boolean isVisible(final Object object) {
+	public boolean isVisible(final Object object) {
 		if (browserElementDefinition == null) {
 			return false;
 		}
@@ -234,7 +234,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	public synchronized List<?> getChildrenFor(final Object object) {
+	public List<Object> getChildrenFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return Collections.EMPTY_LIST;
 		}
@@ -266,7 +266,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return returned;
 	}
 
-	protected synchronized Object getChildrenFor(FIBBrowserElementChildren children, final Object object) {
+	protected Object getChildrenFor(FIBBrowserElementChildren children, final Object object) {
 		if (children.getData().isSet()) {
 			iteratorObject = object;
 			if (children.getVisible().isSet()) {
@@ -286,7 +286,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	protected synchronized List<?> getChildrenListFor(final FIBBrowserElementChildren children, final Object object) {
+	protected List<?> getChildrenListFor(final FIBBrowserElementChildren children, final Object object) {
 		if (children.getData().isSet() && children.isMultipleAccess()) {
 			iteratorObject = object;
 			if (children.getVisible().isSet()) {
