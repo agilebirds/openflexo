@@ -34,6 +34,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -61,7 +62,9 @@ public class ProcessPerspective extends FlexoPerspective {
 		_controller = controller;
 		topRightDummy = new JPanel();
 		setTopLeftView(_controller.getWkfBrowserView());
-		setBottomLeftView(_controller.getProcessBrowserView());
+		if (!UserType.isLite()) {
+			setBottomLeftView(_controller.getProcessBrowserView());
+		}
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedWorkflowTree.fib"));
 		importedWorkflowView = FIBController.makeView(comp, new FlexoFIBController(comp, _controller));
