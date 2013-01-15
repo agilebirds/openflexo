@@ -679,6 +679,9 @@ public class StringEncoder {
 			} catch (ClassNotFoundException e) {
 				// Warns about the exception
 				throw new InvalidDataException("Supplied value represents a class not found: " + value);
+			} catch (NoClassDefFoundError e) {
+				e.printStackTrace();
+				throw new InvalidDataException("Supplied value triggered a class not found: " + value);
 			}
 		}
 
