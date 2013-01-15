@@ -202,9 +202,9 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 		super.updateEditor(from, to);
 		if (to != null && to.getProject() != null) {
-			manager.removeListener(FlexoProject.RESOURCES, this, to.getProject());
+			manager.addListener(FlexoProject.RESOURCES, this, to.getProject());
 			if (to.getProject().getProjectData() != null) {
-				manager.removeListener(ProjectData.IMPORTED_PROJECTS, this, to.getProject().getProjectData());
+				manager.addListener(ProjectData.IMPORTED_PROJECTS, this, to.getProject().getProjectData());
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
