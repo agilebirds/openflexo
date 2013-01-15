@@ -676,6 +676,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		if (o == null) {
 			return false;
 		}
+
 		if (!getRepresentedType().isAssignableFrom(o.getClass())) {
 			return false;
 		}
