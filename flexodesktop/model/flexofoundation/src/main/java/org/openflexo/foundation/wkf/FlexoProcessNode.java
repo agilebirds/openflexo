@@ -25,6 +25,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.Validable;
@@ -382,7 +385,27 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public FlexoProcess getProcess() {
-		return process;
+		return getProcess(false);
+	}
+
+	public FlexoProcess getProcess(boolean force) {
+		if (process != null || !force) {
+			return process;
+		} else {
+			if (getWorkflow().isCache()) {
+				ProjectData projectData = getProject().getProjectData();
+				if (projectData != null) {
+					FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+					if (ref != null) {
+						FlexoProject referredProject = ref.getReferredProject(true);
+						if (referredProject != null) {
+							return referredProject.getWorkflow().getLocalFlexoProcessWithName(getName());
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setProcess(FlexoProcess process) {
