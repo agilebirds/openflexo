@@ -193,11 +193,23 @@
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="OWLClassPatternRole">
 	</entity>
 
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole" xmlTag="EMFClassClassPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole" xmlTag="XSClassPatternRole">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.IndividualPatternRole" abstract="yes">
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole" xmlTag="OWLIndividualPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole" xmlTag="EMFObjectIndividualPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" abstract="yes">
