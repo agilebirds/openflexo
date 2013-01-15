@@ -53,10 +53,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
 
-public class EditionPattern extends EditionPatternObject implements StringConvertable<EditionPattern>, CustomType {
+public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -596,65 +594,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	public void setCalc(ViewPoint viewPoint) {
 		setViewPoint(viewPoint);
 	}
-
-	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {
-		private final ViewPointLibrary viewPointLibrary;
-
-		public EditionPatternConverter(ViewPointLibrary viewPointLibrary) {
-			super(EditionPattern.class);
-			this.viewPointLibrary = viewPointLibrary;
-		}
-
-		@Override
-		public EditionPattern convertFromString(String value) {
-			return viewPointLibrary.getEditionPattern(value);
-		}
-
-		@Override
-		public String convertToString(EditionPattern value) {
-			return value.getViewPoint().getViewPointURI() + "#" + value.getName();
-		}
-	}
-
-	@Override
-	public EditionPatternConverter getConverter() {
-		return getViewPointLibrary().editionPatternConverter;
-
-		/*if (getProject()!=null)
-		   return getProject().getEditionPatternConverter();
-		return null;*/
-	}
-
-	/* public EditionAction getAction(String patternRole)
-	 {
-	   return getEditionScheme().getAction(patternRole);
-	 }
-
-	 public AddShape getAddShapeAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddShapeAction(patternRole);
-	 }
-
-	 public AddShemaElementAction getAddShemaElementAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddShemaElementAction(patternRole);
-	 }
-
-	 public AddClass getAddClassAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddClassAction(patternRole);
-	 }
-
-	 public AddIndividual getAddIndividualAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddIndividualAction(patternRole);
-	 }
-
-	 public AddConnector getAddConnectorAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddConnectorAction(patternRole);
-	 }
-	 */
 
 	@Override
 	public String toString() {

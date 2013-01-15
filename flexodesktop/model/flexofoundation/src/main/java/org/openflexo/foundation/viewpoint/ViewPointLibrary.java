@@ -39,7 +39,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
@@ -62,8 +61,6 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 
 	private final Hashtable<String, ViewPointResource> map;
 
-	protected EditionPatternConverter editionPatternConverter;
-
 	private FlexoServiceManager serviceManager;
 
 	private XMLMapping viewPointModel_0_1;
@@ -72,17 +69,9 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	public ViewPointLibrary() {
 		super();
 
-		editionPatternConverter = new EditionPatternConverter(this);
-		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
-
 		map = new Hashtable<String, ViewPointResource>();
-		// findCalcs(CALC_LIBRARY_DIR);
-		/*for (OntologyCalc calc : calcs.values()) {
-			calc.loadWhenUnloaded();
-		}*/
 
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
-		// StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
 

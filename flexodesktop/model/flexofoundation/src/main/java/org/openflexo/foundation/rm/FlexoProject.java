@@ -164,9 +164,7 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -4157,8 +4155,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}*/
 
 		this.serviceManager = serviceManager;
-		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(serviceManager.getService(ViewPointLibrary.class));
-		getStringEncoder()._addConverter(editionPatternConverter);
 	}
 
 	public boolean isComputeDiff() {
