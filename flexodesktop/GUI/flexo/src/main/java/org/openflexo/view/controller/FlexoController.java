@@ -106,6 +106,7 @@ import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -1810,10 +1811,16 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
-		if (iconForObject != null && getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-				&& ((FlexoModelObject) object).getProject() != getProject()
-				&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
-			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+		if (iconForObject != null) {
+			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
+					&& ((FlexoModelObject) object).getProject() != getProject()
+					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			} else if (object instanceof FlexoProjectReference) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			} else if (object instanceof WorkflowModelObject && ((WorkflowModelObject) object).getWorkflow().isCache()) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			}
 		}
 		return iconForObject;
 	}
@@ -1845,6 +1852,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return CGIconLibrary.TARGET_ICON;
 		} else if (object instanceof FlexoProject) {
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
+		} else if (object instanceof FlexoProjectReference) {
+			return WKFIconLibrary.PROCESS_ICON;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
