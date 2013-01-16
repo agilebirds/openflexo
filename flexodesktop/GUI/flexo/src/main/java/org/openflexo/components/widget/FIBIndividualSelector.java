@@ -34,10 +34,10 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -134,7 +134,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 		}
 	}
 
-	public String renderObject(OntologyObject object) {
+	public String renderObject(AbstractOntologyObject object) {
 		if (object instanceof OntologyIndividual) {
 			return renderedString((OntologyIndividual) object);
 		}
