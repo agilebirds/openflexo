@@ -245,6 +245,9 @@ class ConstantValuePanel extends JPanel {
 					if (isUpdatingPanel) {
 						return;
 					}
+					if (bindingSelectorPanel.bindingSelector.getEditedObject() == null) {
+						return;
+					}
 					if (typeCB.getSelectedItem().equals(BOOLEAN)) {
 						bindingSelectorPanel.bindingSelector.getEditedObject().setExpression(Constant.BooleanConstant.TRUE);
 						bindingSelectorPanel.bindingSelector.fireEditedObjectChanged();
@@ -281,7 +284,8 @@ class ConstantValuePanel extends JPanel {
 			}
 			isUpdatingPanel = false;
 
-			if (bindingSelectorPanel.bindingSelector.getEditedObject().getExpression() == ObjectSymbolicConstant.NULL) {
+			if (bindingSelectorPanel.bindingSelector.getEditedObject() != null
+					&& bindingSelectorPanel.bindingSelector.getEditedObject().getExpression() == ObjectSymbolicConstant.NULL) {
 				isUpdatingPanel = true;
 				typeCB.setSelectedItem(NULL);
 				isUpdatingPanel = false;
@@ -337,7 +341,7 @@ class ConstantValuePanel extends JPanel {
 
 		isUpdatingPanel = true;
 
-		if (edited.isConstant()) {
+		if (edited != null && edited.isConstant()) {
 
 			if (currentType == EvaluationType.BOOLEAN && (edited.getExpression() instanceof BooleanConstant)) {
 				selectValueCB.setSelectedItem(edited.getExpression().toString());

@@ -779,13 +779,12 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					getLabel().setIcon(UtilsIconLibrary.OK_ICON);
 				} else {
 					logger.info("Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
-					if (editedObject.isBindingValue()) {
+					/*if (editedObject.isBindingValue()) {
 						BindingValue bv = (BindingValue) (editedObject.getExpression());
 						System.out.println("BV=" + bv);
 						System.out.println("valid=" + bv.isValid());
 						System.out.println("reason=" + bv.invalidBindingReason());
-						System.out.println("on debuggue");
-					}
+					}*/
 					getLabel().setVisible(true);
 					getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
 				}

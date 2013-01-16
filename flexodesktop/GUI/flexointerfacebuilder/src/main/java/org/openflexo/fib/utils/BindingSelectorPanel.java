@@ -1016,16 +1016,16 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		if (binding != null) {
 			bindingSelector.getTextField().setForeground(binding.isValid() ? Color.BLACK : Color.RED);
 			bindingSelector.getTextField().setSelectedTextColor(binding.isValid() ? Color.BLACK : Color.RED);
-		}
 
-		if (bindingSelector.areStaticValuesAllowed() && staticBindingPanel != null) {
-			staticBindingPanel.updateConstantValuePanel();
-		}
+			if (bindingSelector.areStaticValuesAllowed() && staticBindingPanel != null) {
+				staticBindingPanel.updateConstantValuePanel();
+			}
 
-		if (binding.isBindingValue()) {
-			setEditStaticValue(false);
-		} else if (binding.isConstant()) {
-			setEditStaticValue(true);
+			if (binding.isBindingValue()) {
+				setEditStaticValue(false);
+			} else if (binding.isConstant()) {
+				setEditStaticValue(true);
+			}
 		}
 	}
 

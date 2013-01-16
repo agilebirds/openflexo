@@ -51,7 +51,11 @@ public class JavaBindingFactory implements BindingFactory {
 
 	@Override
 	public SimplePathElement makeSimplePathElement(BindingPathElement father, String propertyName) {
-		KeyValueProperty keyValueProperty = KeyValueLibrary.getKeyValueProperty(father.getType(), propertyName);
+		Type fatherType = father.getType();
+		if (fatherType instanceof Class && ((Class) fatherType).isPrimitive()) {
+			fatherType = TypeUtils.fromPrimitive((Class) fatherType);
+		}
+		KeyValueProperty keyValueProperty = KeyValueLibrary.getKeyValueProperty(fatherType, propertyName);
 		if (keyValueProperty != null) {
 			return new JavaPropertyPathElement(father, keyValueProperty);
 		}
