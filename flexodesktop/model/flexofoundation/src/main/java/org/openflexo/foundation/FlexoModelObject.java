@@ -579,7 +579,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			isRegistered = false;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Project is null for " + this);
+				logger.warning("Project is null for " + this.getClass().getSimpleName() + "_" + this.getFlexoID());
 			}
 		}
 
