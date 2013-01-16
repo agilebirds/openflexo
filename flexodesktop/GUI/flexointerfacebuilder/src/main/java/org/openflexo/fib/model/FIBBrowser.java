@@ -29,36 +29,15 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public class FIBBrowser extends FIBWidget {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowser.class.getPackage().getName());
-
-	@Deprecated
-	private BindingDefinition SELECTED;
-	@Deprecated
-	private BindingDefinition ROOT;
-
-	@Deprecated
-	public BindingDefinition getSelectedBindingDefinition() {
-		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", Object.class, DataBinding.BindingDefinitionType.GET_SET, false);
-		}
-		return SELECTED;
-	}
-
-	@Deprecated
-	public BindingDefinition getRootBindingDefinition() {
-		if (ROOT == null) {
-			ROOT = new BindingDefinition("root", getIteratorClass(), DataBinding.BindingDefinitionType.GET, false);
-		}
-		return ROOT;
-	}
 
 	public static enum Parameters implements FIBModelAttribute {
 		root,
@@ -141,7 +120,7 @@ public class FIBBrowser extends FIBWidget {
 
 	public DataBinding<Object> getRoot() {
 		if (root == null) {
-			root = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET);
+			root = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return root;
 	}
@@ -149,7 +128,7 @@ public class FIBBrowser extends FIBWidget {
 	public void setRoot(DataBinding<Object> root) {
 		if (root != null) {
 			root.setOwner(this);
-			root.setDeclaredType(getIteratorClass());
+			root.setDeclaredType(Object.class);
 			root.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.root = root;
@@ -532,6 +511,24 @@ public class FIBBrowser extends FIBWidget {
 		for (FIBBrowserElement e : getElements()) {
 			e.notifiedBindingModelRecreated();
 		}
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(RootBindingMustBeValid.class, report);
+	}
+
+	public static class RootBindingMustBeValid extends BindingMustBeValid<FIBBrowser> {
+		public RootBindingMustBeValid() {
+			super("'root'_binding_is_not_valid", FIBBrowser.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowser object) {
+			return object.getRoot();
+		}
+
 	}
 
 }

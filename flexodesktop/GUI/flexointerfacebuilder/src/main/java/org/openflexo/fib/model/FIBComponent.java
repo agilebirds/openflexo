@@ -1312,7 +1312,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		@Override
-		public DataBinding getBinding(FIBComponent object) {
+		public DataBinding<?> getBinding(FIBComponent object) {
 			return object.getData();
 		}
 
@@ -1324,7 +1324,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		@Override
-		public DataBinding getBinding(FIBComponent object) {
+		public DataBinding<?> getBinding(FIBComponent object) {
 			return object.getVisible();
 		}
 
