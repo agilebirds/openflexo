@@ -1720,7 +1720,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (_bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
+										.getAccessibleBindingPathElements(columnElement.getElement()) != null
+										&& _bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (_bindingSelector.getBindingDefinition() != null
