@@ -81,7 +81,9 @@ public abstract class FIBContainer extends FIBComponent {
 			aComponent.getConstraints().putAll(someConstraints);
 			aComponent.getConstraints().ignoreNotif = false;
 		}
-		updateComponentIndexForInsertionIndex(aComponent, subComponentIndex);
+		if (deserializationPerformed) {
+			updateComponentIndexForInsertionIndex(aComponent, subComponentIndex);
+		}
 		subComponents.add(subComponentIndex, aComponent);
 		if (deserializationPerformed) {
 			reorderComponents();
@@ -200,7 +202,6 @@ public abstract class FIBContainer extends FIBComponent {
 		// logger.info(toString()+" append "+container);
 
 		// if (this instanceof FIBTab && ())
-		List<FIBComponent> addedComponents = new ArrayList<FIBComponent>();
 		List<FIBComponent> mergedComponents = new ArrayList<FIBComponent>();
 		for (int i = container.getSubComponents().size() - 1; i >= 0; i--) {
 			FIBComponent c2 = container.getSubComponents().get(i);
@@ -353,7 +354,7 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 
 		updateBindingModel();
-		for (FIBComponent c : addedComponents) {
+		for (FIBComponent c : subComponents) {
 			recursivelyFinalizeDeserialization(c);
 		}
 		finalizeDeserialization();

@@ -1767,6 +1767,18 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				if (oldEditor != null || newEditor != null) {
 					updateEditor(oldEditor, newEditor);
 				}
+			} else if (evt.getPropertyName().equals(ControllerModel.LOCATIONS)) {
+				if (evt.getOldValue() != null) {
+					Location location = (Location) evt.getOldValue();
+					ModuleView<?> moduleViewForLocation = moduleViewForLocation(location, false);
+					if (moduleViewForLocation != null) {
+						if (locationsForView.get(moduleViewForLocation).size() < 2) {
+							moduleViewForLocation.deleteModuleView();
+						} else {
+							locationsForView.remove(moduleViewForLocation, location);
+						}
+					}
+				}
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
 			FlexoProject project = (FlexoProject) evt.getSource();

@@ -33,6 +33,8 @@ public class WinRegistryAccess {
 
 	private static final String REGQUERY_UTIL = "reg query ";
 
+	private static final String REGSET_UTIL = "reg add ";
+
 	public static final String REG_SZ_TOKEN = "REG_SZ";
 
 	public static final String REG_EXPAND_SZ_TOKEN = "REG_EXPAND_SZ";
@@ -88,6 +90,38 @@ public class WinRegistryAccess {
 			return result.substring(p + attributeType.length()).trim();
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	public static boolean setRegistryValue(String path, String attributeName, String attributeType, String value) {
+		if (attributeType == null) {
+			attributeType = REG_SZ_TOKEN;
+		}
+		try {
+			if (!path.startsWith("\"")) {
+				path = "\"" + path + "\"";
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append(REGSET_UTIL);
+			sb.append(path);
+			sb.append(' ');
+			if (attributeName != null) {
+				sb.append("/v ");
+				sb.append(attributeName);
+			} else {
+				sb.append("/ve");
+			}
+			sb.append(" /t ").append(attributeType);
+			sb.append(" /d ").append(value);
+			sb.append(" /f");
+			Process process = Runtime.getRuntime().exec(sb.toString());
+			ConsoleReader reader = new ConsoleReader(process.getInputStream());
+			reader.start();
+			process.waitFor();
+			reader.join();
+			return process.exitValue() == 0;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 
@@ -148,13 +182,33 @@ public class WinRegistryAccess {
 		return sb.toString();
 	}
 
+	public static enum Style {
+		STRETCHED(2, 0), CENTERED(1, 0), TILED(1, 1);
+
+		private int style;
+		private int tile;
+
+		private Style(int style, int tile) {
+			this.style = style;
+			this.tile = tile;
+		}
+
+		public int getStyle() {
+			return style;
+		}
+
+		public int getTile() {
+			return tile;
+		}
+	}
+
 	public static void main(String s[]) {
-		String key = "\"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\"";
-		String currentVersionAtt = "CurrentVersion";
-		String javaHomeAtt = "JavaHome";
-		String res1 = getRegistryValue(key, currentVersionAtt, null);
-		String res2 = getRegistryValue(key + "\\" + res1, javaHomeAtt, null);
-		System.out.println("CurrentVersion '" + res1 + "'");
-		System.out.println("JavaHome '" + res2 + "'");
+		String path = "\"HKEY_CURRENT_USER\\Control Panel\\Desktop\"";
+		String wallpaperStyle = "WallpaperStyle";
+		String wallpaperStyleTile = "TileWallpaper";
+		String wallpaper = "Wallpaper";
+		setRegistryValue(path, wallpaperStyle, null, String.valueOf(Style.STRETCHED.getStyle()));
+		setRegistryValue(path, wallpaperStyleTile, null, String.valueOf(Style.STRETCHED.getTile()));
+		setRegistryValue(path, wallpaper, null, "D:\\share\\Wallpaper\\Canyon.jpg");
 	}
 }

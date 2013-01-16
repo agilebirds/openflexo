@@ -29,8 +29,6 @@ import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
@@ -98,34 +96,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		// setToolTipText(getClass().getSimpleName()+hashCode());
 
 		// System.out.println("isDoubleBuffered()="+isDoubleBuffered());
-
-		addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_UP) {
-					if (getController().upKeyPressed()) {
-						event.consume();
-					}
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-					if (getController().downKeyPressed()) {
-						event.consume();
-					}
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-					if (getController().rightKeyPressed()) {
-						event.consume();
-					}
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-					if (getController().leftKeyPressed()) {
-						event.consume();
-					}
-					return;
-				}
-			}
-		});
-
 	}
 
 	public void disableFGEViewMouseListener() {
@@ -500,8 +470,10 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getParent().moveToFront(getLabelView());
 					}
 					getPaintManager().repaint(this);
-					requestFocusInWindow();
-					// requestFocus();
+					if (graphicalRepresentation.getIsSelected()) {
+						requestFocusInWindow();
+						// requestFocus();
+					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {

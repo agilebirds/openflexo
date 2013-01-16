@@ -33,6 +33,8 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -45,10 +47,12 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
@@ -136,6 +140,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		mouseListener = makeDrawingViewMouseListener();
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
+		installKeyBindings();
 		resizeView();
 		getGraphicalRepresentation().addObserver(this);
 
@@ -157,12 +162,44 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		_paintManager = new FGEPaintManager(this);
 
 		setToolTipText(getClass().getSimpleName() + hashCode());
-
 		// setDoubleBuffered(true);
-
 		setFocusable(true);
-
 		revalidate();
+	}
+
+	private void installKeyBindings() {
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "move_left");
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "move_right");
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "move_up");
+		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "move_down");
+		getActionMap().put("move_left", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getController().leftKeyPressed();
+			}
+		});
+		getActionMap().put("move_right", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getController().rightKeyPressed();
+			}
+		});
+		getActionMap().put("move_up", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getController().upKeyPressed();
+			}
+		});
+		getActionMap().put("move_down", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getController().downKeyPressed();
+			}
+		});
 	}
 
 	public D getDrawing() {
