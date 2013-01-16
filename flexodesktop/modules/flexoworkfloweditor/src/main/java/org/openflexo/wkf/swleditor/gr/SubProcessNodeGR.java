@@ -30,9 +30,9 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.controller.MouseClickControlAction;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -65,7 +65,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
-		addToMouseDragControls(new ProcessOpener(), true);
+		addToMouseClickControls(new ProcessOpener(), true);
 		/*setBorder(new ShapeGraphicalRepresentation.ShapeBorder(
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
@@ -223,12 +223,13 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		subLabelTextStyle = TextStyle.makeTextStyle(Color.GRAY, getRoleFont().getFont());
 	}
 
-	public class ProcessOpener extends MouseDragControl {
+	public class ProcessOpener extends MouseClickControl {
 
 		public ProcessOpener() {
-			super("SWL-Process opener", MouseButton.LEFT, new CustomDragControlAction() {
+			super("SWL-Process opener", MouseButton.LEFT, 1, new MouseClickControlAction() {
+
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 						MouseEvent event) {
 					logger.info("Opening process");
 					OpenEmbeddedProcess.actionType.makeNewAction(getSubProcessNode(), null, getDrawing().getEditor()).doAction();
@@ -237,15 +238,8 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-						MouseEvent event, boolean isSignificativeDrag) {
-					return false;
-				}
-
-				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-						MouseEvent event) {
-					return false;
+				public MouseClickControlActionType getActionType() {
+					return MouseClickControlActionType.CUSTOM;
 				}
 			}, false, false, false, false);
 		}
@@ -253,6 +247,11 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		@Override
 		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
+		}
+
+		@Override
+		public boolean isModelEditionAction() {
+			return false;
 		}
 
 	}
