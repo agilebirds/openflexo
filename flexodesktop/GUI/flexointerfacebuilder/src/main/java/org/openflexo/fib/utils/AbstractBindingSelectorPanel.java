@@ -17,7 +17,7 @@ public abstract class AbstractBindingSelectorPanel extends ResizablePanel {
 
 	protected abstract void update();
 
-	protected abstract void fireBindingDefinitionChanged();
+	// protected abstract void fireBindingDefinitionChanged();
 
 	protected abstract void fireBindableChanged();
 

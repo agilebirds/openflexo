@@ -100,15 +100,15 @@ class ConstantValuePanel extends JPanel {
 			}
 		});
 		add(selectStaticBindingCB);
-		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
-				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null) {
+		if (bindingSelectorPanel.bindingSelector.getEditedObject() == null
+				|| bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(SMALL_FONT);
 			add(enterValueTF);
 			currentType = EvaluationType.LITERAL;
 			disableStaticBindingPanel();
 		} else {
-			currentType = kindOf(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType());
+			currentType = kindOf(bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType());
 			if (currentType == EvaluationType.BOOLEAN) {
 				final String UNSELECTED = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select_a_value");
 				final String TRUE = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "true");
@@ -225,9 +225,9 @@ class ConstantValuePanel extends JPanel {
 
 		}
 
-		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
-				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null
-				|| TypeUtils.isObject(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType())) {
+		if (bindingSelectorPanel.bindingSelector.getEditedObject() == null
+				|| bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType() == null
+				|| TypeUtils.isObject(bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType())) {
 			final String SELECT = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "integer");
@@ -325,11 +325,11 @@ class ConstantValuePanel extends JPanel {
 		isUpdatingPanel = true;
 
 		EvaluationType newType;
-		if (bindingSelectorPanel.bindingSelector.getBindingDefinition() == null
-				|| bindingSelectorPanel.bindingSelector.getBindingDefinition().getType() == null) {
+		if (bindingSelectorPanel.bindingSelector.getEditedObject() == null
+				|| bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType() == null) {
 			newType = EvaluationType.LITERAL;
 		} else {
-			newType = kindOf(bindingSelectorPanel.bindingSelector.getBindingDefinition().getType());
+			newType = kindOf(bindingSelectorPanel.bindingSelector.getEditedObject().getDeclaredType());
 		}
 		if (newType != currentType) {
 			removeAll();

@@ -69,7 +69,7 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 			    selector.denyNewEntryCreation();
 			}*/
 			selector.setBindable(getBindableFor(value, rowObject));
-			selector.setBindingDefinition(getBindingDefinitionFor(value, rowObject));
+			// selector.setBindingDefinition(getBindingDefinitionFor(value, rowObject));
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Selector: " + selector.toString() + " rowObject=" + rowObject + "" + " binding=" + value
 						+ " with BindingDefinition " + getBindingDefinitionFor(value, rowObject));

@@ -235,10 +235,10 @@ public class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel
 		update();
 	}
 
-	@Override
-	protected void fireBindingDefinitionChanged() {
-		update();
-	}
+	/*	@Override
+		protected void fireBindingDefinitionChanged() {
+			update();
+		}*/
 
 	@Override
 	protected void willApply() {

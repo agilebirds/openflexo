@@ -87,7 +87,8 @@ public class BindingDefinition extends Observable {
 	}
 
 	public boolean getIsSettable() {
-		return getBindingDefinitionType() == DataBinding.BindingDefinitionType.SET || getBindingDefinitionType() == DataBinding.BindingDefinitionType.GET_SET;
+		return getBindingDefinitionType() == DataBinding.BindingDefinitionType.SET
+				|| getBindingDefinitionType() == DataBinding.BindingDefinitionType.GET_SET;
 	}
 
 	public Type getType() {
@@ -162,7 +163,7 @@ public class BindingDefinition extends Observable {
 	}
 
 	public void notifyBindingDefinitionTypeChanged() {
-		setChanged();
-		notifyObservers(new BindingDefinitionTypeChanged());
+		// setChanged();
+		// notifyObservers(new BindingDefinitionTypeChanged());
 	}
 }
