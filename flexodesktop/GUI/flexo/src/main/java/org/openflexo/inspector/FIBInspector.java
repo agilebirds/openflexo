@@ -163,7 +163,7 @@ public class FIBInspector extends FIBPanel {
 			// System.out.println("Creating FIBTab for " + ep);
 			returned = makeFIBTab(ep, 0);
 			tabsForEP.put(ep, returned);
-			getTabPanel().addToSubComponents(returned);
+			getTabPanel().addToSubComponents(returned, null, 0);
 			return true;
 		}
 		return false;
@@ -573,7 +573,7 @@ public class FIBInspector extends FIBPanel {
 		for (final InspectorEntry entry : ep.getInspector().getEntries()) {
 			FIBLabel label = new FIBLabel();
 			label.setLabel(entry.getLabel());
-			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
 			FIBWidget widget = makeWidget(entry, newTab, index++);
 			widget.setData(new DataBinding(epIdentifier + "." + entry.getData().toString()) {
 				@Override

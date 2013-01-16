@@ -54,6 +54,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
 
+	private final FlexoProject project;
+
 	/**
 	 * Constructor invoked during deserialization
 	 * 
@@ -72,10 +74,19 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	 */
 	public View(ViewDefinition shemaDefinition, FlexoProject project) {
 		super(project);
+		this.project = project;
 		logger.info("Created new shema with project " + project);
 		_viewDefinition = shemaDefinition;
 		setShema(this);
 		loadViewpointIfRequiredAndEnsureOntologyImports(project);
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		if (getFlexoResource() != null) {
+			return super.getProject();
+		}
+		return project;
 	}
 
 	private void loadViewpointIfRequiredAndEnsureOntologyImports(FlexoProject project) {
