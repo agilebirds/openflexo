@@ -21,8 +21,12 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyFolder;
@@ -38,6 +42,38 @@ import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.IProgress;
 
 public class LocalResourceCenterImplementation implements FlexoResourceCenter {
+
+	private static class ImportableViewPoints {
+		public static class ImportableViewPoint {
+			public final String parentDirName;
+			public final Collection<String> validViewPointNames;
+
+			public ImportableViewPoint(String parentDirName, List<String> validViewPointNames) {
+				super();
+				this.parentDirName = parentDirName;
+				this.validViewPointNames = validViewPointNames;
+			}
+
+		}
+
+		public static final List<ImportableViewPoint> IMPORTABLE_VIEWPOINTS = Arrays.asList(
+				new ImportableViewPoint("Archimate", Arrays.asList("InformationStructure", "IntroductoryViewpoint", "ProjectViewpoint")),
+				new ImportableViewPoint("FlexoMethodology", new ArrayList<String>(0)), new ImportableViewPoint("Basic",
+						new ArrayList<String>(0)), new ImportableViewPoint("Tests", new ArrayList<String>(0)));
+
+		public static boolean isImportable(File viewPointFile) {
+			String parentDirName = viewPointFile.getParentFile().getName();
+			for (ImportableViewPoint ivp : IMPORTABLE_VIEWPOINTS) {
+				if (ivp.parentDirName.equals(parentDirName)) {
+					String viewPointName = ViewPoint.getViewPointBaseName(viewPointFile);
+					return ivp.validViewPointNames.contains(viewPointName);
+				}
+			}
+			return true;
+
+		}
+
+	}
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
@@ -176,13 +212,24 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
 				if (f.listFiles().length > 0) {
-					viewPointLibrary.importViewPoint(f, folder);
+					if (isImportable(f)) {
+						viewPointLibrary.importViewPoint(f, folder);
+					} else if (logger.isLoggable(Level.INFO)) {
+						logger.info("Ignoring " + f.getAbsolutePath());
+					}
 				}
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder, viewPointLibrary);
 				findViewPoints(f, newFolder);
+				if (newFolder.getViewPoints().size() == 0 && newFolder.getChildren().size() == 0) {
+					folder.removeFromChildren(newFolder);
+				}
 			}
 		}
+	}
+
+	private boolean isImportable(File f) {
+		return ImportableViewPoints.isImportable(f);
 	}
 
 	public File getLocalDirectory() {
