@@ -163,7 +163,7 @@ public class FIBInspector extends FIBPanel {
 			// System.out.println("Creating FIBTab for " + ep);
 			returned = makeFIBTab(ep, 0);
 			tabsForEP.put(ep, returned);
-			getTabPanel().addToSubComponents(returned);
+			getTabPanel().addToSubComponents(returned, null, 0);
 			return true;
 		}
 		return false;
