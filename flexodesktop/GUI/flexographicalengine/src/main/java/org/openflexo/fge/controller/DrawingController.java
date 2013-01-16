@@ -435,7 +435,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		}
 	}
 
-	public ShapeGraphicalRepresentation<?> getFirstSelectedShape() {
+	private ShapeGraphicalRepresentation<?> getFirstSelectedShape() {
 		for (GraphicalRepresentation<?> gr : getSelectedObjects()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				return (ShapeGraphicalRepresentation<?>) gr;
@@ -869,7 +869,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	private synchronized boolean startKeyDrivenMovingSession() {
 
-		if (getFirstSelectedShape().getLocationConstraints() == LocationConstraints.FREELY_MOVABLE) {
+		if (getFirstSelectedShape().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 
 			keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
 			keyDrivenMovingSessionTimer.start();
@@ -889,7 +889,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	}
 
 	private class KeyDrivenMovingSessionTimer extends Thread {
-		boolean typed = false;
+		volatile boolean typed = false;
 
 		public KeyDrivenMovingSessionTimer() {
 			typed = true;
@@ -898,9 +898,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		@Override
 		public void run() {
 			while (typed) {
-				synchronized (this) {
-					typed = false;
-				}
+				typed = false;
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {
