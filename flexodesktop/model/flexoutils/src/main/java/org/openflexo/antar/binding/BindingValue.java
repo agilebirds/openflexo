@@ -230,6 +230,14 @@ public class BindingValue extends AbstractBinding {
 			}
 		}
 
+		// System.out.println("getBindingDefinition().getType()="+getBindingDefinition().getType());
+		// System.out.println("getAccessedType()="+getAccessedType());
+
+		if (getBindingDefinition().getType() != null
+				&& TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAccessedType(), true)) {
+			return "binding is valid";
+		}
+
 		return "Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
 				+ getAccessedType();
 
