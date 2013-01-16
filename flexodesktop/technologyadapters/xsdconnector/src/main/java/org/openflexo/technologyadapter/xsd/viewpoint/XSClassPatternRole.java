@@ -10,9 +10,4 @@ public class XSClassPatternRole extends ClassPatternRole<XSOntClass> {
 		super(builder);
 	}
 
-	@Override
-	public Class<XSOntClass> getAccessedClass() {
-		return XSOntClass.class;
-	}
-
 }

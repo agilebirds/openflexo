@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,18 +25,13 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.SubClassStatement;
+	public Type getType() {
+		return null;
 	}
 
 	@Override
 	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("sub_class_statement");
-	}
-
-	@Override
-	public Class<SubClassStatement> getAccessedClass() {
-		return SubClassStatement.class;
 	}
 
 	@Override

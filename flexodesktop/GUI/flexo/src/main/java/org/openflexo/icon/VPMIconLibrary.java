@@ -19,10 +19,12 @@
  */
 package org.openflexo.icon;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.ExampleDiagramResource;
@@ -309,7 +311,9 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForOntologyObject(((OntologicObjectPatternRole<?>) object).getAccessedClass());
+				Type accessedType = ((OntologicObjectPatternRole<?>) object).getType();
+				Class accessedTypeBaseClass = TypeUtils.getBaseClass(accessedType);
+				return tac.getIconForOntologyObject(accessedTypeBaseClass);
 			}
 		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;

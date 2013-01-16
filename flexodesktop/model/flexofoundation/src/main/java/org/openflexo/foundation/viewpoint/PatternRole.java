@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -42,25 +43,6 @@ import org.openflexo.toolbox.StringUtils;
 public abstract class PatternRole<T> extends EditionPatternObject {
 
 	private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
-
-	@Deprecated
-	public static enum PatternRoleType {
-		Shape,
-		Connector,
-		Individual,
-		Class,
-		Property,
-		ObjectProperty,
-		DataProperty,
-		SubClassStatement,
-		ObjectPropertyStatement,
-		DataPropertyStatement,
-		RestrictionStatement,
-		FlexoModelObject,
-		Diagram,
-		EditionPattern,
-		Primitive
-	}
 
 	private EditionPattern _pattern;
 
@@ -119,14 +101,12 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		return getPatternRoleName();
 	}
 
-	public abstract PatternRoleType getType();
+	public abstract Type getType();
 
 	public abstract String getPreciseType();
 
 	public void finalizePatternRoleDeserialization() {
 	}
-
-	public abstract Class<? extends T> getAccessedClass();
 
 	@Override
 	public final BindingModel getBindingModel() {

@@ -1,5 +1,7 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -8,8 +10,9 @@ import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction;
-import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
+// TODO: Rewrite this
+@Deprecated
 public class RestrictionStatementPatternRole extends StatementPatternRole {
 
 	public RestrictionStatementPatternRole(ViewPointBuilder builder) {
@@ -17,18 +20,13 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.RestrictionStatement;
+	public Type getType() {
+		return null;
 	}
 
 	@Override
 	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("restriction_statement");
-	}
-
-	@Override
-	public Class<SubClassStatement> getAccessedClass() {
-		return SubClassStatement.class;
 	}
 
 	@Override

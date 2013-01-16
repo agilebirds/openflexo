@@ -29,9 +29,4 @@ public class EMFClassClassPatternRole extends ClassPatternRole<EMFClassClass> {
 		super(builder);
 	}
 
-	@Override
-	public Class<EMFClassClass> getAccessedClass() {
-		return EMFClassClass.class;
-	}
-
 }

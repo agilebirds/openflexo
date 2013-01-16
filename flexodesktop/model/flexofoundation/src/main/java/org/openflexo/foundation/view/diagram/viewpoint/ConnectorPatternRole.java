@@ -1,5 +1,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
@@ -29,11 +31,6 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<ViewConnec
 		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
 			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
 		}
-	}
-
-	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Connector;
 	}
 
 	@Override
@@ -177,7 +174,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<ViewConnec
 	}*/
 
 	@Override
-	public Class<ViewConnector> getAccessedClass() {
+	public Type getType() {
 		return ViewConnector.class;
 	}
 

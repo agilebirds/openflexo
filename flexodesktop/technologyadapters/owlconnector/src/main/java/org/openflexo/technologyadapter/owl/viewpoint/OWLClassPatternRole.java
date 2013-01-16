@@ -10,9 +10,4 @@ public class OWLClassPatternRole extends ClassPatternRole<OWLClass> {
 		super(builder);
 	}
 
-	@Override
-	public Class<OWLClass> getAccessedClass() {
-		return OWLClass.class;
-	}
-
 }

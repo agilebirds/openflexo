@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -15,8 +17,8 @@ public class EditionPatternPatternRole extends PatternRole<EditionPatternReferen
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.EditionPattern;
+	public Type getType() {
+		return getEditionPatternType();
 	}
 
 	@Override
@@ -25,11 +27,6 @@ public class EditionPatternPatternRole extends PatternRole<EditionPatternReferen
 			return getEditionPatternType().getName();
 		}
 		return "EditionPattern";
-	}
-
-	@Override
-	public Class<EditionPatternReference> getAccessedClass() {
-		return EditionPatternReference.class;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -18,11 +20,6 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Diagram;
-	}
-
-	@Override
 	public String getPreciseType() {
 		if (getViewpoint() != null) {
 			return getViewpoint().getName();
@@ -31,7 +28,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	@Override
-	public Class<View> getAccessedClass() {
+	public Type getType() {
 		return View.class;
 	}
 

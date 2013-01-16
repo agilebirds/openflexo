@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.view.ActorReference;
@@ -16,8 +18,11 @@ public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectPr
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.ObjectProperty;
+	public Type getType() {
+		if (getParentProperty() == null) {
+			return IFlexoOntologyObjectProperty.class;
+		}
+		return super.getType();
 	}
 
 	@Override

@@ -10,9 +10,4 @@ public class XSIndividualPatternRole extends IndividualPatternRole<XSOntIndividu
 		super(builder);
 	}
 
-	@Override
-	public Class<XSOntIndividual> getAccessedClass() {
-		return XSOntIndividual.class;
-	}
-
 }

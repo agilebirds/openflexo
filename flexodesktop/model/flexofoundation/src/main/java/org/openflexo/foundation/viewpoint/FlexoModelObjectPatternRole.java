@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
@@ -24,11 +26,6 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 
 	public FlexoModelObjectPatternRole(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.FlexoModelObject;
 	}
 
 	public FlexoModelObjectType getFlexoModelObjectType() {
@@ -65,7 +62,7 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 	}
 
 	@Override
-	public Class<? extends FlexoModelObject> getAccessedClass() {
+	public Type getType() {
 		if (flexoModelObjectType == null) {
 			return null;
 		}
