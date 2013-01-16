@@ -380,6 +380,9 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void componentFirst(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		subComponents.remove(c);
 		updateComponentIndexForInsertionIndex(c, 0);
 		subComponents.insertElementAt(c, 0);
@@ -387,6 +390,9 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void componentUp(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		int index = subComponents.indexOf(c);
 		if (index > 0) {
 			subComponents.remove(c);
@@ -397,6 +403,9 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void componentDown(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		int index = subComponents.indexOf(c);
 		if (index < subComponents.size() - 1) {
 			subComponents.remove(c);
@@ -407,6 +416,9 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void componentLast(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		subComponents.remove(c);
 		updateComponentIndexForInsertionIndex(c, subComponents.size());
 		subComponents.add(c);

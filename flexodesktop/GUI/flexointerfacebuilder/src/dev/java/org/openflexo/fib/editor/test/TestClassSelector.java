@@ -25,29 +25,22 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.toolbox.FileResource;
 
-public class TestClassSelector {
+public class TestClassSelector extends FIBAbstractEditor {
 
 	public static FileResource FIB_FILE = new FileResource("TestFIB/TestClassSelector.fib");
 
-	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				return FIBAbstractEditor.makeArray(LoadedClassesInfo.instance);
-			}
+	@Override
+	public Object[] getData() {
+		return FIBAbstractEditor.makeArray(LoadedClassesInfo.instance);
+	}
 
-			@Override
-			public File getFIBFile() {
-				return FIB_FILE;
-			}
-		};
-		/*editor.addAction("change_name",new ActionListener() {		
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				class1.setName("new_class_1_name");
-			}
-		});*/
-		editor.launch();
+	@Override
+	public File getFIBFile() {
+		return FIB_FILE;
+	}
+
+	public static void main(String[] args) {
+		main(TestClassSelector.class);
 	}
 
 }

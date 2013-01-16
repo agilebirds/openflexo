@@ -521,13 +521,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			returned.setMinHeight(editionScheme.getHeight());
 		}
 
-		Font f = returned.retrieveValidFont();
-		if (f != null) {
-			returned.setFont(f.deriveFont(11f));
-		}
-
 		FIBLabel titleLabel = new FIBLabel();
-		titleLabel.setFont(titleLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
 		titleLabel.setAlign(Align.center);
 		titleLabel.setLabel(editionScheme.getLabel());
 		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 0);
@@ -572,7 +566,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		}
 
 		FIBPanel buttonsPanel = new FIBPanel();
-		buttonsPanel.setFont(f.deriveFont(13f));
+
 		buttonsPanel.setLayout(Layout.flow);
 		buttonsPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
 		buttonsPanel.setHGap(0);
