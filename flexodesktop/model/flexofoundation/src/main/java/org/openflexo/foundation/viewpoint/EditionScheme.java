@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
@@ -619,8 +620,13 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		// _bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
-			for (PatternRole role : getEditionPattern().getPatternRoles()) {
-				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType()));
+			for (final PatternRole role : getEditionPattern().getPatternRoles()) {
+				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType(), true) {
+					@Override
+					public Type getType() {
+						return role.getType();
+					}
+				});
 				/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
 				if (bv != null) {
 					_bindingModel.addToBindingVariables(bv);

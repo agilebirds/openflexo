@@ -23,7 +23,7 @@
 		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
 	</entity>
 
-	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes">
+	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
 		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
 		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
 		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
@@ -468,7 +468,7 @@
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
-		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
+		<property name="modelSlot" contains="org.openflexo.foundation.technologyadapter.ModelSlot" context="Addressed" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual"

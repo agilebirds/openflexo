@@ -181,14 +181,14 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof DataPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
-			if (tac != null) {
+			if (tac != null && ((DataPropertyAssertion) object).getOntologyProperty() != null) {
 				return tac.getIconForOntologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ObjectPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ObjectPropertyAssertion) object).getAction()
 					.getModelSlot().getTechnologyAdapter());
-			if (tac != null) {
+			if (tac != null && ((ObjectPropertyAssertion) object).getOntologyProperty() != null) {
 				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;

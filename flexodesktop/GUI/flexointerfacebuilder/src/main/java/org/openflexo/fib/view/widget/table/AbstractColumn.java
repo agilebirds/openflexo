@@ -358,6 +358,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		public Object getValue(BindingVariable variable) {
 			return value;
 		}
+
 	}
 
 }

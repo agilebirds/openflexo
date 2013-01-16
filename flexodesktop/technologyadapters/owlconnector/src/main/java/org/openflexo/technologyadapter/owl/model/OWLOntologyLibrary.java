@@ -102,6 +102,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
 		dataTypes = new HashMap<String, OWLDataType>();
+
+		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
+
 	}
 
 	private boolean defaultOntologiesLoaded = false;

@@ -351,7 +351,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				|| getBindingDefinitionType() == DataBinding.BindingDefinitionType.GET_SET) {
 			// Only BindingValue may be settable
 			if (!(getExpression() instanceof BindingValue) || !((BindingValue) getExpression()).isSettable()) {
-				invalidBindingReason = "Invalid binding because binding definition declared as settable and definition cannot satisfy it";
+				invalidBindingReason = "Invalid binding because binding declared as settable and definition cannot satisfy it";
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
 				}

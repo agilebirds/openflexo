@@ -1,18 +1,29 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.toolbox.ToolBox;
 
-public class BindingVariable implements BindingPathElement {
+public class BindingVariable implements BindingPathElement, SettableBindingPathElement {
+
+	private static final Logger logger = Logger.getLogger(BindingVariable.class.getPackage().getName());
 
 	private String variableName;
 	private Type type;
+	private boolean settable = false;
 
 	public BindingVariable(String variableName, Type type) {
 		super();
 		this.variableName = variableName;
 		this.type = type;
+	}
+
+	public BindingVariable(String variableName, Type type, boolean settable) {
+		this(variableName, type);
+		setSettable(settable);
 	}
 
 	@Override
@@ -67,7 +78,11 @@ public class BindingVariable implements BindingPathElement {
 
 	@Override
 	public boolean isSettable() {
-		return false;
+		return settable;
+	}
+
+	public void setSettable(boolean settable) {
+		this.settable = settable;
 	}
 
 	@Override
@@ -87,6 +102,14 @@ public class BindingVariable implements BindingPathElement {
 	@Override
 	public Object getBindingValue(Object owner, BindingEvaluationContext context) {
 		return context.getValue(this);
+	}
+
+	@Override
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
+			NullReferenceException {
+		if (isSettable() && context instanceof SettableBindingEvaluationContext) {
+			((SettableBindingEvaluationContext) context).setValue(value, this);
+		}
 	}
 
 	@Override

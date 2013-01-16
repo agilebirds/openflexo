@@ -43,7 +43,7 @@ public class StatementWithProperty implements CustomType {
 
 	@Override
 	public String simpleRepresentation() {
-		return "Statement with property" + ":" + property.getURI();
+		return "Statement:" + property.getName();
 	}
 
 	@Override
