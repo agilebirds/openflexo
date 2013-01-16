@@ -527,7 +527,6 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		}
 
 		FIBLabel titleLabel = new FIBLabel();
-		titleLabel.setFont(titleLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
 		titleLabel.setAlign(Align.center);
 		titleLabel.setLabel(editionScheme.getLabel());
 		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 0);
