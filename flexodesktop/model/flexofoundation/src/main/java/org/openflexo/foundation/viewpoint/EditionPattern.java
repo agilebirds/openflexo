@@ -29,7 +29,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
@@ -44,6 +43,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -646,11 +646,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType()));
-			/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
-			if (bv != null) {
-				_bindingModel.addToBindingVariables(bv);
-			}*/
+			_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 		}
 		notifyBindingModelChanged();
 	}

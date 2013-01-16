@@ -8,27 +8,27 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
-public class EditionPatternPatternRolePathElement<PR extends PatternRole<?>> extends SimplePathElement {
+public class EditionSchemeParameterPathElement extends SimplePathElement {
 
-	private static final Logger logger = Logger.getLogger(EditionPatternPatternRolePathElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EditionSchemeParameterPathElement.class.getPackage().getName());
 
-	private PR patternRole;
+	private EditionSchemeParameter parameter;
 
-	public EditionPatternPatternRolePathElement(BindingPathElement parent, PR patternRole) {
-		super(parent, patternRole.getPatternRoleName(), patternRole.getClass());
-		this.patternRole = patternRole;
+	public EditionSchemeParameterPathElement(BindingPathElement parent, EditionSchemeParameter parameter) {
+		super(parent, parameter.getName(), parameter.getType());
+		this.parameter = parameter;
 	}
 
 	@Override
 	public String getLabel() {
-		return patternRole.getPatternRoleName();
+		return parameter.getName();
 	}
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return patternRole.getDescription();
+		return parameter.getDescription();
 	}
 
 	@Override

@@ -19,21 +19,19 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
@@ -615,22 +613,12 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private final void createBindingModel() {
 		_bindingModel = new BindingModel();
-		_bindingModel.addToBindingVariables(new BindingVariable("parameters", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(
-				EditionSchemeParameter.class))));
+		_bindingModel.addToBindingVariables(new EditionSchemeParametersBindingVariable(this));
 		// _bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
 			for (final PatternRole role : getEditionPattern().getPatternRoles()) {
-				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType(), true) {
-					@Override
-					public Type getType() {
-						return role.getType();
-					}
-				});
-				/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
-				if (bv != null) {
-					_bindingModel.addToBindingVariables(bv);
-				}*/
+				_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 			}
 		}
 		notifyBindingModelChanged();

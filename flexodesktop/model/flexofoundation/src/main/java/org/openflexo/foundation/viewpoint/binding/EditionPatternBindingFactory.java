@@ -13,6 +13,8 @@ import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
 public final class EditionPatternBindingFactory extends JavaBindingFactory {
@@ -42,6 +44,9 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		if (object instanceof PatternRole) {
 			return new EditionPatternPatternRolePathElement<PatternRole<?>>(parent, (PatternRole<?>) object);
 		}
+		if (object instanceof EditionSchemeParameter) {
+			return new EditionSchemeParameterPathElement(parent, (EditionSchemeParameter) object);
+		}
 		logger.warning("Unexpected " + object);
 		return null;
 	}
@@ -49,11 +54,19 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
 		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-		if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
+		if (parent instanceof EditionSchemeParametersBindingVariable) {
+			EditionScheme es = ((EditionSchemeParametersBindingVariable) parent).getEditionScheme();
+			for (EditionSchemeParameter p : es.getParameters()) {
+				returned.add(getSimplePathElement(p, parent));
+			}
+		} else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
 			EditionPattern ep = (EditionPattern) parent.getType();
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
+		} else {
+			// In all other cases, consider it using Java rules
+			return super.getAccessibleSimplePathElements(parent);
 		}
 		return returned;
 	}
@@ -70,7 +83,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			PatternRole pr = ep.getPatternRole(propertyName);
 			return getSimplePathElement(pr, parent);
 		}
-		return null;
+		return super.makeSimplePathElement(parent, propertyName);
 	}
 
 	@Override
