@@ -620,7 +620,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
 			for (PatternRole role : getEditionPattern().getPatternRoles()) {
-				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getClass()));
+				_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType()));
 				/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
 				if (bv != null) {
 					_bindingModel.addToBindingVariables(bv);

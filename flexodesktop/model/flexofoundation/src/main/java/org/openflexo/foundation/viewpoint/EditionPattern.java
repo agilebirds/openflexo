@@ -646,7 +646,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getClass()));
+			_bindingModel.addToBindingVariables(new BindingVariable(role.getPatternRoleName(), role.getType()));
 			/*BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
 			if (bv != null) {
 				_bindingModel.addToBindingVariables(bv);
