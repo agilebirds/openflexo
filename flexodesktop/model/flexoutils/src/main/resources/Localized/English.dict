@@ -4399,6 +4399,7 @@ save_calc=Save the view point
 save_changes=Save changes
 save_complete=Save complete.
 save_config=Save configuration
+save_current_project=Save current project
 save_directory=Save directory
 save_doc_submission=Save doc submission
 save_documentation_center=Save documentation

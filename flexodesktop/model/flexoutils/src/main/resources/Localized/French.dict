@@ -4397,6 +4397,7 @@ save_calc=Sauver le point de vue
 save_changes=Sauvegarder les changements
 save_complete=Sauvegarde effectu\u00E9e.
 save_config=Sauver la configuration
+save_current_project=Sauver le projet courant
 save_directory=R\u00E9pertoire de sauvegarde
 save_doc_submission=Sauver les soumissions de documentation
 save_documentation_center=Sauver la documentation
