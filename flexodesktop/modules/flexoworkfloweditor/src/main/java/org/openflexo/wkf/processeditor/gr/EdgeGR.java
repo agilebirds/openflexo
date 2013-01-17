@@ -596,7 +596,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	@Override
 	public double getRelativeMiddleSymbolLocation() {
-		double defaultValue = 0.5;
+		double defaultValue = 1.0;
 		/*
 		 * if (!getEdge().hasGraphicalPropertyForKey(getRelativeMiddleSymbolLocationKey())) { if (getConnector() instanceof
 		 * RectPolylinConnector) { // GPO: does not always work because polylin is modified when pre-condition is relocated. FGERectPolylin
