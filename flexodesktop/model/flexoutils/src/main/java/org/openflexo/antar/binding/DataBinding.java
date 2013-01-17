@@ -36,11 +36,11 @@ import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.UnresolvedExpression;
 import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
@@ -511,22 +511,49 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		}
 	}
 
+	/**
+	 * Evaluate this binding in run-time evaluation context provided by supplied {@link BindingEvaluationContext} parameter. This evaluation
+	 * is performed in READ_ONLY mode.
+	 * 
+	 * @param context
+	 * @return
+	 * @throws TypeMismatchException
+	 * @throws NullReferenceException
+	 */
 	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 
 		// System.out.println("Evaluating " + this + " in context " + context);
+
+		// First we check that the binding is valid, otherwise we don't go further
 		if (isValid()) {
+
 			try {
+
+				// We then apply a transformation on all BindingValue found in binding's expression, to evaluate them in the run-time
+				// context provided by supplied {@link BindingEvaluationContext} parameter
+				// If a NullReferenceException is raised, the underlying expression is replaced by an UnresolvedExpression, in order to
+				// keep the later ability to eventually resolve the binding even if a part of the expression cannot be resolved.
+				// Think for example to AND operator. If left operand is FALSE, any evaluation of right operand is valid to determine
+				// that binding value is FALSE.
+
 				Expression resolvedExpression = expression.transform(new ExpressionTransformer() {
 					@Override
 					public Expression performTransformation(Expression e) throws TransformException {
 						if (e instanceof BindingValue) {
 							((BindingValue) e).setDataBinding(DataBinding.this);
-							Object o = ((BindingValue) e).getBindingValue(context);
-							return Constant.makeConstant(o);
+							try {
+								Object o = ((BindingValue) e).getBindingValue(context);
+								return Constant.makeConstant(o);
+							} catch (NullReferenceException nre) {
+								return new UnresolvedExpression();
+							}
 						}
 						return e;
 					}
 				});
+
+				// At this point, all BindingValue are resolved, then evaluate the expression itself
+
 				Expression evaluatedExpression = resolvedExpression.evaluate();
 
 				if (evaluatedExpression instanceof CastExpression) {
@@ -539,8 +566,9 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					return (T) ((Constant) evaluatedExpression).getValue();
 				}
 
-				logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
-						+ resolvedExpression);
+				// We do not warn anymore since this situation happens very often
+				/*logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
+						+ resolvedExpression);*/
 				return null;
 
 			} catch (NullReferenceException e1) {
@@ -551,18 +579,20 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				logger.warning("Unexpected TransformException while evaluating " + expression + " " + e1.getMessage());
 				e1.printStackTrace();
 				return null;
-			} catch (InvalidObjectSpecificationException e1) {
-				System.out.println("j'ai mon probleme, binding: " + this);
-				System.out.println("valid=" + isValid());
-				for (BindingValue bv : getExpression().getAllBindingValues()) {
-					System.out.println("bv=" + bv + " valid=" + bv.isValid() + " reason " + bv.invalidBindingReason());
-				}
-				System.out.println("On s'arrete");
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * Evaluate this binding in run-time evaluation context provided by supplied {@link BindingEvaluationContext} parameter. This evaluation
+	 * is performed in WRITE mode.
+	 * 
+	 * @param context
+	 * @return
+	 * @throws TypeMismatchException
+	 * @throws NullReferenceException
+	 */
 	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (isSettable()) {
 			if (isBindingValue()) {

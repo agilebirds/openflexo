@@ -44,6 +44,7 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeReference;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
+import org.openflexo.antar.expr.UnresolvedExpression;
 
 public abstract class ExpressionPrettyPrinter {
 
@@ -95,6 +96,9 @@ public abstract class ExpressionPrettyPrinter {
 		}
 		if (expression instanceof CastExpression) {
 			return makeStringRepresentation((CastExpression) expression);
+		}
+		if (expression instanceof UnresolvedExpression) {
+			return "<UnresolvedExpression>";
 		}
 		// return "<unknown " + expression.getClass().getSimpleName() + ">";
 		return expression.toString();
