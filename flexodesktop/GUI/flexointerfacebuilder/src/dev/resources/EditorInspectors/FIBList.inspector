@@ -32,7 +32,6 @@
 			<Label label="selected" constraints="twocols(location=left)"/>
 			<Custom data="data.selected" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 				<Assignment variable="component.bindable" value="data"/>
-				<Assignment variable="component.bindingDefinition" value="data.selectedBindingDefinition"/>
 			</Custom>
 		
 			<CheckBox data="data.boundToSelectionManager" constraints="twocols(location=left)" />

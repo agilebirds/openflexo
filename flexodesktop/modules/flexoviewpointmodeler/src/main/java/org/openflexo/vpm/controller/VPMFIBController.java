@@ -1,8 +1,11 @@
 package org.openflexo.vpm.controller;
 
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionSchemeObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.action.CreateEditionAction;
 import org.openflexo.foundation.viewpoint.action.CreatePatternRole;
 import org.openflexo.view.controller.FlexoFIBController;
 
@@ -29,8 +32,14 @@ public class VPMFIBController extends FlexoFIBController {
 	}
 
 	public PatternRole createPatternRole(EditionPattern editionPattern) {
-		CreatePatternRole newPatternRole = CreatePatternRole.actionType.makeNewAction(editionPattern, null, getEditor());
-		newPatternRole.doAction();
-		return newPatternRole.getNewPatternRole();
+		CreatePatternRole createPatternRole = CreatePatternRole.actionType.makeNewAction(editionPattern, null, getEditor());
+		createPatternRole.doAction();
+		return createPatternRole.getNewPatternRole();
+	}
+
+	public EditionAction createEditionAction(EditionSchemeObject object) {
+		CreateEditionAction createEditionAction = CreateEditionAction.actionType.makeNewAction(object, null, getEditor());
+		createEditionAction.doAction();
+		return createEditionAction.getNewEditionAction();
 	}
 }

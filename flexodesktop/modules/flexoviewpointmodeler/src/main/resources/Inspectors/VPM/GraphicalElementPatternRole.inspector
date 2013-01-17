@@ -7,10 +7,9 @@
               <Table index="15" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.grSpecifications" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=true)">
                 <CheckBoxColumn data="iterator.mandatory" title="mandatory" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
                 <TextFieldColumn data="iterator.featureName" title="feature" columnWidth="40" resizable="true" displayTitle="true" />
-                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value.binding" title="value" columnWidth="300" resizable="true" displayTitle="true" name="value">
+                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" title="value" columnWidth="300" resizable="true" displayTitle="true" name="value">
                   <ColumnAssignment variable="component.bindable" value="iterator" />
-                  <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
-                </CustomColumn>
+                 </CustomColumn>
                 <CheckBoxColumn data="iterator.readOnly" title="RO" columnWidth="30" resizable="false" displayTitle="true" name="checkbox" />
                 <LocalizedDictionary />
               </Table>
@@ -20,9 +19,8 @@
                 <IconColumn data="controller.iconForObject(iterator.abstractActionScheme)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
                 <DropDownColumn data="iterator.actionMask" title="mask" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
                 <DropDownColumn list="iterator.editionPattern.abstractActionSchemes" data="iterator.abstractActionScheme" format="object.name" title="action" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
-                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.conditional.binding" title="conditional" columnWidth="300" resizable="true" displayTitle="true" name="value">
+                <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.conditional" title="conditional" columnWidth="300" resizable="true" displayTitle="true" name="value">
                   <ColumnAssignment variable="component.bindable" value="iterator" />
-                  <ColumnAssignment variable="component.bindingDefinition" value="iterator.conditionalBindingDefinition" />
                 </CustomColumn>
                 <AddAction method="data.createAction" name="add_action" />
                 <RemoveAction method="data.deleteAction(selected)" name="delete_action" />

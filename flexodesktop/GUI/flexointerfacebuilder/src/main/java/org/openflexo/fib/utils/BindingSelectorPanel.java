@@ -1728,7 +1728,9 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
+										.getAccessibleSimplePathElements(columnElement.getElement()) != null
+										&& bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (!TypeUtils.isTypeAssignableFrom(binding.getDeclaredType(), columnElement.getResultingType(), true)) {
@@ -1776,6 +1778,12 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		}
 
 		DataBinding dataBinding = bindingSelector.getEditedObject();
+
+		if (dataBinding == null) {
+			logger.warning("dataBinding should not be null");
+			return;
+		}
+
 		if (dataBinding.getExpression() == null) {
 			// if (bindingSelector.getBindingDefinition() != null && bindingSelector.getBindable() != null) {
 			BindingValue newBindingValue = new BindingValue();

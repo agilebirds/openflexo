@@ -14,13 +14,11 @@
 				<Label label="list" constraints="twocols(location=left)"/>
 				<Custom data="data.list" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.LIST"/>
 				</Custom>
 		
 				<Label label="array" constraints="twocols(location=left)"/>
 				<Custom data="data.array" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ARRAY"/>
 				</Custom>
 		
 				<Label label="iterator_class" constraints="twocols(location=left)" />
@@ -44,7 +42,6 @@
 				<Label label="icon" constraints="twocols(location=left)" visible="data.showIcon"/>
 				<Custom data="data.icon" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15"  visible="data.showIcon">
 					<Assignment variable="component.bindable" value="data.formatter"/>
-					<Assignment variable="component.bindingDefinition" value="data.ICON"/>
 				</Custom>
 
 			</Tab>

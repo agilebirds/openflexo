@@ -12,7 +12,6 @@
 				<Label name="dataLabel" label="data" constraints="twocols(location=left)"/>
 				<Custom name="dataValue" data="data.data" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.dataBindingDefinition"/>
 				</Custom>
 		
 				<!-- <Label label="data_class" constraints="twocols(location=left)"/>
@@ -27,7 +26,6 @@
 				<Label name="visibleLabel" label="visible" constraints="twocols(location=left)"/>
 				<Custom name="visibleValue" data="data.visible" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.VISIBLE"/>
 				</Custom>
 		
 		    </Tab>

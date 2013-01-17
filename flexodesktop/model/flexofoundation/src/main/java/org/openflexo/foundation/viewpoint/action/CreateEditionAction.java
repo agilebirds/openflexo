@@ -91,7 +91,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add edition action");
+		logger.info("Add edition action, modelSlot=" + modelSlot + " editionActionClass=" + editionActionClass);
 
 		if (modelSlot != null && editionActionClass != null) {
 			newEditionAction = modelSlot.makeEditionAction(editionActionClass);

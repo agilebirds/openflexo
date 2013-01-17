@@ -49,10 +49,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnec
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.CloneIndividual;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
@@ -162,12 +159,6 @@ public class VPMIconLibrary extends IconLibrary {
 			if (tac != null) {
 				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
 			}
-		} else if (object instanceof EditionAction && ((EditionAction) object).getModelSlot() != null) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
-					.getTechnologyAdapter());
-			if (tac != null) {
-				return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
-			}
 		}
 		if (object instanceof ModelSlot) {
 			return MODEL_SLOT_ICON;
@@ -199,29 +190,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ExampleDiagram) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
-			if (object instanceof AddClass) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddClass) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null) {
-					return tac.getIconForOntologyObject(((AddClass) object).getOntologyClassClass());
-				}
-				return null;
-			} else if (object instanceof CloneIndividual) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null) {
-					return IconFactory.getImageIcon(tac.getIconForOntologyObject(((AddIndividual) object).getOntologyClass().getClass()),
-							DUPLICATE);
-				}
-				return null;
-			} else if (object instanceof AddIndividual) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null && ((AddIndividual) object).getOntologyClass() != null) {
-					return tac.getIconForOntologyObject(((AddIndividual) object).getOntologyIndividualClass());
-				}
-				return null;
-			} else if (object instanceof AddDiagram) {
+			if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPattern) {
 				return EDITION_PATTERN_ICON;
@@ -250,6 +219,12 @@ public class VPMIconLibrary extends IconLibrary {
 				return DELETE_ICON;
 			} else if (object instanceof GraphicalAction) {
 				return GRAPHICAL_ACTION_ICON;
+			} else if (((EditionAction) object).getModelSlot() != null) {
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
+						.getTechnologyAdapter());
+				if (tac != null) {
+					return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+				}
 			}
 			return EDITION_PATTERN_ACTION_ICON;
 		} else if (object instanceof EditionPattern) {

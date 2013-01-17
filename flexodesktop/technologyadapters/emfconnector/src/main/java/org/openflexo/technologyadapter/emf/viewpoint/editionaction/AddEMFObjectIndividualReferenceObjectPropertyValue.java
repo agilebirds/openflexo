@@ -75,7 +75,10 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		return value.getClass();
+		if (value != null) {
+			return value.getClass();
+		}
+		return Object.class;
 	}
 
 	/**

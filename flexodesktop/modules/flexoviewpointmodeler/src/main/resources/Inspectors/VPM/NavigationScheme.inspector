@@ -3,9 +3,8 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
                 <Label label="target_object" align="right" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.targetObject.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.targetObject" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="data" />
-                  <Assignment variable="component.bindingDefinition" value="data.targetObjectBindingDefinition" />
                 </Custom>
     </Tab>
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />

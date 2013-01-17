@@ -14,7 +14,6 @@
 				<Label label="button_icon" constraints="twocols(location=left)"/>
 				<Custom data="data.buttonIcon" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.BUTTON_ICON"/>
 				</Custom>
 		
 				<Label label="button_type" constraints="twocols(location=left)"/>
@@ -30,7 +29,6 @@
 				<Label label="action" constraints="twocols(location=left)"/>
 				<Custom data="data.action" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ACTION"/>
 				</Custom>
 				
 			</Tab>

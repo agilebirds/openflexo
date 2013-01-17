@@ -193,9 +193,6 @@
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="OWLClassPatternRole">
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole" xmlTag="EMFClassClassPatternRole">
-	</entity>
-
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole" xmlTag="XSClassPatternRole">
 	</entity>
 

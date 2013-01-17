@@ -18,6 +18,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -96,6 +97,23 @@ public class DiagramModelSlot extends ModelSlot<View, DiagramMetaModel> {
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
+	}
+
+	@Override
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddDiagram(null);
+		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddShape(null);
+		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddConnector(null);
+		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new GraphicalAction(null);
+		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new DeleteAction(null);
+		} else {
+			return super.makeEditionAction(editionActionClass);
+		}
 	}
 
 }

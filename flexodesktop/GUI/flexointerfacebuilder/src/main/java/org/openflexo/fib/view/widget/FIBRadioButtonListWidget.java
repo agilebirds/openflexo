@@ -90,6 +90,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
 				radioButtonArray[0].setSelected(true);
+				getDynamicModel().selected = getListModel().getElementAt(0);
+				selectedValue = getListModel().getElementAt(0);
+				notifyDynamicModelChanged();
+				setValue(selectedValue);
 			}
 
 			widgetUpdating = false;

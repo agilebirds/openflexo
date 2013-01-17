@@ -23,8 +23,12 @@ import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddDataPropertyStatement;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddRestrictionStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassStatement;
 
 /**
  * <p>
@@ -44,7 +48,11 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndivid
 		@DeclarePatternRole(SubClassStatementPatternRole.class) // Subclass statement */
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddOWLIndividual.class), // Add instance
-		@DeclareEditionAction(AddOWLClass.class) // Add class
+		@DeclareEditionAction(AddOWLClass.class), // Add class
+		@DeclareEditionAction(AddDataPropertyStatement.class), // Add class
+		@DeclareEditionAction(AddObjectPropertyStatement.class), // Add class
+		@DeclareEditionAction(AddRestrictionStatement.class), // Add class
+		@DeclareEditionAction(AddSubClassStatement.class), // Add class
 })
 public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
 
@@ -151,8 +159,17 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 			return (EA) new AddOWLIndividual(null);
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddOWLClass(null);
+		} else if (AddDataPropertyStatement.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddDataPropertyStatement(null);
+		} else if (AddObjectPropertyStatement.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddObjectPropertyStatement(null);
+		} else if (AddRestrictionStatement.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddRestrictionStatement(null);
+		} else if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddSubClassStatement(null);
 		} else {
 			return super.makeEditionAction(editionActionClass);
 		}
 	}
+
 }

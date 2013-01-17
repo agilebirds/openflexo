@@ -11,13 +11,11 @@
 				<Label label="enable" constraints="twocols(location=left)"/>
 				<Custom data="data.enable" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ENABLE"/>
 				</Custom>
 		
 				<Label label="format" constraints="twocols(location=left)"/>
 				<Custom data="data.format" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data.formatter"/>
-					<Assignment variable="component.bindingDefinition" value="data.FORMAT"/>
 				</Custom>
 		
 				<CheckBox data="data.localize" constraints="twocols(location=left)"/>
@@ -33,31 +31,26 @@
 				<Label label="click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.clickAction" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION"/>
 				</Custom>
 
 				<Label label="double_click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.doubleClickAction" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION"/>
 				</Custom>
 
 				<Label label="right_click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.rightClickAction" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.RIGHT_CLICK_ACTION"/>
 				</Custom>
 
 				<Label label="enter_pressed_action" constraints="twocols(location=left)"/>
 				<Custom data="data.enterPressedAction" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ENTER_PRESSED_ACTION"/>
 				</Custom>
 
 				<Label label="value_changed" constraints="twocols(location=left)"/>
 				<Custom data="data.valueChangedAction" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.VALUE_CHANGED_ACTION"/>
 				</Custom>
 
 				<CheckBox data="data.manageDynamicModel" constraints="twocols(location=left)" columns="15"/>
@@ -69,7 +62,6 @@
 				<Label label="tooltip" constraints="twocols(location=left)"/>
 				<Custom data="data.tooltip" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
 					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.TOOLTIP"/>
 				</Custom>
 				<Label label="tooltip_text" constraints="twocols(location=left)"/>
 				<TextField data="data.tooltipText" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>

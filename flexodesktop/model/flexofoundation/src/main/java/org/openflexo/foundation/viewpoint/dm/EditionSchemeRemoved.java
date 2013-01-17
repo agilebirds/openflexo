@@ -28,7 +28,7 @@ public class EditionSchemeRemoved extends OEDataModification {
 	private EditionPattern _parent;
 
 	public EditionSchemeRemoved(EditionScheme editionScheme, EditionPattern parent) {
-		super(editionScheme, null);
+		super("editionSchemes", editionScheme, null);
 		_parent = parent;
 	}
 
