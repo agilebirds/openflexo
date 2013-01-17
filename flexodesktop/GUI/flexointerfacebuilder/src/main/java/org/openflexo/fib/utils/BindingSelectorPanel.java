@@ -1790,6 +1790,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				return;
 			}*/
 		}
+
 		JList list = (JList) e.getSource();
 		int index = _lists.indexOf(list);
 		_selectedPathElementIndex = index;

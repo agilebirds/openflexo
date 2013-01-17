@@ -1149,6 +1149,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		}
 		if (index == 0 && selectedValue.getElement() instanceof BindingVariable) { // ICI
 			if (list.getSelectedValue() != bindingValue.getBindingVariable()) {
+				disconnect();
 				bindingValue.setBindingVariable((BindingVariable) selectedValue.getElement());
 				getEditedObject().setExpression(bindingValue);
 				fireEditedObjectChanged();
@@ -1159,6 +1160,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				if (selectedValue.getElement() != bindingValue.getBindingPathElementAtIndex(index - 1)) {
 					// System.out.println("bindingValue was " + bindingValue);
 					// System.out.println("select " + selectedValue.getElement());
+					disconnect();
 					bindingValue.setBindingPathElementAtIndex(selectedValue.getElement(), index - 1);
 					// System.out.println("bindingValue is now " + bindingValue);
 					getEditedObject().setExpression(bindingValue);
@@ -1173,6 +1175,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				if (!(currentElement instanceof FunctionPathElement)
 						|| (!((FunctionPathElement) currentElement).getFunction().equals(
 								((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+					disconnect();
 					Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
 					// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
 					JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
