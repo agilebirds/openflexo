@@ -176,6 +176,12 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 		return getProjectURI() != null && !getProjectURI().equals(getProject().getURI());
 	}
 
+	@Override
+	protected void saveResourceData(boolean clearIsModified)
+			throws org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException, SaveResourcePermissionDeniedException {
+		super.saveResourceData(clearIsModified && getResourceData().getProject() == getProject());
+	}
+
 	/**
 	 * @param progress
 	 * @param workflow
