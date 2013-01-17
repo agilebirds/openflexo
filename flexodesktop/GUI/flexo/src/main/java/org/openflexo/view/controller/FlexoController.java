@@ -1132,10 +1132,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this,
 								representedObject.getProject());
 					}
+					viewsForLocation.put(location, moduleView);
+					locationsForView.put(moduleView, location);
 				}
 			}
-			viewsForLocation.put(location, moduleView);
-			locationsForView.put(moduleView, location);
 		}
 		return moduleView;
 	}
@@ -1835,6 +1835,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		}
 		return iconForObject;
+	}
+
+	public ImageIcon iconForWorkflow(boolean imported) {
+		ImageIcon workflowIcon = WKFIconLibrary.WORKFLOW_ICON;
+		if (imported) {
+			workflowIcon = IconFactory.getImageIcon(workflowIcon, new IconMarker[] { IconLibrary.IMPORT });
+		}
+		return workflowIcon;
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
