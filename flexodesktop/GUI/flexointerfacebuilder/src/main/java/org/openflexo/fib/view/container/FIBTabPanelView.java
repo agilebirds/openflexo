@@ -110,11 +110,15 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 		int index = 0;
 		for (FIBView v : subViews) {
 			if (v.getComponent() instanceof FIBTab) {
-				tabbedPane.setTitleAt(index, getLocalized(((FIBTab) v.getComponent()).getTitle()));
+				if (v.getJComponent().getParent() != null) {
+					tabbedPane.setTitleAt(index, getLocalized(((FIBTab) v.getComponent()).getTitle()));
+					index++;
+				} else {
+					getLocalized(((FIBTab) v.getComponent()).getTitle());
+				}
 			} else {
 				logger.warning("Unexpected component found in TabPanel: " + v.getComponent());
 			}
-			index++;
 		}
 	}
 
