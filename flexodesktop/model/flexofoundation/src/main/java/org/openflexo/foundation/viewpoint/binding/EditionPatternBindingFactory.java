@@ -12,10 +12,12 @@ import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 
 public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	static final Logger logger = Logger.getLogger(EditionPatternBindingFactory.class.getPackage().getName());
@@ -53,22 +55,33 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
-		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+
+		if (parent.getType() instanceof TechnologySpecificCustomType) {
+			TechnologySpecificCustomType parentType = ((TechnologySpecificCustomType) parent.getType());
+			TechnologyAdapter<?, ?> ta = parentType.getTechnologyAdapter();
+			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
+				return ta.getTechnologyAdapterBindingFactory().getAccessibleSimplePathElements(parent);
+			}
+		}
+
 		if (parent instanceof EditionSchemeParametersBindingVariable) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionScheme es = ((EditionSchemeParametersBindingVariable) parent).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
+			return returned;
 		} else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = (EditionPattern) parent.getType();
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
-		} else {
-			// In all other cases, consider it using Java rules
-			return super.getAccessibleSimplePathElements(parent);
+			return returned;
 		}
-		return returned;
+
+		// In all other cases, consider it using Java rules
+		return super.getAccessibleSimplePathElements(parent);
 	}
 
 	@Override

@@ -117,7 +117,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
-		logger.info("Binding decoded: " + dataBinding);
+		// logger.info("Binding decoded: " + dataBinding);
 	}
 
 	public void notifyChange(String propertyName, Object oldValue, Object newValue) {

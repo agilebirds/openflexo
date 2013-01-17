@@ -2,10 +2,11 @@ package org.openflexo.technologyadapter.owl.model;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.CustomType;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 
-public class StatementWithProperty implements CustomType {
+public class StatementWithProperty implements TechnologySpecificCustomType {
 
 	public static StatementWithProperty getStatementWithProperty(IFlexoOntologyStructuralProperty aProperty) {
 		if (aProperty == null) {
@@ -55,4 +56,13 @@ public class StatementWithProperty implements CustomType {
 	public String toString() {
 		return simpleRepresentation();
 	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		if (getProperty() != null) {
+			return getProperty().getTechnologyAdapter();
+		}
+		return null;
+	}
+
 }

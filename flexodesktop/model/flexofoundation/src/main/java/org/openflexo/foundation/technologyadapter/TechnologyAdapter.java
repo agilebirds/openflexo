@@ -189,6 +189,13 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	}
 
 	/**
+	 * Return the technology-specific binding factory
+	 * 
+	 * @return
+	 */
+	public abstract TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory();
+
+	/**
 	 * Provides a hook to finalize initialization of a TechnologyAdapter.<br>
 	 * This method is called:
 	 * <ul>

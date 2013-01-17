@@ -40,6 +40,7 @@ import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
+import org.openflexo.technologyadapter.owl.viewpoint.binding.OWLBindingFactory;
 
 /**
  * This class defines and implements the OWL technology adapter
@@ -50,6 +51,8 @@ import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLTechnologyAdapter.class.getPackage().getName());
+
+	private static final OWLBindingFactory BINDING_FACTORY = new OWLBindingFactory();
 
 	public OWLTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
@@ -249,6 +252,11 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 	public OWLOntologyLibrary getOntologyLibrary() {
 		return getTechnologyContextManager();
+	}
+
+	@Override
+	public OWLBindingFactory getTechnologyAdapterBindingFactory() {
+		return BINDING_FACTORY;
 	}
 
 }

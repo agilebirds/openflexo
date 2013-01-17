@@ -52,6 +52,7 @@ import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
+import org.openflexo.technologyadapter.xsd.viewpoint.XSDBindingFactory;
 
 /**
  * This class defines and implements the XSD/XML technology adapter
@@ -78,6 +79,8 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaModel> {
 
 	protected static final Logger logger = Logger.getLogger(XSDTechnologyAdapter.class.getPackage().getName());
+
+	private static final XSDBindingFactory BINDING_FACTORY = new XSDBindingFactory();
 
 	public XSDTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
@@ -271,6 +274,11 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public XSDBindingFactory getTechnologyAdapterBindingFactory() {
+		return BINDING_FACTORY;
 	}
 
 }

@@ -2,9 +2,10 @@ package org.openflexo.foundation.ontology;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.CustomType;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 
-public class IndividualOfClass implements CustomType {
+public class IndividualOfClass implements TechnologySpecificCustomType {
 
 	public static IndividualOfClass getIndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (anOntologyClass == null) {
@@ -50,5 +51,13 @@ public class IndividualOfClass implements CustomType {
 	@Override
 	public String toString() {
 		return simpleRepresentation();
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		if (getOntologyClass() != null) {
+			return getOntologyClass().getTechnologyAdapter();
+		}
+		return null;
 	}
 }

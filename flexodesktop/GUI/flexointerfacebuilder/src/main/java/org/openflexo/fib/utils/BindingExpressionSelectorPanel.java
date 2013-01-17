@@ -97,7 +97,7 @@ public class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel
 		_resetButton = _controlPanel.addButton("reset", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BindingExpressionSelectorPanel.this.bindingSelector.setEditedObject(null);
+				BindingExpressionSelectorPanel.this.bindingSelector.getEditedObject().reset();
 				BindingExpressionSelectorPanel.this.bindingSelector.apply();
 			}
 		});

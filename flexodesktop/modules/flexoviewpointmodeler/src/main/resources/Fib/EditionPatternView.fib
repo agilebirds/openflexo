@@ -177,7 +177,7 @@
                   <Dependancy componentName="ActionSchemeTF" />
                 </TextField>
                 <Label label="conditional" align="right" index="4" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="ActionSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="ActionSchemePanel.data.conditional" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="ActionSchemePanel.data" />
                 </Custom>
                 <Label label="description" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -191,11 +191,11 @@
                   <Dependancy componentName="NavigationSchemeTF" />
                 </TextField>
                 <Label label="target_object" align="right" index="4" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="NavigationSchemePanel.data.targetObject.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="NavigationSchemePanel.data.targetObject" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="NavigationSchemePanel.data" />
                 </Custom>
                 <Label label="conditional" align="right" index="6" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="7" data="NavigationSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="7" data="NavigationSchemePanel.data.conditional" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="NavigationSchemePanel.data" />
                 </Custom>
                 <Label label="description" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -209,7 +209,7 @@
                   <Dependancy componentName="CreationSchemeTF" />
                 </TextField>
                 <Label label="conditional" align="right" index="4" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="CreationSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="CreationSchemePanel.data.conditional" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="CreationSchemePanel.data" />
                  </Custom>
                 <Label label="description" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -223,7 +223,7 @@
                   <Dependancy componentName="DeletionSchemeTF" />
                 </TextField>
                 <Label label="conditional" align="right" index="4" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="DeletionSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="DeletionSchemePanel.data.conditional" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="DeletionSchemePanel.data" />
                 </Custom>
                 <Label label="description" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -237,7 +237,7 @@
                   <Dependancy componentName="CloningSchemeTF" />
                 </TextField>
                 <Label label="conditional" align="right" index="4" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="CloningSchemePanel.data.conditional.binding" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="CloningSchemePanel.data.conditional" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)">
                   <Assignment variable="component.bindable" value="CloningSchemePanel.data" />
                 </Custom>
                 <Label label="description" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
