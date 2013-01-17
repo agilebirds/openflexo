@@ -257,10 +257,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 				EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
 				Resource emfResource = emfMetaModelResource.getResourceFactory().createResource(
 						URI.createFileURI(aModelFile.getAbsolutePath()));
-				// FIXME Utilisation de fichier FlexoProject
 				emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(
 						aModelFile.getAbsolutePath()).toString());
-
+				emfModelResource.setEMFResource(emfResource);
 				EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
 				emfContextManager.registerModel(emfModelResource);
 			} catch (InvalidFileNameException e) {
@@ -281,10 +280,20 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 *      org.openflexo.foundation.technologyadapter.FlexoMetaModel)
 	 */
 	@Override
-	public EMFModel createEmptyModel(FlexoProject project, EMFMetaModel metaModel,
+	public EMFModelResource createEmptyModel(FlexoProject project, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		// TODO implement this
-		return null;
+		EMFModelResource result = null;
+		try {
+			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
+			File modelFile = File.createTempFile(emfMetaModelResource.getModelFileExtension(),
+					"." + emfMetaModelResource.getModelFileExtension(), new File(
+							"D:/Documents and Settings/gbesancon/Mes documents/FlexoUserResourceCenter/Ontologies/EMF/Model/parameters"));
+			result = (EMFModelResource) retrieveModelResource(modelFile, metaModelResource, technologyContextManager);
+			result.getEMFResource().save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**

@@ -64,6 +64,9 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	/** Model File. */
 	protected final File modelFile;
 
+	/** Model Resource. */
+	protected Resource modelResource;
+
 	/**
 	 * Constructor.
 	 * 
@@ -107,6 +110,25 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	}
 
 	/**
+	 * Getter of EMF Model Resource.
+	 * 
+	 * @return the modelResource value
+	 */
+	public Resource getEMFResource() {
+		return modelResource;
+	}
+
+	/**
+	 * Setter of EMF Model Resource.
+	 * 
+	 * @param modelResource
+	 *            the modelResource to set
+	 */
+	public void setEMFResource(Resource modelResource) {
+		this.modelResource = modelResource;
+	}
+
+	/**
 	 * Follow the link.
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoStorageResource#saveResourceData(boolean)
@@ -139,10 +161,13 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @throws SaveResourceException
 	 */
 	private void writeToFile() throws SaveResourceException {
-
-		// Here comes the code to write EMF model on disk
-
-		// logger.info("Wrote " + getFile());
+		try {
+			modelResource.save(null);
+			logger.info("Wrote " + getFile());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -185,11 +210,13 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	protected EMFModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
 		try {
-			Resource resource = metaModelResource.getResourceFactory().createResource(
-					org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
-			resource.load(null);
+			if (modelResource == null) {
+				modelResource = metaModelResource.getResourceFactory().createResource(
+						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
+			}
+			modelResource.load(null);
 			EMFModelConverter converter = new EMFModelConverter();
-			_resourceData = converter.convertModel(getMetaModel(), resource);
+			_resourceData = converter.convertModel(getMetaModel(), modelResource);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

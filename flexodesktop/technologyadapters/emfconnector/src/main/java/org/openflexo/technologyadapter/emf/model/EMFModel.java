@@ -213,6 +213,15 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 		}
 	}
 
+	/**
+	 * Get EMF Resource.
+	 * 
+	 * @return
+	 */
+	public Resource getEMFResource() {
+		return this.resource;
+	}
+
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();

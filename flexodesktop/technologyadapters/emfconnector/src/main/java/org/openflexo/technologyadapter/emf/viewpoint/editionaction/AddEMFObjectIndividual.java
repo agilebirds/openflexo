@@ -21,23 +21,27 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
+/**
+ * Create EMF Object.
+ * 
+ * @author gbesancon
+ * 
+ */
 public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel, EMFObjectIndividual> {
 
 	private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
-
-	private String dataPropertyURI = null;
 
 	public AddEMFObjectIndividual(ViewPointBuilder builder) {
 		super(builder);
@@ -55,48 +59,35 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 
 	@Override
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
-		EMFClassClass father = getOntologyClass();
-		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
-		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
-		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = null;
-		try {
-			individualName = getIndividualName().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// System.out.println("individualName="+individualName);
-		EMFObjectIndividual newIndividual = null;
-		// try {
-		// newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
-		logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
-
-		for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
-			if (dataPropertyAssertion.evaluateCondition(action)) {
-				// ... TODO
-			}
-		}
-		for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
-			if (objectPropertyAssertion.evaluateCondition(action)) {
-				// ... TODO
-			}
+		EMFObjectIndividual result = null;
+		IFlexoOntologyClass aClass = emfModelResource.getResourceData().getMetaModel().getClass(emfClassURI);
+		if (aClass instanceof EMFClassClass) {
+			EMFClassClass emfClassClass = (EMFClassClass) aClass;
+			EObject eObject = EcoreUtil.create(emfClassClass.getObject());
+			emfModelResource.getResourceData().getEMFResource().getContents().add(eObject);
+			result = emfModelResource.getResourceData().getConverter().convertObjectIndividual(emfModelResource.getResourceData(), eObject);
+			logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+		} else {
+			logger.warning("Not allowed to create new Enum values.");
+			return null;
 		}
 
-		return newIndividual;
-		// } catch (DuplicateURIException e) {
-		// e.printStackTrace();
-		// return null;
-		// }
+		return result;
 	}
 
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
-		// TODO Auto-generated method stub
-
 	}
 
+	protected EMFModelResource emfModelResource;
+
+	public void setEMFModelResource(EMFModelResource emfModelResource) {
+		this.emfModelResource = emfModelResource;
+	}
+
+	protected String emfClassURI;
+
+	public void setEMFClassURI(String emfClassURI) {
+		this.emfClassURI = emfClassURI;
+	}
 }

@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
@@ -116,8 +117,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return viewPoint;
 	}
 
-	public final M createEmptyModel(View view, MM metaModel) {
-		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModel, technologyAdapter.getTechnologyContextManager());
+	public final FlexoResource<M> createEmptyModel(View view, FlexoResource<MM> metaModelResource) {
+		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModelResource,
+				technologyAdapter.getTechnologyContextManager());
 	};
 
 	/**

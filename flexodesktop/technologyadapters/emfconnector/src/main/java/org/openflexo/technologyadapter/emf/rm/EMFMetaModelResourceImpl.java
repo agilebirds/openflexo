@@ -72,7 +72,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	public EMFMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
 		EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
 		EMFMetaModel result = converter.convertMetaModel(getPackage());
-		// result.setResource(this);
+		// FIXME result.setResource(this);
 		return result;
 	}
 

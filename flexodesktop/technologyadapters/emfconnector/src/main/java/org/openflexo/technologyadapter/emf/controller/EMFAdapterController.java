@@ -28,9 +28,7 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.gui.EMFIconLibrary;
-import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.toolbox.FileResource;
@@ -110,9 +108,7 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	 */
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
-		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(EMFClassClass.class);
-		} else if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForOntologyObject(EMFObjectIndividual.class);
 		}
 		return null;

@@ -187,7 +187,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public XMLModel createEmptyModel(FlexoProject project, XSDMetaModel metaModel,
+	public XMLModelResource createEmptyModel(FlexoProject project, FlexoResource<XSDMetaModel> metaModel,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 
 		// TODO: meta model not handled here !

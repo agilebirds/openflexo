@@ -101,7 +101,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	 * @return
 	 */
 	@Override
-	public View createEmptyModel(FlexoProject project, DiagramMetaModel metaModel,
+	public FlexoResource<View> createEmptyModel(FlexoProject project, FlexoResource<DiagramMetaModel> metaModel,
 			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
 		logger.info("Add shema");
 		logger.warning("Not implemented yet");
