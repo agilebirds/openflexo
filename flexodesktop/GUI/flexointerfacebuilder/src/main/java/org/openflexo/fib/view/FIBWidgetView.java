@@ -448,6 +448,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				return returned;
 			}
 		}
+		if (value instanceof Enum) {
+			String returned = value != null ? ((Enum) value).name() : null;
+			if (getWidget().getLocalize() && returned != null) {
+				return getLocalized(returned);
+			} else {
+				return returned;
+			}
+		}
 		if (value instanceof String) {
 			if (getWidget().getLocalize()) {
 				return getLocalized((String) value);
