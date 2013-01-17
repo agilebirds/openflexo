@@ -22,6 +22,8 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -102,12 +104,59 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 	public void setMethod(Method method) {
 		if (method != _method) {
 			_method = method;
+			_setMethod = null;
 			_args.clear();
 			int argNb = 0;
 			for (Type paramType : method.getGenericParameterTypes()) {
 				_args.add(new MethodCallArgument("arg" + argNb++, TypeUtils.makeInstantiatedType(paramType, _declaringType)));
 			}
+			updateSetMethod();
+		}
+	}
 
+	protected void updateSetMethod() {
+		if (_method != null) {
+			boolean settable = getArgs().size() > 0;
+			if (settable) {
+				for (MethodCallArgument arg : getArgs()) {
+					settable &= arg.getBinding() != null && arg.getBinding().isStaticValue();
+				}
+			}
+			if (settable) {
+				Class[] parameterTypes = new Class[_args.size() + 1];
+				int i = 0;
+				parameterTypes[i++] = _method.getReturnType();
+				for (; i <= _args.size(); i++) {
+					parameterTypes[i] = TypeUtils.getBaseClass(_args.get(i - 1).getType());
+				}
+				List<String> methodNames = new ArrayList<String>();
+				String methodName = _method.getName();
+				if (methodName.startsWith("get")) {
+					methodNames.add("set" + methodName.substring(3));
+					methodNames.add("_set" + methodName.substring(3));
+				} else if (methodName.startsWith("_get")) {
+					methodNames.add("_set" + methodName.substring(4));
+					methodNames.add("set" + methodName.substring(4));
+				} else if (methodName.startsWith("is")) {
+					methodNames.add("set" + methodName.substring(2));
+					methodNames.add("_set" + methodName.substring(2));
+				} else if (methodName.startsWith("_is")) {
+					methodNames.add("_set" + methodName.substring(2));
+					methodNames.add("set" + methodName.substring(2));
+				}
+				methodNames.add("set" + methodName);
+				methodNames.add("_set" + methodName);
+				for (String string : methodNames) {
+					try {
+						Method method2 = getDeclaringClass().getMethod(string, parameterTypes);
+						_setMethod = method2;
+						break;
+					} catch (SecurityException e) {
+						e.printStackTrace();
+					} catch (NoSuchMethodException e) {
+					}
+				}
+			}
 		}
 	}
 
@@ -150,6 +199,7 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 			binding.setOwner(_owner);
 			binding.setBindingDefinition(arg.getBindingDefinition());
 			arg.setBinding(binding);
+			updateSetMethod();
 		}
 	}
 
@@ -175,9 +225,7 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 	@Override
 	public boolean isSettable() {
-		// TODO MethodCall with all other params as constants are also settable
-		// !!!!
-		return false;
+		return _setMethod != null;
 	}
 
 	@Override
@@ -229,7 +277,41 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		// TODO MethodCall with all other params as constants are also settable
 		// !!!!
-		logger.warning("Please implement me !!!");
+		if (!isBindingValid()) {
+			return;
+		}
+		if (!isSettable()) {
+			return;
+		}
+		Object returned = value;
+
+		// System.out.println("For variable "+_bindingVariable+" object is "+returned);
+
+		try {
+			if (returned == null) {
+				return;
+			}
+			if (_setMethod != null) {
+				int i = 0;
+				Object[] args = new Object[_args.size() + 1];
+				args[i++] = value;
+				for (; i < _args.size() + 1; i++) {
+					args[i] = _args.get(i - 1).getBinding().getBindingValue(context);
+				}
+				_setMethod.invoke(target, args);
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public class MethodCallArgument extends Observable {
