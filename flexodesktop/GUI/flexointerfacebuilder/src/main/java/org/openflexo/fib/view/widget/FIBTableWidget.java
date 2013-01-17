@@ -374,6 +374,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				col.setCellEditor(getTableModel().columnAt(i).getCellEditor());
 			}
 		}
+		if (getTable().getVisibleRowCount() != null) {
+			_table.setVisibleRowCount(getTable().getVisibleRowCount());
+		}
 
 		if (_fibTable.getRowHeight() != null) {
 			_table.setRowHeight(_fibTable.getRowHeight());
