@@ -78,10 +78,11 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 	@Override
 	public SimplePathElement makeSimplePathElement(BindingPathElement parent, String propertyName) {
-		if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
-			EditionPattern ep = (EditionPattern) parent.getType();
-			PatternRole pr = ep.getPatternRole(propertyName);
-			return getSimplePathElement(pr, parent);
+		// We want to avoid code duplication, so iterate on all accessible simple path element and choose the right one
+		for (SimplePathElement e : getAccessibleSimplePathElements(parent)) {
+			if (e.getLabel().equals(propertyName)) {
+				return e;
+			}
 		}
 		return super.makeSimplePathElement(parent, propertyName);
 	}

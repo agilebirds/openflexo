@@ -17,7 +17,7 @@ public class EditionPatternPatternRolePathElement<PR extends PatternRole<?>> ext
 	private PR patternRole;
 
 	public EditionPatternPatternRolePathElement(BindingPathElement parent, PR patternRole) {
-		super(parent, patternRole.getPatternRoleName(), patternRole.getClass());
+		super(parent, patternRole.getPatternRoleName(), patternRole.getType());
 		this.patternRole = patternRole;
 	}
 

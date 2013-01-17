@@ -824,14 +824,14 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	protected static Document readXMLFile(File f) throws JDOMException, IOException {
+	public static Document readXMLFile(File f) throws JDOMException, IOException {
 		FileInputStream fio = new FileInputStream(f);
 		SAXBuilder parser = new SAXBuilder();
 		Document reply = parser.build(fio);
 		return reply;
 	}
 
-	protected static Element getElement(Document document, String name) {
+	public static Element getElement(Document document, String name) {
 		Iterator it = document.getDescendants(new ElementFilter(name));
 		if (it.hasNext()) {
 			return (Element) it.next();
@@ -840,7 +840,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	protected static Element getElement(Element from, String name) {
+	public static Element getElement(Element from, String name) {
 		Iterator it = from.getDescendants(new ElementFilter(name));
 		if (it.hasNext()) {
 			return (Element) it.next();

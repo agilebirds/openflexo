@@ -122,7 +122,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 
 	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPointLibrary(), getModelVersion());
+		return new ViewPointBuilder(getViewPointLibrary(), this, getModelVersion());
 	}
 
 	@Override

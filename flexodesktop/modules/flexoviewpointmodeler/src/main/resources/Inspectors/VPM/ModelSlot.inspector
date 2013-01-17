@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.technologyadapter.ModelSlot" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="technology" localize="true" name="TechnologyLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" data="data.technologyAdapter.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
@@ -15,6 +14,7 @@
       <Label label="read_only" localize="true" name="ReadOnly" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
       <CheckBox selected="false" localize="true" name="ReadOnlyCB" data="data.isReadOnly" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" />
     </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>
   </LocalizedDictionary>
