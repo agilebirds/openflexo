@@ -323,7 +323,8 @@ public class FileMenu extends FlexoMenu {
 	public class SaveProjectItem extends FlexoMenuItem {
 
 		public SaveProjectItem() {
-			super(new SaveProjectAction(), "save_project", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK), getController(), true);
+			super(new SaveProjectAction(), "save_current_project", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK),
+					getController(), true);
 			setIcon(IconLibrary.SAVE_ICON);
 		}
 
