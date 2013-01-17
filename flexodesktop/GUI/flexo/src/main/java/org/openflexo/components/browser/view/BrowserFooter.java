@@ -160,34 +160,36 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 
 		add(plusMinusPanel, BorderLayout.WEST);
 		optionsButton = new ImageButton(IconLibrary.BROWSER_OPTIONS_ICON);
-		optionsButton.setDisabledIcon(IconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
-		add(optionsButton, BorderLayout.EAST);
+		if (browserView.getBrowser().showOptionsButton()) {
+			optionsButton.setDisabledIcon(IconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
+			add(optionsButton, BorderLayout.EAST);
 
-		optionsButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (hasFilters()) {
-					optionsButton.setIcon(IconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
-					getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			optionsButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent mouseEvent) {
+					if (hasFilters()) {
+						optionsButton.setIcon(IconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
+						getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+					}
 				}
-			}
 
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (hasFilters() && (popupMenu == null || !popupMenu.isVisible())) {
-					getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					getPopupMenu().grabFocus();
+				@Override
+				public void mouseReleased(MouseEvent mouseEvent) {
+					if (hasFilters() && (popupMenu == null || !popupMenu.isVisible())) {
+						getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+						getPopupMenu().grabFocus();
+					}
 				}
+			});
+
+			// if (browserView.getBrowser().getOptionalFilters().size() == 0)
+			optionsButton.setEnabled(hasFilters());
+			FCH.setHelpItem(optionsButton, "options");
+
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Browser " + browserView.getBrowser() + " has "
+						+ browserView.getBrowser().getConfigurableElementTypeFilters().size() + " filters");
 			}
-		});
-
-		// if (browserView.getBrowser().getOptionalFilters().size() == 0)
-		optionsButton.setEnabled(hasFilters());
-		FCH.setHelpItem(optionsButton, "options");
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Browser " + browserView.getBrowser() + " has "
-					+ browserView.getBrowser().getConfigurableElementTypeFilters().size() + " filters");
 		}
 
 		handleSelectionCleared();

@@ -360,24 +360,26 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notifying expansions");
 		}
-		notifyListeners(new ExpansionNotificationEvent());
-		if (selectionBeforeUpdate != null) {
-			for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Select " + next);
+		if (getRootObject() != null) {
+			notifyListeners(new ExpansionNotificationEvent());
+			if (selectionBeforeUpdate != null) {
+				for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
+					FlexoModelObject next = en.nextElement();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Select " + next);
+					}
+					fireObjectSelected(next);
 				}
-				fireObjectSelected(next);
 			}
-		}
-		if (expandedObjects != null) {
-			for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Expand " + next);
+			if (expandedObjects != null) {
+				for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
+					FlexoModelObject next = en.nextElement();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Expand " + next);
+					}
+					expand(next, false);
+					// expandAll(next);
 				}
-				expand(next, false);
-				// expandAll(next);
 			}
 		}
 	}
@@ -1309,5 +1311,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (evt.getSource() == this._rootObject && evt.getPropertyName().equals(this._rootObject.getDeletedProperty())) {
 			setRootObject(null);
 		}
+	}
+
+	public boolean showOptionsButton() {
+		return true;
 	}
 }
