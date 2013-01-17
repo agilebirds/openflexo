@@ -32,7 +32,7 @@ public class WKFAssociation extends WKFEdge<WKFNode, WKFNode> implements Deletab
 		NONE, START_TO_END, END_TO_START, BOTH;
 	}
 
-	private Arrow arrow = Arrow.START_TO_END;
+	private Arrow arrow = Arrow.NONE;
 
 	public WKFAssociation(FlexoProcessBuilder builder) {
 		super(builder.process);
