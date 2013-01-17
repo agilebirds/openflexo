@@ -3,16 +3,16 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
       <Label label="text" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextLabel" localize="true" />
-      <TextArea index="1" data="data.text" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Text" localize="true" />
+      <TextArea index="1" data="data.text" validateOnReturn="false" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Text" localize="true" />
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
     <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
       <Label label="text_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorbpeLabel" localize="true" />
-      <Color allowsNull="false" index="9" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
+      <Color allowsNull="false" index="9" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
       <Label label="back_color" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
-      <Color allowsNull="false" index="11" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
+      <Color allowsNull="false" index="11" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
       <Label label="text_font" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontbpeLabel" localize="true" />
       <Font sampleText="Sample for this font" index="13" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextFont" tooltipText="Text Font" localize="true" />
       <Label label="text_alignment" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentbpeLabel" localize="true" />
@@ -28,9 +28,9 @@
     </Tab>
     <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" name="GraphicsSWLTab">
       <Label label="text_color" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
-      <Color allowsNull="false" index="9" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Color allowsNull="false" index="9" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
       <Label label="back_color" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
-      <Color allowsNull="false" index="11" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="BgColorswl" localize="true" />
+      <Color allowsNull="false" index="11" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="BgColorswl" localize="true" />
       <Label label="text_font" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontswlLabel" localize="true" />
       <Font sampleText="Sample for this font" index="13" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
       <Label label="text_alignment" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentswlLabel" localize="true" />
