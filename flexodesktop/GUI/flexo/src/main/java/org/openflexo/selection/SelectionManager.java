@@ -580,11 +580,6 @@ public abstract class SelectionManager extends Observable {
 				// Component focusOwner =
 				// KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 				notifyObservers(new UniqueSelection(_inspectedObject, getInspectionContext()));
-				// this code seems to be the cause of the switch module bug
-				// if (focusOwner != null) {
-				// focusOwner.requestFocusInWindow();
-				// focusOwner.requestFocus();
-				// }
 			}
 		}
 		if (inspectable instanceof FlexoModelObject) {
