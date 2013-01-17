@@ -44,11 +44,6 @@ public class DropScheme extends AbstractCreationScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.DropScheme;
-	}
-
 	public String _getTarget() {
 		return target;
 	}

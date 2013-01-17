@@ -27,9 +27,4 @@ public class DeletionScheme extends AbstractActionScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.DeletionScheme;
-	}
-
 }

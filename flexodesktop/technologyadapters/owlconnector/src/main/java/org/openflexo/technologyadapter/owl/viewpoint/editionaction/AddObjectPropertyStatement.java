@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
@@ -169,7 +170,10 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	@Override
 	public Type getAssignableType() {
-		return ObjectPropertyStatement.class;
+		if (getObjectProperty() == null) {
+			return ObjectPropertyStatement.class;
+		}
+		return StatementWithProperty.getStatementWithProperty(getObjectProperty());
 	}
 
 	@Override

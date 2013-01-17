@@ -41,6 +41,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
+import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
@@ -165,7 +166,10 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	@Override
 	public Type getAssignableType() {
-		return DataPropertyStatement.class;
+		if (getDataProperty() == null) {
+			return DataPropertyStatement.class;
+		}
+		return StatementWithProperty.getStatementWithProperty(getDataProperty());
 	}
 
 	@Override

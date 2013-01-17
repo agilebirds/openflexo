@@ -50,11 +50,6 @@ public class LinkScheme extends AbstractCreationScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.LinkScheme;
-	}
-
 	public String _getFromTarget() {
 		return fromTarget;
 	}

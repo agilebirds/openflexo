@@ -180,7 +180,6 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	public void setMetaModelURI(String metaModelURI) {
-		System.out.println("Sets metaModelURI=" + metaModelURI);
 		this.metaModelURI = metaModelURI;
 	}
 

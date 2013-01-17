@@ -55,10 +55,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public static final String TO_TARGET = "toTarget";
 	public static final String THIS = "this";
 
-	public static enum EditionSchemeType {
-		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme, CloningScheme
-	}
-
 	private String name;
 	private String label;
 	private String description;
@@ -112,8 +108,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public EditionScheme getEditionScheme() {
 		return this;
 	}
-
-	public abstract EditionSchemeType getEditionSchemeType();
 
 	public String getLabel() {
 		if (label == null || StringUtils.isEmpty(label) || label.equals(name)) {
