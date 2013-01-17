@@ -92,8 +92,9 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 					if (value != null) {
 						textfield.setText(((Number) value).toString());
-					} else
+					} else {
 						textfield.setText("");
+					}
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -107,21 +108,25 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 				public Number getCellEditorValue() {
 					Object cellEditorValue = super.getCellEditorValue();
 					if (cellEditorValue != null) {
-						switch (getColumnModel().getNumberType()) {
-						case ByteType:
-							return Byte.parseByte((String) cellEditorValue);
-						case ShortType:
-							return Short.parseShort((String) cellEditorValue);
-						case IntegerType:
-							return Integer.parseInt((String) cellEditorValue);
-						case LongType:
-							return Long.parseLong((String) cellEditorValue);
-						case FloatType:
-							return Float.parseFloat((String) cellEditorValue);
-						case DoubleType:
-							return Double.parseDouble((String) cellEditorValue);
-						default:
-							return null;
+						try {
+							switch (getColumnModel().getNumberType()) {
+							case ByteType:
+								return Byte.parseByte((String) cellEditorValue);
+							case ShortType:
+								return Short.parseShort((String) cellEditorValue);
+							case IntegerType:
+								return Integer.parseInt((String) cellEditorValue);
+							case LongType:
+								return Long.parseLong((String) cellEditorValue);
+							case FloatType:
+								return Float.parseFloat((String) cellEditorValue);
+							case DoubleType:
+								return Double.parseDouble((String) cellEditorValue);
+							default:
+								return null;
+							}
+						} catch (NumberFormatException e) {
+							e.printStackTrace();
 						}
 					}
 					return null;
