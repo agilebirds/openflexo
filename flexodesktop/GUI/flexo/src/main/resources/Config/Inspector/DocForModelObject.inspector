@@ -9,7 +9,7 @@
 			<param name="align" value="CENTER"/>   <!-- horizontal alignment : LEFT / RIGHT / CENTER -->
 			<param name="useUltraLightWysiwyg" value="true"/>
 		</property>
-		<property name="dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="4" depends="isDocEditable" conditional="isDocEditable=true"/>
+		<!-- <property name="dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="4" depends="isDocEditable" conditional="isDocEditable=true"/>-->
 		<property name="description" label="description" widget="WYSIWYG_ULTRA_LIGHT" depends="isDocEditable" conditional="isDocEditable=false" constraint="0">
 			<param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
 			<param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
