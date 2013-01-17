@@ -51,7 +51,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
-import org.openflexo.technologyadapter.emf.viewpoint.EMFBindingFactory;
+import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 
 /**
  * This class defines and implements the EMF technology adapter

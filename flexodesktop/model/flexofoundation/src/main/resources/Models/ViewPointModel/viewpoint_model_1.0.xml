@@ -472,6 +472,10 @@
 		xmlTag="AddOWLIndividual">
 	</entity>
 
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual"
+		xmlTag="AddEMFObjectIndividual">
+	</entity>
+
 
 	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" xmlTag="CloneIndividual">
 	</entity>
