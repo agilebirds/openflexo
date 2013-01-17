@@ -24,8 +24,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -132,7 +130,8 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 		state &= ~Frame.ICONIFIED;
 		getFlexoFrame().setExtendedState(state);
 		getFlexoFrame().setVisible(true);
-		SwingUtilities.invokeLater(new Runnable() {
+		/*
+		 SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				if (controller != null) {
@@ -140,6 +139,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 				}
 			}
 		});
+		*/
 		if (getEditor() != null && getController().getCurrentDisplayedObjectAsModuleView() == null) {
 			boolean selectDefaultObject = false;
 			FlexoModelObject defaultObjectToSelect = getController().getDefaultObjectToSelect(getEditor().getProject());
