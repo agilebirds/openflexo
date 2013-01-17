@@ -44,7 +44,7 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 
 	public AssociationGR(WKFAssociation edge, SwimmingLaneRepresentation aDrawing) {
 		super(edge, aDrawing.getFirstVisibleObject(edge.getStartNode()), aDrawing.getFirstVisibleObject(edge.getEndNode()), aDrawing);
-		setForeground(ForegroundStyle.makeStyle(Color.darkGray, 1.0f, DashStyle.MEDIUM_SPACED_DASHES));
+		setForeground(ForegroundStyle.makeStyle(Color.darkGray, 1.0f, DashStyle.DOTS_DASHES));
 		setApplyForegroundToSymbols(false);
 	}
 
