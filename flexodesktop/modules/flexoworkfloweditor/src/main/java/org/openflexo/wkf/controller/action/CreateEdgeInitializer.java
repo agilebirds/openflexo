@@ -239,6 +239,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 							executionContext.createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction(
 									(FatherNode) action.getEndNode(), null, action);
 							executionContext.createPreCondition.setAllowsToSelectPreconditionOnly(true);
+							executionContext.createPreCondition.setForceNewCreation(true);
 							executionContext.createPreCondition.doAction();
 							if (!executionContext.createPreCondition.hasActionExecutionSucceeded()) {
 								return false;
