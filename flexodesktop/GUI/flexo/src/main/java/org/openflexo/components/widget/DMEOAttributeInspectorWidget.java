@@ -67,7 +67,7 @@ public class DMEOAttributeInspectorWidget extends CustomInspectorWidget<DMEOAttr
 					logger.fine("Focus gained in " + getClass().getName());
 				}
 				super.focusGained(arg0);
-				_selector.getTextField().requestFocus();
+				_selector.getTextField().requestFocusInWindow();
 				_selector.getTextField().selectAll();
 			}
 

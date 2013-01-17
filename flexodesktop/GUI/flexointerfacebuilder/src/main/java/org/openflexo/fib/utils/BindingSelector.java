@@ -195,7 +195,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								getTextField().requestFocus();
+								getTextField().requestFocusInWindow();
 							}
 						});
 					}
@@ -1049,7 +1049,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				getTextField().requestFocus();
+				getTextField().requestFocusInWindow();
 			}
 		});
 	}

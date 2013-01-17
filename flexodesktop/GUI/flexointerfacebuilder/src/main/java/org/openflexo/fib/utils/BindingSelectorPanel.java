@@ -713,7 +713,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 									.getElement(), i);
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i + 1).requestFocus();
+							listAtIndex(i + 1).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -729,7 +729,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							((BindingValue) bindingValue).disconnect();
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i).requestFocus();
+							listAtIndex(i).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -1964,7 +1964,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 						}
 					});
 				}
@@ -2109,7 +2109,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 				}
 			});
 		}
@@ -2250,7 +2250,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		} else if (completionInfo != null) {
 			completionInfo.autoComplete();
 		} else {
-			list.requestFocus();
+			list.requestFocusInWindow();
 		}
 	}
 

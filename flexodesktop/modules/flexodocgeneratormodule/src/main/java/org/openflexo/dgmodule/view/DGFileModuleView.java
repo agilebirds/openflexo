@@ -450,7 +450,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
 			validate();
-			_codeDisplayer.getComponent().requestFocus();
+			_codeDisplayer.getComponent().requestFocusInWindow();
 		} else {
 
 			if (_cgFile.getGenerationStatus() == GenerationStatus.CodeGenerationNotAvailable) {

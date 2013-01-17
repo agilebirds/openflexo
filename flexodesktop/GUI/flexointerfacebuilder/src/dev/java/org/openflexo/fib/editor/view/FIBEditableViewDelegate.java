@@ -232,7 +232,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		getEditorController().setSelectedObject(getFIBComponent());
-		view.getJComponent().requestFocus();
+		view.getJComponent().requestFocusInWindow();
 	}
 
 	@Override

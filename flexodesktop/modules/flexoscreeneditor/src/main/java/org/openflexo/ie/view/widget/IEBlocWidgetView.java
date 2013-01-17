@@ -344,7 +344,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 				finalizeEditBloc();
 			}
 		});
-		_jLabelTextField.requestFocus();
+		_jLabelTextField.requestFocusInWindow();
 		_jLabelTextField.selectAll();
 		_topTitle.revalidate();
 		_topTitle.repaint();

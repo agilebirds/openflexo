@@ -403,7 +403,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
 			validate();
-			_codeDisplayer.getComponent().requestFocus();
+			_codeDisplayer.getComponent().requestFocusInWindow();
 		}
 
 		else {

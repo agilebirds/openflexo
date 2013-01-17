@@ -148,7 +148,7 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 		DocumentWordTokenizer tokenizer = new DocumentWordTokenizer(textComp.getDocument());
 		int exitStatus = spellCheck.checkSpelling(tokenizer);
 
-		textComp.requestFocus();
+		textComp.requestFocusInWindow();
 		textComp.setCaretPosition(0);
 		this.textComp = null;
 		try {
@@ -200,7 +200,7 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 		int end = start + event.getInvalidWord().length();
 
 		// Mark the invalid word in TextComponent
-		textComp.requestFocus();
+		textComp.requestFocusInWindow();
 		textComp.setCaretPosition(0);
 		textComp.setCaretPosition(start);
 		textComp.moveCaretPosition(end);
