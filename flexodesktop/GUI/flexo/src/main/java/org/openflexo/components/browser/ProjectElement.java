@@ -93,15 +93,6 @@ public class ProjectElement extends BrowserElement {
 		if (getProject().getImportedProcessLibrary() != null) {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}
-		if (getProject().getProjectData() != null) {
-			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				if (ref.getReferredProject() != null) {
-					addToChilds(ref.getReferredProject());
-				}
-
-			}
-		}
-
 	}
 
 	@Override
