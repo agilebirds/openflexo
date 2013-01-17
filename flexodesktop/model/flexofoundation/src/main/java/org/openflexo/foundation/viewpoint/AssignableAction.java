@@ -60,6 +60,7 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 			assignation.setBindingName("assignation");
 			assignation.setMandatory(isAssignationRequired());
 		}
+		assignation.setDeclaredType(getAssignableType());
 		return assignation;
 	}
 
@@ -79,7 +80,10 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 		if (getEditionPattern() == null) {
 			return null;
 		}
-		return getEditionPattern().getPatternRole(getAssignation().toString());
+		if (assignation != null) {
+			return getEditionPattern().getPatternRole(assignation.toString());
+		}
+		return null;
 	}
 
 	@Override
