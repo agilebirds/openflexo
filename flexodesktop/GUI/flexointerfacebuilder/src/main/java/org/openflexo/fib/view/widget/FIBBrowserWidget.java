@@ -41,6 +41,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -327,6 +328,19 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 				}
 			}
 		};
+		if (ToolBox.isMacOS()) {
+			_tree.setSelectionModel(new DefaultTreeSelectionModel() {
+				@Override
+				public int[] getSelectionRows() {
+					int[] selectionRows = super.getSelectionRows();
+					// MacOS X does not support that we return null here during DnD operations.
+					if (selectionRows == null) {
+						return new int[0];
+					}
+					return selectionRows;
+				}
+			});
+		}
 		_tree.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_tree.addFocusListener(this);
 		FIBBrowserCellRenderer renderer = new FIBBrowserCellRenderer(this);
