@@ -145,7 +145,9 @@ public class FIBDialog<T> extends JDialog {
 		pack();
 		center();
 		setVisible(true);
-		toFront();
+		if (getOwner() == null) {
+			toFront();
+		}
 	}
 
 }
