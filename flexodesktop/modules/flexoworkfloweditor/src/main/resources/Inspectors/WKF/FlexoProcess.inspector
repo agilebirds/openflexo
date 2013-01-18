@@ -29,6 +29,7 @@
       <Table iteratorClassName="org.openflexo.foundation.wkf.Status" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="SortedStatusesVector" index="1" data="data.sortedStatusesVector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <NumberColumn numberType="IntegerType" data="iterator.index" title="Index" columnWidth="40" resizable="false" displayTitle="true" name="number" />
         <AddAction method="data.addStatus" name="new" />
         <RemoveAction method="data.deleteStatus(selected)" isAvailable="data.statusList.isStatusDeletable(selected)" name="delete" />
       </Table>

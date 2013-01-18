@@ -13,7 +13,7 @@
       <Label label="specializes_following_roles" align="center" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="RoleSpecializationsLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.wkf.RoleSpecialization" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="RoleSpecializations" index="9" data="data.roleSpecializations" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <LabelColumn data="iterator.parentRole.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
-        <TextFieldColumn data="iterator.annotation" title="Annotation" columnWidth="150" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="Annotation" columnWidth="150" resizable="true" displayTitle="true" />
         <AddAction method="data.performAddRoleSpecialization" name="new" />
         <RemoveAction method="data.performDeleteRoleSpecialization(selected)" isAvailable="data.isRoleSpecializationDeletable(selected)" name="delete" />
       </Table>

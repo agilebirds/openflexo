@@ -294,11 +294,27 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	public ExternalOEModule getOEModule() throws ModuleLoadingException {
 		return (ExternalOEModule) getModuleInstance(Module.VE_MODULE);
 	}
+	
+	private boolean ignoreSwitch = false;
 
-	public FlexoModule switchToModule(Module module) throws ModuleLoadingException {
-		if (activeModule != null && activeModule.getModule() == module) {
+	public FlexoModule switchToModule(final Module module) throws ModuleLoadingException {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						switchToModule(module);
+					} catch (ModuleLoadingException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			return null;
+		}
+		if (ignoreSwitch||activeModule != null && activeModule.getModule() == module) {
 			return activeModule;
 		}
+		ignoreSwitch = true;
+		try {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Switch to module " + module.getName());
 		}
@@ -320,6 +336,13 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			return moduleInstance;
 		}
 		throw new ModuleLoadingException(module);
+		} finally {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					ModuleLoader.this.ignoreSwitch = false;
+				}
+			});
+		}
 	}
 
 	/**
