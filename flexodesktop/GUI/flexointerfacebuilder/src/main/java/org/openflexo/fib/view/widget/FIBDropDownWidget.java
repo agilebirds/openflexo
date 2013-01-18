@@ -157,7 +157,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (widgetUpdating) {
+		if (widgetUpdating || modelUpdating) {
 			return false;
 		}
 		if (notEquals(getValue(), jComboBox.getSelectedItem())) {
