@@ -220,7 +220,11 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	}
 
 	public FlexoCSS getFlexoCSS() {
-		return getProject().getCssSheet();
+		if (getProject() != null) {
+			return getProject().getCssSheet();
+		} else {
+			return FlexoCSS.CONTENTO;
+		}
 	}
 
 	public Vector<String> getAvailableMethods() {
