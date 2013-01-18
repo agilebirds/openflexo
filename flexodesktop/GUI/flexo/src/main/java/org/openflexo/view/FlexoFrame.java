@@ -236,6 +236,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				}
 			}
 			setBounds(bounds);
+		} else {
+			setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, 3 * Toolkit.getDefaultToolkit().getScreenSize().height / 4);
+			setLocationByPlatform(true);
 		}
 		int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
 		if (state != -1
