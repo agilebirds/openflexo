@@ -64,9 +64,4 @@ public class RoleListBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE, true);
 	}
 
-	@Override
-	public boolean showRootNode() {
-		return false;
-	}
-
 }
