@@ -104,7 +104,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorageResourceData, InspectableObject {
 
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
@@ -323,6 +323,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				processNode.setIndexValue(_getTopLevelNodeProcesses().size());
 				FlexoIndexManager.reIndexObjectOfArray(_getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]));
 			}
+			clearOrphanProcesses();
 			setChanged();
 			notifyObservers(new ProcessInserted(processNode.getProcess(), null));
 		}
@@ -331,9 +332,38 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public void removeFromTopLevelNodeProcesses(FlexoProcessNode processNode) {
 		if (_topLevelNodeProcesses.contains(processNode)) {
 			_topLevelNodeProcesses.remove(processNode);
+			clearOrphanProcesses();
 			setChanged();
 			notifyObservers(new ProcessRemoved(processNode.getProcess(), null));
 		}
+	}
+
+	private Vector<FlexoProcessNode> orphanProcesses;
+
+	public Vector<FlexoProcessNode> getOrphanProcesses() {
+		if (orphanProcesses == null) {
+			orphanProcesses = new Vector<FlexoProcessNode>();
+			for (Enumeration<FlexoProcessNode> en = getSortedTopLevelProcesses(); en.hasMoreElements();) {
+				FlexoProcessNode node = en.nextElement();
+				if (node.getParentFolder() == null) {
+					node.setIndex(orphanProcesses.size() + 1);
+					orphanProcesses.add(node);
+				}
+			}
+		}
+		return orphanProcesses;
+	}
+
+	public Enumeration<FlexoProcessNode> getSortedOrphanSubprocesses() {
+		disableObserving();
+		FlexoProcessNode[] o = FlexoIndexManager.sortArray(getOrphanProcesses().toArray(new FlexoProcessNode[0]));
+		enableObserving();
+		return ToolBox.getEnumeration(o);
+	}
+
+	public void clearOrphanProcesses() {
+		orphanProcesses = null;
+		getPropertyChangeSupport().firePropertyChange("sortedOrphanSubprocesses", this.orphanProcesses, null);
 	}
 
 	public Vector<FlexoProcessNode> getImportedRootNodeProcesses() {
@@ -1963,4 +1993,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public boolean isCache() {
 		return getFlexoResource().isCache();
 	}
+
+	@Override
+	public FlexoProcessNode getProcessNode() {
+		return null;
+	}
+
 }

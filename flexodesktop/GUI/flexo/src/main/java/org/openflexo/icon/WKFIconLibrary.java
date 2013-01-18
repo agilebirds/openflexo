@@ -90,13 +90,13 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIconResource TRIANGLE_RIGHT = new ImageIconResource("Icons/WKF/SWL/ArrowRight.gif");
 
 	// Small model icons
-	public static final ImageIcon WORKFLOW_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_WKF.gif");
+	public static final ImageIcon PROCESS_FOLDER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ProcessFolder.gif");
+	public static final ImageIcon WORKFLOW_ICON = PROCESS_FOLDER_ICON/*new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_WKF.gif")*/;
 	public static final ImageIcon ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_Role.gif");
 	public static final ImageIcon IMPORTED_PROCESS_LIBRARY_ICON = new ImageIconResource(
 			"Icons/Model/WKF/SmallIcons/ImportedLibrary_WKF.gif");
 	public static final ImageIcon IMPORTED_ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ImportedLibrary_Role.gif");
 	public static final ImageIconResource PROCESS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallProcess.gif");
-	public static final ImageIcon PROCESS_FOLDER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ProcessFolder.gif");
 	public static final ImageIcon IMPORTED_PROCESS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallImportedProcess.gif");
 	public static final ImageIcon SUBPROCESS_NODE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallSubProcessNode.gif");
 	public static final ImageIcon ACTIVITY_NODE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallActivity.gif");

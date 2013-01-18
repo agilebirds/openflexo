@@ -69,7 +69,9 @@ public class AddSubProcessInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof FlexoProcess) {
 					process = (FlexoProcess) action.getFocusedObject();
 				} else if (action.getFocusedObject() instanceof ProcessFolder) {
-					process = ((ProcessFolder) action.getFocusedObject()).getProcessNode().getProcess();
+					if (((ProcessFolder) action.getFocusedObject()).getProcessNode() != null) {
+						process = ((ProcessFolder) action.getFocusedObject()).getProcessNode().getProcess();
+					}
 				}
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				String baseName = FlexoLocalization.localizedForKey("new_process_name");
