@@ -239,7 +239,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		// Little block to change the currentPerspective if the
 		// current perspective can't handle this object
 		FlexoPerspective perspective = getCurrentPerspective();
-		if (!perspective.hasModuleViewForObject(object)) {
+		if (object != null && !perspective.hasModuleViewForObject(object)) {
 			for (FlexoPerspective p : getPerspectives()) {
 				if (p == null) {
 					continue;
@@ -307,14 +307,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		if (perspective == null) {
 			perspective = getCurrentPerspective();
-		}
-		if (object == null && perspective != null && editor != null) {
-			object = perspective.getDefaultObject(editor.getProject());
-			if (object == getCurrentObject()) {
-				// This is to handle a very specific case when we are closing the last tab
-				// a perspective
-				object = null;
-			}
 		}
 		if (!isGoingForward && !isGoingBackward) {
 			if (currentLocation != null && currentLocation != NO_LOCATION) {
@@ -475,7 +467,13 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getProjectLoader()) {
 			if (evt.getPropertyName().equals(ProjectLoader.PROJECT_OPENED)) {
-				setCurrentProject((FlexoProject) evt.getNewValue());
+				FlexoProject project = (FlexoProject) evt.getNewValue();
+				if (getCurrentPerspective() != null) {
+					FlexoModelObject object = getCurrentPerspective().getDefaultObject(project);
+					setCurrentLocation(getProjectLoader().getEditorForProject(project), object, getCurrentPerspective());
+				} else {
+					setCurrentProject(project);
+				}
 			} else if (evt.getPropertyName().equals(ProjectLoader.PROJECT_CLOSED)) {
 				handleProjectRemoval((FlexoProject) evt.getOldValue());
 				setCurrentProject(null);
@@ -490,7 +488,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		updateHistoryForProjectRemoval(previousHistory, removedProject);
 		updateHistoryForProjectRemoval(nextHistory, removedProject);
 		for (Location location : new ArrayList<Location>(locations)) {
-			if (location.getEditor() == removedProject) {
+			if (location.getEditor() != null && location.getEditor().getProject() == removedProject) {
 				removeFromLocations(location);
 			}
 		}
@@ -512,6 +510,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 		updateHistoryForDeletedObject(previousHistory, deletedObject);
 		updateHistoryForDeletedObject(nextHistory, deletedObject);
+		for (Location location : new ArrayList<Location>(locations)) {
+			if (location.getObject() == deletedObject) {
+				removeFromLocations(location);
+			}
+		}
 		if (currentLocation != null && currentLocation.getObject() == deletedObject) {
 			if (canGoBack()) {
 				historyBack();
