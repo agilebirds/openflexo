@@ -35,6 +35,7 @@ import org.openflexo.foundation.wkf.action.OpenOperationLevel;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
@@ -47,7 +48,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		super(activity, shapeType, aDrawing, isInPalet);
 		setLayer(activity.isEmbedded() ? EMBEDDED_ACTIVITY_LAYER : ACTIVITY_LAYER);
 
-		if (!(activity instanceof SelfExecutableActivityNode)) {
+		if (!(activity instanceof SelfExecutableActivityNode) && !UserType.isLite()) {
 			addToMouseClickControls(new PetriGraphOpener(), true);
 		}
 

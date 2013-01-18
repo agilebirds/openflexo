@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -59,7 +60,9 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		_splitPaneForProcess = new Hashtable<SwimmingLaneEditorController, JSplitPane>();
 		topRightDummy = new JPanel();
 		setTopLeftView(_controller.getWkfBrowserView());
-		setBottomLeftView(_controller.getProcessBrowserView());
+		if (!UserType.isLite()) {
+			setBottomLeftView(_controller.getProcessBrowserView());
+		}
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 

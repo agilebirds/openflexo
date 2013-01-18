@@ -346,7 +346,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoObject> extends Custo
 				list.ensureIndexIsVisible(list.getModel().getSize() - 1);
 			}
 		}
-		_owner.getTextField().requestFocus();
+		_owner.getTextField().requestFocusInWindow();
 	}
 
 	protected void processDownPressed() {
@@ -366,7 +366,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoObject> extends Custo
 				list.ensureIndexIsVisible(0);
 			}
 		}
-		_owner.getTextField().requestFocus();
+		_owner.getTextField().requestFocusInWindow();
 	}
 
 	protected JPanel getControlPanel() {

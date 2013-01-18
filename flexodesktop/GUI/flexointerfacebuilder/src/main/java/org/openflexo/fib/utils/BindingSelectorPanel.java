@@ -724,7 +724,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 									.getElementAt(0).getElement(), i);
 							bindingSelector.setEditedObject(dataBinding);
 							bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i + 1).requestFocus();
+							listAtIndex(i + 1).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -741,7 +741,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 							// _bindingSelector.disconnect();
 							bindingSelector.setEditedObject(dataBinding);
 							bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i).requestFocus();
+							listAtIndex(i).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -761,10 +761,9 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 	int _selectedPathElementIndex = -1;
 
 	protected void resetMethodCallPanel() {
-		if (bindingSelector.getEditedObject() == null
-				|| bindingSelector.getEditedObject().isConstant()
-				|| (bindingSelector.getEditedObject().isBindingValue() && ((BindingValue) bindingSelector.getEditedObject().getExpression())
-						.getBindingPath().size() == 0)) {
+		if (bindingSelector.getEditedObject() == null || bindingSelector.getEditedObject().isConstant()
+				|| bindingSelector.getEditedObject().isBindingValue()
+				&& ((BindingValue) bindingSelector.getEditedObject().getExpression()).getBindingPath().size() == 0) {
 			_selectedPathElementIndex = -1;
 		} else if (bindingSelector.getEditedObject().isBindingValue()) {
 			_selectedPathElementIndex = ((BindingValue) bindingSelector.getEditedObject().getExpression()).getBindingPath().size();
@@ -1292,7 +1291,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				if (getElementAt(i).getElement().equals(element)) {
 					return getElementAt(i);
 				}
-				if ((element instanceof FunctionPathElement) && (getElementAt(i).getElement() instanceof FunctionPathElement)) {
+				if (element instanceof FunctionPathElement && getElementAt(i).getElement() instanceof FunctionPathElement) {
 					// Special equals, we try to find a FunctionPathElement even if parameters are different
 					FunctionPathElement f1 = (FunctionPathElement) element;
 					FunctionPathElement f2 = (FunctionPathElement) getElementAt(i).getElement();
@@ -1860,7 +1859,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							bindingSelector.getTextField().requestFocus();
+							bindingSelector.getTextField().requestFocusInWindow();
 						}
 					});
 				}
@@ -2005,7 +2004,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					bindingSelector.getTextField().requestFocus();
+					bindingSelector.getTextField().requestFocusInWindow();
 				}
 			});
 		}
@@ -2146,7 +2145,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		} else if (completionInfo != null) {
 			completionInfo.autoComplete();
 		} else {
-			list.requestFocus();
+			list.requestFocusInWindow();
 		}
 	}
 
@@ -2181,7 +2180,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 	}
 
 	BindingValue makeBindingValueFromPanel() {
-		if (bindingSelector.getEditedObject() == null || !(bindingSelector.getEditedObject().isBindingValue())) {
+		if (bindingSelector.getEditedObject() == null || !bindingSelector.getEditedObject().isBindingValue()) {
 			return null;
 		}
 		int i = 1;

@@ -124,6 +124,22 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 						}
 					}
 					if (action.getAttachedBeginNode() == null && pg != null) {
+						if (action.isForceNewCreation()) {
+							String nodeNameProposal;
+							if (action.getFocusedObject() instanceof AbstractActivityNode) {
+								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
+										(AbstractActivityNode) action.getFocusedObject());
+							} else if (action.getFocusedObject() instanceof OperationNode) {
+								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
+										(OperationNode) action.getFocusedObject());
+							} else {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("Unknown father node type: " + action.getFocusedObject().getClassNameKey());
+								}
+								nodeNameProposal = FlexoLocalization.localizedForKey("begin_node");
+							}
+							return createNewBeginNode(action, executionContext, nodeNameProposal);
+						}
 						Vector<FlexoNode> unboundBeginNodes = pg.getUnboundBeginNodes();
 						Vector<FlexoNode> alreadyBoundBeginNodes = pg.getBoundBeginNodes();
 
@@ -132,7 +148,6 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 
 						boolean hasUnboundBeginNodes = unboundBeginNodes.size() > 0;
 						boolean hasAlreadyBoundBeginNodes = alreadyBoundBeginNodes.size() > 0;
-						;
 						if (unboundBeginNodes.size() != 1 || hasAlreadyBoundBeginNodes) {
 							String CREATE_NEW_BEGIN_NODE = FlexoLocalization.localizedForKey("create_new_begin_node");
 							String CHOOSE_EXISTING_UNBOUND_BEGIN_NODE = FlexoLocalization
@@ -210,40 +225,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 									action.setSelectedPreCondition(((FlexoNode) alreadyBoundNodeParameter.getValue())
 											.getAttachedPreCondition());
 								} else if (choiceParam.getValue().equals(CREATE_NEW_BEGIN_NODE)) {
-									if (action.getFocusedObject() instanceof AbstractActivityNode
-											|| action.getFocusedObject() instanceof OperationNode
-											|| action.getFocusedObject() instanceof SelfExecutableNode) {
-										if (action.getFocusedObject() instanceof SelfExecutableNode) {
-											if (action.getFocusedObject() instanceof SelfExecutableActivityNode) {
-												executionContext.createBeginNodeAction = CreateNode.createActivityBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else if (action.getFocusedObject() instanceof SelfExecutableOperationNode) {
-												executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else {
-												executionContext.createBeginNodeAction = CreateNode.createActionBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											}
-										} else {
-											if (action.getFocusedObject() instanceof AbstractActivityNode) {
-												executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else {
-												executionContext.createBeginNodeAction = CreateNode.createActionBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											}
-										}
-										executionContext.createBeginNodeAction.setNewNodeName(newBeginNodeNameParam.getValue());
-										executionContext.createBeginNodeAction.doAction();
-										if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
-											if (executionContext.createPg != null) {
-												executionContext.createPg.undoAction();
-
-											}
-											return false;
-										}
-										action.setAttachedBeginNode((FlexoNode) executionContext.createBeginNodeAction.getNewNode());
-									}
+									return createNewBeginNode(action, executionContext, newBeginNodeNameParam.getValue());
 								}
 								return true;
 							} else {
@@ -254,6 +236,44 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 							return true;
 						}
 					}
+				}
+				return true;
+			}
+
+			public boolean createNewBeginNode(final CreatePreCondition action, CreatePreConditionExecutionContext executionContext,
+					String name) {
+				if (action.getFocusedObject() instanceof AbstractActivityNode || action.getFocusedObject() instanceof OperationNode
+						|| action.getFocusedObject() instanceof SelfExecutableNode) {
+					if (action.getFocusedObject() instanceof SelfExecutableNode) {
+						if (action.getFocusedObject() instanceof SelfExecutableActivityNode) {
+							executionContext.createBeginNodeAction = CreateNode.createActivityBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else if (action.getFocusedObject() instanceof SelfExecutableOperationNode) {
+							executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else {
+							executionContext.createBeginNodeAction = CreateNode.createActionBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						}
+					} else {
+						if (action.getFocusedObject() instanceof AbstractActivityNode) {
+							executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else {
+							executionContext.createBeginNodeAction = CreateNode.createActionBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						}
+					}
+					executionContext.createBeginNodeAction.setNewNodeName(name);
+					executionContext.createBeginNodeAction.doAction();
+					if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
+						if (executionContext.createPg != null) {
+							executionContext.createPg.undoAction();
+
+						}
+						return false;
+					}
+					action.setAttachedBeginNode((FlexoNode) executionContext.createBeginNodeAction.getNewNode());
 				}
 				return true;
 			}

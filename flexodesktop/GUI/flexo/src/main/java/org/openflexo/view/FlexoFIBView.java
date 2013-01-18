@@ -256,10 +256,10 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void deleteView() {
-		fibView.delete();
 		if (this instanceof FIBMouseClickListener && fibView.getController() != null) {
 			fibView.getController().removeMouseClickListener((FIBMouseClickListener) this);
 		}
+		fibView.delete();
 		if (dataObject instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
 		} else if (dataObject instanceof FlexoObservable) {

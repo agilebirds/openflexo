@@ -53,12 +53,12 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 
 		@Override
 		public boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return true;
+			return false;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return true;
+			return false;
 		}
 	};
 

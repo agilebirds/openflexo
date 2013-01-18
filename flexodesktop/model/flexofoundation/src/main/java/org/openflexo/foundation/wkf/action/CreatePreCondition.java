@@ -78,6 +78,8 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 
 	private FlexoPreCondition newPreCondition = null;
 
+	private boolean forceNewCreation = false;
+
 	// Optional arguments
 	private FlexoNode attachedBeginNode;
 
@@ -167,5 +169,13 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 
 	public void setSelectedPreCondition(FlexoPreCondition selectedPreCondition) {
 		this.selectedPreCondition = selectedPreCondition;
+	}
+
+	public boolean isForceNewCreation() {
+		return forceNewCreation;
+	}
+
+	public void setForceNewCreation(boolean forceNewCreation) {
+		this.forceNewCreation = forceNewCreation;
 	}
 }

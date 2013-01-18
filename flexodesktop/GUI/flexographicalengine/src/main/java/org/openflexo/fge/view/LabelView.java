@@ -67,6 +67,7 @@ import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
+import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -147,7 +148,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			setDoubleBuffered(!b);
 			if (b) {
 				removeFGEMouseListener();
-				requestFocus();
+				requestFocusInWindow();
 				selectAll();
 			} else {
 				addFGEMouseListener();
@@ -367,7 +368,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
-				if (notification.getParameter() == GraphicalRepresentation.Parameters.text) {
+				if (notification.getParameter() == GraphicalRepresentation.Parameters.text
+				// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
+				// properly use appropriate bindings
+						|| aNotification instanceof ShapeNeedsToBeRedrawn) {
 					updateText();
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {

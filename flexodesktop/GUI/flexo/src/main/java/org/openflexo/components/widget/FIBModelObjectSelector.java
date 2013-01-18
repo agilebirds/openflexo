@@ -147,11 +147,11 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 						}
 					});
 				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-					getFIBListWidget().getDynamicJComponent().requestFocus();
+					getFIBListWidget().getDynamicJComponent().requestFocusInWindow();
 					getFIBListWidget().getDynamicJComponent().setSelectedIndex(
 							getFIBListWidget().getDynamicJComponent().getModel().getSize() - 1);
 				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-					getFIBListWidget().getJComponent().requestFocus();
+					getFIBListWidget().getJComponent().requestFocusInWindow();
 					getFIBListWidget().getDynamicJComponent().setSelectedIndex(0);
 				}
 
@@ -176,7 +176,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							getTextField().requestFocus();
+							getTextField().requestFocusInWindow();
 							getTextField().select(selectionStart, selectionEnd);
 						}
 					});
@@ -223,7 +223,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	public void openPopup() {
 		super.openPopup();
 		// System.out.println("Request focus now");
-		getTextField().requestFocus();
+		getTextField().requestFocusInWindow();
 	}
 
 	public boolean isShowReset() {

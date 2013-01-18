@@ -268,9 +268,9 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() instanceof JRadioButton) {
 					if (newRepositoryNameTF.getText() == null || newRepositoryNameTF.getText().trim().length() == 0) {
-						newRepositoryNameTF.requestFocus();
+						newRepositoryNameTF.requestFocusInWindow();
 					} else {
-						confirmButton.requestFocus();
+						confirmButton.requestFocusInWindow();
 					}
 				}
 			}

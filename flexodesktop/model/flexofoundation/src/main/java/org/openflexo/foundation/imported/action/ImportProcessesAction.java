@@ -55,12 +55,12 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 
 		@Override
 		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return true;
+			return false;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return true;
+			return false;
 		}
 	};
 

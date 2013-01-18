@@ -14,9 +14,9 @@
       <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HeightbpeLabel" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightbpe" localize="true" />
       <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
-      <Color index="9" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
+      <Color allowsNull="false" index="9" data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
       <Label label="text_color" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorbpeLabel" localize="true" />
-      <Color index="11" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
+      <Color allowsNull="false" index="11" data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
     </Tab>
     <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
       <Label label="x" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="XswlLabel" localize="true" />
@@ -28,9 +28,9 @@
       <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Heightswl40Label" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;swl&quot;,40)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightswl40" localize="true" />
       <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
-      <Color index="9" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorswl" localize="true" />
+      <Color allowsNull="false" index="9" data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorswl" localize="true" />
       <Label label="text_color" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
-      <Color index="11" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Color allowsNull="false" index="11" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

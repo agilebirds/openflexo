@@ -1,0 +1,12 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+       name="Inspector" 
+       layout="border" 
+       dataClassName="org.openflexo.fib.model.FIBColor">
+    <Parameter name="title" value="Color"/>
+        <TabPanel name="Tab" constraints="border(location=center)">
+            <Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+                <Label label="allowsNull" constraints="twocols(location=left)"/>
+                <CheckBox data="data.allowsNull"/>
+            </Tab>
+        </TabPanel>
+</Panel>

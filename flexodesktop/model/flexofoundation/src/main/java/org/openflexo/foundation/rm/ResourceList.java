@@ -93,17 +93,14 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
-			if (dataModification instanceof ImportedProjectLoaded) {
-				if (getResourceList().getProject().getProjectData() != null) {
-					FlexoProject project = getResourceList().getProject().getProjectData().getImportedProjectWithURI(getProjectURI());
-					if (project != null) {
-						FlexoResource<FlexoResourceData> resource = (FlexoResource<FlexoResourceData>) project
-								.resourceForKey(getResourceIdentifier());
-						if (resource != null) {
-							getResourceList().addToResources(resource);
-							delete();
-						}
-					}
+			if (dataModification instanceof ImportedProjectLoaded && ((ImportedProjectLoaded) dataModification).getProject() != null
+					&& ((ImportedProjectLoaded) dataModification).getProject().getURI().equals(getProjectURI())) {
+				FlexoProject project = ((ImportedProjectLoaded) dataModification).getProject();
+				FlexoResource<FlexoResourceData> resource = (FlexoResource<FlexoResourceData>) project
+						.resourceForKey(getResourceIdentifier());
+				if (resource != null) {
+					getResourceList().addToResources(resource);
+					delete();
 				}
 			}
 		}

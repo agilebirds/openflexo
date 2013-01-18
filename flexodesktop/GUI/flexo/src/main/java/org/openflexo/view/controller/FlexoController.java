@@ -115,6 +115,7 @@ import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewPointResource;
@@ -1151,10 +1152,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this,
 								((FlexoProjectObject) representedObject).getProject());
 					}
+					viewsForLocation.put(location, moduleView);
+					locationsForView.put(moduleView, location);
 				}
 			}
-			viewsForLocation.put(location, moduleView);
-			locationsForView.put(moduleView, location);
 		}
 		return moduleView;
 	}
@@ -1222,7 +1223,23 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public final void setCurrentEditedObjectAsModuleView(FlexoObject object) {
+	@Deprecated
+	public final void setObjectAsModuleView(Object object) {
+		// This hack is introduced to support double click in imported workflow tree.
+		// This should be removed and imported wofklow tree should be updated to support casting
+		if (object instanceof FlexoModelObject) {
+			setCurrentEditedObjectAsModuleView((FlexoModelObject) object);
+		}
+	}
+
+	/**
+	 * Sets supplied object to be the main object represented as the current view for this module (for example the process for WKF module).
+	 * Does nothing if supplied object is not representable in this module
+	 * 
+	 * @param object
+	 * @return an initialized ModuleView instance
+	 */
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object) {
 		getControllerModel().setCurrentObject(object);
 	}
 
@@ -1863,6 +1880,18 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				if (oldEditor != null || newEditor != null) {
 					updateEditor(oldEditor, newEditor);
 				}
+			} else if (evt.getPropertyName().equals(ControllerModel.LOCATIONS)) {
+				if (evt.getOldValue() != null) {
+					Location location = (Location) evt.getOldValue();
+					ModuleView<?> moduleViewForLocation = moduleViewForLocation(location, false);
+					if (moduleViewForLocation != null) {
+						if (locationsForView.get(moduleViewForLocation).size() < 2) {
+							moduleViewForLocation.deleteModuleView();
+						} else {
+							locationsForView.remove(moduleViewForLocation, location);
+						}
+					}
+				}
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
 			FlexoProject project = (FlexoProject) evt.getSource();
@@ -1928,12 +1957,26 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
-		if (iconForObject != null && getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-				&& ((FlexoModelObject) object).getProject() != getProject()
-				&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
-			iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+		if (iconForObject != null) {
+			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
+					&& ((FlexoModelObject) object).getProject() != getProject()
+					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			} else if (object instanceof FlexoProjectReference) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			} else if (object instanceof WorkflowModelObject && ((WorkflowModelObject) object).getWorkflow().isCache()) {
+				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
+			}
 		}
 		return iconForObject;
+	}
+
+	public ImageIcon iconForWorkflow(boolean imported) {
+		ImageIcon workflowIcon = WKFIconLibrary.WORKFLOW_ICON;
+		if (imported) {
+			workflowIcon = IconFactory.getImageIcon(workflowIcon, new IconMarker[] { IconLibrary.IMPORT });
+		}
+		return workflowIcon;
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
@@ -2019,6 +2062,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return CGIconLibrary.TARGET_ICON;
 		} else if (object instanceof FlexoProject) {
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
+		} else if (object instanceof FlexoProjectReference) {
+			return WKFIconLibrary.PROCESS_ICON;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;

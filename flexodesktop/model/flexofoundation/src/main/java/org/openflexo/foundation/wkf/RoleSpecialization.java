@@ -29,7 +29,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.dm.RoleSpecializationRemoved;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
@@ -64,15 +63,8 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 		initializeDeserialization(builder);
 	}
 
-	/**
-	 * Default constructor
-	 */
-	public RoleSpecialization(FlexoProject project) {
-		super(project, (FlexoWorkflow) null);
-	}
-
 	public RoleSpecialization(Role aRole, Role aParentRole, String anAnnotation) {
-		this(aRole.getProject());
+		super(aRole.getProject(), aRole.getWorkflow());
 		role = aRole;
 		parentRole = aParentRole;
 		annotation = anAnnotation;

@@ -2096,7 +2096,7 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 	class MouseHandler extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent evt) {
-			requestFocus();
+			requestFocusInWindow();
 
 			// Focus events not fired sometimes?
 			setCaretVisible(true);

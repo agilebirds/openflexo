@@ -1162,7 +1162,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	@Override
 	protected void openPopup() {
 		super.openPopup();
-		getTextField().requestFocus();
+		getTextField().requestFocusInWindow();
 		// This little piece of code is intented to avoid
 		// textfield beeing whole selected after first typing
 		// (at this point, popup open, text field gets focus back, select all

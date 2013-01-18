@@ -474,7 +474,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	@Override
 	public double getRelativeMiddleSymbolLocation() {
-		return getEdge()._doubleGraphicalPropertyForKey(getRelativeMiddleSymbolLocationKey(), 0.5);
+		return getEdge()._doubleGraphicalPropertyForKey(getRelativeMiddleSymbolLocationKey(), 1.0);
 	}
 
 	@Override

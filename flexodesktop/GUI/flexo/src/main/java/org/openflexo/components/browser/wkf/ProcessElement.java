@@ -224,15 +224,6 @@ public class ProcessElement extends BrowserElement {
 	}
 
 	@Override
-	public String getSuffixName() {
-		if (getFlexoProcess().isRootProcess()) {
-			return "[MAIN]";
-		} else {
-			return super.getSuffixName();
-		}
-	}
-
-	@Override
 	public void setName(String aName) throws FlexoException {
 		if (isImported()) {
 			return;

@@ -31,8 +31,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -126,45 +124,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	protected JPanel mainPane;
 
 	private MouseAdapter mouseListener = new MouseAdapter() {
-		@Override
-		public void mousePressed(MouseEvent e) {
-			e.consume();
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			e.consume();
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			e.consume();
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			e.consume();
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			e.consume();
-		};
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			e.consume();
-		};
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			e.consume();
-		};
-
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			e.consume();
-		};
 
 	};
 
@@ -175,7 +134,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 			if (getOwner() instanceof JFrame) {
 				Component glassPane = ((JFrame) getOwner()).getGlassPane();
 				if (glassPane.isVisible()) {
-					glassPane.requestFocus();
+					glassPane.requestFocusInWindow();
 				}
 			}
 		}
@@ -273,7 +232,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		center();
 		pack();
 		setVisible(true);
-		toFront();
 		paintImmediately();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Displaying progress window");

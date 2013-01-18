@@ -48,7 +48,7 @@ public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoPr
 
 		@Override
 		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported();
+			return false;
 		}
 
 		@Override

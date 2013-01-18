@@ -52,13 +52,13 @@ public class FIBInspectorController extends FlexoFIBController {
 		super(component);
 	}
 
-	// public boolean displayInspectorTabForContext(String context) {
-	// if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
-	// return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
-	// }
-	// logger.warning("No controller defined here !");
-	// return false;
-	// }
+	public boolean displayInspectorTabForContext(String context) {
+		if (getFlexoController() != null) {
+			return getFlexoController().displayInspectorTabForContext(context);
+		} else {
+			return true;
+		}
+	}
 
 	@Override
 	public Object getValue(BindingVariable variable) {

@@ -84,7 +84,14 @@ public class FlexoLocalization {
 	 * @param delegate
 	 */
 	public static void initWith(LocalizedDelegate delegate) {
-		mainLocalizer = delegate;
+		if (!FlexoLocalization.isInitialized()) {
+			mainLocalizer = delegate;
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Locales have already been initialized. Unless you know what you are doing, this should not happen is therefore prevented.");
+			}
+		}
+
 	}
 
 	/**
@@ -419,7 +426,7 @@ public class FlexoLocalization {
 					}
 				}
 			} catch (NumberFormatException e) {
-				m.appendReplacement(returned, valueForKeyAndObject(suffix, object));
+				m.appendReplacement(returned, valueForKeyAndObject(suffix, object[0]));
 			}
 		}
 		m.appendTail(returned);

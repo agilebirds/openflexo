@@ -32,8 +32,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.editor.view.FIBEditableView;
+import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.fib.editor.view.PlaceHolder;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.Focusable;
 
@@ -143,8 +145,7 @@ public class DropListener implements DropTargetListener {
 	@Override
 	public void dragEnter(DropTargetDragEvent e) {
 		if (isDragOk(e)) {
-			System.err.println("Enter for " + getTargetComponent());
-			editableView.getDelegate().addToPlaceHolderVisibleRequesters(getTargetComponent());
+			getContainerDelegate().addToPlaceHolderVisibleRequesters(getTargetComponent());
 			getTargetComponent().setFocused(true);
 			/* Some explanations required here
 			 * What may happen is that making place holders visible will
@@ -159,7 +160,7 @@ public class DropListener implements DropTargetListener {
 			if (placeHolder == null && editableView.getPlaceHolders() != null) {
 				for (PlaceHolder ph2 : editableView.getPlaceHolders()) {
 					if (ph2.getBounds().contains(e.getLocation())) {
-						editableView.getDelegate().addToPlaceHolderVisibleRequesters(ph2);
+						getContainerDelegate().addToPlaceHolderVisibleRequesters(ph2);
 					}
 				}
 			}
@@ -200,7 +201,7 @@ public class DropListener implements DropTargetListener {
 
 	@Override
 	public void dragExit(DropTargetEvent e) {
-		editableView.getDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
+		getContainerDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
 		getTargetComponent().setFocused(false);
 	}
 
@@ -213,7 +214,7 @@ public class DropListener implements DropTargetListener {
 	 */
 	@Override
 	public void drop(DropTargetDropEvent e) {
-		editableView.getDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
+		getContainerDelegate().removeFromPlaceHolderVisibleRequesters(getTargetComponent());
 		getTargetComponent().setFocused(false);
 		try {
 			DataFlavor chosen = chooseDropFlavor(e);
@@ -299,6 +300,15 @@ public class DropListener implements DropTargetListener {
 		finally {
 			// getController().getDrawingView().resetCapturedNode();
 		}
+	}
+
+	public FIBEditableViewDelegate<?, ?> getContainerDelegate() {
+		if (!(editableView.getComponent() instanceof FIBContainer)) {
+			if (editableView.getParentView() != null && editableView.getParentView() instanceof FIBEditableView) {
+				return ((FIBEditableView<?, ?>) editableView.getParentView()).getDelegate();
+			}
+		}
+		return editableView.getDelegate();
 	}
 
 }

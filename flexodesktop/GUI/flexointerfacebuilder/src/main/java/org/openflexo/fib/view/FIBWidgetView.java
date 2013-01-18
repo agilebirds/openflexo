@@ -46,6 +46,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -249,15 +250,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	}
 
-	private synchronized void updateDependingObjects() {
-
+	protected void updateDependingObjects() {
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController() /*
-															* ,getWidget().getName() != null &&
-															* getWidget().getName().equals("InspectorPropertyTable")
-															*/);
+		dependingObjects.refreshObserving(getController());
 	}
 
 	@Override
@@ -315,6 +312,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		returned.add(getWidget().getVisible());
 		returned.add(getWidget().getEnable());
 		return returned;
+	}
+
+	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return null;
 	}
 
 	/**
@@ -476,6 +478,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
 			}
+			if (getWidget().getLocalize() && returned != null) {
+				return getLocalized(returned);
+			} else {
+				return returned;
+			}
+		}
+		if (value instanceof Enum) {
+			String returned = value != null ? ((Enum) value).name() : null;
 			if (getWidget().getLocalize() && returned != null) {
 				return getLocalized(returned);
 			} else {

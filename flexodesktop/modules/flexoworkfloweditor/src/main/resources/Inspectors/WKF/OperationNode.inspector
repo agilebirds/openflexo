@@ -13,7 +13,6 @@
     </Tab>
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
       <Label label="acronym" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AcronymLabel" localize="true">
-        <Parameter name="invisibleFor" value="DEVELOPER,MAINTAINER" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Label>
       <TextField index="1" data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Acronym" localize="true">
@@ -40,10 +39,10 @@
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
       <Label label="component_instance_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ComponentInstanceflexoIDLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
       </Label>
       <TextField index="1" data="data.componentInstance.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ComponentInstanceflexoID" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
       </TextField>
       <Label label="css_sheet" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="CssSheetLabel" localize="true">
         <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />

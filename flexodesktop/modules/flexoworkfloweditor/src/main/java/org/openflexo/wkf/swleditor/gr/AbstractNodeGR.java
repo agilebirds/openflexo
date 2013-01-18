@@ -149,6 +149,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
+		/*
 		GraphicalRepresentation<?> parentContainer = getContainerGraphicalRepresentation();
 		if (parentContainer instanceof SWLContainerGR) {
 			if (locationConstrainedArea == null) {
@@ -163,6 +164,8 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 		} else {
 			return super.getLocationConstrainedArea();
 		}
+		*/
+		return super.getLocationConstrainedArea();
 	}
 
 	protected final void resetLocationConstrainedArea() {

@@ -109,7 +109,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoObject> extends Tex
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								getTextField().requestFocus();
+								getTextField().requestFocusInWindow();
 								getTextField().select(selectionStart, selectionEnd);
 							}
 						});
@@ -150,8 +150,8 @@ public abstract class AbstractBrowserSelector<T extends FlexoObject> extends Tex
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				_popup.requestFocus();
-				getTextField().requestFocus();
+				_popup.requestFocusInWindow();
+				getTextField().requestFocusInWindow();
 			}
 		});
 	}
@@ -274,7 +274,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoObject> extends Tex
 	@Override
 	public void openPopup() {
 		super.openPopup();
-		getTextField().requestFocus();
+		getTextField().requestFocusInWindow();
 	}
 
 	@Override

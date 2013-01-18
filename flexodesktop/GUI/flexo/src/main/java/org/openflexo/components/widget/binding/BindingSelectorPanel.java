@@ -1329,7 +1329,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 									.getElementAt(0).getElement(), i);
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i + 1).requestFocus();
+							listAtIndex(i + 1).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -1345,7 +1345,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							((BindingValue) bindingValue).disconnect();
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i).requestFocus();
+							listAtIndex(i).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -2423,7 +2423,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 						}
 					});
 				}
@@ -2554,7 +2554,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 				}
 			});
 		}
@@ -2635,9 +2635,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			_bindingSelector.openPopup();
 		}
 		if (_bindingSelector.getEditedObject() != null) {
-			listAtIndex(StringUtils.countMatches(_bindingSelector.getTextField().getText(), ".")).requestFocus();
+			listAtIndex(StringUtils.countMatches(_bindingSelector.getTextField().getText(), ".")).requestFocusInWindow();
 		} else {
-			listAtIndex(0).requestFocus();
+			listAtIndex(0).requestFocusInWindow();
 		}
 	}
 

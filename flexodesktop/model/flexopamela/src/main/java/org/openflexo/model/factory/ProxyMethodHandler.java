@@ -269,7 +269,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, IS_MODIFIED)) {
 			return isModified();
 		} else if (methodIsEquivalentTo(method, SET_MODIFIED) || methodIsEquivalentTo(method, PERFORM_SUPER_SET_MODIFIED)) {
-			setModified((Boolean) args[0]);
+			internallyInvokeSetModified((Boolean) args[0]);
 			return null;
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT)) {
 			return cloneObject();
@@ -436,18 +436,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			// 4. we invoke the super deleter (if any)
 			entity = entity.getSuperEntity();
 		}*/
-		// 5. we set the deleted property (which in turns will notify observers)
-		// TODO: verify if this is ok or we should use another option
-		String deletedProperty;
-		while (!deletedProperties.isEmpty()) {
-			deletedProperty = deletedProperties.pop();
-			ModelProperty<? super I> p = getModelEntity().getModelProperty(deletedProperty);
-			if (p.getSetter() != null) {
-				invokeSetter(p, Boolean.TRUE);
-			} else {
-				internallyInvokeSetter(p, Boolean.TRUE);
-			}
-		}
+
 		propertyChangeSupport = null;
 	}
 
@@ -721,7 +710,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				}
 			}
 
-			markAsModified();
+			if (property.isSerializable()) {
+				invokeSetModified(true);
+			}
 		}
 	}
 
@@ -738,7 +729,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				Object forwarded = internallyInvokeGetter(getModelEntity().getModify().forward());
 				if (evt.getSource() == forwarded) {
 					if (MODIFIED.equals(evt.getPropertyName())) {
-						setModified((Boolean) evt.getNewValue());
+						invokeSetModified((Boolean) evt.getNewValue());
 					}
 				}
 			}
@@ -747,24 +738,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
-	private void markAsModified() throws ModelDefinitionException {
-		if (!isDeserializing() && !isSerializing()) {
-			boolean old = modified;
-			modified = true;
-			if (!old) {
-				firePropertyChange(MODIFIED, old, modified);
-				if (getModelEntity().getModify() != null && getModelEntity().getModify().forward() != null) {
-					ModelProperty<? super I> modelProperty = getModelEntity().getModelProperty(getModelEntity().getModify().forward());
-					if (modelProperty != null) {
-						Object forward = invokeGetter(modelProperty);
-						if (forward instanceof ProxyObject) {
-							((ProxyMethodHandler<?>) ((ProxyObject) forward).getHandler()).markAsModified();
+	private void invokeSetModified(boolean modified) throws ModelDefinitionException {
+		if (getObject() instanceof AccessibleProxyObject) {
+			((AccessibleProxyObject) getObject()).setModified(modified);
+		} else {
+			internallyInvokeSetModified(modified);
 						}
 					}
-				}
-			}
-		}
-	}
 
 	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value) {
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning) {
@@ -814,6 +794,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		if (!list.contains(value)) {
 			list.add(value);
+			firePropertyChange(property.getPropertyIdentifier(), null, value);
 			// Handle inverse property for new value
 			if (property.hasInverseProperty() && value != null) {
 				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(value);
@@ -836,7 +817,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
-			markAsModified();
+			if (property.isSerializable()) {
+				invokeSetModified(true);
+			}
 		}
 	}
 
@@ -895,7 +878,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					throw new ModelExecutionException("Invalid cardinality: " + inverseProperty.getCardinality());
 				}
 			}
-			markAsModified();
+			if (property.isSerializable()) {
+				invokeSetModified(true);
+			}
 		}
 	}
 
@@ -1589,7 +1574,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			this.serializing = serializing;
 			firePropertyChange(SERIALIZING, !serializing, serializing);
 			if (!serializing) {
-				setModified(false);
+				internallyInvokeSetModified(false);
 			}
 		}
 	}
@@ -1615,9 +1600,24 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return modified;
 	}
 
-	public void setModified(boolean modified) throws ModelDefinitionException {
+	private void internallyInvokeSetModified(boolean modified) throws ModelDefinitionException {
 		if (modified) {
-			markAsModified();
+			if (!isDeserializing() && !isSerializing()) {
+				boolean old = this.modified;
+				this.modified = modified;
+				if (!old) {
+					firePropertyChange(MODIFIED, old, modified);
+					if (getModelEntity().getModify() != null && getModelEntity().getModify().forward() != null) {
+						ModelProperty<? super I> modelProperty = getModelEntity().getModelProperty(getModelEntity().getModify().forward());
+						if (modelProperty != null) {
+							Object forward = invokeGetter(modelProperty);
+							if (forward instanceof ProxyObject) {
+								((ProxyMethodHandler<?>) ((ProxyObject) forward).getHandler()).invokeSetModified(modified);
+							}
+						}
+					}
+				}
+			}
 		} else if (this.modified != modified) {
 			this.modified = modified;
 			firePropertyChange(MODIFIED, !modified, modified);

@@ -192,7 +192,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								getTextField().requestFocus();
+								getTextField().requestFocusInWindow();
 							}
 						});
 					}
@@ -1059,7 +1059,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				getTextField().requestFocus();
+				getTextField().requestFocusInWindow();
 			}
 		});
 	}

@@ -45,56 +45,35 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 
 	protected static final Vector<WorkflowModelObject> EMPTY_VECTOR = EmptyVector.EMPTY_VECTOR(WorkflowModelObject.class);
 
-	// ================================================================
-	// ====================== Instance variables ======================
-	// ================================================================
-
-	private FlexoWorkflow _workflow;
-	private FlexoProject _project;
-
-	// ==========================================================
-	// ================= Constructor ============================
-	// ==========================================================
+	private final FlexoWorkflow workflow;
 
 	/**
 	 * Create a new WorkflowModelObject.
 	 */
 	public WorkflowModelObject(FlexoProject project, FlexoWorkflow workflow) {
 		super(project);
-		_project = project;
-		_workflow = workflow;
+		this.workflow = workflow;
 	}
 
-	/**
-	 * Create a new WorkflowModelObject.
-	 */
-	public WorkflowModelObject(FlexoProject project) {
-		this(project, null);
+	@Override
+	protected void registerObject(FlexoProject project) {
 	}
 
-	public FlexoWorkflow getFlexoWorkflow() {
-		if (_workflow != null) {
-			return _workflow;
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		if (getProject().getFlexoWorkflowResource(false) == getWorkflow().getFlexoResource()) {
+			super.registerObject(getProject());
 		}
-		if (_project != null && !isDeserializing) {
-			return _project.getWorkflow();
-		}
-		return null;
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		return getFlexoWorkflow();
+		return workflow;
 	}
 
-	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
-	 * workflow itself
-	 * 
-	 * @return this
-	 */
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		return getFlexoWorkflow();
+		return getWorkflow();
 	}
 
 	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
