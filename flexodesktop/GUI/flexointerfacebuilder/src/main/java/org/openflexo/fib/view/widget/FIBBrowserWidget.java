@@ -20,6 +20,10 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.MouseListener;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +40,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -50,6 +55,7 @@ import org.openflexo.fib.view.widget.browser.FIBBrowserCellRenderer;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel.BrowserCell;
 import org.openflexo.fib.view.widget.browser.FIBBrowserWidgetFooter;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Widget allowing to display a browser (a tree of various objects)
@@ -291,7 +297,36 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	private void buildBrowser() {
 		getBrowserModel().addTreeModelListener(this);
 
-		_tree = new JTree(getBrowserModel());
+		_tree = new JTree(getBrowserModel()) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (ToolBox.isMacOSLaf()) {
+					if (getSelectionRows() != null && getSelectionRows().length > 0) {
+						for (int selected : getSelectionRows()) {
+							Rectangle rowBounds = getRowBounds(selected);
+							if (getVisibleRect().contains(rowBounds)) {
+								Object value = getPathForRow(selected).getLastPathComponent();
+								Component treeCellRendererComponent = getCellRenderer().getTreeCellRendererComponent(this, value, true,
+										isExpanded(selected), getModel().isLeaf(value), selected, getLeadSelectionRow() == selected);
+								Color bgColor = treeCellRendererComponent.getBackground();
+								if (treeCellRendererComponent instanceof DefaultTreeCellRenderer) {
+									bgColor = ((DefaultTreeCellRenderer) treeCellRendererComponent).getBackgroundSelectionColor();
+								}
+								if (bgColor != null) {
+									g.setColor(bgColor);
+									g.fillRect(0, rowBounds.y, getWidth(), rowBounds.height);
+								}
+								Graphics g2 = g.create(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+								treeCellRendererComponent.setBounds(rowBounds);
+								treeCellRendererComponent.paint(g2);
+								g2.dispose();
+							}
+						}
+					}
+				}
+			}
+		};
 		_tree.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_tree.addFocusListener(this);
 		FIBBrowserCellRenderer renderer = new FIBBrowserCellRenderer(this);
