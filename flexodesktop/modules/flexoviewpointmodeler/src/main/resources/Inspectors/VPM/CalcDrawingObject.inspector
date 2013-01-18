@@ -1,42 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ExampleDrawingObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">
-        <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
-          <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
-          <TextField columns="10" passwd="false" localize="true" name="Text" data="GRTab.data.text" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
-          <Label label="text" localize="true" name="MultilineTextLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = true)" />
-          <TextArea columns="10" data="GRTab.data.multilineText" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" visible="(GRTab.data.isMultilineAllowed = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MultilineText" localize="true" />
-          <Label label="text_style" localize="true" name="TextStyleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" data="GRTab.data.textStyle" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="TextStyle" localize="true" manageDynamicModel="true" />
-          <Label label="multiple_lines" localize="true" name="IsMultilineAllowedLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsMultilineAllowed" data="GRTab.data.isMultilineAllowed" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-          <Label label="horizontal_text_alignment" localize="true" name="HTextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="HTextAlignment" data="GRTab.data.horizontalTextAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$HorizontalTextAlignment" />
-          <Label label="vertical_text_alignment" localize="true" name="VTextAlignmentLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="VTextAlignment" data="GRTab.data.verticalTextAlignment" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" />
-          <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.paragraphAlignment" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.ExampleDrawingObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" index="0" constraints="border(index=0;location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <TabPanel name="GRTab" index="4" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+        <Tab title="Text" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
+          <Label label="text" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isMultilineAllowed = false)" name="TextLabel" localize="true" />
+          <TextField index="1" data="GRTab.data.text" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isMultilineAllowed = false)" name="Text" localize="true" columns="10" />
+          <Label label="text" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isMultilineAllowed = true)" name="MultilineTextLabel" localize="true" />
+          <TextArea columns="10" index="3" data="GRTab.data.multilineText" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isMultilineAllowed = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MultilineText" localize="true" />
+          <Label label="text_style" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextStyleLabel" localize="true" />
+          <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" localize="true" manageDynamicModel="true" name="TextStyle" index="5" data="GRTab.data.textStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+          <Label label="multiple_lines" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsMultilineAllowedLabel" localize="true" />
+          <CheckBox selected="false" index="7" data="GRTab.data.isMultilineAllowed" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsMultilineAllowed" localize="true" />
+          <Label label="horizontal_text_alignment" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HTextAlignmentLabel" localize="true" />
+          <DropDown index="9" data="GRTab.data.horizontalTextAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="HTextAlignment" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$HorizontalTextAlignment" autoSelectFirstRow="false" />
+          <Label label="vertical_text_alignment" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="VTextAlignmentLabel" localize="true" />
+          <DropDown index="11" data="GRTab.data.verticalTextAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="VTextAlignment" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" autoSelectFirstRow="false" />
+          <Label label="text_alignment" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentLabel" localize="true" />
+          <DropDown index="13" data="GRTab.data.paragraphAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="TextAlignment" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" autoSelectFirstRow="false" />
         </Tab>
-        <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
-          <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsReadOnly" data="GRTab.data.isReadOnly" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
-          <!--  <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)">
-            <CheckBox selected="false" localize="true" name="IsSelectable" data="GRTab.data.isSelectable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
-            <Label label="is_selected" localize="true" name="IsSelectedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
-            <CheckBox selected="false" readOnly="true" localize="true" name="IsSelected" data="GRTab.data.isSelected" constraints="flow(location=right;index=2;expandVertically=false;expandHorizontally=false)" />
-          </Panel>
-          <Label label="is_focusable" localize="true" name="IsFocusableLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)">
-            <CheckBox selected="false" localize="true" name="IsFocusable" data="GRTab.data.isFocusable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
-            <Label label="is_focused" localize="true" name="IsFocusedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
-            <CheckBox selected="false" readOnly="true" localize="true" name="IsFocused" data="GRTab.data.isFocused" constraints="flow(location=right;index=2;expandVertically=false;expandHorizontally=false)" />
-          </Panel>-->
-          <TabPanel name="ControlsTab" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
-            <Tab index="0" title="mouse_click_controls" layout="border" font="SansSerif,0,11" name="MouseClickControlTab">
-              <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseClickControls" constraints="border(location=center;index=0)" name="MouseClickControls" localize="true" manageDynamicModel="true">
+        <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+          <Label label="read_only" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsReadOnlyLabel" localize="true" />
+          <CheckBox selected="false" index="1" data="GRTab.data.isReadOnly" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsReadOnly" localize="true" />
+          <TabPanel name="ControlsTab" index="6" constraints="twocols(expandHorizontally=true;expandVertically=true;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+            <Tab title="mouse_click_controls" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="MouseClickControlTab">
+              <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MouseClickControls" index="0" data="GRTab.data.mouseClickControls" constraints="border(index=0;location=center)">
                 <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                 <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
                 <NumberColumn numberType="IntegerType" data="iterator.clickCount" title="clics" columnWidth="50" resizable="false" displayTitle="true" />
@@ -49,8 +37,8 @@
                 <RemoveAction method="GRTab.data.deleteMouseClickControl(selected)" isAvailable="GRTab.data.isMouseClickControlDeletable(selected)" name="delete" />
               </Table>
             </Tab>
-            <Tab index="1" title="mouse_drag_controls" layout="border" font="SansSerif,0,11" name="MouseDragControlTab">
-              <Table iteratorClassName="org.openflexo.fge.controller.MouseDragControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseDragControls" constraints="border(location=center;index=0)" name="MouseDragControls" localize="true" manageDynamicModel="true">
+            <Tab title="mouse_drag_controls" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="MouseDragControlTab">
+              <Table iteratorClassName="org.openflexo.fge.controller.MouseDragControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MouseDragControls" index="0" data="GRTab.data.mouseDragControls" constraints="border(index=0;location=center)">
                 <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                 <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
                 <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
@@ -64,10 +52,10 @@
             </Tab>
           </TabPanel>
         </Tab>
-        <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
-          <Label label="identifier" localize="true" name="IdentifierLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-          <TextField columns="10" passwd="false" localize="true" name="Identifier" data="GRTab.data.identifier" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-          <Table iteratorClassName="org.openflexo.fge.GRVariable" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.variables" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=true)" name="VariablesTable" localize="true" manageDynamicModel="true">
+        <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+          <Label label="identifier" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IdentifierLabel" localize="true" />
+          <TextField index="1" data="GRTab.data.identifier" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Identifier" localize="true" columns="10" />
+          <Table iteratorClassName="org.openflexo.fge.GRVariable" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="VariablesTable" index="2" data="GRTab.data.variables" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
             <TextFieldColumn data="iterator.name" title="name" columnWidth="120" resizable="true" displayTitle="true" name="name" />
             <DropDownColumn data="iterator.type" title="type" columnWidth="120" resizable="true" displayTitle="true" name="type" />
             <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="value" />
@@ -123,6 +111,112 @@
     <Localized key="text_alignment" lang="English">Text alignment</Localized>
     <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
     <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
+    <Localized key="horizontal_text_alignment" lang="English">Horizontal text alignment</Localized>
+    <Localized key="horizontal_text_alignment" lang="French">Alignement horizontal du texte</Localized>
+    <Localized key="horizontal_text_alignment" lang="Dutch">Horizontal text alignment</Localized>
+    <Localized key="Left" lang="English">Left</Localized>
+    <Localized key="Left" lang="French">Left</Localized>
+    <Localized key="Left" lang="Dutch">Left</Localized>
+    <Localized key="Center" lang="English">Center</Localized>
+    <Localized key="Center" lang="French">Center</Localized>
+    <Localized key="Center" lang="Dutch">Center</Localized>
+    <Localized key="Right" lang="English">Right</Localized>
+    <Localized key="Right" lang="French">Right</Localized>
+    <Localized key="Right" lang="Dutch">Right</Localized>
+    <Localized key="vertical_text_alignment" lang="English">Vertical text alignment</Localized>
+    <Localized key="vertical_text_alignment" lang="French">Alignement vertical du texte</Localized>
+    <Localized key="vertical_text_alignment" lang="Dutch">Vertical text alignment</Localized>
+    <Localized key="top" lang="English">Top</Localized>
+    <Localized key="top" lang="French">Haut</Localized>
+    <Localized key="top" lang="Dutch">Top</Localized>
+    <Localized key="middle" lang="English">Middle</Localized>
+    <Localized key="middle" lang="French">Middle</Localized>
+    <Localized key="middle" lang="Dutch">Middle</Localized>
+    <Localized key="bottom" lang="English">Bottom</Localized>
+    <Localized key="bottom" lang="French">Bas</Localized>
+    <Localized key="bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="Top" lang="English">Top</Localized>
+    <Localized key="Top" lang="French">Top</Localized>
+    <Localized key="Top" lang="Dutch">Top</Localized>
+    <Localized key="Bottom" lang="English">Bottom</Localized>
+    <Localized key="Bottom" lang="French">Bottom</Localized>
+    <Localized key="Bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="justify" lang="English">Justify</Localized>
+    <Localized key="justify" lang="French">Justify</Localized>
+    <Localized key="justify" lang="Dutch">Justify</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="button" lang="English">Button</Localized>
+    <Localized key="button" lang="French">Bouton</Localized>
+    <Localized key="button" lang="Dutch">Button</Localized>
+    <Localized key="clics" lang="English">clics</Localized>
+    <Localized key="clics" lang="French">clics</Localized>
+    <Localized key="clics" lang="Dutch">clics</Localized>
+    <Localized key="shift" lang="English">shift</Localized>
+    <Localized key="shift" lang="French">shift</Localized>
+    <Localized key="shift" lang="Dutch">shift</Localized>
+    <Localized key="ctrl" lang="English">ctrl</Localized>
+    <Localized key="ctrl" lang="French">ctrl</Localized>
+    <Localized key="ctrl" lang="Dutch">ctrl</Localized>
+    <Localized key="meta" lang="English">meta</Localized>
+    <Localized key="meta" lang="French">meta</Localized>
+    <Localized key="meta" lang="Dutch">meta</Localized>
+    <Localized key="alt" lang="English">alt</Localized>
+    <Localized key="alt" lang="French">alt</Localized>
+    <Localized key="alt" lang="Dutch">alt</Localized>
+    <Localized key="action" lang="English">action</Localized>
+    <Localized key="action" lang="French">action</Localized>
+    <Localized key="action" lang="Dutch">action</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="identifier" lang="English">Identifier</Localized>
+    <Localized key="identifier" lang="French">Identifiant</Localized>
+    <Localized key="identifier" lang="Dutch">Identifier</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="string_variable" lang="English">String variable</Localized>
+    <Localized key="string_variable" lang="French">Variable "string"</Localized>
+    <Localized key="string_variable" lang="Dutch">String variable</Localized>
+    <Localized key="integer_variable" lang="English">Integer variable</Localized>
+    <Localized key="integer_variable" lang="French">Variable entière</Localized>
+    <Localized key="integer_variable" lang="Dutch">Integer variable</Localized>
+    <Localized key="delete_variable" lang="English">Delete variable</Localized>
+    <Localized key="delete_variable" lang="French">Supprimer variable</Localized>
+    <Localized key="delete_variable" lang="Dutch">Delete variable</Localized>
+    <Localized key="Text" lang="English">Text</Localized>
+    <Localized key="Text" lang="Dutch">Text</Localized>
+    <Localized key="Edition" lang="English">Edition</Localized>
+    <Localized key="Edition" lang="French">Edition</Localized>
+    <Localized key="Edition" lang="Dutch">Edition</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Gauche" lang="English">Gauche</Localized>
+    <Localized key="Gauche" lang="French">Gauche</Localized>
+    <Localized key="Gauche" lang="Dutch">Gauche</Localized>
+    <Localized key="Centré" lang="English">Centré</Localized>
+    <Localized key="Centré" lang="French">Centré</Localized>
+    <Localized key="Centré" lang="Dutch">Centré</Localized>
+    <Localized key="Droit" lang="English">Droit</Localized>
+    <Localized key="Droit" lang="French">Droit</Localized>
+    <Localized key="Droit" lang="Dutch">Droit</Localized>
+    <Localized key="Haut" lang="English">Haut</Localized>
+    <Localized key="Haut" lang="French">Haut</Localized>
+    <Localized key="Haut" lang="Dutch">Haut</Localized>
+    <Localized key="Bas" lang="English">Bas</Localized>
+    <Localized key="Bas" lang="French">Bas</Localized>
+    <Localized key="Bas" lang="Dutch">Bas</Localized>
   </LocalizedDictionary>
 </Panel>
-

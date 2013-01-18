@@ -1889,9 +1889,9 @@
     <Localized key="add_data_property_parameter" lang="English">add_data_property_parameter</Localized>
     <Localized key="add_data_property_parameter" lang="French">add_data_property_parameter</Localized>
     <Localized key="add_data_property_parameter" lang="Dutch">add_data_property_parameter</Localized>
-    <Localized key="base_uri" lang="English">base_uri</Localized>
-    <Localized key="base_uri" lang="French">base_uri</Localized>
-    <Localized key="base_uri" lang="Dutch">base_uri</Localized>
+    <Localized key="base_uri" lang="English">Base uri</Localized>
+    <Localized key="base_uri" lang="French">URI de base</Localized>
+    <Localized key="base_uri" lang="Dutch">Base uri</Localized>
     <Localized key="dynamic" lang="English">dynamic</Localized>
     <Localized key="dynamic" lang="French">dynamic</Localized>
     <Localized key="dynamic" lang="Dutch">dynamic</Localized>
@@ -2034,5 +2034,68 @@
     <Localized key="condition" lang="English">Condition</Localized>
     <Localized key="condition" lang="French">Condition</Localized>
     <Localized key="condition" lang="Dutch">Condition</Localized>
+    <Localized key="add_property" lang="English">Add property</Localized>
+    <Localized key="add_property" lang="French">Ajouter une property</Localized>
+    <Localized key="add_property" lang="Dutch">Add property</Localized>
+    <Localized key="renderer" lang="English">renderer</Localized>
+    <Localized key="renderer" lang="French">renderer</Localized>
+    <Localized key="renderer" lang="Dutch">renderer</Localized>
+    <Localized key="new_cloning_scheme" lang="English">new_cloning_scheme</Localized>
+    <Localized key="new_cloning_scheme" lang="French">new_cloning_scheme</Localized>
+    <Localized key="new_cloning_scheme" lang="Dutch">new_cloning_scheme</Localized>
+    <Localized key="north" lang="English">North</Localized>
+    <Localized key="north" lang="French">Nord</Localized>
+    <Localized key="north" lang="Dutch">North</Localized>
+    <Localized key="east" lang="English">East</Localized>
+    <Localized key="east" lang="French">Est</Localized>
+    <Localized key="east" lang="Dutch">East</Localized>
+    <Localized key="south" lang="English">South</Localized>
+    <Localized key="south" lang="French">Sud</Localized>
+    <Localized key="south" lang="Dutch">South</Localized>
+    <Localized key="west" lang="English">West</Localized>
+    <Localized key="west" lang="French">Ouest</Localized>
+    <Localized key="west" lang="Dutch">West</Localized>
+    <Localized key="cloning__scheme" lang="English">cloning__scheme</Localized>
+    <Localized key="cloning__scheme" lang="French">cloning__scheme</Localized>
+    <Localized key="cloning__scheme" lang="Dutch">cloning__scheme</Localized>
+    <Localized key="ObjectProperty" lang="English">ObjectProperty</Localized>
+    <Localized key="ObjectProperty" lang="French">ObjectProperty</Localized>
+    <Localized key="ObjectProperty" lang="Dutch">ObjectProperty</Localized>
+    <Localized key="DataProperty" lang="English">DataProperty</Localized>
+    <Localized key="DataProperty" lang="French">DataProperty</Localized>
+    <Localized key="DataProperty" lang="Dutch">DataProperty</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="English">add_edition_pattern_parameter</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="French">add_edition_pattern_parameter</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="Dutch">add_edition_pattern_parameter</Localized>
+    <Localized key="add_property_parameter" lang="English">add_property_parameter</Localized>
+    <Localized key="add_property_parameter" lang="French">add_property_parameter</Localized>
+    <Localized key="add_property_parameter" lang="Dutch">add_property_parameter</Localized>
+    <Localized key="extend_parent_bounds_to_host_this_shape" lang="English">extend_parent_bounds_to_host_this_shape</Localized>
+    <Localized key="extend_parent_bounds_to_host_this_shape" lang="French">extend_parent_bounds_to_host_this_shape</Localized>
+    <Localized key="extend_parent_bounds_to_host_this_shape" lang="Dutch">extend_parent_bounds_to_host_this_shape</Localized>
+    <Localized key="Chaîne de caractères" lang="English">Chaîne de caractères</Localized>
+    <Localized key="Chaîne de caractères" lang="French">Chaîne de caractères</Localized>
+    <Localized key="Chaîne de caractères" lang="Dutch">Chaîne de caractères</Localized>
+    <Localized key="Processus" lang="English">Processus</Localized>
+    <Localized key="Processus" lang="French">Processus</Localized>
+    <Localized key="Processus" lang="Dutch">Processus</Localized>
+    <Localized key="Répertoire de processus" lang="English">Répertoire de processus</Localized>
+    <Localized key="Répertoire de processus" lang="French">Répertoire de processus</Localized>
+    <Localized key="Répertoire de processus" lang="Dutch">Répertoire de processus</Localized>
+    <Localized key="Rôle" lang="English">Rôle</Localized>
+    <Localized key="Rôle" lang="French">Rôle</Localized>
+    <Localized key="Rôle" lang="Dutch">Rôle</Localized>
+    <Localized key="Activité" lang="English">Activité</Localized>
+    <Localized key="Activité" lang="French">Activité</Localized>
+    <Localized key="Activité" lang="Dutch">Activité</Localized>
+    <Localized key="Opération" lang="English">Opération</Localized>
+    <Localized key="Opération" lang="French">Opération</Localized>
+    <Localized key="Opération" lang="Dutch">Opération</Localized>
+    <Localized key="Evénement" lang="English">Evénement</Localized>
+    <Localized key="Evénement" lang="French">Evénement</Localized>
+    <Localized key="Evénement" lang="Dutch">Evénement</Localized>
+    <Localized key="Propriété" lang="English">Propriété</Localized>
+    <Localized key="Propriété" lang="French">Propriété</Localized>
+    <Localized key="Propriété" lang="Dutch">Propriété</Localized>
   </LocalizedDictionary>
 </Panel>
