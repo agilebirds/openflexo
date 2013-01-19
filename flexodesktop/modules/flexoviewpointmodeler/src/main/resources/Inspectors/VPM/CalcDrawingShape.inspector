@@ -147,7 +147,7 @@
     <Localized key="contained_in_shape" lang="English">Contained in shape</Localized>
     <Localized key="contained_in_shape" lang="French">Contenu dans la forme</Localized>
     <Localized key="contained_in_shape" lang="Dutch">Contained in shape</Localized>
-    <Localized key="unmovable" lang="French">non déplaçable</Localized>
+    <Localized key="unmovable" lang="French">Non déplaçable</Localized>
     <Localized key="relative_to_parent" lang="English">Relative to parent</Localized>
     <Localized key="relative_to_parent" lang="French">Relatif au parent</Localized>
     <Localized key="relative_to_parent" lang="Dutch">Relative to parent</Localized>
@@ -156,9 +156,9 @@
     <Localized key="x_fixed" lang="Dutch">x fixed</Localized>
     <Localized key="y_fixed" lang="English">y fixed</Localized>
     <Localized key="y_fixed" lang="Dutch">y fixed</Localized>
-    <Localized key="area_constrained" lang="English">area constrained</Localized>
-    <Localized key="area_constrained" lang="French">espace contraint</Localized>
-    <Localized key="area_constrained" lang="Dutch">area constrained</Localized>
+    <Localized key="area_constrained" lang="English">Area constrained</Localized>
+    <Localized key="area_constrained" lang="French">Espace contraint</Localized>
+    <Localized key="area_constrained" lang="Dutch">Area constrained</Localized>
     <Localized key="location_constraints" lang="English">Location constraints</Localized>
     <Localized key="location_constraints" lang="French">Contraintes de positionnement</Localized>
     <Localized key="location_constraints" lang="Dutch">Location constraints</Localized>
@@ -171,23 +171,23 @@
     <Localized key="freely_resizable" lang="English">Freely resizable</Localized>
     <Localized key="freely_resizable" lang="French">Peut être redimensionné</Localized>
     <Localized key="freely_resizable" lang="Dutch">Freely resizable</Localized>
-    <Localized key="unresizable" lang="French">non redimensionnable</Localized>
+    <Localized key="unresizable" lang="French">Non redimensionnable</Localized>
     <Localized key="constrained_dimensions" lang="English">Constrained dimensions</Localized>
     <Localized key="constrained_dimensions" lang="French">Dimensions contraintes</Localized>
     <Localized key="constrained_dimensions" lang="Dutch">Constrained dimensions</Localized>
-    <Localized key="step_constrained" lang="English">step constrained</Localized>
-    <Localized key="step_constrained" lang="French">pas contraint</Localized>
-    <Localized key="step_constrained" lang="Dutch">step constrained</Localized>
+    <Localized key="step_constrained" lang="English">Step constrained</Localized>
+    <Localized key="step_constrained" lang="French">Contraint par pas</Localized>
+    <Localized key="step_constrained" lang="Dutch">Step constrained</Localized>
     <Localized key="width_fixed" lang="English">Fixed width</Localized>
     <Localized key="width_fixed" lang="French">Largeur fixe</Localized>
     <Localized key="width_fixed" lang="Dutch">Fixed width</Localized>
     <Localized key="height_fixed" lang="English">Fixed height</Localized>
     <Localized key="height_fixed" lang="French">Hauteur fixe</Localized>
     <Localized key="height_fixed" lang="Dutch">Fixed height</Localized>
-    <Localized key="container" lang="French">conteneur</Localized>
-    <Localized key="dimensions_constraints" lang="English">Dimensions contraints</Localized>
+    <Localized key="container" lang="French">Conteneur</Localized>
+    <Localized key="dimensions_constraints" lang="English">Constrained dimensions</Localized>
     <Localized key="dimensions_constraints" lang="French">Contraintes de dimensionnement</Localized>
-    <Localized key="dimensions_constraints" lang="Dutch">Dimensions contraints</Localized>
+    <Localized key="dimensions_constraints" lang="Dutch">Constrained dimensions</Localized>
     <Localized key="top_border" lang="English">Top border</Localized>
     <Localized key="top_border" lang="French">Bord haut</Localized>
     <Localized key="top_border" lang="Dutch">Top border</Localized>
@@ -208,10 +208,10 @@
     <Localized key="floating_label" lang="French">Label flottant</Localized>
     <Localized key="floating_label" lang="Dutch">Floating label</Localized>
     <Localized key="absolute_text_x" lang="English">Absolute text X</Localized>
-    <Localized key="absolute_text_x" lang="French">texte x absolu</Localized>
+    <Localized key="absolute_text_x" lang="French">Texte x absolu</Localized>
     <Localized key="absolute_text_x" lang="Dutch">Absolute text X</Localized>
     <Localized key="absolute_text_y" lang="English">Absolute text Y</Localized>
-    <Localized key="absolute_text_y" lang="French">texte y absolu</Localized>
+    <Localized key="absolute_text_y" lang="French">Texte y absolu</Localized>
     <Localized key="absolute_text_y" lang="Dutch">Absolute text Y</Localized>
     <Localized key="relative_text_x" lang="English">Relative text x</Localized>
     <Localized key="relative_text_x" lang="French">Text relatif à X</Localized>
@@ -247,9 +247,9 @@
     <Localized key="triangle" lang="English">Triangle</Localized>
     <Localized key="triangle" lang="French">Triangle</Localized>
     <Localized key="triangle" lang="Dutch">Triangle</Localized>
-    <Localized key="losange" lang="English">Losange</Localized>
+    <Localized key="losange" lang="English">Diamond</Localized>
     <Localized key="losange" lang="French">Losange</Localized>
-    <Localized key="losange" lang="Dutch">Losange</Localized>
+    <Localized key="losange" lang="Dutch">Diamond</Localized>
     <Localized key="oval" lang="English">Oval</Localized>
     <Localized key="oval" lang="French">Ovale</Localized>
     <Localized key="oval" lang="Dutch">Oval</Localized>
@@ -274,13 +274,13 @@
     <Localized key="arc_size" lang="English">Arc size</Localized>
     <Localized key="arc_size" lang="French">Taille de l'arc</Localized>
     <Localized key="arc_size" lang="Dutch">Arc size</Localized>
-    <Localized key="ratio" lang="French">rapport</Localized>
-    <Localized key="angle_start" lang="English">angle start</Localized>
-    <Localized key="angle_start" lang="French">début d'angle</Localized>
-    <Localized key="angle_start" lang="Dutch">angle start</Localized>
-    <Localized key="angle_extent" lang="English">angle extent</Localized>
-    <Localized key="angle_extent" lang="French">extension d'angle</Localized>
-    <Localized key="angle_extent" lang="Dutch">angle extent</Localized>
+    <Localized key="ratio" lang="French">Rapport</Localized>
+    <Localized key="angle_start" lang="English">Angle start</Localized>
+    <Localized key="angle_start" lang="French">Début d'angle</Localized>
+    <Localized key="angle_start" lang="Dutch">Angle start</Localized>
+    <Localized key="angle_extent" lang="English">Angle extent</Localized>
+    <Localized key="angle_extent" lang="French">Extension d'angle</Localized>
+    <Localized key="angle_extent" lang="Dutch">Angle extent</Localized>
     <Localized key="arc_type" lang="English">Arc type</Localized>
     <Localized key="arc_type" lang="French">Type d'arc</Localized>
     <Localized key="arc_type" lang="Dutch">Arc type</Localized>
@@ -294,53 +294,53 @@
     <Localized key="line_wrap" lang="English">Line wrap</Localized>
     <Localized key="line_wrap" lang="French">Line wrap</Localized>
     <Localized key="line_wrap" lang="Dutch">Line wrapp</Localized>
-    <Localized key="position" lang="English">position</Localized>
-    <Localized key="position" lang="French">position</Localized>
-    <Localized key="position" lang="Dutch">position</Localized>
+    <Localized key="position" lang="English">Position</Localized>
+    <Localized key="position" lang="French">Position</Localized>
+    <Localized key="position" lang="Dutch">Position</Localized>
     <Localized key=";" lang="English">;</Localized>
     <Localized key=";" lang="French">;</Localized>
     <Localized key=";" lang="Dutch">;</Localized>
-    <Localized key="unmovable" lang="English">unmovable</Localized>
-    <Localized key="unmovable" lang="Dutch">unmovable</Localized>
+    <Localized key="unmovable" lang="English">Unmovable</Localized>
+    <Localized key="unmovable" lang="Dutch">Unmovable</Localized>
     <Localized key="Freely movable" lang="English">Freely movable</Localized>
-    <Localized key="Freely movable" lang="French">Freely movable</Localized>
+    <Localized key="Freely movable" lang="French">Modifiable librement</Localized>
     <Localized key="Freely movable" lang="Dutch">Freely movable</Localized>
     <Localized key="Contained in shape" lang="English">Contained in shape</Localized>
-    <Localized key="Contained in shape" lang="French">Contained in shape</Localized>
+    <Localized key="Contained in shape" lang="French">Contenu dans la forme</Localized>
     <Localized key="Contained in shape" lang="Dutch">Contained in shape</Localized>
     <Localized key="Relative to parent" lang="English">Relative to parent</Localized>
     <Localized key="Relative to parent" lang="French">Relative to parent</Localized>
     <Localized key="Relative to parent" lang="Dutch">Relative to parent</Localized>
     <Localized key="x fixed" lang="English">x fixed</Localized>
-    <Localized key="x fixed" lang="French">x fixed</Localized>
+    <Localized key="x fixed" lang="French">x fixe</Localized>
     <Localized key="x fixed" lang="Dutch">x fixed</Localized>
     <Localized key="y fixed" lang="English">y fixed</Localized>
-    <Localized key="y fixed" lang="French">y fixed</Localized>
+    <Localized key="y fixed" lang="French">y fixe</Localized>
     <Localized key="y fixed" lang="Dutch">y fixed</Localized>
-    <Localized key="area constrained" lang="English">area constrained</Localized>
-    <Localized key="area constrained" lang="French">area constrained</Localized>
-    <Localized key="area constrained" lang="Dutch">area constrained</Localized>
-    <Localized key="dimensions" lang="English">dimensions</Localized>
-    <Localized key="dimensions" lang="French">dimensions</Localized>
-    <Localized key="dimensions" lang="Dutch">dimensions</Localized>
-    <Localized key="unresizable" lang="English">unresizable</Localized>
-    <Localized key="unresizable" lang="Dutch">unresizable</Localized>
-    <Localized key="container" lang="English">container</Localized>
-    <Localized key="container" lang="Dutch">container</Localized>
+    <Localized key="area constrained" lang="English">Area constrained</Localized>
+    <Localized key="area constrained" lang="French">Espace contraint</Localized>
+    <Localized key="area constrained" lang="Dutch">Area constrained</Localized>
+    <Localized key="dimensions" lang="English">Dimensions</Localized>
+    <Localized key="dimensions" lang="French">Dimensions</Localized>
+    <Localized key="dimensions" lang="Dutch">Dimensions</Localized>
+    <Localized key="unresizable" lang="English">Unresizable</Localized>
+    <Localized key="unresizable" lang="Dutch">Unresizable</Localized>
+    <Localized key="container" lang="English">Container</Localized>
+    <Localized key="container" lang="Dutch">Container</Localized>
     <Localized key="Freely resizable" lang="English">Freely resizable</Localized>
-    <Localized key="Freely resizable" lang="French">Freely resizable</Localized>
+    <Localized key="Freely resizable" lang="French">Redimensionable librement</Localized>
     <Localized key="Freely resizable" lang="Dutch">Freely resizable</Localized>
     <Localized key="Constrained dimensions" lang="English">Constrained dimensions</Localized>
-    <Localized key="Constrained dimensions" lang="French">Constrained dimensions</Localized>
+    <Localized key="Constrained dimensions" lang="French">Dimensions contraintes</Localized>
     <Localized key="Constrained dimensions" lang="Dutch">Constrained dimensions</Localized>
-    <Localized key="step constrained" lang="English">step constrained</Localized>
-    <Localized key="step constrained" lang="French">step constrained</Localized>
-    <Localized key="step constrained" lang="Dutch">step constrained</Localized>
+    <Localized key="step constrained" lang="English">Step constrained</Localized>
+    <Localized key="step constrained" lang="French">Contraint par pas</Localized>
+    <Localized key="step constrained" lang="Dutch">Step constrained</Localized>
     <Localized key="Fixed width" lang="English">Fixed width</Localized>
-    <Localized key="Fixed width" lang="French">Fixed width</Localized>
+    <Localized key="Fixed width" lang="French">Largeur fixe</Localized>
     <Localized key="Fixed width" lang="Dutch">Fixed width</Localized>
     <Localized key="Fixed height" lang="English">Fixed height</Localized>
-    <Localized key="Fixed height" lang="French">Fixed height</Localized>
+    <Localized key="Fixed height" lang="French">Hauteur fixe</Localized>
     <Localized key="Fixed height" lang="Dutch">Fixed height</Localized>
     <Localized key="x_constraints" lang="English">x constraints</Localized>
     <Localized key="x_constraints" lang="French">Constraintes x</Localized>
@@ -354,9 +354,9 @@
     <Localized key="height_constraints" lang="English">Height constraints</Localized>
     <Localized key="height_constraints" lang="French">Contraintes de hauteur</Localized>
     <Localized key="height_constraints" lang="Dutch">Height constraints</Localized>
-    <Localized key="border" lang="English">border</Localized>
-    <Localized key="border" lang="French">bord</Localized>
-    <Localized key="border" lang="Dutch">border</Localized>
+    <Localized key="border" lang="English">Border</Localized>
+    <Localized key="border" lang="French">Bord</Localized>
+    <Localized key="border" lang="Dutch">Border</Localized>
     <Localized key="top" lang="English">Top</Localized>
     <Localized key="top" lang="French">Haut</Localized>
     <Localized key="top" lang="Dutch">Top</Localized>
@@ -370,13 +370,13 @@
     <Localized key="right" lang="French">Droit</Localized>
     <Localized key="right" lang="Dutch">Right</Localized>
     <Localized key="may_leave_bounds" lang="English">May leave bounds</Localized>
-    <Localized key="may_leave_bounds" lang="French">may_leave_bounds</Localized>
-    <Localized key="may_leave_bounds" lang="Dutch">May leave boundsds</Localized>
+    <Localized key="may_leave_bounds" lang="French">Peut laisser les bords</Localized>
+    <Localized key="may_leave_bounds" lang="Dutch">May leave bounds</Localized>
     <Localized key="is_selectable" lang="English">Is selectable</Localized>
     <Localized key="is_selectable" lang="French">Sélectionnable</Localized>
     <Localized key="is_selectable" lang="Dutch">Is selectable</Localized>
     <Localized key="use" lang="English">use</Localized>
-    <Localized key="use" lang="French">use</Localized>
+    <Localized key="use" lang="French">utilisez</Localized>
     <Localized key="use" lang="Dutch">use</Localized>
     <Localized key="cp" lang="English">cp</Localized>
     <Localized key="cp" lang="French">cp</Localized>
@@ -396,48 +396,80 @@
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
-    <Localized key="Peut être bougé" lang="English">Peut être bougé</Localized>
+    <Localized key="Peut être bougé" lang="English">Is movable</Localized>
     <Localized key="Peut être bougé" lang="French">Peut être bougé</Localized>
-    <Localized key="Peut être bougé" lang="Dutch">Peut être bougé</Localized>
-    <Localized key="Contenu dans la forme" lang="English">Contenu dans la forme</Localized>
+    <Localized key="Peut être bougé" lang="Dutch">Movable</Localized>
+    <Localized key="Contenu dans la forme" lang="English">Contained in shape</Localized>
     <Localized key="Contenu dans la forme" lang="French">Contenu dans la forme</Localized>
-    <Localized key="Contenu dans la forme" lang="Dutch">Contenu dans la forme</Localized>
-    <Localized key="non déplaçable" lang="English">non déplaçable</Localized>
-    <Localized key="non déplaçable" lang="French">non déplaçable</Localized>
-    <Localized key="non déplaçable" lang="Dutch">non déplaçable</Localized>
+    <Localized key="Contenu dans la forme" lang="Dutch">Contained in shape</Localized>
+    <Localized key="non déplaçable" lang="English">Unmovable</Localized>
+    <Localized key="non déplaçable" lang="French">Non déplaçable</Localized>
+    <Localized key="non déplaçable" lang="Dutch">Unmovable</Localized>
     <Localized key="Relatif au parent" lang="English">Relatif au parent</Localized>
     <Localized key="Relatif au parent" lang="French">Relatif au parent</Localized>
     <Localized key="Relatif au parent" lang="Dutch">Relatif au parent</Localized>
-    <Localized key="x fixe" lang="English">x fixe</Localized>
+    <Localized key="x fixe" lang="English">x fixed</Localized>
     <Localized key="x fixe" lang="French">x fixe</Localized>
-    <Localized key="x fixe" lang="Dutch">x fixe</Localized>
-    <Localized key="y fixe" lang="English">y fixe</Localized>
+    <Localized key="x fixe" lang="Dutch">x fixed</Localized>
+    <Localized key="y fixe" lang="English">y fixed</Localized>
     <Localized key="y fixe" lang="French">y fixe</Localized>
-    <Localized key="y fixe" lang="Dutch">y fixe</Localized>
-    <Localized key="espace contraint" lang="English">espace contraint</Localized>
-    <Localized key="espace contraint" lang="French">espace contraint</Localized>
-    <Localized key="espace contraint" lang="Dutch">espace contraint</Localized>
-    <Localized key="Peut être redimensionné" lang="English">Peut être redimensionné</Localized>
+    <Localized key="y fixe" lang="Dutch">y fixed</Localized>
+    <Localized key="espace contraint" lang="English">Constrained space</Localized>
+    <Localized key="espace contraint" lang="French">Espace contraint</Localized>
+    <Localized key="espace contraint" lang="Dutch">Constrained space</Localized>
+    <Localized key="Peut être redimensionné" lang="English">Is resizable</Localized>
     <Localized key="Peut être redimensionné" lang="French">Peut être redimensionné</Localized>
-    <Localized key="Peut être redimensionné" lang="Dutch">Peut être redimensionné</Localized>
-    <Localized key="non redimensionnable" lang="English">non redimensionnable</Localized>
-    <Localized key="non redimensionnable" lang="French">non redimensionnable</Localized>
-    <Localized key="non redimensionnable" lang="Dutch">non redimensionnable</Localized>
-    <Localized key="Dimensions contraintes" lang="English">Dimensions contraintes</Localized>
+    <Localized key="Peut être redimensionné" lang="Dutch">Resizable</Localized>
+    <Localized key="non redimensionnable" lang="English">Unresizable</Localized>
+    <Localized key="non redimensionnable" lang="French">Non redimensionnable</Localized>
+    <Localized key="non redimensionnable" lang="Dutch">Unresizable</Localized>
+    <Localized key="Dimensions contraintes" lang="English">Constrained dimensions</Localized>
     <Localized key="Dimensions contraintes" lang="French">Dimensions contraintes</Localized>
-    <Localized key="Dimensions contraintes" lang="Dutch">Dimensions contraintes</Localized>
-    <Localized key="pas contraint" lang="English">pas contraint</Localized>
-    <Localized key="pas contraint" lang="French">pas contraint</Localized>
-    <Localized key="pas contraint" lang="Dutch">pas contraint</Localized>
-    <Localized key="Largeur fixe" lang="English">Largeur fixe</Localized>
+    <Localized key="Dimensions contraintes" lang="Dutch">Constrained dimensions</Localized>
+    <Localized key="pas contraint" lang="English">Step constrained</Localized>
+    <Localized key="pas contraint" lang="French">Contraint par pas</Localized>
+    <Localized key="pas contraint" lang="Dutch">Step constrained</Localized>
+    <Localized key="Largeur fixe" lang="English">Fixed width</Localized>
     <Localized key="Largeur fixe" lang="French">Largeur fixe</Localized>
-    <Localized key="Largeur fixe" lang="Dutch">Largeur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="English">Hauteur fixe</Localized>
+    <Localized key="Largeur fixe" lang="Dutch">Fixed width</Localized>
+    <Localized key="Hauteur fixe" lang="English">Fixed height</Localized>
     <Localized key="Hauteur fixe" lang="French">Hauteur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="Dutch">Hauteur fixe</Localized>
-    <Localized key="conteneur" lang="English">conteneur</Localized>
-    <Localized key="conteneur" lang="French">conteneur</Localized>
-    <Localized key="conteneur" lang="Dutch">conteneur</Localized>
+    <Localized key="Hauteur fixe" lang="Dutch">Fixed height</Localized>
+    <Localized key="conteneur" lang="English">Container</Localized>
+    <Localized key="conteneur" lang="French">Conteneur</Localized>
+    <Localized key="conteneur" lang="Dutch">Container</Localized>
+    <Localized key="ratio" lang="English">Ratio</Localized>
+    <Localized key="ratio" lang="Dutch">Ratio</Localized>
+    <Localized key="Unmovable" lang="English">Unmovable</Localized>
+    <Localized key="Unmovable" lang="French">Non modifiable</Localized>
+    <Localized key="Unmovable" lang="Dutch">Unmovable</Localized>
+    <Localized key="Area constrained" lang="English">Area constrained</Localized>
+    <Localized key="Area constrained" lang="French">Espace contraint</Localized>
+    <Localized key="Area constrained" lang="Dutch">Area constrained</Localized>
+    <Localized key="Unresizable" lang="English">Unresizable</Localized>
+    <Localized key="Unresizable" lang="French">Non redimensionnable</Localized>
+    <Localized key="Unresizable" lang="Dutch">Unresizable</Localized>
+    <Localized key="Step constrained" lang="English">Step constrained</Localized>
+    <Localized key="Step constrained" lang="French">Contraint par pas</Localized>
+    <Localized key="Step constrained" lang="Dutch">Step constrained</Localized>
+    <Localized key="Container" lang="English">Container</Localized>
+    <Localized key="Container" lang="French">Conteneur</Localized>
+    <Localized key="Container" lang="Dutch">Container</Localized>
+    <Localized key="Espace contraint" lang="English">Espace contraint</Localized>
+    <Localized key="Espace contraint" lang="French">Espace contraint</Localized>
+    <Localized key="Espace contraint" lang="Dutch">Espace contraint</Localized>
+    <Localized key="Conteneur" lang="English">Conteneur</Localized>
+    <Localized key="Conteneur" lang="French">Conteneur</Localized>
+    <Localized key="Conteneur" lang="Dutch">Conteneur</Localized>
+    <Localized key="Non déplaçable" lang="English">Non déplaçable</Localized>
+    <Localized key="Non déplaçable" lang="French">Non déplaçable</Localized>
+    <Localized key="Non déplaçable" lang="Dutch">Non déplaçable</Localized>
+    <Localized key="Non redimensionnable" lang="English">Non redimensionnable</Localized>
+    <Localized key="Non redimensionnable" lang="French">Non redimensionnable</Localized>
+    <Localized key="Non redimensionnable" lang="Dutch">Non redimensionnable</Localized>
+    <Localized key="Contraint par pas" lang="English">Contraint par pas</Localized>
+    <Localized key="Contraint par pas" lang="French">Contraint par pas</Localized>
+    <Localized key="Contraint par pas" lang="Dutch">Contraint par pas</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Shape" />
 </Panel>

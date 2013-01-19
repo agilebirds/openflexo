@@ -115,13 +115,13 @@
     <Localized key="horizontal_text_alignment" lang="French">Alignement horizontal du texte</Localized>
     <Localized key="horizontal_text_alignment" lang="Dutch">Horizontal text alignment</Localized>
     <Localized key="Left" lang="English">Left</Localized>
-    <Localized key="Left" lang="French">Left</Localized>
+    <Localized key="Left" lang="French">Gauche</Localized>
     <Localized key="Left" lang="Dutch">Left</Localized>
     <Localized key="Center" lang="English">Center</Localized>
     <Localized key="Center" lang="French">Center</Localized>
     <Localized key="Center" lang="Dutch">Center</Localized>
     <Localized key="Right" lang="English">Right</Localized>
-    <Localized key="Right" lang="French">Right</Localized>
+    <Localized key="Right" lang="French">Droit</Localized>
     <Localized key="Right" lang="Dutch">Right</Localized>
     <Localized key="vertical_text_alignment" lang="English">Vertical text alignment</Localized>
     <Localized key="vertical_text_alignment" lang="French">Alignement vertical du texte</Localized>
@@ -142,7 +142,7 @@
     <Localized key="Bottom" lang="French">Bottom</Localized>
     <Localized key="Bottom" lang="Dutch">Bottom</Localized>
     <Localized key="justify" lang="English">Justify</Localized>
-    <Localized key="justify" lang="French">Justify</Localized>
+    <Localized key="justify" lang="French">Justifier</Localized>
     <Localized key="justify" lang="Dutch">Justify</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
@@ -150,24 +150,24 @@
     <Localized key="button" lang="English">Button</Localized>
     <Localized key="button" lang="French">Bouton</Localized>
     <Localized key="button" lang="Dutch">Button</Localized>
-    <Localized key="clics" lang="English">clics</Localized>
-    <Localized key="clics" lang="French">clics</Localized>
-    <Localized key="clics" lang="Dutch">clics</Localized>
-    <Localized key="shift" lang="English">shift</Localized>
-    <Localized key="shift" lang="French">shift</Localized>
-    <Localized key="shift" lang="Dutch">shift</Localized>
-    <Localized key="ctrl" lang="English">ctrl</Localized>
-    <Localized key="ctrl" lang="French">ctrl</Localized>
-    <Localized key="ctrl" lang="Dutch">ctrl</Localized>
-    <Localized key="meta" lang="English">meta</Localized>
-    <Localized key="meta" lang="French">meta</Localized>
-    <Localized key="meta" lang="Dutch">meta</Localized>
-    <Localized key="alt" lang="English">alt</Localized>
-    <Localized key="alt" lang="French">alt</Localized>
-    <Localized key="alt" lang="Dutch">alt</Localized>
-    <Localized key="action" lang="English">action</Localized>
-    <Localized key="action" lang="French">action</Localized>
-    <Localized key="action" lang="Dutch">action</Localized>
+    <Localized key="clics" lang="English">Clics</Localized>
+    <Localized key="clics" lang="French">Clics</Localized>
+    <Localized key="clics" lang="Dutch">Clics</Localized>
+    <Localized key="shift" lang="English">Shift</Localized>
+    <Localized key="shift" lang="French">Shift</Localized>
+    <Localized key="shift" lang="Dutch">Shift</Localized>
+    <Localized key="ctrl" lang="English">Ctrl</Localized>
+    <Localized key="ctrl" lang="French">Ctrl</Localized>
+    <Localized key="ctrl" lang="Dutch">Ctrl</Localized>
+    <Localized key="meta" lang="English">Meta</Localized>
+    <Localized key="meta" lang="French">Meta</Localized>
+    <Localized key="meta" lang="Dutch">Meta</Localized>
+    <Localized key="alt" lang="English">Alt</Localized>
+    <Localized key="alt" lang="French">Alt</Localized>
+    <Localized key="alt" lang="Dutch">Alt</Localized>
+    <Localized key="action" lang="English">Action</Localized>
+    <Localized key="action" lang="French">Action</Localized>
+    <Localized key="action" lang="Dutch">Action</Localized>
     <Localized key="new" lang="English">New</Localized>
     <Localized key="new" lang="French">Nouveau</Localized>
     <Localized key="new" lang="Dutch">New</Localized>
@@ -206,9 +206,9 @@
     <Localized key="Gauche" lang="English">Gauche</Localized>
     <Localized key="Gauche" lang="French">Gauche</Localized>
     <Localized key="Gauche" lang="Dutch">Gauche</Localized>
-    <Localized key="Centré" lang="English">Centré</Localized>
+    <Localized key="Centré" lang="English">Center</Localized>
     <Localized key="Centré" lang="French">Centré</Localized>
-    <Localized key="Centré" lang="Dutch">Centré</Localized>
+    <Localized key="Centré" lang="Dutch">Center</Localized>
     <Localized key="Droit" lang="English">Droit</Localized>
     <Localized key="Droit" lang="French">Droit</Localized>
     <Localized key="Droit" lang="Dutch">Droit</Localized>
@@ -218,5 +218,11 @@
     <Localized key="Bas" lang="English">Bas</Localized>
     <Localized key="Bas" lang="French">Bas</Localized>
     <Localized key="Bas" lang="Dutch">Bas</Localized>
+    <Localized key="Middle" lang="English">Middle</Localized>
+    <Localized key="Middle" lang="French">Middle</Localized>
+    <Localized key="Middle" lang="Dutch">Middle</Localized>
+    <Localized key="Justify" lang="English">Justify</Localized>
+    <Localized key="Justify" lang="French">Justifier</Localized>
+    <Localized key="Justify" lang="Dutch">Justify</Localized>
   </LocalizedDictionary>
 </Panel>
