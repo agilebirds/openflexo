@@ -61,6 +61,8 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	public VPMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
+		// UGLIEST HACK EVER TO BE REMOVED ASAP:
+		ViewPointPalette.setModuleLoader(applicationContext.getModuleLoader());
 		CEDPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 

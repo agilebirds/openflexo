@@ -253,7 +253,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
 		try {
-			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
+			cedModule = ViewPointPalette.getModuleLoader() != null ? ViewPointPalette.getModuleLoader().getVPMModuleInstance() : null;
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();

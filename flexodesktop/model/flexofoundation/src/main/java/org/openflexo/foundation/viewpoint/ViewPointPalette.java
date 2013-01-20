@@ -41,6 +41,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
@@ -58,6 +59,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
 
+	private static IModuleLoader moduleLoader;
+
 	private int index;
 
 	private String name;
@@ -72,6 +75,14 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentation.
 	private Object graphicalRepresentation;
+
+	public static IModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
+	public static void setModuleLoader(IModuleLoader moduleLoader) {
+		ViewPointPalette.moduleLoader = moduleLoader;
+	}
 
 	public static ViewPointPalette instanciateCalcPalette(ViewPoint calc, File paletteFile) {
 		if (paletteFile.exists()) {
@@ -345,7 +356,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
 		try {
-			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
+			cedModule = getModuleLoader() != null ? getModuleLoader().getVPMModuleInstance() : null;
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();
