@@ -39,6 +39,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
@@ -250,7 +251,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public FlexoResource<EMFModel> retrieveModelResource(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
+	public EMFModelResource retrieveModelResource(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource emfModelResource = null;
 		if (aModelFile.isFile()) {
@@ -274,21 +275,48 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	/**
-	 * 
 	 * Follow the link.
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createEmptyModel(org.openflexo.foundation.rm.FlexoProject,
-	 *      org.openflexo.foundation.technologyadapter.FlexoMetaModel)
+	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
 	public EMFModelResource createEmptyModel(FlexoProject project, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		EMFModelResource emfModelResource = null;
+		File modelFile = null;
+		try {
+			if (project != null) {
+				modelFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
+			} else {
+				EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
+				modelFile = File
+						.createTempFile(
+								emfMetaModelResource.getModelFileExtension(),
+								"." + emfMetaModelResource.getModelFileExtension(),
+								new File(
+										"D:/Documents and Settings/gbesancon/Mes documents/FlexoUserResourceCenter/Ontologies/EMF/Model/parameters"));
+			}
+			emfModelResource = createEmptyModel(modelFile.getAbsolutePath(), null, metaModelResource, technologyContextManager);
+		} catch (IOException e) {
+			modelFile = null;
+		}
+		return emfModelResource;
+	}
+
+	/**
+	 * Create empty model.
+	 * 
+	 * @param modelFilePath
+	 * @param metaModelResource
+	 * @param technologyContextManager
+	 * @return
+	 */
+	protected EMFModelResource createEmptyModel(String modelFilePath, String modelUri, FlexoResource<EMFMetaModel> metaModelResource,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource result = null;
 		try {
-			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
-			File modelFile = File.createTempFile(emfMetaModelResource.getModelFileExtension(),
-					"." + emfMetaModelResource.getModelFileExtension(), new File(
-							"D:/Documents and Settings/gbesancon/Mes documents/FlexoUserResourceCenter/Ontologies/EMF/Model/parameters"));
+			File modelFile = new File(modelFilePath);
 			result = (EMFModelResource) retrieveModelResource(modelFile, metaModelResource, technologyContextManager);
 			result.getEMFResource().save(null);
 		} catch (IOException e) {
