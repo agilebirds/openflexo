@@ -205,7 +205,7 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 		});
 		remove(_label);
 		add(_jLabelTextField);
-		_jLabelTextField.requestFocus();
+		_jLabelTextField.requestFocusInWindow();
 		_jLabelTextField.selectAll();
 		_jLabelTextField.revalidate();
 		_jLabelTextField.repaint();

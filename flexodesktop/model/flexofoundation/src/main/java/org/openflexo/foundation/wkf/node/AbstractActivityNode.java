@@ -496,7 +496,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	public List<Role> getAccountableRoles() {
 		List<Role> roles = new ArrayList<Role>();
 		if (accountableRoles.size() == 0 && getRoleA() != null) {
-			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleI());
+			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleA());
 			ref.setOwner(this);
 			accountableRoles.add(ref);
 		}
@@ -543,7 +543,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	public List<Role> getConsultedRoles() {
 		List<Role> roles = new ArrayList<Role>();
 		if (consultedRoles.size() == 0 && getRoleC() != null) {
-			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleI());
+			FlexoModelObjectReference ref = new FlexoModelObjectReference(getRoleC());
 			ref.setOwner(this);
 			consultedRoles.add(ref);
 		}

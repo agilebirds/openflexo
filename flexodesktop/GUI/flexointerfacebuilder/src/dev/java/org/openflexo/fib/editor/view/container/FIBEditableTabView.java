@@ -66,11 +66,8 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 	public FIBEditableTabView(final FIBTab model, FIBEditorController editorController) {
 		super(model, editorController.getController());
 		this.editorController = editorController;
-		// logger.info("************ Created FIBEditablePanelView for "+model);
 
 		delegate = new FIBEditableViewDelegate<FIBTab, JPanel>(this);
-
-		// getJComponent().setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.yellow));
 
 		model.addObserver(this);
 	}

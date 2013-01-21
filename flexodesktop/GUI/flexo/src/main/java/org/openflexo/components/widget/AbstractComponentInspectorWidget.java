@@ -53,7 +53,7 @@ public abstract class AbstractComponentInspectorWidget extends CustomInspectorWi
 					logger.fine("Focus gained in " + getClass().getName());
 				}
 				super.focusGained(arg0);
-				_selector.getTextField().requestFocus();
+				_selector.getTextField().requestFocusInWindow();
 				_selector.getTextField().selectAll();
 			}
 

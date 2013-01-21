@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.fge.DataBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.dm.DMCardinality;

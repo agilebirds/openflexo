@@ -107,7 +107,7 @@ public class ButtonsControlPanel extends JPanel {
 			public void run() {
 				Component button = getFocusTraversalPolicy().getFirstComponent(ButtonsControlPanel.this);
 				if (button != null) {
-					button.requestFocus();
+					button.requestFocusInWindow();
 				}
 			}
 		});

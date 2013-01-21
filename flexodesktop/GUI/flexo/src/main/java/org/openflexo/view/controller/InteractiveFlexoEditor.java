@@ -50,6 +50,7 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.foundation.dm.DMObject;
@@ -134,7 +135,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
 			return null;
 		}
-		if ((action.getFocusedObject() instanceof FlexoProjectObject)
+		if (!(action instanceof FlexoGUIAction<?, ?, ?>) && action.getFocusedObject() instanceof FlexoProjectObject
 				&& ((FlexoProjectObject) action.getFocusedObject()).getProject() != getProject()) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Cannot execute action because focused object is within another project than the one of this editor");

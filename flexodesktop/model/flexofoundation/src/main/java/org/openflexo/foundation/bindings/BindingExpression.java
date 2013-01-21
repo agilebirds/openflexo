@@ -24,17 +24,17 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
-import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.foundation.DataModification;
@@ -56,7 +56,15 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public String getStringRepresentation(Expression expression) {
 			if (expression instanceof BindingValueFunction) {
-				return makeStringRepresentation(((BindingValueFunction) expression).getFunction());
+				StringBuffer sb = new StringBuffer();
+				sb.append(((BindingValueFunction) expression).getFunction().getName());
+				sb.append("(");
+				boolean isFirst = true;
+				for (Expression arg : ((BindingValueFunction) expression).getFunction().getArgs()) {
+					sb.append((isFirst ? "" : ",") + getStringRepresentation(arg));
+				}
+				sb.append(")");
+				return sb.toString();
 			} else if (expression instanceof BindingValueVariable) {
 				return makeStringRepresentation(((BindingValueVariable) expression).getVariable());
 			} else if (expression instanceof BindingValueConstant) {
@@ -394,6 +402,11 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
+		}
+
+		@Override
 		public String toString() {
 			if (constant != null) {
 				return constant.toString();
@@ -424,9 +437,9 @@ public class BindingExpression extends AbstractBinding {
 
 	public static class BindingValueVariable extends Expression {
 		private Variable variable;
-		private BindingValue bindingValue;
+		private org.openflexo.foundation.bindings.BindingValue bindingValue;
 
-		public BindingValueVariable(BindingValue variableAsBindingValue) {
+		public BindingValueVariable(org.openflexo.foundation.bindings.BindingValue variableAsBindingValue) {
 			super();
 			variable = new Variable(variableAsBindingValue.getStringRepresentation());
 			bindingValue = variableAsBindingValue;
@@ -499,6 +512,11 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
+		}
+
+		@Override
 		public String toString() {
 			if (variable != null) {
 				return variable.toString();
@@ -565,11 +583,11 @@ public class BindingExpression extends AbstractBinding {
 						newExp = new BindingValueConstant((StaticBinding) binding);
 					} else if (binding instanceof BindingExpression) {
 						newExp = ((BindingExpression) binding).getExpression();
-					} else if (binding instanceof BindingValue) {
-						if (((BindingValue) binding).isCompoundBinding()) {
-							newExp = new BindingValueFunction((BindingValue) binding);
+					} else if (binding instanceof org.openflexo.foundation.bindings.BindingValue) {
+						if (((org.openflexo.foundation.bindings.BindingValue) binding).isCompoundBinding()) {
+							newExp = new BindingValueFunction((org.openflexo.foundation.bindings.BindingValue) binding);
 						} else {
-							newExp = new BindingValueVariable((BindingValue) binding);
+							newExp = new BindingValueVariable((org.openflexo.foundation.bindings.BindingValue) binding);
 						}
 					}
 					args.add(newExp);
@@ -671,6 +689,11 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public Expression transform(ExpressionTransformer transformer) throws TransformException {
 			return transformer.performTransformation(this);
+		}
+
+		@Override
+		public void visit(ExpressionVisitor visitor) throws VisitorException {
+			visitor.visit(this);
 		}
 
 		@Override
@@ -885,8 +908,8 @@ public class BindingExpression extends AbstractBinding {
 				public Expression performTransformation(Expression e) throws TransformException {
 					if (e instanceof Constant) {
 						return new BindingValueConstant((Constant) e, bindable);
-					} else if (e instanceof BindingValueAsExpression) {
-						return new BindingValueVariable(((BindingValueAsExpression) e).toString(), bindable);
+					} else if (e instanceof org.openflexo.antar.expr.BindingValue) {
+						return new BindingValueVariable(((org.openflexo.antar.expr.BindingValue) e).toString(), bindable);
 					}
 					return e;
 				}

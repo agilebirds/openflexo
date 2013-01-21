@@ -31,10 +31,9 @@ import org.apache.velocity.util.introspection.SecureIntrospectorImpl;
 import org.apache.velocity.util.introspection.SecureUberspector;
 import org.apache.velocity.util.introspection.VelMethod;
 import org.apache.velocity.util.introspection.VelPropertyGet;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 public class FlexoVelocityIntrospector extends SecureUberspector {
@@ -102,11 +101,13 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 		}
 		if (obj instanceof EditionPatternInstance) {
 			EditionPatternInstance epi = (EditionPatternInstance) obj;
-			ViewPointDataBinding vpdb = VPBindingEvaluator.buildBindingForMethodAndParams(methodName, args);
-			vpdb.setOwner(epi.getPattern());
-			vpdb.setBindingDefinition(new BindingDefinition(methodName, Object.class, BindingDefinitionType.GET, false));
-			if (vpdb.isValid()) {
-				return new VPBindingEvaluator(vpdb, epi);
+			DataBinding<?> dataBinding = DataBindingEvaluator.buildBindingForMethodAndParams(methodName, args);
+			dataBinding.setOwner(epi.getPattern());
+			dataBinding.setDeclaredType(Object.class);
+			dataBinding.setBindingDefinitionType(BindingDefinitionType.GET);
+			dataBinding.setBindingName(methodName);
+			if (dataBinding.isValid()) {
+				return new DataBindingEvaluator(dataBinding, epi);
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
@@ -123,11 +124,13 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 		if (get == null) {
 			if (obj instanceof EditionPatternInstance) {
 				EditionPatternInstance epi = (EditionPatternInstance) obj;
-				ViewPointDataBinding vpdb = new ViewPointDataBinding(identifier);
-				vpdb.setOwner(epi.getPattern());
-				vpdb.setBindingDefinition(new BindingDefinition(identifier, Object.class, BindingDefinitionType.GET, false));
-				if (vpdb.isValid()) {
-					return new VPBindingEvaluator(vpdb, epi);
+				DataBinding<?> dataBinding = new DataBinding<Object>(identifier);
+				dataBinding.setOwner(epi.getPattern());
+				dataBinding.setDeclaredType(Object.class);
+				dataBinding.setBindingDefinitionType(BindingDefinitionType.GET);
+				dataBinding.setBindingName(identifier);
+				if (dataBinding.isValid()) {
+					return new DataBindingEvaluator(dataBinding, epi);
 				}
 			}
 			get = getPropertyGetForClass(obj.getClass(), identifier, i);

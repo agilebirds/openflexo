@@ -25,9 +25,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.inspector.InspectableObject;
 
 /**
  * A {@link ResourceRepository} stores all resources of a particular type.<br>
@@ -38,8 +37,7 @@ import org.openflexo.inspector.InspectableObject;
  * @param <R>
  * @param <TA>
  */
-public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFlexoModelObject implements InspectableObject,
-		DataFlexoObserver {
+public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject implements DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(ResourceRepository.class.getPackage().getName());
 
@@ -136,9 +134,8 @@ public class ResourceRepository<R extends FlexoResource<?>> extends TemporaryFle
 		return resources.size();
 	}
 
-	@Deprecated
 	@Override
-	public String getInspectorName() {
-		return null;
+	public String getFullyQualifiedName() {
+		return "ResourceRepository";
 	}
 }

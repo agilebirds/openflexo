@@ -20,17 +20,18 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 public class LinkScheme extends AbstractCreationScheme {
@@ -47,11 +48,6 @@ public class LinkScheme extends AbstractCreationScheme {
 
 	public LinkScheme(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.LinkScheme;
 	}
 
 	public String _getFromTarget() {
@@ -110,14 +106,12 @@ public class LinkScheme extends AbstractCreationScheme {
 		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,
-					getFromTargetEditionPattern(), this));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.FROM_TARGET, getFromTargetEditionPattern()));
 		} else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
 		if (getToTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.TO_TARGET,
-					getToTargetEditionPattern(), this));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.TO_TARGET, getToTargetEditionPattern()));
 		} else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
@@ -156,14 +150,14 @@ public class LinkScheme extends AbstractCreationScheme {
 			if (fromEditionPattern != null) {
 				ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
 				if (fromShapePatternRole != null) {
-					newAction.setFromShape(new ViewPointDataBinding("fromTarget." + fromShapePatternRole.getName()));
+					newAction.setFromShape(new DataBinding<ViewShape>("fromTarget." + fromShapePatternRole.getName()));
 				}
 			}
 			EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 			if (toEditionPattern != null) {
 				ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
 				if (toShapePatternRole != null) {
-					newAction.setToShape(new ViewPointDataBinding("toTarget." + toShapePatternRole.getName()));
+					newAction.setToShape(new DataBinding<ViewShape>("toTarget." + toShapePatternRole.getName()));
 				}
 			}
 		}

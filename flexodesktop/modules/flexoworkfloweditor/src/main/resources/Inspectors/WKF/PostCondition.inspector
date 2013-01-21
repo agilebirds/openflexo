@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
+  <TabPanel name="HideWhenInducedSWL" data="data" constraints="border(location=center)">
     <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER " />
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
       <Label label="is_default_flow" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.canBeDefaultFlow = true)" name="IsDefaultFlowLabel" localize="true" />
@@ -60,9 +60,13 @@
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="hide_when_induced" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HideWhenInducedLabel" localize="true" />
-      <CheckBox selected="false" index="15" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="HideWhenInduced" localize="true" />
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+      <Label label="hide_when_induced" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HideWhenInducedBPELabel" localize="true" />
+      <CheckBox selected="false" index="15" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="HideWhenInducedBPE" localize="true" />
+    </Tab>
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" name="GraphicsSWLTab">
+      <Label label="hide_when_induced" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HideWhenInducedSWLLabel" localize="true" />
+      <CheckBox selected="false" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="HideWhenInducedSWLLabel" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

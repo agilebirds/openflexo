@@ -360,6 +360,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notifying expansions");
 		}
+		if (getRootObject() != null) {
 		notifyListeners(new ExpansionNotificationEvent());
 		if (selectionBeforeUpdate != null) {
 			for (Enumeration<FlexoObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
@@ -380,6 +381,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 				// expandAll(next);
 			}
 		}
+	}
 	}
 
 	/*
@@ -1309,5 +1311,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (evt.getSource() == this._rootObject && evt.getPropertyName().equals(this._rootObject.getDeletedProperty())) {
 			setRootObject(null);
 		}
+	}
+
+	public boolean showOptionsButton() {
+		return true;
 	}
 }

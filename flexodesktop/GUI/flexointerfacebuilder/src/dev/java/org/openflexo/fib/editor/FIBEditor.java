@@ -46,6 +46,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -385,6 +386,10 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void loadFIB(File fibFile) {
+		if (!fibFile.exists()) {
+			JOptionPane.showMessageDialog(frame, "File " + fibFile.getAbsolutePath() + " does not exist anymore");
+			return;
+		}
 		FIBPreferences.setLastFile(fibFile);
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false);
 		EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent);

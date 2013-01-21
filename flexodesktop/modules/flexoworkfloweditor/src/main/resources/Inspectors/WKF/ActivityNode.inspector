@@ -36,8 +36,8 @@
     <Localized key="Service" lang="English">Service</Localized>
     <Localized key="Service" lang="French">Service</Localized>
     <Localized key="Service" lang="Dutch">Service</Localized>
-    <Localized key="BusinessRule" lang="English">BusinessRule</Localized>
-    <Localized key="BusinessRule" lang="French">BusinessRule</Localized>
+    <Localized key="BusinessRule" lang="English">Business Rule</Localized>
+    <Localized key="BusinessRule" lang="French">Business Rule</Localized>
     <Localized key="BusinessRule" lang="Dutch">BusinessRule</Localized>
     <Localized key="User" lang="English">User</Localized>
     <Localized key="User" lang="French">User</Localized>

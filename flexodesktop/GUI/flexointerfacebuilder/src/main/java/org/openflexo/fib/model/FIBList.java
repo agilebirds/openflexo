@@ -24,7 +24,8 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
@@ -75,12 +76,12 @@ public class FIBList extends FIBMultipleValues {
 
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
 
-	private DataBinding selected;
+	private DataBinding<Object> selected;
 
 	private Integer visibleRowCount = 5;
 	private Integer rowHeight;
@@ -113,17 +114,19 @@ public class FIBList extends FIBMultipleValues {
 		return new ParameterizedTypeImpl(FIBListDynamicModel.class, args);
 	}
 
-	public DataBinding getSelected() {
+	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) {
-		selected.setOwner(this);
-		selected.setBindingAttribute(Parameters.selected);
-		selected.setBindingDefinition(getSelectedBindingDefinition());
+	public void setSelected(DataBinding<Object> selected) {
+		if (selected != null) {
+			selected.setOwner(this);
+			selected.setDeclaredType(getIteratorClass());
+			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+		}
 		this.selected = selected;
 	}
 
@@ -131,7 +134,7 @@ public class FIBList extends FIBMultipleValues {
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
 		if (selected != null) {
-			selected.finalizeDeserialization();
+			selected.decode();
 		}
 	}
 

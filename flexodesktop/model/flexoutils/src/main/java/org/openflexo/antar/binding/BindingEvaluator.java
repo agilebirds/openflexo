@@ -1,11 +1,9 @@
 package org.openflexo.antar.binding;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.antar.expr.BindingValueAsExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
-import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElement;
-import org.openflexo.antar.expr.DefaultExpressionParser;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -31,7 +29,7 @@ import org.openflexo.antar.expr.parser.ParseException;
  */
 public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
-	private static final DefaultBindingFactory BINDING_FACTORY = new DefaultBindingFactory();
+	private static final BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 
 	private Object object;
 	private BindingDefinition bindingDefinition;
@@ -39,26 +37,25 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	private BindingEvaluator(Object object) {
 		this.object = object;
-		bindingDefinition = new BindingDefinition("object", object.getClass(), BindingDefinitionType.GET, true);
+		bindingDefinition = new BindingDefinition("object", object.getClass(), DataBinding.BindingDefinitionType.GET, true);
 		bindingModel = new BindingModel();
-		bindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", object.getClass()));
+		bindingModel.addToBindingVariables(new BindingVariable("object", object.getClass()));
 	}
 
 	private static String normalizeBindingPath(String bindingPath) {
-		DefaultExpressionParser parser = new DefaultExpressionParser();
 		Expression expression = null;
 		try {
 			expression = ExpressionParser.parse(bindingPath);
 			expression = expression.transform(new ExpressionTransformer() {
 				@Override
 				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						BindingValueAsExpression bv = (BindingValueAsExpression) e;
-						if (bv.getBindingPath().size() > 0) {
-							AbstractBindingPathElement firstPathElement = bv.getBindingPath().get(0);
+					if (e instanceof BindingValue) {
+						BindingValue bv = (BindingValue) e;
+						if (bv.getParsedBindingPath().size() > 0) {
+							AbstractBindingPathElement firstPathElement = bv.getParsedBindingPath().get(0);
 							if (!(firstPathElement instanceof NormalBindingPathElement)
 									|| !((NormalBindingPathElement) firstPathElement).property.equals("object")) {
-								bv.getBindingPath().add(0, new NormalBindingPathElement("object"));
+								bv.getParsedBindingPath().add(0, new NormalBindingPathElement("object"));
 							}
 						}
 						return bv;
@@ -93,13 +90,21 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		return object;
 	}
 
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+	}
+
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException {
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
 		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath, this);
+		DataBinding binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, DataBinding.BindingDefinitionType.GET);
 		binding.setBindingDefinition(bindingDefinition);
-		System.out.println("Binding = " + binding + " valid=" + binding.isBindingValid() + " as " + binding.getClass());
-		if (!binding.isBindingValid()) {
+		System.out.println("Binding = " + binding + " valid=" + binding.isValid() + " as " + binding.getClass());
+		if (!binding.isValid()) {
 			System.out.println("not valid: " + binding.invalidBindingReason());
 			throw new InvalidKeyValuePropertyException("Cannot interpret " + normalizedBindingPath + " for object of type "
 					+ object.getClass());

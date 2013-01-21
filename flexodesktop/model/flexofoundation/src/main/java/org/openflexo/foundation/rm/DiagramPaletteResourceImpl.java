@@ -47,7 +47,8 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 
 	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPointLibrary());
+		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
+		return new ViewPointBuilder(getViewPointLibrary(), (ViewPointResource) null);
 	}
 
 	@Override

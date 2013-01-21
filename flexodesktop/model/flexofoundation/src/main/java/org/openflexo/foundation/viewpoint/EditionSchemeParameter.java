@@ -23,20 +23,21 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends EditionSchemeObject implements InspectorBindingAttribute {
+public abstract class EditionSchemeParameter extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
@@ -64,12 +65,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	private EditionScheme _scheme;
 
-	private ViewPointDataBinding conditional;
-	private ViewPointDataBinding defaultValue;
-
-	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
-	}
+	private DataBinding<Boolean> conditional;
+	private DataBinding<Object> defaultValue;
 
 	public EditionSchemeParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -96,8 +93,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public abstract WidgetType getWidget();
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET,
+			false);
+	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, DataBinding.BindingDefinitionType.GET,
+			false) {
 		@Override
 		public Type getType() {
 			return EditionSchemeParameter.this.getType();
@@ -154,7 +153,13 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(parameterRetriever);
+			try {
+				return getConditional().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -168,18 +173,20 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		return getScheme().getParameters().indexOf(this);
 	}
 
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, ParameterBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
+	public void setConditional(DataBinding<Boolean> conditional) {
 		if (conditional != null) {
 			conditional.setOwner(this);
-			conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
-			conditional.setBindingDefinition(getConditionalBindingDefinition());
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		this.conditional = conditional;
 	}
@@ -194,32 +201,39 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		return getScheme().getBindingModel();
 	}
 
-	public ViewPointDataBinding getDefaultValue() {
+	public DataBinding<Object> getDefaultValue() {
 		if (defaultValue == null) {
-			defaultValue = new ViewPointDataBinding(this, ParameterBindingAttribute.defaultValue, getDefaultValueBindingDefinition());
+			defaultValue = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			defaultValue.setBindingName("defaultValue");
 		}
 		return defaultValue;
 	}
 
-	public void setDefaultValue(ViewPointDataBinding defaultValue) {
+	public void setDefaultValue(DataBinding<Object> defaultValue) {
 		if (defaultValue != null) {
 			defaultValue.setOwner(this);
-			defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
-			defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+			defaultValue.setBindingName("defaultValue");
+			defaultValue.setDeclaredType(Object.class);
+			defaultValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.defaultValue = defaultValue;
 	}
 
 	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
-				: null;
+		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
 		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
 			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {
-			return getDefaultValue().getBindingValue(action);
+			try {
+				return getDefaultValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

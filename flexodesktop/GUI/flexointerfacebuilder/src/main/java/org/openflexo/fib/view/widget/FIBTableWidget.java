@@ -45,7 +45,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
@@ -171,19 +173,25 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			returned = true;
 			setSelectedObject(wasSelected);
 		} else {
-			if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
-				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
-					setSelectedObject(newSelectedObject);
+			try {
+				if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
+					Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+					if (returned = notEquals(newSelectedObject, getSelectedObject())) {
+						setSelectedObject(newSelectedObject);
+					}
 				}
-			}
 
-			else if (getComponent().getAutoSelectFirstRow()) {
-				if (getTableModel().getValues() != null && getTableModel().getValues().size() > 0) {
-					returned = true;
-					getListSelectionModel().addSelectionInterval(0, 0);
-					// addToSelection(getTableModel().getValues().get(0));
+				else if (getComponent().getAutoSelectFirstRow()) {
+					if (getTableModel().getValues() != null && getTableModel().getValues().size() > 0) {
+						returned = true;
+						getListSelectionModel().addSelectionInterval(0, 0);
+						// addToSelection(getTableModel().getValues().get(0));
+					}
 				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -221,9 +229,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	}
 
 	@Override
-	public List<AbstractBinding> getDependencyBindings() {
-		List<AbstractBinding> returned = super.getDependencyBindings();
-		appendToDependingObjects(getWidget().getSelected(), returned);
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getWidget().getSelected());
 		return returned;
 	}
 
@@ -374,6 +382,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				col.setCellEditor(getTableModel().columnAt(i).getCellEditor());
 			}
 		}
+		if (getTable().getVisibleRowCount() != null) {
+			_table.setVisibleRowCount(getTable().getVisibleRowCount());
+		}
 
 		if (_fibTable.getRowHeight() != null) {
 			_table.setRowHeight(_fibTable.getRowHeight());
@@ -489,7 +500,13 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		footer.handleSelectionChanged();
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
-			getComponent().getSelected().setBindingValue(selectedObject, getController());
+			try {
+				getComponent().getSelected().setBindingValue(selectedObject, getController());
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		updateFont();

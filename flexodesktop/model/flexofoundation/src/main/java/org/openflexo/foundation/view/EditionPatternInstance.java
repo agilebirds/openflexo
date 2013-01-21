@@ -24,13 +24,15 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -40,8 +42,6 @@ import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
@@ -186,18 +186,33 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	}*/
 
 	public Object evaluate(String expression) {
-		ViewPointDataBinding vpdb = new ViewPointDataBinding(expression);
+		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
 		vpdb.setOwner(getPattern());
-		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
-		return vpdb.getBindingValue(this);
+		vpdb.setDeclaredType(Object.class);
+		vpdb.setBindingDefinitionType(BindingDefinitionType.GET);
+		try {
+			return vpdb.getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public boolean setBindingValue(String binding, Object value) {
-		ViewPointDataBinding vpdb = new ViewPointDataBinding(binding);
+	public boolean setBindingValue(String expression, Object value) {
+		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
 		vpdb.setOwner(getPattern());
-		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.SET, false));
-		if (vpdb.getBinding().isBindingValid() && vpdb.getBinding().isSettable()) {
-			vpdb.setBindingValue(value, this);
+		vpdb.setDeclaredType(Object.class);
+		vpdb.setBindingDefinitionType(BindingDefinitionType.SET);
+		if (vpdb.isValid()) {
+			try {
+				vpdb.setBindingValue(value, this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			return true;
 		} else {
 			return false;
@@ -216,8 +231,9 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof PatternRolePathElement) {
-			return getPatternActor(((PatternRolePathElement) variable).getPatternRole());
+		PatternRole pr = getEditionPattern().getPatternRole(variable.getVariableName());
+		if (pr != null) {
+			return getPatternActor(pr);
 		}
 		logger.warning("Unexpected " + variable);
 		return null;
@@ -325,9 +341,23 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	public String getDisplayableName() {
 		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
 			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
-				return (String) pr.getLabel().getBindingValue(this);
+				try {
+					return (String) pr.getLabel().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return getPattern().getName();
+	}
+
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 }

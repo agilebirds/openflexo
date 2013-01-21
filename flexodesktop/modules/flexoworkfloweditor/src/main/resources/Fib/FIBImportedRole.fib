@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.view.controller.model.ControllerModel" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
-  <Browser name="ImportedRoleList" root="data" iteratorClassName="java.lang.Object" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" showFooter="false" rootVisible="false" showRootsHandle="false" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" width="100" height="100">
+  <Browser root="data" iteratorClassName="java.lang.Object" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" showFooter="false" rootVisible="false" showRootsHandle="false" localize="true" manageDynamicModel="true" doubleClickAction="controller.flexoController.setObjectAsModuleView(ImportedRoleList.selected)" name="ImportedRoleList" data="data" constraints="border(location=center)" width="100" height="100">
     <BrowserElement dataClassName="org.openflexo.view.controller.model.ControllerModel" isEditable="false" filtered="false" defaultVisible="true" name="controllerModel">
       <Children data="controllerModel.currentEditor.project.projectData.importedProjects" cast="child.referredProject.flexoWorkflow.roleList" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.RoleList" label="roleList.workflow.name" icon="controller.iconForObject(roleList)" isEditable="false" filtered="false" defaultVisible="true" name="roleList">
       <Children data="roleList.roles" name="children" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.wkf.Role" label="role.name" icon="controller.iconForObject(role)" isEditable="false" filtered="false" defaultVisible="true" name="role"/>
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.Role" label="role.name" icon="controller.iconForObject(role)" isEditable="false" filtered="false" defaultVisible="true" name="role" />
   </Browser>
 </Panel>

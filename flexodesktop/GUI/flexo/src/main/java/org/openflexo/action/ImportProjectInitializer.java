@@ -23,12 +23,17 @@ import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.rm.ProjectImportLoopException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
@@ -47,6 +52,35 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 	}
 
 	@Override
+	protected FlexoExceptionHandler<ImportProject> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<ImportProject>() {
+
+			@Override
+			public boolean handleException(FlexoException exception, ImportProject action) {
+				if (action.getThrownException() instanceof ProjectImportLoopException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("project_already_imported") + " "
+							+ action.getProjectToImport().getName());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<ImportProject> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ImportProject>() {
+			@Override
+			public boolean run(EventObject event, ImportProject action) {
+				if (action.hasActionExecutionSucceeded()) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("successfully_imported_project") + " "
+							+ action.getProjectToImport().getName());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
 	protected FlexoActionInitializer<ImportProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportProject>() {
 			@Override
@@ -57,8 +91,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 				ProjectChooserComponent chooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
 				};
 				while (true) {
-					chooser.showOpenDialog();
-					if (chooser.getSelectedFile() != null) {
+					if (chooser.showOpenDialog() == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						FlexoEditor editor = null;
 						try {
 							editor = getController().getApplicationContext().getProjectLoader()

@@ -49,6 +49,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.wkf.WKFPreferences;
@@ -175,10 +176,12 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			};
 			paletteView.addTab(null, WKFIconLibrary.ACTIVITY_NODE_ICON, getActivityPalette().getPaletteViewInScrollPane(),
 					FlexoLocalization.localizedForKey("Activity"));
-			paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),
-					FlexoLocalization.localizedForKey("Operation"));
-			paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),
-					FlexoLocalization.localizedForKey("Action"));
+			if (!UserType.isLite()) {
+				paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),
+						FlexoLocalization.localizedForKey("Operation"));
+				paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),
+						FlexoLocalization.localizedForKey("Action"));
+			}
 			paletteView.addTab(null, WKFIconLibrary.EVENT_ICON, getEventPalette().getPaletteViewInScrollPane(),
 					FlexoLocalization.localizedForKey("Event"));
 			paletteView.addTab(null, WKFIconLibrary.ARTEFACT_ICON, getArtefactPalette().getPaletteViewInScrollPane(),
@@ -194,15 +197,15 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					if (paletteView.getSelectedIndex() == 0) {
+					if (paletteView.getSelectedComponent() == getActivityPalette().getPaletteViewInScrollPane()) {
 						activatePalette(getActivityPalette());
-					} else if (paletteView.getSelectedIndex() == 1) {
+					} else if (paletteView.getSelectedComponent() == getOperationPalette().getPaletteViewInScrollPane()) {
 						activatePalette(getOperationPalette());
-					} else if (paletteView.getSelectedIndex() == 2) {
+					} else if (paletteView.getSelectedComponent() == getActionPalette().getPaletteViewInScrollPane()) {
 						activatePalette(getActionPalette());
-					} else if (paletteView.getSelectedIndex() == 3) {
+					} else if (paletteView.getSelectedComponent() == getEventPalette().getPaletteViewInScrollPane()) {
 						activatePalette(getEventPalette());
-					} else if (paletteView.getSelectedIndex() == 4) {
+					} else if (paletteView.getSelectedComponent() == getArtefactPalette().getPaletteViewInScrollPane()) {
 						activatePalette(getArtefactPalette());
 					}
 				}

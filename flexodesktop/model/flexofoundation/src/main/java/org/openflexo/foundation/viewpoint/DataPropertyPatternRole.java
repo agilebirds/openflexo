@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.view.ActorReference;
@@ -16,8 +18,11 @@ public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProper
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.DataProperty;
+	public Type getType() {
+		if (getParentProperty() == null) {
+			return IFlexoOntologyDataProperty.class;
+		}
+		return super.getType();
 	}
 
 	@Override

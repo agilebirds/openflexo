@@ -2,9 +2,10 @@ package org.openflexo.foundation.ontology;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.CustomType;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 
-public class SubPropertyOfProperty implements CustomType {
+public class SubPropertyOfProperty implements TechnologySpecificCustomType {
 
 	public static SubPropertyOfProperty getSubPropertyOfProperty(IFlexoOntologyStructuralProperty anOntologyProperty) {
 		if (anOntologyProperty == null) {
@@ -45,6 +46,14 @@ public class SubPropertyOfProperty implements CustomType {
 	@Override
 	public String fullQualifiedRepresentation() {
 		return "Property" + ":" + ontologyProperty.getURI();
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		if (getOntologyProperty() != null) {
+			return getOntologyProperty().getTechnologyAdapter();
+		}
+		return null;
 	}
 
 	public static class SubDataPropertyOfProperty extends SubPropertyOfProperty {

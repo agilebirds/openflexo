@@ -21,13 +21,10 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
-import org.openflexo.antar.binding.BindingValue;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.XMLSerializableFlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
@@ -38,8 +35,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -111,25 +106,23 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 		}
 	}
 
-	public void notifyBindingChanged(ViewPointDataBinding binding) {
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 		if (getPropertyChangeSupport() != null) {
-			if (binding != null && binding.getBindingAttribute() != null) {
-				getPropertyChangeSupport().firePropertyChange(binding.getBindingAttribute().toString(), null, binding);
+			if (dataBinding != null && dataBinding.getBindingName() != null) {
+				getPropertyChangeSupport().firePropertyChange(dataBinding.getBindingName(), null, dataBinding);
 			}
 		}
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+		// logger.info("Binding decoded: " + dataBinding);
 	}
 
 	public void notifyChange(String propertyName, Object oldValue, Object newValue) {
 		if (getPropertyChangeSupport() != null) {
 			getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
-		}
-	}
-
-	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding newValue) {
-		if (getPropertyChangeSupport() != null) {
-			if (bindingAttribute != null) {
-				getPropertyChangeSupport().firePropertyChange(bindingAttribute.toString(), oldValue, newValue);
-			}
 		}
 	}
 
@@ -163,16 +156,14 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 			super(clazz, ruleName);
 		}
 
-		public abstract ViewPointDataBinding getBinding(C object);
-
-		public abstract BindingDefinition getBindingDefinition(C object);
+		public abstract DataBinding<?> getBinding(C object);
 
 		@Override
 		public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {
 			if (getBinding(object) != null && getBinding(object).isSet()) {
 				if (!getBinding(object).isValid()) {
-					logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason follows.");
-					getBinding(object).getBinding().debugIsBindingValid();
+					logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason: "
+							+ getBinding(object).invalidBindingReason());
 					DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
 					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
 				}
@@ -191,7 +182,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 			@Override
 			protected void fixAction() {
-				rule.getBinding(getObject()).setBinding(null);
+				rule.getBinding(getObject()).reset();
 			}
 
 		}
@@ -203,9 +194,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 			super(clazz, ruleName);
 		}
 
-		public abstract ViewPointDataBinding getBinding(C object);
-
-		public abstract BindingDefinition getBindingDefinition(C object);
+		public abstract DataBinding<?> getBinding(C object);
 
 		@Override
 		public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
@@ -214,8 +203,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			} else if (!getBinding(object).isValid()) {
 				logger.info(getClass().getName() + ": Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName()
-						+ ". Reason: " + getBinding(object).getBinding().invalidBindingReason());
-				getBinding(object).getBinding().debugIsBindingValid();
+						+ ". Reason: " + getBinding(object).invalidBindingReason());
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			}
@@ -226,16 +214,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 			if (getBinding(object) == null || !getBinding(object).isSet()) {
 				return "Binding not set";
 			} else if (!getBinding(object).isValid()) {
-				if (getBinding(object).getBinding() instanceof BindingExpression) {
-					System.out.println("**** J'essaie d'en faire un BV");
-					object.getBindingFactory().getBindingValueFactory().debug = true;
-					BindingValue bv = object.getBindingFactory().getBindingValueFactory()
-							.convertFromString(getBinding(object).getUnparsedBinding(), object);
-					object.getBindingFactory().getBindingValueFactory().debug = false;
-					System.out.println("**** j'ai reussi a en faire un BV: " + bv);
-				}
-
-				return "Binding not valid [" + getBinding(object) + "], reason: " + getBinding(object).getBinding().invalidBindingReason();
+				return "Binding not valid [" + getBinding(object) + "], reason: " + getBinding(object).invalidBindingReason();
 			}
 			return null;
 		}

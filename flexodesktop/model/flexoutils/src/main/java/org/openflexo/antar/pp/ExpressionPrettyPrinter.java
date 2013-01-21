@@ -23,8 +23,9 @@ import java.io.PrintStream;
 
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
+import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
@@ -33,16 +34,17 @@ import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionGrammar;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.SymbolicConstant;
+import org.openflexo.antar.expr.TypeReference;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.UnresolvedExpression;
 
 public abstract class ExpressionPrettyPrinter {
 
@@ -77,17 +79,11 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression == null) {
 			return "null";
 		}
-		if (expression instanceof BindingValueAsExpression) {
-			return makeStringRepresentation((BindingValueAsExpression) expression);
-		}
-		if (expression instanceof Variable) {
-			return makeStringRepresentation((Variable) expression);
+		if (expression instanceof BindingValue) {
+			return makeStringRepresentation((BindingValue) expression);
 		}
 		if (expression instanceof Constant) {
 			return makeStringRepresentation((Constant) expression);
-		}
-		if (expression instanceof Function) {
-			return makeStringRepresentation((Function) expression);
 		}
 		if (expression instanceof UnaryOperatorExpression) {
 			return makeStringRepresentation((UnaryOperatorExpression) expression);
@@ -98,12 +94,14 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression instanceof ConditionalExpression) {
 			return makeStringRepresentation((ConditionalExpression) expression);
 		}
+		if (expression instanceof CastExpression) {
+			return makeStringRepresentation((CastExpression) expression);
+		}
+		if (expression instanceof UnresolvedExpression) {
+			return "<UnresolvedExpression>";
+		}
 		// return "<unknown " + expression.getClass().getSimpleName() + ">";
 		return expression.toString();
-	}
-
-	protected String makeStringRepresentation(Variable variable) {
-		return variable.getName();
 	}
 
 	protected String makeStringRepresentation(Constant constant) {
@@ -123,11 +121,15 @@ public abstract class ExpressionPrettyPrinter {
 			return makeStringRepresentation((DurationConstant) constant);
 		} else if (constant instanceof EnumConstant) {
 			return makeStringRepresentation((EnumConstant) constant);
+		} else if (constant instanceof ObjectConstant) {
+			return makeStringRepresentation((ObjectConstant) constant);
 		}
 		return "???";
 	}
 
-	protected abstract String makeStringRepresentation(BindingValueAsExpression bv);
+	protected abstract String makeStringRepresentation(TypeReference tr);
+
+	protected abstract String makeStringRepresentation(BindingValue bv);
 
 	protected abstract String makeStringRepresentation(AbstractBindingPathElement e);
 
@@ -147,12 +149,14 @@ public abstract class ExpressionPrettyPrinter {
 
 	protected abstract String makeStringRepresentation(EnumConstant constant);
 
-	protected abstract String makeStringRepresentation(Function function);
+	protected abstract String makeStringRepresentation(ObjectConstant constant);
 
 	protected abstract String makeStringRepresentation(UnaryOperatorExpression expression);
 
 	protected abstract String makeStringRepresentation(BinaryOperatorExpression expression);
 
 	protected abstract String makeStringRepresentation(ConditionalExpression expression);
+
+	protected abstract String makeStringRepresentation(CastExpression expression);
 
 }

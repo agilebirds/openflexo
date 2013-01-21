@@ -46,7 +46,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.fge.DataBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;

@@ -308,7 +308,8 @@ public class LoadedClassesInfo extends Observable {
 			this.filteredClassName = filteredClassName;
 			for (Package p : packages.keySet()) {
 				try {
-					Class foundClass = Class.forName(p.getName() + "." + filteredClassName);
+					String packagePrefix = p == null || p.getName().length() == 0 ? "" : p.getName() + ".";
+					Class<?> foundClass = Class.forName(packagePrefix + filteredClassName);
 					registerClass(foundClass);
 					logger.info("Found class " + foundClass);
 				} catch (ClassNotFoundException e) {

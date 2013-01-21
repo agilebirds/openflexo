@@ -253,8 +253,7 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	 */
 	@Override
 	public Object getObject(String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
+		return getOntologyObject(objectURI);
 	}
 
 	/**

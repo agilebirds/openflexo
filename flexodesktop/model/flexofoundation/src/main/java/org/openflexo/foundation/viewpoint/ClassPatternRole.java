@@ -1,6 +1,9 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -15,8 +18,11 @@ public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends On
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Class;
+	public Type getType() {
+		if (getOntologicType() == null) {
+			return IFlexoOntologyClass.class;
+		}
+		return SubClassOfClass.getSubClassOfClass(getOntologicType());
 	}
 
 	@Override

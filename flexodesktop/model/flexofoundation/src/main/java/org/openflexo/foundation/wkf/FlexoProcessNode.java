@@ -26,7 +26,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.Validable;
@@ -34,7 +36,6 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.ProcessNodeInserted;
 import org.openflexo.foundation.wkf.dm.ProcessNodeRemoved;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -64,19 +65,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	 */
 	public Vector<FlexoProcessNode> _childs;
 
-	protected String fileName;
-
 	protected String name = null;
 
 	private String processResourceName;
-
-	// DEPRECATED BUT KEPT FOR BACKWARD COMPATIBILITY
-	protected String builderName;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 
 	public FlexoProcessNode(FlexoWorkflowBuilder builder) {
 		this(builder.workflow);
@@ -88,10 +79,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		_childs = new Vector<FlexoProcessNode>();
 	}
 
-	public FlexoProcessNode(String aName, String aFileName, FlexoProcess aProcess, FlexoWorkflow workflow) {
+	public FlexoProcessNode(String aName, FlexoProcess aProcess, FlexoWorkflow workflow) {
 		this(workflow);
 		name = aName;
-		fileName = aFileName;
 		if (aProcess != null) {
 			setProcess(aProcess);
 		}
@@ -121,7 +111,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		if (getFatherProcessNode() != null) {
 			return getFatherProcessNode().isImported();
 		} else {
-			return getFlexoWorkflow().getImportedRootNodeProcesses().contains(this);
+			return getWorkflow().getImportedRootNodeProcesses().contains(this);
 		}
 	}
 
@@ -293,30 +283,6 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		}
 	}
 
-	public String getFileName() {
-		if (getProcess() != null) {
-			fileName = getProcess().getFlexoResource().getResourceFile().getStringRepresentation();
-		}
-		return fileName;
-	}
-
-	public void setFileName(String newFileName) {
-		String oldFileName = getFileName();
-		if (!StringUtils.isSame(newFileName, oldFileName)) {
-			fileName = newFileName;
-			setChanged();
-			notifyObservers(new NameChanged(oldFileName, newFileName));
-		}
-	}
-
-	public String getBuilderName() {
-		return builderName;
-	}
-
-	public void setBuilderName(String aBuilderName) {
-		builderName = aBuilderName;
-	}
-
 	@Override
 	public String getName() {
 		if (getProcess() != null) {
@@ -416,12 +382,31 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		if (getFatherProcessNode() != null) {
 			return getFatherProcessNode().getSubProcesses().toArray(new FlexoProcessNode[0]);
 		}
-
-		return getFlexoWorkflow()._getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]);
+		return getWorkflow()._getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]);
 	}
 
 	public FlexoProcess getProcess() {
-		return process;
+		return getProcess(false);
+	}
+
+	public FlexoProcess getProcess(boolean force) {
+		if (process != null || !force) {
+			return process;
+		} else {
+			if (getWorkflow().isCache()) {
+				ProjectData projectData = getProject().getProjectData();
+				if (projectData != null) {
+					FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+					if (ref != null) {
+						FlexoProject referredProject = ref.getReferredProject(true);
+						if (referredProject != null) {
+							return referredProject.getWorkflow().getLocalFlexoProcessWithName(getName());
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setProcess(FlexoProcess process) {

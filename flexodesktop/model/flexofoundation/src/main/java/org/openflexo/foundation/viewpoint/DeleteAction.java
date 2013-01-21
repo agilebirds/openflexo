@@ -21,18 +21,21 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
+
+	private DataBinding<Object> object;
 
 	public DeleteAction(ViewPointBuilder builder) {
 		super(builder);
@@ -43,34 +46,32 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 		return EditionActionType.DeleteAction;
 	}
 
-	/*@Override
-	public List<PatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles();
-	}*/
-
 	public Object getDeclaredObject(EditionSchemeAction action) {
-		return getObject().getBindingValue(action);
+		try {
+			return getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding object;
-
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
-	}
-
-	public ViewPointDataBinding getObject() {
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<Object> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(Object.class);
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
@@ -92,20 +93,25 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeleteAction object) {
+		public DataBinding<Object> getBinding(DeleteAction object) {
 			return object.getObject();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(DeleteAction object) {
-			return object.getObjectBindingDefinition();
 		}
 
 	}
 
 	@Override
 	public FlexoModelObject performAction(EditionSchemeAction action) {
-		FlexoModelObject objectToDelete = (FlexoModelObject) getObject().getBindingValue(action);
+		FlexoModelObject objectToDelete = null;
+		try {
+			objectToDelete = (FlexoModelObject) getObject().getBindingValue(action);
+		} catch (TypeMismatchException e1) {
+			e1.printStackTrace();
+		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		}
+		if (objectToDelete == null) {
+			return null;
+		}
 		try {
 			logger.info("Delete object " + objectToDelete + " for object " + getObject() + " this=" + this);
 			objectToDelete.delete();

@@ -41,13 +41,20 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
+import org.openflexo.antar.binding.TargetObject;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
+import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
+import org.openflexo.toolbox.ToolBox;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -84,6 +91,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			_elementTypes.get(c).delete();
 		}
 		_elementTypes.clear();
+
 		_elementTypes = null;
 		_fibBrowser = null;
 	}
@@ -234,8 +242,59 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 
 		@Override
-		public List<AbstractBinding> getDependencyBindings() {
+		public List<DataBinding<?>> getDependencyBindings() {
 			return getBrowserElementType().getDependencyBindings(representedObject);
+		}
+
+		@Override
+		public List<TargetObject> getChainedBindings(DataBinding binding, final TargetObject object) {
+			for (FIBBrowserElementChildren child : browserElementType.getBrowserElement().getChildren()) {
+				if (binding.equals(child.getData()) && child.getCast().isSet() && binding.toString().endsWith(object.propertyName)) {
+					try {
+						final Object bindingValue = child.getData().getBindingValue(browserElementType);
+						List<?> list = ToolBox.getListFromIterable(bindingValue);
+						if (list != null) {
+							List<TargetObject> targetObjects = new ArrayList<TargetObject>();
+							for (final Object o : list) {
+								List<TargetObject> targetObjects2 = child.getCast().getTargetObjects(new BindingEvaluationContext() {
+
+									@Override
+									public Object getValue(BindingVariable variable) {
+										if (variable.getVariableName().equals("child")) {
+											return o;
+										} else {
+											return browserElementType.getValue(variable);
+										}
+									}
+								});
+								if (targetObjects2 != null) {
+									targetObjects.addAll(targetObjects2);
+								}
+							}
+							return targetObjects;
+						} else {
+							return child.getCast().getTargetObjects(new BindingEvaluationContext() {
+
+								@Override
+								public Object getValue(BindingVariable variable) {
+									if (variable.getVariableName().equals("child")) {
+										return bindingValue;
+									} else {
+										return browserElementType.getValue(variable);
+									}
+								}
+							});
+
+						}
+					} catch (TypeMismatchException e) {
+						continue;
+					} catch (NullReferenceException e) {
+						continue;
+					}
+
+				}
+			}
+			return null;
 		}
 
 		public void delete() {
@@ -420,6 +479,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				}
 				*/
 			}
+			dependingObjects.refreshObserving(browserElementType);
 		}
 
 		@Override

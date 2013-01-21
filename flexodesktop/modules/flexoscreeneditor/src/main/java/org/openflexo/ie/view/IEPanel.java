@@ -20,10 +20,7 @@
 package org.openflexo.ie.view;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -35,7 +32,6 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.IEFocusListener;
 import org.openflexo.ie.view.widget.IEWidgetView;
 
 /**
@@ -110,21 +106,6 @@ public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoAct
 		setBackground(Color.WHITE);
 		setOpaque(true);
 		_rootView = null;
-		addFocusListener(IEFocusListener.instance());
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.finest("Mouse entered in " + getClass().getName() + ", try to get the focus");
-					// requestFocus();
-				}
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				requestFocus();
-			}
-		});
 	}
 
 	public IEController getIEController() {

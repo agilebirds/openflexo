@@ -33,10 +33,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -54,14 +56,17 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public static Color DISABLED_COLOR = Color.GRAY;
 
-	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
+	@Deprecated
+	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+	@Deprecated
 	private BindingDefinition DATA;
 
 	private String definitionFile;
 
+	@Deprecated
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
-			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET, false);
+			DATA = new BindingDefinition("data", getDefaultDataClass(), DataBinding.BindingDefinitionType.GET, false);
 		}
 		return DATA;
 	}
@@ -134,8 +139,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	private Integer index;
-	private DataBinding data;
-	private DataBinding visible;
+	private DataBinding<?> data;
+	private DataBinding<Boolean> visible;
 
 	private Font font;
 	private boolean opaque = false;
@@ -485,7 +490,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	 * Default behavior is to generate a binding variable with the java type identified by data class
 	 */
 	protected void createDataBindingVariable() {
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+		_bindingModel.addToBindingVariables(new BindingVariable("data", dataClass != null ? dataClass : Object.class));
 	}
 
 	protected void createBindingModel() {
@@ -505,15 +510,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		createDataBindingVariable();
 
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
-			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));
+			_bindingModel.addToBindingVariables(new BindingVariable(getName(), getDynamicAccessType()));
 		}
 
 		Iterator<FIBComponent> it = subComponentIterator();
 		while (it.hasNext()) {
 			FIBComponent subComponent = it.next();
 			if (StringUtils.isNotEmpty(subComponent.getName()) && subComponent.getDynamicAccessType() != null) {
-				_bindingModel.addToBindingVariables(new BindingVariableImpl(this, subComponent.getName(), subComponent
-						.getDynamicAccessType()));
+				_bindingModel.addToBindingVariables(new BindingVariable(subComponent.getName(), subComponent.getDynamicAccessType()));
 			}
 		}
 
@@ -522,7 +526,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			myControllerClass = FIBController.class;
 		}
 
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "controller", myControllerClass));
+		_bindingModel.addToBindingVariables(new BindingVariable("controller", myControllerClass));
 
 		it = subComponentIterator();
 		while (it.hasNext()) {
@@ -531,6 +535,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		// logger.info("Created binding model at root component level:\n"+_bindingModel);
+	}
+
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		super.notifiedBindingChanged(binding);
+		if (binding == getData()) {
+			logger.info("notified data changed");
+		}
 	}
 
 	public void notifiedBindingModelRecreated() {
@@ -553,44 +565,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		if (data != null) {
-			data.finalizeDeserialization();
+			data.decode();
 		}
 		if (visible != null) {
-			visible.finalizeDeserialization();
+			visible.decode();
 		}
 
 		deserializationPerformed = true;
-
-		/*if (conditional != null) {
-			Vector<Variable> variables;
-			try {
-				variables = Expression.extractVariables(conditional);
-				//System.out.println("Variables for "+conditional+"\n"+variables);
-
-				Iterator<FIBComponent> subComponents = getRootComponent().subComponentIterator();
-				while (subComponents.hasNext()) {
-					FIBComponent next = subComponents.next();
-					if (next != this) {
-						if (next instanceof FIBWidget && ((FIBWidget)next).getData() != null) {
-							String data = ((FIBWidget)next).getData().toString();
-							if (data != null) {
-								for (Variable v : variables) {
-									if (v.getName().startsWith(data) || data.startsWith(v.getName())) {
-										mayDepends.add(next);
-										next.mayAlters.add(this);
-										logger.info("Component "+this+" depends of "+next);
-									}
-								}
-							}
-						}
-					}
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			}	
-		}*/
 	}
 
 	public Vector<FIBComponent> getNamedComponents() {
@@ -658,11 +639,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public Iterator<FIBComponent> getMayDependsIterator() {
-		return mayDepends.iterator();
+		return new ArrayList<FIBComponent>(mayDepends).iterator();
 	}
 
 	public Iterator<FIBComponent> getMayAltersIterator() {
-		return mayAlters.iterator();
+		return new ArrayList<FIBComponent>(mayAlters).iterator();
 	}
 
 	public void declareDependantOf(FIBComponent aComponent) /*throws DependancyLoopException*/{
@@ -735,34 +716,41 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public DataBinding getData() {
+	public DataBinding<?> getData() {
 		if (data == null) {
-			data = new DataBinding(this, Parameters.data, getDataBindingDefinition());
+			data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
 		}
 		return data;
 	}
 
-	public void setData(DataBinding data) {
+	public void setData(DataBinding<?> data) {
 		if (data != null) {
-			data.setOwner(this);
-			data.setBindingAttribute(Parameters.data);
-			data.setBindingDefinition(getDataBindingDefinition());
+			this.data = new DataBinding<Object>(data.toString(), this, data.getDeclaredType(), data.getBindingDefinitionType()) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
+		} else {
+			this.data = null;
 		}
-		this.data = data;
 	}
 
-	public DataBinding getVisible() {
+	public DataBinding<Boolean> getVisible() {
 		if (visible == null) {
-			visible = new DataBinding(this, Parameters.visible, VISIBLE);
+			visible = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return visible;
 	}
 
-	public void setVisible(DataBinding visible) {
+	public void setVisible(DataBinding<Boolean> visible) {
 		if (visible != null) {
-			visible.setOwner(this);
-			visible.setBindingAttribute(Parameters.visible);
-			visible.setBindingDefinition(VISIBLE);
+			visible = new DataBinding<Boolean>(visible.toString(), this, Boolean.class, DataBinding.BindingDefinitionType.GET);
 		}
 		this.visible = visible;
 	}
@@ -1324,13 +1312,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		@Override
-		public DataBinding getBinding(FIBComponent object) {
+		public DataBinding<?> getBinding(FIBComponent object) {
 			return object.getData();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(FIBComponent object) {
-			return object.getDataBindingDefinition();
 		}
 
 	}
@@ -1341,13 +1324,32 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		@Override
-		public DataBinding getBinding(FIBComponent object) {
+		public DataBinding<?> getBinding(FIBComponent object) {
 			return object.getVisible();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(FIBComponent object) {
-			return VISIBLE;
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> binding) {
+		if (binding == null) {
+			return;
+		}
+
+		if (binding.isValid() && binding.getExpression() != null) {
+			// System.out.println("For binding " + binding);
+			for (BindingValue e : binding.getExpression().getAllBindingValues()) {
+				// System.out.println(" > binding variable " + e.getBindingVariable() + " of " + e.getBindingVariable().getType());
+				if (TypeUtils.isTypeAssignableFrom(FIBComponentDynamicModel.class, e.getBindingVariable().getType())) {
+					FIBComponent c = getRootComponent().getComponentNamed(e.getBindingVariable().getVariableName());
+					if (c != null) {
+						// System.out.println("Component " + toString() + " depends of " + c.toString());
+						declareDependantOf(c);
+					} else {
+						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName());
+					}
+				}
+			}
 		}
 
 	}

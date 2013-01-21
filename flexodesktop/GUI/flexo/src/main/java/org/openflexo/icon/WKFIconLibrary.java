@@ -25,6 +25,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -552,6 +553,8 @@ public class WKFIconLibrary extends IconLibrary {
 			return ROLE_LIBRARY_ICON;
 		} else if (object instanceof Role) {
 			return ROLE_ICON;
+		} else if (object instanceof FlexoProcessNode) {
+			return PROCESS_ICON;
 		}
 		logger.warning("iconForObject(WorkflowModelObject) not implemented yet");
 		return null;

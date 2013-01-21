@@ -28,7 +28,7 @@ public class EditionSchemeInserted extends OEDataModification {
 	private EditionPattern _parent;
 
 	public EditionSchemeInserted(EditionScheme editionScheme, EditionPattern parent) {
-		super(null, editionScheme);
+		super("editionSchemes", null, editionScheme);
 		_parent = parent;
 	}
 

@@ -2,11 +2,8 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-
-import org.openflexo.antar.expr.parser.analysis.Analysis;
+import java.util.*;
+import org.openflexo.antar.expr.parser.analysis.*;
 
 @SuppressWarnings("nls")
 public final class ANonEmptyListArgList extends PArgList {

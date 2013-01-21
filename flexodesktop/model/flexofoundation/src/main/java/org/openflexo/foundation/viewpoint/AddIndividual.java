@@ -23,8 +23,7 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
@@ -35,7 +34,6 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -47,6 +45,8 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
 	private String ontologyClassURI = null;
+
+	private DataBinding<String> individualName;
 
 	public AddIndividual(ViewPointBuilder builder) {
 		super(builder);
@@ -180,26 +180,21 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		return assertion;
 	}
 
-	private ViewPointDataBinding individualName;
-
-	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getIndividualNameBindingDefinition() {
-		return INDIVIDUAL_NAME;
-	}
-
-	public ViewPointDataBinding getIndividualName() {
+	public DataBinding<String> getIndividualName() {
 		if (individualName == null) {
-			individualName = new ViewPointDataBinding(this, EditionActionBindingAttribute.individualName,
-					getIndividualNameBindingDefinition());
+			individualName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			individualName.setBindingName("individualName");
 		}
 		return individualName;
 	}
 
-	public void setIndividualName(ViewPointDataBinding individualName) {
-		individualName.setOwner(this);
-		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
-		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
+	public void setIndividualName(DataBinding<String> individualName) {
+		if (individualName != null) {
+			individualName.setOwner(this);
+			individualName.setDeclaredType(String.class);
+			individualName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			individualName.setBindingName("individualName");
+		}
 		this.individualName = individualName;
 	}
 
@@ -239,14 +234,14 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 				this.patternRole = patternRole;
 			}
 
-			public IndividualPatternRole getPatternRole() {
+			public IndividualPatternRole<?> getPatternRole() {
 				return patternRole;
 			}
 
 			@Override
 			protected void fixAction() {
-				AddIndividual action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				AddIndividual<?, ?, ?> action = getObject();
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -258,13 +253,8 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddIndividual object) {
+		public DataBinding<String> getBinding(AddIndividual object) {
 			return object.getIndividualName();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddIndividual object) {
-			return object.getIndividualNameBindingDefinition();
 		}
 
 	}

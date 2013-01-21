@@ -27,6 +27,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButtonColumn;
 
@@ -49,7 +51,13 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 			public void actionPerformed(ActionEvent e) {
 				if (getColumnModel().getAction().isSet() && getColumnModel().getAction().isValid()) {
 					iteratorObject = elementAt(buttonTableColumn.getClickedRow());
-					getColumnModel().getAction().execute(ButtonColumn.this);
+					try {
+						getColumnModel().getAction().execute(ButtonColumn.this);
+					} catch (TypeMismatchException e1) {
+						e1.printStackTrace();
+					} catch (NullReferenceException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

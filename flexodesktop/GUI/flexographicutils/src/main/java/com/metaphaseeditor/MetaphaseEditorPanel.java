@@ -1746,7 +1746,7 @@ public class MetaphaseEditorPanel extends JPanel {
 				button.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent ae) {
-						htmlTextPane.requestFocus();
+						htmlTextPane.requestFocusInWindow();
 					}
 				});
 			} else if (vComponents[i] instanceof JComboBox) {
@@ -1755,7 +1755,7 @@ public class MetaphaseEditorPanel extends JPanel {
 
 					@Override
 					public void actionPerformed(ActionEvent ae) {
-						htmlTextPane.requestFocus();
+						htmlTextPane.requestFocusInWindow();
 					}
 				});
 			} else if (vComponents[i] instanceof JPanel) {

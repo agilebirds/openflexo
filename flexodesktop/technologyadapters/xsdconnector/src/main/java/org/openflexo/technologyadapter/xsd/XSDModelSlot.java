@@ -117,7 +117,8 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	}
 
 	@Override
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+	@Deprecated
+	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		return null;
 	}
 

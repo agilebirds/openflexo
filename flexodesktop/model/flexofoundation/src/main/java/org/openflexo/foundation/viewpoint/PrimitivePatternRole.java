@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.ActorReference;
@@ -20,11 +21,6 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 
 	public PrimitivePatternRole(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Primitive;
 	}
 
 	public PrimitiveType getPrimitiveType() {
@@ -57,7 +53,7 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Type getType() {
 		if (primitiveType == null) {
 			return null;
 		}

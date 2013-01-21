@@ -38,6 +38,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDownColumn;
 
@@ -118,7 +120,14 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		else if (getColumnModel().getList() != null && getColumnModel().getList().isSet()) {
 
 			iteratorObject = object;
-			Object accessedList = getColumnModel().getList().getBindingValue(this);
+			Object accessedList = null;
+			try {
+				accessedList = getColumnModel().getList().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 
 			if (accessedList instanceof List) {
 				return (List) accessedList;
@@ -128,7 +137,14 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		else if (getColumnModel().getArray() != null && getColumnModel().getArray().isSet()) {
 
 			iteratorObject = object;
-			Object accessedArray = getColumnModel().getArray().getBindingValue(getController());
+			Object accessedArray = null;
+			try {
+				accessedArray = getColumnModel().getArray().getBindingValue(getController());
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			}
 			try {
 				Object[] array = (Object[]) accessedArray;
 				Vector<Object> list = new Vector<Object>();
@@ -141,8 +157,8 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			}
 		}
 
-		else if (getColumnModel().getData() != null && getColumnModel().getData().getBinding() != null) {
-			Type type = getColumnModel().getData().getBinding().getAccessedType();
+		else if (getColumnModel().getData() != null && getColumnModel().getData().isValid()) {
+			Type type = getColumnModel().getData().getAnalyzedType();
 			if (type instanceof Class && ((Class) type).isEnum()) {
 				Object[] array = ((Class) type).getEnumConstants();
 				Vector<Object> list = new Vector<Object>();

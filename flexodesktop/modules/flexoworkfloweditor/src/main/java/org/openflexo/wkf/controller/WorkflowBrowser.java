@@ -27,6 +27,7 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.module.UserType;
 
 /**
  * Browser for WKF module, browse all processes without details
@@ -45,6 +46,11 @@ public class WorkflowBrowser extends ProjectBrowser {
 
 	public WorkflowBrowser(WKFController controller) {
 		super(controller);
+	}
+
+	@Override
+	public boolean showOptionsButton() {
+		return !UserType.isLite() && !UserType.isCustomerRelease();
 	}
 
 	@Override

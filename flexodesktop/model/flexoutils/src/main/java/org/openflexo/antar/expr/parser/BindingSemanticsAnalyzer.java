@@ -3,7 +3,7 @@ package org.openflexo.antar.expr.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.parser.node.AAdditionalArg;
 import org.openflexo.antar.expr.parser.node.ABindingTerm;
@@ -27,7 +27,7 @@ import org.openflexo.antar.expr.parser.node.TIdentifier;
  */
 class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 
-	private ArrayList<BindingValueAsExpression.AbstractBindingPathElement> path;
+	private ArrayList<BindingValue.AbstractBindingPathElement> path;
 
 	/**
 	 * This flag is used to escape binding processing that may happen in call args handling
@@ -35,10 +35,10 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	private boolean weAreDealingWithTheRightBinding = true;
 
 	public BindingSemanticsAnalyzer() {
-		path = new ArrayList<BindingValueAsExpression.AbstractBindingPathElement>();
+		path = new ArrayList<BindingValue.AbstractBindingPathElement>();
 	}
 
-	public List<BindingValueAsExpression.AbstractBindingPathElement> getPath() {
+	public List<BindingValue.AbstractBindingPathElement> getPath() {
 		return path;
 	};
 
@@ -56,14 +56,14 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	  {call} call |
 	  {tail} identifier dot binding;*/
 
-	protected BindingValueAsExpression.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
-		BindingValueAsExpression.NormalBindingPathElement returned = new BindingValueAsExpression.NormalBindingPathElement(
+	protected BindingValue.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
+		BindingValue.NormalBindingPathElement returned = new BindingValue.NormalBindingPathElement(
 				identifier.getText());
 		path.add(0, returned);
 		return returned;
 	}
 
-	public BindingValueAsExpression.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
+	public BindingValue.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
 		PArgList argList = node.getArgList();
 		ArrayList<Expression> args = new ArrayList<Expression>();
 		if (argList instanceof ANonEmptyListArgList) {
@@ -73,7 +73,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 				args.add(getExpression(additionalArg.getExpr()));
 			}
 		}
-		BindingValueAsExpression.MethodCallBindingPathElement returned = new BindingValueAsExpression.MethodCallBindingPathElement(node
+		BindingValue.MethodCallBindingPathElement returned = new BindingValue.MethodCallBindingPathElement(node
 				.getIdentifier().getText(), args);
 		path.add(0, returned);
 		return returned;

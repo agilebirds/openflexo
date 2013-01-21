@@ -24,9 +24,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.FixProposal;
@@ -44,23 +46,13 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalFeature;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, ViewElement> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
 	private GraphicalFeature<?, ?> graphicalFeature = null;
-	private ViewPointDataBinding value;
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
-		@Override
-		public java.lang.reflect.Type getType() {
-			if (getGraphicalFeature() != null) {
-				return getGraphicalFeature().getType();
-			}
-			return Object.class;
-		}
-	};
+	private DataBinding<Object> value;
 
 	public GraphicalAction(ViewPointBuilder builder) {
 		super(builder);
@@ -71,25 +63,39 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		return EditionActionType.GraphicalAction;
 	}
 
+	public java.lang.reflect.Type getGraphicalFeatureType() {
+		if (getGraphicalFeature() != null) {
+			return getGraphicalFeature().getType();
+		}
+		return Object.class;
+	}
+
 	public Object getValue(EditionSchemeAction action) {
-		return getValue().getBindingValue(action);
+		try {
+			return getValue().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public BindingDefinition getValueBindingDefinition() {
-		return VALUE;
-	}
-
-	public ViewPointDataBinding getValue() {
+	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
+			value = new DataBinding<Object>(this, getGraphicalFeatureType(), BindingDefinitionType.GET);
+			value.setBindingName("value");
 		}
 		return value;
 	}
 
-	public void setValue(ViewPointDataBinding value) {
-		value.setOwner(this);
-		value.setBindingAttribute(EditionActionBindingAttribute.object);
-		value.setBindingDefinition(getValueBindingDefinition());
+	public void setValue(DataBinding<Object> value) {
+		if (value != null) {
+			value.setOwner(this);
+			value.setBindingName("value");
+			value.setDeclaredType(getGraphicalFeatureType());
+			value.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.value = value;
 	}
 
@@ -134,7 +140,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		if (availableFeatures == null) {
 			availableFeatures = new Vector<GraphicalFeature<?, ?>>();
 			if (getSubject().isSet() && getSubject().isValid()) {
-				Class accessedClass = TypeUtils.getBaseClass(getSubject().getBinding().getAccessedType());
+				Class accessedClass = TypeUtils.getBaseClass(getSubject().getAnalyzedType());
 				if (ViewObject.class.isAssignableFrom(accessedClass)) {
 					for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
 						availableFeatures.add(GF);
@@ -168,47 +174,40 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		_graphicalFeatureName = featureName;
 	}
 
-	private ViewPointDataBinding subject;
+	private DataBinding<ViewElement> subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getSubjectBindingDefinition() {
-		return SUBJECT;
-	}
-
-	public ViewPointDataBinding getSubject() {
+	public DataBinding<ViewElement> getSubject() {
 		if (subject == null) {
-			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
+			subject = new DataBinding<ViewElement>(this, ViewElement.class, DataBinding.BindingDefinitionType.GET);
+			subject.setBindingName("subject");
 		}
 		return subject;
 	}
 
-	public void setSubject(ViewPointDataBinding subject) {
+	public void setSubject(DataBinding<ViewElement> subject) {
 		if (subject != null) {
 			subject.setOwner(this);
-			subject.setBindingAttribute(EditionActionBindingAttribute.subject);
-			subject.setBindingDefinition(getSubjectBindingDefinition());
+			subject.setBindingName("subject");
+			subject.setDeclaredType(ViewElement.class);
+			subject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.subject = subject;
 	}
 
 	public ViewElement getSubject(EditionSchemeAction action) {
-		return (ViewElement) getSubject().getBindingValue(action);
+		try {
+			return getSubject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-
-	/*@Deprecated
-	public String _getPatternRoleName() {
-		return getSubject().toString();
-	}
-
-	@Deprecated
-	public void _setPatternRoleName(String patternRole) {
-		getSubject().setUnparsedBinding(patternRole);
-	}*/
 
 	@Override
-	public void notifyBindingChanged(ViewPointDataBinding binding) {
-		super.notifyBindingChanged(binding);
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		super.notifiedBindingChanged(binding);
 		if (binding == getSubject()) {
 			availableFeatures = null;
 		}
@@ -223,13 +222,20 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	public ViewElement performAction(EditionSchemeAction action) {
 		logger.info("Perform graphical action " + action);
 		ViewElement graphicalElement = getSubject(action);
+		Object value = null;
+		try {
+			value = getValue().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Element is " + graphicalElement);
 			logger.fine("Feature is " + getGraphicalFeature());
-			logger.fine("Value is " + getValue().getBindingValue(action));
+			logger.fine("Value is " + value);
 		}
-		getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(),
-				getValue().getBindingValue(action));
+		getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(), value);
 		return graphicalElement;
 	}
 
@@ -275,7 +281,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 			@Override
 			protected void fixAction() {
 				GraphicalAction graphicalAction = getObject();
-				graphicalAction.setSubject(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				graphicalAction.setSubject(new DataBinding<ViewElement>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -287,13 +293,8 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(GraphicalAction object) {
+		public DataBinding<Object> getBinding(GraphicalAction object) {
 			return object.getValue();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(GraphicalAction object) {
-			return object.getValueBindingDefinition();
 		}
 
 	}

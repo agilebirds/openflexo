@@ -1,5 +1,3 @@
-#Dutch
-#Wed May 30 00:31:47 CEST 2012
 BOOLEAN=BOOLEAN
 cancel=Cancel
 close_drawing=Close drawing
@@ -17,4 +15,5 @@ quit=Quit
 save_drawing=Save drawing
 save_drawing_as=Save drawing as...
 tools=Tools
+undefined_value=undefined_value
 untitled=untitled

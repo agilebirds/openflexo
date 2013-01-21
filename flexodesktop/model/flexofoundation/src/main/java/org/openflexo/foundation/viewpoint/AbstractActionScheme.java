@@ -19,50 +19,49 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class AbstractActionScheme extends EditionScheme {
 
-	public static enum ActionSchemeBindingAttribute implements InspectorBindingAttribute {
-		conditional
-	}
-
-	private ViewPointDataBinding conditional;
+	private DataBinding<Boolean> conditional;
 
 	public AbstractActionScheme(ViewPointBuilder builder) {
 		super(builder);
 	}
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, ActionSchemeBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(ActionSchemeBindingAttribute.conditional);
-		conditional.setBindingDefinition(getConditionalBindingDefinition());
+	public void setConditional(DataBinding<Boolean> conditional) {
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
+		}
 		this.conditional = conditional;
 	}
 
 	public boolean evaluateCondition(EditionPatternReference editionPatternReference) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(editionPatternReference);
+			try {
+				return getConditional().getBindingValue(editionPatternReference);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -70,8 +69,9 @@ public abstract class AbstractActionScheme extends EditionScheme {
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		super.appendContextualBindingVariables(bindingModel);
-		bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
-				this));
+		/*bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
+				this));*/
+		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, getEditionPattern()));
 	}
 
 	@Override

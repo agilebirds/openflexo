@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.model.View" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="10" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="draw_working_area" localize="true" name="GraphicalRepresentationdrawWorkingAreaLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="data.graphicalRepresentation.drawWorkingArea" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
-    </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" validateOnReturn="true" passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
@@ -29,6 +24,11 @@
       <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="GRTab.data.drawWorkingArea" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
  		</Tab>
  		</TabPanel>
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="10" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="draw_working_area" localize="true" name="GraphicalRepresentationdrawWorkingAreaLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="data.graphicalRepresentation.drawWorkingArea" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
     </Tab>
     
   </TabPanel>

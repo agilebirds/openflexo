@@ -19,12 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
  * Represents an inspector entry for an ontology property
@@ -36,11 +35,8 @@ public class PropertyInspectorEntry extends InspectorEntry {
 
 	private String parentPropertyURI;
 	private String domainURI;
-
-	private ViewPointDataBinding domainValue;
-
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", IFlexoOntologyClass.class, BindingDefinitionType.GET,
-			false);
+	private boolean isDynamicDomainValueSet = false;
+	private DataBinding<IFlexoOntologyClass> domainValue;
 
 	public PropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -88,25 +84,23 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getDomainValueBindingDefinition() {
-		return DOMAIN_VALUE;
-	}
-
-	public ViewPointDataBinding getDomainValue() {
+	public DataBinding<IFlexoOntologyClass> getDomainValue() {
 		if (domainValue == null) {
-			domainValue = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.domainValue, getDomainValueBindingDefinition());
+			domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			domainValue.setBindingName("domainValue");
 		}
 		return domainValue;
 	}
 
-	public void setDomainValue(ViewPointDataBinding domainValue) {
-		domainValue.setOwner(this);
-		domainValue.setBindingAttribute(InspectorEntryBindingAttribute.domainValue);
-		domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
+		if (domainValue != null) {
+			domainValue.setOwner(this);
+			domainValue.setBindingName("domainValue");
+			domainValue.setDeclaredType(IFlexoOntologyClass.class);
+			domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.domainValue = domainValue;
 	}
-
-	private boolean isDynamicDomainValueSet = false;
 
 	public boolean getIsDynamicDomainValue() {
 		return getDomainValue().isSet() || isDynamicDomainValueSet;

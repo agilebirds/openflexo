@@ -144,6 +144,7 @@
     <property name="processResourceName" xmlTag="processResourceName" attribute="YES"/> 
     <property name="subProcesses" xmlTag="FlexoProcess" type="vector" primary="yes"/>
     <property name="index" xmlTag="docIndex" attribute="yes"/>
+    <property name="name" xmlTag="name" attribute="YES"/>
   </entity>
   
   <entity name="org.openflexo.foundation.wkf.ProcessFolder" xmlTag="ProcessFolder">

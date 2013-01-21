@@ -21,18 +21,17 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.Collection;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
-import org.openflexo.foundation.viewpoint.AbstractActionScheme.ActionSchemeBindingAttribute;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class GraphicalElementAction extends EditionPatternObject {
 
@@ -44,7 +43,7 @@ public class GraphicalElementAction extends EditionPatternObject {
 		SingleClick, DoubleClick, ShiftClick, AltClick, CtrlClick, MetaClick;
 	}
 
-	private ViewPointDataBinding conditional;
+	private DataBinding<Boolean> conditional;
 
 	public GraphicalElementAction(ViewPointBuilder builder) {
 		super(builder);
@@ -68,29 +67,33 @@ public class GraphicalElementAction extends EditionPatternObject {
 		this.graphicalElementPatternRole = graphicalElementPatternRole;
 	}
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, ActionSchemeBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(ActionSchemeBindingAttribute.conditional);
-		conditional.setBindingDefinition(getConditionalBindingDefinition());
+	public void setConditional(DataBinding<Boolean> conditional) {
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
+		}
 		this.conditional = conditional;
 	}
 
 	public boolean evaluateCondition(EditionPatternReference editionPatternReference) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(editionPatternReference);
+			try {
+				return getConditional().getBindingValue(editionPatternReference);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}

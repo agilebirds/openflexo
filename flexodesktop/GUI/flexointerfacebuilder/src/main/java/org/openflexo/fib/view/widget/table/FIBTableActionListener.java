@@ -25,9 +25,11 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBTableAction;
@@ -103,7 +105,14 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 		}
 		if (tableAction.getIsAvailable() != null && tableAction.getIsAvailable().isValid()) {
 			this.selectedObject = selectedObject;
-			Object returned = tableAction.getIsAvailable().getBindingValue(this);
+			Object returned = null;
+			try {
+				returned = tableAction.getIsAvailable().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// e.printStackTrace();
+			}
 			if (returned == null) {
 				return false;
 			}
@@ -119,7 +128,14 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 			logger.info("Perform action " + tableAction.getName() + " method " + tableAction.getMethod());
 			// logger.info("controller="+getController()+" of "+getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
-			Object newObject = tableAction.getMethod().getBindingValue(this);
+			Object newObject = null;
+			try {
+				newObject = tableAction.getMethod().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			tableWidget.updateWidgetFromModel();
 			tableWidget.setSelectedObject(newObject);
 

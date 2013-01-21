@@ -29,9 +29,4 @@ public class EMFObjectIndividualPatternRole extends IndividualPatternRole<EMFObj
 		super(builder);
 	}
 
-	@Override
-	public Class<EMFObjectIndividual> getAccessedClass() {
-		return EMFObjectIndividual.class;
-	}
-
 }

@@ -522,14 +522,14 @@ public class TabModelView extends JPanel {
 
 	public void requestFocusInFirstWidget() {
 		if (_widgets.size() > 0) {
-			_widgets.firstElement().getDynamicComponent().requestFocus();
+			_widgets.firstElement().getDynamicComponent().requestFocusInWindow();
 			// System.out.println("Request focus for "+_widgets.firstElement().getDynamicComponent());
 		}
 	}
 
 	public void requestFocusInSecondWidget() {
 		if (_widgets.size() > 1) {
-			_widgets.elementAt(1).getDynamicComponent().requestFocus();
+			_widgets.elementAt(1).getDynamicComponent().requestFocusInWindow();
 			// System.out.println("Request focus for "+_widgets.elementAt(1).getDynamicComponent());
 		}
 	}

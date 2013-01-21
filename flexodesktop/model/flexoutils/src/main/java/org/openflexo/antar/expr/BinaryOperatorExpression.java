@@ -122,6 +122,13 @@ public class BinaryOperatorExpression extends Expression {
 	}
 
 	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		leftArgument.visit(visitor);
+		rightArgument.visit(visitor);
+		visitor.visit(this);
+	}
+
+	@Override
 	public EvaluationType getEvaluationType() throws TypeMismatchException {
 		return getOperator().getEvaluationType(getLeftArgument().getEvaluationType(), getRightArgument().getEvaluationType());
 	}

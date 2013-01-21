@@ -75,7 +75,10 @@ public class RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		return value.getClass();
+		if (value != null) {
+			return value.getClass();
+		}
+		return Object.class;
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 		EMFModel model = (EMFModel) objectIndividual.getOntology();
 		if (referenceObjectProperty.getObject().getUpperBound() != 1) {
 			List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
-			values.remove((Object) value);
+			values.remove(value);
 		} else {
 			objectIndividual.getObject().eUnset(referenceObjectProperty.getObject());
 		}

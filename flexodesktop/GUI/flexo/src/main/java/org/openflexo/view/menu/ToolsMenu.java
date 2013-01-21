@@ -21,6 +21,8 @@ package org.openflexo.view.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +60,7 @@ import org.openflexo.module.Module;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Automatic builded 'Tools' menu for modules
@@ -177,12 +180,14 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public class ResourceManagerAction extends AbstractAction {
+	public class ResourceManagerAction extends AbstractAction implements PropertyChangeListener {
 		public ResourceManagerAction() {
 			super();
-			if (getController().getProject() == null) {
-				setEnabled(false);
+			if (getController() != null) {
+				getController().getControllerModel().getPropertyChangeSupport()
+						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 			}
+			updateEnability();
 		}
 
 		@Override
@@ -191,6 +196,21 @@ public class ToolsMenu extends FlexoMenu {
 				return;
 			}
 			getController().getRMWindow(getController().getProject()).show();
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getController() != null) {
+				if (evt.getSource() == getController().getControllerModel()) {
+					if (ControllerModel.CURRENT_EDITOR.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
+
+		private void updateEnability() {
+			setEnabled(getController() != null && getController().getProject() != null);
 		}
 
 	}

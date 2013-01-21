@@ -29,6 +29,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -187,6 +188,12 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	@Override
 	public TechnologyContextManager<View, DiagramMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory() {
+		// no specific binding factory for this technology
 		return null;
 	}
 

@@ -51,6 +51,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
@@ -170,6 +171,21 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 	}
 
+	@Override
+	public boolean displayInspectorTabForContext(String context) {
+		if ("METRICS".equals(context)) {
+			return WKFPreferences.getShowLeanTabs();
+		} else if ("BPE".equals(context)) {
+			return getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE;
+		} else if ("SWL".equals(context)) {
+			return getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE;
+		} else if ("ROLE_EDITOR".equals(context)) {
+			return getCurrentPerspective() == ROLE_EDITOR_PERSPECTIVE;
+		} else {
+			return super.displayInspectorTabForContext(context);
+		}
+	}
+
 	public WorkflowBrowserView getWkfBrowserView() {
 		return wkfBrowserView;
 	}
@@ -188,9 +204,9 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 		super.updateEditor(from, to);
 		if (to != null && to.getProject() != null) {
-			manager.removeListener(FlexoProject.RESOURCES, this, to.getProject());
+			manager.addListener(FlexoProject.RESOURCES, this, to.getProject());
 			if (to.getProject().getProjectData() != null) {
-				manager.removeListener(ProjectData.IMPORTED_PROJECTS, this, to.getProject().getProjectData());
+				manager.addListener(ProjectData.IMPORTED_PROJECTS, this, to.getProject().getProjectData());
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
@@ -329,14 +345,35 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object) {
+		if (object instanceof FlexoProcessNode) {
+			object = ((FlexoProcessNode) object).getProcess(true);
+			if (object == null) {
+				return;
+			}
+		}
+		if (object instanceof RoleList || object instanceof FlexoProcess) {
+			super.setCurrentEditedObjectAsModuleView(object);
+		}
+	}
+
+	@Override
 	public void setCurrentEditedObjectAsModuleView(FlexoObject object, FlexoPerspective perspective) {
+		if (object instanceof FlexoProcessNode) {
+			object = ((FlexoProcessNode) object).getProcess(true);
+			if (object == null) {
+				return;
+			}
+		}
 		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
 			return;
 		}
-		super.setCurrentEditedObjectAsModuleView(object, perspective);
+		if (object instanceof RoleList || object instanceof FlexoProcess) {
+			super.setCurrentEditedObjectAsModuleView(object, perspective);
+		}
 	}
 
 	public void setCurrentImportedProcess(FlexoProcess subProcess) {
@@ -591,58 +628,9 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 	}
 
-	/*
-	 * private static final String WORKFLOW_LEAN_TAB_NAME="Metrics Definition"; private static final String
-	 * PROCESS_LEAN_TAB_NAME="Process Metrics"; private static final String ACTIVITY_LEAN_TAB_NAME="Activity Metrics"; private static final
-	 * String OPERATION_LEAN_TAB_NAME="Operation Metrics"; private static final String EDGE_LEAN_TAB_NAME="Edge Metrics";
-	 */
-
 	public void notifyShowLeanTabHasChanged() {
-		if (WKFPreferences.getShowLeanTabs()) {
-			getSelectionManager().setInspectionContext("METRICS", true);
-			/*
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
-			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
-			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
-			 */
-		} else {
-			getSelectionManager().removeInspectionContext("METRICS");
-			/*
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
-			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
-			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
-			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
-			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
-			 */
-		}
-		if (getInspectorWindow() != null) {
-			getInspectorWindow().getContent().refresh();
+		if (getModuleInspectorController() != null) {
+			getModuleInspectorController().refreshComponentVisibility();
 		}
 	}
 

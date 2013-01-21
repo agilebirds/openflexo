@@ -23,6 +23,8 @@ import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -59,6 +61,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 /**
@@ -320,20 +323,21 @@ public class FileMenu extends FlexoMenu {
 	public class SaveProjectItem extends FlexoMenuItem {
 
 		public SaveProjectItem() {
-			super(new SaveProjectAction(), "save_project", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK), getController(), true);
+			super(new SaveProjectAction(), "save_current_project", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK),
+					getController(), true);
 			setIcon(IconLibrary.SAVE_ICON);
 		}
 
 	}
 
-	public class SaveProjectAction extends AbstractAction {
+	public class SaveProjectAction extends AbstractAction implements PropertyChangeListener {
 		public SaveProjectAction() {
 			super();
-		}
-
-		@Override
-		public boolean isEnabled() {
-			return getController() != null && getController().getProject() != null;
+			if (getController() != null) {
+				getController().getControllerModel().getPropertyChangeSupport()
+						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+			}
+			updateEnability();
 		}
 
 		@Override
@@ -354,6 +358,21 @@ public class FileMenu extends FlexoMenu {
 					FileMenu.this._controller.getFlexoFrame().setCursor(c);
 				}
 			}
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getController() != null) {
+				if (evt.getSource() == getController().getControllerModel()) {
+					if (ControllerModel.CURRENT_EDITOR.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
+
+		private void updateEnability() {
+			setEnabled(getController() != null && getController().getProject() != null);
 		}
 	}
 

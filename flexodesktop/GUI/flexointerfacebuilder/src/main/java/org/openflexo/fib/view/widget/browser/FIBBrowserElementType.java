@@ -29,11 +29,12 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.antar.binding.AbstractBinding;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
@@ -60,7 +61,14 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		public synchronized Object apply(Object arg0) {
 			child = arg0;
 			try {
-				Object result = children.getCast().getBindingValue(this);
+				Object result = null;
+				try {
+					result = children.getCast().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				return result;
 			} finally {
 				child = null;
@@ -135,65 +143,73 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return fibBrowserModel;
 	}
 
-	/*public Object elementAt(int row)
-	{
-	    return fibBrowserModel.elementAt(row);
-	}*/
-
-	private void appendToDependingObjects(DataBinding binding, List<AbstractBinding> returned) {
-		if (binding.isSet()) {
-			returned.add(binding.getBinding());
-		}
-	}
-
-	public List<AbstractBinding> getDependencyBindings(final Object object) {
+	public List<DataBinding<?>> getDependencyBindings(final Object object) {
 		if (browserElementDefinition == null) {
 			return null;
 		}
 		iteratorObject = object;
-		List<AbstractBinding> returned = new ArrayList<AbstractBinding>();
-		appendToDependingObjects(browserElementDefinition.getLabel(), returned);
-		appendToDependingObjects(browserElementDefinition.getIcon(), returned);
-		appendToDependingObjects(browserElementDefinition.getTooltip(), returned);
-		appendToDependingObjects(browserElementDefinition.getEnabled(), returned);
-		appendToDependingObjects(browserElementDefinition.getVisible(), returned);
+		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
+		returned.add(browserElementDefinition.getLabel());
+		returned.add(browserElementDefinition.getIcon());
+		returned.add(browserElementDefinition.getTooltip());
+		returned.add(browserElementDefinition.getEnabled());
+		returned.add(browserElementDefinition.getVisible());
 		for (FIBBrowserElementChildren children : browserElementDefinition.getChildren()) {
-			appendToDependingObjects(children.getData(), returned);
-			appendToDependingObjects(children.getCast(), returned);
-			appendToDependingObjects(children.getVisible(), returned);
+			returned.add(children.getData());
+			returned.add(children.getCast());
+			returned.add(children.getVisible());
 		}
 		return returned;
 	}
 
-	public synchronized String getLabelFor(final Object object) {
+	public String getLabelFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return "???" + object.toString();
 		}
 		if (browserElementDefinition.getLabel().isSet()) {
 			iteratorObject = object;
-			return (String) browserElementDefinition.getLabel().getBindingValue(this);
+			try {
+				return browserElementDefinition.getLabel().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return object.toString();
 	}
 
-	public synchronized String getTooltipFor(final Object object) {
+	public String getTooltipFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return "???" + object.toString();
 		}
 		if (browserElementDefinition.getTooltip().isSet()) {
 			iteratorObject = object;
-			return (String) browserElementDefinition.getTooltip().getBindingValue(this);
+			try {
+				return browserElementDefinition.getTooltip().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return browserElementDefinition.getName();
 	}
 
-	public synchronized Icon getIconFor(final Object object) {
+	public Icon getIconFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return null;
 		}
 		if (browserElementDefinition.getIcon().isSet()) {
 			iteratorObject = object;
-			Object returned = browserElementDefinition.getIcon().getBindingValue(this);
+			Object returned = null;
+			try {
+				returned = browserElementDefinition.getIcon().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			if (returned instanceof Icon) {
 				return (Icon) returned;
 			}
@@ -203,13 +219,20 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	public synchronized boolean isEnabled(final Object object) {
+	public boolean isEnabled(final Object object) {
 		if (browserElementDefinition == null) {
 			return false;
 		}
 		if (browserElementDefinition.getEnabled().isSet()) {
 			iteratorObject = object;
-			Object enabledValue = browserElementDefinition.getEnabled().getBindingValue(this);
+			Object enabledValue = null;
+			try {
+				enabledValue = browserElementDefinition.getEnabled().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			if (enabledValue != null) {
 				return (Boolean) enabledValue;
 			}
@@ -219,7 +242,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	public synchronized boolean isVisible(final Object object) {
+	public boolean isVisible(final Object object) {
 		if (browserElementDefinition == null) {
 			return false;
 		}
@@ -228,13 +251,25 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 		if (browserElementDefinition.getVisible().isSet()) {
 			iteratorObject = object;
-			return (Boolean) browserElementDefinition.getVisible().getBindingValue(this);
+			try {
+				Boolean returned = browserElementDefinition.getVisible().getBindingValue(this);
+				if (returned != null) {
+					return returned;
+				}
+				return true;
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+				return true;
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				return true;
+			}
 		} else {
 			return true;
 		}
 	}
 
-	public synchronized List<?> getChildrenFor(final Object object) {
+	public List<Object> getChildrenFor(final Object object) {
 		if (browserElementDefinition == null) {
 			return Collections.EMPTY_LIST;
 		}
@@ -266,17 +301,33 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return returned;
 	}
 
-	protected synchronized Object getChildrenFor(FIBBrowserElementChildren children, final Object object) {
+	protected Object getChildrenFor(FIBBrowserElementChildren children, final Object object) {
 		if (children.getData().isSet()) {
 			iteratorObject = object;
 			if (children.getVisible().isSet()) {
-				boolean visible = (Boolean) children.getVisible().getBindingValue(this);
+				boolean visible;
+				try {
+					visible = children.getVisible().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+					visible = true;
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+					visible = true;
+				}
 				if (!visible) {
 					// Finally we dont want to see it
 					return null;
 				}
 			}
-			Object result = children.getData().getBindingValue(this);
+			Object result = null;
+			try {
+				result = children.getData().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			if (children.getCast().isSet()) {
 				return new CastFunction(children).apply(result);
 			}
@@ -286,17 +337,33 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	protected synchronized List<?> getChildrenListFor(final FIBBrowserElementChildren children, final Object object) {
+	protected List<?> getChildrenListFor(final FIBBrowserElementChildren children, final Object object) {
 		if (children.getData().isSet() && children.isMultipleAccess()) {
 			iteratorObject = object;
 			if (children.getVisible().isSet()) {
-				boolean visible = (Boolean) children.getVisible().getBindingValue(this);
+				boolean visible;
+				try {
+					visible = children.getVisible().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+					visible = true;
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+					visible = true;
+				}
 				if (!visible) {
 					// Finally we dont want to see it
 					return null;
 				}
 			}
-			Object bindingValue = children.getData().getBindingValue(this);
+			Object bindingValue = null;
+			try {
+				bindingValue = children.getData().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
 			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
@@ -309,13 +376,19 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 
 	public boolean isLabelEditable() {
 		return getBrowserElement().getIsEditable() && getBrowserElement().getEditableLabel().isSet()
-				&& getBrowserElement().getEditableLabel().getBinding().isSettable();
+				&& getBrowserElement().getEditableLabel().isSettable();
 	}
 
 	public synchronized String getEditableLabelFor(final Object object) {
 		if (isLabelEditable()) {
 			iteratorObject = object;
-			return (String) browserElementDefinition.getEditableLabel().getBindingValue(this);
+			try {
+				return browserElementDefinition.getEditableLabel().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return object.toString();
 	}
@@ -323,7 +396,13 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	public synchronized void setEditableLabelFor(final Object object, String value) {
 		if (isLabelEditable()) {
 			iteratorObject = object;
-			browserElementDefinition.getEditableLabel().setBindingValue(value, this);
+			try {
+				browserElementDefinition.getEditableLabel().setBindingValue(value, this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -347,10 +426,14 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	public Font getFont(final Object object) {
 		if (browserElementDefinition.getDynamicFont().isSet()) {
 			iteratorObject = object;
-			Object returned = browserElementDefinition.getDynamicFont().getBindingValue(this);
-			if (returned instanceof Font) {
-				return (Font) returned;
+			try {
+				return browserElementDefinition.getDynamicFont().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
 			}
+			return null;
 		}
 		if (getBrowserElement() != null) {
 			return getBrowserElement().retrieveValidFont();

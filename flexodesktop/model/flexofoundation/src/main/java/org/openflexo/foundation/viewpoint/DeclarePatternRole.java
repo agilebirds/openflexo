@@ -22,19 +22,22 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		AssignableAction<M, MM, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
+
+	private DataBinding<Object> object;
 
 	public DeclarePatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -51,28 +54,31 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	public Object getDeclaredObject(EditionSchemeAction action) {
-		return getObject().getBindingValue(action);
+		try {
+			return getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding object;
-
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
-	}
-
-	public ViewPointDataBinding getObject() {
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<Object> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(Object.class);
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
@@ -87,13 +93,8 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+		public DataBinding<Object> getBinding(DeclarePatternRole object) {
 			return object.getAssignation();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getAssignationBindingDefinition();
 		}
 
 	}
@@ -104,13 +105,8 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+		public DataBinding<Object> getBinding(DeclarePatternRole object) {
 			return object.getObject();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getObjectBindingDefinition();
 		}
 
 	}

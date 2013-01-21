@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+
 public class FIBTextField extends FIBTextWidget {
 
 	private boolean passwd = false;
@@ -38,4 +39,5 @@ public class FIBTextField extends FIBTextWidget {
 	public void setPasswd(boolean passwd) {
 		this.passwd = passwd;
 	}
+
 }

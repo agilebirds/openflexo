@@ -181,7 +181,11 @@ public class MainPaneTopBar extends JMenuBar {
 		projectSelector.addApplyCancelListener(new CustomPopup.ApplyCancelListener() {
 			@Override
 			public void fireApplyPerformed() {
-				model.setCurrentProject(projectSelector.getEditedObject());
+				if (projectSelector.getEditedObject() != null) {
+					model.setCurrentProject(projectSelector.getEditedObject());
+				} else {
+					projectSelector.setEditedObject(model.getCurrentProject());
+				}
 			}
 
 			@Override

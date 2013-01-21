@@ -4,8 +4,12 @@ import org.openflexo.foundation.DataModification;
 
 public class ImportedProjectLoaded extends DataModification {
 
-	public ImportedProjectLoaded() {
-		super(null, null);
+	public ImportedProjectLoaded(FlexoProject project) {
+		super(null, project);
+	}
+
+	public FlexoProject getProject() {
+		return (FlexoProject) newValue();
 	}
 
 }

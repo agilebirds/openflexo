@@ -147,7 +147,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 					return false;
 				}
 				if (exception instanceof InvalidFileNameException) {
-					FlexoController.notify("Process named " + action.getNewProcessName() + " is_not_valid");
+					FlexoController.notify("Process named " + action.getNewProcessName() + " is not valid");
 					return false;
 				}
 				return false;

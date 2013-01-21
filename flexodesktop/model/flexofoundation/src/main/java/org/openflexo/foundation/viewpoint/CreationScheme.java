@@ -27,9 +27,4 @@ public class CreationScheme extends AbstractCreationScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.CreationScheme;
-	}
-
 }

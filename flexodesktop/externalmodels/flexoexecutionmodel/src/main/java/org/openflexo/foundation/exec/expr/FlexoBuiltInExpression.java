@@ -23,7 +23,9 @@ import java.util.Vector;
 
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.TransformException;
+import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.java.JavaPrettyPrintable;
 
 public abstract class FlexoBuiltInExpression extends Expression implements JavaPrettyPrintable {
@@ -37,6 +39,11 @@ public abstract class FlexoBuiltInExpression extends Expression implements JavaP
 	@Override
 	public Expression transform(ExpressionTransformer transformer) throws TransformException {
 		return transformer.performTransformation(this);
+	}
+
+	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		visitor.visit(this);
 	}
 
 	@Override

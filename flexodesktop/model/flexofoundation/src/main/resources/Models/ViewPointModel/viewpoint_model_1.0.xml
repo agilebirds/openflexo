@@ -23,7 +23,7 @@
 		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
 	</entity>
 
-	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes">
+	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
 		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
 		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
 		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
@@ -193,11 +193,20 @@
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="OWLClassPatternRole">
 	</entity>
 
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole" xmlTag="XSClassPatternRole">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.IndividualPatternRole" abstract="yes">
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole" xmlTag="OWLIndividualPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole" xmlTag="EMFObjectIndividualPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" abstract="yes">
@@ -284,7 +293,7 @@
 		xmlTag="ActionScheme">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.NavigationScheme"
+	<entity name="org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme"
 		xmlTag="NavigationScheme">
 		<property name="targetObject" xmlTag="targetObject" attribute="YES" />
 	</entity>
@@ -456,11 +465,15 @@
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
-		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
+		<property name="modelSlot" contains="org.openflexo.foundation.technologyadapter.ModelSlot" context="Addressed" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual"
 		xmlTag="AddOWLIndividual">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual"
+		xmlTag="AddEMFObjectIndividual">
 	</entity>
 
 

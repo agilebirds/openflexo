@@ -4,10 +4,12 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
@@ -15,7 +17,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
  * This class represent a constraint of graphical feature that is to be applied on a ViewElement
@@ -31,10 +32,9 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private GraphicalElementPatternRole patternRole;
 	private GraphicalFeature<T, GR> feature;
 	private String featureName;
-	private ViewPointDataBinding value;
+	private DataBinding<String> value;
 	private boolean readOnly;
 	private boolean mandatory;
-	private BindingDefinition BD;
 
 	// Use it only for deserialization
 	public GraphicalElementSpecification(ViewPointBuilder builder) {
@@ -47,16 +47,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		this.patternRole = patternRole;
 		this.feature = feature;
 		this.readOnly = readOnly;
-		BD = new BindingDefinition(feature.getName(), feature.getType(), BindingDefinitionType.GET_SET, mandatory) {
-			@Override
-			public BindingDefinitionType getBindingDefinitionType() {
-				if (getReadOnly()) {
-					return BindingDefinitionType.GET;
-				} else {
-					return BindingDefinitionType.GET_SET;
-				}
-			}
-		};
+		this.mandatory = mandatory;
 	}
 
 	@Override
@@ -84,24 +75,25 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		this.featureName = featureName;
 	}
 
-	public ViewPointDataBinding getValue() {
+	public DataBinding<String> getValue() {
 		if (value == null) {
-			value = new ViewPointDataBinding(this, feature, getBindingDefinition());
+			value = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET_SET);
+			value.setBindingName(featureName);
+			value.setMandatory(mandatory);
+			value.setBindingDefinitionType(getReadOnly() ? BindingDefinitionType.GET : BindingDefinitionType.GET_SET);
 		}
 		return value;
 	}
 
-	public void setValue(ViewPointDataBinding value) {
+	public void setValue(DataBinding<String> value) {
 		if (value != null) {
 			value.setOwner(this);
-			value.setBindingAttribute(feature);
-			value.setBindingDefinition(getBindingDefinition());
+			value.setDeclaredType(String.class);
+			value.setBindingName(featureName);
+			value.setMandatory(mandatory);
+			value.setBindingDefinitionType(getReadOnly() ? BindingDefinitionType.GET : BindingDefinitionType.GET_SET);
 		}
 		this.value = value;
-	}
-
-	public BindingDefinition getBindingDefinition() {
-		return BD;
 	}
 
 	public boolean getReadOnly() {
@@ -158,7 +150,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 			System.out.println("Hop");
 		}*/
 
-		getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
+		try {
+			getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -170,7 +168,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 */
 	public T applyToModel(GR gr, ViewElement element) {
 		T newValue = getFeature().retrieveFromGraphicalRepresentation(gr);
-		getValue().setBindingValue(newValue, element.getEditionPatternInstance());
+		try {
+			getValue().setBindingValue(newValue, element.getEditionPatternInstance());
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		return newValue;
 	}
 

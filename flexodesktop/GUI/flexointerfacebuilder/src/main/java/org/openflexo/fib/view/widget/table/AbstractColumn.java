@@ -29,8 +29,10 @@ import java.util.logging.Logger;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
@@ -166,15 +168,28 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		 * System.out.println("return: "
 		 * +columnModel.getData().getBindingValue(this));
 		 */
-		return (T) columnModel.getData().getBindingValue(this);
-		// return (T)FIBKeyValueCoder.getObjectValue(object, keyValuePath);
+		try {
+			return (T) columnModel.getData().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NullReferenceException e) {
+			// logger.warning("Unexpected " + e.getMessage());
+			// e.printStackTrace();
+			return null;
+		}
 	}
 
 	public synchronized void setValueFor(final Object object, T value) {
 		iteratorObject = object;
-		columnModel.getData().setBindingValue(value, this);
-		// FIBKeyValueCoder.setObjectValue(object, value, keyValuePath);
-		notifyValueChangedFor(object, value);
+		try {
+			columnModel.getData().setBindingValue(value, this);
+			notifyValueChangedFor(object, value);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected Object iteratorObject;
@@ -228,7 +243,13 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	public String getTooltip(Object object) {
 		if (columnModel.getTooltip().isSet() && columnModel.getTooltip().isValid()) {
 			iteratorObject = object;
-			return (String) columnModel.getTooltip().getBindingValue(this);
+			try {
+				return columnModel.getTooltip().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -236,7 +257,13 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	public Color getSpecificColor(Object object) {
 		if (columnModel.getColor().isSet() && columnModel.getColor().isValid()) {
 			iteratorObject = object;
-			return (Color) columnModel.getColor().getBindingValue(this);
+			try {
+				return columnModel.getColor().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -244,7 +271,13 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	public Color getSpecificBgColor(Object object) {
 		if (columnModel.getBgColor().isSet() && columnModel.getBgColor().isValid()) {
 			iteratorObject = object;
-			return (Color) columnModel.getBgColor().getBindingValue(this);
+			try {
+				return columnModel.getBgColor().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -274,7 +307,13 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		getTableModel().getTableWidget().notifyDynamicModelChanged();
 
 		if (getColumnModel().getValueChangedAction().isValid()) {
-			getColumnModel().getValueChangedAction().execute(getController());
+			try {
+				getColumnModel().getValueChangedAction().execute(getController());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -297,7 +336,13 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 		if (getColumnModel().getFormat().isValid()) {
 			formatter.setValue(value);
-			return (String) getColumnModel().getFormat().getBindingValue(formatter);
+			try {
+				return getColumnModel().getFormat().getBindingValue(formatter);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return value.toString();
 	}
@@ -313,6 +358,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		public Object getValue(BindingVariable variable) {
 			return value;
 		}
+
 	}
 
 }

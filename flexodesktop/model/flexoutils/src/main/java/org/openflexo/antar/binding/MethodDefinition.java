@@ -21,19 +21,21 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition extends Observable implements ComplexPathElement<Object> {
+public class MethodDefinition extends Observable implements Function {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
 	private Type declaringType;
 	private Method method;
+	private ArrayList<Function.FunctionArgument> arguments;
 	private static Hashtable<Method, MethodDefinition> cache = new Hashtable<Method, MethodDefinition>();
 
 	public static MethodDefinition getMethodDefinition(Type aDeclaringType, Method method) {
@@ -49,15 +51,22 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		super();
 		this.method = method;
 		this.declaringType = aDeclaringType;
+		arguments = new ArrayList<Function.FunctionArgument>();
+		int i = 0;
+		for (Type t : method.getGenericParameterTypes()) {
+			String argName = "arg" + i;
+			Type argType = TypeUtils.makeInstantiatedType(t, aDeclaringType);
+			arguments.add(new Function.FunctionArgument(this, argName, argType));
+			i++;
+		}
 	}
 
 	public Method getMethod() {
 		return method;
 	}
 
-	@Override
-	public Type getType() {
-		return TypeUtils.makeInstantiatedType(getMethod().getGenericReturnType(), declaringType);
+	public String getMethodName() {
+		return method.getName();
 	}
 
 	private String _signatureNFQ;
@@ -170,27 +179,10 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		return "MethodDefinition[" + getSimplifiedSignature() + "]";
 	}
 
-	@Override
-	public Class getDeclaringClass() {
-		return TypeUtils.getBaseClass(declaringType);
-	}
-
-	@Override
-	public String getSerializationRepresentation() {
-		return toString();
-	}
-
-	@Override
-	public boolean isBindingValid() {
-		return true;
-	}
-
-	@Override
 	public String getLabel() {
 		return getSimplifiedSignature();
 	}
 
-	@Override
 	public String getTooltipText(Type resultingType) {
 		String returned = "<html>";
 		String resultingTypeAsString;
@@ -209,19 +201,17 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 	}
 
 	@Override
-	public boolean isSettable() {
-		return false;
+	public String getName() {
+		return method.getName();
 	}
 
 	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		// Not relevant
-		return null;
+	public Type getReturnType() {
+		return method.getGenericReturnType();
 	}
 
 	@Override
-	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		// Not relevant
+	public List<Function.FunctionArgument> getArguments() {
+		return arguments;
 	}
-
 }

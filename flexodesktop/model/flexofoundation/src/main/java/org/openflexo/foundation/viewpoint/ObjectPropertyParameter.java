@@ -21,21 +21,20 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ObjectPropertyParameter extends PropertyParameter {
 
 	private String rangeURI;
-
-	private ViewPointDataBinding rangeValue;
-
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", IFlexoOntologyClass.class, BindingDefinitionType.GET, false);
+	private DataBinding<IFlexoOntologyClass> rangeValue;
+	private boolean isDynamicRangeValueSet = false;
 
 	public ObjectPropertyParameter(ViewPointBuilder builder) {
 		super(builder);
@@ -67,27 +66,23 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getRangeValueBindingDefinition() {
-		return RANGE_VALUE;
-	}
-
-	public ViewPointDataBinding getRangeValue() {
+	public DataBinding<IFlexoOntologyClass> getRangeValue() {
 		if (rangeValue == null) {
-			rangeValue = new ViewPointDataBinding(this, ParameterBindingAttribute.rangeValue, getRangeValueBindingDefinition());
+			rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			rangeValue.setBindingName("rangeValue");
 		}
 		return rangeValue;
 	}
 
-	public void setRangeValue(ViewPointDataBinding rangeValue) {
+	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue) {
 		if (rangeValue != null) {
 			rangeValue.setOwner(this);
-			rangeValue.setBindingAttribute(ParameterBindingAttribute.rangeValue);
-			rangeValue.setBindingDefinition(getRangeValueBindingDefinition());
+			rangeValue.setBindingName("rangeValue");
+			rangeValue.setDeclaredType(IFlexoOntologyClass.class);
+			rangeValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.rangeValue = rangeValue;
 	}
-
-	private boolean isDynamicRangeValueSet = false;
 
 	public boolean getIsDynamicRangeValue() {
 		return getRangeValue().isSet() || isDynamicRangeValueSet;
@@ -104,7 +99,13 @@ public class ObjectPropertyParameter extends PropertyParameter {
 
 	public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
 		if (getRangeValue().isValid()) {
-			return (IFlexoOntologyClass) getRangeValue().getBindingValue(parameterRetriever);
+			try {
+				return getRangeValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

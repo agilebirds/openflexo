@@ -28,10 +28,10 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
-import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
@@ -54,10 +54,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
 	public static final String THIS = "this";
-
-	public static enum EditionSchemeType {
-		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme, CloningScheme
-	}
 
 	private String name;
 	private String label;
@@ -113,8 +109,6 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return this;
 	}
 
-	public abstract EditionSchemeType getEditionSchemeType();
-
 	public String getLabel() {
 		if (label == null || StringUtils.isEmpty(label) || label.equals(name)) {
 			return getName();
@@ -164,7 +158,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override
@@ -613,19 +607,20 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private final void createBindingModel() {
 		_bindingModel = new BindingModel();
-		_bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
+		_bindingModel.addToBindingVariables(new EditionSchemeParametersBindingVariable(this));
+		// _bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				BindingVariable<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
-				_bindingModel.addToBindingVariables(newPathElement);
+			for (final PatternRole role : getEditionPattern().getPatternRoles()) {
+				_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 			}
 		}
 		notifyBindingModelChanged();
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
+		bindingModel.addToBindingVariables(new BindingVariable(TOP_LEVEL, View.class));
+		// bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
 	}
 
 	/**

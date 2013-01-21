@@ -124,7 +124,9 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForOntologyObject(EMFObjectIndividual.class), IconLibrary.DUPLICATE);
-		}
+		} /*else if (AddEMFClassClass.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForOntologyObject(EMFClassClass.class), IconLibrary.DUPLICATE);
+			}*/
 		return null;
 	}
 

@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -200,7 +202,14 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		for (GraphicalElementPatternRole pr : ep.getPatternRoles(GraphicalElementPatternRole.class)) {
 			GraphicalElementSpecification labelSpec = pr.getGraphicalElementSpecification(GraphicalElementPatternRole.LABEL_FEATURE);
 			if (labelSpec != null) {
-				String returned = (String) labelSpec.getValue().getBindingValue(epi);
+				String returned = null;
+				try {
+					returned = (String) labelSpec.getValue().getBindingValue(epi);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				if (StringUtils.isNotEmpty(returned)) {
 					return returned;
 				}

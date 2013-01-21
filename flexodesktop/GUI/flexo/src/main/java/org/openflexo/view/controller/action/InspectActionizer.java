@@ -27,13 +27,13 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.action.InspectAction;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class InspectActionizer extends ActionInitializer<InspectAction, FlexoModelObject, FlexoModelObject> {
+public class InspectActionizer extends ActionInitializer<InspectAction, FlexoObject, FlexoObject> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(InspectActionizer.class.getPackage()
 			.getName());

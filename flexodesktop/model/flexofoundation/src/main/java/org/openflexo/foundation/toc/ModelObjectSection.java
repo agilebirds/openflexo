@@ -2,13 +2,12 @@ package org.openflexo.foundation.toc;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
-import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -63,9 +62,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 
 	}
 
-	public static enum ModelObjectSectionBindingAttribute implements TOCBindingAttribute {
-		value
-	}
+	private DataBinding<Object> value;
 
 	public ModelObjectSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
@@ -78,31 +75,18 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 
 	public abstract ModelObjectType getModelObjectType();
 
-	private TOCDataBinding value;
-
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return getModelObjectType().getType();
-		};
-	};
-
-	public BindingDefinition getValueBindingDefinition() {
-		return VALUE;
-	}
-
-	public TOCDataBinding getValue() {
+	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new TOCDataBinding(this, ModelObjectSectionBindingAttribute.value, getValueBindingDefinition());
+			value = new DataBinding<Object>(this, getModelObjectType().getType(), DataBinding.BindingDefinitionType.GET);
 		}
 		return value;
 	}
 
-	public void setValue(TOCDataBinding value) {
+	public void setValue(DataBinding<Object> value) {
 		if (value != null) {
 			value.setOwner(this);
-			value.setBindingAttribute(ModelObjectSectionBindingAttribute.value);
-			value.setBindingDefinition(getValueBindingDefinition());
+			value.setDeclaredType(getModelObjectType().getType());
+			value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.value = value;
 	}

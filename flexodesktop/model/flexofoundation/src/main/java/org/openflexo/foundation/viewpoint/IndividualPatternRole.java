@@ -1,7 +1,10 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -21,8 +24,11 @@ public abstract class IndividualPatternRole<I extends IFlexoOntologyIndividual> 
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Individual;
+	public Type getType() {
+		if (getOntologicType() == null) {
+			return IFlexoOntologyIndividual.class;
+		}
+		return IndividualOfClass.getIndividualOfClass(getOntologicType());
 	}
 
 	@Override

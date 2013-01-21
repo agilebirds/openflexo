@@ -51,6 +51,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
+import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 
 /**
  * This class defines and implements the EMF technology adapter
@@ -61,6 +62,8 @@ import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaModel> {
 
 	protected static final Logger logger = Logger.getLogger(EMFTechnologyAdapter.class.getPackage().getName());
+
+	private static final EMFBindingFactory BINDING_FACTORY = new EMFBindingFactory();
 
 	/**
 	 * 
@@ -325,4 +328,10 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFTechnologyContextManager getTechnologyContextManager() {
 		return (EMFTechnologyContextManager) super.getTechnologyContextManager();
 	}
+
+	@Override
+	public EMFBindingFactory getTechnologyAdapterBindingFactory() {
+		return BINDING_FACTORY;
+	}
+
 }

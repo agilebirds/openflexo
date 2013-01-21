@@ -22,13 +22,17 @@ package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
@@ -63,7 +67,10 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	}
 
 	public OWLProperty getObjectProperty() {
-		return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		if (getViewPoint() != null) {
+			return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		}
+		return null;
 	}
 
 	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {
@@ -71,87 +78,109 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	}
 
 	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
-		return (OWLConcept<?>) getObject().getBindingValue(action);
+		try {
+			return (OWLConcept<?>) getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding object;
+	private DataBinding<Object> object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", IFlexoOntologyConcept.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
+	public Type getObjectType() {
+		if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
+				&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty())
+					.getRange());
+		}
+		return IFlexoOntologyConcept.class;
 	}
 
-	public ViewPointDataBinding getObject() {
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<Object> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(getObjectType());
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
-	private ViewPointDataBinding restrictionType;
+	private DataBinding<RestrictionType> restrictionType;
 
-	private BindingDefinition RESTRICTION_TYPE = new BindingDefinition("restrictionType", RestrictionType.class, BindingDefinitionType.GET,
-			false);
-
-	public BindingDefinition getRestrictionTypeBindingDefinition() {
-		return RESTRICTION_TYPE;
-	}
-
-	public ViewPointDataBinding getRestrictionType() {
+	public DataBinding<RestrictionType> getRestrictionType() {
 		if (restrictionType == null) {
-			restrictionType = new ViewPointDataBinding(this, EditionActionBindingAttribute.restrictionType,
-					getRestrictionTypeBindingDefinition());
+			restrictionType = new DataBinding<RestrictionType>(this, RestrictionType.class, BindingDefinitionType.GET);
+			restrictionType.setBindingName("restrictionType");
 		}
 		return restrictionType;
 	}
 
-	public void setRestrictionType(ViewPointDataBinding restrictionType) {
-		restrictionType.setOwner(this);
-		restrictionType.setBindingAttribute(EditionActionBindingAttribute.restrictionType);
-		restrictionType.setBindingDefinition(getRestrictionTypeBindingDefinition());
+	public void setRestrictionType(DataBinding<RestrictionType> restrictionType) {
+		if (restrictionType != null) {
+			restrictionType.setOwner(this);
+			restrictionType.setBindingName("restrictionType");
+			restrictionType.setDeclaredType(RestrictionType.class);
+			restrictionType.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.restrictionType = restrictionType;
 	}
 
 	public RestrictionType getRestrictionType(EditionSchemeAction action) {
-		RestrictionType restrictionType = (RestrictionType) getRestrictionType().getBindingValue(action);
+		RestrictionType restrictionType = null;
+		try {
+			restrictionType = getRestrictionType().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		if (restrictionType == null) {
 			restrictionType = RestrictionType.Some;
 		}
 		return restrictionType;
 	}
 
-	private ViewPointDataBinding cardinality;
+	private DataBinding<Integer> cardinality;
 
-	private BindingDefinition CARDINALITY = new BindingDefinition("cardinality", Integer.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getCardinalityBindingDefinition() {
-		return CARDINALITY;
-	}
-
-	public ViewPointDataBinding getCardinality() {
+	public DataBinding<Integer> getCardinality() {
 		if (cardinality == null) {
-			cardinality = new ViewPointDataBinding(this, EditionActionBindingAttribute.cardinality, getCardinalityBindingDefinition());
+			cardinality = new DataBinding<Integer>(this, Integer.class, BindingDefinitionType.GET);
+			cardinality.setBindingName("cardinality");
 		}
 		return cardinality;
 	}
 
-	public void setCardinality(ViewPointDataBinding cardinality) {
-		cardinality.setOwner(this);
-		cardinality.setBindingAttribute(EditionActionBindingAttribute.cardinality);
-		cardinality.setBindingDefinition(getCardinalityBindingDefinition());
+	public void setCardinality(DataBinding<Integer> cardinality) {
+		if (cardinality != null) {
+			cardinality.setOwner(this);
+			cardinality.setBindingName("cardinality");
+			cardinality.setDeclaredType(Integer.class);
+			cardinality.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.cardinality = cardinality;
 	}
 
 	public int getCardinality(EditionSchemeAction action) {
-		return ((Number) getCardinality().getBindingValue(action)).intValue();
+		try {
+			return getCardinality().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return 1;
 	}
 
 	@Override

@@ -258,7 +258,7 @@ public class SubProcessSelectorDialog {
 				FlexoController.notify("Process named " + newProcessName + " already exists !");
 				return null;
 			} catch (InvalidFileNameException e) {
-				FlexoController.notify("Process named " + newProcessName + " is_not_valid");
+				FlexoController.notify("Process named " + newProcessName + " is not valid");
 				return null;
 			}
 			if (logger.isLoggable(Level.FINE)) {

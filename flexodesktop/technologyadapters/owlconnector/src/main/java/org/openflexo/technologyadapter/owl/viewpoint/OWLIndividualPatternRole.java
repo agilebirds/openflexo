@@ -10,9 +10,4 @@ public class OWLIndividualPatternRole extends IndividualPatternRole<OWLIndividua
 		super(builder);
 	}
 
-	@Override
-	public Class<OWLIndividual> getAccessedClass() {
-		return OWLIndividual.class;
-	}
-
 }

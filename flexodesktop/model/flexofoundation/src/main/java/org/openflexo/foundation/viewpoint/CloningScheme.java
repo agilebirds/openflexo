@@ -33,9 +33,4 @@ public class CloningScheme extends AbstractCreationScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.CloningScheme;
-	}
-
 }

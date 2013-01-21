@@ -190,6 +190,13 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	}
 
 	/**
+	 * Return the technology-specific binding factory
+	 * 
+	 * @return
+	 */
+	public abstract TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory();
+
+	/**
 	 * Provides a hook to finalize initialization of a TechnologyAdapter.<br>
 	 * This method is called:
 	 * <ul>
@@ -208,4 +215,35 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	public void resourceCenterAdded(FlexoResourceCenter newResourceCenter) {
 	}
 
+	/**
+	 * Return model resource identified by its uri. Lookup is performed on all known resource centers.
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoModelResource<M, MM> getModelResource(String modelURI) {
+		for (ModelRepository<?, ?, ?, ?> modelRepository : getTechnologyAdapterService().getAllModelRepositories(this)) {
+			FlexoResource<?> r = modelRepository.getResource(modelURI);
+			if (r != null) {
+				return (FlexoModelResource<M, MM>) r;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return model resource identified by its uri. Lookup is performed on all known resource centers.
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoMetaModelResource<M, MM> getMetaModelResource(String modelURI) {
+		for (MetaModelRepository<?, ?, ?, ?> mmRepository : getTechnologyAdapterService().getAllMetaModelRepositories(this)) {
+			FlexoResource<?> r = mmRepository.getResource(modelURI);
+			if (r != null) {
+				return (FlexoMetaModelResource<M, MM>) r;
+			}
+		}
+		return null;
+	}
 }

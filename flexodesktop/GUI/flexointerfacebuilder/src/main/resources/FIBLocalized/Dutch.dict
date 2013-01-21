@@ -1,14 +1,14 @@
-#Dutch
-#Tue Nov 13 12:58:52 CET 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
 cancel=Cancel
 cannot_evaluate=Cannot evaluate
+cannot_parse=Cannot parse
 choose=Choose
 comparison=Comparison
 connect=Connect
 date=Date
+define_a_constant_value=define_a_constant_value
 define_a_static_value=Define a constant value
 duration=Duration
 enum=Enum

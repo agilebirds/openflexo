@@ -24,7 +24,7 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 public class EditionPatternDeleted extends OEDataModification {
 
 	public EditionPatternDeleted(EditionPattern ep) {
-		super(ep, null);
+		super("allRootEditionPatterns", ep, null);
 	}
 
 }

@@ -29,6 +29,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -72,6 +73,22 @@ public class TypeUtils {
 			if (upperBounds.length == 1 && lowerBounds.length == 0) {
 				return getBaseClass(upperBounds[0]);
 			}
+		}
+		if (aType instanceof TypeVariable) {
+			TypeVariable tv = (TypeVariable) aType;
+			StringBuffer upperBounds = new StringBuffer();
+			boolean isFirst = true;
+			for (Type upperBound : tv.getBounds()) {
+				upperBounds.append((isFirst ? "" : ",") + upperBound.toString());
+				isFirst = false;
+			}
+			// logger.warning("Unresolved TypeVariable: " + tv.getName() + " " + tv.getGenericDeclaration() + " bounds=" + upperBounds);
+			if (tv.getBounds().length > 0) {
+				return getBaseClass(tv.getBounds()[0]);
+			} else {
+				return Object.class;
+			}
+
 		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
@@ -303,6 +320,10 @@ public class TypeUtils {
 		// If supplied type is null return false
 		if (aType == null || anOtherType == null) {
 			return false;
+		}
+
+		if (aType.equals(anOtherType)) {
+			return true;
 		}
 
 		// Everything could be assigned to Object
@@ -630,9 +651,11 @@ public class TypeUtils {
 			} else if (gd instanceof Method) {
 				return type;
 			}
-			logger.warning("Not found type variable " + tv + " in context " + context + " GenericDeclaration=" + tv.getGenericDeclaration());
-			// throw new InvalidKeyValuePropertyException("Not found type variable "+tv+" in context "+context);
-			return type;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Not found type variable " + tv + " in context " + context + " GenericDeclaration="
+						+ tv.getGenericDeclaration() + " bounds=" + (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class));
+			}
+			return (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class);
 		}
 
 		if (type instanceof WildcardType) {

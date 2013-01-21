@@ -60,6 +60,13 @@ public class ProjectElement extends BrowserElement {
 		if (getProject().getFlexoWorkflow(false) != null) {
 			addToChilds(getProject().getFlexoWorkflow());
 		}
+		if (getProject().getProjectData() != null) {
+			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
+					addToChilds(ref.getReferredProject().getWorkflow());
+				}
+			}
+		}
 		if (getProject().getDataModel(false) != null) {
 			addToChilds(getProject().getDataModel());
 		}
@@ -85,13 +92,6 @@ public class ProjectElement extends BrowserElement {
 		if (getProject().getImportedProcessLibrary() != null) {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}
-		if (getProject().getProjectData() != null) {
-			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				addToChilds(ref.getReferredProject());
-
-			}
-		}
-
 	}
 
 	@Override

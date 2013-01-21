@@ -81,6 +81,9 @@ public abstract class FIBContainer extends FIBComponent {
 			aComponent.getConstraints().putAll(someConstraints);
 			aComponent.getConstraints().ignoreNotif = false;
 		}
+		if (deserializationPerformed) {
+			updateComponentIndexForInsertionIndex(aComponent, subComponentIndex);
+		}
 		subComponents.add(subComponentIndex, aComponent);
 		if (deserializationPerformed) {
 			reorderComponents();
@@ -92,6 +95,50 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBComponent>(Parameters.subComponents, aComponent));
+	}
+
+	private void updateComponentIndexForInsertionIndex(FIBComponent component, int insertionIndex) {
+		if (subComponents.size() > 0) {
+			FIBComponent previous = null;
+			FIBComponent next = null;
+			if (insertionIndex < subComponents.size()) {
+				next = subComponents.get(insertionIndex);
+			}
+			if (insertionIndex > 0) {
+				previous = subComponents.get(insertionIndex - 1);
+			}
+
+			if (previous != null) {
+				if (previous.getIndex() == null) {
+					if (component.getIndex() != null && component.getIndex() < 0) {
+						component.setIndex(null);
+					}
+				} else if (previous.getIndex() < 0) {
+					if (component.getIndex() != null && component.getIndex() < previous.getIndex()) {
+						component.setIndex(previous.getIndex());
+					}
+				} else {
+					if (component.getIndex() == null || component.getIndex() < previous.getIndex()) {
+						component.setIndex(previous.getIndex());
+					}
+				}
+			}
+			if (next != null) {
+				if (next.getIndex() == null) {
+					if (component.getIndex() != null && component.getIndex() >= 0) {
+						component.setIndex(null);
+					}
+				} else if (next.getIndex() < 0) {
+					if (component.getIndex() == null || component.getIndex() > next.getIndex()) {
+						component.setIndex(next.getIndex());
+					}
+				} else {
+					if (component.getIndex() != null && component.getIndex() > next.getIndex()) {
+						component.setIndex(next.getIndex());
+					}
+				}
+			}
+		}
 	}
 
 	public FIBComponent getSubComponentNamed(String name) {
@@ -155,8 +202,6 @@ public abstract class FIBContainer extends FIBComponent {
 		// logger.info(toString()+" append "+container);
 
 		// if (this instanceof FIBTab && ())
-
-		List<FIBComponent> addedComponents = new ArrayList<FIBComponent>();
 		List<FIBComponent> mergedComponents = new ArrayList<FIBComponent>();
 		for (int i = container.getSubComponents().size() - 1; i >= 0; i--) {
 			FIBComponent c2 = container.getSubComponents().get(i);
@@ -267,9 +312,6 @@ public abstract class FIBContainer extends FIBComponent {
 				}
 				boolean insert = true;
 				Integer startIndex = child.getIndex();
-				if (startIndex == null) {
-					startIndex = 0;
-				}
 				while (insert) {
 					child.setParent(this);
 					subComponents.add(indexInsertion, child);
@@ -277,12 +319,19 @@ public abstract class FIBContainer extends FIBComponent {
 					if (i + 1 < container.getSubComponents().size()) {
 						Integer previousInteger = child.getIndex();
 						child = container.getSubComponents().get(i + 1);
-						insert = (previousInteger == null && child.getIndex() == null || previousInteger != null
-								&& child.getIndex() != null && previousInteger + 1 == child.getIndex() || child.getIndex() != null
-								&& child.getIndex() == startIndex)
-								&& !mergedComponents.contains(child);
+						insert = previousInteger == null
+								&& child.getIndex() == null
+								|| previousInteger != null
+								&& child.getIndex() != null
+								&& previousInteger + 1 == child.getIndex()
+								|| child.getIndex() != null
+								&& (startIndex == null && child.getIndex() == startIndex || startIndex != null
+										&& startIndex.equals(child.getIndex())) && !mergedComponents.contains(child);
 						if (insert) {
 							i++;
+							overridingComponent = getSubComponentNamed(child.getName());
+							insert &= overridingComponent == null || overridingComponent.getParameter("hidden") != null
+									&& overridingComponent.getParameter("hidden").equalsIgnoreCase("true");
 						} else {
 							break;
 						}
@@ -305,7 +354,7 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 
 		updateBindingModel();
-		for (FIBComponent c : addedComponents) {
+		for (FIBComponent c : subComponents) {
 			recursivelyFinalizeDeserialization(c);
 		}
 		finalizeDeserialization();
@@ -332,27 +381,47 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void componentFirst(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		subComponents.remove(c);
+		updateComponentIndexForInsertionIndex(c, 0);
 		subComponents.insertElementAt(c, 0);
 		notifyComponentIndexChanged(c);
 	}
 
 	public void componentUp(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		int index = subComponents.indexOf(c);
+		if (index > 0) {
 		subComponents.remove(c);
+			updateComponentIndexForInsertionIndex(c, index - 1);
 		subComponents.insertElementAt(c, index - 1);
 		notifyComponentIndexChanged(c);
 	}
+	}
 
 	public void componentDown(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		int index = subComponents.indexOf(c);
+		if (index < subComponents.size() - 1) {
 		subComponents.remove(c);
+		}
+		updateComponentIndexForInsertionIndex(c, index + 1);
 		subComponents.insertElementAt(c, index + 1);
 		notifyComponentIndexChanged(c);
 	}
 
 	public void componentLast(FIBComponent c) {
+		if (c == null) {
+			return;
+		}
 		subComponents.remove(c);
+		updateComponentIndexForInsertionIndex(c, subComponents.size());
 		subComponents.add(c);
 		notifyComponentIndexChanged(c);
 	}
@@ -361,6 +430,11 @@ public abstract class FIBContainer extends FIBComponent {
 		FIBAttributeNotification<ComponentConstraints> notification = new FIBAttributeNotification<ComponentConstraints>(
 				FIBComponent.Parameters.constraints, component.getConstraints(), component.getConstraints());
 		component.notify(notification);
+		setChanged();
+		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
+	}
+
+	private void notifySubcomponentsIndexChanged() {
 		setChanged();
 		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
 	}
@@ -397,6 +471,7 @@ public abstract class FIBContainer extends FIBComponent {
 				}
 			}
 		});
+		notifySubcomponentsIndexChanged();
 	}
 
 }

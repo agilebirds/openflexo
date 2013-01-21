@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBComponent;
@@ -84,7 +86,13 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		}
 		Object data = getController().getDataObject();
 		if (getWidget().getAction().isValid()) {
-			getWidget().getAction().execute(getController());
+			try {
+				getWidget().getAction().execute(getController());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		updateDependancies(new Vector<FIBComponent>());
 		updateWidgetFromModel();
@@ -109,8 +117,17 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 	protected void updateIcon() {
 		// logger.info("Button update label with key="+getWidget().getLabel());
 		if (getWidget().getButtonIcon() != null && getWidget().getButtonIcon().isSet() && getWidget().getButtonIcon().isValid()) {
-			Icon icon = (Icon) getWidget().getButtonIcon().getBindingValue(getController());
-			buttonWidget.setIcon(icon);
+			Icon icon;
+			try {
+				icon = getWidget().getButtonIcon().getBindingValue(getController());
+				buttonWidget.setIcon(icon);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+				buttonWidget.setIcon(null);
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				buttonWidget.setIcon(null);
+			}
 		} else {
 			buttonWidget.setIcon(null);
 		}

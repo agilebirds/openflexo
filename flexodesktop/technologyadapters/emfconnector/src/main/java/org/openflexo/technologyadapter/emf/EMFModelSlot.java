@@ -28,6 +28,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -114,8 +115,30 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 	}
 
 	@Override
-	public BindingVariable<?> makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+	@Deprecated
+	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		return null;
+	}
+
+	@Override
+	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEMFObjectIndividual(null);
+		} else if (AddEMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEMFObjectIndividualAttributeDataPropertyValue(null);
+		} else if (AddEMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEMFObjectIndividualAttributeObjectPropertyValue(null);
+		} else if (AddEMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEMFObjectIndividualReferenceObjectPropertyValue(null);
+		} else if (RemoveEMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new RemoveEMFObjectIndividualAttributeDataPropertyValue(null);
+		} else if (RemoveEMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new RemoveEMFObjectIndividualAttributeObjectPropertyValue(null);
+		} else if (RemoveEMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new RemoveEMFObjectIndividualReferenceObjectPropertyValue(null);
+		} else {
+			return super.makeEditionAction(editionActionClass);
+		}
 	}
 
 }

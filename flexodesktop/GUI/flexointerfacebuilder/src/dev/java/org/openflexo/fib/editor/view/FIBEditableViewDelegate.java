@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.dnd.DnDConstants;
@@ -41,24 +40,17 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.controller.DraggedFIBComponent;
 import org.openflexo.fib.editor.controller.ExistingElementDrag;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
-import org.openflexo.fib.editor.notifications.FIBEditorNotification;
-import org.openflexo.fib.editor.notifications.FocusedObjectChange;
-import org.openflexo.fib.editor.notifications.SelectedObjectChange;
 import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBAttributeNotification;
@@ -81,18 +73,10 @@ import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.Focusable;
-import org.openflexo.swing.NoInsetsBorder;
 
-public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements Observer, MouseListener, FocusListener,
-		Focusable {
+public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements MouseListener, FocusListener, Focusable {
 
 	static final Logger logger = FlexoLogger.getLogger(FIBEditableViewDelegate.class.getPackage().getName());
-
-	private static final Border focusBorder = new NoInsetsBorder(BorderFactory.createLineBorder(Color.RED));
-	private static final Border selectedBorder = new NoInsetsBorder(BorderFactory.createLineBorder(Color.BLUE));
-
-	private boolean isFocused = false;
-	private boolean isSelected = false;
 
 	private FIBEditableView<M, J> view;
 
@@ -112,7 +96,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		// view.getJComponent().addMouseListener(this);
 		// view.getJComponent().addFocusListener(this);
 
-		view.getEditorController().addObserver(this);
+		view.getEditorController().registerViewDelegate(this);
 
 		if (view.getPlaceHolders() != null) {
 			for (PlaceHolder ph : view.getPlaceHolders()) {
@@ -135,7 +119,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	public void delete() {
 		logger.fine("Delete delegate view=" + view);
 		recursivelyDeleteListenersFrom(view.getJComponent());
-		view.getEditorController().deleteObserver(this);
+		view.getEditorController().unregisterViewDelegate(this);
 		view = null;
 	}
 
@@ -193,61 +177,18 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		return view.getComponent();
 	}
 
+	public JComponent getJComponent() {
+		return view.getJComponent();
+	}
+
 	@Override
 	public boolean isFocused() {
-		return isFocused;
+		return getEditorController().getFocusedObject() == getFIBComponent();
 	}
 
 	@Override
-	public void setFocused(boolean aFlag) {
-		if (isSelected) {
-			return;
-		}
-		if (aFlag == isFocused) {
-			return;
-		}
-		if (aFlag) {
-			// logger.info("Set focused for "+getFIBComponent());
-			isFocused = true;
-			if (view.getJComponent().getBorder() == null) {
-				view.getJComponent().setBorder(focusBorder);
-			} else {
-				view.getJComponent().setBorder(BorderFactory.createCompoundBorder(focusBorder, view.getJComponent().getBorder()));
-			}
-		} else {
-			isFocused = false;
-			if (view.getJComponent().getBorder() == focusBorder || view.getJComponent().getBorder() == selectedBorder) {
-				view.getJComponent().setBorder(null);
-			} else if (view.getJComponent().getBorder() instanceof CompoundBorder) {
-				CompoundBorder b = (CompoundBorder) view.getJComponent().getBorder();
-				view.getJComponent().setBorder(b.getInsideBorder());
-			}
-		}
-	}
-
-	public void setSelected(boolean aFlag) {
-		if (aFlag == isSelected) {
-			return;
-		}
-		if (aFlag) {
-			if (isFocused) {
-				setFocused(false);
-			}
-			isSelected = true;
-			if (view.getJComponent().getBorder() == null) {
-				view.getJComponent().setBorder(selectedBorder);
-			} else {
-				view.getJComponent().setBorder(BorderFactory.createCompoundBorder(selectedBorder, view.getJComponent().getBorder()));
-			}
-		} else {
-			isSelected = false;
-			if (view.getJComponent().getBorder() == focusBorder || view.getJComponent().getBorder() == selectedBorder) {
-				view.getJComponent().setBorder(null);
-			} else if (view.getJComponent().getBorder() instanceof CompoundBorder) {
-				CompoundBorder b = (CompoundBorder) view.getJComponent().getBorder();
-				view.getJComponent().setBorder(b.getInsideBorder());
-			}
-		}
+	public void setFocused(boolean focused) {
+		getEditorController().setFocusedObject(getFIBComponent());
 	}
 
 	private List<Object> placeHolderVisibleRequesters = new ArrayList<Object>();
@@ -275,13 +216,15 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				boolean visible = placeHolderVisibleRequesters.size() > 0;
-				if (view.getPlaceHolders() != null) {
-					for (PlaceHolder ph : view.getPlaceHolders()) {
-						ph.setVisible(visible);
+				if (view != null) {
+					boolean visible = placeHolderVisibleRequesters.size() > 0;
+					if (view.getPlaceHolders() != null) {
+						for (PlaceHolder ph : view.getPlaceHolders()) {
+							ph.setVisible(visible);
+						}
 					}
+					updatePlaceHoldersVisibilityRequested = false;
 				}
-				updatePlaceHoldersVisibilityRequested = false;
 			}
 		});
 	}
@@ -289,7 +232,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		getEditorController().setSelectedObject(getFIBComponent());
-		view.getJComponent().requestFocus();
+		view.getJComponent().requestFocusInWindow();
 	}
 
 	@Override
@@ -323,31 +266,6 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	@Override
 	public void mouseExited(MouseEvent e) {
 		getEditorController().setFocusedObject(null);
-	}
-
-	@Override
-	public void update(Observable o, Object notification) {
-		if (notification instanceof FIBEditorNotification) {
-			if (notification instanceof FocusedObjectChange) {
-				FocusedObjectChange focusChange = (FocusedObjectChange) notification;
-				// System.out.println("Receive "+focusChange);
-				if (focusChange.oldValue() == getFIBComponent()) {
-					setFocused(false);
-				}
-				if (focusChange.newValue() == getFIBComponent()) {
-					setFocused(true);
-				}
-			} else if (notification instanceof SelectedObjectChange) {
-				SelectedObjectChange selectionChange = (SelectedObjectChange) notification;
-				// System.out.println("Receive "+focusChange);
-				if (selectionChange.oldValue() == getFIBComponent()) {
-					setSelected(false);
-				}
-				if (selectionChange.newValue() == getFIBComponent()) {
-					setSelected(true);
-				}
-			}
-		}
 	}
 
 	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {

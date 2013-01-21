@@ -10,6 +10,7 @@ Helpers
  not_hyphen2 = [any - ''' ];
 
 Tokens
+ dollar = '$';
  plus = '+';
  minus = '-';
  mult = '*';
@@ -91,6 +92,20 @@ Productions
   {power_expr} [left]:expr3 power [right]:term |
   {not_expr} not term;
  
+ type_reference = 
+  {basic} dollar type_reference_path |
+  {parametered} dollar type_reference_path type_reference_arg_list;
+
+ type_reference_path = 
+  {identifier} identifier |
+  {tail} identifier dot type_reference_path;
+
+ type_reference_arg_list = 
+   lt type_reference [type_reference_additional_args]:type_reference_additional_arg* gt;
+
+ type_reference_additional_arg = 
+  comma type_reference;
+
  call = 
   identifier arg_list ;
 
@@ -137,5 +152,6 @@ Productions
   {chars_value} chars_value |
   {function} function |
   {binding} binding |
-  {expr} l_par expr r_par;
+  {expr} l_par expr r_par |
+  {cast} l_par type_reference r_par term;
   

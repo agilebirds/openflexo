@@ -10,9 +10,4 @@ public class OWLDataPropertyPatternRole extends DataPropertyPatternRole<OWLDataP
 		super(builder);
 	}
 
-	@Override
-	public Class<OWLDataProperty> getAccessedClass() {
-		return OWLDataProperty.class;
-	}
-
 }

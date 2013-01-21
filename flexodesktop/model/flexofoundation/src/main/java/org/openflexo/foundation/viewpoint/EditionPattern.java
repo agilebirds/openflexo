@@ -29,22 +29,22 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -54,10 +54,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
 
-public class EditionPattern extends EditionPatternObject implements StringConvertable<EditionPattern>, CustomType {
+public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -76,18 +74,66 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private EditionPatternStructuralFacet structuralFacet;
 	private EditionPatternBehaviouralFacet behaviouralFacet;
 
+	private EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
+
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	@Override
-	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
-		if (validableObjects == null) {
-			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
-			validableObjects.add(inspector);
+	/**
+	 * Represent the type of a EditionPatternInstance of a given EditionPattern
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static class EditionPatternInstanceType implements CustomType {
+
+		public static EditionPatternInstanceType getEditionPatternInstanceType(EditionPattern anEditionPattern) {
+			if (anEditionPattern == null) {
+				return null;
+			}
+			return anEditionPattern.getInstanceType();
 		}
-		return validableObjects;
+
+		private EditionPattern editionPattern;
+
+		public EditionPatternInstanceType(EditionPattern anEditionPattern) {
+			this.editionPattern = anEditionPattern;
+		}
+
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
+		}
+
+		@Override
+		public Class getBaseClass() {
+			return EditionPatternInstance.class;
+		}
+
+		@Override
+		public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+			// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
+			if (aType instanceof EditionPatternInstanceType) {
+				return editionPattern.isAssignableFrom(((EditionPatternInstanceType) aType).getEditionPattern());
+			}
+			return false;
+		}
+
+		@Override
+		public String simpleRepresentation() {
+			return "EditionPatternInstanceType" + ":" + editionPattern;
+		}
+
+		@Override
+		public String fullQualifiedRepresentation() {
+			return "EditionPatternInstanceType" + ":" + editionPattern;
+		}
+
+		@Override
+		public String toString() {
+			return simpleRepresentation();
+		}
 	}
 
 	public EditionPattern(ViewPointBuilder builder) {
@@ -99,6 +145,19 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		}
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+	}
+
+	@Override
+	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
+		if (validableObjects == null) {
+			validableObjects = new ChainedCollection<ViewPointObject>(getPatternRoles(), getEditionSchemes());
+			validableObjects.add(inspector);
+		}
+		return validableObjects;
+	}
+
+	private EditionPatternInstanceType getInstanceType() {
+		return instanceType;
 	}
 
 	public EditionPatternStructuralFacet getStructuralFacet() {
@@ -276,54 +335,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 			index++;
 		}
 		return testName;
-	}
-
-	@Deprecated
-	public PatternRole createShapePatternRole() {
-		ShapePatternRole newPatternRole = new ShapePatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public ConnectorPatternRole createConnectorPatternRole() {
-		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public DiagramPatternRole createDiagramPatternRole() {
-		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
-		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public EditionPatternPatternRole createEditionPatternPatternRole() {
-		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
-	}
-
-	@Deprecated
-	public PrimitivePatternRole createPrimitivePatternRole() {
-		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
-		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
-		addToPatternRoles(newPatternRole);
-		return newPatternRole;
 	}
 
 	public PatternRole deletePatternRole(PatternRole aPatternRole) {
@@ -552,7 +563,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		});
 		for (PatternRole pr : rolesToDelete) {
 			DeleteAction a = new DeleteAction(null);
-			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
+			a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
 			newDeletionScheme.addToActions(a);
 		}
 		addToEditionSchemes(newDeletionScheme);
@@ -584,65 +595,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	public void setCalc(ViewPoint viewPoint) {
 		setViewPoint(viewPoint);
 	}
-
-	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {
-		private final ViewPointLibrary viewPointLibrary;
-
-		public EditionPatternConverter(ViewPointLibrary viewPointLibrary) {
-			super(EditionPattern.class);
-			this.viewPointLibrary = viewPointLibrary;
-		}
-
-		@Override
-		public EditionPattern convertFromString(String value) {
-			return viewPointLibrary.getEditionPattern(value);
-		}
-
-		@Override
-		public String convertToString(EditionPattern value) {
-			return value.getViewPoint().getViewPointURI() + "#" + value.getName();
-		}
-	}
-
-	@Override
-	public EditionPatternConverter getConverter() {
-		return getViewPointLibrary().editionPatternConverter;
-
-		/*if (getProject()!=null)
-		   return getProject().getEditionPatternConverter();
-		return null;*/
-	}
-
-	/* public EditionAction getAction(String patternRole)
-	 {
-	   return getEditionScheme().getAction(patternRole);
-	 }
-
-	 public AddShape getAddShapeAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddShapeAction(patternRole);
-	 }
-
-	 public AddShemaElementAction getAddShemaElementAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddShemaElementAction(patternRole);
-	 }
-
-	 public AddClass getAddClassAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddClassAction(patternRole);
-	 }
-
-	 public AddIndividual getAddIndividualAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddIndividualAction(patternRole);
-	 }
-
-	 public AddConnector getAddConnectorAction(String patternRole)
-	 {
-	   return getEditionScheme().getAddConnectorAction(patternRole);
-	 }
-	 */
 
 	@Override
 	public String toString() {
@@ -695,10 +647,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getPatternRoles()) {
-			BindingVariable<?> bv = PatternRolePathElement.makePatternRolePathElement(role, this);
-			if (bv != null) {
-				_bindingModel.addToBindingVariables(bv);
-			}
+			_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 		}
 		notifyBindingModelChanged();
 	}
@@ -769,6 +718,9 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		if (aType instanceof EditionPattern) {
+			return isAssignableFrom((EditionPattern) aType);
+		}
 		return aType == this;
 	}
 

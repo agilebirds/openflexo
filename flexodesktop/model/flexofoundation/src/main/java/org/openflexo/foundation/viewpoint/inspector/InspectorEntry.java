@@ -24,15 +24,13 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -45,44 +43,12 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
-	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute {
-		data, conditional, domainValue, rangeValue, parentClassValue, conceptValue
-	}
-
-	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DATA;
-
-	public BindingDefinition getDataBindingDefinition() {
-		if (DATA == null) {
-			DATA = new BindingDefinition("data", getType(), BindingDefinitionType.GET_SET, true) {
-				@Override
-				public BindingDefinitionType getBindingDefinitionType() {
-					if (getIsReadOnly()) {
-						return BindingDefinitionType.GET;
-					} else {
-						return BindingDefinitionType.GET_SET;
-					}
-				}
-
-				@Override
-				public Type getType() {
-					return InspectorEntry.this.getType();
-				}
-			};
-		}
-		return DATA;
-	}
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
 	private EditionPatternInspector inspector;
 	private String label;
 	private boolean readOnly;
 
-	private ViewPointDataBinding data;
-	private ViewPointDataBinding conditional;
+	private DataBinding<Object> data;
+	private DataBinding<Boolean> conditional;
 
 	public InspectorEntry(ViewPointBuilder builder) {
 		super(builder);
@@ -160,34 +126,42 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 		this.readOnly = readOnly;
 	}
 
-	public ViewPointDataBinding getData() {
+	public DataBinding<Object> getData() {
 		if (data == null) {
-			data = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.data, getDataBindingDefinition());
+			data = new DataBinding<Object>(this, getType(), (getIsReadOnly() ? DataBinding.BindingDefinitionType.GET
+					: DataBinding.BindingDefinitionType.GET_SET));
+			data.setBindingName("data");
 		}
 		return data;
 	}
 
-	public void setData(ViewPointDataBinding data) {
+	public void setData(DataBinding<Object> data) {
 		if (data != null) {
 			data.setOwner(this);
-			data.setBindingAttribute(InspectorEntryBindingAttribute.data);
-			data.setBindingDefinition(getDataBindingDefinition());
+			data.setDeclaredType(getType());
+			data.setBindingDefinitionType(getIsReadOnly() ? DataBinding.BindingDefinitionType.GET
+					: DataBinding.BindingDefinitionType.GET_SET);
+			data.setBindingName("data");
 		}
 		this.data = data;
-		notifyBindingChanged(this.data);
+		notifiedBindingChanged(this.data);
 	}
 
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.conditional, CONDITIONAL);
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(InspectorEntryBindingAttribute.conditional);
-		conditional.setBindingDefinition(CONDITIONAL);
+	public void setConditional(DataBinding<Boolean> conditional) {
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
+		}
 		this.conditional = conditional;
 	}
 
@@ -202,13 +176,8 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(InspectorEntry object) {
+		public DataBinding<Object> getBinding(InspectorEntry object) {
 			return object.getData();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(InspectorEntry object) {
-			return object.getDataBindingDefinition();
 		}
 
 	}

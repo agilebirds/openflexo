@@ -25,15 +25,10 @@ package org.openflexo.wkf.view.menu;
  * 
  * Created by benoit on Mar 10, 2004
  */
-import java.awt.event.ActionEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractAction;
-
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.imported.action.ImportProcessesAction;
-import org.openflexo.foundation.imported.action.ImportRolesAction;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
@@ -55,8 +50,6 @@ public class WKFFileMenu extends FileMenu {
 	// ==========================================================================
 
 	protected WKFController _wkfController;
-	public ImportRoleItem importRoleItem;
-	public ImportProcessItem importProcessItem;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -86,49 +79,49 @@ public class WKFFileMenu extends FileMenu {
 			}
 		});
 	}
-
-	@Override
-	protected boolean addImportItems() {
-		super.addImportItems();
-		addToImportItems(importRoleItem = new ImportRoleItem());
-		addToImportItems(importProcessItem = new ImportProcessItem());
-		return true;
-	}
-
-	public class ImportRoleItem extends FlexoMenuItem {
-		public ImportRoleItem() {
-			super(new ImportRoleAction(), "import_roles_from_ppm", null, getController(), true);
-		}
-	}
-
-	public class ImportRoleAction extends AbstractAction {
-		public ImportRoleAction() {
-			super();
-		}
-
+	/*
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(null, null, getController().getEditor());
-			importRoles.doAction();
-		}
-	}
-
-	public class ImportProcessItem extends FlexoMenuItem {
-		public ImportProcessItem() {
-			super(new ImportProcessAction(), "import_processes_from_ppm", null, getController(), true);
-		}
-	}
-
-	public class ImportProcessAction extends AbstractAction {
-		public ImportProcessAction() {
-			super();
+		protected boolean addImportItems() {
+			super.addImportItems();
+			addToImportItems(importRoleItem = new ImportRoleItem());
+			addToImportItems(importProcessItem = new ImportProcessItem());
+			return true;
 		}
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			ImportProcessesAction importRoles = ImportProcessesAction.actionType.makeNewAction(null, null, getController().getEditor());
-			importRoles.doAction();
+		public class ImportRoleItem extends FlexoMenuItem {
+			public ImportRoleItem() {
+				super(new ImportRoleAction(), "import_roles_from_ppm", null, getController(), true);
+			}
 		}
-	}
 
+		public class ImportRoleAction extends AbstractAction {
+			public ImportRoleAction() {
+				super();
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(null, null, getController().getEditor());
+				importRoles.doAction();
+			}
+		}
+
+		public class ImportProcessItem extends FlexoMenuItem {
+			public ImportProcessItem() {
+				super(new ImportProcessAction(), "import_processes_from_ppm", null, getController(), true);
+			}
+		}
+
+		public class ImportProcessAction extends AbstractAction {
+			public ImportProcessAction() {
+				super();
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ImportProcessesAction importRoles = ImportProcessesAction.actionType.makeNewAction(null, null, getController().getEditor());
+				importRoles.doAction();
+			}
+		}
+	*/
 }

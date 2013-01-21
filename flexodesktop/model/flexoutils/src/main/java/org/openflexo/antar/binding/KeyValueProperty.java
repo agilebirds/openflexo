@@ -27,14 +27,11 @@ import java.util.Observable;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
-public class KeyValueProperty extends Observable implements SimplePathElement<Object> {
+public class KeyValueProperty extends Observable {
 
-	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(KeyValueProperty.class.getPackage().getName());
 
 	/** Stores property's name */
 	protected String name;
@@ -333,8 +330,7 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	/**
 	 * Returns related object class (never null)
 	 */
-	@Override
-	public Class getDeclaringClass() {
+	public Class<?> getDeclaringClass() {
 
 		return declaringClass;
 	}
@@ -350,7 +346,6 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	/**
 	 * Returns related type
 	 */
-	@Override
 	public Type getType() {
 		return type;
 	}
@@ -383,17 +378,10 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return returnedTreeSet;
 	}
 
-	@Override
 	public String getSerializationRepresentation() {
 		return name;
 	}
 
-	@Override
-	public boolean isBindingValid() {
-		return true;
-	}
-
-	@Override
 	public boolean isSettable() {
 		return settable;
 	}
@@ -403,12 +391,10 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return "KeyValueProperty: " + (declaringClass != null ? declaringClass.getSimpleName() : declaringType) + "." + name;
 	}
 
-	@Override
 	public String getLabel() {
 		return getName();
 	}
 
-	@Override
 	public String getTooltipText(Type resultingType) {
 		String returned = "<html>";
 		String resultingTypeAsString;
@@ -426,14 +412,12 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return returned;
 	}
 
-	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+	/*public Object getBindingValue(Object target, BindingEvaluationContext context) {
 		return KeyValueDecoder.objectForKey(target, getName());
 	}
 
-	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		KeyValueCoder.setObjectForKey(target, value, getName());
-	}
+	}*/
 
 }

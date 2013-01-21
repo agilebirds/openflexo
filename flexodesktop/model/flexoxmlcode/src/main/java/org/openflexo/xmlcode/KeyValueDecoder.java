@@ -128,7 +128,12 @@ public class KeyValueDecoder {
 				return doubleAsStringForKey(object, keyValueProperty);
 			}
 		} else {
-			return stringEncoder._encodeObject(objectForKey(object, keyValueProperty));
+			try {
+				return stringEncoder._encodeObject(objectForKey(object, keyValueProperty));
+			} catch (InvalidDataException e) {
+				System.err.println("Cannot encode property " + keyValueProperty + " for object " + object + " reason: " + e.getMessage());
+				throw e;
+			}
 		}
 		return null;
 	}

@@ -39,7 +39,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -110,7 +112,14 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public Object getRootValue() {
-		return getWidget().getRoot().getBindingValue(getController());
+		try {
+			return getWidget().getRoot().getBindingValue(getController());
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			// e.printStackTrace();
+		}
+		return null;
 	}
 
 	// private static final Vector EMPTY_VECTOR = new Vector();
@@ -166,11 +175,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// System.out.println("getComponent().getSelected().isValid()="+getComponent().getSelected().isValid());
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
-		if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-			Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
-			if (returned = notEquals(newSelectedObject, getSelectedObject())) {
-				setSelectedObject(newSelectedObject);
+		try {
+			if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
+				Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
+					setSelectedObject(newSelectedObject);
+				}
 			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
 		}
 
 		// }
@@ -223,10 +238,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	@Override
-	public List<AbstractBinding> getDependencyBindings() {
-		List<AbstractBinding> returned = super.getDependencyBindings();
-		appendToDependingObjects(getWidget().getSelected(), returned);
-		appendToDependingObjects(getWidget().getRoot(), returned);
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getWidget().getSelected());
+		returned.add(getWidget().getRoot());
 		return returned;
 	}
 
@@ -459,15 +474,17 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	public synchronized void valueChanged(TreeSelectionEvent e) {
 		Vector<Object> oldSelection = new Vector<Object>();
 		oldSelection.addAll(selection);
-		/*System.out.println("Selection: "+e);
+		// System.out.println("Selection: " + e);
 
-		System.out.println("Paths="+e.getPaths());
+		/*System.out.println("Paths=" + e.getPaths());
 		for (TreePath tp : e.getPaths()) {
-			System.out.println("> "+tp.getLastPathComponent()+" added="+e.isAddedPath(tp));
+			System.out.println("> " + tp.getLastPathComponent() + " added=" + e.isAddedPath(tp));
 		}
-		System.out.println("New LEAD="+(e.getNewLeadSelectionPath()!=null?e.getNewLeadSelectionPath().getLastPathComponent():"null"));
-		System.out.println("Old LEAD="+(e.getOldLeadSelectionPath()!=null?e.getOldLeadSelectionPath().getLastPathComponent():"null"));
-		*/
+		System.out.println("New LEAD="
+				+ (e.getNewLeadSelectionPath() != null ? e.getNewLeadSelectionPath().getLastPathComponent() : "null"));
+		System.out.println("Old LEAD="
+				+ (e.getOldLeadSelectionPath() != null ? e.getOldLeadSelectionPath().getLastPathComponent() : "null")); */
+
 		if (e.getNewLeadSelectionPath() == null || (BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent() == null) {
 			selectedObject = null;
 		} else {
@@ -491,13 +508,30 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			getDynamicModel().selected = null;
 		} else if (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(selectedObject.getClass())) {
 			getDynamicModel().selected = selectedObject;
+		} else {
+			// If selected element is not of expected class, set selected to be null
+			// (we want to be sure that selected is an instance of IteratorClass)
+			getDynamicModel().selected = null;
 		}
 		getDynamicModel().selection = selection;
 		notifyDynamicModelChanged();
 
+		/*System.out.println("selectedObject=" + selectedObject);
+		System.out.println("getComponent().getSelected()=" + getComponent().getSelected() + " of "
+				+ getComponent().getSelected().getClass());
+		System.out.println("getComponent().getSelected().isValid()=" + getComponent().getSelected().isValid());*/
+
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
-			getComponent().getSelected().setBindingValue(selectedObject, getController());
+			try {
+				getComponent().getSelected().setBindingValue(selectedObject, getController());
+			} catch (TypeMismatchException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		updateFont();

@@ -1,13 +1,15 @@
 package org.openflexo.antar.expr.parser;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
+import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
@@ -16,6 +18,7 @@ import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.TypeReference;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.parser.analysis.DepthFirstAdapter;
 import org.openflexo.antar.expr.parser.node.AAcosFuncFunction;
@@ -24,7 +27,9 @@ import org.openflexo.antar.expr.parser.node.AAnd2ExprExpr3;
 import org.openflexo.antar.expr.parser.node.AAndExprExpr3;
 import org.openflexo.antar.expr.parser.node.AAsinFuncFunction;
 import org.openflexo.antar.expr.parser.node.AAtanFuncFunction;
+import org.openflexo.antar.expr.parser.node.ABasicTypeReference;
 import org.openflexo.antar.expr.parser.node.ABindingTerm;
+import org.openflexo.antar.expr.parser.node.ACastTerm;
 import org.openflexo.antar.expr.parser.node.ACharsValueTerm;
 import org.openflexo.antar.expr.parser.node.ACondExprExpr;
 import org.openflexo.antar.expr.parser.node.AConstantNumber;
@@ -41,6 +46,7 @@ import org.openflexo.antar.expr.parser.node.AFalseConstant;
 import org.openflexo.antar.expr.parser.node.AFunctionTerm;
 import org.openflexo.antar.expr.parser.node.AGtExprExpr;
 import org.openflexo.antar.expr.parser.node.AGteExprExpr;
+import org.openflexo.antar.expr.parser.node.AIdentifierTypeReferencePath;
 import org.openflexo.antar.expr.parser.node.ALogFuncFunction;
 import org.openflexo.antar.expr.parser.node.ALtExprExpr;
 import org.openflexo.antar.expr.parser.node.ALteExprExpr;
@@ -53,6 +59,7 @@ import org.openflexo.antar.expr.parser.node.ANullConstant;
 import org.openflexo.antar.expr.parser.node.ANumberTerm;
 import org.openflexo.antar.expr.parser.node.AOr2ExprExpr2;
 import org.openflexo.antar.expr.parser.node.AOrExprExpr2;
+import org.openflexo.antar.expr.parser.node.AParameteredTypeReference;
 import org.openflexo.antar.expr.parser.node.APiConstant;
 import org.openflexo.antar.expr.parser.node.APowerExprExpr3;
 import org.openflexo.antar.expr.parser.node.APreciseNumberNumber;
@@ -61,11 +68,18 @@ import org.openflexo.antar.expr.parser.node.ASinFuncFunction;
 import org.openflexo.antar.expr.parser.node.ASqrtFuncFunction;
 import org.openflexo.antar.expr.parser.node.AStringValueTerm;
 import org.openflexo.antar.expr.parser.node.ASubExprExpr2;
+import org.openflexo.antar.expr.parser.node.ATailTypeReferencePath;
 import org.openflexo.antar.expr.parser.node.ATanFuncFunction;
 import org.openflexo.antar.expr.parser.node.ATermExpr3;
 import org.openflexo.antar.expr.parser.node.ATrueConstant;
+import org.openflexo.antar.expr.parser.node.ATypeReferenceAdditionalArg;
+import org.openflexo.antar.expr.parser.node.ATypeReferenceArgList;
 import org.openflexo.antar.expr.parser.node.Node;
 import org.openflexo.antar.expr.parser.node.PBinding;
+import org.openflexo.antar.expr.parser.node.PTypeReference;
+import org.openflexo.antar.expr.parser.node.PTypeReferenceAdditionalArg;
+import org.openflexo.antar.expr.parser.node.PTypeReferenceArgList;
+import org.openflexo.antar.expr.parser.node.PTypeReferencePath;
 import org.openflexo.antar.expr.parser.node.TCharsValue;
 import org.openflexo.antar.expr.parser.node.TDecimalNumber;
 import org.openflexo.antar.expr.parser.node.TPreciseNumber;
@@ -112,17 +126,55 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 		return null;
 	}
 
-	private BindingValueAsExpression makeBinding(PBinding node) {
+	private BindingValue makeBinding(PBinding node) {
 		// System.out.println("Make binding with " + node);
 
 		// Apply the translation.
 		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer();
 		node.apply(bsa);
-		BindingValueAsExpression returned = new BindingValueAsExpression(bsa.getPath());
+		BindingValue returned = new BindingValue(bsa.getPath());
 		// System.out.println("Made binding as " + bsa.getPath());
 
 		registerExpressionNode(node, returned);
 		return returned;
+	}
+
+	private TypeReference makeTypeReference(PTypeReference node) {
+		if (node instanceof ABasicTypeReference) {
+			return makeBasicTypeReference((ABasicTypeReference) node);
+		} else if (node instanceof AParameteredTypeReference) {
+			return makeParameteredTypeReference((AParameteredTypeReference) node);
+		}
+		System.err.println("Unexpected " + node);
+		return null;
+	}
+
+	private String makeReferencePath(PTypeReferencePath path) {
+		if (path instanceof AIdentifierTypeReferencePath) {
+			return ((AIdentifierTypeReferencePath) path).getIdentifier().getText();
+		} else if (path instanceof ATailTypeReferencePath) {
+			return ((ATailTypeReferencePath) path).getIdentifier().getText() + "."
+					+ makeReferencePath(((ATailTypeReferencePath) path).getTypeReferencePath());
+		}
+		System.err.println("Unexpected " + path);
+		return null;
+	}
+
+	private TypeReference makeBasicTypeReference(ABasicTypeReference node) {
+		return new TypeReference(makeReferencePath(node.getTypeReferencePath()));
+	}
+
+	private TypeReference makeParameteredTypeReference(AParameteredTypeReference node) {
+		PTypeReferenceArgList argList = node.getTypeReferenceArgList();
+		ArrayList<TypeReference> args = new ArrayList<TypeReference>();
+		if (argList instanceof ATypeReferenceArgList) {
+			args.add(makeTypeReference(((ATypeReferenceArgList) argList).getTypeReference()));
+			for (PTypeReferenceAdditionalArg aa : ((ATypeReferenceArgList) argList).getTypeReferenceAdditionalArgs()) {
+				ATypeReferenceAdditionalArg additionalArg = (ATypeReferenceAdditionalArg) aa;
+				args.add(makeTypeReference(additionalArg.getTypeReference()));
+			}
+		}
+		return new TypeReference(makeReferencePath(node.getTypeReferencePath()), args);
 	}
 
 	private IntegerConstant makeDecimalNumber(TDecimalNumber node) {
@@ -487,7 +539,14 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 		  {chars_value} chars_value |
 		  {function} function |
 		  {binding} binding |
-		  {expr} l_par expr r_par;*/
+		  {expr} l_par expr r_par |
+		  {cast} l_par type_reference r_par term;*/
+
+	@Override
+	public void outACastTerm(ACastTerm node) {
+		super.outACastTerm(node);
+		registerExpressionNode(node, new CastExpression(makeTypeReference(node.getTypeReference()), getExpression(node.getTerm())));
+	}
 
 	@Override
 	public void outANegativeTerm(ANegativeTerm node) {

@@ -56,6 +56,7 @@ import javax.imageio.ImageIO;
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
@@ -137,7 +138,6 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
@@ -164,9 +164,7 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -399,7 +397,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
 			_addConverter(imageFileConverter);
-			_addConverter(TOCDataBinding.CONVERTER);
+			_addConverter(DataBinding.CONVERTER);
 		}
 	}
 
@@ -4005,6 +4003,58 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
+	public FlexoWorkflowResource getImportedWorkflowResource(FlexoProjectReference ref) {
+		return getImportedWorkflowResource(ref, false);
+	}
+
+	public FlexoWorkflowResource getImportedWorkflowResource(FlexoProjectReference ref, boolean createIfNotExist) {
+		FlexoWorkflowResource returned = null;
+		for (FlexoWorkflowResource wkfRes : getResourcesOfClass(FlexoWorkflowResource.class)) {
+			if (ref.getURI().equals(wkfRes.getProjectURI())) {
+				returned = wkfRes;
+				break;
+			}
+		}
+		if (returned == null && createIfNotExist && ref.getReferredProject() != null) {
+			File xml = ProjectRestructuration.getExpectedCacheDir(this);
+			String base = FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(ref.getName());
+			String attempt = base;
+			FlexoProjectFile attemptFile = new FlexoProjectFile(new File(xml, attempt + ProjectRestructuration.CACHE_EXTENSION), this);
+			int i = 1;
+			while (resourceForFileName(attemptFile) != null || resourceForKey(ResourceType.CACHE, attempt) != null) {
+				attempt = base + "-" + i++;
+				attemptFile = new FlexoProjectFile(new File(xml, attempt + ProjectRestructuration.CACHE_EXTENSION), this);
+			}
+
+			try {
+				returned = new FlexoWorkflowResource(this, ref.getReferredProject().getWorkflow(), attemptFile, ResourceType.CACHE, attempt);
+				returned.setProjectURI(ref.getURI());
+				registerResource(returned);
+			} catch (Exception e1) {
+				// Warns about the exception
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+				}
+				e1.printStackTrace();
+			}
+
+		}
+		return returned;
+	}
+
+	public FlexoWorkflow getImportedWorkflow(FlexoProjectReference ref) {
+		return getImportedWorkflow(ref, false);
+	}
+
+	public FlexoWorkflow getImportedWorkflow(FlexoProjectReference ref, boolean createIfNotExist) {
+		FlexoWorkflowResource importedWorkflowResource = getImportedWorkflowResource(ref, createIfNotExist);
+		if (importedWorkflowResource != null) {
+			return importedWorkflowResource.getResourceData();
+		} else {
+			return null;
+		}
+	}
+
 	/*
 	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
@@ -4157,8 +4207,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}*/
 
 		this.serviceManager = serviceManager;
-		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(serviceManager.getService(ViewPointLibrary.class));
-		getStringEncoder()._addConverter(editionPatternConverter);
 	}
 
 	public boolean isComputeDiff() {
@@ -4283,11 +4331,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public FlexoProject loadProjectReference(FlexoProjectReference reference) {
 		if (projectReferenceLoader != null) {
-			return projectReferenceLoader.loadProject(reference);
+			FlexoProject loadProject = projectReferenceLoader.loadProject(reference);
+			if (loadProject != null) {
+				setChanged();
+				notifyObservers(new ImportedProjectLoaded(loadProject));
+			}
+			return loadProject;
 		}
 		return null;
 	}
-
 
 	/*	public Set<FlexoOntology> getAllMetaModels() {
 			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
@@ -4323,13 +4375,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public Object getObject(String uri) {
 		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
 			Object o = m.getObject(uri);
-			if (o != null)
+			if (o != null) {
 				return o;
+			}
 		}
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
 			Object o = m.getObject(uri);
-			if (o != null)
+			if (o != null) {
 				return o;
+			}
 		}
 		return null;
 	}
@@ -4486,8 +4540,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public FlexoModel<?, ?> getModel(String modelURI) {
 		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
-			if (m.getURI().equals(modelURI))
+			if (m.getURI().equals(modelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}
@@ -4518,8 +4573,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
-			if (m.getURI().equals(metaModelURI))
+			if (m.getURI().equals(metaModelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.owl.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +19,7 @@ import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 
 public class ObjectPropertyStatementPatternRole extends StatementPatternRole<ObjectPropertyStatement> {
 
@@ -28,8 +30,11 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.ObjectPropertyStatement;
+	public Type getType() {
+		if (getObjectProperty() == null) {
+			return ObjectPropertyStatement.class;
+		}
+		return StatementWithProperty.getStatementWithProperty(getObjectProperty());
 	}
 
 	@Override
@@ -38,11 +43,6 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 			return getObjectProperty().getName();
 		}
 		return "";
-	}
-
-	@Override
-	public Class<ObjectPropertyStatement> getAccessedClass() {
-		return ObjectPropertyStatement.class;
 	}
 
 	private String objectPropertyURI;

@@ -53,7 +53,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 
 	@Override
 	public final ViewPointBuilder instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPointLibrary());
+		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
+		return new ViewPointBuilder(getViewPointLibrary(), (ViewPointResource) null);
 	}
 
 	@Override
@@ -92,8 +93,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		ExampleDiagram returned = super.loadResourceData(progress);
-		returned.init(((ViewPointResource) getContainer()).getViewPoint(), getFile());
-		((ViewPointResource) getContainer()).getViewPoint().addToExampleDiagrams(returned);
+		returned.init(getContainer().getViewPoint(), getFile());
+		getContainer().getViewPoint().addToExampleDiagrams(returned);
 		return returned;
 	}
 

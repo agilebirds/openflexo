@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
@@ -17,10 +17,8 @@ import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class GraphicalElementPatternRole<T extends ViewElement> extends PatternRole<T> implements Bindable {
 
@@ -28,7 +26,6 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
 
 	private boolean readOnlyLabel;
-	private ViewPointDataBinding label;
 
 	private String exampleLabel = "label";
 
@@ -59,21 +56,17 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 
 	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation);
 
-	public static enum GraphicalElementBindingAttribute implements InspectorBindingAttribute {
-		label
-	}
-
 	private BindingDefinition LABEL;
 
 	public BindingDefinition getLabelBindingDefinition() {
 		if (LABEL == null) {
-			LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET_SET, false) {
+			LABEL = new BindingDefinition("label", String.class, DataBinding.BindingDefinitionType.GET_SET, false) {
 				@Override
-				public BindingDefinitionType getBindingDefinitionType() {
+				public DataBinding.BindingDefinitionType getBindingDefinitionType() {
 					if (getReadOnlyLabel()) {
-						return BindingDefinitionType.GET;
+						return DataBinding.BindingDefinitionType.GET;
 					} else {
-						return BindingDefinitionType.GET_SET;
+						return DataBinding.BindingDefinitionType.GET_SET;
 					}
 				}
 			};
@@ -82,12 +75,12 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	}
 
 	// Convenient method to access spec for label feature
-	public ViewPointDataBinding getLabel() {
+	public DataBinding<String> getLabel() {
 		return getGraphicalElementSpecification(LABEL_FEATURE).getValue();
 	}
 
 	// Convenient method to access spec for label feature
-	public void setLabel(ViewPointDataBinding label) {
+	public void setLabel(DataBinding<String> label) {
 		getGraphicalElementSpecification(LABEL_FEATURE).setValue(label);
 	}
 

@@ -24,17 +24,13 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.model.View;
@@ -47,11 +43,6 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
-import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
-import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -65,7 +56,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
-		implements BindingEvaluationContext /*, BindingPathElement<Object>*/{
+		implements BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -216,7 +207,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		// Finalize actions
 		for (EditionAction action : performedActions.keySet()) {
 			action.finalizePerformAction(this, performedActions.get(action));
-			}
+		}
 
 	}
 
@@ -250,7 +241,17 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionSchemeParameterListPathElement) {
+		if (variable.getVariableName().equals(EditionScheme.THIS)) {
+			return getEditionPatternInstance();
+		}
+		if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
+			return retrieveOEShema();
+		}
+		if (variables.get(variable.getVariableName()) != null) {
+			return variables.get(variable.getVariableName());
+		}
+
+		/*if (variable instanceof EditionSchemeParameterListPathElement) {
 			return this;
 		} else if (variable instanceof EditionSchemeParameterPathElement) {
 			return getParameterValue(((EditionSchemeParameterPathElement) variable).getParameter());
@@ -268,7 +269,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 		if (variables.get(variable.getVariableName()) != null) {
 			return variables.get(variable.getVariableName());
-		}
+		}*/
 
 		logger.warning("Unexpected variable requested in EditionSchemeAction " + variable);
 		return null;

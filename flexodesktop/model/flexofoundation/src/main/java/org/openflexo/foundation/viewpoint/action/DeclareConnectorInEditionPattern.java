@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -34,6 +35,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
@@ -51,7 +53,6 @@ import org.openflexo.foundation.viewpoint.IntegerParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
@@ -167,11 +168,11 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				newConnectorPatternRole = new ConnectorPatternRole(builder);
 				newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
 				if (mainPropertyDescriptor != null) {
-					newConnectorPatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+					newConnectorPatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
 							+ mainPropertyDescriptor.property.getName()));
 				} else {
 					newConnectorPatternRole.setReadOnlyLabel(true);
-					newConnectorPatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+					newConnectorPatternRole.setLabel(new DataBinding<String>("\"label\""));
 					newConnectorPatternRole.setExampleLabel(((ConnectorGraphicalRepresentation) getFocusedObject()
 							.getGraphicalRepresentation()).getText());
 				}
@@ -260,15 +261,15 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 					uriParameter.setName("uri");
 					uriParameter.setLabel("uri");
 					if (mainPropertyDescriptor != null) {
-						uriParameter.setBaseURI(new ViewPointDataBinding(mainPropertyDescriptor.property.getName()));
+						uriParameter.setBaseURI(new DataBinding<String>(mainPropertyDescriptor.property.getName()));
 					}
 					newLinkScheme.addToParameters(uriParameter);
 
 					// Declare pattern role
 					for (IndividualPatternRole r : otherRoles) {
 						DeclarePatternRole action = new DeclarePatternRole(builder);
-						action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
-						action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
+						action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
+						action.setObject(new DataBinding<Object>("parameters." + r.getName()));
 						newLinkScheme.addToActions(action);
 					}
 
@@ -300,10 +301,10 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 				// Add connector action
 				AddConnector newAddConnector = new AddConnector(builder);
-				newAddConnector.setAssignation(new ViewPointDataBinding(newConnectorPatternRole.getPatternRoleName()));
-				newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
+				newAddConnector.setAssignation(new DataBinding<Object>(newConnectorPatternRole.getPatternRoleName()));
+				newAddConnector.setFromShape(new DataBinding<ViewShape>(EditionScheme.FROM_TARGET + "."
 						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-				newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."
+				newAddConnector.setToShape(new DataBinding<ViewShape>(EditionScheme.TO_TARGET + "."
 						+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 
 				newLinkScheme.addToActions(newAddConnector);
@@ -325,7 +326,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 									newInspectorEntry.setName(e.property.getName());
 									newInspectorEntry.setLabel(e.label);
 									newInspectorEntry.setIsReadOnly(true);
-									newInspectorEntry.setData(new ViewPointDataBinding(e.property.getName() + ".uriName"));
+									newInspectorEntry.setData(new DataBinding<Object>(e.property.getName() + ".uriName"));
 									inspector.addToEntries(newInspectorEntry);
 								}
 							} else if (e.property instanceof IFlexoOntologyDataProperty) {
@@ -353,7 +354,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								if (newInspectorEntry != null) {
 									newInspectorEntry.setName(e.property.getName());
 									newInspectorEntry.setLabel(e.label);
-									newInspectorEntry.setData(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+									newInspectorEntry.setData(new DataBinding<Object>(getIndividualPatternRoleName() + "."
 											+ e.property.getName()));
 									inspector.addToEntries(newInspectorEntry);
 								}

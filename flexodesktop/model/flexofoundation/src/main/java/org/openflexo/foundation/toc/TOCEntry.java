@@ -24,11 +24,11 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
@@ -38,7 +38,6 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -930,12 +929,14 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		setChanged();
 	}
 
-	public void notifyBindingChanged(TOCDataBinding binding) {
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 		setChanged();
 		rebuildInferedBindingModel();
 	}
 
-	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 
 	@Override
@@ -987,7 +988,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return DEFAULT_BINDING_FACTORY;
 	}
 
-	public static BindingFactory DEFAULT_BINDING_FACTORY = new DefaultBindingFactory();
+	public static BindingFactory DEFAULT_BINDING_FACTORY = new JavaBindingFactory();
 
 	@Override
 	public void finalizeDeserialization(Object builder) {

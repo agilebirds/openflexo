@@ -27,8 +27,10 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.VelocityContext;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
@@ -228,7 +230,14 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	public List<Object> getIterableObjects(IterationSection iteration) {
-		Object listValue = iteration.getIteration().getBindingValue(this);
+		Object listValue = null;
+		try {
+			listValue = iteration.getIteration().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		logger.info("getIterableObjects = " + listValue);
 		if (listValue instanceof List) {
 			return (List) listValue;
@@ -246,18 +255,30 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		if (!iteration.getCondition().isSet() || !iteration.getCondition().isValid()) {
 			return true;
 		}
-		Object conditionValue = iteration.getCondition().getBindingValue(this);
-		logger.info("conditionValue = " + conditionValue);
-		return (Boolean) conditionValue;
+		Boolean conditionValue = true;
+		try {
+			conditionValue = iteration.getCondition().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return conditionValue;
 	}
 
 	public Boolean getCondition(ConditionalSection conditional) {
 		if (!conditional.getCondition().isSet() || !conditional.getCondition().isValid()) {
 			return true;
 		}
-		Object conditionValue = conditional.getCondition().getBindingValue(this);
-		logger.info("conditionValue = " + conditionValue);
-		return (Boolean) conditionValue;
+		Boolean conditionValue = true;
+		try {
+			conditionValue = conditional.getCondition().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return conditionValue;
 	}
 
 	public FlexoModelObject getAccessedModelObject(TOCEntry section) {
@@ -293,16 +314,20 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		if (!section.getValue().isSet() || !section.getValue().isValid()) {
 			return null;
 		}
-		Object objectValue = section.getValue().getBindingValue(this);
-		logger.info("objectValue = " + objectValue);
+		Object objectValue = null;
+		try {
+			objectValue = section.getValue().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 		return (T) objectValue;
 	}
 
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (getVelocityContext() != null) {
-			System.out.println("For value " + variable.getVariableName() + " return "
-					+ getVelocityContext().get(variable.getVariableName()));
 			return getVelocityContext().get(variable.getVariableName());
 		}
 		return null;

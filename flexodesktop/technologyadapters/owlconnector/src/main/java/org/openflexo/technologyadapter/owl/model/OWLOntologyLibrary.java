@@ -22,11 +22,13 @@ package org.openflexo.technologyadapter.owl.model;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -78,6 +80,18 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	private OntologyObjectConverter ontologyObjectConverter;
 
+	protected Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty> statementsWithProperty;
+
+	public StatementWithProperty getStatementWithProperty(IFlexoOntologyStructuralProperty aProperty) {
+		if (statementsWithProperty.get(aProperty) != null) {
+			return statementsWithProperty.get(aProperty);
+		} else {
+			StatementWithProperty returned = new StatementWithProperty(aProperty);
+			statementsWithProperty.put(aProperty, returned);
+			return returned;
+		}
+	}
+
 	public OWLOntologyLibrary(OWLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super();
 		this.adapter = adapter;
@@ -88,6 +102,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
 		dataTypes = new HashMap<String, OWLDataType>();
+
+		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
+
 	}
 
 	private boolean defaultOntologiesLoaded = false;

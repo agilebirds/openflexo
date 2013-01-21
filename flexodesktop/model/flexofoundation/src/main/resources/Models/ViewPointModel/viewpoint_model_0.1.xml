@@ -245,7 +245,7 @@
 		xmlTag="ActionScheme">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.NavigationScheme"
+	<entity name="org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme"
 		xmlTag="NavigationScheme">
 		<property name="targetObject" xmlTag="targetObject" attribute="YES" />
 	</entity>

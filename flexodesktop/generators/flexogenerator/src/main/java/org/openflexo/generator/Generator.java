@@ -57,7 +57,7 @@ import org.apache.velocity.tools.generic.DisplayTool;
 import org.apache.velocity.tools.generic.EscapeTool;
 import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;

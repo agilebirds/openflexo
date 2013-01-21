@@ -27,15 +27,15 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
@@ -154,7 +154,13 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		if (forceUpdate || notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
 			if (getWidget().getValueChangedAction().isValid()) {
-				getWidget().getValueChangedAction().execute(getController());
+				try {
+					getWidget().getValueChangedAction().execute(getController());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 			}
 			return true;
 		}
@@ -179,20 +185,20 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	private void performAssignments() {
 		for (FIBCustomAssignment assign : getWidget().getAssignments()) {
-			DataBinding variableDB = assign.getVariable();
-			DataBinding valueDB = assign.getValue();
-			if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
+			DataBinding<?> variableDB = assign.getVariable();
+			DataBinding<?> valueDB = assign.getValue();
+			if (valueDB != null && valueDB.isValid()) {
 				Object value = null;
 				try {
-					value = valueDB.getBinding().getBindingValue(getController());
+					value = valueDB.getBindingValue(getController());
+					if (variableDB.isValid()) {
+						// System.out.println("Assignment " + assign + " set value with " + value);
+						variableDB.setBindingValue(value, this);
+					}
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
-					e.printStackTrace();
-				}
-				if (variableDB.getBinding().isBindingValid()) {
-					// System.out.println("Assignment " + assign + " set value with " + value);
-					variableDB.getBinding().setBindingValue(value, this);
+					// e.printStackTrace();
 				}
 			}
 		}

@@ -42,6 +42,7 @@ import org.openflexo.foundation.wkf.dm.RoleChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
@@ -63,8 +64,9 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 
 		updatePropertiesFromWKFPreferences();
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
-
-		addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		if (!UserType.isLite()) {
+			addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		}
 		if (activityNode.hasExecutionPetriGraph()) {
 			activityNode.getExecutionPetriGraph().addObserver(this);
 		}

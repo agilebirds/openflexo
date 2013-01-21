@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
-import org.openflexo.foundation.viewpoint.NavigationScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.localization.LocalizedDelegate;
 
 public class NavigationSchemeActionType extends FlexoActionType<NavigationSchemeAction, FlexoModelObject, FlexoModelObject> {

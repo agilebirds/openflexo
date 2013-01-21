@@ -2,7 +2,7 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.Analysis;
+import org.openflexo.antar.expr.parser.analysis.*;
 
 @SuppressWarnings("nls")
 public final class AExpFuncFunction extends PFunction {

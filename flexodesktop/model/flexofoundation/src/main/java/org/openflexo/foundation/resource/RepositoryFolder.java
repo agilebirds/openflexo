@@ -1,5 +1,6 @@
 package org.openflexo.foundation.resource;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 
 	public void addToResources(R resource) {
 		resources.add(resource);
+		setChanged();
+		notifyObservers(new ResourceRegistered(resource, this));
 	}
 
 	public void removeFromResources(R resource) {
@@ -80,5 +83,16 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 	public String getFullyQualifiedName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public File getFile() {
+		if (isRootFolder()) {
+			if (getResourceRepository() instanceof FileResourceRepository) {
+				return ((FileResourceRepository) getResourceRepository()).getDirectory();
+			}
+			return null;
+		} else {
+			return new File(getParentFolder().getFile(), getName());
+		}
 	}
 }

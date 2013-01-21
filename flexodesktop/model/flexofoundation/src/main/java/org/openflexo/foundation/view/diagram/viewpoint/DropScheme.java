@@ -20,9 +20,12 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -30,8 +33,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 public class DropScheme extends AbstractCreationScheme {
@@ -41,11 +42,6 @@ public class DropScheme extends AbstractCreationScheme {
 
 	public DropScheme(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.DropScheme;
 	}
 
 	public String _getTarget() {
@@ -123,8 +119,7 @@ public class DropScheme extends AbstractCreationScheme {
 		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
-					this));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.TARGET, getTargetEditionPattern()));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
 			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
@@ -160,7 +155,7 @@ public class DropScheme extends AbstractCreationScheme {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {
-				((AddShape) newAction).setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+				((AddShape) newAction).setContainer(new DataBinding<ViewObject>(EditionScheme.TOP_LEVEL));
 			}
 		}
 		return newAction;

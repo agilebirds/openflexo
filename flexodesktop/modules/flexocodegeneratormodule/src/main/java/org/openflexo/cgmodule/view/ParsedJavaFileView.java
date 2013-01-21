@@ -60,7 +60,7 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 		_javaFileResource = javaFileResource;
 		if (editable) {
 			javaCodeDisplayer = new CodeEditor((GenerationAvailableFileResource) javaFileResource, controller);
-			javaCodeDisplayer.getComponent().requestFocus();
+			javaCodeDisplayer.getComponent().requestFocusInWindow();
 		} else {
 			javaCodeDisplayer = new CodeDisplayer((GenerationAvailableFileResource) javaFileResource, ContentSource.CONTENT_ON_DISK,
 					controller);

@@ -20,18 +20,26 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
@@ -39,13 +47,16 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -57,7 +68,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
@@ -166,10 +176,15 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public static ViewPoint newViewPoint(String baseName, String viewpointURI/*, File owlFile*/, File viewpointDir,
 			ViewPointLibrary library/*, ViewPointFolder folder*/) {
-		File xmlFile = new File(viewpointDir, baseName + ".xml");
+		ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(baseName, viewpointURI, viewpointDir, library);
 		ViewPoint viewpoint = new ViewPoint();
+		vpRes.setResourceData(viewpoint);
+		viewpoint.setResource(vpRes);
 		// viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
+
+		// And register it to the library
+		library.registerViewPoint(vpRes);
 
 		// ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 
@@ -243,19 +258,23 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		private ViewPoint viewPoint;
 		private FlexoVersion modelVersion;
 		private ViewPointLibrary viewPointLibrary;
+		private ViewPointResource resource;
 
-		public ViewPointBuilder(ViewPointLibrary vpLibrary) {
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource) {
 			this.viewPointLibrary = vpLibrary;
+			this.resource = resource;
 		}
 
 		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
 			this.viewPointLibrary = vpLibrary;
+			this.resource = viewPoint.getResource();
 		}
 
-		public ViewPointBuilder(ViewPointLibrary vpLibrary, FlexoVersion modelVersion) {
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource, FlexoVersion modelVersion) {
 			this.modelVersion = modelVersion;
 			this.viewPointLibrary = vpLibrary;
+			this.resource = resource;
 		}
 
 		public ViewPointLibrary getViewPointLibrary() {
@@ -280,6 +299,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		super(builder);
 		if (builder != null) {
 			builder.setViewPoint(this);
+			resource = builder.resource;
 		}
 		editionPatterns = new Vector<EditionPattern>();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
@@ -579,7 +599,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public void addToEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(this);
+		pattern.setViewPoint(this);
 		editionPatterns.add(pattern);
 		_allEditionPatternWithDropScheme = null;
 		_allEditionPatternWithLinkScheme = null;
@@ -588,7 +608,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public void removeFromEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(null);
+		pattern.setViewPoint(null);
 		editionPatterns.remove(pattern);
 		setChanged();
 		notifyObservers(new EditionPatternDeleted(pattern));
@@ -653,6 +673,35 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		this.owlFile = owlFile;
 	}*/
 
+	private static String findOntologyImports(File aFile) {
+		Document document;
+		try {
+			logger.fine("Try to find URI for " + aFile);
+			document = FlexoXMLFileResourceImpl.readXMLFile(aFile);
+			Element root = FlexoXMLFileResourceImpl.getElement(document, "Ontology");
+			if (root != null) {
+				Element importElement = FlexoXMLFileResourceImpl.getElement(document, "imports");
+				Iterator it = importElement.getAttributes().iterator();
+				while (it.hasNext()) {
+					Attribute at = (Attribute) it.next();
+					if (at.getName().equals("resource")) {
+						System.out.println("Returned " + at.getValue());
+						String returned = at.getValue();
+						if (StringUtils.isNotEmpty(returned)) {
+							return returned;
+						}
+					}
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
+		return null;
+	}
+
 	@Deprecated
 	private void convertTo_1_0(ViewPointLibrary viewPointLibrary) {
 		logger.info("Converting viewpoint from Openflexo 1.4.5 version");
@@ -661,9 +710,31 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
 			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getFlexoServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
+
+			String importedOntology = null;
+			for (File owlFile : getResource().getDirectory().listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return (name.endsWith(".owl"));
+				}
+			})) {
+				if (owlFile.exists()) {
+					importedOntology = findOntologyImports(owlFile);
+				}
+			}
+
+			FlexoMetaModelResource r = OWL.getMetaModelResource(importedOntology);
+			if (r == null) {
+				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
+			}
+			if (r != null) {
+				logger.info("************************ For ViewPoint " + getURI() + " declaring OWL model slot targetting meta-model "
+						+ r.getURI());
+			}
+
 			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
-			ms.setMetaModelResource(null);
+			ms.setMetaModelResource(r);
 			addToModelSlots(ms);
 			DiagramTechnologyAdapter diagramTA = null;
 			if (viewPointLibrary.getFlexoServiceManager() != null
@@ -713,7 +784,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (EditionPattern ep : getEditionPatterns()) {
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
+			// _bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
+			_bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), ep));
 		}
 	}
 
@@ -817,8 +889,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		for (FlexoMetaModel<?> mm : getAllReferencedMetaModels()) {
 			if (mm != null) {
 				Object o = mm.getObject(uri);
-				if (o != null)
+				if (o != null) {
 					return o;
+				}
 			}
 		}
 		return null;
@@ -953,8 +1026,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 */
 	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
-			if (m.getURI().equals(metaModelURI))
+			if (m.getURI().equals(metaModelURI)) {
 				return m;
+			}
 		}
 		return null;
 	}

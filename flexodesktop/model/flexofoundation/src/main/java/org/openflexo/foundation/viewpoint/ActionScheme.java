@@ -27,9 +27,4 @@ public class ActionScheme extends AbstractActionScheme {
 		super(builder);
 	}
 
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.ActionScheme;
-	}
-
 }

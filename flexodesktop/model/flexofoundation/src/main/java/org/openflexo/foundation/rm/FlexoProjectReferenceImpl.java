@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FlexoVersion;
 
@@ -15,16 +16,6 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 
 		public void projectDeleted(FlexoProjectReference reference);
 
-	}
-
-	private ReferenceStatus status = ReferenceStatus.UNRESOLVED;
-
-	/**
-	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getStatus()
-	 */
-	@Override
-	public ReferenceStatus getStatus() {
-		return status;
 	}
 
 	@Override
@@ -48,10 +39,21 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 						+ project.getURI());
 			}
 		}
-		ReferenceStatus old = this.status;
 		performSuperSetter(REFERRED_PROJECT, project);
-		status = project != null ? ReferenceStatus.RESOLVED : ReferenceStatus.UNRESOLVED;
-		getPropertyChangeSupport().firePropertyChange(STATUS, old, status);
+		if (project != null) {
+			FlexoWorkflowResource importedWorkflowResource = getReferringProject().getImportedWorkflowResource(this, true);
+			importedWorkflowResource.replaceWithWorkflow(project.getWorkflow());
+			getPropertyChangeSupport().firePropertyChange("workflow", null, project.getWorkflow());
+		}
+	}
+
+	@Override
+	public void delete() {
+		FlexoWorkflowResource workflowResource = getReferringProject().getImportedWorkflowResource(this);
+		if (workflowResource != null) {
+			workflowResource.delete();
+		}
+		performSuperDelete();
 	}
 
 	@Override
@@ -114,5 +116,14 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	@Override
 	public Class<FlexoProject> getResourceDataClass() {
 		return FlexoProject.class;
+	}
+
+	@Override
+	public FlexoWorkflow getWorkflow() {
+		if (getReferredProject() != null) {
+			return getReferredProject().getWorkflow();
+		} else {
+			return getReferringProject().getImportedWorkflow(this);
+		}
 	}
 }

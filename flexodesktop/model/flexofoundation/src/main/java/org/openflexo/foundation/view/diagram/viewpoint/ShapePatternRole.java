@@ -1,5 +1,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
@@ -26,11 +28,6 @@ public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
 		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
 			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
 		}
-	}
-
-	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Shape;
 	}
 
 	@Override
@@ -80,7 +77,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
 	}
 
 	@Override
-	public Class<ViewShape> getAccessedClass() {
+	public Type getType() {
 		return ViewShape.class;
 	}
 

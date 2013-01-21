@@ -19,10 +19,12 @@
  */
 package org.openflexo.icon;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.ExampleDiagramResource;
@@ -38,6 +40,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
@@ -46,10 +49,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnec
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.CloneIndividual;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
@@ -64,7 +64,6 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
-import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
@@ -160,12 +159,6 @@ public class VPMIconLibrary extends IconLibrary {
 			if (tac != null) {
 				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
 			}
-		} else if (object instanceof EditionAction && ((EditionAction) object).getModelSlot() != null) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
-					.getTechnologyAdapter());
-			if (tac != null) {
-				return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
-			}
 		}
 		if (object instanceof ModelSlot) {
 			return MODEL_SLOT_ICON;
@@ -179,14 +172,14 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof DataPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
-			if (tac != null) {
+			if (tac != null && ((DataPropertyAssertion) object).getOntologyProperty() != null) {
 				return tac.getIconForOntologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ObjectPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ObjectPropertyAssertion) object).getAction()
 					.getModelSlot().getTechnologyAdapter());
-			if (tac != null) {
+			if (tac != null && ((ObjectPropertyAssertion) object).getOntologyProperty() != null) {
 				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
@@ -197,29 +190,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ExampleDiagram) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
-			if (object instanceof AddClass) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddClass) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null) {
-					return tac.getIconForOntologyObject(((AddClass) object).getOntologyClassClass());
-				}
-				return null;
-			} else if (object instanceof CloneIndividual) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null) {
-					return IconFactory.getImageIcon(tac.getIconForOntologyObject(((AddIndividual) object).getOntologyClass().getClass()),
-							DUPLICATE);
-				}
-				return null;
-			} else if (object instanceof AddIndividual) {
-				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((AddIndividual) object).getModelSlot()
-						.getTechnologyAdapter());
-				if (tac != null && ((AddIndividual) object).getOntologyClass() != null) {
-					return tac.getIconForOntologyObject(((AddIndividual) object).getOntologyIndividualClass());
-				}
-				return null;
-			} else if (object instanceof AddDiagram) {
+			if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPattern) {
 				return EDITION_PATTERN_ICON;
@@ -248,6 +219,12 @@ public class VPMIconLibrary extends IconLibrary {
 				return DELETE_ICON;
 			} else if (object instanceof GraphicalAction) {
 				return GRAPHICAL_ACTION_ICON;
+			} else if (((EditionAction) object).getModelSlot() != null) {
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
+						.getTechnologyAdapter());
+				if (tac != null) {
+					return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+				}
 			}
 			return EDITION_PATTERN_ACTION_ICON;
 		} else if (object instanceof EditionPattern) {
@@ -305,11 +282,13 @@ public class VPMIconLibrary extends IconLibrary {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
-		} else if (object instanceof OntologicObjectPatternRole) {
+		} else if (object instanceof OntologicObjectPatternRole && ((OntologicObjectPatternRole<?>) object).getModelSlot() != null) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((OntologicObjectPatternRole<?>) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForOntologyObject(((OntologicObjectPatternRole<?>) object).getAccessedClass());
+				Type accessedType = ((OntologicObjectPatternRole<?>) object).getType();
+				Class accessedTypeBaseClass = TypeUtils.getBaseClass(accessedType);
+				return tac.getIconForOntologyObject(accessedTypeBaseClass);
 			}
 		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;

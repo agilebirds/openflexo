@@ -21,6 +21,8 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileResourceRepository;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceRepository;
@@ -35,7 +37,7 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <TA>
  */
 public abstract class ModelRepository<R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>>
-		extends ResourceRepository<R> {
+		extends FileResourceRepository<R> {
 
 	private static final Logger logger = Logger.getLogger(ModelRepository.class.getPackage().getName());
 
@@ -43,6 +45,8 @@ public abstract class ModelRepository<R extends FlexoResource<? extends M>, M ex
 	private FlexoResourceCenter resourceCenter;
 
 	public ModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
+		super(resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory()
+				: null);
 		this.technologyAdapter = technologyAdapter;
 		this.resourceCenter = resourceCenter;
 		getRootFolder().setName(resourceCenter.getName());

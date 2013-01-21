@@ -76,6 +76,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	private List<ModelSlotInstance> modelSlotInstances;
 	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
 
+	private final FlexoProject project;
+
 	/**
 	 * Constructor invoked during deserialization
 	 * 
@@ -105,9 +107,18 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	 */
 	public View(ViewDefinition shemaDefinition, FlexoProject project) {
 		super(project);
+		this.project = project;
 		logger.info("Created new shema with project " + project);
 		_viewDefinition = shemaDefinition;
 		setShema(this);
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		if (getFlexoResource() != null) {
+			return super.getProject();
+		}
+		return project;
 	}
 
 	@Override

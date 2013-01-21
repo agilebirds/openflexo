@@ -24,7 +24,7 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 public class EditionPatternCreated extends OEDataModification {
 
 	public EditionPatternCreated(EditionPattern ep) {
-		super(null, ep);
+		super("allRootEditionPatterns", null, ep);
 	}
 
 }

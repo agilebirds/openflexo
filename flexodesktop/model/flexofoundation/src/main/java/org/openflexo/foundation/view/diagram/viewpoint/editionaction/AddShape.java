@@ -24,8 +24,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoModelObject;
@@ -42,7 +44,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
  * This edition primitive addresses the creation of a new shape in a diagram
@@ -70,7 +71,14 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 			return (ViewObject) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 		} else {
-			return (ViewObject) getContainer().getBindingValue(action);
+			try {
+				return getContainer().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
 
@@ -86,29 +94,25 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 		return null;
 	}
 
-	private ViewPointDataBinding container;
+	private DataBinding<ViewObject> container;
 
-	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getContainerBindingDefinition() {
-		return CONTAINER;
-	}
-
-	public ViewPointDataBinding getContainer() {
+	public DataBinding<ViewObject> getContainer() {
 		if (container == null) {
-			container = new ViewPointDataBinding(this, EditionActionBindingAttribute.container, getContainerBindingDefinition());
+			container = new DataBinding<ViewObject>(this, ViewShape.class, BindingDefinitionType.GET);
+			container.setBindingName("container");
 		}
 		return container;
 	}
 
-	public void setContainer(ViewPointDataBinding container) {
+	public void setContainer(DataBinding<ViewObject> container) {
 		if (container != null) {
 			container.setOwner(this);
-			container.setBindingAttribute(EditionActionBindingAttribute.container);
-			container.setBindingDefinition(getContainerBindingDefinition());
+			container.setBindingName("container");
+			container.setDeclaredType(ViewObject.class);
+			container.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.container = container;
-		notifyBindingChanged(this.container);
+		notifiedBindingChanged(this.container);
 	}
 
 	public boolean getExtendParentBoundsToHostThisShape() {
@@ -205,7 +209,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -248,7 +252,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+				action.setContainer(new DataBinding<ViewObject>(EditionScheme.TOP_LEVEL));
 			}
 
 		}
@@ -269,7 +273,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<ViewObject>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -295,7 +299,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<ViewObject>(EditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

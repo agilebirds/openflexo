@@ -29,32 +29,15 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public class FIBBrowser extends FIBWidget {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowser.class.getPackage().getName());
-
-	private BindingDefinition SELECTED;
-	private BindingDefinition ROOT;
-
-	public BindingDefinition getSelectedBindingDefinition() {
-		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", Object.class, BindingDefinitionType.GET_SET, false);
-		}
-		return SELECTED;
-	}
-
-	public BindingDefinition getRootBindingDefinition() {
-		if (ROOT == null) {
-			ROOT = new BindingDefinition("root", getIteratorClass(), BindingDefinitionType.GET, false);
-		}
-		return ROOT;
-	}
 
 	public static enum Parameters implements FIBModelAttribute {
 		root,
@@ -99,8 +82,8 @@ public class FIBBrowser extends FIBWidget {
 		public abstract int getMode();
 	}
 
-	private DataBinding root;
-	private DataBinding selected;
+	private DataBinding<Object> root;
+	private DataBinding<Object> selected;
 
 	private Integer visibleRowCount;
 	private Integer rowHeight;
@@ -135,31 +118,35 @@ public class FIBBrowser extends FIBWidget {
 		return "Browser";
 	}
 
-	public DataBinding getRoot() {
+	public DataBinding<Object> getRoot() {
 		if (root == null) {
-			root = new DataBinding(this, Parameters.root, getRootBindingDefinition());
+			root = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return root;
 	}
 
-	public void setRoot(DataBinding root) {
-		root.setOwner(this);
-		root.setBindingAttribute(Parameters.root);
-		root.setBindingDefinition(getRootBindingDefinition());
+	public void setRoot(DataBinding<Object> root) {
+		if (root != null) {
+			root.setOwner(this);
+			root.setDeclaredType(Object.class);
+			root.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		}
 		this.root = root;
 	}
 
-	public DataBinding getSelected() {
+	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) {
-		selected.setOwner(this);
-		selected.setBindingAttribute(Parameters.selected);
-		selected.setBindingDefinition(getSelectedBindingDefinition());
+	public void setSelected(DataBinding<Object> selected) {
+		if (selected != null) {
+			selected.setOwner(this);
+			selected.setDeclaredType(getIteratorClass());
+			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+		}
 		this.selected = selected;
 	}
 
@@ -172,7 +159,7 @@ public class FIBBrowser extends FIBWidget {
 			element.finalizeBrowserDeserialization();
 		}
 		if (selected != null) {
-			selected.finalizeDeserialization();
+			selected.decode();
 		}
 	}
 
@@ -524,6 +511,24 @@ public class FIBBrowser extends FIBWidget {
 		for (FIBBrowserElement e : getElements()) {
 			e.notifiedBindingModelRecreated();
 		}
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(RootBindingMustBeValid.class, report);
+	}
+
+	public static class RootBindingMustBeValid extends BindingMustBeValid<FIBBrowser> {
+		public RootBindingMustBeValid() {
+			super("'root'_binding_is_not_valid", FIBBrowser.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowser object) {
+			return object.getRoot();
+		}
+
 	}
 
 }

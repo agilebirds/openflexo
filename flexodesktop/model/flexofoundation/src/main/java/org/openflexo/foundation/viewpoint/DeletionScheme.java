@@ -20,21 +20,11 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public class DeletionScheme extends AbstractActionScheme {
 
-	public static enum DeletionSchemeBindingAttribute implements InspectorBindingAttribute {
-		conditional
-	}
-
 	public DeletionScheme(ViewPointBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.DeletionScheme;
 	}
 
 }

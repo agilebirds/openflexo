@@ -41,15 +41,17 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.AbstractBinding;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -174,14 +176,24 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (getDataObject() == null) {
 			return null;
 		}
+
+		Object value = null;
+
 		try {
-			T returned = (T) getWidget().getData().getBindingValue(getController());
+			value = getWidget().getData().getBindingValue(getController());
+			T returned = (T) value;
 			if (getDynamicModel() != null) {
 				getDynamicModel().setData(returned);
 			}
 			return returned;
 		} catch (InvalidObjectSpecificationException e) {
 			logger.warning("Widget " + getWidget() + " InvalidObjectSpecificationException: " + e.getMessage());
+			return null;
+		} catch (TypeMismatchException e) {
+			logger.warning("Widget " + getWidget() + " TypeMismatchException: " + e.getMessage());
+			return null;
+		} catch (NullReferenceException e) {
+			// logger.warning("Widget " + getWidget() + " NullReferenceException: " + e.getMessage());
 			return null;
 		}
 
@@ -212,6 +224,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				getWidget().getData().setBindingValue(aValue, getController());
 			} catch (AccessorInvocationException e) {
 				getController().handleException(e.getCause());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
 			}
 
 		}
@@ -223,20 +239,22 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		 */
 
 		if (getWidget().getValueChangedAction().isValid()) {
-			getWidget().getValueChangedAction().execute(getController());
+			try {
+				getWidget().getValueChangedAction().execute(getController());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	private synchronized void updateDependingObjects() {
-
+	protected void updateDependingObjects() {
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController() /*
-															* ,getWidget().getName() != null &&
-															* getWidget().getName().equals("InspectorPropertyTable")
-															*/);
+		dependingObjects.refreshObserving(getController());
 	}
 
 	@Override
@@ -287,19 +305,18 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return true;
 	}
 
-	protected void appendToDependingObjects(DataBinding binding, List<AbstractBinding> returned) {
-		if (binding.isSet()) {
-			returned.add(binding.getBinding());
-		}
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
+		returned.add(getWidget().getData());
+		returned.add(getWidget().getVisible());
+		returned.add(getWidget().getEnable());
+		return returned;
 	}
 
 	@Override
-	public List<AbstractBinding> getDependencyBindings() {
-		List<AbstractBinding> returned = new ArrayList<AbstractBinding>();
-		appendToDependingObjects(getWidget().getData(), returned);
-		appendToDependingObjects(getWidget().getVisible(), returned);
-		appendToDependingObjects(getWidget().getEnable(), returned);
-		return returned;
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return null;
 	}
 
 	/**
@@ -337,7 +354,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 			return true;
 		} catch (Exception e) {
-			logger.warning("Unexpected exception: " + e.getMessage());
+			logger.warning("Unexpected exception while updating FIBWidgetView: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -418,9 +435,17 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			return false;
 		}
 		if (getComponent().getEnable() != null && getComponent().getEnable().isValid()) {
-			Object isEnabled = getComponent().getEnable().getBindingValue(getController());
-			if (isEnabled instanceof Boolean) {
-				componentEnabled = (Boolean) isEnabled;
+			try {
+				Boolean isEnabled = getComponent().getEnable().getBindingValue(getController());
+				if (isEnabled != null) {
+					componentEnabled = isEnabled;
+				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+				componentEnabled = true;
+			} catch (NullReferenceException e) {
+				// NullReferenceException is allowed, in this case, default enability is true
+				componentEnabled = true;
 			}
 		}
 		return componentEnabled;
@@ -428,8 +453,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	private void updateDynamicTooltip() {
 		if (getComponent().getTooltip() != null && getComponent().getTooltip().isValid()) {
-			String tooltipText = (String) getComponent().getTooltip().getBindingValue(getController());
-			getDynamicJComponent().setToolTipText(tooltipText);
+			try {
+				String tooltipText = getComponent().getTooltip().getBindingValue(getController());
+				getDynamicJComponent().setToolTipText(tooltipText);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -439,7 +470,22 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 		if (getWidget().getFormat() != null && getWidget().getFormat().isValid()) {
 			formatter.setValue(value);
-			String returned = (String) getWidget().getFormat().getBindingValue(formatter);
+			String returned = null;
+			try {
+				returned = getWidget().getFormat().getBindingValue(formatter);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
+			if (getWidget().getLocalize() && returned != null) {
+				return getLocalized(returned);
+			} else {
+				return returned;
+			}
+		}
+		if (value instanceof Enum) {
+			String returned = value != null ? ((Enum) value).name() : null;
 			if (getWidget().getLocalize() && returned != null) {
 				return getLocalized(returned);
 			} else {
@@ -460,24 +506,48 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 		if (getWidget().getIcon() != null && getWidget().getIcon().isValid()) {
 			formatter.setValue(value);
-			return (Icon) getWidget().getIcon().getBindingValue(formatter);
+			try {
+				return getWidget().getIcon().getBindingValue(formatter);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 
 	public void applySingleClickAction(MouseEvent event) {
 		eventListener.setEvent(event);
-		getWidget().getClickAction().execute(eventListener);
+		try {
+			getWidget().getClickAction().execute(eventListener);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void applyDoubleClickAction(MouseEvent event) {
 		eventListener.setEvent(event);
-		getWidget().getDoubleClickAction().execute(eventListener);
+		try {
+			getWidget().getDoubleClickAction().execute(eventListener);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void applyRightClickAction(MouseEvent event) {
 		eventListener.setEvent(event);
-		getWidget().getRightClickAction().execute(eventListener);
+		try {
+			getWidget().getRightClickAction().execute(eventListener);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

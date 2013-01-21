@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowserAction;
@@ -256,10 +256,10 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void deleteView() {
-		fibView.delete();
-		if (this instanceof FIBMouseClickListener) {
+		if (this instanceof FIBMouseClickListener && fibView.getController() != null) {
 			fibView.getController().removeMouseClickListener((FIBMouseClickListener) this);
 		}
+		fibView.delete();
 		if (dataObject instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
 		} else if (dataObject instanceof FlexoObservable) {

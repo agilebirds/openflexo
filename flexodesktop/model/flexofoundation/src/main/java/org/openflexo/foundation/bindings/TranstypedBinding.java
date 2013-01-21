@@ -23,11 +23,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
-import org.openflexo.antar.expr.oldparser.ExpressionParser;
-import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.parser.ExpressionParser;
+import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -228,8 +226,7 @@ public class TranstypedBinding extends AbstractBinding {
 			Vector<String> paramsAsString;
 
 			try {
-				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue, null);
+				Expression parsedExpression = ExpressionParser.parse(aValue);
 				if (parsedExpression instanceof Function) {
 					methodName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();
@@ -333,8 +330,7 @@ public class TranstypedBinding extends AbstractBinding {
 			Vector<String> paramsAsString;
 
 			try {
-				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue, null);
+				Expression parsedExpression = ExpressionParser.parse(aValue);
 				if (parsedExpression instanceof Function) {
 					fullyQualifiedTranstyperName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();

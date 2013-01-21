@@ -99,7 +99,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-					ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(f, viewPointLibrary);
+					ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(f, viewPointLibrary);
 					if (vpRes != null) {
 						logger.info("Found and register viewpoint "
 								+ vpRes.getURI()

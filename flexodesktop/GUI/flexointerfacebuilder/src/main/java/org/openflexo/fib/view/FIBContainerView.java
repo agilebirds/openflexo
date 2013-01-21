@@ -31,6 +31,8 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -116,7 +118,15 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		if (getComponent().getData() == null || getComponent().getData().isUnset()) {
 			return null;
 		}
-		return getComponent().getData().getBindingValue(getController());
+		try {
+			return getComponent().getData().getBindingValue(getController());
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

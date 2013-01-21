@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 /**
  * This class represent a graphical feature that is to be associated on a ViewElement
@@ -12,7 +11,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class GraphicalFeature<T, GR extends GraphicalRepresentation> implements InspectorBindingAttribute {
+public abstract class GraphicalFeature<T, GR extends GraphicalRepresentation> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalFeature.class.getPackage().getName());

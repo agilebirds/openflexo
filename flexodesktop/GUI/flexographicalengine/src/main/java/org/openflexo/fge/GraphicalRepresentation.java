@@ -40,13 +40,14 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.fge.GRBindingFactory.ComponentPathElement;
-import org.openflexo.fge.GRBindingFactory.ComponentsBindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.JavaBindingFactory;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GRVariable.GRVariableType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
@@ -86,7 +87,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private Stroke specificStroke = null;
 
-	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
+	private static BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 
 	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
 	private static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
@@ -1964,12 +1965,19 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 
-		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this", this, this));
+		_bindingModel.addToBindingVariables(new BindingVariable("this", getClass()));
+		if (getParentGraphicalRepresentation() != null) {
+			_bindingModel.addToBindingVariables(new BindingVariable("parent", getParentGraphicalRepresentation().getClass()));
+		}
+		/*_bindingModel.addToBindingVariables(new BindingVariable("components", new ParameterizedTypeImpl(List.class,
+				GraphicalRepresentation.class)));*/
+
+		/*_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this", this, this));
 		if (getParentGraphicalRepresentation() != null) {
 			_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent", getParentGraphicalRepresentation(),
 					this));
 		}
-		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
+		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));*/
 
 		Iterator<GraphicalRepresentation<?>> it = allContainedGRIterator();
 		while (it.hasNext()) {
@@ -1983,14 +1991,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		BindingVariable bv = getBindingModel().bindingVariableNamed(variable.getVariableName());
-		/*if (bv instanceof ComponentBindingVariable) {
-			return ((ComponentBindingVariable) bv).getReference();
-		}
-		else*/if (bv instanceof ComponentPathElement) {
-			return ((ComponentPathElement) bv).getComponent();
-		} else if (bv instanceof ComponentsBindingVariable) {
-			return getRootGraphicalRepresentation();
+		if (variable.getVariableName().equals("this")) {
+			return this;
+		} else if (variable.getVariableName().equals("parent")) {
+			return getParentGraphicalRepresentation();
 		} else {
 			logger.warning("Could not find variable named " + variable);
 			return null;
@@ -2223,4 +2227,96 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return Integer.MAX_VALUE;
 	}
 
+	protected void updateDependanciesForBinding(DataBinding<?> binding) {
+		if (binding == null) {
+			return;
+		}
+
+		// logger.info("Searching dependancies for "+this);
+
+		GraphicalRepresentation<?> component = this;
+		List<TargetObject> targetList = binding.getTargetObjects(this);
+		if (targetList != null) {
+			for (TargetObject o : targetList) {
+				// System.out.println("> "+o.target+" for "+o.propertyName);
+				if (o.target instanceof GraphicalRepresentation) {
+					GraphicalRepresentation<?> c = (GraphicalRepresentation) o.target;
+					GRParameter param = c.parameterWithName(o.propertyName);
+					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
+					try {
+						component.declareDependantOf(c, param, param);
+					} catch (DependencyLoopException e) {
+						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+								+ "in the context of binding: " + binding.toString() + " component: " + component + " dependancy: " + c
+								+ " identifier: " + c.getIdentifier() + " message: " + e.getMessage());
+					}
+				}
+			}
+		}
+
+		// Vector<Expression> primitives;
+		// try {
+
+		/*primitives = Expression.extractPrimitives(binding.getStringRepresentation());
+
+			GraphicalRepresentation component = getOwner();
+			GraphicalRepresentation rootComponent = component.getRootGraphicalRepresentation();
+			
+			for (Expression p : primitives) {
+				if (p instanceof Variable) {
+					String fullVariable = ((Variable)p).getName(); 
+					if (fullVariable.indexOf(".") > 0) {
+						String identifier = fullVariable.substring(0,fullVariable.indexOf("."));
+						String parameter = fullVariable.substring(fullVariable.indexOf(".")+1);
+						logger.info("identifier="+identifier);
+						logger.info("parameter="+parameter);
+						Iterator<GraphicalRepresentation> allComponents = rootComponent.allGRIterator();
+						while (allComponents.hasNext()) {
+							GraphicalRepresentation<?> next = allComponents.next();
+							if (next != getOwner()) {
+								if (identifier.equals(next.getIdentifier())) {
+									for (GRParameter param : next.getAllParameters()) {
+										if (param.name().equals(parameter)) {
+											logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+next);
+											try {
+												component.declareDependantOf(next,getBindingAttribute(),param);
+											} catch (DependancyLoopException e) {
+												logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+														+"in the context of binding: "+binding.getStringRepresentation()
+														+" fullVariable: "+fullVariable
+														+" component: "+component
+														+" dependancy: "+next
+														+" identifier: "+next.getIdentifier()
+														+" message: "+e.getMessage());
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+							
+
+		} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		*/
+	}
+
+	@Override
+	public void notifiedBindingDecoded(DataBinding<?> binding) {
+		updateDependanciesForBinding(binding);
+	}
+
+	@Override
+	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+		updateDependanciesForBinding(dataBinding);
+	}
 }

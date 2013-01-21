@@ -24,32 +24,37 @@ import java.lang.reflect.Type;
 import javax.swing.Icon;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 
 public class FIBButtonColumn extends FIBTableColumn {
 
-	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, BindingDefinitionType.EXECUTE, false);
+	@Deprecated
+	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
+	@Deprecated
+	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
 		action, buttonIcon;
 	}
 
-	private DataBinding action;
+	private DataBinding<Object> action;
 
 	// private DataBinding buttonIcon;
 
-	public DataBinding getAction() {
+	public DataBinding<Object> getAction() {
 		if (action == null) {
-			action = new DataBinding(this, Parameters.action, ACTION);
+			action = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 		}
 		return action;
 	}
 
-	public void setAction(DataBinding action) {
-		action.setOwner(this);
-		action.setBindingAttribute(Parameters.action);
-		action.setBindingDefinition(ACTION);
+	public void setAction(DataBinding<Object> action) {
+		if (action != null) {
+			action.setOwner(this);
+			action.setDeclaredType(Void.TYPE);
+			action.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		}
 		this.action = action;
 	}
 

@@ -10,9 +10,4 @@ public class OWLObjectPropertyPatternRole extends ObjectPropertyPatternRole<OWLO
 		super(builder);
 	}
 
-	@Override
-	public Class<OWLObjectProperty> getAccessedClass() {
-		return OWLObjectProperty.class;
-	}
-
 }

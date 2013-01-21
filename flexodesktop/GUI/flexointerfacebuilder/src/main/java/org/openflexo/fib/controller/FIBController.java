@@ -41,8 +41,10 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
@@ -213,7 +215,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		if (variable.getVariableName().equals("controller")) {
 			return this;
 		}
-		return variable.getBindingValue(null, this);
+		return null;
 	}
 
 	public FIBComponent getRootComponent() {
@@ -353,7 +355,13 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			public void keyPressed(KeyEvent e) {
 				if (fibWidget.hasEnterPressedAction() && e.getKeyCode() == KeyEvent.VK_ENTER) {
 					// Detected double-click associated with action
-					fibWidget.getEnterPressedAction().execute(FIBController.this);
+					try {
+						fibWidget.getEnterPressedAction().execute(FIBController.this);
+					} catch (TypeMismatchException e1) {
+						e1.printStackTrace();
+					} catch (NullReferenceException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

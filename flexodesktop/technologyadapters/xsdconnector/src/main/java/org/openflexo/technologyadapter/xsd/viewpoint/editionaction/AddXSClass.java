@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
@@ -52,7 +54,14 @@ public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 	@Override
 	public XSOntClass performAction(EditionSchemeAction action) {
 		XSOntClass father = getOntologyClass();
-		String newClassName = (String) getClassName().getBindingValue(action);
+		String newClassName = null;
+		try {
+			newClassName = getClassName().getBindingValue(action);
+		} catch (TypeMismatchException e1) {
+			e1.printStackTrace();
+		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		}
 		XSOntClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);

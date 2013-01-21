@@ -29,8 +29,8 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.NavigationScheme;
 
 public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction> {
 

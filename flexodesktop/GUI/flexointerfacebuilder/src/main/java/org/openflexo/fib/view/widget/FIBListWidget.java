@@ -31,6 +31,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -164,7 +166,12 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		widgetUpdating = false;
 		Object objectToSelect = null;
 		if (getComponent().getSelected().isValid()) {
-			objectToSelect = getComponent().getSelected().getBindingValue(getController());
+			try {
+				objectToSelect = getComponent().getSelected().getBindingValue(getController());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+			}
 		}
 		if (objectToSelect == null && getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
 			objectToSelect = _list.getModel().getElementAt(0);
@@ -256,7 +263,13 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 			if (getComponent().getSelected().isValid()) {
 				logger.fine("Sets SELECTED binding with " + selectedObject);
-				getComponent().getSelected().setBindingValue(selectedObject, getController());
+				try {
+					getComponent().getSelected().setBindingValue(selectedObject, getController());
+				} catch (TypeMismatchException e1) {
+					e1.printStackTrace();
+				} catch (NullReferenceException e1) {
+					e1.printStackTrace();
+				}
 			}
 
 			updateFont();

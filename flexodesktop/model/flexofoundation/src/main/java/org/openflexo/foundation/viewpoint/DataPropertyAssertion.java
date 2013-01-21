@@ -19,19 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
+	private DataBinding<Object> value;
 
 	public DataPropertyAssertion(ViewPointBuilder builder) {
 		super(builder);
@@ -46,7 +47,10 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public IFlexoOntologyStructuralProperty getOntologyProperty() {
-		return getViewPoint().getOntologyProperty(_getDataPropertyURI());
+		if (getViewPoint() != null) {
+			return getViewPoint().getOntologyProperty(_getDataPropertyURI());
+		}
+		return null;
 	}
 
 	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
@@ -54,7 +58,14 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public Object getValue(EditionSchemeAction action) {
-		return getValue().getBindingValue(action);
+		try {
+			return getValue().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -62,35 +73,30 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		return getEditionScheme().getBindingModel();
 	}
 
-	private ViewPointDataBinding value;
-
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public java.lang.reflect.Type getType() {
-			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
-				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
-					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
-				}
+	public java.lang.reflect.Type getType() {
+		if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
+			if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
+				return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
 			}
-			return Object.class;
-		};
+		}
+		return Object.class;
 	};
 
-	public BindingDefinition getValueBindingDefinition() {
-		return VALUE;
-	}
-
-	public ViewPointDataBinding getValue() {
+	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
+			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
+			value.setBindingName("value");
 		}
 		return value;
 	}
 
-	public void setValue(ViewPointDataBinding value) {
-		value.setOwner(this);
-		value.setBindingAttribute(EditionActionBindingAttribute.value);
-		value.setBindingDefinition(getValueBindingDefinition());
+	public void setValue(DataBinding<Object> value) {
+		if (value != null) {
+			value.setOwner(this);
+			value.setBindingName("value");
+			value.setDeclaredType(getType());
+			value.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.value = value;
 	}
 

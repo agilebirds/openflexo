@@ -11,8 +11,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -21,7 +19,9 @@ public class DependingObjects {
 	private static final Logger logger = FlexoLogger.getLogger(DependingObjects.class.getName());
 
 	public static interface HasDependencyBinding extends Observer, PropertyChangeListener {
-		public List<AbstractBinding> getDependencyBindings();
+		public List<DataBinding<?>> getDependencyBindings();
+
+		public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object);
 	}
 
 	private List<TargetObject> dependingObjects;
@@ -31,8 +31,12 @@ public class DependingObjects {
 	public DependingObjects(HasDependencyBinding observerObject) {
 		super();
 		this.observerObject = observerObject;
-		this.dependingObjects = new ArrayList<AbstractBinding.TargetObject>();
+		this.dependingObjects = new ArrayList<TargetObject>();
 		this.dependingObjectsAreComputed = false;
+	}
+
+	protected void addToDependingObjects(TargetObject object) {
+		dependingObjects.add(object);
 	}
 
 	public synchronized void refreshObserving(BindingEvaluationContext context/*, boolean debug*/) {
@@ -41,11 +45,18 @@ public class DependingObjects {
 			logger.info("refreshObserving() for " + observerObject);
 		}*/
 
-		List<TargetObject> updatedDependingObjects = new ArrayList<AbstractBinding.TargetObject>();
-		for (AbstractBinding binding : observerObject.getDependencyBindings()) {
+		List<TargetObject> updatedDependingObjects = new ArrayList<TargetObject>();
+		for (DataBinding<?> binding : observerObject.getDependencyBindings()) {
 			List<TargetObject> targetObjects = binding.getTargetObjects(context);
 			if (targetObjects != null) {
 				updatedDependingObjects.addAll(targetObjects);
+				if (targetObjects.size() > 0) {
+					List<TargetObject> chainedBindings = observerObject.getChainedBindings(binding,
+							targetObjects.get(targetObjects.size() - 1));
+					if (chainedBindings != null) {
+						updatedDependingObjects.addAll(chainedBindings);
+					}
+				}
 			}
 		}
 		Set<HasPropertyChangeSupport> set = new HashSet<HasPropertyChangeSupport>();

@@ -34,6 +34,7 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
@@ -67,8 +68,9 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 		setForeground(foreground);
 		setBackground(background);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
-
-		addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		if (!UserType.isLite()) {
+			addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		}
 	}
 
 	public SelfExecutableActivityNode getActivityNode() {

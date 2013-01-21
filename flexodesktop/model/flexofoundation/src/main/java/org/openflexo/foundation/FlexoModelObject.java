@@ -132,6 +132,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		super();
 		referencers = new Vector<FlexoModelObjectReference<?>>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
+		registerObject(project);
+	}
+
+	protected void registerObject(FlexoProject project) {
 		if (project != null) {
 			/*
 			 * if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) { flexoID = project.getNewFlexoID();
@@ -440,7 +444,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			isRegistered = false;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Project is null for " + this);
+				logger.warning("Project is null for " + this.getClass().getSimpleName() + "_" + this.getFlexoID());
 			}
 		}
 

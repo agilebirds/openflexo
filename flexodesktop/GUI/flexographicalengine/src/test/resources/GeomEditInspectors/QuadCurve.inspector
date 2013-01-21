@@ -1,7 +1,0 @@
-<inspector title = "Quadratic curve" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.QuadCurveGraphicalRepresentation">
-
-	<tab name="Data" index="0" layout="DEFAULT">
-
- 	</tab>
-
-</inspector>
