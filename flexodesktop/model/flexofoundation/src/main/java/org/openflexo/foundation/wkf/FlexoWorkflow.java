@@ -532,7 +532,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	 * 
 	 * @return an Vector of FlexoProcessNode elements
 	 */
-	private Vector<FlexoProcessNode> getAllLocalProcessNodes() {
+	public Vector<FlexoProcessNode> getAllLocalProcessNodes() {
 		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
 		for (Enumeration<FlexoProcessNode> en = _topLevelNodeProcesses.elements(); en.hasMoreElements();) {
 			FlexoProcessNode aTopLevelProcessNode = en.nextElement();
