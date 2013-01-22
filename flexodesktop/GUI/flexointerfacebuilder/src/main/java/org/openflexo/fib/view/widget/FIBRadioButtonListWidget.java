@@ -68,12 +68,12 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
 			rb.setOpaque(false);
 			rb.addActionListener(new RadioButtonListener(rb, object, i));
-			if (object.equals(getValue())) {
-				rb.setSelected(true);
-			}
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
+			if (object.equals(getValue())) {
+				rb.doClick();
+			}
 		}
 		updateFont();
 		panel.revalidate();
@@ -89,6 +89,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 			widgetUpdating = true;
 			selectedValue = value;
+			getDynamicModel().setSelected(value);
+			// TODO: handle selected index
 			rebuildRadioButtons();
 
 			if (selectedValue == null) {
@@ -120,8 +122,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			if (e.getSource() == button && button.isSelected()) {
 				selectedValue = value;
 				updateModelFromWidget();
-				getDynamicModel().selected = value;
-				getDynamicModel().selectedIndex = index;
+				getDynamicModel().setSelected(value);
+				getDynamicModel().setSelectedIndex(index);
 				notifyDynamicModelChanged();
 			}
 		}

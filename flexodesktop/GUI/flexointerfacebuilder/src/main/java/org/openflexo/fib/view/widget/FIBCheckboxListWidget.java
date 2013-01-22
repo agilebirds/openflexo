@@ -146,8 +146,8 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 					}
 				}
 				updateModelFromWidget();
-				getDynamicModel().selected = value;
-				getDynamicModel().selectedIndex = index;
+				getDynamicModel().setSelected(value);
+				getDynamicModel().setSelectedIndex(index);
 				notifyDynamicModelChanged();
 			}
 		}

@@ -260,7 +260,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				getResultingJComponent().getParent().repaint();
 				visible = true;
 				if (getDynamicModel() != null) {
-					getDynamicModel().isVisible = true;
+					getDynamicModel().setVisible(true);
 				}
 				updateDataObject(getDataObject());
 			}
@@ -278,7 +278,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				}
 				visible = false;
 				if (getDynamicModel() != null) {
-					getDynamicModel().isVisible = false;
+					getDynamicModel().setVisible(false);
 				}
 			}
 		}

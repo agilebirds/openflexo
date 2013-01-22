@@ -331,7 +331,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				if (updateWidgetFromModel()) {
 					updateDependancies(callers);
 				}
-			} else if ((dependingObjects == null || !dependingObjects.areDependingObjectsComputed()) && checkValidDataPath()) {
+			} else if (checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
 				// it self from some depending component (which in that situation,
 				// are very important to know, aren'they ?)
