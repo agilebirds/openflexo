@@ -68,12 +68,15 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
 			rb.setOpaque(false);
 			rb.addActionListener(new RadioButtonListener(rb, object, i));
+			if (object.equals(getValue())) {
+				rb.setSelected(true);
+			}
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
 		}
 		updateFont();
-		panel.validate();
+		panel.revalidate();
 	}
 
 	@Override
@@ -88,8 +91,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			selectedValue = value;
 			rebuildRadioButtons();
 
-			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
-				radioButtonArray[0].setSelected(true);
+			if (selectedValue == null) {
+				if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+					radioButtonArray[0].doClick();
+				}
 			}
 
 			widgetUpdating = false;
