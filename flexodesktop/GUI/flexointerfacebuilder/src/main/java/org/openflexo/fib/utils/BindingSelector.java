@@ -46,7 +46,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -168,9 +167,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("focus lost for " + (opposite != null ? SwingUtils.getComponentPath(opposite) : "null"));
 				}
-				if (opposite != null && !(opposite instanceof JRootPane)
-						&& !SwingUtils.isComponentContainedInContainer(opposite, getParent())
-						&& !SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel)) {
+				if (opposite == null || !SwingUtilities.isDescendingFrom(opposite, BindingSelector.this)
+						&& !SwingUtilities.isDescendingFrom(opposite, _selectorPanel)) {
 					// Little hook used to automatically apply a valid value which has generally been edited
 					// By typing text in text field
 					if (getEditedObject() != null && getEditedObject().isBindingValid()) {
