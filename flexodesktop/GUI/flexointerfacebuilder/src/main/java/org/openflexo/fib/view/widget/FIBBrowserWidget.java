@@ -36,8 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -63,8 +61,7 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @author sguerin
  */
-public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeModelListener,
-		TreeSelectionListener {
+public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserWidget.class.getPackage().getName());
 
@@ -276,7 +273,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		deleteBrowser();
 
 		if (_browserModel != null) {
-			_browserModel.removeTreeModelListener(this);
 			_browserModel.delete();
 			_browserModel = null;
 		}
@@ -296,8 +292,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	private void buildBrowser() {
-		getBrowserModel().addTreeModelListener(this);
-
 		_tree = new JTree(getBrowserModel()) {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -343,34 +337,31 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 		_tree.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_tree.addFocusListener(this);
+		_tree.setEditable(true);
+		_tree.setScrollsOnExpand(true);
 		FIBBrowserCellRenderer renderer = new FIBBrowserCellRenderer(this);
 		_tree.setCellRenderer(renderer);
 		_tree.setCellEditor(new FIBBrowserCellEditor(_tree, renderer));
+		ToolTipManager.sharedInstance().registerComponent(_tree);
+		_tree.setAutoscrolls(true);
 
-		_tree.setEditable(true);
-		_tree.setScrollsOnExpand(true);
-		// _tree.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 0));
+		/** Beginning of model dependent settings */
 		_tree.setRootVisible(getBrowser().getRootVisible());
 		_tree.setShowsRootHandles(getBrowser().getShowRootsHandle());
-		_tree.setAutoscrolls(true);
-		ToolTipManager.sharedInstance().registerComponent(_tree);
 
 		if (_fibBrowser.getRowHeight() != null) {
 			_tree.setRowHeight(_fibBrowser.getRowHeight());
+		} else {
+			_tree.setRowHeight(0);
+		}
+		if (_fibBrowser.getVisibleRowCount() != null) {
+			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
 		}
 
 		getTreeSelectionModel().setSelectionMode(getBrowser().getSelectionMode().getMode());
+
 		getTreeSelectionModel().addTreeSelectionListener(this);
-
 		scrollPane = new JScrollPane(_tree);
-
-		/*_tree.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				getController().fireMouseClicked(getDynamicModel(),e.getClickCount());
-			}
-		});*/
 
 		_dynamicComponent.removeAll();
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
@@ -378,10 +369,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		if (_fibBrowser.getShowFooter()) {
 			_dynamicComponent.add(getFooter(), BorderLayout.SOUTH);
 		}
-		if (_fibBrowser.getVisibleRowCount() != null) {
-			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
-		}
-
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
 	}
@@ -413,27 +400,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	@Override
 	public void selectionResetted() {
 		resetSelectionNoNotification();
-	}
-
-	@Override
-	public void treeNodesChanged(TreeModelEvent e) {
-		// logger.fine("treeNodesChanged "+e);
-	}
-
-	@Override
-	public void treeNodesInserted(TreeModelEvent e) {
-		// logger.fine("treeNodesInserted "+e);
-	}
-
-	@Override
-	public void treeNodesRemoved(TreeModelEvent e) {
-		// logger.fine("treeNodesRemoved "+e);
-		// Here maybe check if objects represented by the removed nodes should be removed from current selection/selectedObject
-	}
-
-	@Override
-	public void treeStructureChanged(TreeModelEvent e) {
-		// logger.fine("treeStructureChanged "+e);
 	}
 
 	@Override
