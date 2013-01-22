@@ -369,6 +369,11 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 
 	@CustomComponentParameter(name = "project", type = CustomComponentParameter.Type.MANDATORY)
 	public void setProject(FlexoProject project) {
+		if (project == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Passing null project. If you rely on project this is unlikely to work");
+			}
+		}
 		this.project = project;
 		pcSupport.firePropertyChange("project", null, project);
 	}
