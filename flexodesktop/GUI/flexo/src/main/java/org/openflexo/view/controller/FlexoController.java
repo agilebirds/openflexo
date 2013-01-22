@@ -1838,11 +1838,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public ImageIcon iconForWorkflow(boolean imported) {
-		ImageIcon workflowIcon = WKFIconLibrary.WORKFLOW_ICON;
 		if (imported) {
-			workflowIcon = IconFactory.getImageIcon(workflowIcon, new IconMarker[] { IconLibrary.IMPORT });
+			return WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON;
+		} else {
+			return WKFIconLibrary.WORKFLOW_ICON;
 		}
-		return workflowIcon;
+
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
@@ -1873,7 +1874,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		} else if (object instanceof FlexoProject) {
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		} else if (object instanceof FlexoProjectReference) {
-			return WKFIconLibrary.PROCESS_ICON;
+			return WKFIconLibrary.OPENFLEXO_NOTEXT_16;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
