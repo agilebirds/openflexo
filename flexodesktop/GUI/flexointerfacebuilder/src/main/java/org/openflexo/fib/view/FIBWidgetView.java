@@ -399,7 +399,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public abstract JComponent getJComponent();
 
 	/**
-	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective
+	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective. This component must be
+	 * either the same or a child of the one returned by {@link #getJComponent()}.
 	 * 
 	 * @return J
 	 */
