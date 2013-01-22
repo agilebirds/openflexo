@@ -475,6 +475,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 					OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
 					logger.info("Property=" + property);
 					Object value = dataPropertyAssertion.getValue(this);
+					logger.info("Value = " + value);
 					newIndividual.addPropertyStatement(property, value);
 				}
 			}
