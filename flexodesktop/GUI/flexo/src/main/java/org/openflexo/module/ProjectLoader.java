@@ -421,9 +421,9 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	public List<FlexoProject> getModifiedProjects() {
 		List<FlexoProject> projects = new ArrayList<FlexoProject>(editors.size());
-		for (FlexoEditor editor : editors.values()) {
-			if (editor.getProject().getUnsavedStorageResources().size() > 0) {
-				projects.add(editor.getProject());
+		for (FlexoProject project : getRootProjects()) {
+			if (project.hasUnsaveStorageResources()) {
+				projects.add(project);
 			}
 		}
 		return projects;
@@ -508,6 +508,11 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 	}
 
 	public boolean someProjectsAreModified() {
+		for (FlexoProject project : getRootProjects()) {
+			if (project.hasUnsaveStorageResources()) {
+				return true;
+			}
+		}
 		return false;
 	}
 
