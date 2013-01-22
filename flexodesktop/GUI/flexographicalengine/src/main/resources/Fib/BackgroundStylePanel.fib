@@ -13,11 +13,11 @@
     <Label label="color1" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Color index="1" data="ColorBackgroundPanel.data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=center)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Color allowsNull="false" index="1" data="ColorBackgroundPanel.data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=center)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="color2" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="false">
       <LocalizedDictionary />
     </Label>
-    <Color index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" enable="false" />
+    <Color allowsNull="false" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" enable="false" />
     <Label label="color_gradient" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="false">
       <LocalizedDictionary />
     </Label>
@@ -36,11 +36,11 @@
     <Label label="color1" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Color index="1" data="ColorGradientBackgroundPanel.data.color1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Color allowsNull="false" index="1" data="ColorGradientBackgroundPanel.data.color1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="color2" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Color index="3" data="ColorGradientBackgroundPanel.data.color2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Color allowsNull="false" index="3" data="ColorGradientBackgroundPanel.data.color2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="color_gradient" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
@@ -57,11 +57,11 @@
     <Label label="color1" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Color index="1" data="TextureBackgroundPanel.data.color1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Color allowsNull="false" index="1" data="TextureBackgroundPanel.data.color1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="color2" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Color index="3" data="TextureBackgroundPanel.data.color2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Color allowsNull="false" index="3" data="TextureBackgroundPanel.data.color2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=6;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="color_gradient" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="false">
       <LocalizedDictionary />
     </Label>
@@ -81,14 +81,7 @@
     <Label label="background" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Label label="fit_to_shape" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="true" index="5" data="ImageBackgroundPanel.data.fitToShape" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" valueChangedAction="controller.parameterChanged()" />
-    <Label label="scale" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=7;location=left)" visible="(!(ImageBackgroundPanel.data.fitToShape))" localize="true">
-      <LocalizedDictionary />
-    </Label>
-    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
       <Label label="x" index="0" constraints="flow(index=0)" localize="true">
         <LocalizedDictionary />
       </Label>
@@ -97,6 +90,17 @@
         <LocalizedDictionary />
       </Label>
       <Number minValue="0" maxValue="1024" increment="0.2" numberType="DoubleType" columns="3" index="3" data="ImageBackgroundPanel.data.scaleY" constraints="flow(index=3)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <Label label="fit_to_shape" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <CheckBox selected="true" index="5" data="ImageBackgroundPanel.data.fitToShape" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="scale" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=7;location=left)" visible="(!(ImageBackgroundPanel.data.fitToShape))" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+      <DropDown index="0" data="ImageBackgroundPanel.data.imageBackgroundType" constraints="flow(index=0)" name="dropdown" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage$ImageBackgroundType" autoSelectFirstRow="false" />
+      <Color index="3" data="ImageBackgroundPanel.data.imageBackgroundColor" constraints="flow(index=1)" visible="(ImageBackgroundPanel.data.imageBackgroundType = &quot;OPAQUE&quot;)" localize="true" />
     </Panel>
     <Label label="delta" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=7;location=left)" visible="(!(ImageBackgroundPanel.data.fitToShape))" localize="true">
       <LocalizedDictionary />
@@ -110,10 +114,6 @@
         <LocalizedDictionary />
       </Label>
       <Number minValue="-1024" maxValue="1024" increment="1" numberType="DoubleType" columns="3" index="3" data="ImageBackgroundPanel.data.deltaY" constraints="flow(index=3)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
-    </Panel>
-    <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-      <DropDown index="0" data="ImageBackgroundPanel.data.imageBackgroundType" constraints="flow(index=0)" name="dropdown" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage$ImageBackgroundType" autoSelectFirstRow="false" />
-      <Color index="1" data="ImageBackgroundPanel.data.imageBackgroundColor" constraints="flow(index=1)" visible="(ImageBackgroundPanel.data.imageBackgroundType = &quot;OPAQUE&quot;)" localize="true" />
     </Panel>
     <LocalizedDictionary />
   </Panel>
@@ -194,13 +194,13 @@
     <Localized key="scale" lang="English">Scale</Localized>
     <Localized key="opaque" lang="English">Opaque</Localized>
     <Localized key="opaque" lang="French">Opaque</Localized>
-    <Localized key="delta" lang="French">delta</Localized>
-    <Localized key="delta" lang="English">delta</Localized>
+    <Localized key="delta" lang="French">Delta</Localized>
+    <Localized key="delta" lang="English">Delta</Localized>
     <Localized key="None" lang="English">None</Localized>
     <Localized key="None" lang="French">None</Localized>
     <Localized key="None" lang="Dutch">None</Localized>
     <Localized key="Color" lang="English">Color</Localized>
-    <Localized key="Color" lang="French">Color</Localized>
+    <Localized key="Color" lang="French">Couleur</Localized>
     <Localized key="Color" lang="Dutch">Color</Localized>
     <Localized key="Color gradient" lang="English">Color gradient</Localized>
     <Localized key="Color gradient" lang="French">Color gradient</Localized>
@@ -211,14 +211,14 @@
     <Localized key="Image" lang="English">Image</Localized>
     <Localized key="Image" lang="French">Image</Localized>
     <Localized key="Image" lang="Dutch">Image</Localized>
-    <Localized key="color1" lang="English">color1</Localized>
-    <Localized key="color1" lang="French">color1</Localized>
-    <Localized key="color1" lang="Dutch">color1</Localized>
-    <Localized key="color2" lang="English">color2</Localized>
-    <Localized key="color2" lang="French">color2</Localized>
-    <Localized key="color2" lang="Dutch">color2</Localized>
+    <Localized key="color1" lang="English">Color1</Localized>
+    <Localized key="color1" lang="French">Couleur1</Localized>
+    <Localized key="color1" lang="Dutch">Color1</Localized>
+    <Localized key="color2" lang="English">Color2</Localized>
+    <Localized key="color2" lang="French">Couleur2</Localized>
+    <Localized key="color2" lang="Dutch">Color2</Localized>
     <Localized key="Not applicable" lang="English">Not applicable</Localized>
-    <Localized key="Not applicable" lang="French">Not applicable</Localized>
+    <Localized key="Not applicable" lang="French">Sans objet</Localized>
     <Localized key="Not applicable" lang="Dutch">Not applicable</Localized>
     <Localized key="North/South" lang="English">North/South</Localized>
     <Localized key="North/South" lang="French">Nord/Sud</Localized>
@@ -281,7 +281,7 @@
     <Localized key="texture16" lang="French">texture16</Localized>
     <Localized key="texture16" lang="Dutch">texture16</Localized>
     <Localized key="transparent" lang="English">Transparent</Localized>
-    <Localized key="transparent" lang="French">Transparant</Localized>
+    <Localized key="transparent" lang="French">Transparent</Localized>
     <Localized key="transparent" lang="Dutch">Transparent</Localized>
     <Localized key="Opaque" lang="English">Opaque</Localized>
     <Localized key="Opaque" lang="French">Opaque</Localized>
@@ -301,9 +301,9 @@
     <Localized key="Gradient de couleurs" lang="English">Gradient de couleurs</Localized>
     <Localized key="Gradient de couleurs" lang="French">Gradient de couleurs</Localized>
     <Localized key="Gradient de couleurs" lang="Dutch">Gradient de couleurs</Localized>
-    <Localized key="Sans objet" lang="English">Sans objet</Localized>
+    <Localized key="Sans objet" lang="English">Not applicable</Localized>
     <Localized key="Sans objet" lang="French">Sans objet</Localized>
-    <Localized key="Sans objet" lang="Dutch">Sans objet</Localized>
+    <Localized key="Sans objet" lang="Dutch">Not applicable</Localized>
     <Localized key="Nord/Sud" lang="English">Nord/Sud</Localized>
     <Localized key="Nord/Sud" lang="French">Nord/Sud</Localized>
     <Localized key="Nord/Sud" lang="Dutch">Nord/Sud</Localized>
@@ -317,7 +317,19 @@
     <Localized key="Sud Ouest Nord Est" lang="French">Sud Ouest Nord Est</Localized>
     <Localized key="Sud Ouest Nord Est" lang="Dutch">Sud Ouest Nord Est</Localized>
     <Localized key="scale" lang="Dutch">Scale</Localized>
-    <Localized key="delta" lang="Dutch">delta</Localized>
+    <Localized key="delta" lang="Dutch">Delta</Localized>
     <Localized key="opaque" lang="Dutch">Opaque</Localized>
+    <Localized key="West/East" lang="English">West/East</Localized>
+    <Localized key="West/East" lang="French">West/East</Localized>
+    <Localized key="West/East" lang="Dutch">West/East</Localized>
+    <Localized key="Transparent" lang="English">Transparent</Localized>
+    <Localized key="Transparent" lang="French">Transparent</Localized>
+    <Localized key="Transparent" lang="Dutch">Transparent</Localized>
+    <Localized key="Ouest/Est" lang="English">Ouest/Est</Localized>
+    <Localized key="Ouest/Est" lang="French">Ouest/Est</Localized>
+    <Localized key="Ouest/Est" lang="Dutch">Ouest/Est</Localized>
+    <Localized key="Transparant" lang="English">Transparent</Localized>
+    <Localized key="Transparant" lang="French">Transparent</Localized>
+    <Localized key="Transparant" lang="Dutch">Transparent</Localized>
   </LocalizedDictionary>
 </Panel>

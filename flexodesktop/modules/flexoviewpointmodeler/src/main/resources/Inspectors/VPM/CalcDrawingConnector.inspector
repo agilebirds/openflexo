@@ -208,13 +208,16 @@
     <Localized key="custom" lang="Dutch">Custom</Localized>
     <Localized key="constraints" lang="English">Constraints</Localized>
     <Localized key="constraints" lang="Dutch">Constraints</Localized>
-    <Localized key="Connector" lang="English" />
+    <Localized key="Connector" lang="English">Connector</Localized>
     <Localized key="line" lang="English">Line</Localized>
     <Localized key="line" lang="Dutch">Line</Localized>
     <Localized key="Location/Size" lang="English">Location/Size</Localized>
     <Localized key="Location/Size" lang="Dutch">Location/Size</Localized>
     <Localized key="adjustability" lang="English">Adjustability</Localized>
     <Localized key="adjustability" lang="Dutch">Adjustability</Localized>
+    <Localized key="Connector" lang="Dutch">Connector</Localized>
+    <Localized key="Text" lang="English">Text</Localized>
+    <Localized key="Text" lang="Dutch">Text</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Connector" />
 </Panel>

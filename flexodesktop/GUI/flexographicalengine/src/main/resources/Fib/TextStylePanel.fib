@@ -53,5 +53,11 @@
     <Localized key="background" lang="English">Background</Localized>
     <Localized key="background" lang="French">Arrière-plan</Localized>
     <Localized key="background" lang="Dutch">Background</Localized>
+    <Localized key="transparent" lang="English">Transparent</Localized>
+    <Localized key="transparent" lang="French">Transparent</Localized>
+    <Localized key="transparent" lang="Dutch">transparent</Localized>
+    <Localized key="foreground" lang="English">Foreground</Localized>
+    <Localized key="foreground" lang="French">Couleur d'avant-plan</Localized>
+    <Localized key="foreground" lang="Dutch">Foreground</Localized>
   </LocalizedDictionary>
 </Panel>
