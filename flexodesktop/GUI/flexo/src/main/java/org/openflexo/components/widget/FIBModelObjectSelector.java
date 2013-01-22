@@ -370,6 +370,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	@CustomComponentParameter(name = "project", type = CustomComponentParameter.Type.MANDATORY)
 	public void setProject(FlexoProject project) {
 		this.project = project;
+		pcSupport.firePropertyChange("project", null, project);
 	}
 
 	@Override
