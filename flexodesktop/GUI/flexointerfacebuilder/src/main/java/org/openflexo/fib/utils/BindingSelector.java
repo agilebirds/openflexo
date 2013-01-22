@@ -142,6 +142,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	public KeyAdapter shortcutsKeyAdapter;
 	private DocumentListener documentListener;
 
+	private Color defaultForeground;
+
+	private Color defaultSelectedColor;
+
 	public BindingSelector(AbstractBinding editedObject) {
 		this(editedObject, -1);
 	}
@@ -282,7 +286,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 		getTextField().addKeyListener(shortcutsKeyAdapter);
 		getTextField().getDocument().addDocumentListener(documentListener);
-
+		updateUI(); // Just to initiate the default color values
 		// setEditedObjectAndUpdateBDAndOwner(editedObject);
 		setEditedObject(editedObject);
 
@@ -302,6 +306,15 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				}
 			}
 		}).start();*/
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (getTextField() != null) {
+			defaultForeground = getTextField().getForeground();
+			defaultSelectedColor = getTextField().getSelectedTextColor();
+		}
 	}
 
 	@Override
@@ -326,8 +339,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Decoded as VALID binding: " + newEditedBinding);
 					}
-					getTextField().setForeground(Color.BLACK);
-					getTextField().setSelectedTextColor(Color.BLACK);
+					getTextField().setForeground(defaultForeground);
+					getTextField().setSelectedTextColor(defaultSelectedColor);
 					if (!newEditedBinding.equals(getEditedObject())) {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("This is a new one, i take this");
@@ -412,8 +425,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		super.setEditedObject(object);
 
 		if (getEditedObject() != null && getEditedObject().isBindingValid()) {
-			getTextField().setForeground(Color.BLACK);
-			getTextField().setSelectedTextColor(Color.BLACK);
+			getTextField().setForeground(defaultForeground);
+			getTextField().setSelectedTextColor(defaultSelectedColor);
 		} else {
 			getTextField().setForeground(Color.RED);
 			getTextField().setSelectedTextColor(Color.RED);
@@ -519,8 +532,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				getTextField().setText(renderedString(getEditedObject()));
 			}
 			if (getEditedObject() != null) {
-				getTextField().setForeground(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
-				getTextField().setSelectedTextColor(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
+				getTextField().setForeground(getEditedObject().isBindingValid() ? defaultForeground : Color.RED);
+				getTextField().setSelectedTextColor(getEditedObject().isBindingValid() ? defaultSelectedColor : Color.RED);
 			} else {
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
@@ -1065,8 +1078,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				if (bindingValue instanceof BindingValue) {
 					((BindingValue) bindingValue).connect();
 				}
-				getTextField().setForeground(Color.BLACK);
-				getTextField().setSelectedTextColor(Color.BLACK);
+				getTextField().setForeground(defaultForeground);
+				getTextField().setSelectedTextColor(defaultSelectedColor);
 			} else {
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
