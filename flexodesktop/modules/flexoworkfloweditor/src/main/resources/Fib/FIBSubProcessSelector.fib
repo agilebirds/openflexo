@@ -24,5 +24,36 @@
       <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="grid(x=1;y=0)" localize="true" />
     </Panel>
   </Panel>
-  <LocalizedDictionary />
+  <LocalizedDictionary>
+    <Localized key="select_a_choice" lang="English">Select a choice</Localized>
+    <Localized key="select_a_choice" lang="French">Sélection d'une option</Localized>
+    <Localized key="select_a_choice" lang="Dutch">Select a choice</Localized>
+    <Localized key="BIND_NEW" lang="English">Create a new process</Localized>
+    <Localized key="BIND_NEW" lang="French">Créer un nouveau processus</Localized>
+    <Localized key="BIND_NEW" lang="Dutch">Create a new process</Localized>
+    <Localized key="BIND_EXISTING" lang="English">Choose an existing process</Localized>
+    <Localized key="BIND_EXISTING" lang="French">Choisir un processus existant</Localized>
+    <Localized key="BIND_EXISTING" lang="Dutch">Choose an existing process</Localized>
+    <Localized key="BIND_LATER" lang="English">Choose a process later</Localized>
+    <Localized key="BIND_LATER" lang="French">Choisir un processus plus tard</Localized>
+    <Localized key="BIND_LATER" lang="Dutch">Choose a process later</Localized>
+    <Localized key="new_process_name" lang="English">New process name</Localized>
+    <Localized key="new_process_name" lang="French">Nom du nouveau processus</Localized>
+    <Localized key="new_process_name" lang="Dutch">New process name</Localized>
+    <Localized key="process" lang="English">Process</Localized>
+    <Localized key="process" lang="French">Processus</Localized>
+    <Localized key="process" lang="Dutch">Process</Localized>
+    <Localized key="parent_process" lang="English">Parent process</Localized>
+    <Localized key="parent_process" lang="French">Processus parent</Localized>
+    <Localized key="parent_process" lang="Dutch">Parent process</Localized>
+    <Localized key="sub_process_node_name" lang="English">Sub process node name</Localized>
+    <Localized key="sub_process_node_name" lang="French">Nom du noeud sous-processus</Localized>
+    <Localized key="sub_process_node_name" lang="Dutch">Sub process node name</Localized>
+    <Localized key="ok" lang="English">OK</Localized>
+    <Localized key="ok" lang="French">OK</Localized>
+    <Localized key="ok" lang="Dutch">OK</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+  </LocalizedDictionary>
 </Panel>

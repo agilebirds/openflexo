@@ -78,8 +78,10 @@ public class DropWKFElementInitializer extends ActionInitializer {
 				if (action.getObject() instanceof SubProcessNode && !action.leaveSubProcessNodeUnchanged()) {
 					final SubProcessNode node = (SubProcessNode) action.getObject();
 					FlexoProcess process = action.getProcess();
+					// Must be called so that process choice works
+					node.setProcess(process);
 					if (node.getSubProcess() == null) {
-						return new SubProcessSelectorDialog(node.getProject(), getControllerActionInitializer(), node,
+						return new SubProcessSelectorDialog(process.getProject(), getControllerActionInitializer(), node,
 								process.getProcessNode()).askAndSetSubProcess();
 					}
 				}

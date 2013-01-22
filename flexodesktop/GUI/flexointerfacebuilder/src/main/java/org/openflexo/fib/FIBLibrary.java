@@ -153,6 +153,7 @@ public class FIBLibrary {
 				inputStream = new FileInputStream(fibFile);
 				FIBComponent component = loadFIBComponent(inputStream);
 				component.setLastModified(new Date(fibFile.lastModified()));
+				component.setDefinitionFile(fibFile.getAbsolutePath());
 				fibFileDefinitions.put(fibFile, component);
 				return component;
 			} catch (FileNotFoundException e) {
