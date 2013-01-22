@@ -152,7 +152,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				if (tab == null) {
 					return false;
 				}
-				if (tab.getObject() == null) {
+				if (tab.getObject() == null || tab.getObject().isDeleted()) {
 					return false;
 				}
 				if (!AdvancedPrefs.getShowAllTabs()
@@ -587,11 +587,13 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 							restoreLayout();
 						}
 						tabbedPane.addTab(newValue);
+						registrationManager.addListener("name", this, newValue.getObject());
 					}
 				} else if (evt.getOldValue() != null) {
 					Location oldValue = (Location) evt.getOldValue();
 					if (oldValue.getObject() != null) {
 						tabbedPane.removeTab(oldValue);
+						registrationManager.addListener("name", this, oldValue.getObject());
 					}
 				}
 			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
@@ -621,6 +623,8 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			}
 		} else if (evt.getSource() == controller) {
 
+		} else if (evt.getPropertyName().equals("name")) {
+			tabbedPane.refreshTabHeaders();
 		}
 	}
 
