@@ -26,6 +26,7 @@
 'value'_binding_is_required_and_must_be_valid_description='value' binding is required and must be valid
 'view'_binding_is_not_valid='view' binding is not valid
 'view'_binding_is_not_valid_description='view' binding is not valid description
+<html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>=<html>Type mismatch on operator ($0)<br>Supplied type is ($1)<br>while expected types are\: ($2)</html>
 <unloaded>=<unloaded>
 AND=AND
 ARITHMETIC_FLOAT=[FLOAT]

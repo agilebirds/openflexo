@@ -208,15 +208,20 @@ public class ViewPoint extends ViewPointObject {
 			logger.fine("Try to find ontology for viewpoint" + viewPointFile);
 			document = readXMLFile(viewPointFile);
 			Element root = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
-			owlFile = new File(viewPointFile.getParent(), root.getAttributeValue("owlFile"));
-			viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
+			if (root != null) {
+				String owlFileAttribute = root.getAttributeValue("owlFile");
+				if (owlFileAttribute != null) {
+					owlFile = new File(viewPointFile.getParent(), owlFileAttribute);
+					viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
+				}
+			}
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		if (owlFile.exists()) {
+		if (owlFile != null && owlFile.exists()) {
 			return loadViewpointOntology(viewPointURI, owlFile, library);
 		}
 

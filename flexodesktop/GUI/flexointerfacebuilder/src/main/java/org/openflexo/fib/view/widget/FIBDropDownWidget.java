@@ -210,8 +210,8 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 				selectedItem = anItem;
 				// logger.info("setSelectedItem() with " + anItem + " widgetUpdating=" + widgetUpdating + " modelUpdating=" +
 				// modelUpdating);
-				getDynamicModel().selected = anItem;
-				getDynamicModel().selectedIndex = indexOf(anItem);
+				getDynamicModel().setSelected(anItem);
+				getDynamicModel().setSelectedIndex(indexOf(anItem));
 				if (!widgetUpdating && !modelUpdating) {
 					notifyDynamicModelChanged();
 				}

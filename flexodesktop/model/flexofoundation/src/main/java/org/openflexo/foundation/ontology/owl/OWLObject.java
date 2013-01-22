@@ -772,6 +772,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	@Override
 	public PropertyStatement addPropertyStatement(OntologyProperty property, Object value) {
 		if (property instanceof OWLProperty) {
+			if (value == null) {
+				logger.warning("Cannot addPropertyStatement with property " + property + " and NULL value");
+				return null;
+			}
 			if (value instanceof String) {
 				getOntResource().addProperty(((OWLProperty) property).getOntProperty(), (String) value);
 				updateOntologyStatements();

@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -58,6 +59,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private BindingDefinition DATA;
 
 	private String definitionFile;
+
+	private Date lastModified;
 
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
@@ -1248,6 +1251,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		performValidation(DataBindingMustBeValid.class, report);
 		performValidation(VisibleBindingMustBeValid.class, report);
 		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
+	}
+
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 
 	public static class RootComponentShouldHaveDataClass extends ValidationRule<RootComponentShouldHaveDataClass, FIBComponent> {

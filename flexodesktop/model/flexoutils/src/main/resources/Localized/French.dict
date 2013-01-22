@@ -3262,6 +3262,7 @@ localized_editor=Edition des traductions
 locally_added_file=Fichier ajout\u00E9 localement
 locally_modified_files=Fichiers modifi\u00E9s
 locally_removed_file=Fichier supprim\u00E9 localement
+locate_project=Retrouver le projet
 located_within_the_process_=\ au sein du processus 
 location=R\u00E9pertoire de travail
 location_constraints=Contraintes de positionnement

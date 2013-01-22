@@ -471,4 +471,19 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 			}*/
 	}
 
+	public boolean isAncestorOf(FlexoProcessNode processNode) {
+		FlexoProcessNode current = processNode;
+		while (current != null) {
+			if (current == this) {
+				return true;
+			}
+			current = current.getFatherProcessNode();
+		}
+		return false;
+	}
+
+	public boolean isTopLevelProcess() {
+		return getFatherProcessNode() == null;
+	}
+
 }

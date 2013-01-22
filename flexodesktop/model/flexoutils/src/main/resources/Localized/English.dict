@@ -3263,6 +3263,7 @@ localized_editor=Localization Editor
 locally_added_file=Locally added file
 locally_modified_files=Locally modified files
 locally_removed_file=Locally removed file
+locate_project=Locate project
 located_within_the_process_=\ located within the process 
 location=Location
 location_constraints=Location constraints

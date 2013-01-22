@@ -26,6 +26,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.module.UserType;
 
 /**
@@ -54,7 +55,9 @@ public class WorkflowBrowser extends ProjectBrowser {
 
 	@Override
 	protected boolean activateBrowsingFor(BrowserElement newElement) {
-		return newElement.getObject().getProject() == getRootObject().getProject() && super.activateBrowsingFor(newElement);
+		return newElement.getObject().getProject() == getRootObject().getProject()
+				&& (!(newElement.getObject() instanceof WorkflowModelObject) || !((WorkflowModelObject) newElement.getObject())
+						.getWorkflow().isCache()) && super.activateBrowsingFor(newElement);
 	}
 
 	@Override
