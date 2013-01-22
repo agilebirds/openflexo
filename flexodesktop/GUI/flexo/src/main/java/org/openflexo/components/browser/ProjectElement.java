@@ -63,8 +63,8 @@ public class ProjectElement extends BrowserElement {
 		}
 		if (getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-					addToChilds(ref.getReferredProject().getWorkflow());
+				if (ref.getWorkflow() != null) {
+					addToChilds(ref.getWorkflow());
 				}
 			}
 		}
