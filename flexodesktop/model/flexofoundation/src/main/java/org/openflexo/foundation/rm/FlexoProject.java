@@ -900,6 +900,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		writeDotVersion();
 	}
 
+	public synchronized boolean hasUnsaveStorageResources() {
+		for (FlexoStorageResource<? extends StorageResourceData> resource : getStorageResources()) {
+			if (resource.needsSaving()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/*
 	 * GPO: The 2 following methods have a synchronized attributes to prevent 2 saves from deadlocking each-other. When the
 	 * saveModifiedResources is invoked, this also sends notification to Frames which will attempt to clear their modified status. To do so,
@@ -912,8 +921,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 * @return a Vector of FlexoStorageResource
 	 */
-	public synchronized List<FlexoStorageResource<? extends StorageResourceData>> getUnsavedStorageResources() {
-		return getUnsavedStorageResources(true);
+	public List<FlexoStorageResource<? extends StorageResourceData>> getUnsavedStorageResources() {
+		return getUnsavedStorageResources(false);
 	}
 
 	/**
