@@ -331,20 +331,22 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		returned.getDynamicJComponent().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mouseEvent = e;
-				fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
-				if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
-					// Detected right-click associated with action
-					returned.applyRightClickAction(e);
-					// fibWidget.getRightClickAction().execute(FIBController.this);
-				} else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
-					// Detected click associated with action
-					returned.applySingleClickAction(e);
-					// fibWidget.getClickAction().execute(FIBController.this);
-				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
-					// Detected double-click associated with action
-					returned.applyDoubleClickAction(e);
-					// fibWidget.getDoubleClickAction().execute(FIBController.this);
+				if (returned.isEnabled()) {
+					mouseEvent = e;
+					fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
+					if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
+						// Detected right-click associated with action
+						returned.applyRightClickAction(e);
+						// fibWidget.getRightClickAction().execute(FIBController.this);
+					} else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
+						// Detected click associated with action
+						returned.applySingleClickAction(e);
+						// fibWidget.getClickAction().execute(FIBController.this);
+					} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
+						// Detected double-click associated with action
+						returned.applyDoubleClickAction(e);
+						// fibWidget.getDoubleClickAction().execute(FIBController.this);
+					}
 				}
 			}
 		});
