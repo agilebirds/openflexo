@@ -170,6 +170,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(action);
 		setChanged();
 		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override

@@ -40,11 +40,46 @@ public abstract class EditionAction extends EditionSchemeObject {
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
 	public static enum EditionActionType {
-		AddClass, AddIndividual, AddObjectPropertyStatement, AddDataPropertyStatement, AddIsAStatement, AddRestrictionStatement, AddConnector, AddShape, AddDiagram, AddEditionPattern, CloneShape, CloneConnector, CloneIndividual, DeclarePatternRole, DeleteAction, GraphicalAction, GoToObject, Iteration, Conditional
+		AddClass,
+		AddIndividual,
+		AddObjectPropertyStatement,
+		AddDataPropertyStatement,
+		AddIsAStatement,
+		AddRestrictionStatement,
+		AddConnector,
+		AddShape,
+		AddDiagram,
+		AddEditionPattern,
+		CloneShape,
+		CloneConnector,
+		CloneIndividual,
+		DeclarePatternRole,
+		DeleteAction,
+		GraphicalAction,
+		GoToObject,
+		Iteration,
+		Conditional
 	}
 
 	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
-		conditional, assignation, individualName, className, container, fromShape, toShape, object, subject, father, value, restrictionType, cardinality, target, diagramName, view, condition, iteration
+		conditional,
+		assignation,
+		individualName,
+		className,
+		container,
+		fromShape,
+		toShape,
+		object,
+		subject,
+		father,
+		value,
+		restrictionType,
+		cardinality,
+		target,
+		diagramName,
+		view,
+		condition,
+		iteration
 	}
 
 	// private EditionScheme _scheme;
@@ -188,7 +223,9 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	private void insertActionAtCurrentIndex(EditionAction editionAction) {
-		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+		if (getActionContainer() != null) {
+			getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+		}
 	}
 
 	public AddShape createAddShapeAction() {
