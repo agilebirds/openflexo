@@ -64,6 +64,7 @@ public class NoneLayoutConstraints extends ComponentConstraints {
 	@Override
 	public void performConstrainedAddition(JComponent container, JComponent contained) {
 		contained.setLocation(getX(), getY());
+		contained.setSize(contained.getPreferredSize());
 		container.add(contained);
 	}
 
