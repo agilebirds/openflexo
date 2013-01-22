@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -182,7 +183,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				_contextualPalettes.put(palette, newContextualPalette);
 				registerPalette(newContextualPalette);
 				activatePalette(newContextualPalette);
-				paletteView.add(palette.getName(), newContextualPalette.getPaletteView());
+				paletteView.add(palette.getName(), newContextualPalette.getPaletteViewInScrollPane());
 				paletteView.revalidate();
 				paletteView.repaint();
 			} else if (dataModification instanceof CalcPaletteRemoved) {
@@ -190,18 +191,18 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				ContextualPalette removedPalette = _contextualPalettes.get(palette);
 				unregisterPalette(removedPalette);
 				_contextualPalettes.remove(palette);
-				paletteView.remove(removedPalette.getPaletteView());
+				paletteView.remove(removedPalette.getPaletteViewInScrollPane());
 				paletteView.revalidate();
 				paletteView.repaint();
 			}
 		}
 	}
 
-	protected void updatePalette(ViewPointPalette palette, DrawingView<?> oldPaletteView) {
+	protected void updatePalette(ViewPointPalette palette, JScrollPane oldPaletteView) {
 		int index = paletteView.indexOfComponent(oldPaletteView);
 		paletteView.remove(oldPaletteView);
 		ContextualPalette cp = _contextualPalettes.get(palette);
-		paletteView.insertTab(palette.getName(), null, cp.getPaletteView(), null, index);
+		paletteView.insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
 		paletteView.revalidate();
 		paletteView.repaint();
 	}
