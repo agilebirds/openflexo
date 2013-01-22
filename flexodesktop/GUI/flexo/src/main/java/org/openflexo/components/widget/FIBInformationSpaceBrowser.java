@@ -19,32 +19,19 @@
  */
 package org.openflexo.components.widget;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.DefaultFlexoServiceManager;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
-import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.FlexoFIBController;
-import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Browser allowing to browse through information space<br>
@@ -69,7 +56,7 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<InformationSpace>
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
@@ -117,6 +104,6 @@ public class FIBInformationSpaceBrowser extends FIBBrowserView<InformationSpace>
 		};
 		editor.launch();
 
-	}
+	}*/
 
 }
