@@ -5305,6 +5305,7 @@ would_you_like_to_send_a_report=Souhaitez-vous soumettre un rapport afin de nous
 would_you_like_to_set_this_component_as_parent_component_(recommanded)=Voulez vous utiliser ce composant comme composant parent (recommand\u00E9) ?
 would_you_like_to_ungroup_those_activities=Voulez vous vraiment d\u00E9grouper ces activit\u00E9s ?
 would_you_really_like_to_delete_this_CVS_repository_location=Voulez vous vraiment supprimer ce repository CVS ?
+would_you_really_like_to_delete_this_edition_pattern=Voulez vous vraiment supprimer cet Edition Pattern ?
 would_you_really_like_to_make_process_($0)_without_context=Voulez vous supprimer la d\u00E9pendance de ($0) \u00E0 un processus parent ?
 would_you_really_like_to_make_process_($movedProcess)_without_context=Voulez vous supprimer la d\u00E9pendance de ($movedProcess) \u00E0 un processus parent ?
 would_you_really_like_to_move_process_($0)_to_($1)=Voulez vous d\u00E9placer le processus '($0)' dans le processus '($1)' ?

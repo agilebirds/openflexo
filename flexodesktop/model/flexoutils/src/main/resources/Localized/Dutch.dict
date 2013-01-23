@@ -5306,6 +5306,7 @@ would_you_like_to_send_a_report=Would you like to send a report to help us impro
 would_you_like_to_set_this_component_as_parent_component_(recommanded)=Would you like to set this component as parent component (recommanded) ?
 would_you_like_to_ungroup_those_activities=Would you really like to ungroup those activities ?
 would_you_really_like_to_delete_this_CVS_repository_location=Would you really like to delete this repository location ?
+would_you_really_like_to_delete_this_edition_pattern=Would you really like to delete this edition pattern ?
 would_you_really_like_to_make_process_($0)_without_context=Would you really like to make process '($0)' context-free (remove any dependancy to a parent process) ?
 would_you_really_like_to_make_process_($movedProcess)_without_context=Would you really like to make process '($movedProcess)' context-free (remove any dependancy to a parent process) ?
 would_you_really_like_to_move_process_($0)_to_($1)=Would you really like to move process '($0)' under process '($1)' ?
