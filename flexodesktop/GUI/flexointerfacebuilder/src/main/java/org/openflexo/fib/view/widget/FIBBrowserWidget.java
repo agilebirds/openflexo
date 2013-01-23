@@ -499,7 +499,15 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);
 
-		getDynamicModel().selected = selectedObject;
+		if (selectedObject == null) {
+			getDynamicModel().selected = null;
+		} else if (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(selectedObject.getClass())) {
+			getDynamicModel().selected = selectedObject;
+		} else {
+			// If selected element is not of expected class, set selected to be null
+			// (we want to be sure that selected is an instance of IteratorClass)
+			getDynamicModel().selected = null;
+		}
 		getDynamicModel().selection = selection;
 		notifyDynamicModelChanged();
 
