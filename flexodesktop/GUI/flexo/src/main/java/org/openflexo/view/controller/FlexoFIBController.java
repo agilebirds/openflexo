@@ -102,6 +102,9 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	@Override
 	public void update(final FlexoObservable o, final DataModification dataModification) {
+		if (isDeleted()) {
+			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
