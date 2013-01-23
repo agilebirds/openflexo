@@ -268,8 +268,8 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 			}
 
 			@Override
-			public FIBController<?> makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+			public FIBController makeNewController(FIBComponent component) {
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

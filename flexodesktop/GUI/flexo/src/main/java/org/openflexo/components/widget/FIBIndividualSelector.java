@@ -405,7 +405,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

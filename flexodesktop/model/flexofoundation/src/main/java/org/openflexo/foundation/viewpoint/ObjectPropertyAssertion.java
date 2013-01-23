@@ -27,6 +27,9 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -103,6 +106,41 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	public Object getValue(EditionSchemeAction action) {
 		return getObject().getBindingValue(action);
+	}
+
+	public static class ObjectPropertyAssertionMustDefineAnOntologyProperty extends
+			ValidationRule<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> {
+		public ObjectPropertyAssertionMustDefineAnOntologyProperty() {
+			super(ObjectPropertyAssertion.class, "object_property_assertion_must_define_an_ontology_property");
+		}
+
+		@Override
+		public ValidationIssue<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> applyValidation(
+				ObjectPropertyAssertion assertion) {
+			if (assertion.getOntologyProperty() == null) {
+				return new ValidationError<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion>(this, assertion,
+						"object_property_assertion_must_define_an_ontology_property");
+			}
+			return null;
+		}
+
+	}
+
+	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ObjectPropertyAssertion> {
+		public ObjectBindingIsRequiredAndMustBeValid() {
+			super("'object'_binding_is_required_and_must_be_valid", ObjectPropertyAssertion.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(ObjectPropertyAssertion object) {
+			return object.getObject();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(ObjectPropertyAssertion object) {
+			return object.getObjectBindingDefinition();
+		}
+
 	}
 
 }
