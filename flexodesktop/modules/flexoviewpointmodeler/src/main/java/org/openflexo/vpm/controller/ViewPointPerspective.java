@@ -204,6 +204,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object.isDeleted()) {
+			return null;
+		}
 		if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
@@ -216,7 +219,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new CalcView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
+			if (((EditionPattern) object).getViewPoint() != null) {
+				((EditionPattern) object).getViewPoint().loadWhenUnloaded();
+			}
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof ViewPointPalette) {
