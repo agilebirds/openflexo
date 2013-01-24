@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -19,6 +20,7 @@ import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.StringConverter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -53,6 +55,7 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 		if (storage == null) {
 			storage = modelFactory.newInstance(Storage.class);
 		}
+		modelFactory.getStringEncoder().addConverter(FLEXO_VERSION_CONVERTER);
 	}
 
 	public File getUserResourceCenterStorageFile() {
@@ -194,6 +197,27 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 				saveStorage();
 			}
 		}
+	}
+
+	@StringConverter
+	public static final Converter<FlexoVersion> FLEXO_VERSION_CONVERTER = new FlexoVersionConverter();
+
+	public static class FlexoVersionConverter extends Converter<FlexoVersion> {
+
+		public FlexoVersionConverter() {
+			super(FlexoVersion.class);
+		}
+
+		@Override
+		public FlexoVersion convertFromString(String value, ModelFactory factory) {
+			return new FlexoVersion(value);
+		}
+
+		@Override
+		public String convertToString(FlexoVersion value) {
+			return value.toString();
+		}
+
 	}
 
 }
