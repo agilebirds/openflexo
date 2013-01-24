@@ -52,7 +52,7 @@ public class VEController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
 
-	public DiagramPerspective DIAGRAM_PERSPECTIVE;
+	public ViewLibraryPerspective VIEW_LIBRARY_PERSPECTIVE;
 
 	// public OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
@@ -75,7 +75,7 @@ public class VEController extends FlexoController {
 
 	@Override
 	protected void initializePerspectives() {
-		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
+		addToPerspectives(VIEW_LIBRARY_PERSPECTIVE = new ViewLibraryPerspective(this));
 		// addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 	}
 
@@ -107,7 +107,7 @@ public class VEController extends FlexoController {
 			project.getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 			project.getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 		}
-		DIAGRAM_PERSPECTIVE.setProject(project);
+		VIEW_LIBRARY_PERSPECTIVE.setProject(project);
 		// ONTOLOGY_PERSPECTIVE.setProject(project);
 	}
 
@@ -154,8 +154,8 @@ public class VEController extends FlexoController {
 
 	@Override
 	public String getWindowTitleforObject(FlexoObject object) {
-		if (getCurrentPerspective() == DIAGRAM_PERSPECTIVE) {
-			return DIAGRAM_PERSPECTIVE.getWindowTitleforObject(object);
+		if (getCurrentPerspective() == VIEW_LIBRARY_PERSPECTIVE) {
+			return VIEW_LIBRARY_PERSPECTIVE.getWindowTitleforObject(object);
 		}
 		/*if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
 			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);

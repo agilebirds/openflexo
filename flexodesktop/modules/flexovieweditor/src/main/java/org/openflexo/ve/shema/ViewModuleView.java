@@ -30,17 +30,23 @@ import javax.swing.JScrollPane;
 
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.ve.controller.DiagramPerspective;
+import org.openflexo.ve.controller.ViewLibraryPerspective;
 import org.openflexo.view.ModuleView;
 
-public class VEShemaModuleView extends JPanel implements ModuleView<View>, PropertyChangeListener {
+/**
+ * This is the module view dedicated to represent a {@link View}
+ * 
+ * @author sylvain
+ * 
+ */
+public class ViewModuleView extends JPanel implements ModuleView<View>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(VEShemaModuleView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ViewModuleView.class.getPackage().getName());
 
 	private VEShemaController _controller;
 
-	public VEShemaModuleView(VEShemaController controller) {
+	public ViewModuleView(VEShemaController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
@@ -65,8 +71,8 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View>, Prope
 	}
 
 	@Override
-	public DiagramPerspective getPerspective() {
-		return getController().getVEController().DIAGRAM_PERSPECTIVE;
+	public ViewLibraryPerspective getPerspective() {
+		return getController().getVEController().VIEW_LIBRARY_PERSPECTIVE;
 	}
 
 	public FlexoProject getProject() {
@@ -89,7 +95,7 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View>, Prope
 
 	@Override
 	public void willShow() {
-		getPerspective().focusOnShema(getRepresentedObject());
+		getPerspective().focusOnView(getRepresentedObject());
 	}
 
 	@Override

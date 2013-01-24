@@ -46,7 +46,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 
 	private VEController _controller;
 	private CommonPalette _commonPalette;
-	private VEShemaModuleView _moduleView;
+	private ViewModuleView _moduleView;
 	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
 	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
@@ -92,7 +92,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			if (getDrawingView() != null) {
 				_controller.removeModuleView(getModuleView());
 			}
-			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
+			_controller.VIEW_LIBRARY_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
@@ -116,9 +116,9 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return (VEShemaView) super.getDrawingView();
 	}
 
-	public VEShemaModuleView getModuleView() {
+	public ViewModuleView getModuleView() {
 		if (_moduleView == null) {
-			_moduleView = new VEShemaModuleView(this);
+			_moduleView = new ViewModuleView(this);
 		}
 		return _moduleView;
 	}

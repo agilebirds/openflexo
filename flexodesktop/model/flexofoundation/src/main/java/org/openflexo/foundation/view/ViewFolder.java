@@ -42,6 +42,7 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
@@ -49,7 +50,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
 /**
- * @author bmangez <B>Class Description</B>
+ * A ViewFolder contains some {@link View} inside a project
+ * 
+ * @author sylvain
  */
 public class ViewFolder extends ViewLibraryObject implements InspectableObject, Sortable {
 

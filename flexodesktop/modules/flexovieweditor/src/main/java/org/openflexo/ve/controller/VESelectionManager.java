@@ -33,7 +33,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.shema.VEShemaModuleView;
+import org.openflexo.ve.shema.ViewModuleView;
 import org.openflexo.ve.shema.VEShemaView;
 import org.openflexo.view.menu.FlexoMenuBar;
 
@@ -83,8 +83,8 @@ public class VESelectionManager extends SelectionManager {
 
 	@Override
 	public FlexoModelObject getPasteContext() {
-		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
-			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+		if (getVEController().getCurrentModuleView() instanceof ViewModuleView) {
+			VEShemaView v = ((ViewModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
 			GraphicalRepresentation<?> gr = v.getController().getLastSelectedGR();
 			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
@@ -99,8 +99,8 @@ public class VESelectionManager extends SelectionManager {
 	@Override
 	public PastingGraphicalContext getPastingGraphicalContext() {
 		PastingGraphicalContext pgc = new PastingGraphicalContext();
-		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
-			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+		if (getVEController().getCurrentModuleView() instanceof ViewModuleView) {
+			VEShemaView v = ((ViewModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
 			DrawingController<?> controller = v.getController();
 			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
 			if (target == null) {

@@ -22,6 +22,7 @@ package org.openflexo.ve.controller;
 import java.awt.Dimension;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -29,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -41,20 +41,19 @@ import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.shema.VEShemaController;
-import org.openflexo.ve.shema.VEShemaModuleView;
-import org.openflexo.ve.view.VEBrowserView;
+import org.openflexo.ve.shema.ViewModuleView;
+import org.openflexo.ve.widget.FIBViewLibraryBrowser;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class DiagramPerspective extends FlexoPerspective {
+public class ViewLibraryPerspective extends FlexoPerspective {
+
+	protected static final Logger logger = Logger.getLogger(ViewLibraryPerspective.class.getPackage().getName());
 
 	private final VEController _controller;
 
-	private final ShemaLibraryBrowser _browser;
-	private final ShemaBrowser shemaBrowser;
-	private final VEBrowserView _browserView;
-	private final VEBrowserView shemaBrowserView;
+	private final FIBViewLibraryBrowser viewLibraryBrowser;
 
 	private final Map<View, VEShemaController> _controllers;
 
@@ -73,43 +72,36 @@ public class DiagramPerspective extends FlexoPerspective {
 	 *            TODO
 	 * @param name
 	 */
-	public DiagramPerspective(VEController controller) {
+	public ViewLibraryPerspective(VEController controller) {
 		super("diagram_perspective");
+
+		viewLibraryBrowser = new FIBViewLibraryBrowser(controller.getProject() != null ? controller.getProject().getViewLibrary() : null,
+				controller);
+
+		setTopLeftView(viewLibraryBrowser);
+
 		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
 		bottomRightDummy = new JPanel();
-		_browser = new ShemaLibraryBrowser(controller);
-		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
-			@Override
-			public void treeDoubleClick(FlexoObject object) {
-				super.treeDoubleClick(object);
-				if (object instanceof View) {
-					focusOnShema((View) object);
-				}
-			}
 
-			/*  public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
-			  {
-			  	if (event.getAddedObject() instanceof ERDiagram) {
-			  		diagramBrowser.deleteBrowserListener(this);
-			  		diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
-			  		diagramBrowser.update();
-			  		diagramBrowser.addBrowserListener(this);
-			  	}
-			  	super.objectAddedToSelection(event);
-			  }			*/
-		};
-		shemaBrowser = new ShemaBrowser(controller);
-		shemaBrowserView = new VEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
 		infoLabel = new JLabel("Diagram perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 
 		// Initialized inspector panel
 		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
 		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
-		setTopLeftView(_browserView);
-		setBottomLeftView(shemaBrowserView);
+	}
+
+	public void focusOnView(View aView) {
+		logger.info("focusOnView " + aView);
+		// calcBrowser.deleteBrowserListener(_browserView);
+		// calcBrowser.setRepresentedObject(viewPoint);
+		// calcBrowser.update();
+		// calcBrowser.addBrowserListener(_browserView);
+
+		// viewBrowser.setRootObject(viewPoint);
+		// setBottomLeftView(viewBrowser);
 	}
 
 	@Override
@@ -126,12 +118,6 @@ public class DiagramPerspective extends FlexoPerspective {
 			return bottomRightDummy;
 		}
 		return inspectorPanelScrollPane;
-	}
-
-	public void focusOnShema(View shema) {
-		shemaBrowser.deleteBrowserListener(_browserView);
-		shemaBrowser.setRootObject(shema);
-		shemaBrowser.addBrowserListener(_browserView);
 	}
 
 	/**
@@ -203,9 +189,9 @@ public class DiagramPerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	public VEShemaModuleView getCurrentShemaModuleView() {
-		if (_controller != null && _controller.getCurrentModuleView() instanceof VEShemaModuleView) {
-			return (VEShemaModuleView) _controller.getCurrentModuleView();
+	public ViewModuleView getCurrentShemaModuleView() {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof ViewModuleView) {
+			return (ViewModuleView) _controller.getCurrentModuleView();
 		}
 		return null;
 	}
@@ -232,7 +218,7 @@ public class DiagramPerspective extends FlexoPerspective {
 			return FlexoLocalization.localizedForKey("no_selection");
 		}
 		if (object instanceof ViewLibrary) {
-			return FlexoLocalization.localizedForKey("shema_library");
+			return FlexoLocalization.localizedForKey("view_library");
 		}
 		if (object instanceof ViewDefinition) {
 			return ((ViewDefinition) object).getName();
@@ -244,6 +230,8 @@ public class DiagramPerspective extends FlexoPerspective {
 	}
 
 	public void setProject(FlexoProject project) {
-		_browser.setRootObject(project.getShemaLibrary());
+		System.out.println("On bascule sur le projet " + project);
+		System.out.println("ViewLibrary: " + project.getViewLibrary());
+		viewLibraryBrowser.setRootObject(project.getViewLibrary());
 	}
 }
