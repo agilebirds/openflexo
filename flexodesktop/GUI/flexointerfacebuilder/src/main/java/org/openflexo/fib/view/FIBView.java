@@ -196,43 +196,24 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (callers.contains(getComponent())) {
 			return false;
 		}
-		updateVisibility(true);
+		updateVisibility();
 		return true;
 	}
 
 	protected abstract boolean checkValidDataPath();
 
 	public final boolean isComponentVisible() {
-		/*
-		 * boolean debug = false; if (getComponent().getName() != null &&
-		 * getComponent().getName().equals("ColorBackgroundPanel")) {
-		 * debug=true; }
-		 */
-
 		if (getParentView() != null && !getParentView().isComponentVisible()) {
 			return false;
 		}
-
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
 			Object isVisible = getComponent().getVisible().getBindingValue(getController());
-			/*
-			 * if (debug) {
-			 * System.out.println("getComponent().getVisible()="+getComponent
-			 * ().getVisible());
-			 * System.out.println("Eh bien isVisible="+isVisible); }
-			 */
 			if (isVisible instanceof Boolean) {
 				componentVisible = (Boolean) isVisible;
 			}
 		}
-		if (!componentVisible) {
-			return false;
-		}
-		// logger.info("Please look at this !!!");
-		// if (getParentView() != null) return
-		// getParentView().isComponentVisible();
-		return true;
+		return componentVisible;
 	}
 
 	public final boolean hasValue() {
@@ -243,49 +224,27 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return visible;
 	}
 
-	private final void updateVisibility(boolean revalidateAndRepaint) {
-		if (isComponentVisible()) {
-			if (visible == false) {
-				// Becomes visible
-				performSetIsVisible(true);
-				// Also update visibility for sub-components
-				for (FIBView view : subViews) {
-					view.updateVisibility(false);
-				}
-				if (getResultingJComponent().getParent() instanceof JComponent) {
-					((JComponent) getResultingJComponent().getParent()).revalidate();
-				} else {
-					getResultingJComponent().getParent().validate();
-				}
-				getResultingJComponent().getParent().repaint();
-				visible = true;
-				if (getDynamicModel() != null) {
-					getDynamicModel().setVisible(true);
-				}
-				updateDataObject(getDataObject());
+	protected void updateVisibility() {
+		if (isComponentVisible() != visible) {
+			visible = !visible;
+			getResultingJComponent().setVisible(visible);
+			if (getResultingJComponent().getParent() instanceof JComponent) {
+				((JComponent) getResultingJComponent().getParent()).revalidate();
+			} else if (getResultingJComponent().getParent() != null) {
+				getResultingJComponent().getParent().validate();
 			}
-		} else {
-			if (visible == true) {
-				// Becomes invisible
-				performSetIsVisible(false);
-				if (getResultingJComponent().getParent() instanceof JComponent) {
-					((JComponent) getResultingJComponent().getParent()).revalidate();
-				} else if (getResultingJComponent().getParent() != null) {
-					getResultingJComponent().getParent().validate();
+			if (getResultingJComponent().getParent() != null) {
+				getResultingJComponent().getParent().repaint();
+			}
+			if (visible) {
+				for (FIBView<?, ?> view : subViews) {
+					view.updateVisibility();
 				}
-				if (getResultingJComponent().getParent() != null) {
-					getResultingJComponent().getParent().repaint();
-				}
-				visible = false;
-				if (getDynamicModel() != null) {
-					getDynamicModel().setVisible(false);
-				}
+			}
+			if (getDynamicModel() != null) {
+				getDynamicModel().setVisible(visible);
 			}
 		}
-	}
-
-	protected void performSetIsVisible(boolean isVisible) {
-		getResultingJComponent().setVisible(isVisible);
 	}
 
 	public FIBComponentDynamicModel<?> createDynamicModel() {
