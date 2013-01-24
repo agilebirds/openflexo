@@ -33,7 +33,7 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -96,8 +96,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ViewDefinition viewDefinition) {
-		View target = viewDefinition.getView();
+	public JComponent createScreenshotForShema(FlexoViewResource viewResource) {
+		View target = viewResource.getView();
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");

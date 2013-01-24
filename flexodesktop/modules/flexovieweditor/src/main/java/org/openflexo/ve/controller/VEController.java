@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
@@ -112,8 +111,8 @@ public class VEController extends FlexoController {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getShemaLibrary();
+	public FlexoObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getViewLibrary();
 	}
 
 	/**

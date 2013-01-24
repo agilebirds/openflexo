@@ -17,52 +17,46 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.controller.action;
+package org.openflexo.view.controller.action;
 
 import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.DeleteRepositoryFolder;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewFolder;
-import org.openflexo.foundation.view.ViewLibraryObject;
-import org.openflexo.foundation.view.action.DeleteViewFolder;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class DeleteViewFolderInitializer extends ActionInitializer<DeleteViewFolder, ViewFolder, ViewLibraryObject> {
+public class DeleteRepositoryFolderInitializer extends ActionInitializer<DeleteRepositoryFolder, RepositoryFolder, RepositoryFolder> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteViewFolderInitializer(VEControllerActionInitializer actionInitializer) {
-		super(DeleteViewFolder.actionType, actionInitializer);
+	public DeleteRepositoryFolderInitializer(ControllerActionInitializer actionInitializer) {
+		super(DeleteRepositoryFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected VEControllerActionInitializer getControllerActionInitializer() {
-		return (VEControllerActionInitializer) super.getControllerActionInitializer();
-	}
-
-	@Override
-	protected FlexoActionInitializer<DeleteViewFolder> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeleteViewFolder>() {
+	protected FlexoActionInitializer<DeleteRepositoryFolder> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeleteRepositoryFolder>() {
 			@Override
-			public boolean run(EventObject e, DeleteViewFolder action) {
+			public boolean run(EventObject e, DeleteRepositoryFolder action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("really_delete_this_view_folder_and_all_its_contents_?"));
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteViewFolder> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeleteViewFolder>() {
+	protected FlexoActionFinalizer<DeleteRepositoryFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteRepositoryFolder>() {
 			@Override
-			public boolean run(EventObject e, DeleteViewFolder action) {
+			public boolean run(EventObject e, DeleteRepositoryFolder action) {
 				return true;
 			}
 		};

@@ -86,9 +86,9 @@ public class ProjectElement extends BrowserElement {
 		/*if (getProject().getProjectOntology(false) != null) {
 			addToChilds((FlexoModelObject) getProject().getProjectOntology(false));
 		}*/
-		if (getProject().getShemaLibrary(false) != null) {
+		/*if (getProject().getShemaLibrary(false) != null) {
 			addToChilds(getProject().getShemaLibrary(false));
-		}
+		}*/
 		if (getProject().getImportedProcessLibrary() != null) {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}

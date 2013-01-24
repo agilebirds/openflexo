@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.xml.ViewBuilder;
 
@@ -119,11 +118,6 @@ public class ViewConnector extends ViewElement {
 	@Override
 	public String getFullyQualifiedName() {
 		return getView().getFullyQualifiedName() + "." + getName();
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VE.OE_CONNECTOR_INSPECTOR;
 	}
 
 	public ViewShape getEndShape() {

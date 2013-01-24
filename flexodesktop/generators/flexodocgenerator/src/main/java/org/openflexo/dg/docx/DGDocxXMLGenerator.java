@@ -34,6 +34,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
@@ -281,7 +282,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		return conditionValue;
 	}
 
-	public FlexoModelObject getAccessedModelObject(TOCEntry section) {
+	public FlexoObject getAccessedModelObject(TOCEntry section) {
 		if (section instanceof ModelObjectSection<?>) {
 			return getAccessedModelObject((ModelObjectSection<?>) section);
 		} else if (section.getObject() != null) {
@@ -297,7 +298,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			case SCREENS:
 				return getProject().getFlexoComponentLibrary();
 			case VIEWS:
-				return getProject().getShemaLibrary();
+				return getProject().getViewLibrary();
 			}
 		}
 		if (logger.isLoggable(Level.SEVERE)) {

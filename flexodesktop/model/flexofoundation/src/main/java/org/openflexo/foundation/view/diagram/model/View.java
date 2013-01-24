@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -265,11 +264,6 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	@Override
 	public XMLMapping getXMLMapping() {
 		return getProject().getXmlMappings().getShemaMapping();
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VE.OE_SHEMA_INSPECTOR;
 	}
 
 	public ViewPoint getViewPoint() {

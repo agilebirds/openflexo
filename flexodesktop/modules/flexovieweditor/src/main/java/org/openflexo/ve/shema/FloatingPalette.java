@@ -377,8 +377,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
 		// Lets look if we match a CalcPaletteConnector
 		final ViewShape from = shapeGR.getDrawable();
-		if (from.getView().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-			availableConnectors = from.getView().getCalc().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
+		if (from.getView().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+			availableConnectors = from.getView().getViewPoint().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 		}
 
 		if (availableConnectors.size() == 1) {

@@ -64,11 +64,9 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 			new VESelectAllInitializer(this);
 		}
 
-		// Shema library perspective
+		// View library perspective
 		new AddViewInitializer(this);
-		new AddViewFolderInitializer(this);
 		new DeleteViewInitializer(this);
-		new DeleteViewFolderInitializer(this);
 		new ResetGraphicalRepresentationInitializer(this);
 
 		// Diagram perspective

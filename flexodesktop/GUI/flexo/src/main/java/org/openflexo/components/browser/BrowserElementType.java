@@ -115,19 +115,17 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
@@ -378,8 +376,6 @@ public enum BrowserElementType {
 	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape", ExampleDiagramShape.class, VPMIconLibrary.SHAPE_ICON),
 	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDiagramConnector.class, VPMIconLibrary.CONNECTOR_ICON),
 	OE_SHEMA_LIBRARY("shema_library", ViewLibrary.class, VEIconLibrary.VIEW_LIBRARY_ICON),
-	OE_SHEMA_FOLDER("shema_folder", ViewFolder.class, IconLibrary.FOLDER_ICON),
-	OE_SHEMA_DEFINITION("view", ViewDefinition.class, VEIconLibrary.VIEW_ICON),
 	OE_SHEMA("view", View.class, VEIconLibrary.VIEW_ICON),
 	OE_SHAPE("oe_shape", ViewShape.class, VEIconLibrary.SHAPE_ICON),
 	OE_CONNECTOR("oe_connector", ViewConnector.class, VEIconLibrary.CONNECTOR_ICON),

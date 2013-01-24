@@ -50,7 +50,9 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
+import org.openflexo.view.controller.action.AddRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
+import org.openflexo.view.controller.action.DeleteRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.HelpActionizer;
 import org.openflexo.view.controller.action.InspectActionizer;
 import org.openflexo.view.controller.action.RefreshImportedProcessesActionInitializer;
@@ -123,6 +125,9 @@ public class ControllerActionInitializer implements EditorProvider {
 		new RefreshImportedProcessesActionInitializer(this);
 		new UploadPrjInitializer(this);
 		new ProjectExcelExportInitializer(this);
+
+		new AddRepositoryFolderInitializer(this);
+		new DeleteRepositoryFolderInitializer(this);
 
 		new AddFlexoPropertyActionizer(this);
 		new DeleteFlexoPropertyActionizer(this);

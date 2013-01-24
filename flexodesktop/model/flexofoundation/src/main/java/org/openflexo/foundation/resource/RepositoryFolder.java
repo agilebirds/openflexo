@@ -61,6 +61,15 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 		return getParentFolder() == null;
 	}
 
+	public RepositoryFolder<R> getFolderNamed(String newFolderName) {
+		for (RepositoryFolder<R> f : children) {
+			if (f.getName().equals(newFolderName)) {
+				return f;
+			}
+		}
+		return null;
+	}
+
 	public List<R> getResources() {
 		return resources;
 	}

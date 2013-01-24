@@ -59,8 +59,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		activatePalette(_commonPalette);
 
 		_contextualPalettes = new Hashtable<DiagramPalette, ContextualPalette>();
-		if (shema.getCalc() != null) {
-			for (DiagramPalette palette : shema.getCalc().getPalettes()) {
+		if (shema.getViewPoint() != null) {
+			for (DiagramPalette palette : shema.getViewPoint().getPalettes()) {
 				ContextualPalette contextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, contextualPalette);
 				registerPalette(contextualPalette);

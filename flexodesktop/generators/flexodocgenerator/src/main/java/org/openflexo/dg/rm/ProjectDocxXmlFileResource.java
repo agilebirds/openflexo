@@ -33,8 +33,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoTOCResource;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.GeneratedDocResource;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
 public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGenerator<FlexoProject>> implements FlexoObserver {
@@ -87,8 +87,8 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 			for (FlexoProcess process : getProject().getAllLocalFlexoProcesses()) {
 				addToDependentResources(process.getFlexoResource());
 			}
-			for (ViewDefinition vd : getProject().getShemaLibrary().getAllShemaList()) {
-				addToDependentResources(vd.getShemaResource());
+			for (FlexoViewResource vd : getProject().getViewLibrary().getAllResources()) {
+				addToDependentResources(vd);
 			}
 			addToDependentResources(getProject().getWorkflow().getFlexoResource());
 			addToDependentResources(getProject().getDataModel().getFlexoResource());

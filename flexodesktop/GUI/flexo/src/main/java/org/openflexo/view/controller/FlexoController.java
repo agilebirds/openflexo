@@ -131,7 +131,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
-import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -2016,8 +2016,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
-		} else if (object instanceof AbstractViewObject) {
-			return VEIconLibrary.iconForObject((AbstractViewObject) object);
+		} else if (object instanceof ViewObject) {
+			return VEIconLibrary.iconForObject((ViewObject) object);
 		} else if (object instanceof RepositoryFolder) {
 			if (((RepositoryFolder) object).isRootFolder()) {
 				return IconLibrary.RESOURCE_CENTER_ICON;

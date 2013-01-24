@@ -36,7 +36,6 @@ import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.toc.ViewFolderSection;
 import org.openflexo.foundation.toc.ViewSection;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -102,9 +101,9 @@ public class DEIconLibrary extends IconLibrary {
 			return PROCESS_SECTION_ICON;
 		} else if (object instanceof ViewSection) {
 			return VIEW_SECTION_ICON;
-		} else if (object instanceof ViewFolderSection) {
+		} /*else if (object instanceof RepositoryFolderSection) {
 			return VIEW_FOLDER_SECTION_ICON;
-		} else if (object instanceof RoleSection) {
+			}*/else if (object instanceof RoleSection) {
 			return ROLE_SECTION_ICON;
 		} else if (object instanceof EntitySection) {
 			return ENTITY_SECTION_ICON;

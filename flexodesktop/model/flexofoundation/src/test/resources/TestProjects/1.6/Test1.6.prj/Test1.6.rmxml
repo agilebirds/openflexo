@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="FLX_42" name="Test1.6" projectURI="http://www.agilebirds.com/projects/2013/1/Test1.6_1359025319092" cssSheet="Contento" lastUniqueID="44" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 776" creationUserId="FLX" projectDateFormat="%d/%m/%y" userID="FLX" flexoID="42" dontGenerate="false" useSpecificDescriptions="false">
-  <resourcesCount>14</resourcesCount>
+<Project id="FLX_42" name="Test1.6" projectURI="http://www.agilebirds.com/projects/2013/1/Test1.6_1359057976096" cssSheet="Contento" lastUniqueID="42" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 815" creationUserId="FLX" projectDateFormat="%d/%m/%y" userID="FLX" flexoID="42" dontGenerate="false" useSpecificDescriptions="false">
+  <resourcesCount>13</resourcesCount>
   No description
   <RMResource id="FLX_RM.Test1.6" userID="FLX" version="5.0" file="Test1.6.rmxml">
     <DependantResources id="FLX_RM.Test1.6_DR" />
@@ -18,82 +18,75 @@
       <FlexoWebServerFileResource idref="FLX_WEBSERVER.objective-process.jpg" />
       <FlexoWebServerFileResource idref="FLX_WEBSERVER.organisationStructure.jpg" />
       <FlexoWebServerFileResource idref="FLX_WEBSERVER.process-mapping.jpg" />
-      <ShemaLibrary idref="FLX_SHEMA_LIBRARY.Test1.6" />
     </SynchronizedResources>
   </RMResource>
-  <ShemaLibrary id="FLX_SHEMA_LIBRARY.Test1.6" userID="FLX" version="1.0" file="Ontology/Test1.6.oelib">
-    <DependantResources id="FLX_SHEMA_LIBRARY.Test1.6_DR" />
-    <SynchronizedResources id="FLX_SHEMA_LIBRARY.Test1.6_SR">
-      <RMResource idref="FLX_RM.Test1.6" />
-    </SynchronizedResources>
-  </ShemaLibrary>
   <TOCResource id="FLX_TOC_RESOURCE.Test1.6" userID="FLX" file="Documentation/Test1.6.toc" version="0.1">
     <DependantResources id="FLX_TOC_RESOURCE.Test1.6_DR" />
     <SynchronizedResources id="FLX_TOC_RESOURCE.Test1.6_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </TOCResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 956" userID="FLX" file="ImportedImages/001-Dialog.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 871" userID="FLX" file="ImportedImages/001-Dialog.jpg">
     <DependantResources id="FLX_WEBSERVER.001-Dialog.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.001-Dialog.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.002-Information.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 968" userID="FLX" file="ImportedImages/002-Information.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.002-Information.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 872" userID="FLX" file="ImportedImages/002-Information.jpg">
     <DependantResources id="FLX_WEBSERVER.002-Information.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.002-Information.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.003-FillForm.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 969" userID="FLX" file="ImportedImages/003-FillForm.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.003-FillForm.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 873" userID="FLX" file="ImportedImages/003-FillForm.jpg">
     <DependantResources id="FLX_WEBSERVER.003-FillForm.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.003-FillForm.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.004-InformationComputer.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 970" userID="FLX" file="ImportedImages/004-InformationComputer.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.004-InformationComputer.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 874" userID="FLX" file="ImportedImages/004-InformationComputer.jpg">
     <DependantResources id="FLX_WEBSERVER.004-InformationComputer.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.004-InformationComputer.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.005-AssemblyLine.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 971" userID="FLX" file="ImportedImages/005-AssemblyLine.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.005-AssemblyLine.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 875" userID="FLX" file="ImportedImages/005-AssemblyLine.jpg">
     <DependantResources id="FLX_WEBSERVER.005-AssemblyLine.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.005-AssemblyLine.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.006-FlexoServerVideo.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 972" userID="FLX" file="ImportedImages/006-FlexoServerVideo.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.006-FlexoServerVideo.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 876" userID="FLX" file="ImportedImages/006-FlexoServerVideo.jpg">
     <DependantResources id="FLX_WEBSERVER.006-FlexoServerVideo.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.006-FlexoServerVideo.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.007-Audio.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 973" userID="FLX" file="ImportedImages/007-Audio.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.007-Audio.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 877" userID="FLX" file="ImportedImages/007-Audio.jpg">
     <DependantResources id="FLX_WEBSERVER.007-Audio.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.007-Audio.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.agileMapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 974" userID="FLX" file="ImportedImages/agileMapping.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.agileMapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 878" userID="FLX" file="ImportedImages/agileMapping.jpg">
     <DependantResources id="FLX_WEBSERVER.agileMapping.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.agileMapping.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.objective-process.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 976" userID="FLX" file="ImportedImages/objective-process.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.objective-process.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 879" userID="FLX" file="ImportedImages/objective-process.jpg">
     <DependantResources id="FLX_WEBSERVER.objective-process.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.objective-process.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.organisationStructure.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 992" userID="FLX" file="ImportedImages/organisationStructure.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.organisationStructure.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 880" userID="FLX" file="ImportedImages/organisationStructure.jpg">
     <DependantResources id="FLX_WEBSERVER.organisationStructure.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.organisationStructure.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="FLX_WEBSERVER.process-mapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,12:01:58 24/01/2013 993" userID="FLX" file="ImportedImages/process-mapping.jpg">
+  <FlexoWebServerFileResource id="FLX_WEBSERVER.process-mapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,21:06:15 24/01/2013 881" userID="FLX" file="ImportedImages/process-mapping.jpg">
     <DependantResources id="FLX_WEBSERVER.process-mapping.jpg_DR" />
     <SynchronizedResources id="FLX_WEBSERVER.process-mapping.jpg_SR">
       <RMResource idref="FLX_RM.Test1.6" />

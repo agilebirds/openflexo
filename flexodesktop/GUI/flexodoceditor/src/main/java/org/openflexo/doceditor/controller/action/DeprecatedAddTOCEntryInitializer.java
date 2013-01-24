@@ -44,7 +44,6 @@ import org.openflexo.foundation.param.ViewParameter;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.ProcessSection;
 import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.localization.FlexoLocalization;
@@ -183,12 +182,12 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 				def[9] = new ViewParameter("view", "view", null);
 				def[9].setDepends("sectionType,section");
 				def[9].setConditional("sectionType=\"" + SectionTypeList.VIEW + "\"");
-				((ViewParameter) def[9]).setViewSelectingConditional(new ViewParameter.ViewSelectingConditional() {
+				/*((ViewParameter) def[9]).setViewSelectingConditional(new ViewParameter.ViewSelectingConditional() {
 					@Override
 					public boolean isSelectable(ViewDefinition view) {
 						return true;
 					}
-				});
+				});*/
 
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), getController().getFlexoFrame(),
 						FlexoLocalization.localizedForKey("toc_entry_creation"), FlexoLocalization.localizedForKey("enter_new_title"), def);
@@ -222,7 +221,7 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 						if (def[9].getValue() == null) {
 							return false;
 						}
-						action.setModelObject(((ViewDefinition) def[9].getValue()).getShema());
+						// action.setModelObject(((ViewDefinition) def[9].getValue()).getShema());
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.ROLE) {

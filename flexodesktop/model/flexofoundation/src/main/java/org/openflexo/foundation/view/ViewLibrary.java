@@ -62,7 +62,7 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 	}
 
 	public static File getExpectedViewLibraryDirectory(FlexoProject project) {
-		File returned = new File(project.getProjectDirectory(), "views");
+		File returned = new File(project.getProjectDirectory(), "Views");
 		if (!returned.exists()) {
 			returned.mkdir();
 		}

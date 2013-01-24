@@ -76,8 +76,8 @@ public class DrawEdgeControl extends MouseDragControl {
 					// Lets look if we match a CalcPaletteConnector
 					final ViewShape from = fromShape.getDrawable();
 					final ViewShape to = toShape.getDrawable();
-					if (from.getView().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-						availableConnectors = from.getView().getCalc()
+					if (from.getView().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+						availableConnectors = from.getView().getViewPoint()
 								.getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 
 					}

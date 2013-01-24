@@ -30,10 +30,11 @@ import java.util.logging.Logger;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
@@ -43,7 +44,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class ViewObject extends AbstractViewObject implements PropertyChangeListener {
+public abstract class ViewObject extends FlexoModelObject implements PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
@@ -338,5 +339,18 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 
 	@Override
 	public abstract String getDisplayableDescription();
+
+	protected void notifyModification(String key, Object oldValue, Object newValue) {
+		notifyModification(key, oldValue, newValue, false);
+	}
+
+	protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant) {
+		setChanged();
+		DataModification dataModification = new DataModification(key, oldValue, newValue);
+		if (isReentrant) {
+			dataModification.setReentrant(isReentrant);
+		}
+		notifyObservers(dataModification);
+	}
 
 }

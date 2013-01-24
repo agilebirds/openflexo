@@ -55,12 +55,12 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.localization.FlexoLocalization;
@@ -277,20 +277,20 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 				}
 			}
 			boolean found = false;
-			for (ViewDefinition vd : project.getShemaLibrary().getAllShemaList()) {
-				View view = vd.getView();
+			for (FlexoViewResource vr : project.getViewLibrary().getAllResources()) {
+				View view = vr.getView();
 				if (view == null) {
 					continue;
 				}
 				EditionPattern pattern = null;
-				for (EditionPattern ep : view.getCalc().getEditionPatterns()) {
+				for (EditionPattern ep : view.getViewPoint().getEditionPatterns()) {
 					if (ep.getURI().equals(epi.getEditionPatternURI())) {
 						pattern = ep;
 						break;
 					}
 				}
 				if (pattern != null) {
-					for (EditionPatternInstance inst : vd.getView().getEPInstances(pattern)) {
+					for (EditionPatternInstance inst : vr.getView().getEPInstances(pattern)) {
 						if (inst.getInstanceId() == instanceID) {
 							epis.put(inst, epi);
 							found = true;

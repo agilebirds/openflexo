@@ -108,9 +108,9 @@
     <version id="0.2" modelFile="WSModel/ws_model_0.2.xml"/>  <!-- 1.1, 1.2 -->
   </class>
   
-  <class name="org.openflexo.foundation.view.ViewLibrary" latestVersion="1.0"> 
+  <!--  <class name="org.openflexo.foundation.view.ViewLibrary" latestVersion="1.0"> 
     <version id="1.0" modelFile="ShemaLibraryModel/shema_library_model_1.0.xml"/>
-  </class>
+  </class>-->
    
   <class name="org.openflexo.foundation.view.diagram.model.View" latestVersion="1.0"> 
     <version id="1.0" modelFile="ShemaModel/shema_model_1.0.xml"/>

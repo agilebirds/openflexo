@@ -33,8 +33,6 @@ import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.icon.VEIconLibrary;
@@ -141,9 +139,9 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public AbstractViewObject getDefaultObject(FlexoObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof View) {
-			return (View) proposedObject;
+			return proposedObject;
 		}
 		if (proposedObject instanceof FlexoProjectObject) {
 			return ((FlexoProjectObject) proposedObject).getProject().getViewLibrary();
@@ -154,24 +152,13 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof View || object instanceof ViewDefinition;
+		return object instanceof View;
 	}
 
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof View) {
 			return getControllerForShema((View) object).getModuleView();
-		}
-		if (object instanceof ViewDefinition) {
-			ViewDefinition viewDefinition = (ViewDefinition) object;
-			View shema = viewDefinition.getView();
-			if (shema == null) {
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
-						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
-						+ viewDefinition._getCalcURI() + " " + FlexoLocalization.localizedForKey("in_your_resource_center"));
-			} else {
-				return getControllerForShema(shema).getModuleView();
-			}
 		}
 		return null;
 	}
@@ -219,9 +206,6 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		}
 		if (object instanceof ViewLibrary) {
 			return FlexoLocalization.localizedForKey("view_library");
-		}
-		if (object instanceof ViewDefinition) {
-			return ((ViewDefinition) object).getName();
 		}
 		if (object instanceof View) {
 			return ((View) object).getName();

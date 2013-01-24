@@ -30,7 +30,6 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -72,7 +71,7 @@ public class AddViewInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddView>() {
 			@Override
 			public boolean run(EventObject e, AddView action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
+				getController().setCurrentEditedObjectAsModuleView(action.getNewView());
 				return true;
 			}
 		};
@@ -88,10 +87,6 @@ public class AddViewInitializer extends ActionInitializer {
 					return true;
 				}
 				if (exception instanceof DuplicateResourceException) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_view_with_this_name_already_exists"));
-					return true;
-				}
-				if (exception instanceof DuplicateShemaNameException) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_view_with_this_name_already_exists"));
 					return true;
 				}

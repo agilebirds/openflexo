@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
@@ -121,11 +120,6 @@ public class ViewShape extends ViewElement {
 	@Override
 	public String getFullyQualifiedName() {
 		return getView().getFullyQualifiedName() + "." + getName();
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VE.OE_SHAPE_INSPECTOR;
 	}
 
 	/*@Override

@@ -30,7 +30,6 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
@@ -41,29 +40,28 @@ import org.openflexo.foundation.view.diagram.model.ViewObject;
  * @author sylvain
  * 
  */
-public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRepresentations, AbstractViewObject, ViewObject> {
+public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRepresentations, ViewObject, ViewObject> {
 
 	private static final Logger logger = Logger.getLogger(ResetGraphicalRepresentations.class.getPackage().getName());
 
-	public static FlexoActionType<ResetGraphicalRepresentations, AbstractViewObject, ViewObject> actionType = new FlexoActionType<ResetGraphicalRepresentations, AbstractViewObject, ViewObject>(
+	public static FlexoActionType<ResetGraphicalRepresentations, ViewObject, ViewObject> actionType = new FlexoActionType<ResetGraphicalRepresentations, ViewObject, ViewObject>(
 			"reset_graphical_representations", FlexoActionType.editGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ResetGraphicalRepresentations makeNewAction(AbstractViewObject focusedObject, Vector<ViewObject> globalSelection,
-				FlexoEditor editor) {
+		public ResetGraphicalRepresentations makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 			return new ResetGraphicalRepresentations(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewObject view, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewObject view, Vector<ViewObject> globalSelection) {
 			return view instanceof View;
 		}
 
@@ -73,7 +71,7 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, View.class);
 	}
 
-	ResetGraphicalRepresentations(AbstractViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	ResetGraphicalRepresentations(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

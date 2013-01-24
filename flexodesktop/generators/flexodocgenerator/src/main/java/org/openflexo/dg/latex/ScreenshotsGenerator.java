@@ -34,9 +34,9 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -100,12 +100,10 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 			}
 		}
 
-		// Now the OEShemas
-		if (getProject().getFlexoShemaLibraryResource(false) != null && getProject() != null) {
-			Enumeration<ViewDefinition> en5 = getProject().getShemaLibrary().retrieveAllViews().elements();
-			while (en5.hasMoreElements()) {
-				ViewDefinition sd = en5.nextElement();
-				FlexoCopiedResource cdCopy = getResourceForShema(sd, true);
+		// Now the Views
+		if (getProject() != null) {
+			for (FlexoViewResource vr : getProject().getViewLibrary().getAllResources()) {
+				FlexoCopiedResource cdCopy = getResourceForView(vr, true);
 				resources.add(cdCopy);
 				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
 			}
@@ -210,8 +208,8 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		return getResourceForFlexoModelObject(cd, createIfNull);
 	}
 
-	private FlexoCopiedResource getResourceForShema(ViewDefinition sd, boolean createIfNull) {
-		return getResourceForFlexoModelObject(sd, createIfNull);
+	private FlexoCopiedResource getResourceForView(FlexoViewResource viewResource, boolean createIfNull) {
+		return getResourceForFlexoModelObject(viewResource.getView(), createIfNull);
 	}
 
 	private CopiedResourceGenerator getGenerator(FlexoCopiedResource c) {
@@ -266,9 +264,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		} else if (o instanceof FlexoWorkflow) {
 			return getResourceForFlexoModelObject(o, false);
 		} else if (o instanceof View) {
-			return getResourceForShema(((View) o).getShemaDefinition(), false);
-		} else if (o instanceof ViewDefinition) {
-			return getResourceForShema((ViewDefinition) o, false);
+			return getResourceForView(((View) o).getFlexoResource(), false);
 		}
 		return null;
 	}

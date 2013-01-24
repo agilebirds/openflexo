@@ -23,12 +23,9 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
-import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -62,19 +59,13 @@ public class VEIconLibrary extends IconLibrary {
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 
-	public static ImageIcon iconForObject(AbstractViewObject object) {
+	public static ImageIcon iconForObject(ViewObject object) {
 		if (object instanceof View) {
 			return VIEW_ICON;
 		} else if (object instanceof ViewConnector) {
 			return CONNECTOR_ICON;
 		} else if (object instanceof ViewShape) {
 			return SHAPE_ICON;
-		} else if (object instanceof ViewLibrary) {
-			return VIEW_LIBRARY_ICON;
-		} else if (object instanceof ViewDefinition) {
-			return VIEW_ICON;
-		} else if (object instanceof ViewFolder) {
-			return FOLDER_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;

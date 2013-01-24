@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.controller.action;
+package org.openflexo.view.controller.action;
 
 import java.awt.Component;
 import java.util.EventObject;
@@ -30,26 +30,19 @@ import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
-import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class AddViewFolderInitializer extends ActionInitializer {
+public class AddRepositoryFolderInitializer extends ActionInitializer<AddRepositoryFolder, RepositoryFolder, RepositoryFolder> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddViewFolderInitializer(VEControllerActionInitializer actionInitializer) {
+	public AddRepositoryFolderInitializer(ControllerActionInitializer actionInitializer) {
 		super(AddRepositoryFolder.actionType, actionInitializer);
-	}
-
-	@Override
-	protected VEControllerActionInitializer getControllerActionInitializer() {
-		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -57,15 +50,7 @@ public class AddViewFolderInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddRepositoryFolder>() {
 			@Override
 			public boolean run(EventObject e, AddRepositoryFolder action) {
-				ViewFolder parentFolder = null;
-				if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewDefinition) {
-					parentFolder = ((ViewDefinition) action.getFocusedObject()).getFolder();
-				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewFolder) {
-					parentFolder = (ViewFolder) action.getFocusedObject();
-				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewLibrary) {
-					parentFolder = ((ViewLibrary) action.getFocusedObject()).getRootFolder();
-				}
-				if (parentFolder != null) {
+				if (action.getFocusedObject() != null) {
 					String newFolderName = null;
 					while (newFolderName == null) {
 						/*newFolderName = FlexoController.askForStringMatchingPattern(
@@ -80,12 +65,11 @@ public class AddViewFolderInitializer extends ActionInitializer {
 							FlexoController.showError(FlexoLocalization.localizedForKey("a_folder_name_cannot_be_empty"));
 							return false;
 						}
-						if (parentFolder.getFolderNamed(newFolderName) != null) {
+						if (action.getFocusedObject().getFolderNamed(newFolderName) != null) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("there_is_already_a_folder_with that name"));
 							newFolderName = null;
 						}
 					}
-					action.setParentFolder(parentFolder);
 					action.setNewFolderName(newFolderName);
 					return true;
 				} else {
