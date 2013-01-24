@@ -81,7 +81,7 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, View
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc shema");
+		logger.info("Add calc view");
 
 		_newShema = ExampleDiagram.newShema(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(), newShemaName
 				+ ".shema"), graphicalRepresentation);

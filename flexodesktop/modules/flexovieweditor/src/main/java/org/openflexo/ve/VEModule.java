@@ -97,7 +97,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 	@Override
 	public JComponent createScreenshotForShema(ViewDefinition viewDefinition) {
-		View target = viewDefinition.getShema();
+		View target = viewDefinition.getView();
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");

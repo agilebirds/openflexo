@@ -76,8 +76,8 @@ public class DrawEdgeControl extends MouseDragControl {
 					// Lets look if we match a CalcPaletteConnector
 					final ViewShape from = fromShape.getDrawable();
 					final ViewShape to = toShape.getDrawable();
-					if (from.getShema().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-						availableConnectors = from.getShema().getCalc()
+					if (from.getView().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+						availableConnectors = from.getView().getCalc()
 								.getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 
 					}
@@ -93,7 +93,7 @@ public class DrawEdgeControl extends MouseDragControl {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null,
+									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null,
 											((VEShemaController) controller).getVEController().getEditor());
 									action.setLinkScheme(linkScheme);
 									action.setFromShape(from);

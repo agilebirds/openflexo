@@ -110,14 +110,14 @@ public class AddDiagram extends DiagramAction<View> {
 	@Override
 	public View performAction(EditionSchemeAction action) {
 		View initialShema = action.retrieveOEShema();
-		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, action);
+		AddView addDiagramAction = AddView.actionType
+				.makeNewEmbeddedAction(initialShema.getFlexoResource().getParentFolder(), null, action);
 		addDiagramAction.newViewTitle = getDiagramName(action);
 		addDiagramAction.viewpoint = getPatternRole().getViewpoint();
-		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
 		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
-		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
-			View newDiagram = addDiagramAction.getNewDiagram().getView();
+		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewView() != null) {
+			View newDiagram = addDiagramAction.getNewView();
 			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");

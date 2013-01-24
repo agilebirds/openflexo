@@ -4,9 +4,9 @@ import java.lang.reflect.Type;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
-import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationModified;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
+import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 

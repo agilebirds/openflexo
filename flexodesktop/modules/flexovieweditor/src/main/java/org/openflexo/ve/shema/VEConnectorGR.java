@@ -30,12 +30,12 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.diagram.model.ElementUpdated;
 import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ToolBox;
 
 public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver, VEShemaConstants {
@@ -46,7 +46,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEConnectorGR(VEShemaBuilder builder) {
+	public VEConnectorGR(ViewBuilder builder) {
 		this(null, null);
 	}
 

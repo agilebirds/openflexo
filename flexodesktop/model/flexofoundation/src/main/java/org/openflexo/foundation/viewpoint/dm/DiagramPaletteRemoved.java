@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
@@ -29,7 +28,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class DiagramPaletteRemoved extends OEDataModification {
+public class DiagramPaletteRemoved extends ViewPointDataModification {
 
 	private ViewPoint _parent;
 

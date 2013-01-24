@@ -21,7 +21,7 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.rm.FlexoViewResource;
 
 /**
  * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
@@ -30,7 +30,7 @@ import org.openflexo.foundation.view.ViewDefinition;
  * @author yourname
  */
 public interface ExternalOEModule extends ExternalModule {
-	public JComponent createScreenshotForShema(ViewDefinition shema);
+	public JComponent createScreenshotForShema(FlexoViewResource viewResource);
 
 	public float getScreenshotQuality();
 

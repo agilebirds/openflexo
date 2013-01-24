@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 
-public class OntologyObjectRenamed extends OEDataModification {
+public class OntologyObjectRenamed extends OntologyDataModification {
 	public OntologyObjectRenamed(IFlexoOntologyConcept object, String oldURI, String newURI) {
 		super(oldURI, newURI);
 	}

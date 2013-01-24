@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 
-public class OntologyDataPropertyRemoved extends OEDataModification {
+public class OntologyDataPropertyRemoved extends OntologyDataModification {
 	public OntologyDataPropertyRemoved(IFlexoOntologyDataProperty property) {
 		super(property, null);
 	}

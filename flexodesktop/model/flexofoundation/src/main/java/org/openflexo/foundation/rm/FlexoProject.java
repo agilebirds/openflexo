@@ -160,7 +160,6 @@ import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -238,6 +237,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoServiceManager serviceManager;
 
 	private FlexoObjectIDManager objectIDManager;
+
+	private ViewLibrary viewLibrary = null;
 
 	private List<FlexoModelObjectReference> objectReferences = new ArrayList<FlexoModelObjectReference>();
 	/**
@@ -1307,19 +1308,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
-	public FlexoViewLibraryResource getFlexoShemaLibraryResource() {
-		return getFlexoShemaLibraryResource(true);
-	}
-
-	public FlexoViewLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
-		FlexoViewLibraryResource returned = (FlexoViewLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
-		if (returned == null && createIfNotExist) {
-			ViewLibrary.createNewShemaLibrary(this);
-			return getFlexoShemaLibraryResource(false);
-		}
-		return returned;
-	}
-
 	public FlexoNavigationMenuResource getFlexoNavigationMenuResource() {
 		return getFlexoNavigationMenuResource(true);
 	}
@@ -1396,8 +1384,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return (FlexoMonitoringScreenResource) resourceForKey(ResourceType.MONITORING_SCREEN, componentName);
 	}
 
-	public FlexoOEShemaResource getShemaResource(String shemaName) {
-		return (FlexoOEShemaResource) resourceForKey(ResourceType.OE_SHEMA, shemaName);
+	public FlexoViewResource getShemaResource(String shemaName) {
+		return (FlexoViewResource) resourceForKey(ResourceType.OE_SHEMA, shemaName);
 	}
 
 	public ImplementationModelResource getImplementationModelResource(String modelName) {
@@ -1578,27 +1566,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return null;
 	}
 
-	@Deprecated
-	public ViewLibrary getShemaLibrary() {
-		return getShemaLibrary(true);
-	}
-
 	public ViewLibrary getViewLibrary() {
-		return getShemaLibrary();
-	}
-
-	public ViewLibrary getShemaLibrary(boolean createIfNotExist) {
-		if (getFlexoShemaLibraryResource(createIfNotExist) == null) {
-			if (createIfNotExist) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Create ShemaLibrary");
-				}
-				ViewLibrary.createNewShemaLibrary(this);
-			} else {
-				return null;
-			}
+		if (viewLibrary == null) {
+			viewLibrary = ViewLibrary.createNewViewLibrary(this);
 		}
-		return getFlexoShemaLibraryResource(createIfNotExist).getResourceData();
+		return viewLibrary;
 	}
 
 	public GeneratedCode getGeneratedCode() {
@@ -4550,16 +4522,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	/**
 	 * Return the list of all models used in the scope of current project<br>
-	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * To compute this this, iterate on each loaded View, then each ModelSlotInstance
 	 * 
 	 * @return
 	 */
 	public Set<FlexoModel<?, ?>> getAllReferencedModels() {
 		HashSet<FlexoModel<?, ?>> returned = new HashSet<FlexoModel<?, ?>>();
-		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
-			View v = vd.getView();
-			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-				returned.add(msi.getModel());
+		for (FlexoViewResource vr : getViewLibrary().getAllResources()) {
+			if (vr.isLoaded()) {
+				View v = vr.getView();
+				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+					returned.add(msi.getModel());
+				}
 			}
 		}
 		return returned;
@@ -4589,10 +4563,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
-		for (ViewDefinition vd : getViewLibrary().getAllShemaList()) {
-			View v = vd.getView();
-			for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-				returned.add(msi.getModelSlot().getMetaModelResource().getMetaModelData());
+		for (FlexoViewResource vr : getViewLibrary().getAllResources()) {
+			if (vr.isLoaded()) {
+				View v = vr.getView();
+				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
+					returned.add(msi.getModelSlot().getMetaModelResource().getMetaModelData());
+				}
 			}
 		}
 		return returned;

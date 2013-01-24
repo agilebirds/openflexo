@@ -30,7 +30,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 
 public class ViewShape extends ViewElement {
 
@@ -47,8 +47,8 @@ public class ViewShape extends ViewElement {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ViewShape(VEShemaBuilder builder) {
-		this(builder.shema);
+	public ViewShape(ViewBuilder builder) {
+		this(builder.view);
 		initializeDeserialization(builder);
 	}
 
@@ -120,7 +120,7 @@ public class ViewShape extends ViewElement {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getShema().getFullyQualifiedName() + "." + getName();
+		return getView().getFullyQualifiedName() + "." + getName();
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public class ViewShape extends ViewElement {
 
 		Vector<DropAndLinkScheme> availableLinkSchemeFromThisShape = null;
 
-		ViewPoint viewPoint = getShema().getViewPoint();
+		ViewPoint viewPoint = getView().getViewPoint();
 		if (viewPoint == null) {
 			return null;
 		}
@@ -255,7 +255,7 @@ public class ViewShape extends ViewElement {
 
 		Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
 
-		ViewPoint calc = getShema().getCalc();
+		ViewPoint calc = getView().getViewPoint();
 		if (calc == null) {
 			return null;
 		}

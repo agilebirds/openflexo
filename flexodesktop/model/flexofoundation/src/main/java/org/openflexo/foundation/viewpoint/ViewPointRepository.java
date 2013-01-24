@@ -28,7 +28,7 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 
 /**
- * A {@link ViewPointRepository} contains some resources storing viewpoint, and contained in a given {@link FlexoResourceCenter}
+ * A {@link ViewRepository} contains some resources storing viewpoint, and contained in a given {@link FlexoResourceCenter}
  * 
  * @author sylvain
  * 

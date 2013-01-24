@@ -19,11 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class PatternRoleRemoved extends OEDataModification {
+public class PatternRoleRemoved extends ViewPointDataModification {
 
 	private EditionPattern _parent;
 

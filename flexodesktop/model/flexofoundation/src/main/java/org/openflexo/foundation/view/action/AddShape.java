@@ -90,7 +90,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 			throw new InvalidParameterException("shape name is undefined");
 		}
 
-		_newShape = new ViewShape(getParent().getShema());
+		_newShape = new ViewShape(getParent().getView());
 		if (getGraphicalRepresentation() != null) {
 			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
 		}

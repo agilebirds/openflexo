@@ -9,7 +9,7 @@ import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -55,7 +55,7 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		}
 
 		// Constructor used during deserialization
-		public SubClassStatementActorReference(VEShemaBuilder builder) {
+		public SubClassStatementActorReference(ViewBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

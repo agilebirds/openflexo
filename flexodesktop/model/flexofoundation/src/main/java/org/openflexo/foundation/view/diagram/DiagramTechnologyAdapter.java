@@ -103,7 +103,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 	@Override
 	public FlexoResource<View> createEmptyModel(FlexoProject project, FlexoResource<DiagramMetaModel> metaModel,
 			TechnologyContextManager<View, DiagramMetaModel> technologyContextManager) {
-		logger.info("Add shema");
+		logger.info("Add view");
 		logger.warning("Not implemented yet");
 		return null;
 		/*if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
@@ -118,7 +118,7 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter<View, DiagramMet
 			throw new InvalidParameterException("folder is undefined");
 		}
 		if (StringUtils.isEmpty(newViewName)) {
-			throw new InvalidParameterException("shema name is undefined");
+			throw new InvalidParameterException("view name is undefined");
 		}
 
 		int index = 1;

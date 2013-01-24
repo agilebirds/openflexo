@@ -38,7 +38,7 @@ public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		View shema = project.getShemaLibrary().getShemaNamed("BasicOrganization").getShema();
+		View shema = project.getShemaLibrary().getViewResourceNamed("BasicOrganization").getView();
 		ViewShape a = shema.getShapeNamed("A");
 		ViewShape b = a.getShapeNamed("B");
 		ViewShape c = a.getShapeNamed("C");

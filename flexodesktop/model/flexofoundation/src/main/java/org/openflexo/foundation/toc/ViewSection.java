@@ -1,10 +1,10 @@
 package org.openflexo.foundation.toc;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
-public class ViewSection extends ModelObjectSection<ViewDefinition> {
+public class ViewSection extends ModelObjectSection<View> {
 
 	private static final String DOC_TEMPLATE = "docx_tocentry_view.xml.vm";
 
@@ -22,11 +22,11 @@ public class ViewSection extends ModelObjectSection<ViewDefinition> {
 		return ModelObjectType.View;
 	}
 
-	public ViewDefinition getViewDefinition() {
+	public View getView() {
 		return getModelObject(true);
 	}
 
-	public void setViewDefinition(ViewDefinition view) {
+	public void setView(View view) {
 		setModelObject(view);
 	}
 

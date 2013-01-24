@@ -41,7 +41,6 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -99,10 +98,8 @@ public class ScreenshotGenerator {
 			return getImageNameForRoleList((RoleList) o);
 		} else if (o instanceof FlexoWorkflow) {
 			return getImageNameForWorkflow((FlexoWorkflow) o);
-		} else if (o instanceof ViewDefinition) {
-			return getImageNameForShema((ViewDefinition) o);
 		} else if (o instanceof View) {
-			return getImageNameForShema(((View) o).getShemaDefinition());
+			return getImageNameForView((View) o);
 		}
 		return null;
 	}
@@ -191,11 +188,11 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param shema
+	 * @param view
 	 * @return
 	 */
-	private static String getImageNameForShema(ViewDefinition shema) {
-		return getImageNameForShema(shema.getName() + shema.getFlexoID());
+	private static String getImageNameForView(View view) {
+		return getImageNameForShema(view.getName() + view.getFlexoID());
 	}
 
 	/**
@@ -270,7 +267,7 @@ public class ScreenshotGenerator {
 					ieModule = project.getModuleLoader() != null ? project.getModuleLoader().getIEModuleInstance() : null;
 				} else if (object instanceof ERDiagram) {
 					dmModule = project.getModuleLoader() != null ? project.getModuleLoader().getDMModuleInstance() : null;
-				} else if (object instanceof View || object instanceof ViewDefinition) {
+				} else if (object instanceof View) {
 					oeModule = project.getModuleLoader() != null ? project.getModuleLoader().getVEModuleInstance() : null;
 				}
 			} catch (ModuleLoadingException e) {
@@ -301,10 +298,8 @@ public class ScreenshotGenerator {
 								.getComponentDefinition().getWOComponent());
 					} else if (object instanceof ERDiagram) {
 						c = dmModule.createScreenshotForObject((ERDiagram) object);
-					} else if (object instanceof ViewDefinition) {
-						c = oeModule.createScreenshotForShema((ViewDefinition) object);
 					} else if (object instanceof View) {
-						c = oeModule.createScreenshotForShema(((View) object).getShemaDefinition());
+						c = oeModule.createScreenshotForShema(((View) object).getFlexoResource());
 					}
 					if (c == null) {
 						if (logger.isLoggable(Level.WARNING)) {

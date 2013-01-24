@@ -152,10 +152,10 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	@Override
 	public View retrieveOEShema() {
 		if (getParent() != null) {
-			return getParent().getShema();
+			return getParent().getView();
 		}
 		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getShema();
+			return ((ViewObject) getFocusedObject()).getView();
 		}
 		return null;
 	}

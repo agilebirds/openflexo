@@ -128,7 +128,7 @@
   
   <entity name="org.openflexo.foundation.rm.FlexoViewLibraryResource" xmlTag="ShemaLibrary"/>
 
-  <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
+  <entity name="org.openflexo.foundation.rm.FlexoViewResource" xmlTag="Shema">
 	 <property name="name" xmlTag="name" attribute="YES"/> 	
   </entity>
 

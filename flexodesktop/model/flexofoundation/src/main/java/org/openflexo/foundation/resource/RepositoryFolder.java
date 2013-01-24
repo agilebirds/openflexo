@@ -95,4 +95,29 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 			return new File(getParentFolder().getFile(), getName());
 		}
 	}
+
+	public R getResourceWithName(String resourceName) {
+		for (R resource : getResources()) {
+			if (resource.getName().equals(resourceName)) {
+				return resource;
+			}
+		}
+		return null;
+	}
+
+	public boolean isValidResourceName(String resourceName) {
+		return getResourceWithName(resourceName) == null;
+	}
+
+	public boolean isFatherOf(RepositoryFolder<R> folder) {
+		RepositoryFolder<R> f = folder.getParentFolder();
+		while (f != null) {
+			if (f.equals(this)) {
+				return true;
+			}
+			f = f.getParentFolder();
+		}
+		return false;
+	}
+
 }

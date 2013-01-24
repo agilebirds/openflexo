@@ -25,7 +25,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 
 public class ViewConnector extends ViewElement {
 
@@ -39,8 +39,8 @@ public class ViewConnector extends ViewElement {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ViewConnector(VEShemaBuilder builder) {
-		this(builder.shema);
+	public ViewConnector(ViewBuilder builder) {
+		this(builder.view);
 		initializeDeserialization(builder);
 	}
 
@@ -118,7 +118,7 @@ public class ViewConnector extends ViewElement {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getShema().getFullyQualifiedName() + "." + getName();
+		return getView().getFullyQualifiedName() + "." + getName();
 	}
 
 	@Override

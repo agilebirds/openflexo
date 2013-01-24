@@ -42,8 +42,7 @@ import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -413,7 +412,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ViewSection createViewSection(String title, ViewDefinition view, DataBinding<Object> value) {
+	public ViewSection createViewSection(String title, View view, DataBinding<Object> value) {
 		ViewSection reply = new ViewSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(view);
@@ -421,13 +420,13 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ViewFolderSection createViewFolderSection(String title, ViewFolder folder, DataBinding<Object> value) {
+	/*public ViewFolderSection createViewFolderSection(String title, RepositoryFolder folder, DataBinding<Object> value) {
 		ViewFolderSection reply = new ViewFolderSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(folder);
 		reply.setValue(value);
 		return reply;
-	}
+	}*/
 
 	public RoleSection createRoleSection(String title, Role role, DataBinding<Object> value) {
 		RoleSection reply = new RoleSection(getData());

@@ -30,8 +30,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
 public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPaletteElement> implements GraphicalFlexoObserver {
@@ -81,9 +81,9 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPalett
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcPaletteElement()) {
-			if (dataModification instanceof CalcPaletteElementInserted) {
+			if (dataModification instanceof DiagramPaletteElementInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			} else if (dataModification instanceof CalcPaletteElementRemoved) {
+			} else if (dataModification instanceof DiagramPaletteElementRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification != null && dataModification.propertyName() != null
 					&& dataModification.propertyName().equals("boundLabelToElementName")) {

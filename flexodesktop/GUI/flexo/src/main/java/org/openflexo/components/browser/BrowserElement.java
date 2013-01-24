@@ -46,7 +46,7 @@ import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.dm.dm.DMDataModification;
 import org.openflexo.foundation.ie.dm.IEDataModification;
-import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.event.SGDataModification;
 import org.openflexo.foundation.toc.TOCModification;
@@ -366,7 +366,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			}
 			if ((dataModification instanceof WKFDataModification || dataModification instanceof IEDataModification
 					|| dataModification instanceof DKVDataModification || dataModification instanceof DMDataModification
-					|| dataModification instanceof WSDataModification || dataModification instanceof OEDataModification
+					|| dataModification instanceof WSDataModification || dataModification instanceof OntologyDataModification
 					|| dataModification instanceof CGDataModification || dataModification instanceof SGDataModification
 					|| dataModification instanceof TOCModification || dataModification instanceof NameChanged)
 					&& !(dataModification instanceof ObjectLocationChanged)

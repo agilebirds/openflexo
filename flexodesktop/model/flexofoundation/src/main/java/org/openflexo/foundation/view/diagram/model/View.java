@@ -19,9 +19,11 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,13 +38,14 @@ import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.dm.ShemaDeleted;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
@@ -50,14 +53,17 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.VEDataModification;
+import org.openflexo.foundation.view.ViewDeleted;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.DiagramMetaModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -70,23 +76,51 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
-	private FlexoOEShemaResource _resource;
-	private ViewDefinition _viewDefinition;
+	private FlexoViewResource _resource;
 	private ViewPoint _viewpoint;
 	private List<ModelSlotInstance> modelSlotInstances;
 	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
+	private String title;
 
 	private final FlexoProject project;
+
+	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<FlexoViewResource> folder,
+			FlexoProject project) throws InvalidFileNameException {
+
+		FlexoViewResource newViewResource = new FlexoViewResource(project, viewName, new FlexoProjectFile(new File(folder.getFile(),
+				viewName + ".view"), project), viewPoint);
+
+		View newView = new View(project);
+		newViewResource.setResourceData(newView);
+		newView.setResource(newViewResource);
+
+		// And register it to the library
+		project.getViewLibrary().registerResource(newViewResource, folder);
+
+		return newView;
+	}
 
 	/**
 	 * Constructor invoked during deserialization
 	 * 
 	 * @param componentDefinition
 	 */
-	public View(VEShemaBuilder builder) {
-		this(builder.shemaDefinition, builder.getProject());
-		builder.shema = this;
+	public View(ViewBuilder builder) {
+		this(builder.getProject());
+		builder.view = this;
 		initializeDeserialization(builder);
+	}
+
+	/**
+	 * Default constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public View(FlexoProject project) {
+		super(project);
+		this.project = project;
+		logger.info("Created new view with project " + project);
+		setView(this);
 	}
 
 	@Override
@@ -98,19 +132,6 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		// TODO
 		return null;
-	}
-
-	/**
-	 * Default constructor for OEShema
-	 * 
-	 * @param shemaDefinition
-	 */
-	public View(ViewDefinition shemaDefinition, FlexoProject project) {
-		super(project);
-		this.project = project;
-		logger.info("Created new shema with project " + project);
-		_viewDefinition = shemaDefinition;
-		setShema(this);
 	}
 
 	@Override
@@ -127,7 +148,10 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
-		EditionPattern ep = getCalc().getEditionPattern(epName);
+		if (getViewPoint() == null) {
+			return Collections.emptyList();
+		}
+		EditionPattern ep = getViewPoint().getEditionPattern(epName);
 		return getEPInstances(ep);
 	}
 
@@ -168,12 +192,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		return returned;
 	}
 
-	public ViewDefinition getShemaDefinition() {
-		return _viewDefinition;
-	}
-
 	@Override
-	public FlexoOEShemaResource getFlexoResource() {
+	public FlexoViewResource getFlexoResource() {
 		return _resource;
 	}
 
@@ -184,7 +204,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		_resource = (FlexoOEShemaResource) resource;
+		_resource = (FlexoViewResource) resource;
 	}
 
 	@Override
@@ -213,8 +233,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 
 	@Override
 	public String getName() {
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getName();
+		if (getFlexoResource() != null) {
+			return getFlexoResource().getName();
 		}
 		return null;
 	}
@@ -222,80 +242,24 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	// TODO: big issue with renaming, don't call this !!!
 	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		if (getShemaDefinition() != null) {
-			getShemaDefinition().setName(name);
-		}
 	}
 
 	public String getTitle() {
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getTitle();
-		}
-		return null;
+		return title;
 	}
 
 	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
-		if (getShemaDefinition() != null) {
-			getShemaDefinition().setTitle(title);
+		String oldTitle = this.title;
+		if (requireChange(oldTitle, title)) {
+			this.title = title;
+			setChanged();
+			notifyObservers(new VEDataModification("title", oldTitle, title));
 		}
-	}
-
-	@Override
-	public int getIndex() {
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getIndex();
-		}
-		return -1;
-	}
-
-	@Override
-	public void setIndex(int index) {
-		if (getShemaDefinition() != null) {
-			getShemaDefinition().setIndex(index);
-		}
-	}
-
-	@Override
-	public String getDescription() {
-		if (isSerializing()) {
-			return null;
-		}
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getDescription();
-		}
-		return super.getDescription();
-	}
-
-	@Override
-	public void setDescription(String description) {
-		if (getShemaDefinition() != null) {
-			getShemaDefinition().setDescription(description);
-		}
-		super.setDescription(description);
-	}
-
-	@Override
-	public Map<String, String> getSpecificDescriptions() {
-		if (isSerializing()) {
-			return null;
-		}
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getSpecificDescriptions();
-		}
-		return super.getSpecificDescriptions();
-	}
-
-	@Override
-	public boolean getHasSpecificDescriptions() {
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getHasSpecificDescriptions();
-		}
-		return super.getHasSpecificDescriptions();
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + getShemaDefinition().getName();
+		return getProject().getFullyQualifiedName() + "." + getName();
 	}
 
 	@Override
@@ -309,13 +273,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	}
 
 	public ViewPoint getViewPoint() {
-		return getCalc();
-	}
-
-	@Deprecated
-	public ViewPoint getCalc() {
-		if (getShemaDefinition() != null) {
-			return getShemaDefinition().getCalc();
+		if (getFlexoResource() != null) {
+			return getFlexoResource().getViewPoint();
 		}
 		return null;
 	}
@@ -327,19 +286,19 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 
 	@Override
 	public String getDisplayableDescription() {
-		return "Shema " + getName() + (getCalc() != null ? " (calc " + getCalc().getName() + ")" : "");
+		return "View " + getName() + (getViewPoint() != null ? " (calc " + getViewPoint().getName() + ")" : "");
 	}
 
 	/**
 	 * @return
 	 */
 	public static final String getTypeName() {
-		return "SHEMA";
+		return "VIEW";
 	}
 
 	@Override
 	public String toString() {
-		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
+		return "View[name=" + getName() + "/viewpoint=" + getViewPoint().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
 	}
 
 	// ==========================================================================
@@ -464,8 +423,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 			getFlexoResource().delete();
 		}
 
-		if (getShemaDefinition() != null) {
-			getShemaDefinition().delete();
+		if (getFlexoResource() != null) {
+			getFlexoResource().delete();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("View " + getName() + " has no ViewDefinition associated!");
@@ -475,8 +434,19 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		super.delete();
 
 		setChanged();
-		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
+		notifyObservers(new ViewDeleted(this));
 		deleteObservers();
+	}
+
+	public ViewLibrary getViewLibrary() {
+		return getProject().getViewLibrary();
+	}
+
+	public RepositoryFolder<FlexoViewResource> getFolder() {
+		if (getFlexoResource() != null) {
+			return getViewLibrary().getParentFolder(getFlexoResource());
+		}
+		return null;
 	}
 
 }

@@ -86,7 +86,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		OWL_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("OWL_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML, "owl");
 		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY", "application/openflexo/oelib", TextSyntax.XML,
 				"oelib");
-		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/shema", TextSyntax.XML, "shema");
+		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/view", TextSyntax.XML, "view");
 		DKV_FORMAT = FileFormat.registerTextFileFormat("DKV", "application/openflexo/dkv", TextSyntax.XML, "dkv");
 		WS_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("WS_LIBRARY", "application/openflexo/ws", TextSyntax.XML, "ws");
 

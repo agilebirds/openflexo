@@ -47,7 +47,6 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -189,10 +188,8 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			ret.setSource(o);
 		} else if (o instanceof FlexoWorkflow) {
 			ret.setSource(o);
-		} else if (o instanceof ViewDefinition) {
-			ret.setSource(o);
 		} else if (o instanceof View) {
-			ret.setSource(((View) o).getShemaDefinition());
+			ret.setSource(o);
 		} else {
 			logger.warning("Could not create screenshot for " + o);
 			return null;
@@ -562,7 +559,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		super.rebuildDependancies();
 		if (getModelObject() != null && getModelObject().getXMLResourceData() != null
 				&& getModelObject().getXMLResourceData().getFlexoResource() != null) {
-			if (!(getModelObject() instanceof ComponentDefinition) && !(getModelObject() instanceof ViewDefinition)) {
+			if (!(getModelObject() instanceof ComponentDefinition)) {
 				addToDependentResources(getModelObject().getXMLResourceData().getFlexoResource());
 			}
 		}
@@ -572,12 +569,6 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(true);
 			if (compRes != null) {
 				addToDependentResources(compRes);
-			}
-		}
-		if (getModelObject() instanceof ViewDefinition) {
-			FlexoOEShemaResource viewRes = ((ViewDefinition) getModelObject()).getShemaResource(false);
-			if (viewRes != null) {
-				addToDependentResources(viewRes);
 			}
 		}
 	}

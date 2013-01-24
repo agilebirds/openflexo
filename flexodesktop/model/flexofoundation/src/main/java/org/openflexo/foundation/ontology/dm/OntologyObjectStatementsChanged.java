@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 
-public class OntologyObjectStatementsChanged extends OEDataModification {
+public class OntologyObjectStatementsChanged extends OntologyDataModification {
 	public OntologyObjectStatementsChanged(IFlexoOntologyConcept object) {
 		super(null, object);
 	}

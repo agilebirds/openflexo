@@ -197,7 +197,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 	public ViewConnector performAction(EditionSchemeAction action) {
 		ViewShape fromShape = getFromShape(action);
 		ViewShape toShape = getToShape(action);
-		ViewConnector newConnector = new ViewConnector(fromShape.getShema(), fromShape, toShape);
+		ViewConnector newConnector = new ViewConnector(fromShape.getView(), fromShape, toShape);
 		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
 		if (parent == null) {
 			throw new IllegalArgumentException("No common ancestor");

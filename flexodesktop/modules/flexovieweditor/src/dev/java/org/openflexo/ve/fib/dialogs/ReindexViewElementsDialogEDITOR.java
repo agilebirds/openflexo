@@ -35,7 +35,7 @@ public class ReindexViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		View diagram = project.getShemaLibrary().getShemaNamed("R&DDefinition").getView();
+		View diagram = project.getShemaLibrary().getViewResourceNamed("R&DDefinition").getView();
 		ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getChilds().get(0), null, null);
 		return makeArray(action);
 	}

@@ -25,12 +25,12 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.diagram.model.ConnectorInserted;
-import org.openflexo.foundation.view.diagram.model.ConnectorRemoved;
-import org.openflexo.foundation.view.diagram.model.ShapeInserted;
-import org.openflexo.foundation.view.diagram.model.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
+import org.openflexo.foundation.xml.ViewBuilder;
 
 public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements GraphicalFlexoObserver, VEShemaConstants {
 
@@ -40,7 +40,7 @@ public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements G
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShemaGR(VEShemaBuilder builder) {
+	public VEShemaGR(ViewBuilder builder) {
 		this((VEShemaRepresentation) null);
 	}
 

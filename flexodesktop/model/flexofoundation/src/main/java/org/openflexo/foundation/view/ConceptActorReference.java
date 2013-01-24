@@ -4,7 +4,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 
 public class ConceptActorReference<T extends IFlexoOntologyObject> extends ActorReference<T> {
 	private T object;
@@ -19,7 +19,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 	}
 
 	// Constructor used during deserialization
-	public ConceptActorReference(VEShemaBuilder builder) {
+	public ConceptActorReference(ViewBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}

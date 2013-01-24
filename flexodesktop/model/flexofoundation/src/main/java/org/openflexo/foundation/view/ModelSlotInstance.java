@@ -43,7 +43,7 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + view.getShemaDefinition().getName() + "." + modelSlot.getName();
+		return getProject().getFullyQualifiedName() + "." + view.getName() + "." + modelSlot.getName();
 	}
 
 	@Override

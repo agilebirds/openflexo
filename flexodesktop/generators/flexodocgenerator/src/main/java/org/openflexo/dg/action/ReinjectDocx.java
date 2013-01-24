@@ -278,7 +278,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			}
 			boolean found = false;
 			for (ViewDefinition vd : project.getShemaLibrary().getAllShemaList()) {
-				View view = vd.getShema();
+				View view = vd.getView();
 				if (view == null) {
 					continue;
 				}
@@ -290,7 +290,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 					}
 				}
 				if (pattern != null) {
-					for (EditionPatternInstance inst : vd.getShema().getEPInstances(pattern)) {
+					for (EditionPatternInstance inst : vd.getView().getEPInstances(pattern)) {
 						if (inst.getInstanceId() == instanceID) {
 							epis.put(inst, epi);
 							found = true;

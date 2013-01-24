@@ -2,7 +2,7 @@
 
 <!-- Mapping model for drawing editor -->
 
-<model builder="org.openflexo.foundation.xml.VEShemaBuilder"
+<model builder="org.openflexo.foundation.xml.ViewBuilder"
 	handlesReferences="yes" serializationMode="pseudoTree">
 
 	<mapId>
@@ -132,6 +132,7 @@
 
 	<entity name="org.openflexo.foundation.view.diagram.model.View" xmlTag="VEShema">
 		<description>VEShema</description>
+		<property name="title" xmlTag="title" attribute="yes" />
 		<property name="graphicalRepresentation" xmlTag="DrawingGraphicalRepresentation" />
 		<property name="modelSlotInstances" xmlTag="modelSlotInstances"
 			type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />

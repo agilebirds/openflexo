@@ -45,8 +45,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 
 public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {
 
@@ -74,18 +74,18 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == _calcPalette) {
-			if (dataModification instanceof CalcPaletteElementInserted) {
+			if (dataModification instanceof DiagramPaletteElementInserted) {
 				logger.info("Notified new Palette Element added");
-				CalcPaletteElementInserted dm = (CalcPaletteElementInserted) dataModification;
+				DiagramPaletteElementInserted dm = (DiagramPaletteElementInserted) dataModification;
 				ContextualPaletteElement e = makePaletteElement(dm.newValue());
 				addElement(e);
 				e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
 				updatePalette();
 				getController().updatePalette(_calcPalette, oldPaletteView);
-			} else if (dataModification instanceof CalcPaletteElementRemoved) {
+			} else if (dataModification instanceof DiagramPaletteElementRemoved) {
 				logger.info("Notified new Palette Element removed");
-				CalcPaletteElementRemoved dm = (CalcPaletteElementRemoved) dataModification;
+				DiagramPaletteElementRemoved dm = (DiagramPaletteElementRemoved) dataModification;
 				ContextualPaletteElement e = getContextualPaletteElement(dm.oldValue());
 				removeElement(e);
 				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();

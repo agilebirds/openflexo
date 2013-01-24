@@ -38,10 +38,11 @@ import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -57,8 +58,8 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 * 
 	 * @param componentDefinition
 	 */
-	public ViewElement(VEShemaBuilder builder) {
-		this(builder.shema);
+	public ViewElement(ViewBuilder builder) {
+		this(builder.view);
 		initializeDeserialization(builder);
 	}
 

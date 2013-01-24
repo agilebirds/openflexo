@@ -333,7 +333,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		ViewObject container = null;
 		EditionPattern targetEP = null;
 		if (focusedGR == null || focusedGR instanceof VEShemaGR) {
-			container = target.getShema();
+			container = target.getView();
 			targetEP = null;
 		} else if (focusedGR.getDrawable() instanceof ViewElement) {
 			container = (ViewElement) focusedGR.getDrawable();
@@ -377,12 +377,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
 		// Lets look if we match a CalcPaletteConnector
 		final ViewShape from = shapeGR.getDrawable();
-		if (from.getShema().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-			availableConnectors = from.getShema().getCalc().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
+		if (from.getView().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+			availableConnectors = from.getView().getCalc().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getVEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller.getVEController()
 					.getEditor());
 			action.setLinkScheme(availableConnectors.firstElement());
 			action.setFromShape(from);
@@ -400,7 +400,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller
+						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller
 								.getVEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
@@ -531,7 +531,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) {
 
-		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getVEController()
+		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller.getVEController()
 				.getEditor());
 		linkSchemeAction.setLinkScheme(linkScheme);
 		linkSchemeAction.setFromShape(from);

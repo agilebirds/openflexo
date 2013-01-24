@@ -33,8 +33,11 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
 import com.google.common.base.Predicate;
@@ -44,7 +47,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
-	private View _shema;
+	private View view;
 	private String _name;
 	private ViewObject parent = null;
 	private Vector<ViewElement> childs;
@@ -72,17 +75,17 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	/**
 	 * Default constructor
 	 */
-	public ViewObject(View shema) {
-		this(shema.getProject());
-		setShema(shema);
+	public ViewObject(View view) {
+		this(view.getProject());
+		setView(view);
 	}
 
-	public View getShema() {
-		return _shema;
+	public View getView() {
+		return view;
 	}
 
-	public void setShema(View shema) {
-		_shema = shema;
+	public void setView(View view) {
+		this.view = view;
 	}
 
 	/**
@@ -92,8 +95,8 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 * @return the component library
 	 */
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
-		return getShema();
+	public View getXMLResourceData() {
+		return getView();
 	}
 
 	@Override

@@ -29,10 +29,10 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorInserted;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorRemoved;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeRemoved;
 
 public abstract class ExampleDiagramObject extends NamedViewPointObject implements Bindable {
 
@@ -109,10 +109,10 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		aChild.parent = this;
 		setChanged();
 		if (aChild instanceof ExampleDiagramShape) {
-			notifyObservers(new CalcDrawingShapeInserted((ExampleDiagramShape) aChild, this));
+			notifyObservers(new ExampleDiagramShapeInserted((ExampleDiagramShape) aChild, this));
 		}
 		if (aChild instanceof ExampleDiagramConnector) {
-			notifyObservers(new CalcDrawingConnectorInserted((ExampleDiagramConnector) aChild, this));
+			notifyObservers(new ExampleDiagramConnectorInserted((ExampleDiagramConnector) aChild, this));
 		}
 	}
 
@@ -121,10 +121,10 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		aChild.parent = null;
 		setChanged();
 		if (aChild instanceof ExampleDiagramShape) {
-			notifyObservers(new CalcDrawingShapeRemoved((ExampleDiagramShape) aChild, this));
+			notifyObservers(new ExampleDiagramShapeRemoved((ExampleDiagramShape) aChild, this));
 		}
 		if (aChild instanceof ExampleDiagramConnector) {
-			notifyObservers(new CalcDrawingConnectorRemoved((ExampleDiagramConnector) aChild, this));
+			notifyObservers(new ExampleDiagramConnectorRemoved((ExampleDiagramConnector) aChild, this));
 		}
 	}
 

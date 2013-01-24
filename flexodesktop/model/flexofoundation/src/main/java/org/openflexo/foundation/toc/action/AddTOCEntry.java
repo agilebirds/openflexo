@@ -32,7 +32,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
@@ -44,6 +43,7 @@ import org.openflexo.foundation.cg.action.InvalidLevelException;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectType;
 import org.openflexo.foundation.toc.PredefinedSection;
@@ -51,8 +51,7 @@ import org.openflexo.foundation.toc.ProcessSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.toolbox.StringUtils;
@@ -144,8 +143,8 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	// Model object section
 	private ModelObjectType modelObjectType = ModelObjectType.Process;
 	public FlexoProcess selectedProcess;
-	public ViewDefinition selectedView;
-	public ViewFolder selectedViewFolder;
+	public View selectedView;
+	public RepositoryFolder selectedViewFolder;
 	public Role selectedRole;
 	public DMEntity selectedEntity;
 	public OperationComponentDefinition selectedOperationComponent;
@@ -211,8 +210,8 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			case View:
 				newEntry = getRepository().createViewSection(getTocEntryTitle(), selectedView, null);
 				break;
-			case ViewFolder:
-				newEntry = getRepository().createViewFolderSection(getTocEntryTitle(), selectedViewFolder, null);
+			case RepositoryFolder:
+				// newEntry = getRepository().createViewFolderSection(getTocEntryTitle(), selectedViewFolder, null);
 				break;
 			case Role:
 				newEntry = getRepository().createRoleSection(getTocEntryTitle(), selectedRole, null);
@@ -306,7 +305,8 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public DataBinding<Object> getValue() {
 		if (value == null && getFocusedObject() instanceof TOCEntry) {
-			value = new DataBinding<Object>((TOCEntry) getFocusedObject(), getModelObjectType().getType(), DataBinding.BindingDefinitionType.GET);
+			value = new DataBinding<Object>((TOCEntry) getFocusedObject(), getModelObjectType().getType(),
+					DataBinding.BindingDefinitionType.GET);
 		}
 		return value;
 	}
@@ -363,7 +363,8 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public DataBinding<Boolean> getIterationCondition() {
 		if (iterationCondition == null && getFocusedObject() instanceof TOCEntry) {
-			iterationCondition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class, DataBinding.BindingDefinitionType.GET);
+			iterationCondition = new DataBinding<Boolean>((TOCEntry) getFocusedObject(), Boolean.class,
+					DataBinding.BindingDefinitionType.GET);
 		}
 		return iterationCondition;
 	}

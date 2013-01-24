@@ -19,17 +19,16 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
- * Notify that a new shema has been added
+ * Notify that a new view has been added
  * 
  * @author sguerin
  * 
  */
-public class ExampleDiagramInserted extends OEDataModification {
+public class ExampleDiagramInserted extends ViewPointDataModification {
 
 	private ViewPoint _parent;
 

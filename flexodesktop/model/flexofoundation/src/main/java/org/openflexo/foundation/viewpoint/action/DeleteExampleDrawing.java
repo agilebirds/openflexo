@@ -67,7 +67,7 @@ public class DeleteExampleDrawing extends FlexoAction<DeleteExampleDrawing, Exam
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Delete calc drawing shema");
+		logger.info("Delete calc drawing view");
 
 		getFocusedObject().delete();
 	}

@@ -19,14 +19,21 @@
  */
 package org.openflexo.foundation.resource;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.toolbox.FileUtils;
 
 /**
  * A {@link ResourceRepository} stores all resources of a particular type.<br>
@@ -79,6 +86,13 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 		registerResource(flexoResource, getRootFolder());
 	}
 
+	public void unregisterResource(R flexoResource) {
+		RepositoryFolder<R> parentFolder = getParentFolder(flexoResource);
+		parentFolder.removeFromResources(flexoResource);
+		resources.remove(flexoResource.getURI());
+
+	}
+
 	/**
 	 * Register supplied resource in supplied folder
 	 * 
@@ -113,6 +127,43 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	}
 
 	/**
+	 * Delete supplied folder, asserting supplied folder is empty
+	 * 
+	 * @param folder
+	 */
+	public void deleteFolder(RepositoryFolder<R> folder) {
+		RepositoryFolder<R> parentFolder = getParentFolder(folder);
+		if (parentFolder != null && folder.getResources().size() == 0) {
+			parentFolder.removeFromChildren(folder);
+			folder.delete();
+		}
+	}
+
+	/**
+	 * Move resource from a folder to an other one
+	 * 
+	 * @param resource
+	 * @param fromFolder
+	 * @param toFolder
+	 */
+	public void moveResource(R resource, RepositoryFolder<R> fromFolder, RepositoryFolder<R> toFolder) {
+		if (getParentFolder(resource) == fromFolder) {
+			fromFolder.removeFromResources(resource);
+			toFolder.addToResources(resource);
+			if (resource instanceof FlexoFileResource) {
+				File fromFile = ((FlexoFileResource) resource).getFile();
+				File toFile = new File(toFolder.getFile(), fromFile.getName());
+				try {
+					FileUtils.rename(fromFile, toFile);
+					((FlexoFileResource) resource).setFile(toFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
 	 * Return a collection storing all resources contained in this repository
 	 * 
 	 * @return
@@ -138,4 +189,69 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	public String getFullyQualifiedName() {
 		return "ResourceRepository";
 	}
+
+	/**
+	 * Return an enumeration of all folders, by recursively explore the tree
+	 * 
+	 * @return an Enumeration of FlexoComponentFolder elements
+	 */
+	public Enumeration<RepositoryFolder<R>> allFolders() {
+		Vector<RepositoryFolder<R>> temp = new Vector<RepositoryFolder<R>>();
+		addFolders(temp, getRootFolder());
+		return temp.elements();
+	}
+
+	/**
+	 * Return number of folders
+	 */
+	public int allFoldersCount() {
+		Vector<RepositoryFolder<R>> temp = new Vector<RepositoryFolder<R>>();
+		addFolders(temp, getRootFolder());
+		return temp.size();
+	}
+
+	private void addFolders(List<RepositoryFolder<R>> temp, RepositoryFolder<R> folder) {
+		temp.add(folder);
+		for (RepositoryFolder<R> currentFolder : folder.getChildren()) {
+			addFolders(temp, currentFolder);
+		}
+	}
+
+	public RepositoryFolder<R> getFolderWithName(String folderName) {
+		for (Enumeration<RepositoryFolder<R>> e = allFolders(); e.hasMoreElements();) {
+			RepositoryFolder<R> folder = e.nextElement();
+
+			if (folder.getName().equals(folderName)) {
+				return folder;
+			}
+
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Could not find folder named " + folderName);
+		}
+		return null;
+	}
+
+	public RepositoryFolder<R> getParentFolder(R resource) {
+		for (Enumeration<RepositoryFolder<R>> e = allFolders(); e.hasMoreElements();) {
+			RepositoryFolder<R> folder = e.nextElement();
+			if (folder.getResources().contains(resource)) {
+				return folder;
+			}
+
+		}
+		return null;
+	}
+
+	public RepositoryFolder<R> getParentFolder(RepositoryFolder<R> aFolder) {
+		for (Enumeration<RepositoryFolder<R>> e = allFolders(); e.hasMoreElements();) {
+			RepositoryFolder<R> folder = e.nextElement();
+			if (folder.getChildren().contains(aFolder)) {
+				return folder;
+			}
+
+		}
+		return null;
+	}
+
 }

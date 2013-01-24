@@ -31,8 +31,6 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
 import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.model.ViewObject;
@@ -66,14 +64,13 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 
 		@Override
 		public boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
-			return view instanceof View || view instanceof ViewDefinition;
+			return view instanceof View;
 		}
 
 	};
 
 	static {
 		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, View.class);
-		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, ViewDefinition.class);
 	}
 
 	ResetGraphicalRepresentations(AbstractViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
@@ -81,16 +78,13 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException,
-			DuplicateShemaNameException {
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Reset graphical representations for view");
 
 		View view = null;
 
 		if (getFocusedObject() instanceof View) {
 			view = (View) getFocusedObject();
-		} else if (getFocusedObject() instanceof ViewDefinition) {
-			view = ((ViewDefinition) getFocusedObject()).getView();
 		}
 
 		if (view != null) {

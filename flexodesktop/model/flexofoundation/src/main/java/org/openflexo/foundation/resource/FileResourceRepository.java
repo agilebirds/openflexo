@@ -47,4 +47,5 @@ public class FileResourceRepository<R extends FlexoResource<?>> extends Resource
 	public File getDirectory() {
 		return directory;
 	}
+
 }

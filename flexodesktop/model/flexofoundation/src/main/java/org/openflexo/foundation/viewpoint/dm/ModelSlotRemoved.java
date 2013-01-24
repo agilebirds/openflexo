@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
@@ -29,7 +28,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class ModelSlotRemoved extends OEDataModification {
+public class ModelSlotRemoved extends ViewPointDataModification {
 
 	private ViewPoint viewPoint;
 

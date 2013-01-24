@@ -109,7 +109,7 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
 		ImplementationModel implModel;
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Loading shema " + getName());
+			logger.fine("Loading view " + getName());
 		}
 		try {
 			implModel = super.performLoadResourceData(progress, loadingHandler);

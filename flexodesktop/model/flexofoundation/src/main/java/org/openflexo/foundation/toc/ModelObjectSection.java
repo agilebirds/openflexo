@@ -3,7 +3,6 @@ package org.openflexo.foundation.toc;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
@@ -18,13 +17,13 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		View {
 			@Override
 			public Type getType() {
-				return org.openflexo.foundation.view.ViewDefinition.class;
+				return org.openflexo.foundation.view.diagram.model.View.class;
 			}
 		},
-		ViewFolder {
+		RepositoryFolder {
 			@Override
 			public Type getType() {
-				return org.openflexo.foundation.view.ViewFolder.class;
+				return org.openflexo.foundation.resource.RepositoryFolder.class;
 			}
 		},
 		Process {

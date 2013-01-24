@@ -27,10 +27,10 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorInserted;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorRemoved;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
+import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeRemoved;
 
 public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDiagram> implements GraphicalFlexoObserver,
 		CalcDrawingShemaConstants {
@@ -77,8 +77,8 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDi
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getShema()) {
 			// logger.info("Notified "+dataModification);
-			if (dataModification instanceof CalcDrawingShapeInserted || dataModification instanceof CalcDrawingShapeRemoved
-					|| dataModification instanceof CalcDrawingConnectorInserted || dataModification instanceof CalcDrawingConnectorRemoved) {
+			if (dataModification instanceof ExampleDiagramShapeInserted || dataModification instanceof ExampleDiagramShapeRemoved
+					|| dataModification instanceof ExampleDiagramConnectorInserted || dataModification instanceof ExampleDiagramConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}

@@ -5,7 +5,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 
 public class ModelObjectActorReference<T extends FlexoModelObject> extends ActorReference<T> {
 	public T object;
@@ -20,7 +20,7 @@ public class ModelObjectActorReference<T extends FlexoModelObject> extends Actor
 	}
 
 	// Constructor used during deserialization
-	public ModelObjectActorReference(VEShemaBuilder builder) {
+	public ModelObjectActorReference(ViewBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}

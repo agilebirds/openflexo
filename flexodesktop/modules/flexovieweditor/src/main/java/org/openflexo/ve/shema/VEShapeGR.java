@@ -32,17 +32,17 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.diagram.model.ConnectorInserted;
-import org.openflexo.foundation.view.diagram.model.ConnectorRemoved;
-import org.openflexo.foundation.view.diagram.model.ElementUpdated;
-import org.openflexo.foundation.view.diagram.model.ShapeInserted;
-import org.openflexo.foundation.view.diagram.model.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
+import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
@@ -54,7 +54,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShapeGR(VEShemaBuilder builder) {
+	public VEShapeGR(ViewBuilder builder) {
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
@@ -248,16 +248,16 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 				}
 
 				if (northDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.NORTH));
 				}
 				if (eastDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.EAST));
 				}
 				if (southDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.SOUTH));
 				}
 				if (westDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.WEST));
 				}
 			}
 		}

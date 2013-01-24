@@ -19,9 +19,9 @@
  */
 package org.openflexo.foundation.resource;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 
-public class ResourceRegistered extends OEDataModification {
+public class ResourceRegistered extends OntologyDataModification {
 
 	private RepositoryFolder<?> folder;
 

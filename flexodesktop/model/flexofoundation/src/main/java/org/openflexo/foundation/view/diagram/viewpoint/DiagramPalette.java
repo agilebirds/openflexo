@@ -44,8 +44,8 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
@@ -174,14 +174,14 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 		obj.setPalette(this);
 		_elements.add(obj);
 		setChanged();
-		notifyObservers(new CalcPaletteElementInserted(obj, this));
+		notifyObservers(new DiagramPaletteElementInserted(obj, this));
 	}
 
 	public boolean removeFromElements(DiagramPaletteElement obj) {
 		obj.setPalette(null);
 		boolean returned = _elements.remove(obj);
 		setChanged();
-		notifyObservers(new CalcPaletteElementRemoved(obj, this));
+		notifyObservers(new DiagramPaletteElementRemoved(obj, this));
 		return returned;
 	}
 

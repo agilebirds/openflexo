@@ -77,7 +77,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	@Override
 	public View retrieveOEShema() {
 		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getShema();
+			return ((ViewObject) getFocusedObject()).getView();
 		}
 		return null;
 	}

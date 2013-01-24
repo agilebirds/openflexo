@@ -19,14 +19,14 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class ViewParameter extends ParameterDefinition<ViewDefinition> {
+public class ViewParameter extends ParameterDefinition<View> {
 
 	private ViewSelectingConditional _viewSelectingConditional;
 
-	public ViewParameter(String name, String label, ViewDefinition defaultValue) {
+	public ViewParameter(String name, String label, View defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("className", "org.openflexo.components.widget.ViewInspectorWidget");
 		_viewSelectingConditional = null;
@@ -37,7 +37,7 @@ public class ViewParameter extends ParameterDefinition<ViewDefinition> {
 		return DenaliWidget.CUSTOM;
 	}
 
-	public boolean isAcceptableView(ViewDefinition aView) {
+	public boolean isAcceptableView(View aView) {
 		if (_viewSelectingConditional != null) {
 			return _viewSelectingConditional.isSelectable(aView);
 		}
@@ -50,7 +50,7 @@ public class ViewParameter extends ParameterDefinition<ViewDefinition> {
 	}
 
 	public abstract static class ViewSelectingConditional {
-		public abstract boolean isSelectable(ViewDefinition view);
+		public abstract boolean isSelectable(View view);
 	}
 
 }

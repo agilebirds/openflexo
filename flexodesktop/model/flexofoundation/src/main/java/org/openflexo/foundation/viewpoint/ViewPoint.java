@@ -46,7 +46,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -70,6 +70,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
+import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
+import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
@@ -462,7 +464,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			String old = this.version;
 			this.version = aVersion;
 			setChanged();
-			notifyObservers(new OEDataModification("version", old, version));
+			notifyObservers(new OntologyDataModification("version", old, version));
 		}
 	}
 

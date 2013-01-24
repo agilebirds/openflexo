@@ -23,12 +23,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.action.AddView;
-import org.openflexo.foundation.view.action.AddViewFolder;
 import org.openflexo.toolbox.FileUtils;
 
 public class TestShemas extends FlexoTestCase {
@@ -53,12 +54,12 @@ public class TestShemas extends FlexoTestCase {
 	}
 
 	/**
-	 * Creates a new empty project in a temp directory, create shema library, and reload
+	 * Creates a new empty project in a temp directory, create view library, and reload
 	 */
 	public void test1CreateOntology() {
 		log("test1CreateOntology()");
 
-		logger.info("Hop" + _project.getShemaLibrary());
+		logger.info("Hop" + _project.getViewLibrary());
 
 		saveProject(_project);
 
@@ -73,21 +74,23 @@ public class TestShemas extends FlexoTestCase {
 	}
 
 	/**
-	 * Creates some shema folders
+	 * Creates some view folders
 	 */
 	public void test2CreateFolders() {
 		log("test2CreateFolders()");
 
-		logger.info("Hop " + _project.getShemaLibrary());
-		AddViewFolder addFolder1 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
+		logger.info("Hop " + _project.getViewLibrary());
+		AddRepositoryFolder addFolder1 = AddRepositoryFolder.actionType.makeNewAction(_project.getViewLibrary().getRootFolder(), null,
+				_editor);
 		addFolder1.setNewFolderName("Folder1");
 		addFolder1.doAction();
 
-		AddViewFolder addFolder2 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
+		AddRepositoryFolder addFolder2 = AddRepositoryFolder.actionType.makeNewAction(_project.getViewLibrary().getRootFolder(), null,
+				_editor);
 		addFolder2.setNewFolderName("Folder2");
 		addFolder2.doAction();
 
-		AddViewFolder addFolder3 = AddViewFolder.actionType.makeNewAction(addFolder2.getNewFolder(), null, _editor);
+		AddRepositoryFolder addFolder3 = AddRepositoryFolder.actionType.makeNewAction(addFolder2.getNewFolder(), null, _editor);
 		addFolder3.setNewFolderName("Folder3");
 		addFolder3.doAction();
 
@@ -104,12 +107,12 @@ public class TestShemas extends FlexoTestCase {
 	}
 
 	/**
-	 * Creates a shema
+	 * Creates a view
 	 */
 	public void test3CreateShema() {
 		log("test3CreateShema()");
 
-		ViewFolder folder3 = _project.getShemaLibrary().getFolderWithName("Folder3");
+		RepositoryFolder<FlexoViewResource> folder3 = _project.getViewLibrary().getFolderWithName("Folder3");
 
 		logger.info("Hop " + folder3);
 
@@ -118,7 +121,7 @@ public class TestShemas extends FlexoTestCase {
 		addShema.doAction();
 
 		try {
-			addShema.getNewDiagram().getShemaResource().saveResourceData();
+			addShema.getNewView().getFlexoResource().saveResourceData();
 		} catch (SaveResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

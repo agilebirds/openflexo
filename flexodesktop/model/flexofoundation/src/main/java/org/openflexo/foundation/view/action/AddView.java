@@ -28,54 +28,51 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
-import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewLibraryObject;
+import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.ViewObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibraryObject> {
+public class AddView extends FlexoAction<AddView, RepositoryFolder, ViewObject> {
 
 	private static final Logger logger = Logger.getLogger(AddView.class.getPackage().getName());
 
-	public static FlexoActionType<AddView, ViewLibraryObject, ViewLibraryObject> actionType = new FlexoActionType<AddView, ViewLibraryObject, ViewLibraryObject>(
+	public static FlexoActionType<AddView, RepositoryFolder, ViewObject> actionType = new FlexoActionType<AddView, RepositoryFolder, ViewObject>(
 			"create_view", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddView makeNewAction(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+		public AddView makeNewAction(RepositoryFolder focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 			return new AddView(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
-			return true;
+		public boolean isVisibleForSelection(RepositoryFolder object, Vector<ViewObject> globalSelection) {
+			return object.getResourceRepository() instanceof ViewPointRepository;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
-			return object instanceof ViewFolder || object instanceof ViewDefinition || object instanceof ViewLibrary;
+		public boolean isEnabledForSelection(RepositoryFolder object, Vector<ViewObject> globalSelection) {
+			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddView.actionType, ViewLibrary.class);
-		FlexoModelObject.addActionForClass(AddView.actionType, ViewFolder.class);
-		FlexoModelObject.addActionForClass(AddView.actionType, ViewDefinition.class);
+		FlexoModelObject.addActionForClass(AddView.actionType, RepositoryFolder.class);
 	}
 
-	private ViewDefinition _newShema;
-
-	private ViewFolder _folder;
+	private View newView;
 
 	public boolean useViewPoint = true;
 	public String newViewName;
@@ -84,14 +81,14 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 	public boolean skipChoosePopup = false;
 
-	AddView(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+	AddView(RepositoryFolder focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException,
-			DuplicateShemaNameException {
-		logger.info("Add shema");
+			InvalidFileNameException {
+		logger.info("Add view in folder " + getFolder());
 
 		if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
 			newViewName = JavaUtils.getClassName(newViewTitle);
@@ -105,60 +102,38 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 			throw new InvalidParameterException("folder is undefined");
 		}
 		if (StringUtils.isEmpty(newViewName)) {
-			throw new InvalidParameterException("shema name is undefined");
+			throw new InvalidParameterException("view name is undefined");
 		}
 
 		int index = 1;
 		String baseName = newViewName;
-		while (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
+		while (!getFolder().isValidResourceName(newViewName)) {
 			newViewName = baseName + index;
 			index++;
 		}
 
-		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
-		_newShema.setTitle(newViewTitle);
-		if (useViewPoint) {
-			_newShema.setViewPoint(viewpoint);
-		}
-		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
+		newView = View.newView(newViewName, newViewTitle, viewpoint, getFolder(), getProject());
+
+		logger.info("Added view " + newView + " in folder " + getFolder() + " for project " + getProject());
 		// Creates the resource here
-		_newShema.getShemaResource();
+	}
+
+	public ViewLibrary getViewLibrary() {
+		if (getFocusedObject().getResourceRepository() instanceof ViewLibrary) {
+			return (ViewLibrary) getFocusedObject().getResourceRepository();
+		}
+		return null;
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
+		if (getViewLibrary() != null) {
+			return getViewLibrary().getProject();
 		}
 		return null;
 	}
 
-	public ViewDefinition getNewDiagram() {
-		return _newShema;
-	}
-
-	public ViewLibrary getShemaLibrary() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getShemaLibrary();
-		}
-		return null;
-	}
-
-	public ViewFolder getFolder() {
-		if (_folder == null) {
-			if (getFocusedObject() != null && getFocusedObject() instanceof ViewDefinition) {
-				_folder = ((ViewDefinition) getFocusedObject()).getFolder();
-			} else if (getFocusedObject() != null && getFocusedObject() instanceof ViewFolder) {
-				_folder = (ViewFolder) getFocusedObject();
-			} else if (getFocusedObject() != null && getFocusedObject() instanceof ViewLibrary) {
-				_folder = ((ViewLibrary) getFocusedObject()).getRootFolder();
-			}
-
-		}
-		return _folder;
-	}
-
-	public void setFolder(ViewFolder folder) {
-		_folder = folder;
+	public RepositoryFolder getFolder() {
+		return getFocusedObject();
 	}
 
 	public String errorMessage;
@@ -181,10 +156,14 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 			viewName = JavaUtils.getClassName(newViewTitle);
 		}
 
-		if (getProject().getShemaLibrary().getShemaNamed(viewName) != null) {
+		if (getFocusedObject().getResourceWithName(viewName) != null) {
 			errorMessage = FlexoLocalization.localizedForKey("a_view_with_that_name_already_exists");
 			return false;
 		}
 		return true;
+	}
+
+	public View getNewView() {
+		return newView;
 	}
 }

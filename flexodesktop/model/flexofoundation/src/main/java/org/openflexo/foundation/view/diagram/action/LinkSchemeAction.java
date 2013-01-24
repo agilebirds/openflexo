@@ -139,13 +139,13 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 	@Override
 	public View retrieveOEShema() {
 		if (getFromShape() != null) {
-			return getFromShape().getShema();
+			return getFromShape().getView();
 		}
 		if (getToShape() != null) {
-			return getToShape().getShema();
+			return getToShape().getView();
 		}
 		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getShema();
+			return ((ViewObject) getFocusedObject()).getView();
 		}
 		return null;
 	}

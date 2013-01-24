@@ -86,7 +86,7 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 			if (parent == null) {
 				throw new IllegalArgumentException("No common ancestor");
 			}
-			_newConnector = new ViewConnector(getFromShape().getShema(), getFromShape(), getToShape());
+			_newConnector = new ViewConnector(getFromShape().getView(), getFromShape(), getToShape());
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
 		} else {

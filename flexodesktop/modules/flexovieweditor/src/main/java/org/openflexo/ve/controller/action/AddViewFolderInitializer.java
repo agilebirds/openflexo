@@ -27,12 +27,12 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.action.AddViewFolder;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -44,7 +44,7 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	AddViewFolderInitializer(VEControllerActionInitializer actionInitializer) {
-		super(AddViewFolder.actionType, actionInitializer);
+		super(AddRepositoryFolder.actionType, actionInitializer);
 	}
 
 	@Override
@@ -53,10 +53,10 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddViewFolder> getDefaultInitializer() {
-		return new FlexoActionInitializer<AddViewFolder>() {
+	protected FlexoActionInitializer<AddRepositoryFolder> getDefaultInitializer() {
+		return new FlexoActionInitializer<AddRepositoryFolder>() {
 			@Override
-			public boolean run(EventObject e, AddViewFolder action) {
+			public boolean run(EventObject e, AddRepositoryFolder action) {
 				ViewFolder parentFolder = null;
 				if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ViewDefinition) {
 					parentFolder = ((ViewDefinition) action.getFocusedObject()).getFolder();
@@ -96,10 +96,10 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddViewFolder> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<AddViewFolder>() {
+	protected FlexoActionFinalizer<AddRepositoryFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AddRepositoryFolder>() {
 			@Override
-			public boolean run(EventObject e, AddViewFolder action) {
+			public boolean run(EventObject e, AddRepositoryFolder action) {
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification

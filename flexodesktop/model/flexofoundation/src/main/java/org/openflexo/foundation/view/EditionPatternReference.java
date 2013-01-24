@@ -35,7 +35,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -62,7 +62,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 
 	// Constructor used during deserialization
-	public EditionPatternReference(VEShemaBuilder builder) {
+	public EditionPatternReference(ViewBuilder builder) {
 		this(builder.getProject());
 		initializeDeserialization(builder);
 	}

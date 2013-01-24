@@ -379,8 +379,8 @@ public enum BrowserElementType {
 	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDiagramConnector.class, VPMIconLibrary.CONNECTOR_ICON),
 	OE_SHEMA_LIBRARY("shema_library", ViewLibrary.class, VEIconLibrary.VIEW_LIBRARY_ICON),
 	OE_SHEMA_FOLDER("shema_folder", ViewFolder.class, IconLibrary.FOLDER_ICON),
-	OE_SHEMA_DEFINITION("shema", ViewDefinition.class, VEIconLibrary.VIEW_ICON),
-	OE_SHEMA("shema", View.class, VEIconLibrary.VIEW_ICON),
+	OE_SHEMA_DEFINITION("view", ViewDefinition.class, VEIconLibrary.VIEW_ICON),
+	OE_SHEMA("view", View.class, VEIconLibrary.VIEW_ICON),
 	OE_SHAPE("oe_shape", ViewShape.class, VEIconLibrary.SHAPE_ICON),
 	OE_CONNECTOR("oe_connector", ViewConnector.class, VEIconLibrary.CONNECTOR_ICON),
 	UNKNOWN_OBJECT("unknown_object", FlexoModelObject.class, IconLibrary.QUESTION_ICON);

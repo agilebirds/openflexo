@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 
-public class OntologyClassInserted extends OEDataModification {
+public class OntologyClassInserted extends OntologyDataModification {
 	public OntologyClassInserted(IFlexoOntologyClass aClass) {
 		super(null, aClass);
 	}

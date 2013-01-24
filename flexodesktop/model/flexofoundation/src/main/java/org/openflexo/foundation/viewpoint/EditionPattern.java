@@ -45,6 +45,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
+import org.openflexo.foundation.viewpoint.dm.EditionPatternHierarchyChanged;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;

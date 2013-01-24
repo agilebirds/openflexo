@@ -31,7 +31,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.view.diagram.model.GraphicalRepresentationChanged;
+import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 
 public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver,
@@ -104,10 +104,10 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPatternRole()) {
 			logger.info("Notified " + dataModification);
-			/*if ((dataModification instanceof CalcDrawingShapeInserted)
-					|| (dataModification instanceof CalcDrawingShapeRemoved)
-					|| (dataModification instanceof CalcDrawingConnectorInserted)
-					|| (dataModification instanceof CalcDrawingConnectorRemoved)) {
+			/*if ((dataModification instanceof ExampleDiagramShapeInserted)
+					|| (dataModification instanceof ExampleDiagramShapeRemoved)
+					|| (dataModification instanceof ExampleDiagramConnectorInserted)
+					|| (dataModification instanceof ExampleDiagramConnectorRemoved)) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 			else*/
