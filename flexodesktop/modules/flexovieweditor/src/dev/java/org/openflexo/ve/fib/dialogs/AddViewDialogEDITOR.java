@@ -34,7 +34,7 @@ public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		AddView action = AddView.actionType.makeNewAction(project.getShemaLibrary(), null, editor);
+		AddView action = AddView.actionType.makeNewAction(project.getViewLibrary(), null, editor);
 		return makeArray(action);
 	}
 
