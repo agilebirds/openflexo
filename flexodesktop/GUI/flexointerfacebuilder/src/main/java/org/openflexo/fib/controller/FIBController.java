@@ -161,6 +161,10 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		}
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
 	public FIBView<FIBComponent, ?> buildView() {
 		return buildView(rootComponent);
 	}

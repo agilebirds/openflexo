@@ -43,6 +43,7 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLProperty;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
@@ -126,7 +127,6 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		System.out.println("ok, je recalcule tout");
 		recomputeStructure();
 	}
 
@@ -296,7 +296,18 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 		if (object instanceof OntologyProperty && getDomain() != null) {
 			OntologyProperty p = (OntologyProperty) object;
-			if (p.getDomain() instanceof OntologyClass) {
+			if (p instanceof OWLProperty && (((OWLProperty) p).getDomainList().size() > 0)) {
+				OWLProperty owlProperty = (OWLProperty) p;
+				boolean hasASuperClass = false;
+				for (OWLObject d : owlProperty.getDomainList()) {
+					if (((OntologyClass) d).isSuperClassOf(getDomain())) {
+						hasASuperClass = true;
+					}
+				}
+				if (!hasASuperClass) {
+					return false;
+				}
+			} else if (p.getDomain() instanceof OntologyClass) {
 				if (!((OntologyClass) p.getDomain()).isSuperClassOf(getDomain())) {
 					/*System.out.println("Dismiss " + object + " becasuse " + p.getDomain().getName() + " is not superclass of "
 							+ getDomain().getName());*/
@@ -612,6 +623,21 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	 */
 	private List<OntologyClass> getPreferredStorageLocations(OntologyProperty p, FlexoOntology searchedOntology) {
 		List<OntologyClass> potentialStorageClasses = new ArrayList<OntologyClass>();
+
+		if (p instanceof OWLProperty && ((OWLProperty) p).getDomainList().size() > 0) {
+			OWLProperty owlProperty = (OWLProperty) p;
+			for (OWLObject d : owlProperty.getDomainList()) {
+				OntologyClass domainClass = (searchedOntology != null ? searchedOntology : getContext()).getClass(d.getURI());
+				if (domainClass != null && (searchedOntology == null || domainClass.getFlexoOntology() == searchedOntology)) {
+					if (getDomain() == null || domainClass.isSuperClassOf(getDomain())) {
+						potentialStorageClasses.add(domainClass);
+					} else {
+						// Do not add it, it does not concern this
+					}
+				}
+			}
+			return potentialStorageClasses;
+		}
 
 		// First we look if property has a defined domain
 		if (p.getDomain() instanceof OntologyClass) {

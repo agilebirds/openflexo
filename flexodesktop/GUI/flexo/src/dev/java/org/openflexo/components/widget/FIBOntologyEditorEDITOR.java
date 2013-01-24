@@ -37,11 +37,13 @@ public class FIBOntologyEditorEDITOR {
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-				"http://www.cpmf.org/ontologies/cpmfInstance");
+		// "http://www.cpmf.org/ontologies/cpmfInstance");
 		// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 		// "http://www.openflexo.org/test/TestInstances.owl");
 		// "http://www.w3.org/2002/07/owl");
-		// "http://www.w3.org/2000/01/rdf-schema");
+		// "http://www.w3.org/2002/07/owl");
+				"http://www.w3.org/2000/01/rdf-schema");
+		// "http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 		o.loadWhenUnloaded();
 		final FIBOntologyEditor selector = new FIBOntologyEditor(o, null);
 		selector.setOntology(o);
@@ -79,7 +81,8 @@ public class FIBOntologyEditorEDITOR {
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-				"http://www.w3.org/2002/07/owl");
+				"http://www.w3.org/2000/01/rdf-schema");
+		// "http://www.w3.org/2002/07/owl");
 		// "http://www.cpmf.org/ontologies/cpmfInstance");
 		o.loadWhenUnloaded();
 		System.out.println("ontology: " + o);
@@ -89,5 +92,4 @@ public class FIBOntologyEditorEDITOR {
 		frame.pack();
 		frame.setVisible(true);
 	}
-
 }
