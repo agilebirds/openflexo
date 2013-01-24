@@ -420,11 +420,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (getGraphicalRepresentation().getDrawWorkingArea()) {
-			getGraphicalRepresentation().paint(g, getController());
-			// for (Component c : getComponents())
-			// System.out.println("Component: "+c);
-		}
+		getGraphicalRepresentation().paint(g, getController());
 	}
 
 	private long cumulatedRepaintTime = 0;

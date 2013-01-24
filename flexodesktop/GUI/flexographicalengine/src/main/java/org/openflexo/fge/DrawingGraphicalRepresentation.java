@@ -347,7 +347,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 		graphics.setDefaultForeground(fgStyle);
 		graphics.setDefaultBackground(bgStyle);
-		getWorkingArea().paint(graphics);
+		if (drawWorkingArea) {
+			getWorkingArea().paint(graphics);
+		}
 		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
 		if (decorationPainter != null && !decorationPainter.paintBeforeDrawing()) {
 			decorationPainter.paintDecoration(decorationGraphics);
