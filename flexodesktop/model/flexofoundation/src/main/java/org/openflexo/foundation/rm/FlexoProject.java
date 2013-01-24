@@ -1868,7 +1868,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 
 		FlexoProjectFile projectRMFile = new FlexoProjectFile(rmFile, project);
-		FlexoRMResource rmResource = new FlexoRMResource(project, projectRMFile);
+		FlexoRMResource rmResource = new FlexoRMResource(project, projectRMFile, serviceManager);
 
 		try {
 			project.setTimestampsHaveBeenLoaded(true);
@@ -3975,7 +3975,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			FlexoProjectFile dataFile = new FlexoProjectFile(xml, this);
 
 			try {
-				returned = new FlexoPamelaResource<ProjectData>(this, ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
+				returned = new FlexoPamelaResource<ProjectData>(this, getServiceManager(), ResourceType.PROJECT_DATA, ProjectData.class,
+						dataFile);
 				registerResource(returned);
 				getPropertyChangeSupport().firePropertyChange(PROJECT_DATA, null, returned.getResourceData());
 			} catch (Exception e1) {

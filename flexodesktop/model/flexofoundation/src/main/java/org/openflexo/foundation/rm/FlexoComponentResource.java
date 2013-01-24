@@ -80,7 +80,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	}
 
 	public FlexoComponentResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	@Override
@@ -94,6 +94,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		setChanged();
 	}
 
+	@Override
 	public void setResourceData(IEWOComponent component) {
 		_resourceData = component;
 	}

@@ -128,7 +128,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 		if (dataModelResource == null) {
 			dataModelResource = getProject().getFlexoDMResource();
 		}
-		_eoModelResource = new FlexoEOModelResource(getProject(), dataModelResource, eoModelFile);
+		_eoModelResource = new FlexoEOModelResource(getProject(), getProject().getServiceManager(), dataModelResource, eoModelFile);
 		_eoModelResource.setDMModel(dmModel);
 		getProject().registerResource(_eoModelResource);
 		// EOModel reply = _eoModelResource.createsNewEOModel(adaptor, username, passwd, databaseServerURL, plugin, driver).getEOModel();

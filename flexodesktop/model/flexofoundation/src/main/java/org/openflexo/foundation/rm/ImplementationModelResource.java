@@ -63,7 +63,7 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 	}
 
 	public ImplementationModelResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	@Override
@@ -77,6 +77,7 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 		setChanged();
 	}
 
+	@Override
 	public void setResourceData(ImplementationModel implementationModel) {
 		_resourceData = implementationModel;
 	}

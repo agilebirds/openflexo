@@ -76,12 +76,12 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	}
 
 	public OWLOntologyResource(FlexoProject aProject, OWLTechnologyAdapter technologyAdapter) {
-		super(aProject);
+		super(aProject, technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager());
 		this.technologyAdapter = technologyAdapter;
 	}
 
 	public OWLOntologyResource(File owlFile, OWLOntologyLibrary ontologyLibrary) {
-		super((FlexoProject) null);
+		super((FlexoProject) null, ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getFlexoServiceManager());
 		this.ontologyURI = OWLOntology.findOntologyURI(owlFile);
 		absoluteFile = owlFile;
 		setOntologyLibrary(ontologyLibrary);

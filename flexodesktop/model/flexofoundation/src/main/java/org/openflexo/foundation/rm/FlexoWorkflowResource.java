@@ -66,7 +66,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	}
 
 	private FlexoWorkflowResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	public FlexoWorkflowResource(FlexoProject aProject, FlexoWorkflow workflow, FlexoProjectFile workflowFile)

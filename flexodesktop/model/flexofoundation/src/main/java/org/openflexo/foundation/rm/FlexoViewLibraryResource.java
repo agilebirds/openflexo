@@ -47,7 +47,7 @@ public class FlexoViewLibraryResource extends FlexoXMLStorageResource<ViewLibrar
 	}
 
 	public FlexoViewLibraryResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 		if (aProject != null) {
 			try {
 				setResourceFile(new FlexoProjectFile(ProjectRestructuration.getExpectedShemaLibFile(aProject), aProject));
@@ -70,12 +70,11 @@ public class FlexoViewLibraryResource extends FlexoXMLStorageResource<ViewLibrar
 	}
 
 	public FlexoViewLibraryResource(FlexoProject aProject, FlexoProjectFile shemaLibraryFile) throws InvalidFileNameException {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 		setResourceFile(shemaLibraryFile);
 	}
 
-	public FlexoViewLibraryResource(FlexoProject aProject, ViewLibrary lib, FlexoProjectFile shemaLibFile)
-			throws InvalidFileNameException {
+	public FlexoViewLibraryResource(FlexoProject aProject, ViewLibrary lib, FlexoProjectFile shemaLibFile) throws InvalidFileNameException {
 		this(aProject, shemaLibFile);
 		_resourceData = lib;
 		try {

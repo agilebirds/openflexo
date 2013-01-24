@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 
 /**
  * @author sylvain
@@ -48,8 +49,8 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	/**
 	 * @param aProject
 	 */
-	public FlexoGeneratedResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoGeneratedResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	private Date _lastGenerationDate;

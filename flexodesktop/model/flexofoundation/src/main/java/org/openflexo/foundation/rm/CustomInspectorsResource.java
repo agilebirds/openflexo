@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.FileNotFoundException;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
@@ -38,16 +39,17 @@ public class CustomInspectorsResource extends FlexoDirectoryResource {
 	 * @param builder
 	 */
 	public CustomInspectorsResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public CustomInspectorsResource(FlexoProject aProject) {
-		super(aProject);
+	public CustomInspectorsResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
-	public CustomInspectorsResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException {
-		this(aProject);
+	public CustomInspectorsResource(FlexoProject aProject, FlexoServiceManager serviceManager, FlexoProjectFile directory)
+			throws InvalidFileNameException {
+		this(aProject, serviceManager);
 		setResourceFile(directory);
 	}
 

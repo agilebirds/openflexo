@@ -82,16 +82,16 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	 * @param builder
 	 */
 	public FlexoRMResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		super(builder);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoRMResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoRMResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
-	public FlexoRMResource(File rmFile, File projectDirectory) {
-		this((FlexoProject) null);
+	public FlexoRMResource(File rmFile, File projectDirectory, FlexoServiceManager serviceManager) {
+		super((FlexoProject) null, serviceManager);
 		this.rmFile = rmFile;
 		this.projectDirectory = projectDirectory;
 	}
@@ -102,8 +102,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	 * @param aProject
 	 * @param rmFile
 	 */
-	public FlexoRMResource(FlexoProject aProject, FlexoProjectFile rmFile) {
-		this(aProject);
+	public FlexoRMResource(FlexoProject aProject, FlexoProjectFile rmFile, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 		try {
 			setResourceFile(rmFile);
 		} catch (InvalidFileNameException e) {
@@ -217,24 +217,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 	private ProjectLoadingHandler _loadingHandler;
 
 	private XMLSerializationService xmlMappings;
-
-	/**
-	 * Overrides getXmlMappings
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#getXmlMappings()
-	 */
-	@Override
-	protected XMLSerializationService getXmlMappings() {
-		if (getProject() != null) {
-			xmlMappings = null; // just to be sure
-			return getProject().getXmlMappings();
-		} else {
-			if (xmlMappings == null) {
-				xmlMappings = getProject().getServiceManager().getXMLSerializationService();
-			}
-			return xmlMappings;
-		}
-	}
 
 	private boolean isInitializingProject = false;
 

@@ -52,7 +52,7 @@ public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNa
 	}
 
 	public FlexoNavigationMenuResource(FlexoProject aProject, FlexoProjectFile navigationMenuFile) throws InvalidFileNameException {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 		setResourceFile(navigationMenuFile);
 	}
 

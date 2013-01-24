@@ -155,7 +155,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	 * @param aProject
 	 */
 	public CGRepositoryFileResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	public GenerationRepository getRepository() {

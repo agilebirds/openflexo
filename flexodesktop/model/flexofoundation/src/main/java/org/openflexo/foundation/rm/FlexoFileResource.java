@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.toolbox.FileUtils;
 
@@ -64,12 +65,12 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 * @param builder
 	 */
 	public FlexoFileResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoFileResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoFileResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	/**

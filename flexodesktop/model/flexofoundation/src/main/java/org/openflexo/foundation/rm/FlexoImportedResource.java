@@ -35,7 +35,7 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	private Date _lastImportDate;
 
 	public FlexoImportedResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	protected abstract RD doImport() throws FlexoException;

@@ -210,7 +210,7 @@ public class FlexoResourceManager {
 			}
 			FlexoRMResource rmRes;
 			try {
-				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
+				rmRes = new FlexoRMResource(rmFile, aProjectDirectory, serviceManager);
 				rmRes.setProjectReferenceLoader(projectReferenceLoader);
 				project = rmRes.loadProject(progress, loadingHandler, serviceManager);
 			} catch (RuntimeException e1) {

@@ -31,11 +31,11 @@ public class FlexoTOCResource extends FlexoXMLStorageResource<TOCData> {
 	}
 
 	public FlexoTOCResource(FlexoProject project) {
-		super(project);
+		super(project, project.getServiceManager());
 	}
 
 	public FlexoTOCResource(FlexoProjectBuilder projectBuilder) {
-		super(projectBuilder.project);
+		super(projectBuilder);
 		projectBuilder.notifyResourceLoading(this);
 	}
 

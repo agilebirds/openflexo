@@ -66,7 +66,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	}
 
 	public FlexoOEShemaResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	@Override

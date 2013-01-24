@@ -63,7 +63,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 	}
 
 	public FlexoDMResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	public FlexoDMResource(FlexoProject aProject, FlexoProjectFile dmFile) throws InvalidFileNameException {

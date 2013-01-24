@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.eclipse.emf.ecore.resource.Resource;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -73,7 +74,7 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @param builder
 	 */
 	public EMFModelResource(FlexoProjectBuilder builder) {
-		this(builder != null ? builder.project : null);
+		this(builder != null ? builder.project : null, builder != null ? builder.serviceManager : null);
 		if (builder != null) {
 			builder.notifyResourceLoading(this);
 		}
@@ -84,8 +85,8 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * 
 	 * @param aProject
 	 */
-	public EMFModelResource(FlexoProject aProject) {
-		super(aProject);
+	public EMFModelResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 		metaModelResource = null;
 		adapter = null;
 		modelFile = null;
@@ -102,7 +103,7 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 */
 	public EMFModelResource(File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter, String uri)
 			throws InvalidFileNameException, DuplicateResourceException {
-		super((FlexoProject) null);
+		super((FlexoProject) null, adapter.getTechnologyAdapterService().getFlexoServiceManager());
 		this.modelFile = file;
 		this.metaModelResource = metaModelResource;
 		this.adapter = adapter;

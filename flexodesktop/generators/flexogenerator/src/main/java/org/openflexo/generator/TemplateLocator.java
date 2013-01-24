@@ -71,11 +71,11 @@ public class TemplateLocator extends FlexoMemoryResource {
 	 * @param builder
 	 */
 	public TemplateLocator(FlexoProjectBuilder builder) {
-		super(builder.project);
+		super(builder.project, builder.serviceManager);
 	}
 
 	public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator) {
-		super(templates.getProject());
+		super(templates.getProject(), templates.getProject().getServiceManager());
 		_templateDirectories = null;
 		_templateTable = new Hashtable<String, CGTemplate>();
 		_templates = templates;

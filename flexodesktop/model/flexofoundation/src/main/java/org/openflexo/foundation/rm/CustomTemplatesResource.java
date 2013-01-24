@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.FileNotFoundException;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
@@ -38,17 +39,18 @@ public class CustomTemplatesResource extends FlexoDirectoryResource {
 	 * @param builder
 	 */
 	public CustomTemplatesResource(FlexoProjectBuilder builder) {
-		super(builder.project);
+		super(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public CustomTemplatesResource(FlexoProject aProject, String name) {
-		super(aProject);
+	public CustomTemplatesResource(FlexoProject aProject, FlexoServiceManager serviceManager, String name) {
+		super(aProject, serviceManager);
 		setName(name);
 	}
 
-	public CustomTemplatesResource(FlexoProject aProject, String name, FlexoProjectFile directory) throws InvalidFileNameException {
-		this(aProject, name);
+	public CustomTemplatesResource(FlexoProject aProject, FlexoServiceManager serviceManager, String name, FlexoProjectFile directory)
+			throws InvalidFileNameException {
+		this(aProject, serviceManager, name);
 		setResourceFile(directory);
 	}
 

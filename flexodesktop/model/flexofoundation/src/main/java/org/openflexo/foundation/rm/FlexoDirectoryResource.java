@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
 /**
@@ -41,16 +42,17 @@ public abstract class FlexoDirectoryResource extends FlexoFileResource {
 	 * @param builder
 	 */
 	public FlexoDirectoryResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoDirectoryResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoDirectoryResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
-	public FlexoDirectoryResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException {
-		this(aProject);
+	public FlexoDirectoryResource(FlexoProject aProject, FlexoServiceManager serviceManager, FlexoProjectFile directory)
+			throws InvalidFileNameException {
+		this(aProject, serviceManager);
 		setResourceFile(directory);
 	}
 

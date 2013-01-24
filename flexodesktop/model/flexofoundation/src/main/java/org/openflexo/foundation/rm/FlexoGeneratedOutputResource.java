@@ -35,7 +35,7 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput<GO
 	private static final Logger logger = Logger.getLogger(FlexoGeneratedOutputResource.class.getPackage().getName());
 
 	public FlexoGeneratedOutputResource(FlexoProject project) {
-		super(project);
+		super(project, project.getServiceManager());
 	}
 
 	public FlexoGeneratedOutputResource(FlexoProjectBuilder builder) {

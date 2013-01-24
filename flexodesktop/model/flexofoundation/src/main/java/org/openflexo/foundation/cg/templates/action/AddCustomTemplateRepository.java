@@ -94,8 +94,8 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 		logger.info("Add CustomTemplateRepository " + getFocusedObject());
 		if (getFocusedObject() != null) {
 			getNewCustomTemplatesRepositoryDirectory().getFile().mkdirs();
-			CustomTemplatesResource newResource = new CustomTemplatesResource(getFocusedObject().getProject(),
-					getNewCustomTemplatesRepositoryName(), getNewCustomTemplatesRepositoryDirectory());
+			CustomTemplatesResource newResource = new CustomTemplatesResource(getFocusedObject().getProject(), getFocusedObject()
+					.getProject().getServiceManager(), getNewCustomTemplatesRepositoryName(), getNewCustomTemplatesRepositoryDirectory());
 			getFocusedObject().getProject().registerResource(newResource);
 			getFocusedObject().getTemplates().refresh();
 			_newCustomTemplatesRepository = getFocusedObject().getTemplates().getCustomCGTemplateRepositoryForName(

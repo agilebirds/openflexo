@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOModel;
@@ -58,17 +59,17 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 	 * @param builder
 	 */
 	public FlexoEOModelResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoEOModelResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoEOModelResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
-	public FlexoEOModelResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
-			throws InvalidFileNameException {
-		this(aProject);
+	public FlexoEOModelResource(FlexoProject aProject, FlexoServiceManager serviceManager, FlexoDMResource dmResource,
+			FlexoProjectFile eoModelFile) throws InvalidFileNameException {
+		this(aProject, serviceManager);
 		setResourceFile(eoModelFile);
 		addToSynchronizedResources(dmResource);
 		if (logger.isLoggable(Level.INFO)) {
@@ -78,7 +79,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 
 	public FlexoEOModelResource(FlexoProject aProject, EOModelResourceData anEOModelResourceData, FlexoDMResource dmResource,
 			FlexoProjectFile eoModelFile) throws InvalidFileNameException {
-		this(aProject, dmResource, eoModelFile);
+		this(aProject, aProject.getServiceManager(), dmResource, eoModelFile);
 		_resourceData = anEOModelResourceData;
 		anEOModelResourceData.setFlexoResource(this);
 	}

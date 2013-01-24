@@ -51,8 +51,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 
 	private static final Logger logger = Logger.getLogger(FlexoStorageResource.class.getPackage().getName());
 
-	private FlexoServiceManager serviceManager;
-
 	private String uri;
 	private Vector<ResourceLoadingListener> resourceLoadingListeners = new Vector<ResourceLoadingListener>();
 	private Date lastKnownMemoryUpdate;
@@ -83,7 +81,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	 * @param builder
 	 */
 	public FlexoStorageResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
@@ -99,8 +97,8 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 		super.delete(deleteFile);
 	}
 
-	public FlexoStorageResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoStorageResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	public boolean needsSaving() {
@@ -146,6 +144,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	 * 
 	 * @return
 	 */
+	@Override
 	public Date lastMemoryUpdate() {
 		if (!isLoaded()) {
 			return null;
@@ -164,6 +163,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	 * 
 	 * @return
 	 */
+	@Override
 	public boolean isModified() {
 		if (!isLoaded()) {
 			return false;
@@ -563,16 +563,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	@Override
 	public boolean isReadOnly() {
 		return false;
-	}
-
-	@Override
-	public FlexoServiceManager getServiceManager() {
-		return serviceManager;
-	}
-
-	@Override
-	public void setServiceManager(FlexoServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
 	}
 
 }

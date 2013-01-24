@@ -57,7 +57,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 	}
 
 	public FlexoComponentLibraryResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 		if (aProject != null) {
 			try {
 				setResourceFile(new FlexoProjectFile(ProjectRestructuration.getExpectedComponentLibFile(aProject), aProject));
@@ -80,7 +80,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 	}
 
 	public FlexoComponentLibraryResource(FlexoProject aProject, FlexoProjectFile componentLibraryFile) throws InvalidFileNameException {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 		setResourceFile(componentLibraryFile);
 	}
 

@@ -51,7 +51,7 @@ public class FlexoFileResourceResource extends FlexoMemoryResource {
 	}
 
 	private FlexoFileResourceResource(FlexoProject project, FileResource resource) {
-		super(project);
+		super(project, project.getServiceManager());
 		this.resource = resource;
 	}
 

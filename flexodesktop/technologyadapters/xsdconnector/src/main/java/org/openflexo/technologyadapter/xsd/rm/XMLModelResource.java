@@ -32,6 +32,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -57,17 +58,17 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 			.getName());
 
 	public XMLModelResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public XMLModelResource(FlexoProject aProject) {
-		super(aProject);
+	public XMLModelResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
-	public XMLModelResource(FlexoProject project, XMLModel newProjectOntology, FlexoProjectFile ontologyFile)
-			throws InvalidFileNameException, DuplicateResourceException {
-		super(project);
+	public XMLModelResource(FlexoProject project, FlexoServiceManager serviceManager, XMLModel newProjectOntology,
+			FlexoProjectFile ontologyFile) throws InvalidFileNameException, DuplicateResourceException {
+		super(project, serviceManager);
 		_resourceData = newProjectOntology;
 		newProjectOntology.setFlexoResource(this);
 		this.setResourceFile(ontologyFile);

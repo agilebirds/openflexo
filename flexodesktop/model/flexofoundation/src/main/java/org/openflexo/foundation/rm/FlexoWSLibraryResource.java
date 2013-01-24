@@ -37,7 +37,7 @@ public class FlexoWSLibraryResource extends FlexoXMLStorageResource<FlexoWSLibra
 	}
 
 	public FlexoWSLibraryResource(FlexoProject project) {
-		super(project);
+		super(project, project.getServiceManager());
 	}
 
 	/**

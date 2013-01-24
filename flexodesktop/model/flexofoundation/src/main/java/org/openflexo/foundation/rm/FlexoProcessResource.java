@@ -78,7 +78,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	}
 
 	public FlexoProcessResource(FlexoProject aProject) {
-		super(aProject);
+		super(aProject, aProject.getServiceManager());
 	}
 
 	public FlexoProcessResource(FlexoProject aProject, String aName, FlexoWorkflowResource workflowResource, FlexoProjectFile processFile)

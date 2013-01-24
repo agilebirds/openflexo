@@ -39,6 +39,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.Validable;
@@ -56,6 +57,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  */
 public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObject implements XMLSerializable, Validable {
+
+	private FlexoServiceManager serviceManager;
 
 	private static final FlexoDependantResourceComparator dependancyComparator = new FlexoDependantResourceComparator();
 
@@ -150,10 +153,19 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @param aProject
 	 */
-	public FlexoResource(FlexoProject aProject) {
+	public FlexoResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
 		super();
 		_lastSynchronizedForResources = new Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry>();
 		project = aProject;
+		this.serviceManager = serviceManager;
+	}
+
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
+	}
+
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
 	}
 
 	public ProjectLoadingHandler getLoadingHandler() {

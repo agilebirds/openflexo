@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -61,9 +62,10 @@ public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends F
 
 	private ModelFactory modelFactory;
 
-	public FlexoPamelaResource(FlexoProject project, String name, ResourceType resourceType, Class<SRD> resourceDataClass,
-			FlexoProjectFile file) throws ModelDefinitionException, InvalidFileNameException, DuplicateResourceException {
-		this(project);
+	public FlexoPamelaResource(FlexoProject project, FlexoServiceManager serviceManager, String name, ResourceType resourceType,
+			Class<SRD> resourceDataClass, FlexoProjectFile file) throws ModelDefinitionException, InvalidFileNameException,
+			DuplicateResourceException {
+		this(project, serviceManager);
 		this.name = name;
 		this.useProjectName = name == null;
 		this.resourceType = resourceType;
@@ -78,9 +80,10 @@ public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends F
 		this._resourceData.setFlexoResource(this);
 	}
 
-	public FlexoPamelaResource(FlexoProject project, ResourceType resourceType, Class<SRD> resourceDataClass, FlexoProjectFile file)
-			throws ModelDefinitionException, InvalidFileNameException, DuplicateResourceException {
-		this(project);
+	public FlexoPamelaResource(FlexoProject project, FlexoServiceManager serviceManager, ResourceType resourceType,
+			Class<SRD> resourceDataClass, FlexoProjectFile file) throws ModelDefinitionException, InvalidFileNameException,
+			DuplicateResourceException {
+		this(project, serviceManager);
 		this.useProjectName = true;
 		this.resourceType = resourceType;
 		setResourceDataClass(resourceDataClass);
@@ -90,12 +93,12 @@ public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends F
 	}
 
 	public FlexoPamelaResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	private FlexoPamelaResource(FlexoProject aProject) {
-		super(aProject);
+	private FlexoPamelaResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	public ModelFactory getModelFactory() {

@@ -38,7 +38,7 @@ public class FlexoDKVResource extends FlexoXMLStorageResource<DKVModel> {
 	}
 
 	public FlexoDKVResource(FlexoProject project) {
-		super(project);
+		super(project, project.getServiceManager());
 	}
 
 	/**

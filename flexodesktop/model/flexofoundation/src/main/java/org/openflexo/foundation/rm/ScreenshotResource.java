@@ -35,6 +35,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dm.ERDiagram;
@@ -162,7 +163,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		 * org.openflexo.dg.latex.ScreenshotsGenerator.buildResourcesAndSetGenerators(DGRepository, Vector<CGRepositoryFileResource>) * and
 		 * in the method of the module that will generate the screenshot Clearly this could be improved but I don't have time for it.
 		 */
-		ScreenshotResource ret = new ScreenshotResource(o.getProject());
+		ScreenshotResource ret = new ScreenshotResource(o.getProject(), o.getProject().getServiceManager());
 		String name = ScreenshotGenerator.getScreenshotName(o);
 		ret.setName(name);
 		if (o instanceof FlexoProcess) {
@@ -233,8 +234,8 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	/**
 	 * @param aProject
 	 */
-	public ScreenshotResource(FlexoProject aProject) {
-		super(aProject);
+	public ScreenshotResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	/**

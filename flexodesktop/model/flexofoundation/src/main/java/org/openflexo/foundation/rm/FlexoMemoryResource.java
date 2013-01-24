@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.util.Date;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
 /**
@@ -39,12 +40,12 @@ public class FlexoMemoryResource extends FlexoResource {
 	 * @param builder
 	 */
 	public FlexoMemoryResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoMemoryResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoMemoryResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	public boolean needsSaving() {

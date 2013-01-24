@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -84,12 +85,12 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	 * @param builder
 	 */
 	public FlexoXMLStorageResource(FlexoProjectBuilder builder) {
-		this(builder.project);
+		this(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoXMLStorageResource(FlexoProject aProject) {
-		super(aProject);
+	public FlexoXMLStorageResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
+		super(aProject, serviceManager);
 	}
 
 	@Override
@@ -621,8 +622,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	/**
 	 * @return
 	 */
-	protected XMLSerializationService getXmlMappings() {
-		return getProject().getXmlMappings();
+	protected final XMLSerializationService getXmlMappings() {
+		return getServiceManager().getXMLSerializationService();
 	}
 
 	/**
