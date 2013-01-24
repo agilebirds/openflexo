@@ -74,7 +74,7 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 			}
 		}*/
 		// We add the roles
-		for (Role role : getRoleList().getRoles()) {
+		for (Role role : getRoleList().getSortedRolesVector()) {
 			addToChilds(role);
 		}
 	}
