@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
@@ -36,6 +37,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
+import org.openflexo.wkf.view.ImportedWorkflowView;
 
 public class SwimmingLanePerspective extends FlexoPerspective {
 
@@ -46,6 +48,8 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	private final Hashtable<SwimmingLaneEditorController, JSplitPane> _splitPaneForProcess;
 
 	private JPanel topRightDummy;
+
+	private ImportedWorkflowView importedWorkflowView;
 
 	/**
 	 * @param controller
@@ -153,7 +157,20 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
+			importedWorkflowView.setSelected(process.getProcessNode());
 		}
+	}
+
+	protected void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedWorkflowView);
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }
