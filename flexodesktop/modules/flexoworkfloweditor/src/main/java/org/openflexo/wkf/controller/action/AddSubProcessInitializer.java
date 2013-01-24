@@ -136,7 +136,9 @@ public class AddSubProcessInitializer extends ActionInitializer {
 					add.setDestination((ProcessFolder) action.getFocusedObject());
 					res &= add.doAction().hasActionExecutionSucceeded();
 				}
-				getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getNewProcess());
+				if (action.isShowNewProcess()) {
+					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getNewProcess());
+				}
 				return res;
 			}
 		};

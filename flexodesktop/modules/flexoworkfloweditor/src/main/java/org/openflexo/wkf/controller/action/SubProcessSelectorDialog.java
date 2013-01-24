@@ -229,9 +229,11 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 			case BIND_LATER:
 				return true;
 			case BIND_NEW:
-				AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().parentProcess.getProcess(), null, getData()
+				AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().subProcessNode.getProcess(), null, getData()
 						.getControllerActionInitializer().getEditor());
 				addSubProcess.setNewProcessName(getData().getNewProcessName());
+				addSubProcess.setParentProcess(getData().parentProcess.getProcess());
+				addSubProcess.setShowNewProcess(false);
 				addSubProcess.doAction();
 				if (addSubProcess.hasActionExecutionSucceeded()) {
 					getData().getSubProcessNode().setSubProcess(addSubProcess.getNewProcess());

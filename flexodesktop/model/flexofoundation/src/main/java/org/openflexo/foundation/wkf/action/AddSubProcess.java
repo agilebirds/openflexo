@@ -66,6 +66,7 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 	private FlexoProcess _parentProcess;
 	private FlexoProcess _newProcess;
 	private FlexoProject _project;
+	private boolean showNewProcess = true;
 
 	static {
 		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoWorkflow.class);
@@ -110,6 +111,14 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 
 	public FlexoProcess getNewProcess() {
 		return _newProcess;
+	}
+
+	public boolean isShowNewProcess() {
+		return showNewProcess;
+	}
+
+	public void setShowNewProcess(boolean showNewProcess) {
+		this.showNewProcess = showNewProcess;
 	}
 
 }
