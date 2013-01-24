@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShemaLibrary id="FLX_43" userID="FLX" flexoID="43" dontGenerate="false" useSpecificDescriptions="false">
+  <ShemaFolder id="FLX_44" docIndex="1" userID="FLX" flexoID="44" dontGenerate="false" useSpecificDescriptions="false">
+    <folderName>Test1.6</folderName>
+  </ShemaFolder>
+</ShemaLibrary>
