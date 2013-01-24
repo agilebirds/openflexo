@@ -348,6 +348,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		_table = new JXTable(getTableModel()) {
 			@Override
 			public Dimension getPreferredScrollableViewportSize() {
+				if (getTable().getVisibleRowCount() != null) {
+					return super.getPreferredScrollableViewportSize();
+				}
 				return super.getPreferredSize();
 			}
 

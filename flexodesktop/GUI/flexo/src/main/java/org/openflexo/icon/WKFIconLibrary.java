@@ -63,13 +63,9 @@ public class WKFIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon WKF_BPEP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/workflow-perspective.png");
-	public static final ImageIcon WKF_BPEP_SELECTED_ICON = new ImageIconResource("Icons/WKF/workflow-perspective-hover.png");
 	public static final ImageIcon WKF_SWLP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective.png");
-	public static final ImageIcon WKF_SWLP_SELECTED_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective-hover.png");
 	public static final ImageIcon WKF_RP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/role-perspective.png");
-	public static final ImageIcon WKF_RP_SELECTED_ICON = new ImageIconResource("Icons/WKF/role-perspective-hover.png");
 	public static final ImageIcon WKF_DOCP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/documentation-perspective.png");
-	public static final ImageIcon WKF_DOCP_SELECTED_ICON = new ImageIconResource("Icons/WKF/documentation-perspective-hover.png");
 
 	// Editor icons
 	public static final ImageIcon FLAT_ICON = new ImageIconResource("Icons/WKF/Flat.gif");

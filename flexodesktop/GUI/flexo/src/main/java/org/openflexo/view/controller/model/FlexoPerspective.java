@@ -89,8 +89,6 @@ public abstract class FlexoPerspective extends ControllerModelObject {
 
 	public abstract ImageIcon getActiveIcon();
 
-	public abstract ImageIcon getSelectedIcon();
-
 	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
 		if (!editable) {
 			if (logger.isLoggable(Level.WARNING)) {

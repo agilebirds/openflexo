@@ -63,16 +63,6 @@ public class VersionningPerspective extends FlexoPerspective {
 		return DGIconLibrary.DG_VP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DGIconLibrary.DG_VP_SELECTED_ICON;
-	}
-
 	@Override
 	public JPanel getFooter() {
 		return this.dgController._footer;

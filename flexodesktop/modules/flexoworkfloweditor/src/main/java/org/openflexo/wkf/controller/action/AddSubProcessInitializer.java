@@ -65,6 +65,9 @@ public class AddSubProcessInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddSubProcess>() {
 			@Override
 			public boolean run(EventObject e, AddSubProcess action) {
+				if (action.getNewProcessName() != null) {
+					return true;
+				}
 				FlexoProcess process = null;
 				if (action.getFocusedObject() instanceof FlexoProcess) {
 					process = (FlexoProcess) action.getFocusedObject();

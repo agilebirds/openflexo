@@ -1387,7 +1387,6 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 		dialog.setPreferredSize(new Dimension(550, 600));
 		dialog.getContentPane().add(panel);
-		dialog.validate();
 		dialog.pack();
 
 		dialog.setVisible(true);

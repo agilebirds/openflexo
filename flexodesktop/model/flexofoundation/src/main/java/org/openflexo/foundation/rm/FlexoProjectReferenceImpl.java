@@ -42,7 +42,7 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (project != null) {
 			FlexoWorkflowResource importedWorkflowResource = getReferringProject().getImportedWorkflowResource(this, true);
 			importedWorkflowResource.replaceWithWorkflow(project.getWorkflow());
-			getPropertyChangeSupport().firePropertyChange("workflow", null, project.getWorkflow());
+			getPropertyChangeSupport().firePropertyChange(WORKFLOW, null, project.getWorkflow());
 		}
 	}
 

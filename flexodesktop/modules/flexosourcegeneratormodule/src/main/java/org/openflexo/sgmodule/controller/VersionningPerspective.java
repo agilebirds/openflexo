@@ -54,11 +54,6 @@ public class VersionningPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return SGIconLibrary.SG_VP_SELECTED_ICON;
-	}
-
-	@Override
 	public JPanel getFooter() {
 		return _controller.getFooter();
 	}

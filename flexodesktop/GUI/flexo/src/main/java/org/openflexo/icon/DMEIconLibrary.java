@@ -53,13 +53,9 @@ public class DMEIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon DME_RP_ACTIVE_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_A.png");
-	public static final ImageIcon DME_RP_SELECTED_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_S.gif");
 	public static final ImageIcon DME_PP_ACTIVE_ICON = new ImageIconResource("Icons/DME/PackagePerspective_A.png");
-	public static final ImageIcon DME_PP_SELECTED_ICON = new ImageIconResource("Icons/DME/PackagePerspective_S.gif");
 	public static final ImageIcon DME_HP_ACTIVE_ICON = new ImageIconResource("Icons/DME/HierarchyPerspective_A.png");
-	public static final ImageIcon DME_HP_SELECTED_ICON = new ImageIconResource("Icons/DME/HierarchyPerspective_S.gif");
 	public static final ImageIcon DME_DP_ACTIVE_ICON = new ImageIconResource("Icons/DME/DiagramPerspective_A.png");
-	public static final ImageIcon DME_DP_SELECTED_ICON = new ImageIconResource("Icons/DME/DiagramPerspective_S.gif");
 
 	// Editor icons
 	public static final ImageIcon CONNECTED_ICON = new ImageIconResource("Icons/DME/Utils/Connected.gif");

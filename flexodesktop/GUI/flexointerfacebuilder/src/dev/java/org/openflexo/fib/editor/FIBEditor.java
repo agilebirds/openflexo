@@ -348,7 +348,7 @@ public class FIBEditor implements FIBGenericEditor {
 		});
 		frame.setJMenuBar(menuBar);
 		frame.getContentPane().add(mainPanel);
-		frame.validate();
+		mainPanel.revalidate();
 		frame.setVisible(true);
 	}
 
@@ -451,7 +451,6 @@ public class FIBEditor implements FIBGenericEditor {
 
 		JDialog testInterface = new JDialog(frame, "Test", false);
 		testInterface.getContentPane().add(view.getResultingJComponent());
-		testInterface.validate();
 		testInterface.pack();
 		testInterface.setVisible(true);
 	}
@@ -469,7 +468,6 @@ public class FIBEditor implements FIBGenericEditor {
 		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
 				"component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
-		localizationInterface.validate();
 		localizationInterface.pack();
 		localizationInterface.setVisible(true);
 	}
@@ -820,7 +818,7 @@ public class FIBEditor implements FIBGenericEditor {
 			editedComponents.add(edited);
 			controllers.put(edited, controller);
 			add(controller.getEditorPanel(), edited.title);
-			frame.validate();
+			revalidate();
 			setSelectedIndex(getComponentCount() - 1);
 		}
 

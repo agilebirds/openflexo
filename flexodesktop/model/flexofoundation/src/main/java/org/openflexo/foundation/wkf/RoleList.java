@@ -128,6 +128,15 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		return null;
 	}
 
+	public Role getRoleWithFlexoID(long flexoID) {
+		for (Role role : getRoles()) {
+			if (role.getFlexoID() == flexoID) {
+				return role;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Default inspector name
 	 */

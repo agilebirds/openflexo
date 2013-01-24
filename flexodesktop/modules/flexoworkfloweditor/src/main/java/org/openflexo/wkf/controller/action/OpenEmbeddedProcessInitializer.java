@@ -59,8 +59,12 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer<OpenEmbedd
 					return false;
 				}
 				if (action.getProcessToOpen() == null) {
-					return new SubProcessSelectorDialog(action.getFocusedObject().getProject(), getControllerActionInitializer(),
-							action.getFocusedObject(), action.getFocusedObject().getProcess().getProcessNode()).askAndSetSubProcess();
+					if (action.getFocusedObject().getProcess().getProject() == getEditor().getProject()) {
+						return new SubProcessSelectorDialog(action.getFocusedObject().getProject(), getControllerActionInitializer(),
+								action.getFocusedObject(), action.getFocusedObject().getProcess().getProcessNode()).askAndSetSubProcess();
+					} else {
+						return false;
+					}
 				}
 				return true;
 			}

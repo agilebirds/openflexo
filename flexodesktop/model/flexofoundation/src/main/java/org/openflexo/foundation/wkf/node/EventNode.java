@@ -24,11 +24,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -54,7 +54,7 @@ import org.openflexo.toolbox.ProgrammingLanguage;
  * @author sguerin
  * 
  */
-public class EventNode extends PetriGraphNode implements ExecutableWorkflowElement {
+public class EventNode extends PetriGraphNode implements ExecutableWorkflowElement, ReferenceOwner {
 
 	public enum EVENT_TYPE {
 		Start, Intermediate, End, NonInteruptive, NonInteruptiveBoundary, IntermediateDrop
@@ -102,8 +102,6 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	//
 	// protected static final ImageIcon REVERT_ICON = new ImageIconResource("Resources/WKF/Revert.gif");
 
-	private Role _role;
-
 	private AbstractActivityNode boundaryOf;
 
 	private String documentationUrl;
@@ -125,6 +123,8 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	public static final String DATE_BINDING = "dateBinding";
 	private AbstractBinding dateBinding;
+
+	private FlexoModelObjectReference<Role> roleReference;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -298,30 +298,70 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
-		if (getRole() != null) {
-			return new FlexoModelObjectReference<FlexoModelObject>(getRole());
+	public FlexoModelObjectReference<Role> getRoleReference() {
+		return roleReference;
+	}
+
+	// Used when deserializing
+	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
+		this.roleReference = aRoleReference;
+	}
+
+	public Role getRole() {
+		if (roleReference != null) {
+			Role object = roleReference.getObject();
+			if (object != null) {
+				return object;
+			} else {
+				return getWorkflow().getCachedRole(roleReference);
+			}
 		} else {
 			return null;
 		}
 	}
 
-	// Used when deserializing
-	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
-		setRole(aRoleReference.getObject(true));
-	}
-
-	public Role getRole() {
-		return _role;
-	}
-
 	public void setRole(Role aRole) {
-		Role oldRole = _role;
+		if (aRole != null && aRole.isCache()) {
+			aRole = aRole.getUncachedObject();
+			if (aRole == null) {
+				return;
+			}
+		}
+		Role oldRole = getRole();
 		if (oldRole != aRole) {
-			_role = aRole;
+			if (roleReference != null) {
+				roleReference.delete();
+				roleReference = null;
+			}
+			if (aRole != null) {
+				roleReference = new FlexoModelObjectReference<Role>(aRole);
+				roleReference.setOwner(this);
+			}
 			setChanged();
 			notifyObservers(new RoleChanged(oldRole, aRole));
 		}
+	}
+
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		setRole(null);
+	}
+
+	@Override
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+		setChanged();
 	}
 
 	public String getDocumentationUrl() {

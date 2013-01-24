@@ -70,16 +70,6 @@ public class OntologyPerspective extends FlexoPerspective {
 		return VEIconLibrary.VE_OP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return VEIconLibrary.VE_OP_SELECTED_ICON;
-	}
-
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof FlexoOntology) {

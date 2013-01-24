@@ -4037,6 +4037,7 @@ process_must_define_business_data_class_description=Process must define a busine
 process_must_have_a_default_status=Process must have a default status
 process_must_have_a_default_status_description=Process must have a default status
 process_name=Process name
+process_named_($0)_already_exists=A process named ($0) already exists
 process_prefix=Project prefix
 process_properties=Process properties
 process_should_have_a_default_status=Process should have a default status

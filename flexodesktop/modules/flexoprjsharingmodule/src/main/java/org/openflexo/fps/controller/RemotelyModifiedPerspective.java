@@ -31,11 +31,6 @@ public class RemotelyModifiedPerspective extends FPSPerspective {
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_RMP_SELECTED_ICON;
-	}
-
-	@Override
 	public JPanel getFooter() {
 		return this.fpsController._footer;
 	}

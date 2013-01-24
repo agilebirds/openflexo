@@ -97,16 +97,6 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		return WKFIconLibrary.WKF_SWLP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_SWLP_SELECTED_ICON;
-	}
-
 	@Override
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {

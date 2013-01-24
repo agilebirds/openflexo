@@ -37,6 +37,8 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.FixProposal;
@@ -196,10 +198,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		return returned;
 	}
 
-	// ==========================================================================
-	// ================================= Delete ===============================
-	// ==========================================================================
-
 	public Vector<AbstractNode> getNodesUsingRole() {
 		Vector<AbstractNode> returned = new Vector<AbstractNode>();
 		for (FlexoProcess p : getProject().getAllLocalFlexoProcesses()) {
@@ -282,6 +280,39 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 			logger.fine("No role list defined on " + this);
 		}
 		return isImported;
+	}
+
+	@Override
+	public Role getUncachedObject() {
+		return getRole(true);
+	}
+
+	public Role getRole() {
+		return getRole(false);
+	}
+
+	private Role role;
+
+	public Role getRole(boolean force) {
+		if (role != null) {
+			return role;
+		}
+		if (!getWorkflow().isCache()) {
+			return role = this;
+		}
+		if (force) {
+			ProjectData projectData = getProject().getProjectData();
+			if (projectData != null) {
+				FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+				if (ref != null) {
+					FlexoProject referredProject = ref.getReferredProject(true);
+					if (referredProject != null) {
+						return role = referredProject.getWorkflow().getRoleList().roleWithName(getName());
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public static Role createImportedRoleFromRole(RoleList roleList, PPMRole role) {

@@ -80,16 +80,6 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 		return SEIconLibrary.COMPONENT_PERSPECTIVE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return SEIconLibrary.COMPONENT_PERSPECTIVE_SELECTED_ICON;
-	}
-
 	@Override
 	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof ComponentInstance) {

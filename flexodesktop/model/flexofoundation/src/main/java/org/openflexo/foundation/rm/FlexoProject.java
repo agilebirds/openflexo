@@ -200,7 +200,7 @@ import org.openflexo.xmlcode.XMLMapping;
 public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
-	private static final String PROJECT_DATA = "projectData";
+	public static final String PROJECT_DATA = "projectData";
 	private static final String REVISION = "revision";
 	private static final String VERSION = "version";
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
@@ -3931,18 +3931,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		FlexoPostCondition.deleteMetricsActionizer = null;
 
 		// AbstractActivityNode
-		AbstractActivityNode.addAccountableRoleActionizer = null;
 		AbstractActivityNode.addConsultedRoleActionizer = null;
 		AbstractActivityNode.addInformedRoleActionizer = null;
 		AbstractActivityNode.addMetricsActionizer = null;
-		AbstractActivityNode.addResponsibleRoleActionizer = null;
 
 		AbstractActivityNode.deleteMetricsActionizer = null;
 
-		AbstractActivityNode.removeFromAccountableRoleActionizer = null;
 		AbstractActivityNode.removeFromConsultedRoleActionizer = null;
 		AbstractActivityNode.removeFromInformedRoleActionizer = null;
-		AbstractActivityNode.removeFromResponsibleRoleActionizer = null;
 
 		// OperationNode
 		OperationNode.addMetricsActionizer = null;

@@ -51,16 +51,6 @@ class VersionningPerspective extends FlexoPerspective {
 		return CGIconLibrary.CG_VP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return CGIconLibrary.CG_VP_SELECTED_ICON;
-	}
-
 	@Override
 	public JPanel getFooter() {
 		return this.generatorController._footer;

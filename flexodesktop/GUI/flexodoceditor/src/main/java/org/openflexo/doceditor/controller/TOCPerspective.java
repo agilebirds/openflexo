@@ -63,16 +63,6 @@ public class TOCPerspective extends FlexoPerspective {
 		return DEIconLibrary.DE_TOC_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DEIconLibrary.DE_TOC_SELECTED_ICON;
-	}
-
 	@Override
 	public JComponent getFooter() {
 		return infoLabel;

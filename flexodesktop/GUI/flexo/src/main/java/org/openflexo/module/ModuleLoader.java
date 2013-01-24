@@ -294,12 +294,13 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	public ExternalOEModule getOEModule() throws ModuleLoadingException {
 		return (ExternalOEModule) getModuleInstance(Module.VE_MODULE);
 	}
-	
+
 	private boolean ignoreSwitch = false;
 
 	public FlexoModule switchToModule(final Module module) throws ModuleLoadingException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					try {
 						switchToModule(module);
@@ -310,34 +311,35 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			});
 			return null;
 		}
-		if (ignoreSwitch||activeModule != null && activeModule.getModule() == module) {
+		if (ignoreSwitch || activeModule != null && activeModule.getModule() == module) {
 			return activeModule;
 		}
 		ignoreSwitch = true;
 		try {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Switch to module " + module.getName());
-		}
-		FlexoModule moduleInstance = getModuleInstance(module);
-		if (moduleInstance != null) {
-			FlexoModule old = activeModule;
-			if (activeModule != null) {
-				activeModule.getController().getControllerModel().getPropertyChangeSupport()
-						.removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
-				activeModule.setAsInactive();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Switch to module " + module.getName());
 			}
-			activeModule = moduleInstance;
-			moduleInstance.setAsActiveModule();
-			if (activeModule.getModule().requireProject()) {
-				activeModule.getController().getControllerModel().getPropertyChangeSupport()
-						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+			FlexoModule moduleInstance = getModuleInstance(module);
+			if (moduleInstance != null) {
+				FlexoModule old = activeModule;
+				if (activeModule != null) {
+					activeModule.getController().getControllerModel().getPropertyChangeSupport()
+							.removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+					activeModule.setAsInactive();
+				}
+				activeModule = moduleInstance;
+				moduleInstance.setAsActiveModule();
+				if (activeModule.getModule().requireProject()) {
+					activeModule.getController().getControllerModel().getPropertyChangeSupport()
+							.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+				}
+				getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
+				return moduleInstance;
 			}
-			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
-			return moduleInstance;
-		}
-		throw new ModuleLoadingException(module);
+			throw new ModuleLoadingException(module);
 		} finally {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					ModuleLoader.this.ignoreSwitch = false;
 				}
@@ -386,7 +388,8 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	}
 
 	public void saveModifiedProjects() throws OperationCancelledException, SaveResourceExceptionList {
-		SaveProjectsDialog dialog = new SaveProjectsDialog(applicationContext.getProjectLoader().getModifiedProjects());
+		SaveProjectsDialog dialog = new SaveProjectsDialog(getActiveModule() != null ? getActiveModule().getController() : null,
+				applicationContext.getProjectLoader().getModifiedProjects());
 		if (dialog.isOk()) {
 			applicationContext.getProjectLoader().saveProjects(dialog.getSelectedProject());
 		} else { // CANCEL

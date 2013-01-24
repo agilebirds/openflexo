@@ -66,7 +66,7 @@ public abstract class Constant<V> extends Expression {
 			} else if (value instanceof DurationValue) {
 			return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
 			}*/
-		return new Constant.StringConstant("?");
+		return new Constant.StringConstant(value.toString());
 	}
 
 	/*@Override

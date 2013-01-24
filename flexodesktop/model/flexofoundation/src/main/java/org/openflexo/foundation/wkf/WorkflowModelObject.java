@@ -67,6 +67,11 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 		}
 	}
 
+	@Override
+	public boolean isCache() {
+		return getWorkflow().isCache();
+	}
+
 	public FlexoWorkflow getWorkflow() {
 		return workflow;
 	}

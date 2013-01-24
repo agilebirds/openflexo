@@ -217,10 +217,6 @@
     <property name="operationPetriGraph" xmlTag="OperationPetriGraph" primary="yes" description="Petri graph at OPERATION level attached to this activity"/>
     <property name="roleReference" xmlTag="role" attribute="YES" description="Role for this activity stored as an external reference"/> 
     <property name="roleAReference" xmlTag="roleA" attribute="YES" description="Role for this activity stored as an external reference"/> 
-    <property name="roleCReference" xmlTag="roleC" attribute="YES" description="Role for this activity stored as an external reference"/> 
-    <property name="roleIReference" xmlTag="roleI" attribute="YES" description="Role for this activity stored as an external reference"/> 
-    <property name="responsibleRoleReferences" xmlTag="ResponsibleRoles" type="vector" description="Roles responsible for this activity"/>
-    <property name="accountableRoleReferences" xmlTag="AccountableRoles" type="vector" description="Roles accoutable for this activity"/>
     <property name="consultedRoleReferences" xmlTag="ConsultedRoles" type="vector" description="Roles consulted for this activity"/>
     <property name="informedRoleReferences" xmlTag="InformedRoles" type="vector" description="Roles informed for this activity"/>
     <property name="acronym" xmlTag="acronym" attribute="YES" description="Short name for this activity"/>

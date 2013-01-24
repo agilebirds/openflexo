@@ -50,9 +50,7 @@ public class VEIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ontology-perspective.png");
-	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/ontology-perspective-hover.png");
 	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/diagram-perspective.png");
-	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/diagram-perspective-hover.png");
 
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");

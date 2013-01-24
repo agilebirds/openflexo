@@ -39,11 +39,8 @@ public class CGIconLibrary extends GeneratorIconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon CG_MRP_ACTIVE_ICON = new ImageIconResource("Icons/CG/MRPerspective_A.png");
-	public static final ImageIcon CG_MRP_SELECTED_ICON = new ImageIconResource("Icons/CG/MRPerspective_S.gif");
 	public static final ImageIcon CG_CGP_ACTIVE_ICON = new ImageIconResource("Icons/CG/CGPerspective_A.png");
-	public static final ImageIcon CG_CGP_SELECTED_ICON = new ImageIconResource("Icons/CG/CGPerspective_S.gif");
 	public static final ImageIcon CG_VP_ACTIVE_ICON = new ImageIconResource("Icons/CG/VersionningPerspective_A.png");
-	public static final ImageIcon CG_VP_SELECTED_ICON = new ImageIconResource("Icons/CG/VersionningPerspective_S.gif");
 
 	// Model icons
 	public static final ImageIcon GENERATED_CODE_ICON = new ImageIconResource("Icons/CG/GeneratedCode.gif");

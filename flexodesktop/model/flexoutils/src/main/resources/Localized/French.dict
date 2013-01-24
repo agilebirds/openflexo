@@ -4036,6 +4036,7 @@ process_must_define_business_data_class_description=Les processus doivent d\u00E
 process_must_have_a_default_status=Les processus doivent d\u00E9finir un statut par d\u00E9faut
 process_must_have_a_default_status_description=Les processus doivent d\u00E9finir un statut par d\u00E9faut
 process_name=Process name
+process_named_($0)_already_exists=Un processus avec le nom ($0) existe d\u00E9j\u00E0
 process_prefix=Pr\u00E9fixe du projet
 process_properties=Proprietes du processus
 process_should_have_a_default_status=Un processus doit avoir un statut par d\u00E9faut

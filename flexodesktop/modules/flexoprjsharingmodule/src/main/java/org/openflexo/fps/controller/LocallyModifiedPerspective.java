@@ -31,11 +31,6 @@ public class LocallyModifiedPerspective extends FPSPerspective {
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_LMP_SELECTED_ICON;
-	}
-
-	@Override
 	public JPanel getFooter() {
 		return this.fpsController._footer;
 	}
