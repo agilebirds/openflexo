@@ -495,8 +495,10 @@ public class ExpressionParser {
 				return new Constant.DateConstant(((DateValue) value).getDateValue());
 			} else if (value instanceof DurationValue) {
 				return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
+			} else if (value != null) {
+				return new Constant.StringConstant(value.toString());
 			}
-			return new Constant.StringConstant("?");
+			return new Constant.StringConstant("");
 		}
 	}
 
