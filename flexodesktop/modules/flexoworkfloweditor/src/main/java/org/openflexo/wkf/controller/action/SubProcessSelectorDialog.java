@@ -232,7 +232,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 				AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().subProcessNode.getProcess(), null, getData()
 						.getControllerActionInitializer().getEditor());
 				addSubProcess.setNewProcessName(getData().getNewProcessName());
-				addSubProcess.setParentProcess(getData().parentProcess.getProcess());
+				addSubProcess.setParentProcess(getData().parentProcess != null ? getData().parentProcess.getProcess() : null);
 				addSubProcess.setShowNewProcess(false);
 				addSubProcess.doAction();
 				if (addSubProcess.hasActionExecutionSucceeded()) {
