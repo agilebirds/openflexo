@@ -46,18 +46,14 @@ import org.openflexo.foundation.wkf.action.AddProcessMetricsValue;
 import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.AddRoleSpecialization;
 import org.openflexo.foundation.wkf.action.AddStatus;
-import org.openflexo.foundation.wkf.action.AddToAccountableRole;
 import org.openflexo.foundation.wkf.action.AddToConsultedRole;
 import org.openflexo.foundation.wkf.action.AddToInformedRole;
-import org.openflexo.foundation.wkf.action.AddToResponsibleRole;
 import org.openflexo.foundation.wkf.action.CreateNode;
 import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
 import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.RemoveFromAccountableRole;
 import org.openflexo.foundation.wkf.action.RemoveFromConsultedRole;
 import org.openflexo.foundation.wkf.action.RemoveFromInformedRole;
-import org.openflexo.foundation.wkf.action.RemoveFromResponsibleRole;
 import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -182,12 +178,8 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new MoveProcessFolderInitializer(this);
 		new OpenProcessInNewWindowInitializer(this);
 
-		new AddToResponsibleRoleInitializer(this);
-		new AddToAccountableRoleInitializer(this);
 		new AddToConsultedRoleInitializer(this);
 		new AddToInformedRoleInitializer(this);
-		new RemoveFromResponsibleRoleInitializer(this);
-		new RemoveFromAccountableRoleInitializer(this);
 		new RemoveFromConsultedRoleInitializer(this);
 		new RemoveFromInformedRoleInitializer(this);
 
@@ -236,15 +228,6 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 				DeleteMetricsValue.actionType, this);
 		WKFArtefact.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
 				DeleteMetricsValue.actionType, this);
-		AbstractActivityNode.addResponsibleRoleActionizer = new FlexoActionizer<AddToResponsibleRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToResponsibleRole.actionType, this);
-		AbstractActivityNode.removeFromResponsibleRoleActionizer = new FlexoActionizer<RemoveFromResponsibleRole, Role, AbstractActivityNode>(
-				RemoveFromResponsibleRole.actionType, this);
-
-		AbstractActivityNode.addAccountableRoleActionizer = new FlexoActionizer<AddToAccountableRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToAccountableRole.actionType, this);
-		AbstractActivityNode.removeFromAccountableRoleActionizer = new FlexoActionizer<RemoveFromAccountableRole, Role, AbstractActivityNode>(
-				RemoveFromAccountableRole.actionType, this);
 
 		AbstractActivityNode.addConsultedRoleActionizer = new FlexoActionizer<AddToConsultedRole, AbstractActivityNode, AbstractActivityNode>(
 				AddToConsultedRole.actionType, this);
@@ -255,6 +238,44 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 				AddToInformedRole.actionType, this);
 		AbstractActivityNode.removeFromInformedRoleActionizer = new FlexoActionizer<RemoveFromInformedRole, Role, AbstractActivityNode>(
 				RemoveFromInformedRole.actionType, this);
+
+	}
+
+	public void disposeActionizer() {
+		// Initialize action of inspectors
+		RoleList.addRoleActionizer = null;
+		Role.addParentRoleActionizer = null;
+		RoleList.deleteRoleActionizer = null;
+
+		FlexoProcess.addStatusActionizer = null;
+		FlexoProcess.deleteActionizer = null;
+
+		// MetricsDefinition actions
+		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addActivityMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addOperationMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addEdgeMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addArtefactMetricsDefinitionActionizer = null;
+		FlexoWorkflow.deleteMetricsDefinitionActionizer = null;
+
+		// MetricsValue actions
+		FlexoProcess.addMetricsActionizer = null;
+		AbstractActivityNode.addMetricsActionizer = null;
+		OperationNode.addMetricsActionizer = null;
+		FlexoPostCondition.addMetricsActionizer = null;
+		WKFArtefact.addMetricsActionizer = null;
+
+		FlexoProcess.deleteMetricsActionizer = null;
+		AbstractActivityNode.deleteMetricsActionizer = null;
+		OperationNode.deleteMetricsActionizer = null;
+		FlexoPostCondition.deleteMetricsActionizer = null;
+		WKFArtefact.deleteMetricsActionizer = null;
+
+		AbstractActivityNode.addConsultedRoleActionizer = null;
+		AbstractActivityNode.removeFromConsultedRoleActionizer = null;
+
+		AbstractActivityNode.addInformedRoleActionizer = null;
+		AbstractActivityNode.removeFromInformedRoleActionizer = null;
 
 	}
 

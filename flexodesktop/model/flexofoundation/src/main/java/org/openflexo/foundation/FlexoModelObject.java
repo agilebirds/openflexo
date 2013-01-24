@@ -270,6 +270,19 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return false;
 	}
 
+	public boolean isCache() {
+		return false;
+	}
+
+	public FlexoModelObject getUncachedObject() {
+		if (!isCache()) {
+			return this;
+		} else {
+			throw new RuntimeException("Object of type " + getClass().getName()
+					+ " is cached but does not properly override getUncachedObject()! (" + this + ")");
+		}
+	}
+
 	public Class<? extends PPMObject> getEquivalentPPMClass() {
 		return null;
 	}

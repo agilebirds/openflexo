@@ -6,13 +6,13 @@
   <Label label="new_process_name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)" localize="true" />
   <TextField data="data.newProcessName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)" name="newProcessName" localize="true" columns="7" text="TextField" />
   <Label label="process" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_EXISTING&quot;)" localize="true" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" manageDynamicModel="true" name="ExistingProcessSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_EXISTING&quot;)">
+  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" manageDynamicModel="true" name="ExistingProcessSelector" data="data.existingProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_EXISTING&quot;)">
     <Assignment variable="component.project" value="data.project" />
     <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableExistingProcessNode(ExistingProcessSelector.customComponent.candidateValue)&quot;" />
     <Parameter name="selectableCondition" value="data.isAcceptableExistingProcessNode(ExistingProcessSelector.candidateValue)" />
   </Custom>
   <Label label="parent_process" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)" localize="true" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" manageDynamicModel="true" name="ParentProcessSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)">
+  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" manageDynamicModel="true" name="ParentProcessSelector" data="data.parentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)">
     <Assignment variable="component.project" value="data.project" />
     <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableParentProcessNode(ParentProcessSelector.customComponent.candidateValue)&quot;" />
   </Custom>

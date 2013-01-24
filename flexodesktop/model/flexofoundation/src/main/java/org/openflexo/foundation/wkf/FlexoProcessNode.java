@@ -402,7 +402,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 					if (ref != null) {
 						FlexoProject referredProject = ref.getReferredProject(true);
 						if (referredProject != null) {
-							return referredProject.getWorkflow().getLocalFlexoProcessWithName(getName());
+							return process = referredProject.getWorkflow().getLocalFlexoProcessWithFlexoID(getFlexoID());
 						}
 					}
 				}

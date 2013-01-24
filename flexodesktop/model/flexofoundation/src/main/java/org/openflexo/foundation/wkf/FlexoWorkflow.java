@@ -26,6 +26,8 @@ package org.openflexo.foundation.wkf;
  * Created by benoit on Mar 3, 2004
  */
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,11 +67,13 @@ import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
@@ -92,6 +96,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.xmlcode.XMLMapping;
@@ -1234,23 +1239,61 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 
 	public void clearAssignableRolesCache() {
 		allAssignableRoles = null;
+		if (manager != null) {
+			manager.delete();
+		}
+		manager = null;
 		notifyAttributeModification(ALL_ASSIGNABLE_ROLES, null, null);
 	}
 
+	private PropertyChangeListenerRegistrationManager manager;
+
 	public List<Role> getAllAssignableRoles() {
 		if (allAssignableRoles == null) {
+			manager = new PropertyChangeListenerRegistrationManager();
 			allAssignableRoles = new ArrayList<Role>();
 			RoleList roleList = getRoleList();
 			appendRoles(roleList, allAssignableRoles);
-			if (getProject().getProjectData() != null) {
-				for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-					if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
-						allAssignableRoles.addAll(ref.getReferredProject().getFlexoWorkflow().getAllAssignableRoles());
+			if (!isCache()) {
+				if (getProject().getProjectData() != null) {
+					manager.addListener(ProjectData.IMPORTED_PROJECTS, new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							clearAssignableRolesCache();
+						}
+					}, getProject().getProjectData());
+					for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+						manager.addListener(FlexoProjectReference.WORKFLOW, new PropertyChangeListener() {
+
+							@Override
+							public void propertyChange(PropertyChangeEvent evt) {
+								clearAssignableRolesCache();
+							}
+						}, ref);
+						if (ref.getWorkflow() != null) {
+							allAssignableRoles.addAll(ref.getWorkflow().getAllAssignableRoles());
+							manager.addListener(ALL_ASSIGNABLE_ROLES, new PropertyChangeListener() {
+
+								@Override
+								public void propertyChange(PropertyChangeEvent evt) {
+									clearAssignableRolesCache();
+								}
+							}, ref.getWorkflow());
+						}
 					}
+				} else {
+					manager.addListener(FlexoProject.PROJECT_DATA, new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							clearAssignableRolesCache();
+						}
+					}, getProject());
 				}
+				appendRoles(getImportedRoleList(), allAssignableRoles);
+				allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 			}
-			appendRoles(getImportedRoleList(), allAssignableRoles);
-			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 		}
 		return allAssignableRoles;
 	}
@@ -1990,8 +2033,32 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		}
 	}
 
+	public Role getCachedRole(FlexoModelObjectReference<Role> reference) {
+		if (reference.getObject() != null) {
+			return reference.getObject();
+		} else {
+			String projectURI = reference.getEnclosingProjectIdentifier();
+			if (projectURI != null) {
+				ProjectData data = getProject().getProjectData();
+				if (data != null) {
+					FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
+					if (projectRef != null) {
+						return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public boolean isCache() {
 		return getFlexoResource().isCache();
+	}
+
+	@Override
+	public FlexoModelObject getUncachedObject() {
+		return super.getUncachedObject();
 	}
 
 	@Override

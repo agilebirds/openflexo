@@ -275,6 +275,18 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		}
 	}
 
+	public long getFlexoID() {
+		return flexoID;
+	}
+
+	public String getEnclosingProjectIdentifier() {
+		if (modelObject != null) {
+			return modelObject.getProject().getProjectURI();
+		} else {
+			return enclosingProjectIdentifier;
+		}
+	}
+
 	private FlexoProject getReferringProject() {
 		if (owner != null) {
 			return owner.getProject();

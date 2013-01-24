@@ -10,6 +10,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
+import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -115,7 +116,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 							&& old.getName().equals(subProcessNodeName))) {
 				setSubProcessNodeName(existingProcess.getName());
 			}
-			propertyChangeSupport.firePropertyChange("existingProcess", null, existingProcess);
+			propertyChangeSupport.firePropertyChange("existingProcess", old, existingProcess);
 			validate();
 		}
 
@@ -124,8 +125,12 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		}
 
 		public void setNewProcessName(String newProcessName) {
+			String old = this.newProcessName;
 			this.newProcessName = newProcessName;
-			propertyChangeSupport.firePropertyChange("newProcessName", null, newProcessName);
+			propertyChangeSupport.firePropertyChange("newProcessName", old, newProcessName);
+			if (subProcessNodeName == null || subProcessNodeName.trim().length() == 0 || subProcessNodeName.equals(old)) {
+				setSubProcessNodeName(newProcessName);
+			}
 			validate();
 		}
 
@@ -157,7 +162,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		}
 
 		public boolean isAcceptableParentProcessNode(FlexoProcessNode parentProcessNode) {
-			return parentProcessNode == null || parentProcessNode.isAncestorOf(parentProcess);
+			return parentProcessNode == null || parentProcessNode.isAncestorOf(subProcessNode.getProcess().getProcessNode());
 		}
 
 		public boolean isAcceptableExistingProcessNode(FlexoProcessNode existingProcessNode) {
@@ -171,11 +176,18 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 					setErrorMessage(FlexoLocalization.localizedForKey("please_select_a_valid_process"));
 					return;
 				}
+				break;
 			case BIND_NEW:
 				if (newProcessName == null || newProcessName.trim().length() == 0) {
 					setErrorMessage(FlexoLocalization.localizedForKey("please_submit_a_valid_process_name"));
 					return;
+				} else {
+					if (getProject().getWorkflow().getLocalFlexoProcessWithName(newProcessName) != null) {
+						setErrorMessage(FlexoLocalization.localizedForKeyWithParams("process_named_($0)_already_exists", newProcessName));
+						return;
+					}
 				}
+				break;
 			}
 			setErrorMessage(null);
 		}
@@ -194,6 +206,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		setLocationRelativeTo(getOwner());
 		setVisible(true);
 		if (getStatus() == Status.VALIDATED) {
+			getData().getSubProcessNode().setName(getData().getSubProcessNodeName());
 			switch (getData().getChoice()) {
 			case BIND_EXISTING:
 				FlexoProcessNode existingProcess = getData().getExistingProcess();
@@ -208,7 +221,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 						process = existingProcess.getProcess();
 					}
 					if (process != null) {
-						getData().getSubProcessNode().setProcess(process);
+						getData().getSubProcessNode().setSubProcess(process);
 						return true;
 					}
 				}
@@ -216,7 +229,14 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 			case BIND_LATER:
 				return true;
 			case BIND_NEW:
-
+				AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().parentProcess.getProcess(), null, getData()
+						.getControllerActionInitializer().getEditor());
+				addSubProcess.setNewProcessName(getData().getNewProcessName());
+				addSubProcess.doAction();
+				if (addSubProcess.hasActionExecutionSucceeded()) {
+					getData().getSubProcessNode().setSubProcess(addSubProcess.getNewProcess());
+					return true;
+				}
 				break;
 			}
 		}

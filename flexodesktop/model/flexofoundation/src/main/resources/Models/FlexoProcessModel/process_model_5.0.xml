@@ -180,8 +180,6 @@
     <property name="operationPetriGraph" xmlTag="OperationPetriGraph" primary="yes" description="Petri graph at OPERATION level attached to this activity"/>
     <property name="roleReference" xmlTag="role" attribute="YES" description="Role for this activity stored as an external reference"/> 
     <property name="roleAReference" xmlTag="roleA" attribute="YES" description="Role for this activity stored as an external reference"/> 
-    <property name="roleCReference" xmlTag="roleC" attribute="YES" description="Role for this activity stored as an external reference"/> 
-    <property name="roleIReference" xmlTag="roleI" attribute="YES" description="Role for this activity stored as an external reference"/> 
     <property name="acronym" xmlTag="acronym" attribute="YES" description="Short name for this activity"/>
     <property name="roleTextColor" xmlTag="roleTextColor" attribute="YES" description="Defines role text color"/> 
     <property name="cssSheet" xmlTag="CSS" description="The Css for the components used in this activity"/>

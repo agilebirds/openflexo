@@ -23,6 +23,7 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	public static final String REFERRING_PROJECT = "referringProject";
 	public static final String REFERRED_PROJECT = "referredProject";
 	public static final String PROJECT = "project";
+	public static final String WORKFLOW = "workflow";
 
 	@Initializer
 	public FlexoProjectReference init(@Parameter(REFERRED_PROJECT) FlexoProject referredProject);
