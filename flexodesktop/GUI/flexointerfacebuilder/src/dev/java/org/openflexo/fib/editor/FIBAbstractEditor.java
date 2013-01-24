@@ -407,12 +407,8 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			editorController = new FIBEditorController(fibComponent, this, getData()[0]);
 		}
 		getPalette().setEditorController(editorController);
-
 		frame.getContentPane().add(editorController.getEditorPanel());
-
-		frame.validate();
 		frame.pack();
-
 	}
 
 	public void switchToData(Object data) {
@@ -435,7 +431,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		view.getController().setDataObject(editorController.getDataObject());
 		JDialog testInterface = new JDialog(frame, "Test", false);
 		testInterface.getContentPane().add(view.getResultingJComponent());
-		testInterface.validate();
 		testInterface.pack();
 		testInterface.setVisible(true);
 	}
@@ -447,7 +442,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		view.getController().setDataObject(editorController.getController());
 		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(LOCALIZATION, "component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
-		localizationInterface.validate();
 		localizationInterface.pack();
 		localizationInterface.setVisible(true);
 	}

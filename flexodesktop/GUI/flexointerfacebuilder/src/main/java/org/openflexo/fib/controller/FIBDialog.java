@@ -102,7 +102,6 @@ public class FIBDialog<T> extends JDialog {
 		if (!defaultButtonSet) {
 			// TODO: choose a button
 		}
-		validate();
 		pack();
 	}
 

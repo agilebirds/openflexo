@@ -193,7 +193,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		        }
 		    }
 		});*/
-		validate();
+		revalidate();
 
 	}
 
