@@ -62,7 +62,7 @@ public class PropertyParameter extends InnerModelSlotParameter {
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		return getViewPoint().getOntologyClass(_getDomainURI());
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
 	public void setDomain(IFlexoOntologyClass c) {
@@ -122,7 +122,7 @@ public class PropertyParameter extends InnerModelSlotParameter {
 	}
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
-		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
+		return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 	}
 
 	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
@@ -133,8 +133,8 @@ public class PropertyParameter extends InnerModelSlotParameter {
 	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
 		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
 		if (returned == null) {
-			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
 			}
 		}
 		return returned;

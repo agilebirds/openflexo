@@ -33,6 +33,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.ViewBuilder;
@@ -216,6 +217,13 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getViewPoint();
+		}
+		return null;
+	}
+
+	public VirtualModel getVirtualModel() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getVirtualModel();
 		}
 		return null;
 	}

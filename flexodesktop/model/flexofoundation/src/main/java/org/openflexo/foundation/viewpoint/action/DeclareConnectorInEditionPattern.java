@@ -85,7 +85,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 		@Override
 		public boolean isEnabledForSelection(ExampleDiagramConnector connector, Vector<ExampleDiagramObject> globalSelection) {
-			return connector != null && connector.getViewPoint().getEditionPatterns().size() > 0;
+			return connector != null && connector.getVirtualModel().getEditionPatterns().size() > 0;
 		}
 
 	};
@@ -364,7 +364,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 
 				// And add the newly created edition pattern
-				getFocusedObject().getViewPoint().addToEditionPatterns(newEditionPattern);
+				getFocusedObject().getVirtualModel().addToEditionPatterns(newEditionPattern);
 
 			default:
 				logger.warning("Pattern not implemented");

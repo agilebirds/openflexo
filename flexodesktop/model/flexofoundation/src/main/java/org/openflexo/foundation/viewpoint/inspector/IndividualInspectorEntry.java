@@ -74,8 +74,8 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getOntologyClass(_getConceptURI());
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getOntologyClass(_getConceptURI());
 		}
 		return null;
 	}

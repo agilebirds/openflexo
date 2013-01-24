@@ -46,7 +46,7 @@ public class EditionPatternView extends FIBModuleView<EditionPattern> {
 	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
 		super(editionPattern, controller, CEDCst.EDITION_PATTERN_VIEW_FIB);
 
-		controller.manageResource(editionPattern.getViewPoint());
+		controller.manageResource(editionPattern.getVirtualModel());
 
 	}
 

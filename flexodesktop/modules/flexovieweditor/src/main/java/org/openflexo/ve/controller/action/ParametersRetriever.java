@@ -419,7 +419,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 		FIBLabel titleLabel = new FIBLabel();
 		titleLabel.setAlign(Align.center);
-		titleLabel.setLabel(FlexoLocalization.localizedForKey(editionScheme.getViewPoint().getLocalizedDictionary(),
+		titleLabel.setLabel(FlexoLocalization.localizedForKey(editionScheme.getVirtualModel().getLocalizedDictionary(),
 				editionScheme.getLabel() != null ? editionScheme.getLabel() : editionScheme.getName()));
 		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 0);
 

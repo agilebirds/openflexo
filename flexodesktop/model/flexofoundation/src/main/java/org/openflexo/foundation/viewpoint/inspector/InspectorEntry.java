@@ -29,8 +29,8 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -73,9 +73,9 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	public abstract String getWidgetName();
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getViewPoint();
+			return getEditionPattern().getVirtualModel();
 		}
 		return null;
 	}

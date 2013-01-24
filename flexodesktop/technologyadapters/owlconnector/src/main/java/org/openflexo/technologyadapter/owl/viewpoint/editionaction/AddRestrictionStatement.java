@@ -67,8 +67,8 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 	}
 
 	public OWLProperty getObjectProperty() {
-		if (getViewPoint() != null) {
-			return (OWLProperty) getViewPoint().getOntologyObjectProperty(_getPropertyURI());
+		if (getVirtualModel() != null) {
+			return (OWLProperty) getVirtualModel().getOntologyObjectProperty(_getPropertyURI());
 		}
 		return null;
 	}

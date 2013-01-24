@@ -22,8 +22,6 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ExampleDiagramConnector extends ExampleDiagramObject {
 
@@ -37,7 +35,7 @@ public class ExampleDiagramConnector extends ExampleDiagramObject {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ExampleDiagramConnector(ViewPointBuilder builder) {
+	public ExampleDiagramConnector(ExampleDiagramBuilder builder) {
 		super(builder);
 	}
 

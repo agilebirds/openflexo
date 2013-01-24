@@ -41,8 +41,7 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
@@ -60,7 +59,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 
 	private int index;
 	private Vector<DiagramPaletteElement> _elements;
-	private ViewPoint _viewPoint;
+	private DiagramSpecification diagramSpecification;
 	private RelativePathFileConverter relativePathFileConverter;
 	private DiagramPaletteResource resource;
 	private DrawingGraphicalRepresentation<?> graphicalRepresentation;
@@ -71,21 +70,23 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	private File expectedScreenshotImageFile = null;
 	private boolean screenshotModified = false;
 
-	public static DiagramPalette newDiagramPalette(ViewPoint viewPoint, File paletteFile,
+	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, File paletteFile,
 			DrawingGraphicalRepresentation<?> graphicalRepresentation) {
 		DiagramPalette palette = new DiagramPalette(null);
-		palette.setIndex(viewPoint.getPalettes().size());
+		palette.setIndex(diagramSpecification.getPalettes().size());
 		palette.setGraphicalRepresentation(graphicalRepresentation);
-		palette.init(viewPoint, paletteFile);
+		palette.init(diagramSpecification, paletteFile);
 		return palette;
 	}
 
 	// Used during deserialization, do not use it
-	public DiagramPalette(ViewPointBuilder builder) {
+	public DiagramPalette(DiagramPaletteBuilder builder) {
 		super(builder);
 		_elements = new Vector<DiagramPaletteElement>();
 		if (builder != null) {
-			_viewPoint = builder.getViewPoint();
+			builder.diagramPalette = this;
+			diagramSpecification = builder.diagramSpecification;
+			resource = builder.resource;
 		}
 	}
 
@@ -94,22 +95,31 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 		return this;
 	}
 
-	public void init(ViewPoint viewPoint, File paletteFile) {
+	public void init(DiagramSpecification diagramSpecification, File paletteFile) {
 		if (StringUtils.isEmpty(getName())) {
 			setName(paletteFile.getName().substring(0, paletteFile.getName().length() - 8));
 		}
-		_viewPoint = viewPoint;
+		this.diagramSpecification = diagramSpecification;
 		// xmlFile = paletteFile;
-		logger.info("Registering calc palette for calc " + viewPoint.getName());
-		relativePathFileConverter = new RelativePathFileConverter(viewPoint.getResource().getDirectory());
+		logger.info("Registering diagram palette for viewpoint " + getViewPoint().getName());
+		relativePathFileConverter = new RelativePathFileConverter(getViewPoint().getResource().getDirectory());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
 
 	@Override
+	public DiagramSpecification getVirtualModel() {
+		return diagramSpecification;
+	}
+
+	public DiagramSpecification getDiagramSpecification() {
+		return diagramSpecification;
+	}
+
+	@Override
 	public void delete() {
-		if (getViewPoint() != null) {
-			getViewPoint().removeFromPalettes(this);
+		if (getVirtualModel() != null) {
+			getVirtualModel().removeFromPalettes(this);
 		}
 		super.delete();
 		deleteObservers();
@@ -127,7 +137,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 
 	@Override
 	public String toString() {
-		return "DiagramPalette:" + (getViewPoint() != null ? getViewPoint().getName() : "null");
+		return "DiagramPalette:" + (getVirtualModel() != null ? getVirtualModel().getName() : "null");
 	}
 
 	public int getIndex() {
@@ -153,13 +163,8 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return _viewPoint;
-	}
-
-	@Override
 	public ViewPointLibrary getViewPointLibrary() {
-		return getViewPoint().getViewPointLibrary();
+		return getVirtualModel().getViewPointLibrary();
 	}
 
 	public Vector<DiagramPaletteElement> getElements() {
@@ -293,7 +298,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getViewPoint().getBindingModel();
+		return getVirtualModel().getBindingModel();
 	}
 
 	@Override

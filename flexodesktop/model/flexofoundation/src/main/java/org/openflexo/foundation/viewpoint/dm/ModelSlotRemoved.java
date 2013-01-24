@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Notify that a model slot has been removed
@@ -34,6 +35,11 @@ public class ModelSlotRemoved extends ViewPointDataModification {
 
 	public ModelSlotRemoved(ModelSlot<?, ?> modelSlot, ViewPoint viewPoint) {
 		super("modelSlots", modelSlot, null);
+		this.viewPoint = viewPoint;
+	}
+
+	public ModelSlotRemoved(ModelSlot<?, ?> modelSlot, VirtualModel virtualModel) {
+		super("modelSlots", virtualModel, null);
 		this.viewPoint = viewPoint;
 	}
 

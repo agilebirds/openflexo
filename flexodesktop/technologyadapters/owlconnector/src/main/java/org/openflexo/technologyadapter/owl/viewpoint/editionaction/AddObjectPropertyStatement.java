@@ -88,7 +88,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	public IFlexoOntologyStructuralProperty getObjectProperty() {
 		if (StringUtils.isNotEmpty(objectPropertyURI)) {
-			return getViewPoint().getOntologyObjectProperty(objectPropertyURI);
+			return getVirtualModel().getOntologyObjectProperty(objectPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getObjectProperty();

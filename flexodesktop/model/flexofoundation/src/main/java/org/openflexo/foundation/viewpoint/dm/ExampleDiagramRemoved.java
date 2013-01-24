@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 
 /**
  * Notify that a new view has been added
@@ -30,9 +30,9 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  */
 public class ExampleDiagramRemoved extends ViewPointDataModification {
 
-	private ViewPoint _parent;
+	private DiagramSpecification _parent;
 
-	public ExampleDiagramRemoved(ExampleDiagram shema, ViewPoint parent) {
+	public ExampleDiagramRemoved(ExampleDiagram shema, DiagramSpecification parent) {
 		super(shema, null);
 		_parent = parent;
 	}
@@ -42,7 +42,7 @@ public class ExampleDiagramRemoved extends ViewPointDataModification {
 		return (ExampleDiagram) super.oldValue();
 	}
 
-	public ViewPoint getParent() {
+	public DiagramSpecification getParent() {
 		return _parent;
 	}
 

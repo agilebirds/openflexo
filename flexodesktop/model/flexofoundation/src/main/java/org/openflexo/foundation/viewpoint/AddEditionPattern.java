@@ -310,9 +310,9 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 
 		@Override
-		public ViewPoint getViewPoint() {
+		public VirtualModel getVirtualModel() {
 			if (getAction() != null) {
-				return getAction().getViewPoint();
+				return getAction().getVirtualModel();
 			}
 			return null;
 		}

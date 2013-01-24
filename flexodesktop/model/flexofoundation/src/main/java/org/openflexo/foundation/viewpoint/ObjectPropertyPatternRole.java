@@ -51,7 +51,7 @@ public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectPr
 	}
 
 	public IFlexoOntologyClass getRange() {
-		return getViewPoint().getOntologyClass(_getRangeURI());
+		return getVirtualModel().getOntologyClass(_getRangeURI());
 	}
 
 	public void setRange(IFlexoOntologyClass c) {

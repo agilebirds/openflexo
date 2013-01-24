@@ -37,7 +37,7 @@ public abstract class EditionSchemeObject extends EditionPatternObject {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
 				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getClass().getSimpleName();
 	}

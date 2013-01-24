@@ -30,8 +30,8 @@ import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 public class GraphicalElementAction extends EditionPatternObject {
 
@@ -109,8 +109,8 @@ public class GraphicalElementAction extends EditionPatternObject {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getEditionPattern().getViewPoint();
+	public VirtualModel getVirtualModel() {
+		return getEditionPattern().getVirtualModel();
 	}
 
 	public AbstractActionScheme getAbstractActionScheme() {

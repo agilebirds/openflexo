@@ -59,7 +59,7 @@ public class EditionPatternBehaviouralFacet extends EditionPatternObject impleme
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getEditionPattern().getViewPoint();
+	public VirtualModel getVirtualModel() {
+		return getEditionPattern().getVirtualModel();
 	}
 }

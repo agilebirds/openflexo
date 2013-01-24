@@ -77,8 +77,8 @@ public abstract class AddConcept<M extends FlexoModel<M, MM>, MM extends FlexoMe
 	@Override
 	public ModelSlot<M, MM> getModelSlot() {
 		ModelSlot<M, MM> returned = super.getModelSlot();
-		if (returned == null && getViewPoint() != null) {
-			List<FlexoOntologyModelSlot> msList = getViewPoint().getModelSlots(FlexoOntologyModelSlot.class);
+		if (returned == null && getVirtualModel() != null) {
+			List<FlexoOntologyModelSlot> msList = getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class);
 			if (msList.size() > 0) {
 				return msList.get(0);
 			}

@@ -40,7 +40,7 @@ public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor 
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 		ViewPoint calc1 = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-		ExampleDiagram shema = calc1.getExampleDiagrams().get(0);
+		ExampleDiagram shema = calc1.getDefaultDiagramSpecification().getExampleDiagrams().get(0);
 		ExampleDiagramShape shape = (ExampleDiagramShape) shema.getChilds().firstElement();
 		DeclareShapeInEditionPattern action = DeclareShapeInEditionPattern.actionType.makeNewAction(shape, null, null);
 		return makeArray(action);

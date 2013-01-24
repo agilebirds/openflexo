@@ -26,9 +26,10 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.rm.ExampleDiagramResource;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
@@ -47,6 +48,18 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	// For a CalcDrawingConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
 	private GraphicalRepresentation<?> _graphicalRepresentation;
 
+	public static class ExampleDiagramBuilder {
+		public DiagramSpecification diagramSpecification;
+		public ExampleDiagram exampleDiagram;
+		public ExampleDiagramResource resource;
+
+		public ExampleDiagramBuilder(DiagramSpecification diagramSpecification, ExampleDiagramResource resource) {
+			this.diagramSpecification = diagramSpecification;
+			this.resource = resource;
+		}
+
+	}
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
@@ -55,7 +68,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public ExampleDiagramObject(ViewPointBuilder builder) {
+	public ExampleDiagramObject(ExampleDiagramBuilder builder) {
 		super(builder);
 		childs = new Vector<ExampleDiagramObject>();
 	}
@@ -89,8 +102,15 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 
 	@Override
 	public ViewPoint getViewPoint() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
+		return null;
+	}
+
+	public DiagramSpecification getVirtualModel() {
 		if (getExampleDiagram() != null) {
-			return getExampleDiagram().getViewPoint();
+			return getExampleDiagram().getVirtualModel();
 		}
 		return null;
 	}
@@ -201,7 +221,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getViewPoint().getBindingModel();
+		return getVirtualModel().getBindingModel();
 	}
 
 	@Override

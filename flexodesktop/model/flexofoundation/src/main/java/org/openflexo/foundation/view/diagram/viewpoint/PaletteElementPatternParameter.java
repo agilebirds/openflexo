@@ -17,27 +17,28 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.URIParameter;
 
-public class PaletteElementPatternParameter extends NamedViewPointObject {
+public class PaletteElementPatternParameter extends DiagramPaletteObject {
 
 	private EditionSchemeParameter _parameter;
 	private DiagramPaletteElement _element;
 	private String value;
 
-	public PaletteElementPatternParameter(ViewPointBuilder builder) {
+	public PaletteElementPatternParameter(DiagramPaletteBuilder builder) {
 		super(builder);
 	}
 
 	public PaletteElementPatternParameter(EditionSchemeParameter p) {
-		super(null);
+		super((DiagramPaletteBuilder) null);
 		_parameter = p;
 		setName(p.getName());
 		setValue(p.getDefaultValue().toString());
@@ -77,9 +78,17 @@ public class PaletteElementPatternParameter extends NamedViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public DiagramPalette getPalette() {
 		if (getElement() != null) {
-			return getElement().getViewPoint();
+			return getElement().getPalette();
+		}
+		return null;
+	}
+
+	@Override
+	public DiagramSpecification getVirtualModel() {
+		if (getElement() != null) {
+			return getElement().getVirtualModel();
 		}
 		return null;
 	}

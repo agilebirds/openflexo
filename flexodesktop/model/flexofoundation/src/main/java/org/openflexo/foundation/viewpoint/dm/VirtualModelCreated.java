@@ -19,31 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
-/**
- * Notify that a new palette has been added
- * 
- * @author sguerin
- * 
- */
-public class DiagramPaletteInserted extends ViewPointDataModification {
+public class VirtualModelCreated extends ViewPointDataModification {
 
-	private DiagramSpecification _parent;
-
-	public DiagramPaletteInserted(DiagramPalette palette, DiagramSpecification parent) {
-		super(null, palette);
-		_parent = parent;
-	}
-
-	@Override
-	public DiagramPalette newValue() {
-		return (DiagramPalette) super.newValue();
-	}
-
-	public DiagramSpecification getParent() {
-		return _parent;
+	public VirtualModelCreated(VirtualModel vm) {
+		super("virtualModels", null, vm);
 	}
 
 }

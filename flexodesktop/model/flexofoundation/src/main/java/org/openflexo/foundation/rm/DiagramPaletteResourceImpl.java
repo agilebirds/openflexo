@@ -7,7 +7,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -46,9 +46,9 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
-	public final ViewPointBuilder instanciateNewBuilder() {
+	public final DiagramPaletteBuilder instanciateNewBuilder() {
 		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
-		return new ViewPointBuilder(getViewPointLibrary(), (ViewPointResource) null);
+		return new DiagramPaletteBuilder();
 	}
 
 	@Override

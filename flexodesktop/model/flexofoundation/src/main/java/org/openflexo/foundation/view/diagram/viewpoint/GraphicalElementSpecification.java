@@ -15,8 +15,8 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * This class represent a constraint of graphical feature that is to be applied on a ViewElement
@@ -128,8 +128,8 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getEditionPattern() != null ? getEditionPattern().getViewPoint() : null;
+	public VirtualModel getVirtualModel() {
+		return getEditionPattern() != null ? getEditionPattern().getVirtualModel() : null;
 	}
 
 	/**

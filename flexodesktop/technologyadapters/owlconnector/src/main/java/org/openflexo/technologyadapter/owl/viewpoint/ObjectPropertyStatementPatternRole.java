@@ -56,7 +56,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 	}
 
 	public IFlexoOntologyStructuralProperty getObjectProperty() {
-		return getViewPoint().getOntologyObjectProperty(_getObjectPropertyURI());
+		return getVirtualModel().getOntologyObjectProperty(_getObjectPropertyURI());
 	}
 
 	public void setObjectProperty(IFlexoOntologyStructuralProperty p) {

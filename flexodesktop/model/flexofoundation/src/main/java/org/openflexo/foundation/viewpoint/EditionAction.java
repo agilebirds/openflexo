@@ -113,8 +113,12 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public ViewPoint getViewPoint() {
+		return getVirtualModel().getViewPoint();
+	}
+
+	public VirtualModel getVirtualModel() {
 		if (getScheme() != null) {
-			return getScheme().getViewPoint();
+			return getScheme().getVirtualModel();
 		}
 		return null;
 	}

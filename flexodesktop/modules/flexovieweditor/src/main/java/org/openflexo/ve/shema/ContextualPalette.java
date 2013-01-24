@@ -185,7 +185,7 @@ public class ContextualPalette extends DrawingPalette {
 						if (availableDropPatterns.size() > 1) {
 							JPopupMenu popup = new JPopupMenu();
 							for (final DropScheme dropScheme : availableDropPatterns) {
-								JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(dropScheme.getViewPoint()
+								JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(dropScheme.getVirtualModel()
 										.getLocalizedDictionary(),
 										dropScheme.getLabel() != null ? dropScheme.getLabel() : dropScheme.getName()));
 								menuItem.addActionListener(new ActionListener() {

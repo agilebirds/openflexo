@@ -15,6 +15,7 @@ import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.ViewElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
@@ -43,6 +44,11 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
 			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
 		}
+	}
+
+	@Override
+	public DiagramSpecification getVirtualModel() {
+		return (DiagramSpecification) super.getVirtualModel();
 	}
 
 	@Override
@@ -299,8 +305,8 @@ public abstract class GraphicalElementPatternRole<T extends ViewElement> extends
 	public DiagramModelSlot getModelSlot() {
 		DiagramModelSlot returned = (DiagramModelSlot) super.getModelSlot();
 		if (returned == null) {
-			if (getViewPoint() != null && getViewPoint().getModelSlots(DiagramModelSlot.class).size() > 0) {
-				return getViewPoint().getModelSlots(DiagramModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(DiagramModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(DiagramModelSlot.class).get(0);
 			}
 		}
 		return returned;

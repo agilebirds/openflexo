@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 
 /**
  * Notify that a new palette has been removed
@@ -30,9 +30,9 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  */
 public class DiagramPaletteRemoved extends ViewPointDataModification {
 
-	private ViewPoint _parent;
+	private DiagramSpecification _parent;
 
-	public DiagramPaletteRemoved(DiagramPalette palette, ViewPoint parent) {
+	public DiagramPaletteRemoved(DiagramPalette palette, DiagramSpecification parent) {
 		super(palette, null);
 		_parent = parent;
 	}
@@ -42,7 +42,7 @@ public class DiagramPaletteRemoved extends ViewPointDataModification {
 		return (DiagramPalette) super.oldValue();
 	}
 
-	public ViewPoint getParent() {
+	public DiagramSpecification getParent() {
 		return _parent;
 	}
 

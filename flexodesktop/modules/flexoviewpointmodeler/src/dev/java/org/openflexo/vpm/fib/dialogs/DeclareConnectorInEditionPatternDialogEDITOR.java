@@ -40,7 +40,7 @@ public class DeclareConnectorInEditionPatternDialogEDITOR extends FIBAbstractEdi
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 		ViewPoint calc1 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 
-		ExampleDiagram shema = calc1.getExampleDiagrams().get(0);
+		ExampleDiagram shema = calc1.getDefaultDiagramSpecification().getExampleDiagrams().get(0);
 		ExampleDiagramConnector connector = (ExampleDiagramConnector) shema.getChilds().get(2);
 		DeclareConnectorInEditionPattern action = DeclareConnectorInEditionPattern.actionType.makeNewAction(connector, null, null);
 		return makeArray(action);

@@ -59,8 +59,8 @@ public class EditionSchemeParameters extends EditionSchemeObject implements Flex
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getEditionPattern().getViewPoint();
+	public VirtualModel getVirtualModel() {
+		return getEditionPattern().getVirtualModel();
 	}
 
 	@Override

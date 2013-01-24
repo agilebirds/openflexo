@@ -61,7 +61,7 @@ public class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
-		return getViewPoint().getOntologyProperty(_getParentPropertyURI());
+		return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 	}
 
 	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
@@ -77,7 +77,7 @@ public class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		return getViewPoint().getOntologyClass(_getDomainURI());
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
 	public void setDomain(IFlexoOntologyClass c) {

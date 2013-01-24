@@ -29,12 +29,10 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class DiagramPaletteElement extends DiagramPaletteObject {
 
@@ -61,7 +59,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	private DiagramPalette _palette;
 
-	public DiagramPaletteElement(ViewPointBuilder builder) {
+	public DiagramPaletteElement(DiagramPaletteBuilder builder) {
 		super(builder);
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
@@ -69,7 +67,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	@Override
 	public String getURI() {
-		return getViewPoint().getURI() + "." + getName();
+		return getVirtualModel().getURI() + "." + getName();
 	}
 
 	@Override
@@ -77,10 +75,17 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		return getOverridingGraphicalRepresentations();
 	}
 
-	@Override
-	public ViewPoint getViewPoint() {
+	public DiagramSpecification getDiagramSpecification() {
 		if (getPalette() != null) {
-			return getPalette().getViewPoint();
+			return getPalette().getDiagramSpecification();
+		}
+		return null;
+	}
+
+	@Override
+	public DiagramSpecification getVirtualModel() {
+		if (getPalette() != null) {
+			return getPalette().getVirtualModel();
 		}
 		return null;
 	}
@@ -128,8 +133,8 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		if (editionPattern != null) {
 			return editionPattern;
 		}
-		if (_editionPatternId != null && getViewPoint() != null) {
-			editionPattern = getViewPoint().getEditionPattern(_editionPatternId);
+		if (_editionPatternId != null && getVirtualModel() != null) {
+			editionPattern = getVirtualModel().getEditionPattern(_editionPatternId);
 			updateParameters();
 		}
 		return editionPattern;
@@ -280,15 +285,15 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 	}
 
 	public Vector<EditionPattern> allAvailableEditionPatterns() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getAllEditionPatternWithDropScheme();
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getAllEditionPatternWithDropScheme();
 		}
 		return null;
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getViewPoint().getBindingModel();
+		return getVirtualModel().getBindingModel();
 	}
 
 	public String getPatternRoleName() {
@@ -304,7 +309,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		private String patternRoleName;
 
 		// Do not use, required for deserialization
-		public OverridingGraphicalRepresentation(ViewPointBuilder builder) {
+		public OverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
 			super(builder);
 		}
 
@@ -323,9 +328,9 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		}
 
 		@Override
-		public ViewPoint getViewPoint() {
+		public DiagramSpecification getVirtualModel() {
 			if (getPaletteElement() != null) {
-				return getPaletteElement().getViewPoint();
+				return getPaletteElement().getVirtualModel();
 			}
 			return null;
 		}
@@ -365,7 +370,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+		public ShapeOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
 			super(builder);
 		}
 
@@ -396,7 +401,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		private ConnectorGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+		public ConnectorOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
 			super(builder);
 		}
 

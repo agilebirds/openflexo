@@ -7,7 +7,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -52,9 +52,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
-	public final ViewPointBuilder instanciateNewBuilder() {
-		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
-		return new ViewPointBuilder(getViewPointLibrary(), (ViewPointResource) null);
+	public final ExampleDiagramBuilder instanciateNewBuilder() {
+		return new ExampleDiagramBuilder();
 	}
 
 	@Override

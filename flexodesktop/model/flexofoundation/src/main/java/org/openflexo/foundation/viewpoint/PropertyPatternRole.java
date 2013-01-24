@@ -37,8 +37,8 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	}
 
 	public IFlexoOntologyStructuralProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getOntologyProperty(_getParentPropertyURI());
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 		}
 		return null;
 	}
@@ -56,7 +56,7 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	}
 
 	public IFlexoOntologyClass getDomain() {
-		return getViewPoint().getOntologyClass(_getDomainURI());
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
 	public void setDomain(IFlexoOntologyClass c) {
@@ -85,8 +85,8 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
 		FlexoOntologyModelSlot<?, ?> returned = super.getModelSlot();
 		if (returned == null) {
-			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
 			}
 		}
 		return returned;

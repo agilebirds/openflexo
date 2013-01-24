@@ -37,8 +37,8 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
@@ -50,25 +50,27 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	private static final Logger logger = Logger.getLogger(ExampleDiagram.class.getPackage().getName());
 
 	private ExampleDiagramResource resource;
-	private ViewPoint _viewpoint;
+	private DiagramSpecification diagramSpecification;
 	private boolean initialized = false;
 
 	private boolean screenshotModified = false;
 	private ScreenshotImage screenshotImage;
 	private File expectedScreenshotImageFile = null;
 
-	public static ExampleDiagram newShema(ViewPoint calc, File shemaFile,
+	public static ExampleDiagram newExampleDiagram(DiagramSpecification diagramSpecification, File shemaFile,
 			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation) {
 		ExampleDiagram shema = new ExampleDiagram(null);
 		shema.setGraphicalRepresentation(graphicalRepresentation);
-		shema.init(calc, shemaFile);
+		shema.init(diagramSpecification, shemaFile);
 		return shema;
 	}
 
-	public ExampleDiagram(ViewPointBuilder builder) {
+	public ExampleDiagram(ExampleDiagramBuilder builder) {
 		super(builder);
 		if (builder != null) {
-			_viewpoint = builder.getViewPoint();
+			builder.exampleDiagram = this;
+			diagramSpecification = builder.diagramSpecification;
+			resource = builder.resource;
 		}
 	}
 
@@ -77,28 +79,37 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
-	public void init(ViewPoint viewpoint, File diagramFile) {
+	public void init(DiagramSpecification diagramSpecification, File diagramFile) {
 		if (StringUtils.isEmpty(getName())) {
 			setName(diagramFile.getName().substring(0, diagramFile.getName().length() - 6));
 		}
-		_viewpoint = viewpoint;
-		logger.info("Registering example diagram for viewpoint " + viewpoint.getName());
+		this.diagramSpecification = diagramSpecification;
+		logger.info("Registering example diagram for viewpoint " + diagramSpecification.getViewPoint().getName());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
 
 	@Override
 	public void delete() {
-		if (getViewPoint() != null) {
-			getViewPoint().removeFromExampleDiagrams(this);
+		if (getVirtualModel() != null) {
+			getVirtualModel().removeFromExampleDiagrams(this);
 		}
 		super.delete();
 		deleteObservers();
 	}
 
 	@Override
+	public DiagramSpecification getVirtualModel() {
+		return diagramSpecification;
+	}
+
+	public DiagramSpecification getDiagramSpecification() {
+		return diagramSpecification;
+	}
+
+	@Override
 	public ViewPoint getViewPoint() {
-		return _viewpoint;
+		return getVirtualModel().getViewPoint();
 	}
 
 	@Override

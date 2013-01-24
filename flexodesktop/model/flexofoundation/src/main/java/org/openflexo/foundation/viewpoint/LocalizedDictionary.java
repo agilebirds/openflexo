@@ -58,11 +58,6 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		return _viewPoint;
 	}
 
-	@Deprecated
-	public void setCalc(ViewPoint calc) {
-		setViewPoint(calc);
-	}
-
 	public void setViewPoint(ViewPoint viewPoint) {
 		_viewPoint = viewPoint;
 	}
@@ -295,16 +290,18 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	public void searchNewEntries() {
 		logger.info("Search new entries");
-		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
-			checkAndRegisterLocalized(ep.getName());
-			for (EditionScheme es : ep.getEditionSchemes()) {
-				checkAndRegisterLocalized(es.getLabel());
-				checkAndRegisterLocalized(es.getDescription());
-				for (EditionSchemeParameter p : es.getParameters()) {
-					checkAndRegisterLocalized(p.getLabel());
-				}
-				for (InspectorEntry entry : ep.getInspector().getEntries()) {
-					checkAndRegisterLocalized(entry.getLabel());
+		for (VirtualModel vm : getViewPoint().getVirtualModels()) {
+			for (EditionPattern ep : vm.getEditionPatterns()) {
+				checkAndRegisterLocalized(ep.getName());
+				for (EditionScheme es : ep.getEditionSchemes()) {
+					checkAndRegisterLocalized(es.getLabel());
+					checkAndRegisterLocalized(es.getDescription());
+					for (EditionSchemeParameter p : es.getParameters()) {
+						checkAndRegisterLocalized(p.getLabel());
+					}
+					for (InspectorEntry entry : ep.getInspector().getEntries()) {
+						checkAndRegisterLocalized(entry.getLabel());
+					}
 				}
 			}
 		}

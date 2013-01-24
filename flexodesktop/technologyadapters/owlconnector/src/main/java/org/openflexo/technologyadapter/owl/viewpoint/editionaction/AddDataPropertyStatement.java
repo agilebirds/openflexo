@@ -88,7 +88,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	public IFlexoOntologyStructuralProperty getDataProperty() {
 		if (StringUtils.isNotEmpty(dataPropertyURI)) {
-			return getViewPoint().getOntologyDataProperty(dataPropertyURI);
+			return getVirtualModel().getOntologyDataProperty(dataPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
 				return getPatternRole().getDataProperty();

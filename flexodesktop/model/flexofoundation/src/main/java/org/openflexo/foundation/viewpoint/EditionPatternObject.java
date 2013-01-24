@@ -36,8 +36,20 @@ public abstract class EditionPatternObject extends NamedViewPointObject {
 	public abstract EditionPattern getEditionPattern();
 
 	@Override
+	public ViewPoint getViewPoint() {
+		return getVirtualModel().getViewPoint();
+	}
+
+	public VirtualModel getVirtualModel() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getVirtualModel();
+		}
+		return null;
+	}
+
+	@Override
 	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
 	}
 

@@ -14,7 +14,7 @@ public class EditionPatternInstanceBindingVariable extends BindingVariable {
 	private int index;
 
 	public EditionPatternInstanceBindingVariable(EditionPattern anEditionPattern, int index) {
-		super(anEditionPattern.getViewPoint().getName() + "_" + anEditionPattern.getName() + "_" + index, anEditionPattern);
+		super(anEditionPattern.getVirtualModel().getName() + "_" + anEditionPattern.getName() + "_" + index, anEditionPattern);
 		this.editionPattern = anEditionPattern;
 	}
 

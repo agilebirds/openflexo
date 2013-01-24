@@ -50,8 +50,8 @@ public abstract class IndividualPatternRole<I extends IFlexoOntologyIndividual> 
 	}
 
 	public IFlexoOntologyClass getOntologicType() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getOntologyClass(_getConceptURI());
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getOntologyClass(_getConceptURI());
 		}
 		return null;
 	}

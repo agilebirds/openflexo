@@ -84,7 +84,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
 				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getName();
 	}
@@ -125,9 +125,9 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getScheme() != null) {
-			return getScheme().getViewPoint();
+			return getScheme().getVirtualModel();
 		}
 		return null;
 	}

@@ -41,8 +41,8 @@ public abstract class DiagramAction<T extends ViewObject> extends AssignableActi
 	public DiagramModelSlot getModelSlot() {
 		DiagramModelSlot returned = (DiagramModelSlot) super.getModelSlot();
 		if (returned == null) {
-			if (getViewPoint() != null && getViewPoint().getModelSlots(DiagramModelSlot.class).size() > 0) {
-				return getViewPoint().getModelSlots(DiagramModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(DiagramModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(DiagramModelSlot.class).get(0);
 			}
 		}
 		return returned;

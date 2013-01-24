@@ -26,7 +26,7 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.CreateDiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
@@ -36,7 +36,7 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.palette.PaletteGR;
 
-public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDiagramPalette, ViewPoint, ViewPointObject> {
+public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

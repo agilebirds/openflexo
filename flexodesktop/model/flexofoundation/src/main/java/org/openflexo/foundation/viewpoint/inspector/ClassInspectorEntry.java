@@ -63,7 +63,7 @@ public class ClassInspectorEntry extends InspectorEntry {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		return getViewPoint().getOntologyClass(_getConceptURI());
+		return getVirtualModel().getOntologyClass(_getConceptURI());
 	}
 
 	public void setConcept(IFlexoOntologyClass c) {

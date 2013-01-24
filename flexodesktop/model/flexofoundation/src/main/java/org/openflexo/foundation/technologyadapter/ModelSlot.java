@@ -25,6 +25,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -51,12 +52,13 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	private String metaModelURI;
 	private TechnologyAdapter<M, MM> technologyAdapter;
 	private ViewPoint viewPoint;
+	private VirtualModel virtualModel;
 
 	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
 	private List<Class<? extends EditionAction>> availableEditionActionTypes;
 
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
-		super(null);
+		super((ViewPointBuilder) null);
 		this.viewPoint = viewPoint;
 		this.technologyAdapter = technologyAdapter;
 	}
@@ -76,7 +78,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	@Override
 	public String getURI() {
-		return getViewPoint().getURI() + "." + getName();
+		return getVirtualModel().getURI() + "." + getName();
 	}
 
 	/**
@@ -112,8 +114,15 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return null;
 	}
 
+	public VirtualModel getVirtualModel() {
+		return virtualModel;
+	}
+
 	@Override
 	public ViewPoint getViewPoint() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
 		return viewPoint;
 	}
 

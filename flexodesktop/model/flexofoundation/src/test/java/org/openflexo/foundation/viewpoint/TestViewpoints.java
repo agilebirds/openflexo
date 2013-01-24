@@ -92,7 +92,7 @@ public class TestViewpoints extends FlexoTestCase {
 		ViewPoint basicOntologyEditor = testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 		assertNotNull(basicOntologyEditor);
 
-		EditionPattern conceptEP = basicOntologyEditor.getEditionPattern("Concept");
+		EditionPattern conceptEP = basicOntologyEditor.getDefaultDiagramSpecification().getEditionPattern("Concept");
 		assertNotNull(conceptEP);
 
 		DropScheme ds = (DropScheme) conceptEP.getEditionScheme("DropConceptAtTopLevel");

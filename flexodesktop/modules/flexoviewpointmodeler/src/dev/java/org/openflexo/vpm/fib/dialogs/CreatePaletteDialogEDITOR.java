@@ -37,9 +37,9 @@ public class CreatePaletteDialogEDITOR extends FIBAbstractEditor {
 				new FileResource("src/test/resources/TestResourceCenter"));
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
-		ViewPoint calc1 = viewPointLibrary
+		ViewPoint vp = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-		CreateDiagramPalette action = CreateDiagramPalette.actionType.makeNewAction(calc1, null, null);
+		CreateDiagramPalette action = CreateDiagramPalette.actionType.makeNewAction(vp.getDefaultDiagramSpecification(), null, null);
 		return makeArray(action);
 	}
 

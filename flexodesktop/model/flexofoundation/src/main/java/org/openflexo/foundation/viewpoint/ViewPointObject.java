@@ -34,6 +34,8 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -51,9 +53,19 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 	public ViewPointObject(ViewPointBuilder builder) {
 		if (builder != null) {
-			// System.out.println("BEGIN deserialisation for " + getClass().getSimpleName());
 			initializeDeserialization(builder);
-			// viewPointOntology = builder.getViewPointOntology();
+		}
+	}
+
+	public ViewPointObject(ExampleDiagramBuilder builder) {
+		if (builder != null) {
+			initializeDeserialization(builder);
+		}
+	}
+
+	public ViewPointObject(DiagramPaletteBuilder builder) {
+		if (builder != null) {
+			initializeDeserialization(builder);
 		}
 	}
 

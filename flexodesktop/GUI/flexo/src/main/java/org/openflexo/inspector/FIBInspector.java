@@ -541,7 +541,7 @@ public class FIBInspector extends FIBPanel {
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
-		String epIdentifier = ep.getViewPoint().getName() + "_" + ep.getName() + "_" + refIndex;
+		String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
 		newTab.setName(epIdentifier + "Panel");
 		int index = 0;
 		for (final InspectorEntry entry : ep.getInspector().getEntries()) {

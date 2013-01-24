@@ -22,6 +22,8 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
@@ -38,6 +40,14 @@ public abstract class NamedViewPointObject extends ViewPointObject {
 	private String description;
 
 	public NamedViewPointObject(ViewPointBuilder builder) {
+		super(builder);
+	}
+
+	public NamedViewPointObject(ExampleDiagramBuilder builder) {
+		super(builder);
+	}
+
+	public NamedViewPointObject(DiagramPaletteBuilder builder) {
 		super(builder);
 	}
 

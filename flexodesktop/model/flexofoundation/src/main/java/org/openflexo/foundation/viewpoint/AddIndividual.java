@@ -76,7 +76,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			return getViewPoint().getOntologyClass(ontologyClassURI);
+			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
 				// System.out.println("Je reponds avec le pattern role " + getPatternRole());

@@ -19,15 +19,39 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import org.openflexo.foundation.rm.DiagramPaletteResource;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 public abstract class DiagramPaletteObject extends NamedViewPointObject {
 
-	public DiagramPaletteObject(ViewPointBuilder builder) {
+	public DiagramPaletteObject(DiagramPaletteBuilder builder) {
 		super(builder);
 	}
 
 	public abstract DiagramPalette getPalette();
+
+	public abstract DiagramSpecification getVirtualModel();
+
+	@Override
+	public final ViewPoint getViewPoint() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
+		return null;
+	}
+
+	public static class DiagramPaletteBuilder {
+		public DiagramSpecification diagramSpecification;
+		public DiagramPalette diagramPalette;
+		public DiagramPaletteResource resource;
+
+		public DiagramPaletteBuilder(DiagramSpecification diagramSpecification, DiagramPaletteResource resource) {
+			this.diagramSpecification = diagramSpecification;
+			this.resource = resource;
+		}
+
+	}
 
 }

@@ -56,6 +56,20 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * An EditionPattern aggregates modelling elements from different modelling element resources (models, metamodels, graphical representation,
+ * GUI, etc…). Each such element is associated with a {@link PatternRole}.
+ * 
+ * A PatternRole is an abstraction of the manipulation roles played in the {@link EditionPattern} by modelling element potentially in
+ * different metamodels.
+ * 
+ * An {@link EditionPatternInstance} is an instance of an {@link EditionPattern}.
+ * 
+ * Instances of modelling elements in an {@link EditionPatternInstance} are called Pattern Actors. They play given Pattern Roles.
+ * 
+ * @author sylvain
+ * 
+ */
 public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
@@ -67,7 +81,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	private OntologicObjectPatternRole primaryConceptRole;
 	private GraphicalElementPatternRole primaryRepresentationRole;
 
-	private ViewPoint _viewPoint;
+	private VirtualModel virtualModel;
 
 	private EditionPattern parentEditionPattern = null;
 	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
@@ -141,9 +155,6 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
-		if (builder != null) {
-			setViewPoint(builder.getViewPoint());
-		}
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
 	}
@@ -176,8 +187,8 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	@Override
 	public void delete() {
-		if (getViewPoint() != null) {
-			getViewPoint().removeFromEditionPatterns(this);
+		if (getVirtualModel() != null) {
+			getVirtualModel().removeFromEditionPatterns(this);
 		}
 		super.delete();
 		deleteObservers();
@@ -185,12 +196,12 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#" + getName();
+		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#" + getName();
 	}
 
 	@Override
 	public String getURI() {
-		return getViewPoint().getURI() + "#" + getName();
+		return getVirtualModel().getURI() + "#" + getName();
 	}
 
 	@Override
@@ -222,8 +233,8 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	public void addToEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(this);
 		editionSchemes.add(anEditionScheme);
-		if (getViewPoint() != null) {
-			getViewPoint().notifyEditionSchemeModified();
+		if (getVirtualModel() != null) {
+			getVirtualModel().notifyEditionSchemeModified();
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeInserted(anEditionScheme, this));
@@ -232,8 +243,8 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	public void removeFromEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(null);
 		editionSchemes.remove(anEditionScheme);
-		if (getViewPoint() != null) {
-			getViewPoint().notifyEditionSchemeModified();
+		if (getVirtualModel() != null) {
+			getVirtualModel().notifyEditionSchemeModified();
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeRemoved(anEditionScheme, this));
@@ -584,17 +595,17 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	}
 
 	@Override
+	public VirtualModel getVirtualModel() {
+		return virtualModel;
+	}
+
+	public void setVirtualModel(VirtualModel virtualModel) {
+		this.virtualModel = virtualModel;
+	}
+
+	@Override
 	public ViewPoint getViewPoint() {
-		return _viewPoint;
-	}
-
-	public void setViewPoint(ViewPoint viewPoint) {
-		_viewPoint = viewPoint;
-	}
-
-	@Deprecated
-	public void setCalc(ViewPoint viewPoint) {
-		setViewPoint(viewPoint);
+		return getVirtualModel().getViewPoint();
 	}
 
 	@Override
@@ -623,7 +634,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	}
 
 	public void save() {
-		getViewPoint().save();
+		getVirtualModel().save();
 	}
 
 	private BindingModel _bindingModel;
@@ -735,7 +746,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	public EditionPattern duplicate(String newName) {
 		EditionPattern newEditionPattern = (EditionPattern) cloneUsingXMLMapping();
 		newEditionPattern.setName(newName);
-		getViewPoint().addToEditionPatterns(newEditionPattern);
+		getVirtualModel().addToEditionPatterns(newEditionPattern);
 		return newEditionPattern;
 	}
 
@@ -780,10 +791,10 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 				aParentEP.notifyObservers(new EditionPatternHierarchyChanged(this));
 				aParentEP.notifyChange("childEditionPatterns", null, getChildEditionPatterns());
 			}
-			if (getViewPoint() != null) {
-				getViewPoint().setChanged();
-				getViewPoint().notifyObservers(new EditionPatternHierarchyChanged(this));
-				getViewPoint().notifyChange("allRootEditionPatterns", null, getViewPoint().getAllRootEditionPatterns());
+			if (getVirtualModel() != null) {
+				getVirtualModel().setChanged();
+				getVirtualModel().notifyObservers(new EditionPatternHierarchyChanged(this));
+				getVirtualModel().notifyChange("allRootEditionPatterns", null, getVirtualModel().getAllRootEditionPatterns());
 			}
 		}
 	}

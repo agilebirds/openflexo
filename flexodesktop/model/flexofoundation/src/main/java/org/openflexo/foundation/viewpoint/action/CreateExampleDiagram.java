@@ -33,40 +33,41 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, ViewPoint, ViewPointObject> {
+public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, DiagramSpecification, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateExampleDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<CreateExampleDiagram, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateExampleDiagram, ViewPoint, ViewPointObject>(
+	public static FlexoActionType<CreateExampleDiagram, DiagramSpecification, ViewPointObject> actionType = new FlexoActionType<CreateExampleDiagram, DiagramSpecification, ViewPointObject>(
 			"create_example_diagram", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateExampleDiagram makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public CreateExampleDiagram makeNewAction(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection,
+				FlexoEditor editor) {
 			return new CreateExampleDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateExampleDiagram.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateExampleDiagram.actionType, DiagramSpecification.class);
 	}
 
 	public String newShemaName;
@@ -75,16 +76,16 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, View
 
 	private ExampleDiagram _newShema;
 
-	CreateExampleDiagram(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateExampleDiagram(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc view");
+		logger.info("Add example diagram");
 
-		_newShema = ExampleDiagram.newShema(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(), newShemaName
-				+ ".shema"), graphicalRepresentation);
+		_newShema = ExampleDiagram.newExampleDiagram(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
+				.getDirectory(), newShemaName + ".shema"), graphicalRepresentation);
 		_newShema.setDescription(description);
 		getFocusedObject().addToExampleDiagrams(_newShema);
 		_newShema.save();

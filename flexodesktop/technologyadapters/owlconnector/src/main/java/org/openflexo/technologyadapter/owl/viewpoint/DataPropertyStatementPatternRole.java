@@ -57,7 +57,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 	}
 
 	public IFlexoOntologyDataProperty getDataProperty() {
-		return getViewPoint().getOntologyDataProperty(_getDataPropertyURI());
+		return getVirtualModel().getOntologyDataProperty(_getDataPropertyURI());
 	}
 
 	public void setDataProperty(IFlexoOntologyStructuralProperty p) {

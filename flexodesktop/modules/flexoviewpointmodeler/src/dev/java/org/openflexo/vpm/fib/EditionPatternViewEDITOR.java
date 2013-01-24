@@ -46,28 +46,28 @@ public class EditionPatternViewEDITOR extends FIBAbstractEditor {
 
 		ViewPoint viewPoint2 = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
-		returned[0] = viewPoint2.getEditionPattern("OrganizationalUnit");
-		returned[1] = viewPoint2.getEditionPattern("OrganizationalUnitPosition");
-		returned[2] = viewPoint2.getEditionPattern("PositionTask");
+		returned[0] = viewPoint2.getDefaultDiagramSpecification().getEditionPattern("OrganizationalUnit");
+		returned[1] = viewPoint2.getDefaultDiagramSpecification().getEditionPattern("OrganizationalUnitPosition");
+		returned[2] = viewPoint2.getDefaultDiagramSpecification().getEditionPattern("PositionTask");
 
 		ViewPoint viewPoint3 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		returned[3] = viewPoint3.getEditionPattern("Concept");
-		returned[4] = viewPoint3.getEditionPattern("IsARelationship");
-		returned[5] = viewPoint3.getEditionPattern("HasRelationship");
+		returned[3] = viewPoint3.getDefaultDiagramSpecification().getEditionPattern("Concept");
+		returned[4] = viewPoint3.getDefaultDiagramSpecification().getEditionPattern("IsARelationship");
+		returned[5] = viewPoint3.getDefaultDiagramSpecification().getEditionPattern("HasRelationship");
 
 		ViewPoint viewPoint4 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl");
-		returned[6] = viewPoint4.getEditionPattern("Concept");
+		returned[6] = viewPoint4.getDefaultDiagramSpecification().getEditionPattern("Concept");
 
 		ViewPoint viewPoint5 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl");
-		returned[7] = viewPoint5.getEditionPattern("Actor");
+		returned[7] = viewPoint5.getDefaultDiagramSpecification().getEditionPattern("Actor");
 
 		ViewPoint viewPoint6 = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl");
-		returned[8] = viewPoint6.getEditionPattern("ContainsPositionLink");
-		returned[9] = viewPoint6.getEditionPattern("SubOrganizationUnitLink");
+		returned[8] = viewPoint6.getDefaultDiagramSpecification().getEditionPattern("ContainsPositionLink");
+		returned[9] = viewPoint6.getDefaultDiagramSpecification().getEditionPattern("SubOrganizationUnitLink");
 
 		ViewPoint viewPoint7 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
-		returned[10] = viewPoint7.getEditionPattern("ImportPackage");
+		returned[10] = viewPoint7.getDefaultDiagramSpecification().getEditionPattern("ImportPackage");
 
 		// ViewPoint viewPoint9 = viewPointLibrary.getOntologyCalc("http://www.thalesgroup.com/ViewPoints/sepel-ng/MappingCapture.owl");
 		// viewPoint9.loadWhenUnloaded();

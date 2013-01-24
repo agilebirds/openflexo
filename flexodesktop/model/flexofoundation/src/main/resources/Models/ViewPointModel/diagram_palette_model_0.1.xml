@@ -2,7 +2,7 @@
 
 <!-- Mapping model for calc palette -->
 
-<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
+<model builder="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject$DiagramPaletteBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
   <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette" xmlTag="Palette"> 
     <property name="index" xmlTag="index" attribute="YES"/> 
@@ -18,13 +18,13 @@
     <property name="editionPatternId" xmlTag="editionPattern" attribute="YES"/> 
     <property name="dropSchemeName" xmlTag="dropSchemeName" attribute="YES"/> 
     <property name="boundLabelToElementName" xmlTag="boundLabelToElementName" attribute="YES"/> 
-    <property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" primary="yes"/>
+    <property name="parameters" type="vector" contains="org.openflexo.foundation.view.diagram.viewpoint.PaletteElementPatternParameter" primary="yes"/>
     <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/>
     <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
     <property name="overridingGraphicalRepresentations" type="vector" contains="org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement$OverridingGraphicalRepresentation" primary="yes"/>
    </entity>
 
-  <entity name="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" xmlTag="Parameter"> 
+  <entity name="org.openflexo.foundation.view.diagram.viewpoint.PaletteElementPatternParameter" xmlTag="Parameter"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="value" xmlTag="value" attribute="YES"/> 
   </entity>

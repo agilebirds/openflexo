@@ -104,6 +104,22 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	}
 
 	/**
+	 * Retrieve, load and return ViewPoint identified by supplied URI
+	 * 
+	 * @param viewpointURI
+	 * @return
+	 */
+	public VirtualModel getVirtualModel(String virtualModelURI) {
+		String viewPointURI = virtualModelURI.substring(0, virtualModelURI.lastIndexOf("."));
+		ViewPoint vp = getViewPoint(viewPointURI);
+		if (vp != null) {
+			return vp.getVirtualModelNamed(virtualModelURI.substring(virtualModelURI.lastIndexOf(".") + 1));
+		}
+		logger.warning("Cannot find virtual model:" + virtualModelURI);
+		return null;
+	}
+
+	/**
 	 * Return all viewpoints contained in this library<br>
 	 * No consideration is performed on underlying organization structure
 	 * 
@@ -248,10 +264,10 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 
 	public EditionPattern getEditionPattern(String editionPatternURI) {
 		if (editionPatternURI.indexOf("#") > -1) {
-			String viewPointURI = editionPatternURI.substring(0, editionPatternURI.indexOf("#"));
-			ViewPoint vp = getViewPoint(viewPointURI);
-			if (vp != null) {
-				return vp.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#") + 1));
+			String virtualModelURI = editionPatternURI.substring(0, editionPatternURI.indexOf("#"));
+			VirtualModel vm = getVirtualModel(virtualModelURI);
+			if (vm != null) {
+				return vm.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#") + 1));
 			}
 		}
 		logger.warning("Cannot find edition pattern:" + editionPatternURI);

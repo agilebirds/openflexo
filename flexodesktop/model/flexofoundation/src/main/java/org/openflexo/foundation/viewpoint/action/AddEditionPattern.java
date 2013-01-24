@@ -30,44 +30,44 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class AddEditionPattern extends FlexoAction<AddEditionPattern, ViewPoint, ViewPointObject> {
+public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualModel, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<AddEditionPattern, ViewPoint, ViewPointObject> actionType = new FlexoActionType<AddEditionPattern, ViewPoint, ViewPointObject>(
+	public static FlexoActionType<AddEditionPattern, VirtualModel, ViewPointObject> actionType = new FlexoActionType<AddEditionPattern, VirtualModel, ViewPointObject>(
 			"add_new_edition_pattern", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddEditionPattern makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public AddEditionPattern makeNewAction(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new AddEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddEditionPattern.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(AddEditionPattern.actionType, VirtualModel.class);
 	}
 
 	private String _newEditionPatternName;
 	private EditionPattern _newEditionPattern;
 
-	AddEditionPattern(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	AddEditionPattern(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

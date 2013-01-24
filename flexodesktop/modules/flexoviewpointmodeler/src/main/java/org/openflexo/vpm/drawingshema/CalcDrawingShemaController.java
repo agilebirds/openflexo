@@ -59,7 +59,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 
 		_controller = controller;
 
-		shema.getViewPoint().addObserver(this);
+		shema.getVirtualModel().addObserver(this);
 
 		if (!readOnly) {
 			_commonPalette = new CommonPalette();
@@ -67,8 +67,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			activatePalette(_commonPalette);
 
 			_contextualPalettes = new Hashtable<DiagramPalette, ContextualPalette>();
-			if (shema.getViewPoint() != null) {
-				for (DiagramPalette palette : shema.getViewPoint().getPalettes()) {
+			if (shema.getVirtualModel() != null) {
+				for (DiagramPalette palette : shema.getVirtualModel().getPalettes()) {
 					ContextualPalette contextualPalette = new ContextualPalette(palette);
 					_contextualPalettes.put(palette, contextualPalette);
 					registerPalette(contextualPalette);
@@ -101,8 +101,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 
 	@Override
 	public void delete() {
-		if (getShema() != null && getShema().getViewPoint() != null) {
-			getShema().getViewPoint().deleteObserver(this);
+		if (getShema() != null && getShema().getVirtualModel() != null) {
+			getShema().getVirtualModel().deleteObserver(this);
 		}
 		if (_controller != null) {
 			if (getDrawingView() != null && _moduleView != null) {
@@ -175,7 +175,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		logger.fine("dataModification=" + dataModification);
-		if (observable == getShema().getViewPoint()) {
+		if (observable == getShema().getVirtualModel()) {
 			if (dataModification instanceof DiagramPaletteInserted) {
 				DiagramPalette palette = ((DiagramPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);

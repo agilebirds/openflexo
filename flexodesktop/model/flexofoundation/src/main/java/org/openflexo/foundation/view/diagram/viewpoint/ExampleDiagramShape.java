@@ -23,9 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ExampleDiagramShape extends ExampleDiagramObject {
 
@@ -42,7 +39,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ExampleDiagramShape(ViewPointBuilder builder) {
+	public ExampleDiagramShape(ExampleDiagramBuilder builder) {
 		super(builder);
 		incomingConnectors = new Vector<ExampleDiagramConnector>();
 		outgoingConnectors = new Vector<ExampleDiagramConnector>();

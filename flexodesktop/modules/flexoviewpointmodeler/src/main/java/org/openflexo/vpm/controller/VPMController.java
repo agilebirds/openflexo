@@ -184,9 +184,9 @@ public class VPMController extends FlexoController {
 			} else if (object instanceof ViewPoint) {
 				ViewPoint viewPoint = (ViewPoint) object;
 				VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
-				if (viewPoint.getEditionPatterns().size() > 0) {
+				/*if (viewPoint.getEditionPatterns().size() > 0) {
 					getSelectionManager().setSelectedObject(viewPoint.getEditionPatterns().firstElement());
-				}
+				}*/
 			} else if (object instanceof EditionPattern) {
 				EditionPattern pattern = (EditionPattern) object;
 				if (pattern.getEditionSchemes().size() > 0) {

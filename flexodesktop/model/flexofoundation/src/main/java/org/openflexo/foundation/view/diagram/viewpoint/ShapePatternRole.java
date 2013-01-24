@@ -66,7 +66,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
 	public void tryToFindAGR() {
 		if (getGraphicalRepresentation() == null) {
 			// Try to find one somewhere
-			for (DiagramPalette palette : getViewPoint().getPalettes()) {
+			for (DiagramPalette palette : getVirtualModel().getPalettes()) {
 				for (DiagramPaletteElement e : palette.getElements()) {
 					if (e.getEditionPattern() == getEditionPattern()) {
 						setGraphicalRepresentation(e.getGraphicalRepresentation());

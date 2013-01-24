@@ -38,7 +38,7 @@ public class LocalizedEntry extends ViewPointObject {
 	}
 
 	public LocalizedEntry(LocalizedDictionary localizedDictionary, String key, String language, String value) {
-		super(null);
+		super((ViewPointBuilder) null);
 		setLocalizedDictionary(localizedDictionary);
 		this.key = key;
 		this.language = language;

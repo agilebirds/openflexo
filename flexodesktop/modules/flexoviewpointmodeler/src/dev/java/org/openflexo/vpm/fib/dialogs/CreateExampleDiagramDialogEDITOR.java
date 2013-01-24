@@ -37,9 +37,9 @@ public class CreateExampleDiagramDialogEDITOR extends FIBAbstractEditor {
 				new FileResource("src/test/resources/TestResourceCenter"));
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
-		ViewPoint calc1 = viewPointLibrary
+		ViewPoint vp = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-		CreateExampleDiagram action = CreateExampleDiagram.actionType.makeNewAction(calc1, null, null);
+		CreateExampleDiagram action = CreateExampleDiagram.actionType.makeNewAction(vp.getDefaultDiagramSpecification(), null, null);
 		return makeArray(action);
 	}
 

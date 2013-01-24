@@ -33,40 +33,41 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, ViewPoint, ViewPointObject> {
+public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateDiagramPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateDiagramPalette, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateDiagramPalette, ViewPoint, ViewPointObject>(
+	public static FlexoActionType<CreateDiagramPalette, DiagramSpecification, ViewPointObject> actionType = new FlexoActionType<CreateDiagramPalette, DiagramSpecification, ViewPointObject>(
 			"create_new_palette", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateDiagramPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public CreateDiagramPalette makeNewAction(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection,
+				FlexoEditor editor) {
 			return new CreateDiagramPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateDiagramPalette.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateDiagramPalette.actionType, DiagramSpecification.class);
 	}
 
 	public String newPaletteName;
@@ -75,7 +76,7 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, View
 
 	private DiagramPalette _newPalette;
 
-	CreateDiagramPalette(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateDiagramPalette(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -83,8 +84,8 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, View
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add calc palette");
 
-		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), new File(getFocusedObject().getResource().getDirectory(),
-				newPaletteName + ".palette"), (DrawingGraphicalRepresentation<?>) graphicalRepresentation);
+		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
+				.getDirectory(), newPaletteName + ".palette"), (DrawingGraphicalRepresentation<?>) graphicalRepresentation);
 		_newPalette.setDescription(description);
 		getFocusedObject().addToPalettes(_newPalette);
 		_newPalette.save();

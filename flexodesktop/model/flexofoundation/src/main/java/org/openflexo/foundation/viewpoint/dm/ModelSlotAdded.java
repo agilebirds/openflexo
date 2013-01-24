@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Notify that a new model slot has been added
@@ -33,6 +34,11 @@ public class ModelSlotAdded extends ViewPointDataModification {
 	private ViewPoint viewPoint;
 
 	public ModelSlotAdded(ModelSlot<?, ?> modelSlot, ViewPoint viewPoint) {
+		super("modelSlots", null, modelSlot);
+		this.viewPoint = viewPoint;
+	}
+
+	public ModelSlotAdded(ModelSlot<?, ?> modelSlot, VirtualModel virtualModel) {
 		super("modelSlots", null, modelSlot);
 		this.viewPoint = viewPoint;
 	}

@@ -67,9 +67,9 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getAction() != null) {
-			return getAction().getViewPoint();
+			return getAction().getVirtualModel();
 		}
 		return null;
 	}

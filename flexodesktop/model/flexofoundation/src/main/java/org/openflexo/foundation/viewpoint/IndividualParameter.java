@@ -65,7 +65,7 @@ public class IndividualParameter extends InnerModelSlotParameter {
 	}
 
 	public IFlexoOntologyClass getConcept() {
-		return getViewPoint().getOntologyClass(_getConceptURI());
+		return getVirtualModel().getOntologyClass(_getConceptURI());
 	}
 
 	public void setConcept(IFlexoOntologyClass c) {
@@ -138,8 +138,8 @@ public class IndividualParameter extends InnerModelSlotParameter {
 	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
 		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
 		if (returned == null) {
-			if (getViewPoint() != null && getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getViewPoint().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
 			}
 		}
 		return returned;
