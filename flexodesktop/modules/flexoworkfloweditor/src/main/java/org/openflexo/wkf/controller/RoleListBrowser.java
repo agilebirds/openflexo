@@ -25,6 +25,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -39,8 +41,13 @@ public class RoleListBrowser extends ProjectBrowser {
 	protected WKFController _controller;
 
 	public RoleListBrowser(WKFController controller) {
-		super(controller);
+		super((FlexoController) null);
 		_controller = controller;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
+		return _controller.getEditor();
 	}
 
 	@Override
