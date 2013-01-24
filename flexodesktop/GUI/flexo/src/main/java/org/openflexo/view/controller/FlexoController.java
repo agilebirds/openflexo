@@ -57,6 +57,7 @@ import java.util.regex.Pattern;
 
 import javax.naming.InvalidNameException;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -627,6 +628,38 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public void registerActionForKeyStroke(AbstractAction action, KeyStroke accelerator, String actionName) {
 		String key = actionName;
+		Object object = getFlexoFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).get(accelerator);
+		Action action2 = null;
+		if (object != null) {
+			action2 = getFlexoFrame().getRootPane().getActionMap().get(object);
+		}
+		if (action2 != null) {
+			class CompoundAction extends AbstractAction {
+
+				private List<Action> actions = new ArrayList<Action>();
+
+				void addToAction(Action action) {
+					actions.add(action);
+				}
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for (Action action : actions) {
+						action.actionPerformed(e);
+					}
+				}
+			}
+			if (action2 instanceof CompoundAction) {
+				((CompoundAction) action2).addToAction(action);
+				return;
+			} else {
+				CompoundAction compoundAction = new CompoundAction();
+				compoundAction.addToAction(action2);
+				compoundAction.addToAction(action);
+				action = compoundAction;
+				key = "compound-" + accelerator.toString();
+			}
+		}
 		getFlexoFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(accelerator, key);
 		getFlexoFrame().getRootPane().getActionMap().put(key, action);
 		if (accelerator.getKeyCode() == FlexoCst.DELETE_KEY_CODE) {
