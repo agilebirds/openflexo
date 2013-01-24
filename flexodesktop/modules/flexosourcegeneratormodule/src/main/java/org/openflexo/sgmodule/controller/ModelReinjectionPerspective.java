@@ -51,11 +51,6 @@ public class ModelReinjectionPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return SGIconLibrary.SG_MRP_SELECTED_ICON;
-	}
-
-	@Override
 	public JPanel getFooter() {
 		return _controller.getFooter();
 	}

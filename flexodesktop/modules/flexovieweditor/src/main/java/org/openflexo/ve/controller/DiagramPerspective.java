@@ -145,16 +145,6 @@ public class DiagramPerspective extends FlexoPerspective {
 		return VEIconLibrary.VE_SP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return VEIconLibrary.VE_SP_SELECTED_ICON;
-	}
-
 	@Override
 	public AbstractViewObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof View) {

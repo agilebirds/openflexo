@@ -58,7 +58,6 @@ public class DEIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon DE_TOC_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.png");
-	public static final ImageIcon DE_TOC_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	// Model icons
 

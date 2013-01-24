@@ -59,16 +59,6 @@ public class WSEPerspective extends FlexoPerspective {
 		return WSEIconLibrary.WSE_WSEP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WSEIconLibrary.WSE_WSEP_SELECTED_ICON;
-	}
-
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {

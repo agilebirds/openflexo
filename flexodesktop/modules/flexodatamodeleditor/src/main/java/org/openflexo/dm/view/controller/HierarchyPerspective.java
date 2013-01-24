@@ -93,16 +93,6 @@ class HierarchyPerspective extends DMPerspective {
 		return DMEIconLibrary.DME_HP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DMEIconLibrary.DME_HP_SELECTED_ICON;
-	}
-
 	@Override
 	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {

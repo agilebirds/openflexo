@@ -51,16 +51,6 @@ public class CodeGeneratorPerspective extends FlexoPerspective {
 		return CGIconLibrary.CG_CGP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return CGIconLibrary.CG_CGP_SELECTED_ICON;
-	}
-
 	@Override
 	public JPanel getFooter() {
 		return this.generatorController.getFooter();

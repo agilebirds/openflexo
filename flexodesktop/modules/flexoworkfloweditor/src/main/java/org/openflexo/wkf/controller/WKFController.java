@@ -151,6 +151,12 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
+	public void dispose() {
+		((WKFControllerActionInitializer) getControllerActionInitializer()).disposeActionizer();
+		super.dispose();
+	}
+
+	@Override
 	protected void initializePerspectives() {
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);

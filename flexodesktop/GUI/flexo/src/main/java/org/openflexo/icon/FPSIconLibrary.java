@@ -45,16 +45,12 @@ public class FPSIconLibrary extends IconLibrary {
 	public static final ImageIcon FPS_COMMIT_ICON = new ImageIconResource("Icons/FPS/CommitIcon.gif");
 	public static final ImageIcon FPS_COMMIT_DISABLED_ICON = new ImageIconResource("Icons/FPS/CommitIcon-disabled.gif");
 	public static final ImageIcon RESOLVED_CONFLICT_ICON = new ImageIconResource("Icons/FPS/ResolvedConflict.gif");
+
 	public static final ImageIcon FPS_AFP_ACTIVE_ICON = new ImageIconResource("Icons/FPS/AllFilesViewMode.gif");
-	public static final ImageIcon FPS_AFP_SELECTED_ICON = new ImageIconResource("Icons/FPS/AllFilesViewMode_S.gif");
 	public static final ImageIcon FPS_CFP_ACTIVE_ICON = new ImageIconResource("Icons/FPS/ConflictingViewMode.gif");
-	public static final ImageIcon FPS_CFP_SELECTED_ICON = new ImageIconResource("Icons/FPS/ConflictingViewMode_S.gif");
 	public static final ImageIcon FPS_IFP_ACTIVE_ICON = new ImageIconResource("Icons/FPS/InterestingFilesViewMode.gif");
-	public static final ImageIcon FPS_IFP_SELECTED_ICON = new ImageIconResource("Icons/FPS/InterestingFilesViewMode_S.gif");
 	public static final ImageIcon FPS_LMP_ACTIVE_ICON = new ImageIconResource("Icons/FPS/LocallyModifiedViewMode.gif");
-	public static final ImageIcon FPS_LMP_SELECTED_ICON = new ImageIconResource("Icons/FPS/LocallyModifiedViewMode_S.gif");
 	public static final ImageIcon FPS_RMP_ACTIVE_ICON = new ImageIconResource("Icons/FPS/RemotelyModifiedViewMode.gif");
-	public static final ImageIcon FPS_RMP_SELECTED_ICON = new ImageIconResource("Icons/FPS/RemotelyModifiedViewMode_S.gif");
 
 	// Model icons
 	public static final ImageIcon CVS_REPOSITORY_LIST_ICON = new ImageIconResource("Icons/FPS/RepositoryList.gif");

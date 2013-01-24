@@ -61,16 +61,6 @@ class DefaultValuePerspective extends FlexoPerspective {
 		return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
-	}
-
 	@Override
 	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof ComponentInstance) {
