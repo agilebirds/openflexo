@@ -71,7 +71,7 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	 * @param builder
 	 */
 	public OWLOntologyResource(FlexoProjectBuilder builder) {
-		this(builder.project, null);
+		super(builder.project, builder.serviceManager);
 		builder.notifyResourceLoading(this);
 	}
 
