@@ -20,6 +20,8 @@
 package org.openflexo.foundation.wkf.node;
 
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -35,6 +37,8 @@ import org.openflexo.foundation.FlexoUtils;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.action.FlexoActionizer;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.stats.AbstractActivityStatistics;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoColor;
@@ -75,6 +79,7 @@ import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.wkf.dm.RoleTextColorChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -239,9 +244,37 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		this.linkedProcess = aProcessReference;
 	}
 
+	private Role observedRole;
+	private PropertyChangeListenerRegistrationManager manager;
+
 	public Role getRole() {
 		if (role != null) {
-			return getWorkflow().getCachedRole(role);
+			Role object = getWorkflow().getCachedRole(role);
+			if (object != null && object.isCache() && manager == null) {
+				String projectURI = role.getEnclosingProjectIdentifier();
+				if (projectURI != null) {
+					ProjectData data = getProject().getProjectData();
+					if (data != null) {
+						final FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
+						if (projectRef != null) {
+							manager = new PropertyChangeListenerRegistrationManager();
+							manager.addListener(FlexoProjectReference.WORKFLOW, new PropertyChangeListener() {
+
+								@Override
+								public void propertyChange(PropertyChangeEvent evt) {
+									manager.delete();
+									manager = null;
+									if (role != null && role.getObject(true) != null) {
+										role.getObject(true).addObserver(AbstractActivityNode.this);
+										observedRole = role.getObject(true);
+									}
+								}
+							}, projectRef);
+						}
+					}
+				}
+			}
+			return object;
 		} else {
 			return null;
 		}
@@ -254,10 +287,13 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 				return;
 			}
 		}
-		Role oldRole = getRole();
-		if (oldRole != aRole) {
-			if (oldRole != null) {
-				oldRole.deleteObserver(this);
+		if (observedRole != aRole) {
+			if (manager != null) {
+				manager.delete();
+				manager = null;
+			}
+			if (observedRole != null) {
+				observedRole.deleteObserver(this);
 			}
 			if (role != null) {
 				role.delete();
@@ -265,11 +301,12 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 			}
 			if (aRole != null) {
 				aRole.addObserver(this);
+				observedRole = aRole;
 				role = new FlexoModelObjectReference<Role>(aRole);
 				role.setOwner(this);
 			}
 			setChanged();
-			notifyObservers(new RoleChanged(oldRole, aRole));
+			notifyObservers(new RoleChanged(observedRole, aRole));
 		}
 	}
 
@@ -786,6 +823,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	protected Color roleTextColor = FlexoColor.GRAY_COLOR;
 
+	private Role cachedRole;
+
 	public Color getRoleTextColor() {
 		return roleTextColor;
 	}
@@ -850,8 +889,9 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
-		// TODO Auto-generated method stub
-
+		if (reference == role) {
+			setRole(role.getObject());
+		}
 	}
 
 	@Override
