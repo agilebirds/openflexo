@@ -106,7 +106,7 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 			widgetUpdating = true;
 			try {
 				checkBox.setSelected(getValue() == null);
-				_selector.setEnabled(getValue() != null);
+				_selector.setEnabled(getValue() != null || !getWidget().getAllowsNull());
 				setColor(getValue());
 			} finally {
 				widgetUpdating = false;

@@ -74,6 +74,8 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	private Role _newRole;
 
+	private Role roleToClone;
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
 		FlexoModelObject.addActionForClass(actionType, RoleList.class);
@@ -104,7 +106,13 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 		logger.info("Add role");
 		if (getWorkflow() != null) {
 			RoleList roleList = getWorkflow().getRoleList();
-			roleList.addToRoles(_newRole = new Role(getWorkflow(), getNewRoleName()));
+			if (roleToClone != null) {
+				_newRole = (Role) roleToClone.cloneUsingXMLMapping();
+				_newRole.setName(getNewRoleName());
+			} else {
+				_newRole = new Role(getWorkflow(), getNewRoleName());
+			}
+			roleList.addToRoles(_newRole);
 			if (x != -1 && y != -1) {
 				_newRole.setX(x, RepresentableFlexoModelObject.DEFAULT);
 				_newRole.setY(y, RepresentableFlexoModelObject.DEFAULT);
@@ -160,6 +168,10 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	public void setIsSystemRole(boolean isSystemRole) {
 		_isSystemRole = isSystemRole;
+	}
+
+	public void setRoleToClone(Role roleToClone) {
+		this.roleToClone = roleToClone;
 	}
 
 }

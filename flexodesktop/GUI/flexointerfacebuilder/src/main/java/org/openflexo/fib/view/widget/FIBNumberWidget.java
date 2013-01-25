@@ -161,7 +161,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		if (notEquals(getValue(), editedValue)) {
 
 			widgetUpdating = true;
-			valueChooser.setEnabled(getValue() != null);
+			valueChooser.setEnabled(getValue() != null || !getWidget().getAllowsNull());
 			checkBox.setSelected(getValue() == null);
 			T currentValue = null;
 
