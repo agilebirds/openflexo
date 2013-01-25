@@ -60,7 +60,6 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
@@ -364,7 +363,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 			updateTitle();
 		}
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
-			getRootPane().putClientProperty(WINDOW_MODIFIED, ProjectLoader.someResourcesNeedsSaving(getController().getProject()));
+			getRootPane().putClientProperty(WINDOW_MODIFIED, getController().getProject().hasUnsaveStorageResources());
 		}
 	}
 

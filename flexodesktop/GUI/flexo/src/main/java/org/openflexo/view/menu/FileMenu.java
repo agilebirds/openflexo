@@ -73,35 +73,13 @@ public class FileMenu extends FlexoMenu {
 
 	static final Logger logger = Logger.getLogger(FileMenu.class.getPackage().getName());
 
-	public NewProjectItem newProjectItem;
-
-	public OpenProjectItem openProjectItem;
-
 	public JMenu recentProjectMenu;
 
 	public JMenu exportMenu;
 
 	public JMenu importMenu;
 
-	public SaveProjectItem saveProjectItem;
-
-	public SaveAsProjectItem saveAsProjectItem;
-
-	public SaveProjectForServerItem saveProjectForServerItem;
-
-	public SendProjectToFlexoServerItem sendProjectToFlexoServerItem;
-
-	public ReloadProjectItem reloadProjectItem;
-
-	public InspectProjectItem inspectProjectItem;
-
-	public PageSetUpItem pageSetupItem;
-
-	public QuitItem quitItem;
-
 	protected FlexoController _controller;
-
-	private ImportProjectMenuItem importProject;
 
 	protected FileMenu(FlexoController controller) {
 		this(controller, true);
@@ -111,15 +89,16 @@ public class FileMenu extends FlexoMenu {
 		super("file", controller);
 		_controller = controller;
 		if (insertCommonItems) {
-			add(newProjectItem = new NewProjectItem());
-			add(openProjectItem = new OpenProjectItem());
+			add(new NewProjectItem());
+			add(new OpenProjectItem());
 			add(recentProjectMenu = new JMenu());
 			recentProjectMenu.setText(FlexoLocalization.localizedForKey("recent_projects", recentProjectMenu));
-			add(importProject = new ImportProjectMenuItem());
-			add(saveProjectItem = new SaveProjectItem());
-			add(saveAsProjectItem = new SaveAsProjectItem());
-			add(saveProjectForServerItem = new SaveProjectForServerItem());
-			add(sendProjectToFlexoServerItem = new SendProjectToFlexoServerItem());
+			add(new ImportProjectMenuItem());
+			add(new SaveProjectItem());
+			add(new SaveAllProjectItem());
+			add(new SaveAsProjectItem());
+			add(new SaveProjectForServerItem());
+			add(new SendProjectToFlexoServerItem());
 			// TODO: repair reload project. this includes to also support close project.
 			// add(reloadProjectItem = new ReloadProjectItem());
 			addSeparator();
@@ -135,15 +114,15 @@ public class FileMenu extends FlexoMenu {
 		}
 		addSpecificItems();
 		if (insertCommonItems) {
-			add(inspectProjectItem = new InspectProjectItem());
+			add(new InspectProjectItem());
 			if (controller instanceof PrintManagingController) {
 				addSeparator();
 				addPrintItems();
-				add(pageSetupItem = new PageSetUpItem());
+				add(new PageSetUpItem());
 			}
 			addSeparator();
 		}
-		add(quitItem = new QuitItem());
+		add(new QuitItem());
 
 		updateRecentProjectMenu();
 	}
@@ -202,16 +181,11 @@ public class FileMenu extends FlexoMenu {
 		}
 	}
 
-	// ==========================================================================
-	// ============================= NewProject ================================
-	// ==========================================================================
-
 	public class NewProjectItem extends FlexoMenuItem {
 
 		public NewProjectItem() {
 			super(new NewProjectAction(), "new_project", KeyStroke.getKeyStroke(KeyEvent.VK_N, FlexoCst.META_MASK), getController(), true);
-			setText(FlexoLocalization.localizedForKey("new_project", this));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, FlexoCst.META_MASK));
+			setIcon(IconLibrary.NEW_ICON);
 		}
 
 	}
@@ -231,16 +205,12 @@ public class FileMenu extends FlexoMenu {
 		}
 	}
 
-	// ==========================================================================
-	// ============================= OpenProject ===============================
-	// ==========================================================================
-
 	public class OpenProjectItem extends FlexoMenuItem {
 
 		public OpenProjectItem() {
 			super(new OpenProjectAction(), "open_project", KeyStroke.getKeyStroke(KeyEvent.VK_O, FlexoCst.META_MASK), getController(), true);
+			setIcon(IconLibrary.OPEN_ICON);
 		}
-
 	}
 
 	public class OpenProjectAction extends AbstractAction {
@@ -345,8 +315,8 @@ public class FileMenu extends FlexoMenu {
 			if (getController() == null || getController().getProject() == null) {
 				return;
 			}
-			if (ProjectLoader.someResourcesNeedsSaving(getController().getProject())) {
-				Cursor c = FileMenu.this._controller.getFlexoFrame().getCursor();
+			if (getController().getProject().hasUnsaveStorageResources()) {
+				Cursor c = getController().getFlexoFrame().getCursor();
 				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
 				try {
 					getProjectLoader().saveProjects(Arrays.asList(getController().getProject()));
@@ -355,7 +325,7 @@ public class FileMenu extends FlexoMenu {
 					FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
 							FlexoLocalization.localizedForKey("errors_during_saving"));
 				} finally {
-					FileMenu.this._controller.getFlexoFrame().setCursor(c);
+					getController().getFlexoFrame().setCursor(c);
 				}
 			}
 		}
@@ -379,8 +349,8 @@ public class FileMenu extends FlexoMenu {
 	public class SaveAsProjectItem extends FlexoMenuItem {
 
 		public SaveAsProjectItem() {
-			super(new SaveAsProjectAction(), "save_project_as", null, getController(), true);
-			setIcon(IconLibrary.SAVE_ICON);
+			super(new SaveAsProjectAction(), "save_current_project_as", null, getController(), true);
+			setIcon(IconLibrary.SAVE_AS_ICON);
 		}
 
 	}
@@ -535,6 +505,58 @@ public class FileMenu extends FlexoMenu {
 			return false;
 		}
 		return true;
+	}
+
+	public class SaveAllProjectItem extends FlexoMenuItem {
+
+		public SaveAllProjectItem() {
+			super(new SaveAllProjectAction(), "save_all_project", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK
+					| KeyEvent.SHIFT_MASK), getController(), true);
+			setIcon(IconLibrary.SAVE_ALL_ICON);
+		}
+
+	}
+
+	public class SaveAllProjectAction extends AbstractAction implements PropertyChangeListener {
+		public SaveAllProjectAction() {
+			super();
+			if (getProjectLoader() != null) {
+				getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.ROOT_PROJECTS, this);
+			}
+			updateEnability();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (getProjectLoader().someProjectsAreModified()) {
+				Cursor c = getController().getFlexoFrame().getCursor();
+				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
+				try {
+					getProjectLoader().saveProjects(getProjectLoader().getModifiedProjects());
+				} catch (SaveResourceExceptionList e) {
+					e.printStackTrace();
+					FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
+							FlexoLocalization.localizedForKey("errors_during_saving"));
+				} finally {
+					getController().getFlexoFrame().setCursor(c);
+				}
+			}
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getProjectLoader() != null) {
+				if (evt.getSource() == getProjectLoader()) {
+					if (ProjectLoader.ROOT_PROJECTS.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
+
+		private void updateEnability() {
+			setEnabled(getProjectLoader().getRootProjects().size() > 0);
+		}
 	}
 
 	protected ProjectLoader getProjectLoader() {

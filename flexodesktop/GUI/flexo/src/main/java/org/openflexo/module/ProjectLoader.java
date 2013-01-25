@@ -468,13 +468,6 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 
 	}
 
-	/**
-	 * Return boolean indicating if some resources need saving
-	 */
-	public static boolean someResourcesNeedsSaving(FlexoProject project) {
-		return project != null && project.getUnsavedStorageResources(false).size() > 0;
-	}
-
 	static void informUserAboutSaveResourceException(SaveResourceException e) {
 		if (e instanceof SaveResourcePermissionDeniedException) {
 			informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException) e);
