@@ -4,7 +4,7 @@
 
 	<TabPanel name="Tab" constraints="border(location=center)">
 
-		<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+		<Tab name="BasicTab" title="Basic" index="0" layout="twocols"  >
 
 			<Label label="iterator_class" constraints="twocols(location=left)" />
 			<Custom data="data.iteratorClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
@@ -32,11 +32,11 @@
 
 		</Tab>
 
-		<Tab name="AdvancedTab" title="Table" index="1" layout="twocols" font="SansSerif,0,11" >
+		<Tab name="AdvancedTab" title="Table" index="1" layout="twocols" >
 
 			<TabPanel constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)">
-        <Tab index="0" title="Columns" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
-          <Table iteratorClassName="org.openflexo.fib.model.FIBTableColumn" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ColumnsTable" data="data.columns" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="SansSerif,0,11">
+        <Tab index="0" title="Columns" layout="gridbag"  darkLevel="0">
+          <Table iteratorClassName="org.openflexo.fib.model.FIBTableColumn" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ColumnsTable" data="data.columns" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
             <TextFieldColumn data="iterator.title" title="title" columnWidth="200" resizable="true" displayTitle="true" name="title" />
             <LabelColumn data="iterator.columnType" title="type" columnWidth="150" resizable="true" displayTitle="true" name="type" />
             <CheckBoxColumn data="iterator.resizable" title="Resize" columnWidth="50" resizable="false" displayTitle="true" name="resizable" />
@@ -60,7 +60,7 @@
             <CustomAction method="data.moveDown(selected)" name="move_down" />
             <CustomAction method="data.moveToBottom(selected)" name="move_to_bottom" />
           </Table>
-          <Panel visible="ColumnsTable.selected != null" layout="twocols" border="none" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+          <Panel visible="ColumnsTable.selected != null" layout="twocols" border="none" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
             <Label label="title" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
             <TextField columns="7" text="TextField" data="ColumnsTable.selected.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
             <Label label="type" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -114,7 +114,7 @@
 					<Table name="ActionsTable" iteratorClassName="org.openflexo.fib.model.FIBTableAction"
 						data="data.actions"
 						constraints="border(location=center)"
-						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
+						visibleRowCount="5" rowHeight="18" >
 						<TextFieldColumn name="name" data="iterator.name"
 							title="action" columnWidth="200" resizable="true" />
 						<LabelColumn name="type" data="iterator.actionType"
@@ -148,7 +148,7 @@
 
 		</Tab>
 
-		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
+		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols"  >
 
 			<Label label="selected" constraints="twocols(location=left)"/>
 			<Custom data="data.selected.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
@@ -164,7 +164,7 @@
 
 		</Tab>
 			
-		<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
+		<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols"  >
 
   		   <Panel layout="border" border="titled" borderTitle="table_colors" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)">
    		     <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="3" borderTitle="Panel" constraints="border(location=center)">
