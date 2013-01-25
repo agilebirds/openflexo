@@ -36,6 +36,8 @@
     <property name="resourcesCount" xmlTag="resourcesCount"/> 
     <property name="projectName" xmlTag="name" attribute="YES"/> 
     <property name="projectURI" xmlTag="projectURI" attribute="YES"/> 
+    <property name="version" xmlTag="version" attribute="YES"/> 
+    <property name="revision" xmlTag="revision" attribute="YES"/> 
     <property name="projectVersionURI" xmlTag="projectVersionURI" attribute="YES"/> 
     <property name="projectDescription" xmlTag="description" text="YES" description="Description of the project"/> 
     <property name="externalRepositories" xmlTag="ProjectExternalRepository" type="vector" primary="yes"/> 
