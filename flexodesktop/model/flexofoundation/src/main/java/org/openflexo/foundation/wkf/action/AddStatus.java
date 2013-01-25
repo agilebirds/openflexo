@@ -49,7 +49,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 
 		@Override
 		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+			return false;
 		}
 
 		@Override

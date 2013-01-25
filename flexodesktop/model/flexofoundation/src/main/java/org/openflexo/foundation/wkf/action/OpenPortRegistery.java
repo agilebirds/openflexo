@@ -50,12 +50,12 @@ public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery, Fl
 
 		@Override
 		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported();
+			return false;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return isVisibleForSelection(object, globalSelection);
+			return object != null && !object.isImported();
 		}
 
 	};

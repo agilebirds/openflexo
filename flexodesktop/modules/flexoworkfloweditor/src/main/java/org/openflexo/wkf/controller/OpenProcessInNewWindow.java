@@ -46,7 +46,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 
 		@Override
 		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return !object.isImported();
+			return false;
 		}
 
 		@Override
