@@ -473,6 +473,7 @@ public abstract class FIBWidget extends FIBComponent {
 	public void updateBindingModel() {
 		super.updateBindingModel();
 		getEventListener().createEventListenerBindingModel();
+		getFormatter().createFormatterBindingModel();
 	}
 
 	public FIBEventListener getEventListener() {
