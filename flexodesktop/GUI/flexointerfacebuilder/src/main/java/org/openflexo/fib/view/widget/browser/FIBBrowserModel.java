@@ -338,7 +338,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			List<BrowserCell> oldChildren = new ArrayList<BrowserCell>(children);
 			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
 			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
-			boolean isEnabled = browserElementType.isEnabled(representedObject);
 			final List<?> newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
 
@@ -399,7 +398,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			if (removedChildren.size() > 0 || newChildren.size() > 0) {
 				structureChanged = true;
-				if (oldChildren.size() == 0) {
+				/*if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
 					try {
 						nodeStructureChanged(this);
@@ -411,24 +410,24 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 						logger.warning("Unexpected " + e.getClass().getSimpleName()
 								+ " when refreshing browser, no severity but please investigate");
 					}
-				} else {
-					if (removedChildren.size() > 0) {
-						int[] childIndices = new int[removedChildren.size()];
-						Object[] removedChildrenObjects = new Object[removedChildren.size()];
-						for (int i = 0; i < removedChildren.size(); i++) {
-							childIndices[i] = oldChildren.indexOf(removedChildren.get(i));
-							removedChildrenObjects[i] = removedChildren.get(i);
-						}
-						nodesWereRemoved(this, childIndices, removedChildrenObjects);
+				} else {*/
+				if (removedChildren.size() > 0) {
+					int[] childIndices = new int[removedChildren.size()];
+					Object[] removedChildrenObjects = new Object[removedChildren.size()];
+					for (int i = 0; i < removedChildren.size(); i++) {
+						childIndices[i] = oldChildren.indexOf(removedChildren.get(i));
+						removedChildrenObjects[i] = removedChildren.get(i);
 					}
-					if (newChildren.size() > 0) {
-						int[] childIndices = new int[newChildren.size()];
-						for (int i = 0; i < newChildren.size(); i++) {
-							childIndices[i] = children.indexOf(newChildren.get(i));
-						}
-						nodesWereInserted(this, childIndices);
-					}
+					nodesWereRemoved(this, childIndices, removedChildrenObjects);
 				}
+				if (newChildren.size() > 0) {
+					int[] childIndices = new int[newChildren.size()];
+					for (int i = 0; i < newChildren.size(); i++) {
+						childIndices[i] = children.indexOf(newChildren.get(i));
+					}
+					nodesWereInserted(this, childIndices);
+				}
+				// }
 			}
 
 			try {

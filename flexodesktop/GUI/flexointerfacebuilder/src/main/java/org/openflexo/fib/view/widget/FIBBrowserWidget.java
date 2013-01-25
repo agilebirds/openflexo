@@ -36,6 +36,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -146,18 +148,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
-		if (!getBrowser().getRootVisible() && (BrowserCell) getBrowserModel().getRoot() != null
-				&& ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
-			// Only one cell and roots are hidden, expand this first cell
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					getJTree().expandPath(
-							new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
-									((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
-				}
-			});
-		}
+
 		// getBrowserModel().setModel(getDataObject());
 
 		// We restore value if and only if we represent same browser
@@ -372,6 +363,40 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
+		getBrowserModel().addTreeModelListener(new TreeModelListener() {
+
+			@Override
+			public void treeStructureChanged(TreeModelEvent e) {
+
+			}
+
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {
+
+			}
+
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {
+				if (!getBrowser().getRootVisible() && (BrowserCell) getBrowserModel().getRoot() != null
+						&& ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
+					// Only one cell and roots are hidden, expand this first cell
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getJTree().expandPath(
+									new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
+											((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+						}
+					});
+				}
+			}
+
+			@Override
+			public void treeNodesChanged(TreeModelEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	@Override
