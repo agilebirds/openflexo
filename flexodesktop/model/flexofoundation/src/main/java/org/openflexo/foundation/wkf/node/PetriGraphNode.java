@@ -75,10 +75,6 @@ public abstract class PetriGraphNode extends Node implements Bindable, Sortable 
 
 	private FlexoPetriGraph parentPetriGraph;
 
-	// ==========================================================================
-	// ============================= Constructor ================================
-	// ==========================================================================
-
 	/**
 	 * Default constructor
 	 */
@@ -580,6 +576,18 @@ public abstract class PetriGraphNode extends Node implements Bindable, Sortable 
 			}
 		}
 		return false;
+	}
+
+	public String getRoleNameForInspector(Role role) {
+		if (role != null) {
+			if (role.isCache() || role.getProject() != getProject()) {
+				return role.getName() + " [" + role.getWorkflow().getName() + "]";
+			} else {
+				return role.getName();
+			}
+		} else {
+			return "";
+		}
 	}
 
 	public Role getBestRole() {

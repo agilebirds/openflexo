@@ -2004,6 +2004,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return getProjectName();
 	}
 
+	public String getDisplayName() {
+		String name = getProjectDirectory().getName();
+		if (name.toLowerCase().endsWith(".prj")) {
+			return name.substring(0, name.length() - 4);
+		}
+		return name;
+	}
+
 	public void setProjectName(String aName) throws InvalidNameException {
 		if (!BAD_CHARACTERS_PATTERN.matcher(aName).find()) {
 			projectName = aName;

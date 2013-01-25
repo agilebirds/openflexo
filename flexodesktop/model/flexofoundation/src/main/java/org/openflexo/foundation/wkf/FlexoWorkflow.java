@@ -283,8 +283,17 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		_resource = (FlexoWorkflowResource) resource;
 	}
 
+	@Override
+	public String getName() {
+		if (isCache()) {
+			return super.getName();
+		} else {
+			return getProject().getDisplayName();
+		}
+	}
+
 	/**
-	 * Save this object using ResourceManager scheme Additionnaly save all known processes related to this workflow
+	 * Save this object using ResourceManager scheme Additionally save all known processes related to this workflow
 	 * 
 	 * Overrides
 	 * 

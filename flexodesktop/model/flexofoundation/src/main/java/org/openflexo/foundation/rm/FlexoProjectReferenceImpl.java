@@ -66,7 +66,7 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	@Override
 	public String getName() {
 		if (getReferredProject() != null) {
-			return getReferredProject().getProjectName();
+			return getReferredProject().getDisplayableName();
 		}
 		return (String) performSuperGetter(NAME);
 	}
