@@ -78,9 +78,13 @@ public class IconLibrary {
 	public static final ImageIcon HELP_ICON = new ImageIconResource("Icons/Actions/Help.png");
 	public static final ImageIcon IMPORT_ICON = new ImageIconResource("Icons/Actions/Import.png");
 	public static final ImageIcon EXPORT_ICON = new ImageIconResource("Icons/Actions/Export.png");
+	public static final ImageIcon OPEN_ICON = new ImageIconResource("Icons/Actions/Open.png");
+	public static final ImageIcon NEW_ICON = new ImageIconResource("Icons/Actions/New.png");
 	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.png");
 	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.png");
 	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
+	public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/Save-as.png");
+	public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/Save-all.png");
 	public static final ImageIcon NETWORK_ICON = new ImageIconResource("Icons/Actions/Network.png");
 	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
 	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
