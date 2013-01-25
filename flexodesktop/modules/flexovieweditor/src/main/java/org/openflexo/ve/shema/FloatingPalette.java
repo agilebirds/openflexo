@@ -69,6 +69,7 @@ import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {
@@ -355,9 +356,22 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 		JPopupMenu popup = new JPopupMenu();
 		for (final DropAndLinkScheme dropAndLinkScheme : shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP)) {
-			JMenuItem menuItem = new JMenuItem(
-					FlexoLocalization.localizedForKey(dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme
-							.getLabel() : dropAndLinkScheme.linkScheme.getName()));
+			LocalizedDictionary localizedDictionary = dropAndLinkScheme.linkScheme.getViewPoint().getLocalizedDictionary();
+			String linkLabel = dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme.getLabel()
+					: dropAndLinkScheme.linkScheme.getName();
+			String localizedLinkLabel = localizedDictionary
+					.getLocalizedForKeyAndLanguage(linkLabel, FlexoLocalization.getCurrentLanguage());
+			if (localizedLinkLabel == null) {
+				localizedLinkLabel = FlexoLocalization.localizedForKey(linkLabel);
+			}
+			String dropLabel = dropAndLinkScheme.dropScheme.getEditionPattern().getName();
+			String localizedDropLabel = localizedDictionary
+					.getLocalizedForKeyAndLanguage(dropLabel, FlexoLocalization.getCurrentLanguage());
+			if (localizedDropLabel == null) {
+				localizedDropLabel = FlexoLocalization.localizedForKey(dropLabel);
+			}
+			String withNew = FlexoLocalization.localizedForKey("with_new");
+			JMenuItem menuItem = new JMenuItem(localizedLinkLabel + " " + withNew + " " + localizedDropLabel);
 			final ViewObject finalContainer = container;
 			menuItem.addActionListener(new ActionListener() {
 				@Override
@@ -394,8 +408,13 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			for (final LinkScheme linkScheme : availableConnectors) {
 				// final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
 				// System.out.println("Available: "+paletteConnector.getEditionPattern().getName());
-				JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel() != null ? linkScheme.getLabel()
-						: linkScheme.getName()));
+				LocalizedDictionary localizedDictionary = linkScheme.getViewPoint().getLocalizedDictionary();
+				String label = linkScheme.getLabel() != null ? linkScheme.getLabel() : linkScheme.getName();
+				String localized = localizedDictionary.getLocalizedForKeyAndLanguage(label, FlexoLocalization.getCurrentLanguage());
+				if (localized == null) {
+					localized = FlexoLocalization.localizedForKey(label);
+				}
+				JMenuItem menuItem = new JMenuItem(localized);
 				menuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
