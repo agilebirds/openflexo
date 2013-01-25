@@ -311,7 +311,11 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 		@Override
 		public Object getValue(BindingVariable variable) {
-			return value;
+			if (variable.getVariableName().equals("object")) {
+				return value;
+			} else {
+				return controller.getValue(variable);
+			}
 		}
 	}
 
