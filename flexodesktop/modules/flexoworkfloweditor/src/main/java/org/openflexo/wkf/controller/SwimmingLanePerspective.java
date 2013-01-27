@@ -62,6 +62,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		_controllerForProcess = new Hashtable<FlexoProcess, SwimmingLaneEditorController>();
 		_splitPaneForProcess = new Hashtable<SwimmingLaneEditorController, JSplitPane>();
 		topRightDummy = new JPanel();
+		importedWorkflowView = new ImportedWorkflowView(controller);
 		setTopLeftView(_controller.getWkfBrowserView());
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
