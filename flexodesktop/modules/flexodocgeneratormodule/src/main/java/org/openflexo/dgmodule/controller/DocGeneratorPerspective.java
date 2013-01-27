@@ -10,8 +10,6 @@ import javax.swing.JPanel;
 
 import org.openflexo.dg.file.DGLatexFile;
 import org.openflexo.dg.file.DGScreenshotFile;
-import org.openflexo.dgmodule.controller.browser.DGBrowser;
-import org.openflexo.dgmodule.view.DGBrowserView;
 import org.openflexo.dgmodule.view.DGFileModuleView;
 import org.openflexo.dgmodule.view.DGRepositoryModuleView;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
@@ -33,9 +31,6 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DocGeneratorPerspective extends FlexoPerspective {
 
-	private DGBrowser browser;
-	private DGBrowserView dgBrowserView;
-
 	private final DGController dgController;
 
 	/**
@@ -46,8 +41,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	public DocGeneratorPerspective(DGController dgController) {
 		super("doc_generation");
 		this.dgController = dgController;
-		browser = new DGBrowser(dgController);
-		setTopLeftView(dgBrowserView = new DGBrowserView(dgController, browser));
+		setTopLeftView(dgController.getDgBrowserView());
 	}
 
 	/**
@@ -111,14 +105,6 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 		if (moduleView instanceof DGFileModuleView) {
 			((DGFileModuleView) moduleView).refresh();
 		}
-	}
-
-	public DGBrowserView getDGBrowserView() {
-		return dgBrowserView;
-	}
-
-	public DGBrowser getBrowser() {
-		return browser;
 	}
 
 }

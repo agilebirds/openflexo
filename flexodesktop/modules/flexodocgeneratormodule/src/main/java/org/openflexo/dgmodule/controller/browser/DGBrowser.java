@@ -149,6 +149,7 @@ public class DGBrowser extends ProjectBrowser implements FlexoObserver {
 
 	public DGBrowser(DGController controller) {
 		super(controller);
+		setBrowserElementFactory(new GeneratorBrowserConfigurationElementFactory());
 	}
 
 	@Override
