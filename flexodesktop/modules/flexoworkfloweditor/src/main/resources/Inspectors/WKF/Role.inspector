@@ -91,9 +91,9 @@
     <Localized key="system_role" lang="English">System role</Localized>
     <Localized key="system_role" lang="French">Rôle système</Localized>
     <Localized key="system_role" lang="Dutch">System role</Localized>
-    <Localized key="specializes_following_roles" lang="English">This role is also playing the following roles</Localized>
-    <Localized key="specializes_following_roles" lang="French">Ce rôle joue aussi les rôles suivants</Localized>
-    <Localized key="specializes_following_roles" lang="Dutch">This role is also playing the following roles</Localized>
+    <Localized key="specializes_following_roles" lang="English">This role can also act as the following roles.</Localized>
+    <Localized key="specializes_following_roles" lang="French">Ce rôle peut aussi tenir  les rôles suivants</Localized>
+    <Localized key="specializes_following_roles" lang="Dutch">This role can also act as the following roles.</Localized>
     <Localized key="Graphics" lang="French">Graphisme</Localized>
     <Localized key="x" lang="English">Position x</Localized>
     <Localized key="x" lang="French">Abscisse</Localized>
