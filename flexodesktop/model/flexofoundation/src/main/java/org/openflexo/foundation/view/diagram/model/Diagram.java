@@ -76,6 +76,11 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 		super(view, diagramSpecification);
 	}
 
+	@Override
+	public DiagramResource getResource() {
+		return (DiagramResource) super.getResource();
+	}
+
 	public DiagramRootPane getRootPane() {
 		return rootPane;
 	}

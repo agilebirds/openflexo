@@ -96,8 +96,8 @@ public class CommonPalette extends DrawingPalette {
 	}
 
 	@Override
-	public VEShemaController getController() {
-		return (VEShemaController) super.getController();
+	public DiagramController getController() {
+		return (DiagramController) super.getController();
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
@@ -169,7 +169,7 @@ public class CommonPalette extends DrawingPalette {
 		PaletteElement returned = new PaletteElement() {
 			@Override
 			public boolean acceptDragging(GraphicalRepresentation target) {
-				return target instanceof VEShemaGR || target instanceof VEShapeGR;
+				return target instanceof DiagramGR || target instanceof DiagramShapeGR;
 			}
 
 			@Override

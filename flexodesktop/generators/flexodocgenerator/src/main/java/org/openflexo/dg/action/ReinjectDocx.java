@@ -62,6 +62,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -282,24 +283,26 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 				if (view == null) {
 					continue;
 				}
-				EditionPattern pattern = null;
-				for (EditionPattern ep : view.getViewPoint().getEditionPatterns()) {
-					if (ep.getURI().equals(epi.getEditionPatternURI())) {
-						pattern = ep;
-						break;
-					}
-				}
-				if (pattern != null) {
-					for (EditionPatternInstance inst : vr.getView().getEPInstances(pattern)) {
-						if (inst.getInstanceId() == instanceID) {
-							epis.put(inst, epi);
-							found = true;
+				for (VirtualModelInstance<?, ?> vmi : view.getVirtualModelInstances()) {
+					EditionPattern pattern = null;
+					for (EditionPattern ep : vmi.getVirtualModel().getEditionPatterns()) {
+						if (ep.getURI().equals(epi.getEditionPatternURI())) {
+							pattern = ep;
 							break;
 						}
 					}
-				}
-				if (found) {
-					break;
+					if (pattern != null) {
+						for (EditionPatternInstance inst : vmi.getEPInstances(pattern)) {
+							if (inst.getInstanceId() == instanceID) {
+								epis.put(inst, epi);
+								found = true;
+								break;
+							}
+						}
+					}
+					if (found) {
+						break;
+					}
 				}
 			}
 			if (found) {

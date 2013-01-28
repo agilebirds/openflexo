@@ -32,13 +32,13 @@ public class VEMouseClickControl extends MouseClickControl {
 	@Override
 	public void handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		super.handleClick(graphicalRepresentation, controller, event);
-		FlexoEditor editor = ((VEShemaController) controller).getEditor();
+		FlexoEditor editor = ((DiagramController) controller).getEditor();
 		DiagramElement ve = null;
-		if (graphicalRepresentation instanceof VEShapeGR) {
-			VEShapeGR gr = (VEShapeGR) graphicalRepresentation;
+		if (graphicalRepresentation instanceof DiagramShapeGR) {
+			DiagramShapeGR gr = (DiagramShapeGR) graphicalRepresentation;
 			ve = gr.getDrawable();
-		} else if (graphicalRepresentation instanceof VEConnectorGR) {
-			VEConnectorGR gr = (VEConnectorGR) graphicalRepresentation;
+		} else if (graphicalRepresentation instanceof DiagramConnectorGR) {
+			DiagramConnectorGR gr = (DiagramConnectorGR) graphicalRepresentation;
 			ve = gr.getDrawable();
 		}
 		if (ve != null && ve.getEditionPatternReference() != null) {

@@ -25,18 +25,18 @@ import java.util.logging.Logger;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.ve.shema.DrawEdgeControl.DrawEdgeAction;
 
-public class VEShemaView extends DrawingView<VEShemaRepresentation> {
+public class DiagramView extends DrawingView<DiagramRepresentation> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(VEShemaView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramView.class.getPackage().getName());
 
-	public VEShemaView(VEShemaRepresentation aDrawing, VEShemaController controller) {
+	public DiagramView(DiagramRepresentation aDrawing, DiagramController controller) {
 		super(aDrawing, controller);
 	}
 
 	@Override
-	public VEShemaController getController() {
-		return (VEShemaController) super.getController();
+	public DiagramController getController() {
+		return (DiagramController) super.getController();
 	}
 
 	private DrawEdgeAction _drawEdgeAction;

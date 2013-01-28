@@ -35,11 +35,12 @@ import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.shema.VEShemaController;
-import org.openflexo.ve.shema.ViewModuleView;
+import org.openflexo.ve.shema.DiagramController;
+import org.openflexo.ve.shema.DiagramModuleView;
 import org.openflexo.ve.widget.FIBViewLibraryBrowser;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -53,7 +54,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	private final FIBViewLibraryBrowser viewLibraryBrowser;
 
-	private final Map<View, VEShemaController> _controllers;
+	private final Map<Diagram, DiagramController> _controllers;
 
 	private final JLabel infoLabel;
 
@@ -80,7 +81,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
-		_controllers = new Hashtable<View, VEShemaController>();
+		_controllers = new Hashtable<Diagram, DiagramController>();
 		bottomRightDummy = new JPanel();
 
 		infoLabel = new JLabel("Diagram perspective");
@@ -91,8 +92,8 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
 	}
 
-	public void focusOnView(View aView) {
-		logger.info("focusOnView " + aView);
+	public void focusOnDiagram(Diagram aDiagram) {
+		logger.info("focusOnDiagram " + aDiagram);
 		// calcBrowser.deleteBrowserListener(_browserView);
 		// calcBrowser.setRepresentedObject(viewPoint);
 		// calcBrowser.update();
@@ -157,8 +158,8 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
-		if (object instanceof View) {
-			return getControllerForShema((View) object).getModuleView();
+		if (object instanceof Diagram) {
+			return getControllerForDiagram((Diagram) object).getModuleView();
 		}
 		return null;
 	}
@@ -176,26 +177,26 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	public ViewModuleView getCurrentShemaModuleView() {
-		if (_controller != null && _controller.getCurrentModuleView() instanceof ViewModuleView) {
-			return (ViewModuleView) _controller.getCurrentModuleView();
+	public DiagramModuleView getCurrentShemaModuleView() {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof DiagramModuleView) {
+			return (DiagramModuleView) _controller.getCurrentModuleView();
 		}
 		return null;
 	}
 
-	public VEShemaController getControllerForShema(View shema) {
-		VEShemaController returned = _controllers.get(shema);
+	public DiagramController getControllerForDiagram(Diagram diagram) {
+		DiagramController returned = _controllers.get(diagram);
 		if (returned == null) {
-			returned = new VEShemaController(_controller, shema, false);
-			_controllers.put(shema, returned);
+			returned = new DiagramController(_controller, diagram, false);
+			_controllers.put(diagram, returned);
 		}
 		return returned;
 	}
 
-	public void removeFromControllers(VEShemaController shemaController) {
+	public void removeFromControllers(DiagramController shemaController) {
 		if (shemaController != null) {
-			if (shemaController.getDrawing() != null && shemaController.getDrawing().getShema() != null) {
-				_controllers.remove(shemaController.getDrawing().getShema());
+			if (shemaController.getDrawing() != null && shemaController.getDrawing().getDiagram() != null) {
+				_controllers.remove(shemaController.getDrawing().getDiagram());
 			}
 		}
 	}

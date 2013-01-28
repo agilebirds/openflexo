@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.ReindexViewElements;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
@@ -35,8 +36,9 @@ public class ReindexViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		View diagram = project.getViewLibrary().getViewResourceNamed("R&DDefinition").getView();
-		ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getChilds().get(0), null, null);
+		View view = project.getViewLibrary().getViewResourceNamed("R&DDefinition").getView();
+		Diagram diagram = (Diagram) view.getVirtualModelInstances().get(0);
+		ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getRootPane().getChilds().get(0), null, null);
 		return makeArray(action);
 	}
 

@@ -33,24 +33,24 @@ import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.ReindexViewElements;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.VEController;
 
-public class VEShemaController extends SelectionManagingDrawingController<VEShemaRepresentation> {
+public class DiagramController extends SelectionManagingDrawingController<DiagramRepresentation> {
 
 	private VEController _controller;
 	private CommonPalette _commonPalette;
-	private ViewModuleView _moduleView;
+	private DiagramModuleView _moduleView;
 	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
-	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
-		super(new VEShemaRepresentation(shema, screenshotOnly), controller.getSelectionManager());
+	public DiagramController(VEController controller, Diagram diagram, boolean screenshotOnly) {
+		super(new DiagramRepresentation(diagram, screenshotOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -59,8 +59,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		activatePalette(_commonPalette);
 
 		_contextualPalettes = new Hashtable<DiagramPalette, ContextualPalette>();
-		if (shema.getViewPoint() != null) {
-			for (DiagramPalette palette : shema.getViewPoint().getPalettes()) {
+		if (diagram.getDiagramSpecification() != null) {
+			for (DiagramPalette palette : diagram.getDiagramSpecification().getPalettes()) {
 				ContextualPalette contextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, contextualPalette);
 				registerPalette(contextualPalette);
@@ -75,7 +75,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 
-				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getVEController().getEditor());
+				AddShape action = AddShape.actionType.makeNewAction(getDiagram().getRootPane(), null, getVEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);
 				action.setNameSetToNull(true);
 
@@ -97,14 +97,14 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		super.delete();
 		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
 		// getDrawing().delete();
-		if (getDrawing().getShema() != null) {
-			getDrawing().getShema().deleteObserver(getDrawing());
+		if (getDrawing().getDiagram() != null) {
+			getDrawing().getDiagram().deleteObserver(getDrawing());
 		}
 	}
 
 	@Override
-	public DrawingView<VEShemaRepresentation> makeDrawingView(VEShemaRepresentation drawing) {
-		return new VEShemaView(drawing, this);
+	public DrawingView<DiagramRepresentation> makeDrawingView(DiagramRepresentation drawing) {
+		return new DiagramView(drawing, this);
 	}
 
 	public VEController getVEController() {
@@ -112,13 +112,13 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	}
 
 	@Override
-	public VEShemaView getDrawingView() {
-		return (VEShemaView) super.getDrawingView();
+	public DiagramView getDrawingView() {
+		return (DiagramView) super.getDrawingView();
 	}
 
-	public ViewModuleView getModuleView() {
+	public DiagramModuleView getModuleView() {
 		if (_moduleView == null) {
-			_moduleView = new ViewModuleView(this);
+			_moduleView = new DiagramModuleView(this);
 		}
 		return _moduleView;
 	}
@@ -161,8 +161,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return paletteView;
 	}
 
-	public View getShema() {
-		return getDrawing().getShema();
+	public Diagram getDiagram() {
+		return getDrawing().getDiagram();
 	}
 
 	public FlexoEditor getEditor() {

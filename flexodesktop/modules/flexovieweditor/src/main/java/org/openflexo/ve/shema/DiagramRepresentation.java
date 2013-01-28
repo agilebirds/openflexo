@@ -29,33 +29,33 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
-public class VEShemaRepresentation extends DefaultDrawing<View> implements GraphicalFlexoObserver, VEShemaConstants {
+public class DiagramRepresentation extends DefaultDrawing<Diagram> implements GraphicalFlexoObserver, DiagramConstants {
 
-	private static final Logger logger = Logger.getLogger(VEShemaRepresentation.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramRepresentation.class.getPackage().getName());
 
-	private VEShemaGR graphicalRepresentation;
+	private DiagramGR graphicalRepresentation;
 
-	private Hashtable<DiagramShape, VEShapeGR> shapesGR;
-	private Hashtable<DiagramConnector, VEConnectorGR> connectorsGR;
+	private Hashtable<DiagramShape, DiagramShapeGR> shapesGR;
+	private Hashtable<DiagramConnector, DiagramConnectorGR> connectorsGR;
 
 	private boolean screenshotOnly;
 
-	public VEShemaRepresentation(View aShema, boolean screenshotOnly) {
-		super(aShema);
+	public DiagramRepresentation(Diagram aDiagram, boolean screenshotOnly) {
+		super(aDiagram);
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
 		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 
 		this.screenshotOnly = screenshotOnly;
 
-		shapesGR = new Hashtable<DiagramShape, VEShapeGR>();
-		connectorsGR = new Hashtable<DiagramConnector, VEConnectorGR>();
+		shapesGR = new Hashtable<DiagramShape, DiagramShapeGR>();
+		connectorsGR = new Hashtable<DiagramConnector, DiagramConnectorGR>();
 
-		aShema.addObserver(this);
+		aDiagram.addObserver(this);
 
 		updateGraphicalObjectsHierarchy();
 
@@ -66,15 +66,15 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
 		}
-		if (getShema() != null) {
-			getShema().deleteObserver(this);
+		if (getDiagram() != null) {
+			getDiagram().deleteObserver(this);
 		}
 		super.delete();
 	}
 
 	@Override
 	protected void buildGraphicalObjectsHierarchy() {
-		buildGraphicalObjectsHierarchyFor(getShema());
+		buildGraphicalObjectsHierarchyFor(getDiagram().getRootPane());
 	}
 
 	private void buildGraphicalObjectsHierarchyFor(DiagramElement<?> parent) {
@@ -92,14 +92,14 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		}
 	}
 
-	public View getShema() {
+	public Diagram getDiagram() {
 		return getModel();
 	}
 
 	@Override
-	public VEShemaGR getDrawingGraphicalRepresentation() {
+	public DiagramGR getDrawingGraphicalRepresentation() {
 		if (graphicalRepresentation == null) {
-			graphicalRepresentation = new VEShemaGR(this);
+			graphicalRepresentation = new DiagramGR(this);
 		}
 		return graphicalRepresentation;
 	}
@@ -165,7 +165,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof DiagramShape) {
 			DiagramShape shape = (DiagramShape) aDrawable;
-			VEShapeGR returned = shapesGR.get(shape);
+			DiagramShapeGR returned = shapesGR.get(shape);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(shape);
 				shapesGR.put(shape, returned);
@@ -173,7 +173,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			return (GraphicalRepresentation<O>) returned;
 		} else if (aDrawable instanceof DiagramConnector) {
 			DiagramConnector connector = (DiagramConnector) aDrawable;
-			VEConnectorGR returned = connectorsGR.get(connector);
+			DiagramConnectorGR returned = connectorsGR.get(connector);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(connector);
 				connectorsGR.put(connector, returned);
@@ -184,9 +184,9 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		return null;
 	}
 
-	private VEConnectorGR buildGraphicalRepresentation(DiagramConnector connector) {
+	private DiagramConnectorGR buildGraphicalRepresentation(DiagramConnector connector) {
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
-			VEConnectorGR graphicalRepresentation = new VEConnectorGR(connector, this);
+			DiagramConnectorGR graphicalRepresentation = new DiagramConnectorGR(connector, this);
 			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) connector.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!screenshotOnly) {
@@ -194,21 +194,21 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			}
 			return graphicalRepresentation;
 		}
-		VEConnectorGR graphicalRepresentation = new VEConnectorGR(connector, this);
+		DiagramConnectorGR graphicalRepresentation = new DiagramConnectorGR(connector, this);
 		connector.setGraphicalRepresentation(graphicalRepresentation);
 		return graphicalRepresentation;
 	}
 
-	private VEShapeGR buildGraphicalRepresentation(DiagramShape shape) {
-		/*if (shape.getGraphicalRepresentation() instanceof VEShapeGR) {
-			VEShapeGR returned = (VEShapeGR) shape.getGraphicalRepresentation();
+	private DiagramShapeGR buildGraphicalRepresentation(DiagramShape shape) {
+		/*if (shape.getGraphicalRepresentation() instanceof DiagramShapeGR) {
+			DiagramShapeGR returned = (DiagramShapeGR) shape.getGraphicalRepresentation();
 			if (!returned.isGRRegistered()) {
 				returned.registerShapeGR(shape, this);
 			}
 			return returned;
 		}*/
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
+			DiagramShapeGR graphicalRepresentation = new DiagramShapeGR(shape, this);
 			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
 			if (!screenshotOnly) {
@@ -216,7 +216,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			}
 			return graphicalRepresentation;
 		}
-		VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
+		DiagramShapeGR graphicalRepresentation = new DiagramShapeGR(shape, this);
 		shape.setGraphicalRepresentation(graphicalRepresentation);
 		return graphicalRepresentation;
 	}

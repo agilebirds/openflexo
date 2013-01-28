@@ -72,8 +72,8 @@ public class ContextualPalette extends DrawingPalette {
 	}
 
 	@Override
-	public VEShemaController getController() {
-		return (VEShemaController) super.getController();
+	public DiagramController getController() {
+		return (DiagramController) super.getController();
 	}
 
 	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) {
@@ -148,7 +148,7 @@ public class ContextualPalette extends DrawingPalette {
 					final DiagramElement<?> container = (DiagramElement<?>) containerGR.getDrawable();
 
 					// final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
-					final ShapeGraphicalRepresentation<?> shapeGR = new VEShapeGR(null, null);
+					final ShapeGraphicalRepresentation<?> shapeGR = new DiagramShapeGR(null, null);
 					// boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
 					// getGraphicalRepresentation().setAllowToLeaveBounds(true);
 

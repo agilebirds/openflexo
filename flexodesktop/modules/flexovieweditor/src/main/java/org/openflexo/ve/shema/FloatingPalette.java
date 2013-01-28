@@ -81,7 +81,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		CREATE_SHAPE_AND_LINK, LINK_ONLY;
 	}
 
-	private VEShapeGR shapeGR;
+	private DiagramShapeGR shapeGR;
 	private DiagramElement<?> target;
 
 	private FGERoundRectangle roleRect;
@@ -110,7 +110,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private SimplifiedCardinalDirection orientation;
 
-	public FloatingPalette(VEShapeGR shapeGR, DiagramElement<?> target, SimplifiedCardinalDirection orientation) {
+	public FloatingPalette(DiagramShapeGR shapeGR, DiagramElement<?> target, SimplifiedCardinalDirection orientation) {
 		super(shapeGR, makeRoundRect(shapeGR, orientation));
 		this.shapeGR = shapeGR;
 		this.target = target;
@@ -127,15 +127,15 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	protected Point currentDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
 	protected boolean isDnd = false;
-	protected VEShapeGR to = null;
+	protected DiagramShapeGR to = null;
 	protected GraphicalRepresentation<?> focusedGR;
-	private VEShemaController controller;
+	private DiagramController controller;
 	private FGEPoint normalizedStartPoint;
 
 	private Rectangle previousRectangle;
 	private Mode mode;
 
-	public void paint(Graphics g, VEShemaController controller) {
+	public void paint(Graphics g, DiagramController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
 			FGEShape<?> fgeShape = shapeGR.getShape().getOutline();
 			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
@@ -193,8 +193,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (mode != null) {
 			drawEdge = true;
 			normalizedStartPoint = startPoint;
-			this.controller = (VEShemaController) controller;
-			((VEShemaView) controller.getDrawingView()).setFloatingPalette(this);
+			this.controller = (DiagramController) controller;
+			((DiagramView) controller.getDrawingView()).setFloatingPalette(this);
 		} else {
 			drawEdge = false;
 		}
@@ -215,8 +215,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				oldBounds.height += 2;
 			}
 			focusedGR = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-			if (focusedGR instanceof VEShapeGR && focusedGR != shapeGR) {
-				to = (VEShapeGR) focusedGR;
+			if (focusedGR instanceof DiagramShapeGR && focusedGR != shapeGR) {
+				to = (DiagramShapeGR) focusedGR;
 			} else {
 				to = null;
 			}
@@ -317,7 +317,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 			} finally {
 				resetVariables();
-				((VEShemaView) controller.getDrawingView()).resetFloatingPalette();
+				((DiagramView) controller.getDrawingView()).resetFloatingPalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
 				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
@@ -332,7 +332,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	private void askAndApplyDropAndLinkScheme(final FGEPoint dropLocation, GraphicalRepresentation focusedGR) {
 		DiagramElement<?> container = null;
 		EditionPattern targetEP = null;
-		if (focusedGR == null || focusedGR instanceof VEShemaGR) {
+		if (focusedGR == null || focusedGR instanceof DiagramGR) {
 			container = target.getDiagram().getRootPane();
 			targetEP = null;
 		} else if (focusedGR.getDrawable() instanceof DiagramElement) {
@@ -690,7 +690,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	}
 
-	private static FGERoundRectangle makeRoundRect(VEShapeGR shapeGR, SimplifiedCardinalDirection orientation) {
+	private static FGERoundRectangle makeRoundRect(DiagramShapeGR shapeGR, SimplifiedCardinalDirection orientation) {
 		double x, y, width, height;
 		int PALETTE_WIDTH = 0, PALETTE_HEIGHT = 0;
 

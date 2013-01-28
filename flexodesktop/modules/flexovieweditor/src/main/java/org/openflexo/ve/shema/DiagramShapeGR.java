@@ -46,19 +46,19 @@ import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implements GraphicalFlexoObserver, VEShemaConstants {
+public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implements GraphicalFlexoObserver, DiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(VEShapeGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramShapeGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShapeGR(ViewBuilder builder) {
+	public DiagramShapeGR(ViewBuilder builder) {
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public VEShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
+	public DiagramShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		registerShapeGR(aShape, aDrawing);
@@ -73,9 +73,9 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implem
 	public void registerShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
 		setDrawable(aShape);
 		setDrawing(aDrawing);
-		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new DiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new DiagramController.ShowContextualMenuControl(true));
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
@@ -120,8 +120,8 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implem
 	}
 
 	@Override
-	public VEShemaRepresentation getDrawing() {
-		return (VEShemaRepresentation) super.getDrawing();
+	public DiagramRepresentation getDrawing() {
+		return (DiagramRepresentation) super.getDrawing();
 	}
 
 	public DiagramShape getOEShape() {

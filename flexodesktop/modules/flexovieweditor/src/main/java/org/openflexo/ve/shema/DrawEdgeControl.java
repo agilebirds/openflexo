@@ -47,8 +47,8 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected Point currentDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
-	protected VEShapeGR fromShape = null;
-	protected VEShapeGR toShape = null;
+	protected DiagramShapeGR fromShape = null;
+	protected DiagramShapeGR toShape = null;
 
 	public DrawEdgeControl() {
 		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
@@ -59,10 +59,10 @@ public class DrawEdgeControl extends MouseDragControl {
 		@Override
 		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
-			if (graphicalRepresentation instanceof VEShapeGR) {
+			if (graphicalRepresentation instanceof DiagramShapeGR) {
 				drawEdge = true;
-				fromShape = (VEShapeGR) graphicalRepresentation;
-				((VEShemaView) controller.getDrawingView()).setDrawEdgeAction(this);
+				fromShape = (DiagramShapeGR) graphicalRepresentation;
+				((DiagramView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
 			return false;
@@ -95,7 +95,7 @@ public class DrawEdgeControl extends MouseDragControl {
 								public void actionPerformed(ActionEvent e) {
 									// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
 									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null,
-											((VEShemaController) controller).getVEController().getEditor());
+											((DiagramController) controller).getVEController().getEditor());
 									action.setLinkScheme(linkScheme);
 									action.setFromShape(from);
 									action.setToShape(to);
@@ -109,7 +109,7 @@ public class DrawEdgeControl extends MouseDragControl {
 						menuItem.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
+								AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((DiagramController) controller)
 										.getVEController().getEditor());
 								action.setToShape(to);
 								action.setAutomaticallyCreateConnector(true);
@@ -121,7 +121,7 @@ public class DrawEdgeControl extends MouseDragControl {
 						popup.add(menuItem);
 						popup.show(event.getComponent(), event.getX(), event.getY());
 					} else {
-						AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
+						AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((DiagramController) controller)
 								.getVEController().getEditor());
 						action.setToShape(to);
 						action.setAutomaticallyCreateConnector(true);
@@ -132,7 +132,7 @@ public class DrawEdgeControl extends MouseDragControl {
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;
-				((VEShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
+				((DiagramView) controller.getDrawingView()).setDrawEdgeAction(null);
 				return true;
 			}
 			return false;
@@ -143,8 +143,8 @@ public class DrawEdgeControl extends MouseDragControl {
 				MouseEvent event) {
 			if (drawEdge) {
 				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof VEShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
-					toShape = (VEShapeGR) gr;
+				if (gr instanceof DiagramShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
+					toShape = (DiagramShapeGR) gr;
 				} else {
 					toShape = null;
 				}

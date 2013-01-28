@@ -38,27 +38,28 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver, VEShemaConstants {
+public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver,
+		DiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(VEConnectorGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramConnectorGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEConnectorGR(ViewBuilder builder) {
+	public DiagramConnectorGR(ViewBuilder builder) {
 		this(null, null);
 	}
 
-	public VEConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
+	public DiagramConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
 				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
 				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
 		// setText(getRole().getName());
 
-		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new DiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new DiagramController.ShowContextualMenuControl(true));
 		}
 
 		registerMouseClickControls();

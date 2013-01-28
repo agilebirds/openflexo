@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.ve.controller.ViewLibraryPerspective;
 import org.openflexo.view.ModuleView;
 
@@ -39,14 +40,14 @@ import org.openflexo.view.ModuleView;
  * @author sylvain
  * 
  */
-public class ViewModuleView extends JPanel implements ModuleView<View>, PropertyChangeListener {
+public class DiagramModuleView extends JPanel implements ModuleView<Diagram>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(ViewModuleView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramModuleView.class.getPackage().getName());
 
-	private VEShemaController _controller;
+	private DiagramController _controller;
 
-	public ViewModuleView(VEShemaController controller) {
+	public DiagramModuleView(DiagramController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
@@ -58,7 +59,7 @@ public class ViewModuleView extends JPanel implements ModuleView<View>, Property
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
-	public VEShemaController getController() {
+	public DiagramController getController() {
 		return _controller;
 	}
 
@@ -80,8 +81,8 @@ public class ViewModuleView extends JPanel implements ModuleView<View>, Property
 	}
 
 	@Override
-	public View getRepresentedObject() {
-		return _controller.getShema();
+	public Diagram getRepresentedObject() {
+		return _controller.getDiagram();
 	}
 
 	@Override
@@ -95,7 +96,7 @@ public class ViewModuleView extends JPanel implements ModuleView<View>, Property
 
 	@Override
 	public void willShow() {
-		getPerspective().focusOnView(getRepresentedObject());
+		getPerspective().focusOnDiagram(getRepresentedObject());
 	}
 
 	@Override

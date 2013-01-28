@@ -55,7 +55,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.module.external.ExternalOEModule;
+import org.openflexo.module.external.ExternalVEModule;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
@@ -330,8 +330,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		return (ExternalCEDModule) getModuleInstance(Module.VPM_MODULE);
 	}
 
-	public ExternalOEModule getOEModule() throws ModuleLoadingException {
-		return (ExternalOEModule) getModuleInstance(Module.VE_MODULE);
+	public ExternalVEModule getOEModule() throws ModuleLoadingException {
+		return (ExternalVEModule) getModuleInstance(Module.VE_MODULE);
 	}
 
 	public FlexoModule switchToModule(Module module) throws ModuleLoadingException {
@@ -464,7 +464,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	}
 
 	@Override
-	public ExternalOEModule getVEModuleInstance() throws ModuleLoadingException {
+	public ExternalVEModule getVEModuleInstance() throws ModuleLoadingException {
 		return getOEModule();
 	}
 

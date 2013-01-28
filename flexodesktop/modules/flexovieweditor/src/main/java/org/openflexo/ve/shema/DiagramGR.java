@@ -25,53 +25,53 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.xml.ViewBuilder;
 
-public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements GraphicalFlexoObserver, VEShemaConstants {
+public class DiagramGR extends DrawingGraphicalRepresentation<Diagram> implements GraphicalFlexoObserver, DiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(VEShemaGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShemaGR(ViewBuilder builder) {
-		this((VEShemaRepresentation) null);
+	public DiagramGR(ViewBuilder builder) {
+		this((DiagramRepresentation) null);
 	}
 
-	public VEShemaGR(VEShemaRepresentation aDrawing) {
+	public DiagramGR(DiagramRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith(aDrawing.getShema().getGraphicalRepresentation());
+		if (aDrawing != null && aDrawing.getDiagram() != null && aDrawing.getDiagram().getRootPane().getGraphicalRepresentation() != null) {
+			setsWith(aDrawing.getDiagram().getRootPane().getGraphicalRepresentation());
 		}
 
-		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new DiagramController.ShowContextualMenuControl());
 
-		if (aDrawing != null && aDrawing.getShema() != null) {
-			aDrawing.getShema().setGraphicalRepresentation(this);
-			aDrawing.getShema().addObserver(this);
+		if (aDrawing != null && aDrawing.getDiagram() != null) {
+			aDrawing.getDiagram().getRootPane().setGraphicalRepresentation(this);
+			aDrawing.getDiagram().getRootPane().addObserver(this);
 		}
 
 	}
 
 	@Override
-	public VEShemaRepresentation getDrawing() {
-		return (VEShemaRepresentation) super.getDrawing();
+	public DiagramRepresentation getDrawing() {
+		return (DiagramRepresentation) super.getDrawing();
 	}
 
-	public View getShema() {
-		return getDrawing().getShema();
+	public Diagram getDiagram() {
+		return getDrawing().getDiagram();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getShema()) {
+		if (observable == getDiagram() || observable == getDiagram().getRootPane()) {
 			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof ShapeInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();

@@ -69,9 +69,9 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 				/*	DiagramShape shape = action.getPrimaryShape();
 					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {
-						VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
-						VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
-						VEShapeGR myGR = (VEShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
+						DiagramShapeGR parentGR = (DiagramShapeGR) shape.getParent().getGraphicalRepresentation();
+						DiagramShapeGR expectedGR = (DiagramShapeGR) action.getParent().getGraphicalRepresentation();
+						DiagramShapeGR myGR = (DiagramShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
 						Point p = new Point((int) myGR.getX(), (int) myGR.getY());
 						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
 						myGR.setLocation(new FGEPoint(newP.x, newP.y));

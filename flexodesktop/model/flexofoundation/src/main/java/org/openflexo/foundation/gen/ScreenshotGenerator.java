@@ -42,6 +42,7 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -53,7 +54,7 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.module.external.ExternalModule;
-import org.openflexo.module.external.ExternalOEModule;
+import org.openflexo.module.external.ExternalVEModule;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.swing.ImageUtils;
@@ -251,7 +252,7 @@ public class ScreenshotGenerator {
 		ExternalWKFModule wkfModule = null;
 		ExternalIEModule ieModule = null;
 		ExternalDMModule dmModule = null;
-		ExternalOEModule oeModule = null;
+		ExternalVEModule oeModule = null;
 		if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject) {
 			((FlexoXMLSerializableObject) object.getXMLResourceData()).setIgnoreNotifications();
 		}
@@ -298,8 +299,8 @@ public class ScreenshotGenerator {
 								.getComponentDefinition().getWOComponent());
 					} else if (object instanceof ERDiagram) {
 						c = dmModule.createScreenshotForObject((ERDiagram) object);
-					} else if (object instanceof View) {
-						c = oeModule.createScreenshotForShema(((View) object).getFlexoResource());
+					} else if (object instanceof Diagram) {
+						c = oeModule.createScreenshotForDiagram(((Diagram) object).getResource());
 					}
 					if (c == null) {
 						if (logger.isLoggable(Level.WARNING)) {

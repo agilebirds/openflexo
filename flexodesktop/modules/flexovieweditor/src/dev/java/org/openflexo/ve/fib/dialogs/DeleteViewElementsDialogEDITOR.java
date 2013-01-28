@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.action.DeleteViewElements;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.toolbox.FileResource;
@@ -38,8 +39,9 @@ public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		View shema = project.getViewLibrary().getViewResourceNamed("BasicOrganization").getView();
-		DiagramShape a = shema.getShapeNamed("A");
+		View view = project.getViewLibrary().getViewResourceNamed("BasicOrganization").getView();
+		Diagram diagram = (Diagram) view.getVirtualModelInstances().get(0);
+		DiagramShape a = diagram.getRootPane().getShapeNamed("A");
 		DiagramShape b = a.getShapeNamed("B");
 		DiagramShape c = a.getShapeNamed("C");
 		DiagramShape x = b.getShapeNamed("X");

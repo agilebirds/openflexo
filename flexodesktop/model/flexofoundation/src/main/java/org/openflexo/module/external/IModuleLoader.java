@@ -36,7 +36,7 @@ public interface IModuleLoader {
 
 	public ExternalCEDModule getVPMModuleInstance() throws ModuleLoadingException;
 
-	public ExternalOEModule getVEModuleInstance() throws ModuleLoadingException;
+	public ExternalVEModule getVEModuleInstance() throws ModuleLoadingException;
 
 	public boolean isWKFLoaded();
 
