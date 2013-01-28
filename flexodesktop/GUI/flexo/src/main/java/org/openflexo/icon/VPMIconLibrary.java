@@ -26,11 +26,11 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.DiagramPaletteResource;
-import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;

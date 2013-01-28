@@ -31,44 +31,43 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 
-public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, ViewElement, ViewElement> {
+public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, DiagramElement, DiagramElement> {
 
 	private static final Logger logger = Logger.getLogger(DeleteViewElements.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteViewElements, ViewElement, ViewElement> actionType = new FlexoActionType<DeleteViewElements, ViewElement, ViewElement>(
+	public static FlexoActionType<DeleteViewElements, DiagramElement, DiagramElement> actionType = new FlexoActionType<DeleteViewElements, DiagramElement, DiagramElement>(
 			"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteViewElements makeNewAction(ViewElement focusedObject, Vector<ViewElement> globalSelection, FlexoEditor editor) {
+		public DeleteViewElements makeNewAction(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 			return new DeleteViewElements(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewElement object, Vector<ViewElement> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement object, Vector<DiagramElement> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewElement focusedObject, Vector<ViewElement> globalSelection) {
-			Vector<ViewElement> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
+		public boolean isEnabledForSelection(DiagramElement focusedObject, Vector<DiagramElement> globalSelection) {
+			Vector<DiagramElement> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
 			return objectsToDelete.size() > 0;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, ViewShape.class);
-		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, ViewConnector.class);
+		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, DiagramConnector.class);
 	}
 
 	/**
@@ -79,23 +78,23 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	 * @param globalSelection
 	 * @return
 	 */
-	protected static Vector<ViewElement> objectsToDelete(ViewElement focusedObject, Vector<ViewElement> globalSelection) {
-		Vector<ViewElement> allSelection = new Vector<ViewElement>();
+	protected static Vector<DiagramElement> objectsToDelete(DiagramElement focusedObject, Vector<DiagramElement> globalSelection) {
+		Vector<DiagramElement> allSelection = new Vector<DiagramElement>();
 		if (globalSelection == null || !globalSelection.contains(focusedObject)) {
 			allSelection.add(focusedObject);
 		}
 		if (globalSelection != null) {
-			for (ViewElement o : globalSelection) {
+			for (DiagramElement o : globalSelection) {
 				if (!allSelection.contains(o)) {
 					allSelection.add(o);
 				}
 			}
 		}
 
-		Vector<ViewElement> returned = new Vector<ViewElement>();
-		for (ViewElement o : allSelection) {
+		Vector<DiagramElement> returned = new Vector<DiagramElement>();
+		for (DiagramElement o : allSelection) {
 			boolean isContainedByAnOtherObject = false;
-			for (ViewElement potentielContainer : allSelection) {
+			for (DiagramElement potentielContainer : allSelection) {
 				if (potentielContainer != o && o.isContainedIn(potentielContainer)) {
 					isContainedByAnOtherObject = true;
 					break;
@@ -109,11 +108,11 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		return returned;
 	}
 
-	private Vector<ViewElement> viewElementsToDelete;
+	private Vector<DiagramElement> viewElementsToDelete;
 	private Vector<EditionPatternInstance> epiThatWillBeDeleted;
 	private Vector<FlexoModelObject> allObjectsThatWillBeDeleted;
 
-	protected DeleteViewElements(ViewElement focusedObject, Vector<ViewElement> globalSelection, FlexoEditor editor) {
+	protected DeleteViewElements(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		logger.info("Created DeleteShemaElements action focusedObject=" + focusedObject + "globalSelection=" + globalSelection);
 	}
@@ -146,12 +145,12 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 			epi.delete();
 		}
 
-		for (ViewElement o : getViewElementsToDelete()) {
+		for (DiagramElement o : getViewElementsToDelete()) {
 			if (!o.isDeleted()) {
-				logger.info("Delete undeleted ViewElement " + o);
+				logger.info("Delete undeleted DiagramElement " + o);
 				o.delete();
 			} else {
-				logger.info("ViewElement " + o + " has been successfully deleted");
+				logger.info("DiagramElement " + o + " has been successfully deleted");
 			}
 		}
 	}
@@ -166,7 +165,7 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		logger.warning("REDO DELETE not implemented yet !");
 	}
 
-	public List<ViewElement> getViewElementsToDelete() {
+	public List<DiagramElement> getViewElementsToDelete() {
 		if (viewElementsToDelete == null) {
 			computeElementsToDelete();
 		}
@@ -175,12 +174,12 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 
 	private void computeElementsToDelete() {
 		viewElementsToDelete = objectsToDelete(getFocusedObject(), getGlobalSelection());
-		Vector<ViewElement> viewElementsThatWillBeDeleted = new Vector<ViewElement>();
-		for (ViewElement o : viewElementsToDelete) {
+		Vector<DiagramElement<?>> viewElementsThatWillBeDeleted = new Vector<DiagramElement<?>>();
+		for (DiagramElement<?> o : viewElementsToDelete) {
 			addAllEmbeddedObjects(o, viewElementsThatWillBeDeleted);
 		}
 		epiThatWillBeDeleted = new Vector<EditionPatternInstance>();
-		for (ViewElement o : viewElementsThatWillBeDeleted) {
+		for (DiagramElement<?> o : viewElementsThatWillBeDeleted) {
 			if (o.getEditionPatternInstance() != null && !epiThatWillBeDeleted.contains(o.getEditionPatternInstance())) {
 				epiThatWillBeDeleted.add(o.getEditionPatternInstance());
 			}
@@ -214,25 +213,25 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 		}
 	}
 
-	private void addAllEmbeddedObjects(ViewElement o, Vector<ViewElement> v) {
+	private void addAllEmbeddedObjects(DiagramElement<?> o, Vector<DiagramElement<?>> v) {
 		if (!v.contains(o) && o.playsPrimaryRole()) {
 			v.add(o);
-			if (o instanceof ViewShape) {
-				ViewShape s = (ViewShape) o;
-				for (ViewConnector connector : s.getIncomingConnectors()) {
+			if (o instanceof DiagramShape) {
+				DiagramShape s = (DiagramShape) o;
+				for (DiagramConnector connector : s.getIncomingConnectors()) {
 					if (!v.contains(connector) && connector.playsPrimaryRole()) {
 						v.add(connector);
 					}
 				}
-				for (ViewConnector connector : s.getOutgoingConnectors()) {
+				for (DiagramConnector connector : s.getOutgoingConnectors()) {
 					if (!v.contains(connector) && connector.playsPrimaryRole()) {
 						v.add(connector);
 					}
 				}
 			}
-			for (ViewObject child : o.getChilds()) {
-				if (child instanceof ViewElement) {
-					addAllEmbeddedObjects((ViewElement) child, v);
+			for (DiagramElement<?> child : o.getChilds()) {
+				if (child instanceof DiagramElement) {
+					addAllEmbeddedObjects(child, v);
 				}
 			}
 		}
@@ -248,7 +247,7 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	public List<FlexoModelObject> getAllObjectsThatWillBeDeleted() {
 		if (allObjectsThatWillBeDeleted == null) {
 			computeElementsToDelete();
-			/*for (ViewElement e : getObjectsThatWillBeDeleted()) {
+			/*for (DiagramElement e : getObjectsThatWillBeDeleted()) {
 				if (e.getEditionPatternReferences() != null) {
 					for (EditionPatternReference ref : e.getEditionPatternReferences()) {
 						EditionPatternInstance epInstance = ref.getEditionPatternInstance();

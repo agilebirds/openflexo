@@ -62,7 +62,7 @@ import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.logging.FlexoLogger;
@@ -475,7 +475,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				getModuleLoader().switchToModule(Module.DM_MODULE);
 			} else if (object instanceof WSObject) {
 				getModuleLoader().switchToModule(Module.WSE_MODULE);
-			} else if (object instanceof ViewObject) {
+			} else if (object instanceof DiagramObject) {
 				getModuleLoader().switchToModule(Module.VE_MODULE);
 			}
 		} catch (ModuleLoadingException e) {

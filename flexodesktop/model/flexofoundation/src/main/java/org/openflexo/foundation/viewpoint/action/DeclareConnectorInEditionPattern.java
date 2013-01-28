@@ -35,7 +35,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
@@ -302,9 +302,9 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Add connector action
 				AddConnector newAddConnector = new AddConnector(builder);
 				newAddConnector.setAssignation(new DataBinding<Object>(newConnectorPatternRole.getPatternRoleName()));
-				newAddConnector.setFromShape(new DataBinding<ViewShape>(EditionScheme.FROM_TARGET + "."
+				newAddConnector.setFromShape(new DataBinding<DiagramShape>(EditionScheme.FROM_TARGET + "."
 						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-				newAddConnector.setToShape(new DataBinding<ViewShape>(EditionScheme.TO_TARGET + "."
+				newAddConnector.setToShape(new DataBinding<DiagramShape>(EditionScheme.TO_TARGET + "."
 						+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 
 				newLinkScheme.addToActions(newAddConnector);

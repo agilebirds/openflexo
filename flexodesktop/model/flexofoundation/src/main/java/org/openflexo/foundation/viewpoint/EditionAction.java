@@ -116,7 +116,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return getVirtualModel().getViewPoint();
 	}
 
-	public VirtualModel getVirtualModel() {
+	@Override
+	public VirtualModel<?> getVirtualModel() {
 		if (getScheme() != null) {
 			return getScheme().getVirtualModel();
 		}
@@ -132,7 +133,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 	}
 
 	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {
-		return action.getView().getModelSlotInstance(getModelSlot());
+		return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {

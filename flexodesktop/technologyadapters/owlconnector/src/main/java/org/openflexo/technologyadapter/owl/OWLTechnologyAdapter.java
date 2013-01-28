@@ -35,6 +35,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializatio
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -65,6 +66,11 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	@Override
 	public OWLModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new OWLModelSlot(viewPoint, this);
+	}
+
+	@Override
+	public OWLModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
+		return new OWLModelSlot(virtualModel, this);
 	}
 
 	/**

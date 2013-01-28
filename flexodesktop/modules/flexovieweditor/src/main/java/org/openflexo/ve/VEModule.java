@@ -34,7 +34,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;

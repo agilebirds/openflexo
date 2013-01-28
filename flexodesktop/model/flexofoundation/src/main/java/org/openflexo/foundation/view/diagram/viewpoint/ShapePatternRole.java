@@ -4,13 +4,13 @@ import java.lang.reflect.Type;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
+public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> {
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ShapeGraphicalRepresentation.
@@ -78,7 +78,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<ViewShape> {
 
 	@Override
 	public Type getType() {
-		return ViewShape.class;
+		return DiagramShape.class;
 	}
 
 	public ShapePatternRole getParentShapePatternRole() {

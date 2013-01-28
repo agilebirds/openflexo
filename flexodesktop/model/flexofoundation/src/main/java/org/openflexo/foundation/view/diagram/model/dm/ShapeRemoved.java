@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
-
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 /**
  * Notify that a Shape has been removed from a OEShema
@@ -31,14 +30,14 @@ import org.openflexo.foundation.view.diagram.model.ViewShape;
  */
 public class ShapeRemoved extends DiagramDataModification {
 
-	private ViewObject _parent;
+	private DiagramElement<?> _parent;
 
-	public ShapeRemoved(ViewShape shape, ViewObject parent) {
+	public ShapeRemoved(DiagramShape shape, DiagramElement<?> parent) {
 		super(shape, null);
 		_parent = parent;
 	}
 
-	public ViewObject getParent() {
+	public DiagramElement<?> getParent() {
 		return _parent;
 	}
 

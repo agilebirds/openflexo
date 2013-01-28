@@ -36,10 +36,12 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
@@ -61,7 +63,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sylvain
  * 
  */
-public class VirtualModel extends EditionPattern {
+public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern implements FlexoMetaModel<VM> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModel.class.getPackage().getName());
 
@@ -69,6 +71,8 @@ public class VirtualModel extends EditionPattern {
 	private Vector<EditionPattern> editionPatterns;
 	private List<ModelSlot<?, ?>> modelSlots;
 	private BindingModel bindingModel;
+
+	private boolean readOnly = false;
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -240,6 +244,7 @@ public class VirtualModel extends EditionPattern {
 	 * @param uri
 	 * @return
 	 */
+	@Override
 	public Object getObject(String uri) {
 		for (FlexoMetaModel<?> mm : getAllReferencedMetaModels()) {
 			if (mm != null) {
@@ -410,6 +415,34 @@ public class VirtualModel extends EditionPattern {
 			validableObjects = new ChainedCollection<ViewPointObject>(getEditionPatterns(), getModelSlots());
 		}
 		return validableObjects;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	@Override
+	public void setIsReadOnly(boolean b) {
+		readOnly = b;
+	}
+
+	@Override
+	public FlexoResource<VM> getResource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setResource(FlexoResource<VM> resource) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

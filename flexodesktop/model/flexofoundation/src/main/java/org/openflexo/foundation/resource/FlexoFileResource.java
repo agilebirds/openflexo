@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
@@ -19,6 +20,7 @@ import org.openflexo.model.annotations.XMLElement;
  * @param <RD>
  */
 @ModelEntity
+@ImplementationClass(FlexoFileResourceImpl.class)
 @XMLElement
 public interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoResource<RD> {
 	public static final String FILE = "file";

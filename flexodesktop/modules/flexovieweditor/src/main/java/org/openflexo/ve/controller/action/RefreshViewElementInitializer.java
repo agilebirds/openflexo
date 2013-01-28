@@ -24,12 +24,12 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.view.action.RefreshViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class RefreshViewElementInitializer extends ActionInitializer<RefreshViewElement, ViewObject, ViewObject> {
+public class RefreshViewElementInitializer extends ActionInitializer<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

@@ -31,11 +31,11 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -63,18 +63,18 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof ViewObject;
+			return object instanceof DiagramElement<?>;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
 	}
 
-	private ViewShape _fromShape;
-	private ViewShape _toShape;
-	private ViewConnector _newConnector;
+	private DiagramShape _fromShape;
+	private DiagramShape _toShape;
+	private DiagramConnector _newConnector;
 
 	private LinkScheme _linkScheme;
 
@@ -111,7 +111,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 		return getLinkScheme();
 	}
 
-	public ViewConnector getNewConnector() {
+	public DiagramConnector getNewConnector() {
 		return _newConnector;
 	}
 
@@ -120,32 +120,32 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 		return editionPatternInstance;
 	}
 
-	public ViewShape getFromShape() {
+	public DiagramShape getFromShape() {
 		return _fromShape;
 	}
 
-	public void setFromShape(ViewShape fromShape) {
+	public void setFromShape(DiagramShape fromShape) {
 		_fromShape = fromShape;
 	}
 
-	public ViewShape getToShape() {
+	public DiagramShape getToShape() {
 		return _toShape;
 	}
 
-	public void setToShape(ViewShape toShape) {
+	public void setToShape(DiagramShape toShape) {
 		_toShape = toShape;
 	}
 
 	@Override
-	public View retrieveOEShema() {
+	public VirtualModelInstance retrieveVirtualModelInstance() {
 		if (getFromShape() != null) {
-			return getFromShape().getView();
+			return getFromShape().getDiagram();
 		}
 		if (getToShape() != null) {
-			return getToShape().getView();
+			return getToShape().getDiagram();
 		}
-		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getView();
+		if (getFocusedObject() instanceof DiagramElement<?>) {
+			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}
 		return null;
 	}
@@ -155,7 +155,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 		Object assignedObject = super.performAction(anAction, performedActions);
 		if (anAction instanceof AddConnector) {
 			AddConnector action = (AddConnector) anAction;
-			_newConnector = (ViewConnector) assignedObject;
+			_newConnector = (DiagramConnector) assignedObject;
 		}
 		return assignedObject;
 	}

@@ -111,9 +111,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.DiagramPaletteResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.ExampleDiagramResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
@@ -131,7 +129,9 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramObject;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -2016,8 +2016,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
-		} else if (object instanceof ViewObject) {
-			return VEIconLibrary.iconForObject((ViewObject) object);
+		} else if (object instanceof DiagramObject) {
+			return VEIconLibrary.iconForObject((DiagramObject) object);
 		} else if (object instanceof RepositoryFolder) {
 			if (((RepositoryFolder) object).isRootFolder()) {
 				return IconLibrary.RESOURCE_CENTER_ICON;

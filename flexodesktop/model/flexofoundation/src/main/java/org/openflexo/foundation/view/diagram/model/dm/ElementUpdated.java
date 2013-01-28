@@ -19,8 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 
 /**
  * Notify that an element has been updated
@@ -30,7 +29,7 @@ import org.openflexo.foundation.view.diagram.model.ViewObject;
  */
 public class ElementUpdated extends DiagramDataModification {
 
-	public ElementUpdated(ViewObject o) {
+	public ElementUpdated(DiagramElement<?> o) {
 		super(null, o);
 	}
 

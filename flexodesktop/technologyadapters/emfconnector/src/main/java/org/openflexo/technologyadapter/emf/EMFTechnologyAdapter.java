@@ -43,6 +43,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -316,6 +317,18 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	@Override
 	public EMFModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new EMFModelSlot(viewPoint, this);
+	}
+
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createNewModelSlot(org.openflexo.foundation.viewpoint.VirtualModel)
+	 *      )
+	 */
+	@Override
+	public EMFModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
+		return new EMFModelSlot(virtualModel, this);
 	}
 
 	/**

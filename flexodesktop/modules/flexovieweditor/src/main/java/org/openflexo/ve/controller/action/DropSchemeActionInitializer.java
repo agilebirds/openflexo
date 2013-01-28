@@ -66,7 +66,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DropSchemeAction>() {
 			@Override
 			public boolean run(EventObject e, DropSchemeAction action) {
-				/*	ViewShape shape = action.getPrimaryShape();
+				/*	DiagramShape shape = action.getPrimaryShape();
 					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {
 						VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();

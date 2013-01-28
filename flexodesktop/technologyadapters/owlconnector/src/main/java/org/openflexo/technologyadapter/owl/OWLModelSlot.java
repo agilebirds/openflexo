@@ -13,6 +13,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
@@ -60,6 +61,10 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 
 	public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
+	}
+
+	public OWLModelSlot(VirtualModel<?> virtualModel, OWLTechnologyAdapter adapter) {
+		super(virtualModel, adapter);
 	}
 
 	public OWLModelSlot(ViewPointBuilder builder) {

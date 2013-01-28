@@ -51,7 +51,7 @@ import org.openflexo.foundation.toc.ProcessSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.toolbox.StringUtils;

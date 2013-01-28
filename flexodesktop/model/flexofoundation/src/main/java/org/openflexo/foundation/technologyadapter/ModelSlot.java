@@ -12,7 +12,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -40,7 +40,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @author Luka Le Roux, Sylvain Guerin
  * @see org.openflexo.foundation.viewpoint.ViewPoint
- * @see org.openflexo.foundation.view.diagram.model.View
+ * @see org.openflexo.foundation.view.View
  * */
 public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends NamedViewPointObject {
 
@@ -52,7 +52,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	private String metaModelURI;
 	private TechnologyAdapter<M, MM> technologyAdapter;
 	private ViewPoint viewPoint;
-	private VirtualModel virtualModel;
+	private VirtualModel<?> virtualModel;
 
 	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
 	private List<Class<? extends EditionAction>> availableEditionActionTypes;
@@ -60,6 +60,13 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
 		super((ViewPointBuilder) null);
 		this.viewPoint = viewPoint;
+		this.technologyAdapter = technologyAdapter;
+	}
+
+	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter<M, MM> technologyAdapter) {
+		super((ViewPointBuilder) null);
+		this.virtualModel = virtualModel;
+		this.viewPoint = virtualModel.getViewPoint();
 		this.technologyAdapter = technologyAdapter;
 	}
 
@@ -114,7 +121,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return null;
 	}
 
-	public VirtualModel getVirtualModel() {
+	public VirtualModel<?> getVirtualModel() {
 		return virtualModel;
 	}
 

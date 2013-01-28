@@ -11,8 +11,8 @@
     <BrowserElement dataClassName="org.openflexo.foundation.rm.ViewPointResource" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint">
       <Children data="viewPoint.contents" visible="viewPoint.isLoaded" name="subResources" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.rm.ExampleDiagramResource" label="exampleDiagram.name" icon="controller.iconForObject(exampleDiagram)" isEditable="false" filtered="false" defaultVisible="true" name="exampleDiagram" />
-    <BrowserElement dataClassName="org.openflexo.foundation.rm.DiagramPaletteResource" label="diagramPalette.name" icon="controller.iconForObject(diagramPalette)" isEditable="false" filtered="false" defaultVisible="true" name="diagramPalette" />
+    <BrowserElement dataClassName="org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource" label="exampleDiagram.name" icon="controller.iconForObject(exampleDiagram)" isEditable="false" filtered="false" defaultVisible="true" name="exampleDiagram" />
+    <BrowserElement dataClassName="org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource" label="diagramPalette.name" icon="controller.iconForObject(diagramPalette)" isEditable="false" filtered="false" defaultVisible="true" name="diagramPalette" />
   </Browser>
   <LocalizedDictionary />
 </Panel>

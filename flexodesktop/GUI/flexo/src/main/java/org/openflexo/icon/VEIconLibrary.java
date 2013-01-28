@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramObject;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -54,17 +54,17 @@ public class VEIconLibrary extends IconLibrary {
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
 	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/View.png");
-	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/ViewShape.png");
-	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/ViewConnector.gif");
+	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/DiagramShape.png");
+	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/DiagramConnector.gif");
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 
-	public static ImageIcon iconForObject(ViewObject object) {
+	public static ImageIcon iconForObject(DiagramObject object) {
 		if (object instanceof View) {
 			return VIEW_ICON;
-		} else if (object instanceof ViewConnector) {
+		} else if (object instanceof DiagramConnector) {
 			return CONNECTOR_ICON;
-		} else if (object instanceof ViewShape) {
+		} else if (object instanceof DiagramShape) {
 			return SHAPE_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());

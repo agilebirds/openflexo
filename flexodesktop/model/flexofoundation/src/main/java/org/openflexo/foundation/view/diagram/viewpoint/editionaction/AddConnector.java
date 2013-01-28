@@ -37,9 +37,9 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
@@ -54,7 +54,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
-public class AddConnector extends AddShemaElementAction<ViewConnector> {
+public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
@@ -87,10 +87,10 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		return null;
 	}
 
-	public ViewShape getFromShape(EditionSchemeAction action) {
+	public DiagramShape getFromShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
-			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+			return (DiagramShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 		} else {
 			try {
 				return getFromShape().getBindingValue(action);
@@ -103,10 +103,10 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		}
 	}
 
-	public ViewShape getToShape(EditionSchemeAction action) {
+	public DiagramShape getToShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
-			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+			return (DiagramShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 		} else {
 			try {
 				return getToShape().getBindingValue(action);
@@ -142,41 +142,41 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 		super.setPatternRole(patternRole);
 	}*/
 
-	private DataBinding<ViewShape> fromShape;
-	private DataBinding<ViewShape> toShape;
+	private DataBinding<DiagramShape> fromShape;
+	private DataBinding<DiagramShape> toShape;
 
-	public DataBinding<ViewShape> getFromShape() {
+	public DataBinding<DiagramShape> getFromShape() {
 		if (fromShape == null) {
-			fromShape = new DataBinding<ViewShape>(this, ViewShape.class, BindingDefinitionType.GET);
+			fromShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
 			fromShape.setBindingName("fromShape");
 		}
 		return fromShape;
 	}
 
-	public void setFromShape(DataBinding<ViewShape> fromShape) {
+	public void setFromShape(DataBinding<DiagramShape> fromShape) {
 		if (fromShape != null) {
 			fromShape.setOwner(this);
 			fromShape.setBindingName("fromShape");
-			fromShape.setDeclaredType(ViewShape.class);
+			fromShape.setDeclaredType(DiagramShape.class);
 			fromShape.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.fromShape = fromShape;
 		notifiedBindingChanged(this.fromShape);
 	}
 
-	public DataBinding<ViewShape> getToShape() {
+	public DataBinding<DiagramShape> getToShape() {
 		if (toShape == null) {
-			toShape = new DataBinding<ViewShape>(this, ViewShape.class, BindingDefinitionType.GET);
+			toShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
 			toShape.setBindingName("toShape");
 		}
 		return toShape;
 	}
 
-	public void setToShape(DataBinding<ViewShape> toShape) {
+	public void setToShape(DataBinding<DiagramShape> toShape) {
 		if (toShape != null) {
 			toShape.setOwner(this);
 			toShape.setBindingName("toShape");
-			toShape.setDeclaredType(ViewShape.class);
+			toShape.setDeclaredType(DiagramShape.class);
 			toShape.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.toShape = toShape;
@@ -185,7 +185,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 
 	@Override
 	public Type getAssignableType() {
-		return ViewConnector.class;
+		return DiagramConnector.class;
 	}
 
 	@Override
@@ -194,11 +194,11 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 	}
 
 	@Override
-	public ViewConnector performAction(EditionSchemeAction action) {
-		ViewShape fromShape = getFromShape(action);
-		ViewShape toShape = getToShape(action);
-		ViewConnector newConnector = new ViewConnector(fromShape.getView(), fromShape, toShape);
-		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
+	public DiagramConnector performAction(EditionSchemeAction action) {
+		DiagramShape fromShape = getFromShape(action);
+		DiagramShape toShape = getToShape(action);
+		DiagramConnector newConnector = new DiagramConnector(fromShape.getDiagram(), fromShape, toShape);
+		DiagramElement<?> parent = DiagramElement.getFirstCommonAncestor(fromShape, toShape);
 		if (parent == null) {
 			throw new IllegalArgumentException("No common ancestor");
 		}
@@ -212,7 +212,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ConnectorGraphicalRepresentation<ViewConnector> newGR = new ConnectorGraphicalRepresentation<ViewConnector>();
+		ConnectorGraphicalRepresentation<DiagramConnector> newGR = new ConnectorGraphicalRepresentation<DiagramConnector>();
 		newGR.setsWith(grToUse);
 		newConnector.setGraphicalRepresentation(newGR);
 
@@ -228,7 +228,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, ViewConnector newConnector) {
+	public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
 		// Be sure that the newly created shape is updated
 		newConnector.update();
 	}
@@ -318,7 +318,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<ViewShape>(patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -345,7 +345,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<ViewShape>(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<DiagramShape>(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -395,7 +395,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setToShape(new DataBinding<ViewShape>(patternRole.getPatternRoleName()));
+				action.setToShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -422,7 +422,7 @@ public class AddConnector extends AddShemaElementAction<ViewConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setToShape(new DataBinding<ViewShape>(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setToShape(new DataBinding<DiagramShape>(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

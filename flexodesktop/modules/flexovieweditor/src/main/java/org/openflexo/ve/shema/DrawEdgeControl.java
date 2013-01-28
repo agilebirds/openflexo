@@ -26,7 +26,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -38,7 +39,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -71,14 +72,14 @@ public class DrawEdgeControl extends MouseDragControl {
 		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
-				Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
+				List<LinkScheme> availableConnectors = new ArrayList<LinkScheme>();
 				if (fromShape != null && toShape != null) {
 					// Lets look if we match a CalcPaletteConnector
-					final ViewShape from = fromShape.getDrawable();
-					final ViewShape to = toShape.getDrawable();
-					if (from.getView().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-						availableConnectors = from.getView().getViewPoint()
-								.getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
+					final DiagramShape from = fromShape.getDrawable();
+					final DiagramShape to = toShape.getDrawable();
+					if (from.getDiagram().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+						availableConnectors = from.getDiagramSpecification().getConnectorsMatching(from.getEditionPattern(),
+								to.getEditionPattern());
 
 					}
 
@@ -93,7 +94,7 @@ public class DrawEdgeControl extends MouseDragControl {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null,
+									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null,
 											((VEShemaController) controller).getVEController().getEditor());
 									action.setLinkScheme(linkScheme);
 									action.setFromShape(from);

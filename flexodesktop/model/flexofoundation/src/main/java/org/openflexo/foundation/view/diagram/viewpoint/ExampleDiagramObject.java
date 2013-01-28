@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.rm.ExampleDiagramResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;

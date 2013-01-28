@@ -28,7 +28,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 
 public class MoveView extends FlexoAction<MoveView, View, View> {
 

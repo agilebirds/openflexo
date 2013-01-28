@@ -24,22 +24,22 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
-public class ViewConnector extends ViewElement {
+public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> {
 
-	private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
-	private ViewShape startShape;
-	private ViewShape endShape;
+	private DiagramShape startShape;
+	private DiagramShape endShape;
 
 	/**
 	 * Constructor invoked during deserialization
 	 * 
 	 * @param componentDefinition
 	 */
-	public ViewConnector(ViewBuilder builder) {
-		this(builder.view);
+	public DiagramConnector(VirtualModelInstanceBuilder builder) {
+		this((Diagram) builder.vmInstance);
 		initializeDeserialization(builder);
 	}
 
@@ -48,8 +48,8 @@ public class ViewConnector extends ViewElement {
 	 * 
 	 * @param shemaDefinition
 	 */
-	public ViewConnector(View shema) {
-		super(shema);
+	public DiagramConnector(Diagram diagram) {
+		super(diagram);
 	}
 
 	/**
@@ -57,15 +57,15 @@ public class ViewConnector extends ViewElement {
 	 * 
 	 * @param shemaDefinition
 	 */
-	public ViewConnector(View shema, ViewShape aStartShape, ViewShape anEndShape) {
-		super(shema);
+	public DiagramConnector(Diagram diagram, DiagramShape aStartShape, DiagramShape anEndShape) {
+		super(diagram);
 		setStartShape(aStartShape);
 		setEndShape(anEndShape);
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<ViewConnector> getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation<ViewConnector>) super.getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation<DiagramConnector> getGraphicalRepresentation() {
+		return super.getGraphicalRepresentation();
 	}
 
 	/**
@@ -117,29 +117,29 @@ public class ViewConnector extends ViewElement {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getView().getFullyQualifiedName() + "." + getName();
+		return getParent().getFullyQualifiedName() + "." + getName();
 	}
 
-	public ViewShape getEndShape() {
+	public DiagramShape getEndShape() {
 		return endShape;
 	}
 
-	public void setEndShape(ViewShape endShape) {
+	public void setEndShape(DiagramShape endShape) {
 		this.endShape = endShape;
 		endShape.addToIncomingConnectors(this);
 	}
 
-	public ViewShape getStartShape() {
+	public DiagramShape getStartShape() {
 		return startShape;
 	}
 
-	public void setStartShape(ViewShape startShape) {
+	public void setStartShape(DiagramShape startShape) {
 		this.startShape = startShape;
 		startShape.addToOutgoingConnectors(this);
 	}
 
 	@Override
-	public boolean isContainedIn(ViewObject o) {
+	public boolean isContainedIn(DiagramElement<?> o) {
 		if (o == this) {
 			return true;
 		}

@@ -1,7 +1,7 @@
 package org.openflexo.foundation.toc;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class ViewSection extends ModelObjectSection<View> {

@@ -207,9 +207,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 		loadViewpointMetaModels();
 
-		for (VirtualModel vm : getVirtualModels()) {
+		for (VirtualModel<?> vm : getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
-				for (PatternRole pr : ep.getPatternRoles()) {
+				for (PatternRole<?> pr : ep.getPatternRoles()) {
 					if (pr instanceof ShapePatternRole) {
 						((ShapePatternRole) pr).tryToFindAGR();
 					}
@@ -423,7 +423,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			// There were no model slots before 1.0, please add them
 			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
 		}
-		for (VirtualModel vm : getVirtualModels()) {
+		for (VirtualModel<?> vm : getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				ep.finalizeEditionPatternDeserialization();
 			}

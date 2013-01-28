@@ -42,7 +42,7 @@ import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;

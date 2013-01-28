@@ -4,13 +4,13 @@ import java.lang.reflect.Type;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ConnectorPatternRole extends GraphicalElementPatternRole<ViewConnector> {
+public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector> {
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentation.
@@ -175,7 +175,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<ViewConnec
 
 	@Override
 	public Type getType() {
-		return ViewConnector.class;
+		return DiagramConnector.class;
 	}
 
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = {};

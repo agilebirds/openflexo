@@ -25,7 +25,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -150,14 +150,14 @@ public class LinkScheme extends AbstractCreationScheme {
 			if (fromEditionPattern != null) {
 				ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
 				if (fromShapePatternRole != null) {
-					newAction.setFromShape(new DataBinding<ViewShape>("fromTarget." + fromShapePatternRole.getName()));
+					newAction.setFromShape(new DataBinding<DiagramShape>("fromTarget." + fromShapePatternRole.getName()));
 				}
 			}
 			EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 			if (toEditionPattern != null) {
 				ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
 				if (toShapePatternRole != null) {
-					newAction.setToShape(new DataBinding<ViewShape>("toTarget." + toShapePatternRole.getName()));
+					newAction.setToShape(new DataBinding<DiagramShape>("toTarget." + toShapePatternRole.getName()));
 				}
 			}
 		}

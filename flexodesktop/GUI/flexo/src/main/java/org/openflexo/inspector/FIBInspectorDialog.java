@@ -31,8 +31,8 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
 import org.openflexo.utils.WindowBoundsSaver;
@@ -80,7 +80,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 
 	/*public void inspectObject(Object object) {
 		if (inspectorPanel.inspectObject(object)) {
-			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
+			if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
 					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
 				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();
@@ -100,7 +100,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 			setTitle(INSPECTOR_TITLE);
 		} else*/if (notification instanceof InspectedObjectChanged) {
 			Object object = ((InspectedObjectChanged) notification).getInspectedObject();
-			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
+			if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
 					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
 				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();

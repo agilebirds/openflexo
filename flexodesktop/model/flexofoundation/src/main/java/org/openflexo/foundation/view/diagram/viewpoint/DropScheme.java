@@ -25,7 +25,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -155,7 +155,7 @@ public class DropScheme extends AbstractCreationScheme {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {
-				((AddShape) newAction).setContainer(new DataBinding<ViewObject>(EditionScheme.TOP_LEVEL));
+				((AddShape) newAction).setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TOP_LEVEL));
 			}
 		}
 		return newAction;

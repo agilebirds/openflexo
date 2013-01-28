@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -30,50 +31,253 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
+
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public abstract class ViewElement extends ViewObject implements Bindable, PropertyChangeListener, Observer {
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
-	private static final Logger logger = Logger.getLogger(ViewElement.class.getPackage().getName());
+public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends FlexoModelObject implements Bindable,
+		PropertyChangeListener, Observer {
+
+	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());
 
 	private final Vector<TargetObject> dependingObjects = new Vector<TargetObject>();
 	private boolean dependingObjectsAreComputed = false;
 
+	private Diagram diagram;
+	private String name;
+	private DiagramElement<?> parent = null;
+	private Vector<DiagramElement<?>> childs;
+	private Vector<DiagramElement<?>> ancestors;
+
+	private GR graphicalRepresentation;
+
+	// =======================================================
+	// ================== Constructor =======================
+	// =======================================================
+
 	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 * @param componentDefinition
+	 * Default constructor
 	 */
-	public ViewElement(ViewBuilder builder) {
-		this(builder.view);
-		initializeDeserialization(builder);
+	public DiagramElement(Diagram diagram) {
+		super(diagram.getProject());
+		this.diagram = diagram;
+	}
+
+	public Diagram getDiagram() {
+		return diagram;
+	}
+
+	public DiagramSpecification getDiagramSpecification() {
+		return getDiagram().getDiagramSpecification();
 	}
 
 	/**
-	 * Default constructor for OEShema
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
 	 * 
-	 * @param shemaDefinition
+	 * @return the component library
 	 */
-	public ViewElement(View shema) {
-		super(shema);
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getDiagram();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+		if (requireChange(name, name)) {
+			String oldName = name;
+			this.name = name;
+			setChanged();
+			notifyObservers(new NameChanged(oldName, name));
+		}
+	}
+
+	public Vector<DiagramElement<?>> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(Vector<DiagramElement<?>> someChilds) {
+		childs.addAll(someChilds);
+	}
+
+	public void addToChilds(DiagramElement<?> aChild) {
+		// logger.info("****** addToChild() put "+aChild+" under "+this);
+		childs.add(aChild);
+		aChild.setParent(this);
+		setChanged();
+		if (aChild instanceof DiagramShape) {
+			notifyObservers(new ShapeInserted((DiagramShape) aChild, this));
+		}
+		if (aChild instanceof DiagramConnector) {
+			notifyObservers(new ConnectorInserted((DiagramConnector) aChild));
+		}
+	}
+
+	public void removeFromChilds(DiagramElement<?> aChild) {
+		childs.remove(aChild);
+		setChanged();
+		if (aChild instanceof DiagramShape) {
+			notifyObservers(new ShapeRemoved((DiagramShape) aChild, this));
+		}
+		if (aChild instanceof DiagramConnector) {
+			notifyObservers(new ConnectorRemoved((DiagramConnector) aChild));
+		}
+	}
+
+	/**
+	 * Re-index child, as it is defined in diagram hierarchy
+	 * 
+	 * @param aChild
+	 * @param newIndex
+	 */
+	protected void setIndexForChild(DiagramElement<?> aChild, int newIndex) {
+		if (childs.contains(aChild) && childs.indexOf(aChild) != newIndex) {
+			childs.remove(aChild);
+			childs.insertElementAt(aChild, newIndex);
+			for (DiagramElement<?> o : childs) {
+				o.notifyIndexChange();
+			}
+		}
+	}
+
+	/**
+	 * Return the index of this ViewElement, as it is defined in diagram hierarchy
+	 * 
+	 * @return
+	 */
+	public int getIndex() {
+		if (getParent() == null) {
+			return -1;
+		}
+		return getParent().getChilds().indexOf(this);
+	}
+
+	/**
+	 * Sets the index of this ViewElement, as it is defined in diagram hierarchy
+	 * 
+	 * @param index
+	 */
+	public void setIndex(int index) {
+		if (getIndex() != index && !isDeserializing() && this instanceof DiagramElement<?>) {
+			getParent().setIndexForChild(this, index);
+		}
+	}
+
+	/**
+	 * Re-index child, relative to its position in the list of DiagramElement declared to be of same EditionPattern
+	 * 
+	 * @param aChild
+	 * @param newIndex
+	 */
+	protected void setIndexForChildRelativeToEPType(DiagramElement<?> aChild, int newIndex) {
+		List<DiagramElement<?>> childsOfRightType = getChildsOfType(aChild.getEditionPattern());
+		if (childsOfRightType.contains(aChild) && childsOfRightType.indexOf(aChild) != newIndex) {
+			if (newIndex > 0) {
+				DiagramElement<?> previousElement = childsOfRightType.get(newIndex - 1);
+				int previousElementIndex = childs.indexOf(previousElement);
+				childs.remove(aChild);
+				if (previousElementIndex + 1 <= childs.size()) {
+					childs.insertElementAt(aChild, previousElementIndex + 1);
+				} else {
+					childs.insertElementAt(aChild, childs.size());
+				}
+			} else {
+				DiagramElement<?> firstElement = childsOfRightType.get(0);
+				int firstElementIndex = childs.indexOf(firstElement);
+				childs.remove(aChild);
+				childs.insertElementAt(aChild, firstElementIndex);
+			}
+			for (DiagramElement<?> o : childs) {
+				o.notifyIndexChange();
+			}
+		}
+	}
+
+	public List<DiagramElement<?>> getChildsOfType(EditionPattern editionPattern) {
+		ArrayList<DiagramElement<?>> returned = new ArrayList<DiagramElement<?>>();
+		for (DiagramElement<?> e : getChilds()) {
+			if (e.getEditionPattern() == editionPattern) {
+				returned.add(e);
+			}
+		}
+		return returned;
+	}
+
+	public <T extends DiagramElement<?>> Collection<T> getChildrenOfType(final Class<T> type) {
+		return getChildrenOfType(type, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	// We can remove the warning because the code performs the necessary checks
+	public <T extends DiagramElement<?>> Collection<T> getChildrenOfType(final Class<T> type, boolean recursive) {
+		Collection<T> objects = (Collection<T>) Collections2.filter(new ArrayList<DiagramElement<?>>(childs),
+				new Predicate<DiagramElement<?>>() {
+					@Override
+					public boolean apply(DiagramElement<?> input) {
+						return type.isAssignableFrom(input.getClass());
+					}
+				});
+		if (recursive) {
+			for (DiagramElement<?> object : childs) {
+				objects.addAll(object.getChildrenOfType(type, true));
+			}
+		}
+		return objects;
+	}
+
+	public DiagramShape getShapeNamed(String name) {
+		for (DiagramElement<?> o : childs) {
+			if (o instanceof DiagramShape && o.getName() != null && o.getName().equals(name)) {
+				return (DiagramShape) o;
+			}
+		}
+		return null;
+	}
+
+	public DiagramConnector getConnectorNamed(String name) {
+		for (DiagramElement<?> o : childs) {
+			if (o instanceof DiagramConnector && o.getName() != null && o.getName().equals(name)) {
+				return (DiagramConnector) o;
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public void delete() {
+		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
+			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
 		}
@@ -91,33 +295,63 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		super.delete();
 	}
 
-	/*@Override
-	public String getName() {
-		if (isBoundInsideEditionPattern()) {
-			return getLabelValue();
+	public GR getGraphicalRepresentation() {
+		return graphicalRepresentation;
+	}
+
+	public void setGraphicalRepresentation(GR graphicalRepresentation) {
+		// logger.info("************************* setGraphicalRepresentation() dans " + this + " of " + getClass());
+		if (this.graphicalRepresentation != null) {
+			this.graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
-		return super.getName();
+		this.graphicalRepresentation = graphicalRepresentation;
+		setChanged();
+		if (this.graphicalRepresentation != null) {
+			this.graphicalRepresentation.getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
+		update();
+	}
+
+	public DiagramElement<?> getParent() {
+		return parent;
+	}
+
+	protected void setParent(DiagramElement<?> parent) {
+		this.parent = parent;
+	}
+
+	public Vector<DiagramElement<?>> getAncestors() {
+		if (ancestors == null) {
+			ancestors = new Vector<DiagramElement<?>>();
+			DiagramElement<?> current = getParent();
+			while (current != null) {
+				ancestors.add(current);
+				current = current.getParent();
+			}
+		}
+		return ancestors;
+	}
+
+	public static DiagramElement<?> getFirstCommonAncestor(DiagramElement<?> child1, DiagramElement<?> child2) {
+		Vector<DiagramElement<?>> ancestors1 = child1.getAncestors();
+		Vector<DiagramElement<?>> ancestors2 = child2.getAncestors();
+		for (int i = 0; i < ancestors1.size(); i++) {
+			DiagramElement<?> o1 = ancestors1.elementAt(i);
+			if (ancestors2.contains(o1)) {
+				return o1;
+			}
+		}
+		return null;
+	}
+
+	public abstract boolean isContainedIn(DiagramElement<?> o);
+
+	public final boolean contains(DiagramElement<?> o) {
+		return o.isContainedIn(this);
 	}
 
 	@Override
-	public void setName(String name) {
-		// logger.info("setName of OEShemaElement with "+name);
-		if (isBoundInsideEditionPattern()) {
-			setLabelValue(name);
-		} else {
-			try {
-				super.setName(name);
-			} catch (DuplicateResourceException e) {
-				// cannot happen
-				e.printStackTrace();
-			} catch (InvalidNameException e) {
-				// cannot happen
-				e.printStackTrace();
-			}
-		}
-	}*/
-
-	// public abstract AddShemaElementAction getEditionAction();
+	public abstract String getDisplayableDescription();
 
 	/**
 	 * Return a flag indicating if current graphical element is bound inside an edition pattern, ie if there is one edition pattern instance
@@ -130,11 +364,6 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		return getPatternRole() != null;
 	}
 
-	@Override
-	public GraphicalRepresentation<? extends ViewElement> getGraphicalRepresentation() {
-		return (GraphicalRepresentation<? extends ViewElement>) super.getGraphicalRepresentation();
-	}
-
 	/**
 	 * Return a flag indicating if current graphical element is bound inside an edition pattern, and if this element plays a role as primary
 	 * representation,
@@ -144,22 +373,6 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	public boolean playsPrimaryRole() {
 		return getPatternRole() != null && getPatternRole().getIsPrimaryRepresentationRole();
 	}
-
-	/*public String getLabelValue() {
-		if (getPatternRole() != null) {
-			//if (!dependingObjectsAreComputed) {
-			//	updateDependingObjects();
-			//}
-			return (String) getPatternRole().getLabel().getBindingValue(getEditionPatternInstance());
-		}
-		return null;
-	}
-
-	public void setLabelValue(String aValue) {
-		if (getPatternRole() != null && !getPatternRole().getReadOnlyLabel()) {
-			getPatternRole().getLabel().setBindingValue(aValue, getEditionPatternInstance());
-		}
-	}*/
 
 	public EditionPattern getEditionPattern() {
 		if (getEditionPatternInstance() != null) {
@@ -355,7 +568,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// System.out.println("**************> ViewElement " + this + " : receive notification " + arg + " observable=" + o);
+		// System.out.println("**************> DiagramElement " + this + " : receive notification " + arg + " observable=" + o);
 		update();
 	}
 
@@ -366,7 +579,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		// - they also observe their GR
 		// If the case of their GR observing, update() should not be invoked, only invoke setChanged() in order
 		// to resource to be flagged as modified
-		// logger.info("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt.getPropertyName() + " source="
+		// logger.info("**************> DiagramElement " + this + " : receive PropertyChangeEvent " + evt.getPropertyName() + " source="
 		// + evt.getSource().getClass().getSimpleName() + " evt=" + evt);
 		if (evt.getSource() == getGraphicalRepresentation()) {
 			// We just want here to track events such as object moving, just to flag the resource as modified
@@ -388,7 +601,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 * are recomputed, and notification of potential change is thrown, to be later caught by underlying GR (VEShapeGR or VEConnectorGR)
 	 */
 	public void update() {
-		// System.out.println("Update in ViewElement " + this + ", text=" + getLabelValue());
+		// System.out.println("Update in DiagramElement " + this + ", text=" + getLabelValue());
 		updateDependingObjects();
 		setChanged();
 		notifyObservers(new ElementUpdated(this));
@@ -420,14 +633,8 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		applyGraphicalElementSpecifications();
 	}
 
-	@Override
-	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
-		super.setGraphicalRepresentation(graphicalRepresentation);
-		update();
-	}
-
 	/**
-	 * Return the index of this ViewElement, relative to its position in the list of ViewObject declared to be of same EditionPattern
+	 * Return the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same EditionPattern
 	 * 
 	 * @return
 	 */
@@ -439,7 +646,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	}
 
 	/**
-	 * Sets the index of this ViewElement, relative to its position in the list of ViewObject declared to be of same EditionPattern
+	 * Sets the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same EditionPattern
 	 * 
 	 * @param index
 	 */

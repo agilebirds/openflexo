@@ -1,4 +1,4 @@
-package org.openflexo.foundation.rm;
+package org.openflexo.foundation.view.diagram.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
+import org.openflexo.foundation.rm.FlexoResourceTree;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -15,7 +17,7 @@ import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImpl<DiagramPalette> implements DiagramPaletteResource {
+public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImpl<ExampleDiagram> implements ExampleDiagramResource {
 
 	private RelativePathFileConverter relativePathFileConverter;
 
@@ -29,15 +31,16 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 		return encoder;
 	}
 
-	public static DiagramPaletteResource makeDiagramPaletteResource(File diagramPaletteFile, ViewPointLibrary viewPointLibrary) {
+	public static ExampleDiagramResource makeExampleDiagramResource(File exampleDiagramFile, ViewPointLibrary viewPointLibrary) {
 		try {
-			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
-			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
-			returned.setName(diagramPaletteFile.getName());
-			returned.setFile(diagramPaletteFile);
+			ModelFactory factory = new ModelFactory(ExampleDiagramResource.class);
+			ExampleDiagramResourceImpl returned = (ExampleDiagramResourceImpl) factory.newInstance(ExampleDiagramResource.class);
+			returned.setName(exampleDiagramFile.getName());
+			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
-			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
+			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -46,9 +49,13 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
-	public final DiagramPaletteBuilder instanciateNewBuilder() {
-		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
-		return new DiagramPaletteBuilder();
+	public Class<ExampleDiagram> getResourceDataClass() {
+		return ExampleDiagram.class;
+	}
+
+	@Override
+	public final ExampleDiagramBuilder instanciateNewBuilder() {
+		return new ExampleDiagramBuilder(getContainer().getViewPoint().getDefaultDiagramSpecification(), this);
 	}
 
 	@Override
@@ -57,12 +64,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	}
 
 	@Override
-	public Class<DiagramPalette> getResourceDataClass() {
-		return DiagramPalette.class;
-	}
-
-	@Override
-	public DiagramPalette getDiagramPalette() {
+	public ExampleDiagram getExampleDiagram() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {
@@ -88,12 +90,12 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	 * @throws FileNotFoundException
 	 */
 	@Override
-	public DiagramPalette loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException,
+	public ExampleDiagram loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException,
 			FileNotFoundException, ResourceDependencyLoopException {
 
-		DiagramPalette returned = super.loadResourceData(progress);
-		returned.init(getContainer().getViewPoint(), getFile());
-		getContainer().getViewPoint().addToPalettes(returned);
+		ExampleDiagram returned = super.loadResourceData(progress);
+		returned.init(getContainer().getViewPoint().getDefaultDiagramSpecification(), getFile());
+		getContainer().getViewPoint().getDefaultDiagramSpecification().addToExampleDiagrams(returned);
 		return returned;
 	}
 

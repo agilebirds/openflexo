@@ -25,10 +25,10 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
@@ -93,9 +93,9 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 	}
 
 	@Override
-	public View retrieveOEShema() {
-		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getView();
+	public VirtualModelInstance retrieveVirtualModelInstance() {
+		if (getFocusedObject() instanceof DiagramElement<?>) {
+			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}
 		return null;
 	}

@@ -33,10 +33,10 @@ import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.ReindexViewElements;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
@@ -176,9 +176,9 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			if (o == null) {
 				o = getSelectionManager().getFocusedObject();
 			}
-			if (o instanceof ViewElement) {
-				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((ViewElement) o, null, getEditor());
-				action.initAsUpReindexing((ViewElement) o);
+			if (o instanceof DiagramElement) {
+				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
+				action.initAsUpReindexing((DiagramElement) o);
 				action.doAction();
 				return true;
 			}
@@ -195,9 +195,9 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			if (o == null) {
 				o = getSelectionManager().getFocusedObject();
 			}
-			if (o instanceof ViewElement) {
-				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((ViewElement) o, null, getEditor());
-				action.initAsDownReindexing((ViewElement) o);
+			if (o instanceof DiagramElement) {
+				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
+				action.initAsDownReindexing((DiagramElement) o);
 				action.doAction();
 				return true;
 			}

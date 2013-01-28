@@ -32,7 +32,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
@@ -46,7 +46,7 @@ import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implements GraphicalFlexoObserver, VEShemaConstants {
+public class VEShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShapeGR.class.getPackage().getName());
@@ -58,7 +58,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public VEShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
+	public VEShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		registerShapeGR(aShape, aDrawing);
@@ -70,7 +70,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		return isGRRegistered;
 	}
 
-	public void registerShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
+	public void registerShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
 		setDrawable(aShape);
 		setDrawing(aDrawing);
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
@@ -124,7 +124,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		return (VEShemaRepresentation) super.getDrawing();
 	}
 
-	public ViewShape getOEShape() {
+	public DiagramShape getOEShape() {
 		return getDrawable();
 	}
 
@@ -248,16 +248,20 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 				}
 
 				if (northDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.NORTH));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.NORTH));
 				}
 				if (eastDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.EAST));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.EAST));
 				}
 				if (southDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.SOUTH));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.SOUTH));
 				}
 				if (westDirectionSupported) {
-					controlAreas.addElement(new FloatingPalette(this, getDrawable().getView(), SimplifiedCardinalDirection.WEST));
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.WEST));
 				}
 			}
 		}

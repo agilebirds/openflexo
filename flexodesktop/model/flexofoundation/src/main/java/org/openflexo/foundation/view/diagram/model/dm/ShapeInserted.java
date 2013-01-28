@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
-
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 /**
  * Notify that a new Shape has been inserted in a OEShema
@@ -31,14 +30,14 @@ import org.openflexo.foundation.view.diagram.model.ViewShape;
  */
 public class ShapeInserted extends DiagramDataModification {
 
-	private ViewObject _parent;
+	private DiagramElement<?> _parent;
 
-	public ShapeInserted(ViewShape shape, ViewObject parent) {
+	public ShapeInserted(DiagramShape shape, DiagramElement<?> parent) {
 		super(null, shape);
 		_parent = parent;
 	}
 
-	public ViewObject getParent() {
+	public DiagramElement<?> getParent() {
 		return _parent;
 	}
 

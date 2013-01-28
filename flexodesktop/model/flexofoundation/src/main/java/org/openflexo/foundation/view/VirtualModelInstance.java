@@ -17,86 +17,80 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.diagram.model;
+package org.openflexo.foundation.view;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.InvalidNameException;
-
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
+import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.VEDataModification;
-import org.openflexo.foundation.view.ViewDeleted;
-import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.DiagramMetaModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
- * TODO: This class should be split into 3 notions: View, VirtualModel and DiagramModel
+ * A {@link VirtualModelInstance} is the run-time concept (instance) of a {@link VirtualModel}.<br>
+ * 
+ * As such, a {@link VirtualModelInstance} is instantiated inside a {@link View}, and all model slot defined for the corresponding
+ * {@link ViewPoint} are instantiated (reified) with existing or build-in managed {@link FlexoModel}.<br>
+ * 
+ * A {@link VirtualModelInstance} mostly manages a collection of {@link EditionPatternInstance} and is itself an
+ * {@link EditionPatternInstance}.<br>
+ * 
+ * A {@link VirtualModelInstance} might be used in the Design Space (for example to encode a Diagram)
  * 
  * @author sylvain
  * 
  */
-public class View extends ViewObject implements XMLStorageResourceData<View>, FlexoModel<View, DiagramMetaModel> {
+public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends EditionPatternInstance
+		implements XMLStorageResourceData<VMI>, FlexoModel<VMI, VM> {
 
-	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VirtualModelInstance.class.getPackage().getName());
 
-	private FlexoViewResource _resource;
-	private ViewPoint _viewpoint;
-	private List<ModelSlotInstance> modelSlotInstances;
+	private VirtualModelInstanceResource<VMI> resource;
+	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
 	private String title;
+	private View view;
 
-	private final FlexoProject project;
+	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
+			VirtualModel virtualModel, View view) throws InvalidFileNameException {
 
-	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<FlexoViewResource> folder,
-			FlexoProject project) throws InvalidFileNameException {
+		VirtualModelInstanceResource newVirtualModelResource = VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(
+				virtualModelName, virtualModel, view);
 
-		FlexoViewResource newViewResource = new FlexoViewResource(project, viewName, new FlexoProjectFile(new File(folder.getFile(),
-				viewName + ".view"), project), viewPoint);
+		VirtualModelInstance newVirtualModelInstance = new VirtualModelInstance(view, virtualModel);
+		newVirtualModelResource.setResourceData(newVirtualModelInstance);
+		newVirtualModelInstance.setResource(newVirtualModelResource);
+		newVirtualModelInstance.setTitle(virtualModelTitle);
 
-		View newView = new View(project);
-		newViewResource.setResourceData(newView);
-		newView.setResource(newViewResource);
-
-		// And register it to the library
-		project.getViewLibrary().registerResource(newViewResource, folder);
-
-		return newView;
+		return newVirtualModelResource;
 	}
 
 	/**
@@ -104,9 +98,9 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	 * 
 	 * @param componentDefinition
 	 */
-	public View(ViewBuilder builder) {
-		this(builder.getProject());
-		builder.view = this;
+	public VirtualModelInstance(VirtualModelInstanceBuilder builder) {
+		this(builder.getView(), builder.getVirtualModel());
+		builder.vmInstance = this;
 		initializeDeserialization(builder);
 	}
 
@@ -115,16 +109,35 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	 * 
 	 * @param shemaDefinition
 	 */
-	public View(FlexoProject project) {
-		super(project);
-		this.project = project;
-		logger.info("Created new view with project " + project);
-		setView(this);
+	public VirtualModelInstance(View view, VirtualModel virtualModel) {
+		super(virtualModel, view.getProject());
+		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
+		this.view = view;
+	}
+
+	public View getView() {
+		return view;
 	}
 
 	@Override
-	public DiagramMetaModel getMetaModel() {
-		return DiagramMetaModel.INSTANCE;
+	public VM getEditionPattern() {
+		return (VM) super.getEditionPattern();
+	}
+
+	public ViewPoint getViewPoint() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
+		return null;
+	}
+
+	public VM getVirtualModel() {
+		return getEditionPattern();
+	}
+
+	@Override
+	public VM getMetaModel() {
+		return getEditionPattern();
 	}
 
 	@Override
@@ -135,10 +148,10 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 
 	@Override
 	public FlexoProject getProject() {
-		if (getFlexoResource() != null) {
-			return super.getProject();
+		if (getView() != null) {
+			return getView().getProject();
 		}
-		return project;
+		return super.getProject();
 	}
 
 	@Override
@@ -150,37 +163,38 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		if (getViewPoint() == null) {
 			return Collections.emptyList();
 		}
-		EditionPattern ep = getViewPoint().getEditionPattern(epName);
+		EditionPattern ep = getVirtualModel().getEditionPattern(epName);
 		return getEPInstances(ep);
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
-		Collection<ViewShape> shapes = getChildrenOfType(ViewShape.class);
-		Collection<ViewConnector> connectors = getChildrenOfType(ViewConnector.class);
+		/*Collection<DiagramShape> shapes = getChildrenOfType(DiagramShape.class);
+		Collection<DiagramConnector> connectors = getChildrenOfType(DiagramConnector.class);
 		Collection<EditionPatternInstance> epis = new LinkedHashSet<EditionPatternInstance>();
-		for (ViewShape shape : shapes) {
+		for (DiagramShape shape : shapes) {
 			EditionPatternReference epr = shape.getEditionPatternReference();
 			if (epr == null) {
 				continue;
 			}
-			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
-		for (ViewConnector conn : connectors) {
+		for (DiagramConnector conn : connectors) {
 			EditionPatternReference epr = conn.getEditionPatternReference();
 			if (epr == null) {
 				continue;
 			}
-			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
-		return epis;
+		return epis;*/
+		return null;
 	}
 
 	public List<EditionPatternInstance> getEPInstancesWithPropertyEqualsTo(String epName, String epProperty, Object value) {
-		List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
+		/*List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
 		Collection<EditionPatternInstance> epis = getEPInstances(epName);
 		for (EditionPatternInstance epi : epis) {
 			Object evaluate = epi.evaluate(epProperty);
@@ -188,36 +202,34 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 				returned.add(epi);
 			}
 		}
-		return returned;
+		return returned;*/
+		return null;
 	}
 
+	@Deprecated
 	@Override
-	public FlexoViewResource getFlexoResource() {
-		return _resource;
+	public FlexoStorageResource<VMI> getFlexoResource() {
+		return null;
 	}
 
-	@Override
-	public FlexoXMLStorageResource getFlexoXMLFileResource() {
-		return getFlexoResource();
-	}
-
+	@Deprecated
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		_resource = (FlexoViewResource) resource;
 	}
 
 	@Override
-	public org.openflexo.foundation.resource.FlexoResource<View> getResource() {
-		return getFlexoResource();
+	public FlexoXMLFileResource<VMI> getFlexoXMLFileResource() {
+		return getResource();
 	}
 
 	@Override
-	public void setResource(org.openflexo.foundation.resource.FlexoResource<View> resource) {
-		try {
-			setFlexoResource((FlexoResource) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
+	public VirtualModelInstanceResource<VMI> getResource() {
+		return resource;
+	}
+
+	@Override
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<VMI> resource) {
+		this.resource = (VirtualModelInstanceResource<VMI>) resource;
 	}
 
 	@Override
@@ -226,28 +238,18 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "oe_shema";
-	}
-
-	@Override
 	public String getName() {
-		if (getFlexoResource() != null) {
-			return getFlexoResource().getName();
+		if (getResource() != null) {
+			return getResource().getName();
 		}
 		return null;
-	}
-
-	// TODO: big issue with renaming, don't call this !!!
-	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
+	public void setTitle(String title) {
 		String oldTitle = this.title;
 		if (requireChange(oldTitle, title)) {
 			this.title = title;
@@ -266,33 +268,10 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		return getProject().getXmlMappings().getShemaMapping();
 	}
 
-	public ViewPoint getViewPoint() {
-		if (getFlexoResource() != null) {
-			return getFlexoResource().getViewPoint();
-		}
-		return null;
-	}
-
-	@Override
-	public boolean isContainedIn(ViewObject o) {
-		return o == this;
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		return "View " + getName() + (getViewPoint() != null ? " (calc " + getViewPoint().getName() + ")" : "");
-	}
-
-	/**
-	 * @return
-	 */
-	public static final String getTypeName() {
-		return "VIEW";
-	}
-
 	@Override
 	public String toString() {
-		return "View[name=" + getName() + "/viewpoint=" + getViewPoint().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
+		return "VirtualModelInstance[name=" + getName() + "/virtualModel=" + getVirtualModel() + "/hash=" + Integer.toHexString(hashCode())
+				+ "]";
 	}
 
 	// ==========================================================================
@@ -300,7 +279,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 	// ==========================================================================
 
 	/**
-	 * This is the binding point between a {@link ModelSlot} and its concretization in a {@link View} through notion of
+	 * This is the binding point between a {@link ModelSlot} and its concretization in a {@link VirtualModelInstance} through notion of
 	 * {@link ModelSlotInstance}
 	 * 
 	 * @param modelSlot
@@ -313,25 +292,25 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		return null;
 	}
 
-	public void setModelSlotInstances(List<ModelSlotInstance> instances) {
+	public void setModelSlotInstances(List<ModelSlotInstance<?, ?>> instances) {
 		this.modelSlotInstances = instances;
 		modelsMap.clear();
-		for (ModelSlotInstance model : instances) {
+		for (ModelSlotInstance<?, ?> model : instances) {
 			modelsMap.put(model.getModelSlot(), model.getModel());
 		}
 	}
 
-	public List<ModelSlotInstance> getModelSlotInstances() {
+	public List<ModelSlotInstance<?, ?>> getModelSlotInstances() {
 		return modelSlotInstances;
 	}
 
-	public void removeFromModelSlotInstance(ModelSlotInstance instance) {
+	public void removeFromModelSlotInstance(ModelSlotInstance<?, ?> instance) {
 		modelSlotInstances.remove(instance);
 		modelsMap.remove(instance.getModelSlot());
 	}
 
-	public void addToModelSlotInstances(ModelSlotInstance instance) {
-		Iterator<ModelSlotInstance> it = modelSlotInstances.iterator();
+	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
+		Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
 		while (it.hasNext()) {
 			if (it.next().getModelSlot().equals(instance.getModelSlot())) {
 				it.remove();
@@ -358,7 +337,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
 			try {
-				org.openflexo.foundation.resource.FlexoResource<M> modelResource = modelSlot.createEmptyModel(this,
+				org.openflexo.foundation.resource.FlexoResource<M> modelResource = modelSlot.createEmptyModel(getView(),
 						modelSlot.getMetaModelResource());
 				model = modelResource.getResourceData(null);
 				setModel(modelSlot, model);
@@ -428,19 +407,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View>, Fl
 		super.delete();
 
 		setChanged();
-		notifyObservers(new ViewDeleted(this));
+		notifyObservers(new VirtualModelInstanceDeleted(this));
 		deleteObservers();
-	}
-
-	public ViewLibrary getViewLibrary() {
-		return getProject().getViewLibrary();
-	}
-
-	public RepositoryFolder<FlexoViewResource> getFolder() {
-		if (getFlexoResource() != null) {
-			return getViewLibrary().getParentFolder(getFlexoResource());
-		}
-		return null;
 	}
 
 }

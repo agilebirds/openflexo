@@ -37,9 +37,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.View;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 

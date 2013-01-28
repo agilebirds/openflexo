@@ -29,15 +29,15 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
-public class ViewShape extends ViewElement {
+public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 
-	private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
 	// private String multilineText;
-	private Vector<ViewConnector> incomingConnectors;
-	private Vector<ViewConnector> outgoingConnectors;
+	private Vector<DiagramConnector> incomingConnectors;
+	private Vector<DiagramConnector> outgoingConnectors;
 
 	// private EditionPatternInstance editionPatternInstance;
 
@@ -46,8 +46,8 @@ public class ViewShape extends ViewElement {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ViewShape(ViewBuilder builder) {
-		this(builder.view);
+	public DiagramShape(VirtualModelInstanceBuilder builder) {
+		this((Diagram) builder.vmInstance);
 		initializeDeserialization(builder);
 	}
 
@@ -56,10 +56,10 @@ public class ViewShape extends ViewElement {
 	 * 
 	 * @param shemaDefinition
 	 */
-	public ViewShape(View shema) {
-		super(shema);
-		incomingConnectors = new Vector<ViewConnector>();
-		outgoingConnectors = new Vector<ViewConnector>();
+	public DiagramShape(Diagram diagram) {
+		super(diagram);
+		incomingConnectors = new Vector<DiagramConnector>();
+		outgoingConnectors = new Vector<DiagramConnector>();
 	}
 
 	@Override
@@ -68,8 +68,8 @@ public class ViewShape extends ViewElement {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<ViewShape> getGraphicalRepresentation() {
-		return (ShapeGraphicalRepresentation<ViewShape>) super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation<DiagramShape> getGraphicalRepresentation() {
+		return super.getGraphicalRepresentation();
 	}
 
 	/**
@@ -102,10 +102,10 @@ public class ViewShape extends ViewElement {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
-		for (ViewConnector c : incomingConnectors) {
+		for (DiagramConnector c : incomingConnectors) {
 			c.delete();
 		}
-		for (ViewConnector c : outgoingConnectors) {
+		for (DiagramConnector c : outgoingConnectors) {
 			c.delete();
 		}
 		super.delete();
@@ -114,71 +114,48 @@ public class ViewShape extends ViewElement {
 
 	@Override
 	public String getClassNameKey() {
-		return "oe_shape";
+		return "diagram_shape";
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getView().getFullyQualifiedName() + "." + getName();
+		return getDiagram().getFullyQualifiedName() + "." + getName();
 	}
 
-	/*@Override
-	public AddShemaElementAction getEditionAction() 
-	{
-		return getAddShapeAction();
-	}
-	
-	public AddShape getAddShapeAction()
-	{
-		if (getEditionPattern() != null && getPatternRole() != null)
-			return getEditionPattern().getAddShapeAction(getPatternRole());
-		return null;
-	}*/
-
-	/*public String getMultilineText() 
-	{
-		return multilineText;
-	}
-
-	public void setMultilineText(String multilineText) 
-	{
-		this.multilineText = multilineText;
-	}*/
-
-	public Vector<ViewConnector> getIncomingConnectors() {
+	public Vector<DiagramConnector> getIncomingConnectors() {
 		return incomingConnectors;
 	}
 
-	public void setIncomingConnectors(Vector<ViewConnector> incomingConnectors) {
+	public void setIncomingConnectors(Vector<DiagramConnector> incomingConnectors) {
 		this.incomingConnectors = incomingConnectors;
 	}
 
-	public void addToIncomingConnectors(ViewConnector connector) {
+	public void addToIncomingConnectors(DiagramConnector connector) {
 		incomingConnectors.add(connector);
 	}
 
-	public void removeFromIncomingConnectors(ViewConnector connector) {
+	public void removeFromIncomingConnectors(DiagramConnector connector) {
 		incomingConnectors.remove(connector);
 	}
 
-	public Vector<ViewConnector> getOutgoingConnectors() {
+	public Vector<DiagramConnector> getOutgoingConnectors() {
 		return outgoingConnectors;
 	}
 
-	public void setOutgoingConnectors(Vector<ViewConnector> outgoingConnectors) {
+	public void setOutgoingConnectors(Vector<DiagramConnector> outgoingConnectors) {
 		this.outgoingConnectors = outgoingConnectors;
 	}
 
-	public void addToOutgoingConnectors(ViewConnector connector) {
+	public void addToOutgoingConnectors(DiagramConnector connector) {
 		outgoingConnectors.add(connector);
 	}
 
-	public void removeFromOutgoingConnectors(ViewConnector connector) {
+	public void removeFromOutgoingConnectors(DiagramConnector connector) {
 		outgoingConnectors.remove(connector);
 	}
 
 	@Override
-	public boolean isContainedIn(ViewObject o) {
+	public boolean isContainedIn(DiagramElement<?> o) {
 		if (o == this) {
 			return true;
 		}
@@ -215,17 +192,17 @@ public class ViewShape extends ViewElement {
 
 		Vector<DropAndLinkScheme> availableLinkSchemeFromThisShape = null;
 
-		ViewPoint viewPoint = getView().getViewPoint();
+		ViewPoint viewPoint = getDiagram().getViewPoint();
 		if (viewPoint == null) {
 			return null;
 		}
 
 		availableLinkSchemeFromThisShape = new Vector<DropAndLinkScheme>();
 
-		for (EditionPattern ep1 : viewPoint.getEditionPatterns()) {
+		for (EditionPattern ep1 : getDiagramSpecification().getEditionPatterns()) {
 			for (DropScheme ds : ep1.getDropSchemes()) {
 				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
-					for (EditionPattern ep2 : viewPoint.getEditionPatterns()) {
+					for (EditionPattern ep2 : getDiagramSpecification().getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
 							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
 									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
@@ -249,14 +226,14 @@ public class ViewShape extends ViewElement {
 
 		Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
 
-		ViewPoint calc = getView().getViewPoint();
+		ViewPoint calc = getDiagram().getViewPoint();
 		if (calc == null) {
 			return null;
 		}
 
 		availableLinkSchemeFromThisShape = new Vector<LinkScheme>();
 
-		for (EditionPattern ep : calc.getEditionPatterns()) {
+		for (EditionPattern ep : getDiagramSpecification().getEditionPatterns()) {
 			for (LinkScheme ls : ep.getLinkSchemes()) {
 				if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
 					// This candidate is acceptable

@@ -36,8 +36,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -51,7 +52,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
-public class AddShape extends AddShemaElementAction<ViewShape> {
+public class AddShape extends AddShemaElementAction<DiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
@@ -66,10 +67,10 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 		return EditionActionType.AddShape;
 	}
 
-	public ViewObject getContainer(EditionSchemeAction action) {
+	public DiagramElement<?> getContainer(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
-			return (ViewObject) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+			return (DiagramElement<?>) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 		} else {
 			try {
 				return getContainer().getBindingValue(action);
@@ -94,21 +95,21 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 		return null;
 	}
 
-	private DataBinding<ViewObject> container;
+	private DataBinding<DiagramElement<?>> container;
 
-	public DataBinding<ViewObject> getContainer() {
+	public DataBinding<DiagramElement<?>> getContainer() {
 		if (container == null) {
-			container = new DataBinding<ViewObject>(this, ViewShape.class, BindingDefinitionType.GET);
+			container = new DataBinding<DiagramElement<?>>(this, DiagramShape.class, BindingDefinitionType.GET);
 			container.setBindingName("container");
 		}
 		return container;
 	}
 
-	public void setContainer(DataBinding<ViewObject> container) {
+	public void setContainer(DataBinding<DiagramElement<?>> container) {
 		if (container != null) {
 			container.setOwner(this);
 			container.setBindingName("container");
-			container.setDeclaredType(ViewObject.class);
+			container.setDeclaredType(DiagramElement.class);
 			container.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.container = container;
@@ -125,7 +126,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 
 	@Override
 	public Type getAssignableType() {
-		return ViewShape.class;
+		return DiagramShape.class;
 	}
 
 	@Override
@@ -134,8 +135,8 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 	}
 
 	@Override
-	public ViewShape performAction(EditionSchemeAction action) {
-		ViewShape newShape = new ViewShape(action.retrieveOEShema());
+	public DiagramShape performAction(EditionSchemeAction action) {
+		DiagramShape newShape = new DiagramShape((Diagram) action.retrieveVirtualModelInstance());
 
 		GraphicalRepresentation<?> grToUse = null;
 
@@ -146,14 +147,14 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ShapeGraphicalRepresentation<ViewShape> newGR = new ShapeGraphicalRepresentation<ViewShape>();
+		ShapeGraphicalRepresentation<DiagramShape> newGR = new ShapeGraphicalRepresentation<DiagramShape>();
 		newGR.setsWith(grToUse);
 		newShape.setGraphicalRepresentation(newGR);
 
 		// Register reference
 		newShape.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
 
-		ViewObject container = getContainer(action);
+		DiagramElement<?> container = getContainer(action);
 
 		if (container == null) {
 			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action));
@@ -169,7 +170,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, ViewShape newShape) {
+	public void finalizePerformAction(EditionSchemeAction action, DiagramShape newShape) {
 		// Be sure that the newly created shape is updated
 		newShape.update();
 	}
@@ -252,7 +253,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<ViewObject>(EditionScheme.TOP_LEVEL));
+				action.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TOP_LEVEL));
 			}
 
 		}
@@ -273,7 +274,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<ViewObject>(patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramElement<?>>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -299,7 +300,7 @@ public class AddShape extends AddShemaElementAction<ViewShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<ViewObject>(EditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

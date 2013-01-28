@@ -33,8 +33,8 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -182,11 +182,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
-	public View getView() {
-		return retrieveOEShema();
+	public VirtualModelInstance getVirtualModelInstance() {
+		return retrieveVirtualModelInstance();
 	}
 
-	public abstract View retrieveOEShema();
+	public abstract VirtualModelInstance retrieveVirtualModelInstance();
 
 	/**
 	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control
@@ -245,7 +245,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			return getEditionPatternInstance();
 		}
 		if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
-			return retrieveOEShema();
+			return retrieveVirtualModelInstance();
 		}
 		if (variables.get(variable.getVariableName()) != null) {
 			return variables.get(variable.getVariableName());
@@ -275,7 +275,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return null;
 	}
 
-	public GraphicalRepresentation<? extends ViewElement> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+	public GraphicalRepresentation<? extends DiagramElement> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;

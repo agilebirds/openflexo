@@ -36,10 +36,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalFeature;
@@ -47,7 +46,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, ViewElement> {
+public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, DiagramElement> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
@@ -141,16 +140,16 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 			availableFeatures = new Vector<GraphicalFeature<?, ?>>();
 			if (getSubject().isSet() && getSubject().isValid()) {
 				Class accessedClass = TypeUtils.getBaseClass(getSubject().getAnalyzedType());
-				if (ViewObject.class.isAssignableFrom(accessedClass)) {
+				if (DiagramElement.class.isAssignableFrom(accessedClass)) {
 					for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
 						availableFeatures.add(GF);
 					}
-					if (ViewShape.class.isAssignableFrom(accessedClass)) {
+					if (DiagramShape.class.isAssignableFrom(accessedClass)) {
 						for (GraphicalFeature<?, ?> GF : ShapePatternRole.AVAILABLE_FEATURES) {
 							availableFeatures.add(GF);
 						}
 					}
-					if (ViewConnector.class.isAssignableFrom(accessedClass)) {
+					if (DiagramConnector.class.isAssignableFrom(accessedClass)) {
 						for (GraphicalFeature<?, ?> GF : ConnectorPatternRole.AVAILABLE_FEATURES) {
 							availableFeatures.add(GF);
 						}
@@ -174,27 +173,27 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		_graphicalFeatureName = featureName;
 	}
 
-	private DataBinding<ViewElement> subject;
+	private DataBinding<DiagramElement> subject;
 
-	public DataBinding<ViewElement> getSubject() {
+	public DataBinding<DiagramElement> getSubject() {
 		if (subject == null) {
-			subject = new DataBinding<ViewElement>(this, ViewElement.class, DataBinding.BindingDefinitionType.GET);
+			subject = new DataBinding<DiagramElement>(this, DiagramElement.class, DataBinding.BindingDefinitionType.GET);
 			subject.setBindingName("subject");
 		}
 		return subject;
 	}
 
-	public void setSubject(DataBinding<ViewElement> subject) {
+	public void setSubject(DataBinding<DiagramElement> subject) {
 		if (subject != null) {
 			subject.setOwner(this);
 			subject.setBindingName("subject");
-			subject.setDeclaredType(ViewElement.class);
+			subject.setDeclaredType(DiagramElement.class);
 			subject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.subject = subject;
 	}
 
-	public ViewElement getSubject(EditionSchemeAction action) {
+	public DiagramElement getSubject(EditionSchemeAction action) {
 		try {
 			return getSubject().getBindingValue(action);
 		} catch (TypeMismatchException e) {
@@ -219,9 +218,9 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	}
 
 	@Override
-	public ViewElement performAction(EditionSchemeAction action) {
+	public DiagramElement performAction(EditionSchemeAction action) {
 		logger.info("Perform graphical action " + action);
-		ViewElement graphicalElement = getSubject(action);
+		DiagramElement graphicalElement = getSubject(action);
 		Object value = null;
 		try {
 			value = getValue().getBindingValue(action);
@@ -240,7 +239,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, ViewElement initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, DiagramElement initialContext) {
 	}
 
 	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
@@ -281,7 +280,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 			@Override
 			protected void fixAction() {
 				GraphicalAction graphicalAction = getObject();
-				graphicalAction.setSubject(new DataBinding<ViewElement>(patternRole.getPatternRoleName()));
+				graphicalAction.setSubject(new DataBinding<DiagramElement>(patternRole.getPatternRoleName()));
 			}
 
 		}

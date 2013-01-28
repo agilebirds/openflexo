@@ -32,6 +32,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
@@ -57,6 +58,10 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 	public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
+	}
+
+	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
+		super(virtualModel, adapter);
 	}
 
 	public XSDModelSlot(ViewPointBuilder builder) {

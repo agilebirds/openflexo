@@ -46,6 +46,7 @@ import org.openflexo.toolbox.IProgress;
  * 
  * @param <SRD>
  */
+@Deprecated
 public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>> extends FlexoFileResource<SRD> implements
 		FlexoResource<SRD> {
 

@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
@@ -93,6 +94,11 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public XSDModelSlot createNewModelSlot(ViewPoint viewPoint) {
 		return new XSDModelSlot(viewPoint, this);
+	}
+
+	@Override
+	public XSDModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
+		return new XSDModelSlot(virtualModel, this);
 	}
 
 	/**

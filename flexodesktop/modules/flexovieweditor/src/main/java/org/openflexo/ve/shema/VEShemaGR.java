@@ -25,7 +25,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;

@@ -41,8 +41,8 @@ import org.openflexo.fge.view.FGEView;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -82,8 +82,8 @@ public class ContextualPalette extends DrawingPalette {
 			if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 				returned.add(dropScheme);
 			}
-			if (target.getDrawable() instanceof ViewShape) {
-				ViewShape targetShape = (ViewShape) target.getDrawable();
+			if (target.getDrawable() instanceof DiagramShape) {
+				DiagramShape targetShape = (DiagramShape) target.getDrawable();
 				for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
 					if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
 						returned.add(dropScheme);
@@ -102,8 +102,8 @@ public class ContextualPalette extends DrawingPalette {
 				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 					return true;
 				}
-				if (target.getDrawable() instanceof ViewShape) {
-					ViewShape targetShape = (ViewShape) target.getDrawable();
+				if (target.getDrawable() instanceof DiagramShape) {
+					DiagramShape targetShape = (DiagramShape) target.getDrawable();
 					for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
 						if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
 							return true;
@@ -143,9 +143,9 @@ public class ContextualPalette extends DrawingPalette {
 			public boolean elementDragged(GraphicalRepresentation containerGR, final FGEPoint dropLocation) {
 				logger.info("Dragging " + getGraphicalRepresentation() + " with text " + getGraphicalRepresentation().getText());
 
-				if (containerGR.getDrawable() instanceof ViewObject) {
+				if (containerGR.getDrawable() instanceof DiagramElement<?>) {
 
-					final ViewObject container = (ViewObject) containerGR.getDrawable();
+					final DiagramElement<?> container = (DiagramElement<?>) containerGR.getDrawable();
 
 					// final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					final ShapeGraphicalRepresentation<?> shapeGR = new VEShapeGR(null, null);

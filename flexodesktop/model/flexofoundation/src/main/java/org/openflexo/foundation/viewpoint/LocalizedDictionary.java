@@ -290,7 +290,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	public void searchNewEntries() {
 		logger.info("Search new entries");
-		for (VirtualModel vm : getViewPoint().getVirtualModels()) {
+		for (VirtualModel<?> vm : getViewPoint().getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				checkAndRegisterLocalized(ep.getName());
 				for (EditionScheme es : ep.getEditionSchemes()) {

@@ -61,7 +61,7 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;

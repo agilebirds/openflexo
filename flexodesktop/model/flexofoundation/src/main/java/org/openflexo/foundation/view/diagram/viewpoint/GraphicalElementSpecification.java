@@ -12,14 +12,14 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
- * This class represent a constraint of graphical feature that is to be applied on a ViewElement
+ * This class represent a constraint of graphical feature that is to be applied on a DiagramElement
  * 
  * @author sylvain
  * 
@@ -138,7 +138,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param gr
 	 * @param element
 	 */
-	public void applyToGraphicalRepresentation(GR gr, ViewElement element) {
+	public void applyToGraphicalRepresentation(GR gr, DiagramElement element) {
 		/*if (getValue().toString().equals(
 				"(property.label.asString + ((inputAttributeReference.value != \"\") ? (\"=\" + inputAttributeReference.value) : \"\"))")) {
 			System.out.println("value=" + getValue());
@@ -166,7 +166,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param element
 	 * @return
 	 */
-	public T applyToModel(GR gr, ViewElement element) {
+	public T applyToModel(GR gr, DiagramElement element) {
 		T newValue = getFeature().retrieveFromGraphicalRepresentation(gr);
 		try {
 			getValue().setBindingValue(newValue, element.getEditionPatternInstance());

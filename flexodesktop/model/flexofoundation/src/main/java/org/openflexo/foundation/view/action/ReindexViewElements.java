@@ -36,10 +36,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -52,46 +51,47 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewObject, ViewObject> {
+public class ReindexViewElements extends FlexoAction<ReindexViewElements, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ReindexViewElements.class.getPackage().getName());
 
-	public static FlexoActionType<ReindexViewElements, ViewObject, ViewObject> actionType = new FlexoActionType<ReindexViewElements, ViewObject, ViewObject>(
+	public static FlexoActionType<ReindexViewElements, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<ReindexViewElements, DiagramElement<?>, DiagramElement<?>>(
 			"reindex_contents", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ReindexViewElements makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public ReindexViewElements makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
 			return new ReindexViewElements(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
-			return object instanceof View || object instanceof ViewShape;
+		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+			return object instanceof DiagramRootPane || object instanceof DiagramShape;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, View.class);
-		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, ViewShape.class);
+		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, DiagramRootPane.class);
+		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, DiagramShape.class);
 	}
 
-	ReindexViewElements(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	ReindexViewElements(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		init();
 	}
 
 	public boolean skipDialog = false;
 
-	private ViewObject container = null;
+	private DiagramElement<?> container = null;
 
 	private List<EditionPattern> matchingEditionPatterns = new ArrayList<EditionPattern>();
 	private HashMap<EditionPattern, OrderedElementList> reorderedElements = new HashMap<EditionPattern, OrderedElementList>();
@@ -103,9 +103,9 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 
 		matchingEditionPatterns = getContainedEditionPattern(getContainer());
 
-		for (ViewObject o : getContainer().getChilds()) {
-			if (o instanceof ViewElement) {
-				ViewElement e = (ViewElement) o;
+		for (DiagramElement<?> o : getContainer().getChilds()) {
+			if (o instanceof DiagramElement) {
+				DiagramElement e = o;
 				if (e.getEditionPattern() != null) {
 					OrderedElementList orderedList = reorderedElements.get(e.getEditionPattern());
 					if (orderedList == null) {
@@ -118,7 +118,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 	}
 
-	public void initAsUpReindexing(ViewElement elementToBeReindexed) {
+	public void initAsUpReindexing(DiagramElement elementToBeReindexed) {
 		skipDialog = true;
 		if (elementToBeReindexed.getEditionPattern() != null) {
 			container = elementToBeReindexed.getParent();
@@ -129,7 +129,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 	}
 
-	public void initAsDownReindexing(ViewElement elementToBeReindexed) {
+	public void initAsDownReindexing(DiagramElement elementToBeReindexed) {
 		skipDialog = true;
 		if (elementToBeReindexed.getEditionPattern() != null) {
 			container = elementToBeReindexed.getParent();
@@ -141,17 +141,17 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 	}
 
-	private static List<EditionPattern> getContainedEditionPattern(ViewObject element) {
+	private static List<EditionPattern> getContainedEditionPattern(DiagramElement<?> element) {
 		ArrayList<EditionPattern> returned = new ArrayList<EditionPattern>();
 		// EditionPattern of current container is excluded, as we can
 		// find some other graphical elements representing same EP
 		EditionPattern excludedEditionPattern = null;
-		if (element instanceof ViewElement) {
-			excludedEditionPattern = ((ViewElement) element).getEditionPattern();
+		if (element instanceof DiagramElement) {
+			excludedEditionPattern = ((DiagramElement) element).getEditionPattern();
 		}
-		for (ViewObject o : element.getChilds()) {
-			if (o instanceof ViewElement) {
-				ViewElement e = (ViewElement) o;
+		for (DiagramElement<?> o : element.getChilds()) {
+			if (o instanceof DiagramElement) {
+				DiagramElement e = o;
 				if (e.getEditionPattern() != null) {
 					if (!returned.contains(e.getEditionPattern()) && e.getEditionPattern() != excludedEditionPattern) {
 						returned.add(e.getEditionPattern());
@@ -162,7 +162,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		return returned;
 	}
 
-	public ViewObject getContainer() {
+	public DiagramElement<?> getContainer() {
 		if (container == null) {
 			if (getContainedEditionPattern(getFocusedObject()).size() > 0) {
 				container = getFocusedObject();
@@ -177,8 +177,8 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		for (EditionPattern ep : getMatchingEditionPatterns()) {
 			OrderedElementList l = reorderedElements.get(ep);
-			List<ViewElement> currentList = getContainer().getChildsOfType(ep);
-			for (ViewElement e : l) {
+			List<DiagramElement<?>> currentList = getContainer().getChildsOfType(ep);
+			for (DiagramElement<?> e : l) {
 				int oldIndex = currentList.indexOf(e);
 				int newIndex = l.indexOf(e);
 				if (oldIndex != newIndex) {
@@ -193,7 +193,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		return matchingEditionPatterns;
 	}
 
-	public String getExplicitDescription(ViewElement element) {
+	public String getExplicitDescription(DiagramElement element) {
 		EditionPattern ep = element.getEditionPattern();
 		EditionPatternInstance epi = element.getEditionPatternInstance();
 		if (ep == null) {
@@ -222,23 +222,23 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		return reorderedElements.get(editionPattern);
 	}
 
-	public void elementFirst(ViewElement e, EditionPattern ep) {
+	public void elementFirst(DiagramElement e, EditionPattern ep) {
 		getReorderedElements(ep).elementFirst(e);
 	}
 
-	public void elementUp(ViewElement e, EditionPattern ep) {
+	public void elementUp(DiagramElement e, EditionPattern ep) {
 		getReorderedElements(ep).elementUp(e);
 	}
 
-	public void elementDown(ViewElement e, EditionPattern ep) {
+	public void elementDown(DiagramElement e, EditionPattern ep) {
 		getReorderedElements(ep).elementDown(e);
 	}
 
-	public void elementLast(ViewElement e, EditionPattern ep) {
+	public void elementLast(DiagramElement e, EditionPattern ep) {
 		getReorderedElements(ep).elementLast(e);
 	}
 
-	public static class OrderedElementList extends ArrayList<ViewElement> implements HasPropertyChangeSupport {
+	public static class OrderedElementList extends ArrayList<DiagramElement> implements HasPropertyChangeSupport {
 		private EditionPattern editionPattern;
 
 		private PropertyChangeSupport pcSupport;
@@ -248,7 +248,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 			pcSupport = new PropertyChangeSupport(this);
 		}
 
-		public void elementFirst(ViewElement e) {
+		public void elementFirst(DiagramElement e) {
 			logger.fine("First for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			remove(e);
@@ -256,7 +256,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 			pcSupport.firePropertyChange("indexOf(Object)", index, 0);
 		}
 
-		public void elementUp(ViewElement e) {
+		public void elementUp(DiagramElement e) {
 			logger.fine("Up for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			if (index > 0) {
@@ -266,7 +266,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 			}
 		}
 
-		public void elementDown(ViewElement e) {
+		public void elementDown(DiagramElement e) {
 			logger.fine("Down for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			if (index < size() - 1) {
@@ -276,7 +276,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 			}
 		}
 
-		public void elementLast(ViewElement e) {
+		public void elementLast(DiagramElement e) {
 			logger.fine("Last for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			remove(e);

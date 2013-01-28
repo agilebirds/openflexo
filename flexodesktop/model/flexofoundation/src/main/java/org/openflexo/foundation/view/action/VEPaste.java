@@ -26,40 +26,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 
-public class VEPaste extends FlexoUndoableAction<VEPaste, ViewObject, ViewObject> {
+public class VEPaste extends FlexoUndoableAction<VEPaste, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(VEPaste.class.getPackage().getName());
 
-	public static FlexoActionType<VEPaste, ViewObject, ViewObject> actionType = new FlexoActionType<VEPaste, ViewObject, ViewObject>(
+	public static FlexoActionType<VEPaste, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<VEPaste, DiagramElement<?>, DiagramElement<?>>(
 			"paste", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VEPaste makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public VEPaste makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 			return new VEPaste(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VEPaste.actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(VEPaste.actionType, DiagramElement.class);
 	}
 
-	VEPaste(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	VEPaste(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

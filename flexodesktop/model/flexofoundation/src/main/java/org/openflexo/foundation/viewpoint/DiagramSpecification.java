@@ -44,7 +44,7 @@ import org.openflexo.toolbox.ChainedCollection;
  * @author sylvain
  * 
  */
-public class DiagramSpecification extends VirtualModel {
+public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());
 
@@ -190,7 +190,7 @@ public class DiagramSpecification extends VirtualModel {
 
 	public Vector<LinkScheme> getAllConnectors() {
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getVirtualModel().getEditionPatterns()) {
+		for (EditionPattern ep : getEditionPatterns()) {
 			for (LinkScheme s : ep.getLinkSchemes()) {
 				returned.add(s);
 			}
@@ -200,7 +200,7 @@ public class DiagramSpecification extends VirtualModel {
 
 	public Vector<LinkScheme> getConnectorsMatching(EditionPattern fromConcept, EditionPattern toConcept) {
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getVirtualModel().getEditionPatterns()) {
+		for (EditionPattern ep : getEditionPatterns()) {
 			for (LinkScheme s : ep.getLinkSchemes()) {
 				if (s.isValidTarget(fromConcept, toConcept)) {
 					returned.add(s);

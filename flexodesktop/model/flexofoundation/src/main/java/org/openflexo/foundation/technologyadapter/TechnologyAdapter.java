@@ -27,6 +27,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * This class represents a technology adapter<br>
@@ -53,11 +54,18 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	public abstract String getName();
 
 	/**
-	 * Creates a new ModelSlot
+	 * Creates a new ModelSlot in the scope of the supplied {@link ViewPoint}
 	 * 
 	 * @return a new {@link ModelSlot}
 	 */
 	public abstract ModelSlot<M, MM> createNewModelSlot(ViewPoint viewPoint);
+
+	/**
+	 * Creates a new ModelSlot in the scope of supplied {@link VirtualModel}
+	 * 
+	 * @return a new {@link ModelSlot}
+	 */
+	public abstract ModelSlot<M, MM> createNewModelSlot(VirtualModel<?> virtualModel);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XSD schema

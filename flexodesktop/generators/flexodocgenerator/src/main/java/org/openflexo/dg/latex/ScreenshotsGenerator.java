@@ -37,7 +37,7 @@ import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;

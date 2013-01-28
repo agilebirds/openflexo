@@ -10,7 +10,7 @@ import org.openflexo.foundation.view.action.ActionSchemeAction;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
@@ -33,7 +33,7 @@ public class VEMouseClickControl extends MouseClickControl {
 	public void handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		super.handleClick(graphicalRepresentation, controller, event);
 		FlexoEditor editor = ((VEShemaController) controller).getEditor();
-		ViewElement ve = null;
+		DiagramElement ve = null;
 		if (graphicalRepresentation instanceof VEShapeGR) {
 			VEShapeGR gr = (VEShapeGR) graphicalRepresentation;
 			ve = gr.getDrawable();

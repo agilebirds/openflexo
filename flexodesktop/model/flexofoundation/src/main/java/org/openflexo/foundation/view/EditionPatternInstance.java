@@ -34,8 +34,8 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.CloningScheme;
@@ -44,7 +44,16 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.logging.FlexoLogger;
 
-public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
+/**
+ * A {@link EditionPatternInstance} is the run-time concept (instance) of an {@link EditionPattern}.<br>
+ * 
+ * As such, a {@link EditionPatternInstance} is instantiated inside a {@link VirtualModelInstance} (only {@link VirtualModelInstance}
+ * objects might leave outside an other {@link VirtualModelInstance}).<br>
+ * 
+ * @author sylvain
+ * 
+ */
+public class EditionPatternInstance extends FlexoModelObject implements Bindable, BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
@@ -54,6 +63,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	private EditionPattern pattern;
 	private long instanceId;
 	private Hashtable<PatternRole<?>, FlexoModelObject> actors;
+	private VirtualModelInstance<?, ?> vmInstance;
 
 	/**
 	 * 
@@ -124,6 +134,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		}
 	}
 
+	@Override
 	public FlexoProject getProject() {
 		return _project;
 	}
@@ -245,6 +256,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return deleted;
 	}
 
+	@Override
 	public boolean isDeleted() {
 		return deleted();
 	}
@@ -252,6 +264,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	/**
 	 * Delete this EditionPattern instance using default DeletionScheme
 	 */
+	@Override
 	public void delete() {
 		// Also implement properly #getDeletedProperty()
 		if (getEditionPattern().getDefaultDeletionScheme() != null) {
@@ -338,6 +351,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return DELETED_PROPERTY;
 	}
 
+	@Override
 	public String getDisplayableName() {
 		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
 			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
@@ -359,5 +373,28 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getVirtualModelInstance().getFullyQualifiedName() + "." + getEditionPattern().getURI() + "." + getInstanceId();
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "edition_pattern_instance";
+	}
+
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getVirtualModelInstance();
+	}
+
+	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+		return vmInstance;
+	}
+
+	public void setVirtualModelInstance(VirtualModelInstance<?, ?> vmInstance) {
+		this.vmInstance = vmInstance;
 	}
 }

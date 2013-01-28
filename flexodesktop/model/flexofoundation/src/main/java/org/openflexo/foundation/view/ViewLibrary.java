@@ -37,7 +37,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.view.diagram.model.View;
 
 /**
  * The {@link ViewLibrary} contains all {@link FlexoViewResource} referenced in a {@link FlexoProject}

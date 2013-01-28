@@ -17,7 +17,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		View {
 			@Override
 			public Type getType() {
-				return org.openflexo.foundation.view.diagram.model.View.class;
+				return org.openflexo.foundation.view.View.class;
 			}
 		},
 		RepositoryFolder {

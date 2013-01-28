@@ -6,7 +6,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 
 /**
- * This class represent a graphical feature that is to be associated on a ViewElement
+ * This class represent a graphical feature that is to be associated on a DiagramElement
  * 
  * @author sylvain
  * 

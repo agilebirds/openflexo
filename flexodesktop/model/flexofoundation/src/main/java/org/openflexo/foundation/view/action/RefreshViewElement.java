@@ -29,11 +29,10 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 /**
  * This action is called to force refresh elements, by resetting graphical representation to those defined in EditionPattern
@@ -41,40 +40,41 @@ import org.openflexo.foundation.view.diagram.model.ViewShape;
  * @author sylvain
  * 
  */
-public class RefreshViewElement extends FlexoAction<RefreshViewElement, ViewObject, ViewObject> {
+public class RefreshViewElement extends FlexoAction<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(RefreshViewElement.class.getPackage().getName());
 
-	public static FlexoActionType<RefreshViewElement, ViewObject, ViewObject> actionType = new FlexoActionType<RefreshViewElement, ViewObject, ViewObject>(
+	public static FlexoActionType<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<RefreshViewElement, DiagramElement<?>, DiagramElement<?>>(
 			"refresh", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RefreshViewElement makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public RefreshViewElement makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
 			return new RefreshViewElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, View.class);
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, ViewShape.class);
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, ViewConnector.class);
+		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramRootPane.class);
+		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramConnector.class);
 	}
 
-	RefreshViewElement(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	RefreshViewElement(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -85,11 +85,11 @@ public class RefreshViewElement extends FlexoAction<RefreshViewElement, ViewObje
 
 	}
 
-	private void refresh(ViewObject objectToBeRefreshed) {
-		if (objectToBeRefreshed instanceof ViewElement) {
-			((ViewElement) objectToBeRefreshed).resetGraphicalRepresentation();
+	private void refresh(DiagramElement<?> objectToBeRefreshed) {
+		if (objectToBeRefreshed instanceof DiagramElement) {
+			((DiagramElement) objectToBeRefreshed).resetGraphicalRepresentation();
 		}
-		for (ViewObject o : objectToBeRefreshed.getChilds()) {
+		for (DiagramElement<?> o : objectToBeRefreshed.getChilds()) {
 			refresh(o);
 		}
 	}

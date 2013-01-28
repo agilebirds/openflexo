@@ -29,9 +29,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
@@ -61,11 +62,10 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
-import org.openflexo.foundation.view.diagram.model.ViewShape.DropAndLinkScheme;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape.DropAndLinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -82,7 +82,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	private VEShapeGR shapeGR;
-	private ViewObject target;
+	private DiagramElement<?> target;
 
 	private FGERoundRectangle roleRect;
 	private FGERectangle edgeRect;
@@ -110,7 +110,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private SimplifiedCardinalDirection orientation;
 
-	public FloatingPalette(VEShapeGR shapeGR, ViewObject target, SimplifiedCardinalDirection orientation) {
+	public FloatingPalette(VEShapeGR shapeGR, DiagramElement<?> target, SimplifiedCardinalDirection orientation) {
 		super(shapeGR, makeRoundRect(shapeGR, orientation));
 		this.shapeGR = shapeGR;
 		this.target = target;
@@ -295,7 +295,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, focusedGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
-				ViewShape to = null;
+				DiagramShape to = null;
 
 				switch (mode) {
 				case CREATE_SHAPE_AND_LINK:
@@ -330,14 +330,14 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	private void askAndApplyDropAndLinkScheme(final FGEPoint dropLocation, GraphicalRepresentation focusedGR) {
-		ViewObject container = null;
+		DiagramElement<?> container = null;
 		EditionPattern targetEP = null;
 		if (focusedGR == null || focusedGR instanceof VEShemaGR) {
-			container = target.getView();
+			container = target.getDiagram().getRootPane();
 			targetEP = null;
-		} else if (focusedGR.getDrawable() instanceof ViewElement) {
-			container = (ViewElement) focusedGR.getDrawable();
-			targetEP = ((ViewElement) container).getEditionPatternReference().getEditionPattern();
+		} else if (focusedGR.getDrawable() instanceof DiagramElement) {
+			container = (DiagramElement<?>) focusedGR.getDrawable();
+			targetEP = ((DiagramElement<?>) container).getEditionPatternReference().getEditionPattern();
 		}
 		if (container == null) {
 			return;
@@ -358,7 +358,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			JMenuItem menuItem = new JMenuItem(
 					FlexoLocalization.localizedForKey(dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme
 							.getLabel() : dropAndLinkScheme.linkScheme.getName()));
-			final ViewObject finalContainer = container;
+			final DiagramElement<?> finalContainer = container;
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -373,18 +373,18 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	}
 
-	private void askAndApplyLinkScheme(final FGEPoint dropLocation, final ViewShape to) {
-		Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
+	private void askAndApplyLinkScheme(final FGEPoint dropLocation, final DiagramShape to) {
+		List<LinkScheme> availableConnectors = new ArrayList<LinkScheme>();
 		// Lets look if we match a CalcPaletteConnector
-		final ViewShape from = shapeGR.getDrawable();
-		if (from.getView().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
-			availableConnectors = from.getView().getViewPoint().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
+		final DiagramShape from = shapeGR.getDrawable();
+		if (from.getDiagram().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+			availableConnectors = from.getDiagramSpecification().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller.getVEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null, controller.getVEController()
 					.getEditor());
-			action.setLinkScheme(availableConnectors.firstElement());
+			action.setLinkScheme(availableConnectors.get(0));
 			action.setFromShape(from);
 			action.setToShape(to);
 			action.escapeParameterRetrievingWhenValid = true;
@@ -400,7 +400,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller
+						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null, controller
 								.getVEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
@@ -442,7 +442,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	}
 
-	protected void applyDropAndLinkScheme(final DropAndLinkScheme dropAndLinkScheme, final FGEPoint dropLocation, ViewObject container) {
+	protected void applyDropAndLinkScheme(final DropAndLinkScheme dropAndLinkScheme, final FGEPoint dropLocation,
+			DiagramElement<?> container) {
 		applyDropAndLinkScheme(dropAndLinkScheme.dropScheme, dropAndLinkScheme.linkScheme, dropLocation, container);
 	}
 
@@ -472,11 +473,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		}
 	}*/
 
-	protected void applyDropAndLinkScheme(DropScheme dropScheme, LinkScheme linkScheme, FGEPoint dropLocation, ViewObject container) {
+	protected void applyDropAndLinkScheme(DropScheme dropScheme, LinkScheme linkScheme, FGEPoint dropLocation, DiagramElement<?> container) {
 
 		logger.info("applyDropAndLinkScheme container=" + container);
 
-		ViewShape newShape = createNewShape(dropLocation, container, dropScheme);
+		DiagramShape newShape = createNewShape(dropLocation, container, dropScheme);
 
 		if (newShape != null) {
 			createNewConnector(shapeGR.getDrawable(), newShape, linkScheme);
@@ -497,7 +498,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		currentDraggingLocationInDrawingView = null;
 	}
 
-	private ViewShape createNewShape(FGEPoint dropLocation, ViewObject container, DropScheme dropScheme) {
+	private DiagramShape createNewShape(FGEPoint dropLocation, DiagramElement<?> container, DropScheme dropScheme) {
 
 		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getVEController()
 				.getEditor());
@@ -529,9 +530,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		return dropSchemeAction.getPrimaryShape();
 	}
 
-	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) {
+	private DiagramConnector createNewConnector(DiagramShape from, DiagramShape to, LinkScheme linkScheme) {
 
-		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getView(), null, controller.getVEController()
+		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null, controller.getVEController()
 				.getEditor());
 		linkSchemeAction.setLinkScheme(linkScheme);
 		linkSchemeAction.setFromShape(from);

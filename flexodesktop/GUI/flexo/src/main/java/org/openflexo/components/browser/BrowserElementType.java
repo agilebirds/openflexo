@@ -115,10 +115,10 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
@@ -377,8 +377,8 @@ public enum BrowserElementType {
 	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDiagramConnector.class, VPMIconLibrary.CONNECTOR_ICON),
 	OE_SHEMA_LIBRARY("shema_library", ViewLibrary.class, VEIconLibrary.VIEW_LIBRARY_ICON),
 	OE_SHEMA("view", View.class, VEIconLibrary.VIEW_ICON),
-	OE_SHAPE("oe_shape", ViewShape.class, VEIconLibrary.SHAPE_ICON),
-	OE_CONNECTOR("oe_connector", ViewConnector.class, VEIconLibrary.CONNECTOR_ICON),
+	OE_SHAPE("oe_shape", DiagramShape.class, VEIconLibrary.SHAPE_ICON),
+	OE_CONNECTOR("oe_connector", DiagramConnector.class, VEIconLibrary.CONNECTOR_ICON),
 	UNKNOWN_OBJECT("unknown_object", FlexoModelObject.class, IconLibrary.QUESTION_ICON);
 
 	static final Logger logger = Logger.getLogger(BrowserElementType.class.getPackage().getName());

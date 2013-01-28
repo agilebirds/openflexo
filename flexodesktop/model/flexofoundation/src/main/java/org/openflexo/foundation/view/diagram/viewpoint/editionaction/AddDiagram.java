@@ -25,15 +25,16 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.view.action.AddView;
+import org.openflexo.foundation.rm.FlexoViewResource;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-public class AddDiagram extends DiagramAction<View> {
+public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
@@ -89,16 +90,16 @@ public class AddDiagram extends DiagramAction<View> {
 		this.diagramName = diagramName;
 	}
 
-	public ViewPoint getViewpoint() {
+	public DiagramSpecification getDiagramSpecification() {
 		if (getPatternRole() instanceof DiagramPatternRole) {
-			return getPatternRole().getViewpoint();
+			return getPatternRole().getDiagramSpecification();
 		}
 		return null;
 	}
 
-	public void setViewpoint(ViewPoint viewpoint) {
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
 		if (getPatternRole() instanceof DiagramPatternRole) {
-			getPatternRole().setViewpoint(viewpoint);
+			getPatternRole().setDiagramSpecification(diagramSpecification);
 		}
 	}
 
@@ -108,16 +109,17 @@ public class AddDiagram extends DiagramAction<View> {
 	}
 
 	@Override
-	public View performAction(EditionSchemeAction action) {
-		View initialShema = action.retrieveOEShema();
-		AddView addDiagramAction = AddView.actionType
-				.makeNewEmbeddedAction(initialShema.getFlexoResource().getParentFolder(), null, action);
-		addDiagramAction.newViewTitle = getDiagramName(action);
-		addDiagramAction.viewpoint = getPatternRole().getViewpoint();
+	public Diagram performAction(EditionSchemeAction action) {
+		Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
+		FlexoViewResource viewResource = initialDiagram.getView().getResource();
+		org.openflexo.foundation.view.diagram.action.AddDiagram addDiagramAction = org.openflexo.foundation.view.diagram.action.AddDiagram.actionType
+				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
+		addDiagramAction.newDiagramTitle = getDiagramName(action);
+		addDiagramAction.diagramSpecification = getPatternRole().getDiagramSpecification();
 		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
-		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewView() != null) {
-			View newDiagram = addDiagramAction.getNewView();
+		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
+			Diagram newDiagram = addDiagramAction.getNewDiagram();
 			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
@@ -125,9 +127,9 @@ public class AddDiagram extends DiagramAction<View> {
 			}
 			// logger.info("Shape pattern role: " + shapePatternRole);
 			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-			ViewShape newShape = new ViewShape(newShema);
-			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof ViewShape) {
-				ViewShape primaryShape = (ViewShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
+			DiagramShape newShape = new DiagramShape(newShema);
+			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {
+				DiagramShape primaryShape = (DiagramShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
 				newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
 			} else if (shapePatternRole.getGraphicalRepresentation() != null) {
 				newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
@@ -152,7 +154,7 @@ public class AddDiagram extends DiagramAction<View> {
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, View initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, Diagram initialContext) {
 	}
 
 }

@@ -35,10 +35,11 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -68,19 +69,19 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof ViewObject;
+			return object instanceof DiagramElement<?>;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
 	}
 
-	private ViewObject _parent;
+	private DiagramElement<?> _parent;
 	private DiagramPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
-	private ViewShape _primaryShape;
+	private DiagramShape _primaryShape;
 
 	public FGEPoint dropLocation;
 
@@ -104,18 +105,18 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	}
 
-	public ViewObject getParent() {
+	public DiagramElement<?> getParent() {
 		if (_parent == null) {
-			if (getFocusedObject() instanceof ViewShape) {
-				_parent = (ViewShape) getFocusedObject();
-			} else if (getFocusedObject() instanceof View) {
-				_parent = (View) getFocusedObject();
+			if (getFocusedObject() instanceof DiagramShape) {
+				_parent = (DiagramShape) getFocusedObject();
+			} else if (getFocusedObject() instanceof DiagramRootPane) {
+				_parent = (DiagramRootPane) getFocusedObject();
 			}
 		}
 		return _parent;
 	}
 
-	public void setParent(ViewObject parent) {
+	public void setParent(DiagramElement<?> parent) {
 		_parent = parent;
 	}
 
@@ -140,7 +141,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		_paletteElement = paletteElement;
 	}
 
-	public ViewShape getPrimaryShape() {
+	public DiagramShape getPrimaryShape() {
 		return _primaryShape;
 	}
 
@@ -150,12 +151,12 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	}
 
 	@Override
-	public View retrieveOEShema() {
+	public VirtualModelInstance retrieveVirtualModelInstance() {
 		if (getParent() != null) {
-			return getParent().getView();
+			return getParent().getDiagram();
 		}
-		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getView();
+		if (getFocusedObject() instanceof DiagramElement<?>) {
+			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}
 		return null;
 	}
@@ -165,7 +166,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		Object assignedObject = super.performAction(anAction, performedActions);
 		if (anAction instanceof AddShape) {
 			AddShape action = (AddShape) anAction;
-			ViewShape newShape = (ViewShape) assignedObject;
+			DiagramShape newShape = (DiagramShape) assignedObject;
 			if (newShape != null) {
 				ShapeGraphicalRepresentation<?> gr = newShape.getGraphicalRepresentation();
 				if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
@@ -232,8 +233,8 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
-			if (getParent() instanceof ViewShape) {
-				return ((ViewShape) getParent()).getEditionPatternInstance();
+			if (getParent() instanceof DiagramShape) {
+				return ((DiagramShape) getParent()).getEditionPatternInstance();
 			}
 		}
 		return super.getValue(variable);

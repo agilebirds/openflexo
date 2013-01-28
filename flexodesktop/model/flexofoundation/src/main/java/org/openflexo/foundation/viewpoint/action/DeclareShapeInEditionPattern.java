@@ -36,7 +36,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
@@ -320,9 +320,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {
 								if (isTopLevel) {
-									newAddShape.setContainer(new DataBinding<ViewObject>(EditionScheme.TOP_LEVEL));
+									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TOP_LEVEL));
 								} else {
-									newAddShape.setContainer(new DataBinding<ViewObject>(EditionScheme.TARGET + "."
+									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TARGET + "."
 											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 								}
 							}

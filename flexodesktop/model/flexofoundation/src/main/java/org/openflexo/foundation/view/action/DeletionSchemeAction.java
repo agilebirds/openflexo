@@ -30,9 +30,8 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
@@ -65,10 +64,10 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
 	}
 
-	private View _view;
+	private VirtualModelInstance vmInstance;
 	private DeletionScheme deletionScheme;
 
 	DeletionSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
@@ -89,17 +88,17 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	}
 
 	@Override
-	public View getView() {
-		if (_view == null) {
-			if (getFocusedObject() instanceof View) {
-				_view = (View) getFocusedObject();
+	public VirtualModelInstance getVirtualModelInstance() {
+		if (vmInstance == null) {
+			if (getFocusedObject() instanceof VirtualModelInstance) {
+				vmInstance = (VirtualModelInstance) getFocusedObject();
 			}
 		}
-		return _view;
+		return vmInstance;
 	}
 
-	public void setView(View view) {
-		_view = view;
+	public void setVirtualModelInstance(VirtualModelInstance vmInstance) {
+		this.vmInstance = vmInstance;
 	}
 
 	public DeletionScheme getDeletionScheme() {
@@ -121,8 +120,8 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	}
 
 	public EditionPatternInstance getEditionPatternInstanceToDelete() {
-		if (editionPatternInstanceToDelete == null && getFocusedObject() instanceof ViewElement) {
-			editionPatternInstanceToDelete = ((ViewElement) getFocusedObject()).getEditionPatternInstance();
+		if (editionPatternInstanceToDelete == null && getFocusedObject() instanceof DiagramElement) {
+			editionPatternInstanceToDelete = ((DiagramElement) getFocusedObject()).getEditionPatternInstance();
 		}
 		return editionPatternInstanceToDelete;
 	}
@@ -132,8 +131,8 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	}
 
 	@Override
-	public View retrieveOEShema() {
-		return getView();
+	public VirtualModelInstance retrieveVirtualModelInstance() {
+		return getVirtualModelInstance();
 	}
 
 }

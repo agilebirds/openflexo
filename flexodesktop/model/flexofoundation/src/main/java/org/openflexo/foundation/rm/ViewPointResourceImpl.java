@@ -13,10 +13,15 @@ import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResourceImpl;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResourceImpl;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
@@ -163,8 +168,10 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 
 		returned.init(baseName,/* getDirectory(), getFile(),*/getViewPointLibrary());
 
-		for (EditionPattern ep : returned.getEditionPatterns()) {
-			ep.finalizeParentEditionPatternDeserialization();
+		for (VirtualModel<?> vm : returned.getVirtualModels()) {
+			for (EditionPattern ep : vm.getEditionPatterns()) {
+				ep.finalizeParentEditionPatternDeserialization();
+			}
 		}
 
 		return returned;

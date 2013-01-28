@@ -25,38 +25,38 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 
-public class VESelectAll extends FlexoGUIAction<VESelectAll, ViewObject, ViewObject> {
+public class VESelectAll extends FlexoGUIAction<VESelectAll, DiagramElement<?>, DiagramElement<?>> {
 
-	public static FlexoActionType<VESelectAll, ViewObject, ViewObject> actionType = new FlexoActionType<VESelectAll, ViewObject, ViewObject>(
+	public static FlexoActionType<VESelectAll, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<VESelectAll, DiagramElement<?>, DiagramElement<?>>(
 			"select_all", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VESelectAll makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public VESelectAll makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 			return new VESelectAll(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VESelectAll.actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(VESelectAll.actionType, DiagramElement.class);
 	}
 
-	VESelectAll(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	VESelectAll(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

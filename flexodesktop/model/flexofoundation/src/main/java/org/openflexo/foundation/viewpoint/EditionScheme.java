@@ -28,7 +28,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
@@ -285,7 +285,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public VirtualModel getVirtualModel() {
+	public VirtualModel<?> getVirtualModel() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getVirtualModel();
 		}

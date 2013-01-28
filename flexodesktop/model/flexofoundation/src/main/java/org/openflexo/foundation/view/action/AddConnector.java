@@ -27,49 +27,49 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
-public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObject> {
+public class AddConnector extends FlexoAction<AddConnector, DiagramShape, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(AddConnector.class.getPackage().getName());
 
-	public static FlexoActionType<AddConnector, ViewShape, ViewObject> actionType = new FlexoActionType<AddConnector, ViewShape, ViewObject>(
+	public static FlexoActionType<AddConnector, DiagramShape, DiagramElement<?>> actionType = new FlexoActionType<AddConnector, DiagramShape, DiagramElement<?>>(
 			"add_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddConnector makeNewAction(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public AddConnector makeNewAction(DiagramShape focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 			return new AddConnector(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramShape shape, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(DiagramShape shape, Vector<DiagramElement<?>> globalSelection) {
 			return shape != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddConnector.actionType, ViewShape.class);
+		FlexoModelObject.addActionForClass(AddConnector.actionType, DiagramShape.class);
 	}
 
-	private ViewShape _fromShape;
-	private ViewShape _toShape;
+	private DiagramShape _fromShape;
+	private DiagramShape _toShape;
 	private String annotation;
-	private ViewConnector _newConnector;
+	private DiagramConnector _newConnector;
 
 	private boolean automaticallyCreateConnector = false;
 
-	AddConnector(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	AddConnector(DiagramShape focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -79,14 +79,14 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 			logger.info("Add connector");
 		}
 		if (getFocusedObject() != null && getFromShape() != null && getToShape() != null) {
-			ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
+			DiagramElement<?> parent = DiagramElement.getFirstCommonAncestor(getFromShape(), getToShape());
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Parent=" + parent);
 			}
 			if (parent == null) {
 				throw new IllegalArgumentException("No common ancestor");
 			}
-			_newConnector = new ViewConnector(getFromShape().getView(), getFromShape(), getToShape());
+			_newConnector = new DiagramConnector(getFromShape().getDiagram(), getFromShape(), getToShape());
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
 		} else {
@@ -96,26 +96,26 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 		}
 	}
 
-	public ViewShape getToShape() {
+	public DiagramShape getToShape() {
 		return _toShape;
 	}
 
-	public void setToShape(ViewShape aShape) {
+	public void setToShape(DiagramShape aShape) {
 		_toShape = aShape;
 	}
 
-	public ViewShape getFromShape() {
+	public DiagramShape getFromShape() {
 		if (_fromShape == null) {
 			return getFocusedObject();
 		}
 		return _fromShape;
 	}
 
-	public void setFromShape(ViewShape fromShape) {
+	public void setFromShape(DiagramShape fromShape) {
 		_fromShape = fromShape;
 	}
 
-	public ViewConnector getConnector() {
+	public DiagramConnector getConnector() {
 		return _newConnector;
 	}
 

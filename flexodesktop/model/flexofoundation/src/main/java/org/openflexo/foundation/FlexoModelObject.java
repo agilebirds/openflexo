@@ -346,7 +346,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 * 
 	 * @return a displayable name that is localized and readable by a user.
 	 */
-	public final String getDisplayableName() {
+	public String getDisplayableName() {
 		if (getName() != null) {
 			return getLocalizedClassName() + " " + getName();
 		} else {
@@ -853,6 +853,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
+	@Override
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
 		EditionPatternReference existingReference = getEditionPatternReference(editionPatternInstance);
 		if (existingReference == null) {
@@ -867,6 +868,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
+	@Override
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
 		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
 		if (referenceToRemove == null) {

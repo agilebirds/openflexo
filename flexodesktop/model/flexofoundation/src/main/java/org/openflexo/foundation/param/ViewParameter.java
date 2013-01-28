@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 import org.openflexo.inspector.widget.DenaliWidget;
 
 public class ViewParameter extends ParameterDefinition<View> {

@@ -30,9 +30,8 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 
 /**
  * This action reset all graphical representations found in view to conform to those described in EditionPattern
@@ -40,38 +39,39 @@ import org.openflexo.foundation.view.diagram.model.ViewObject;
  * @author sylvain
  * 
  */
-public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRepresentations, ViewObject, ViewObject> {
+public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRepresentations, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ResetGraphicalRepresentations.class.getPackage().getName());
 
-	public static FlexoActionType<ResetGraphicalRepresentations, ViewObject, ViewObject> actionType = new FlexoActionType<ResetGraphicalRepresentations, ViewObject, ViewObject>(
+	public static FlexoActionType<ResetGraphicalRepresentations, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<ResetGraphicalRepresentations, DiagramElement<?>, DiagramElement<?>>(
 			"reset_graphical_representations", FlexoActionType.editGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ResetGraphicalRepresentations makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public ResetGraphicalRepresentations makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
 			return new ResetGraphicalRepresentations(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject view, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> view, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject view, Vector<ViewObject> globalSelection) {
-			return view instanceof View;
+		public boolean isEnabledForSelection(DiagramElement<?> view, Vector<DiagramElement<?>> globalSelection) {
+			return view instanceof DiagramRootPane;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, View.class);
+		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, DiagramRootPane.class);
 	}
 
-	ResetGraphicalRepresentations(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	ResetGraphicalRepresentations(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -79,10 +79,10 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Reset graphical representations for view");
 
-		View view = null;
+		DiagramRootPane view = null;
 
-		if (getFocusedObject() instanceof View) {
-			view = (View) getFocusedObject();
+		if (getFocusedObject() instanceof DiagramRootPane) {
+			view = (DiagramRootPane) getFocusedObject();
 		}
 
 		if (view != null) {
@@ -91,12 +91,12 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 
 	}
 
-	private void processElement(ViewObject o) {
-		if (o instanceof ViewElement) {
-			((ViewElement) o).resetGraphicalRepresentation();
+	private void processElement(DiagramElement<?> o) {
+		if (o instanceof DiagramElement) {
+			((DiagramElement) o).resetGraphicalRepresentation();
 		}
-		/*if (o instanceof ViewShape) {
-			ViewShape shape = (ViewShape) o;
+		/*if (o instanceof DiagramShape) {
+			DiagramShape shape = (DiagramShape) o;
 			if (shape.getPatternRole() != null) {
 				((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).setsWith((ShapeGraphicalRepresentation) shape
 						.getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
@@ -106,8 +106,8 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 						ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
 						ShapeGraphicalRepresentation.Parameters.relativeTextY);
 			}
-		} else if (o instanceof ViewConnector) {
-			ViewConnector connector = (ViewConnector) o;
+		} else if (o instanceof DiagramConnector) {
+			DiagramConnector connector = (DiagramConnector) o;
 			if (connector.getPatternRole() != null) {
 				((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation()).setsWith(
 						(ConnectorGraphicalRepresentation) connector.getPatternRole().getGraphicalRepresentation(),
@@ -115,7 +115,7 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 						GraphicalRepresentation.Parameters.absoluteTextX, GraphicalRepresentation.Parameters.absoluteTextY);
 			}
 		}*/
-		for (ViewObject child : o.getChilds()) {
+		for (DiagramElement<?> child : o.getChilds()) {
 			processElement(child);
 		}
 	}

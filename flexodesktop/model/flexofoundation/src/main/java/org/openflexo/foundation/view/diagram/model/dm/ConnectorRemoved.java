@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 
 /**
@@ -31,16 +31,16 @@ import org.openflexo.foundation.view.diagram.model.ViewShape;
  */
 public class ConnectorRemoved extends DiagramDataModification {
 
-	public ConnectorRemoved(ViewConnector connector) {
+	public ConnectorRemoved(DiagramConnector connector) {
 		super(connector, null);
 	}
 
-	public ViewShape getFromShape() {
-		return ((ViewConnector) oldValue()).getStartShape();
+	public DiagramShape getFromShape() {
+		return ((DiagramConnector) oldValue()).getStartShape();
 	}
 
-	public ViewShape getToShape() {
-		return ((ViewConnector) oldValue()).getEndShape();
+	public DiagramShape getToShape() {
+		return ((DiagramConnector) oldValue()).getEndShape();
 	}
 
 }

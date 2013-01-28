@@ -13,7 +13,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
-import org.openflexo.foundation.view.diagram.model.ViewElement;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -21,7 +21,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 
-public abstract class GraphicalElementPatternRole<T extends ViewElement> extends PatternRole<T> implements Bindable {
+public abstract class GraphicalElementPatternRole<T extends DiagramElement> extends PatternRole<T> implements Bindable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());

@@ -20,7 +20,7 @@
 package org.openflexo.foundation.xml;
 
 import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
 
 /**
  * Please comment this class

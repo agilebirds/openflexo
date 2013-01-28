@@ -33,49 +33,49 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
-public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
+public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddShape, ViewObject, ViewObject> actionType = new FlexoActionType<AddShape, ViewObject, ViewObject>(
+	public static FlexoActionType<AddShape, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<AddShape, DiagramElement<?>, DiagramElement<?>>(
 			"add_new_shape", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddShape makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public AddShape makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 			return new AddShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
-			return object instanceof View || object instanceof ViewShape;
+		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+			return object instanceof DiagramRootPane || object instanceof DiagramShape;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddShape.actionType, View.class);
-		FlexoModelObject.addActionForClass(AddShape.actionType, ViewShape.class);
+		FlexoModelObject.addActionForClass(AddShape.actionType, DiagramRootPane.class);
+		FlexoModelObject.addActionForClass(AddShape.actionType, DiagramShape.class);
 	}
 
-	private ViewShape _newShape;
+	private DiagramShape _newShape;
 	private String _newShapeName;
-	private ViewObject _parent;
+	private DiagramElement<?> _parent;
 	private ShapeGraphicalRepresentation<?> _graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
-	AddShape(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	AddShape(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -90,7 +90,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 			throw new InvalidParameterException("shape name is undefined");
 		}
 
-		_newShape = new ViewShape(getParent().getView());
+		_newShape = new DiagramShape(getParent().getDiagram());
 		if (getGraphicalRepresentation() != null) {
 			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
 		}
@@ -113,22 +113,22 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 		return null;
 	}
 
-	public ViewShape getNewShape() {
+	public DiagramShape getNewShape() {
 		return _newShape;
 	}
 
-	public ViewObject getParent() {
+	public DiagramElement<?> getParent() {
 		if (_parent == null) {
-			if (getFocusedObject() instanceof ViewShape) {
+			if (getFocusedObject() instanceof DiagramShape) {
 				_parent = getFocusedObject();
-			} else if (getFocusedObject() instanceof View) {
+			} else if (getFocusedObject() instanceof DiagramRootPane) {
 				_parent = getFocusedObject();
 			}
 		}
 		return _parent;
 	}
 
-	public void setParent(ViewObject parent) {
+	public void setParent(DiagramElement<?> parent) {
 		_parent = parent;
 	}
 

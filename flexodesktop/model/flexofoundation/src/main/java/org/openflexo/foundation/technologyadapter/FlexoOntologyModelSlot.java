@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Implementation of a ModelSlot in a technology conform to FlexoOntology layer
@@ -15,6 +16,10 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 
 	protected FlexoOntologyModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
 		super(viewPoint, technologyAdapter);
+	}
+
+	protected FlexoOntologyModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter<M, MM> technologyAdapter) {
+		super(virtualModel, technologyAdapter);
 	}
 
 	protected FlexoOntologyModelSlot(ViewPointBuilder builder) {

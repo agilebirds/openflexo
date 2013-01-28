@@ -4,16 +4,15 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.view.diagram.model.View;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DiagramPatternRole extends PatternRole<View> {
 
-	private ViewPoint viewpoint;
-	private String viewpointURI;
+	private DiagramSpecification diagramSpecification;
 
 	public DiagramPatternRole(ViewPointBuilder builder) {
 		super(builder);
@@ -21,8 +20,8 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	@Override
 	public String getPreciseType() {
-		if (getViewpoint() != null) {
-			return getViewpoint().getName();
+		if (getDiagramSpecification() != null) {
+			return getDiagramSpecification().getName();
 		}
 		return FlexoLocalization.localizedForKey("diagram");
 	}
@@ -42,32 +41,12 @@ public class DiagramPatternRole extends PatternRole<View> {
 		// Not relevant
 	}
 
-	public ViewPoint getViewpoint() {
-		if (viewpoint == null && viewpointURI != null && getViewPointLibrary() != null) {
-			viewpoint = getViewPointLibrary().getViewPoint(viewpointURI);
-		}
-		return viewpoint;
+	public DiagramSpecification getDiagramSpecification() {
+		return diagramSpecification;
 	}
 
-	public void setViewpoint(ViewPoint viewpoint) {
-		this.viewpoint = viewpoint;
-		if (viewpoint != null) {
-			viewpointURI = viewpoint.getURI();
-		}
-	}
-
-	public String _getViewpointURI() {
-		if (getViewpoint() != null) {
-			return getViewpoint().getURI();
-		}
-		return viewpointURI;
-	}
-
-	public void _setViewpointURI(String uri) {
-		if (getViewPointLibrary() != null) {
-			viewpoint = getViewPointLibrary().getViewPoint(uri);
-		}
-		viewpointURI = uri;
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+		this.diagramSpecification = diagramSpecification;
 	}
 
 	@Override

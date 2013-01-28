@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view;
 
-import org.openflexo.foundation.view.diagram.model.View;
 
 public class ViewDeleted extends VEDataModification {
 

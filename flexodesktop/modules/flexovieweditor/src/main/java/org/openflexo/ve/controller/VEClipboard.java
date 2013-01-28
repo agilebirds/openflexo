@@ -30,7 +30,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.view.diagram.model.ViewShape;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
@@ -87,10 +87,10 @@ public class VEClipboard extends FlexoClipboard {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Pasting " + _clipboardData + " in " + pastingContext);
 				// Handle paste here
-				ViewShape newShape = (ViewShape) _clipboardData.cloneUsingXMLMapping();
+				DiagramShape newShape = (DiagramShape) _clipboardData.cloneUsingXMLMapping();
 				((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).setLocation(new FGEPoint(
 						graphicalContext.precisePastingLocation));
-				((ViewShape) pastingContext).addToChilds(newShape);
+				((DiagramShape) pastingContext).addToChilds(newShape);
 
 			}
 		} else {
@@ -130,6 +130,6 @@ public class VEClipboard extends FlexoClipboard {
 	}
 
 	protected boolean isTargetValidForPasting(FlexoObject pastingContext) {
-		return _clipboardData instanceof ViewShape && pastingContext instanceof ViewShape;
+		return _clipboardData instanceof DiagramShape && pastingContext instanceof DiagramShape;
 	}
 }

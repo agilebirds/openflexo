@@ -29,8 +29,10 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.action.AddView;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -38,7 +40,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class AddViewInitializer extends ActionInitializer {
+public class AddViewInitializer extends ActionInitializer<AddView, RepositoryFolder, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

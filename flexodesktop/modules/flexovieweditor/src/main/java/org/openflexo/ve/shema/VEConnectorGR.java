@@ -30,7 +30,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.view.diagram.model.ViewConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver, VEShemaConstants {
+public class VEConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEConnectorGR.class.getPackage().getName());
@@ -50,7 +50,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		this(null, null);
 	}
 
-	public VEConnectorGR(ViewConnector aConnector, Drawing<?> aDrawing) {
+	public VEConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
 				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
 				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
@@ -95,7 +95,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		super.delete();
 	}
 
-	public ViewConnector getOEConnector() {
+	public DiagramConnector getOEConnector() {
 		return getDrawable();
 	}
 

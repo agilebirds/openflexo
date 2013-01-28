@@ -32,37 +32,37 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.model.View;
-import org.openflexo.foundation.view.diagram.model.ViewObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddView extends FlexoAction<AddView, RepositoryFolder, ViewObject> {
+public class AddView extends FlexoAction<AddView, RepositoryFolder, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(AddView.class.getPackage().getName());
 
-	public static FlexoActionType<AddView, RepositoryFolder, ViewObject> actionType = new FlexoActionType<AddView, RepositoryFolder, ViewObject>(
+	public static FlexoActionType<AddView, RepositoryFolder, DiagramElement<?>> actionType = new FlexoActionType<AddView, RepositoryFolder, DiagramElement<?>>(
 			"create_view", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddView makeNewAction(RepositoryFolder focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public AddView makeNewAction(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 			return new AddView(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(RepositoryFolder object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(RepositoryFolder object, Vector<DiagramElement<?>> globalSelection) {
 			return object.getResourceRepository() instanceof ViewPointRepository;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(RepositoryFolder object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(RepositoryFolder object, Vector<DiagramElement<?>> globalSelection) {
 			return object != null;
 		}
 
@@ -81,7 +81,7 @@ public class AddView extends FlexoAction<AddView, RepositoryFolder, ViewObject> 
 
 	public boolean skipChoosePopup = false;
 
-	AddView(RepositoryFolder focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	AddView(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

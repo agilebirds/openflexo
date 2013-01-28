@@ -32,6 +32,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
@@ -72,6 +73,17 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 	 */
 	public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
+	}
+
+	/**
+	 * 
+	 * Constructor.
+	 * 
+	 * @param virtualModel
+	 * @param adapter
+	 */
+	public EMFModelSlot(VirtualModel<?> virtualModel, EMFTechnologyAdapter adapter) {
+		super(virtualModel, adapter);
 	}
 
 	/**
