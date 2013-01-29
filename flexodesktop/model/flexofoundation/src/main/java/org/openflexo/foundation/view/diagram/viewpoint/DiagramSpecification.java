@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
+import org.openflexo.foundation.rm.DiagramSpecificationResourceImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -38,7 +40,6 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
@@ -63,6 +64,28 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	 * Stores a chained collections of objects which are involved in validation
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
+
+	/**
+	 * Creates a new VirtualModel on user request<br>
+	 * Creates both the resource and the object
+	 * 
+	 * 
+	 * @param baseName
+	 * @param viewPoint
+	 * @return
+	 */
+	public static DiagramSpecification newDiagramSpecification(String baseName, ViewPoint viewPoint) {
+		File diagramSpecificationDirectory = new File(viewPoint.getResource().getDirectory(), baseName);
+		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
+		ViewPointLibrary viewPointLibrary = viewPoint.getViewPointLibrary();
+		DiagramSpecificationResource dsRes = DiagramSpecificationResourceImpl.makeDiagramSpecificationResource(
+				diagramSpecificationDirectory, diagramSpecificationXMLFile, viewPoint.getResource(), viewPointLibrary);
+		DiagramSpecification diagramSpecification = new DiagramSpecification(viewPoint);
+		dsRes.setResourceData(diagramSpecification);
+		diagramSpecification.setResource(dsRes);
+		diagramSpecification.save();
+		return diagramSpecification;
+	}
 
 	// Used during deserialization, do not use it
 	public DiagramSpecification(VirtualModel.VirtualModelBuilder builder) {
@@ -229,7 +252,8 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof VirtualModel.VirtualModelBuilder && ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
+		if (builder instanceof VirtualModel.VirtualModelBuilder
+				&& ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
 			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
 		}

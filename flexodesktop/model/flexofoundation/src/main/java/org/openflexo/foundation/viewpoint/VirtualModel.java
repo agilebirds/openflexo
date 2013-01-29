@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,6 +40,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.VirtualModelResource;
+import org.openflexo.foundation.rm.VirtualModelResourceImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -83,6 +85,28 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
+	/**
+	 * Creates a new VirtualModel on user request<br>
+	 * Creates both the resource and the object
+	 * 
+	 * 
+	 * @param baseName
+	 * @param viewPoint
+	 * @return
+	 */
+	public static VirtualModel<?> newVirtualModel(String baseName, ViewPoint viewPoint) {
+		File diagramSpecificationDirectory = new File(viewPoint.getResource().getDirectory(), baseName);
+		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
+		ViewPointLibrary viewPointLibrary = viewPoint.getViewPointLibrary();
+		VirtualModelResource vmRes = VirtualModelResourceImpl.makeVirtualModelResource(diagramSpecificationDirectory,
+				diagramSpecificationXMLFile, viewPoint.getResource(), viewPointLibrary);
+		VirtualModel virtualModel = new VirtualModel(viewPoint);
+		vmRes.setResourceData(virtualModel);
+		virtualModel.setResource(vmRes);
+		virtualModel.save();
+		return virtualModel;
+	}
+
 	// Used during deserialization, do not use it
 	public VirtualModel(VirtualModelBuilder builder) {
 		super(builder);
@@ -93,6 +117,15 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		}
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
 		editionPatterns = new Vector<EditionPattern>();
+	}
+
+	/**
+	 * Creates a new VirtualModel in supplied viewpoint
+	 * 
+	 * @param viewPoint
+	 */
+	public VirtualModel(ViewPoint viewPoint) {
+		this((VirtualModel.VirtualModelBuilder) null);
 	}
 
 	@Override

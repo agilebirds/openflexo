@@ -56,6 +56,8 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		// ViewPoint perspective
 		new CreateViewPointInitializer(this);
 		new CreateModelSlotInitializer(this);
+		new CreateVirtualModelInitializer(this);
+		new CreateDiagramSpecificationInitializer(this);
 		new CreatePatternRoleInitializer(this);
 		new CreateEditionActionInitializer(this);
 		new AddEditionPatternInitializer(this);

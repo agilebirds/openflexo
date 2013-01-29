@@ -27,7 +27,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 	static final Logger logger = Logger.getLogger(DiagramSpecificationResourceImpl.class.getPackage().getName());
 
 	public static DiagramSpecificationResource makeDiagramSpecificationResource(File diagramSpecificationDirectory,
-			File diagramSpecificationXMLFile, ViewPointLibrary viewPointLibrary) {
+			File diagramSpecificationXMLFile, ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
@@ -38,6 +38,8 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramSpecificationDirectory);
+			viewPointResource.addToContents(returned);
+			viewPointResource.notifyContentsAdded(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();

@@ -112,19 +112,17 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	public static ViewPoint newViewPoint(String baseName, String viewpointURI/*, File owlFile*/, File viewpointDir,
-			ViewPointLibrary library/*, ViewPointFolder folder*/) {
+	public static ViewPoint newViewPoint(String baseName, String viewpointURI, File viewpointDir, ViewPointLibrary library) {
 		ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(baseName, viewpointURI, viewpointDir, library);
 		ViewPoint viewpoint = new ViewPoint();
 		vpRes.setResourceData(viewpoint);
 		viewpoint.setResource(vpRes);
-		// viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
 
 		// And register it to the library
 		library.registerViewPoint(vpRes);
 
-		viewpoint.init(baseName, /*viewpointDir, xmlFile,*/library/*, folder*/);
+		viewpoint.init(baseName, library);
 		viewpoint.loadViewpointMetaModels();
 		viewpoint.save();
 		return viewpoint;

@@ -63,6 +63,8 @@ public class VPMCst {
 	public static File CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
 	public static File CREATE_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePaletteDialog.fib");
 	public static File CREATE_VIEW_POINT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewPointDialog.fib");
+	public static File CREATE_VIRTUAL_MODEL_DIALOG_FIB = new FileResource("Fib/Dialog/CreateVirtualModelDialog.fib");
+	public static File CREATE_DIAGRAM_SPECIFICATION_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramSpecificationDialog.fib");
 	public static File DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource("Fib/Dialog/DeclareShapeInEditionPatternDialog.fib");
 	public static File DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource(
 			"Fib/Dialog/DeclareConnectorInEditionPatternDialog.fib");

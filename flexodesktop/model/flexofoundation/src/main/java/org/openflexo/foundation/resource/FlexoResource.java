@@ -19,6 +19,7 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
@@ -267,5 +268,21 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 */
 	public FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
 			ProjectLoadingCancelledException, FlexoException;
+
+	/**
+	 * Called to notify that a resource has successfully been loaded
+	 */
+	public void notifyResourceLoaded();
+
+	/**
+	 * Called to notify that a resource has successfully been saved
+	 */
+	public void notifyResourceSaved();
+
+	/**
+	 * Called to notify that a resource has been added to contents TODO: integrate this in setContents() when this interface will extends
+	 * {@link AccessibleProxyObject}
+	 */
+	public void notifyContentsAdded(FlexoResource<?> resource);
 
 }

@@ -1,13 +1,17 @@
 package org.openflexo.foundation.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.StringEncoder;
@@ -20,6 +24,26 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	protected RelativePathFileConverter relativePathFileConverter;
 
 	private StringEncoder encoder;
+
+	public static VirtualModelResource makeVirtualModelResource(File virtualModelDirectory, File virtualModelXMLFile,
+			ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
+		try {
+			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
+			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
+			returned.setName(virtualModelDirectory.getName());
+			returned.setDirectory(virtualModelDirectory);
+			returned.setFile(virtualModelXMLFile);
+			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
+			viewPointResource.addToContents(returned);
+			viewPointResource.notifyContentsAdded(returned);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public StringEncoder getStringEncoder() {

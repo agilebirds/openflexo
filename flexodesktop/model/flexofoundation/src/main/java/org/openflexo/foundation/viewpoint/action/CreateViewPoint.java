@@ -30,7 +30,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -70,20 +69,10 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 		FlexoModelObject.addActionForClass(CreateViewPoint.actionType, RepositoryFolder.class);
 	}
 
-	public static enum OntologicalScopeChoices {
-		IMPORT_EXISTING_ONTOLOGY, CREATES_NEW_ONTOLOGY
-	}
-
-	public OntologicalScopeChoices ontologicalScopeChoice = OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY;
-
 	private String _newViewPointName;
 	private String _newViewPointURI;
 	private String _newViewPointDescription;
 	private ViewPoint newViewPoint;
-
-	public Vector<IFlexoOntology> importedOntologies = new Vector<IFlexoOntology>();
-
-	// private boolean createsOntology = false;
 
 	CreateViewPoint(RepositoryFolder focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -259,21 +248,6 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 			return new File(getFocusedObject().getFile(), baseName + ".viewpoint");
 		}
 		return null;
-	}
-
-	/*public void createOntology() {
-		createsOntology = true;
-		_ontologyFile = new File(getViewPointDir(), getBaseName() + ".owl");
-	}*/
-
-	public void addToImportedOntologies(IFlexoOntology ontology) {
-		System.out.println("import ontology " + ontology);
-		importedOntologies.add(ontology);
-	}
-
-	public void removeFromImportedOntologies(IFlexoOntology ontology) {
-		System.out.println("remove ontology " + ontology);
-		importedOntologies.remove(ontology);
 	}
 
 }

@@ -514,6 +514,21 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
+	public void notifyContentsAdded(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public void notifyResourceLoaded() {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public void notifyResourceSaved() {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
 	public SRD getResourceData(IProgress progress) throws ResourceLoadingCancelledException {
 		return getResourceData();
 	}

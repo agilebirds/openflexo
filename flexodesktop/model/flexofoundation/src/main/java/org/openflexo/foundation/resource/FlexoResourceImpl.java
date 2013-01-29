@@ -10,6 +10,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -92,6 +93,19 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		logger.info("notifyResourceSaved(), resource=" + this);
 
 		ResourceSaved notification = new ResourceSaved(this, resourceData);
+		setChanged();
+		notifyObservers(notification);
+		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
+	}
+
+	/**
+	 * Called to notify that a resource has been added to contents TODO: integrate this in setContents() when this interface will extends
+	 * {@link AccessibleProxyObject}
+	 */
+	public void notifyContentsAdded(FlexoResource<?> resource) {
+		logger.info("notifyResourceLoaded(), resource=" + this);
+
+		ContentsAdded notification = new ContentsAdded(this, resource);
 		setChanged();
 		notifyObservers(notification);
 		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
