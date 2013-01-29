@@ -36,7 +36,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.VirtualModelResource;
@@ -75,7 +74,6 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	private List<ModelSlot<?, ?>> modelSlots;
 	private BindingModel bindingModel;
 	private VirtualModelResource<VM> resource;
-	private String version;
 	private LocalizedDictionary localizedDictionary;
 
 	private boolean readOnly = false;
@@ -91,8 +89,8 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		if (builder != null) {
 			builder.setVirtualModel(this);
 			resource = (VirtualModelResource<VM>) builder.resource;
+			viewPoint = builder.getViewPoint();
 		}
-		viewPoint = builder.getViewPoint();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
 		editionPatterns = new Vector<EditionPattern>();
 	}
@@ -110,16 +108,37 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		return getViewPoint().getURI() + "." + getName();
 	}
 
-	public String getVersion() {
-		return version;
+	@Override
+	public String getName() {
+		if (getResource() != null) {
+			return getResource().getName();
+		}
+		return super.getName();
 	}
 
-	public void setVersion(String aVersion) {
-		if (requireChange(version, aVersion)) {
-			String old = this.version;
-			this.version = aVersion;
-			setChanged();
-			notifyObservers(new OntologyDataModification("version", old, version));
+	@Override
+	public void setName(String name) {
+		if (requireChange(getName(), name)) {
+			if (getResource() != null) {
+				getResource().setName(name);
+			} else {
+				super.setName(name);
+			}
+		}
+	}
+
+	public FlexoVersion getVersion() {
+		if (getResource() != null) {
+			return getResource().getVersion();
+		}
+		return null;
+	}
+
+	public void setVersion(FlexoVersion aVersion) {
+		if (requireChange(getVersion(), aVersion)) {
+			if (getResource() != null) {
+				getResource().setVersion(aVersion);
+			}
 		}
 	}
 

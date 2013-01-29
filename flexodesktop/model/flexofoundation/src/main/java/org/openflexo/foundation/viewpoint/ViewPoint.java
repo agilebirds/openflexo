@@ -38,7 +38,6 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -46,6 +45,7 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewPointResourceImpl;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -99,7 +99,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	private String viewPointURI;
-	private String version;
 
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
@@ -204,16 +203,37 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return "ViewPoint:" + getViewPointURI();
 	}
 
-	public String getVersion() {
-		return version;
+	@Override
+	public String getName() {
+		if (getResource() != null) {
+			return getResource().getName();
+		}
+		return super.getName();
 	}
 
-	public void setVersion(String aVersion) {
-		if (requireChange(version, aVersion)) {
-			String old = this.version;
-			this.version = aVersion;
-			setChanged();
-			notifyObservers(new OntologyDataModification("version", old, version));
+	@Override
+	public void setName(String name) {
+		if (requireChange(getName(), name)) {
+			if (getResource() != null) {
+				getResource().setName(name);
+			} else {
+				super.setName(name);
+			}
+		}
+	}
+
+	public FlexoVersion getVersion() {
+		if (getResource() != null) {
+			return getResource().getVersion();
+		}
+		return null;
+	}
+
+	public void setVersion(FlexoVersion aVersion) {
+		if (requireChange(getVersion(), aVersion)) {
+			if (getResource() != null) {
+				getResource().setVersion(aVersion);
+			}
 		}
 	}
 
@@ -228,19 +248,34 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	/**
+	 * Load eventually unloaded VirtualModels<br>
+	 * After this call return, we can assert that all {@link VirtualModel} are loaded.
+	 */
+	private void loadVirtualModelsWhenUnloaded() {
+		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+			if (r instanceof VirtualModelResource) {
+				((VirtualModelResource<?>) r).getVirtualModel();
+			}
+		}
+	}
+
+	/**
 	 * Return all {@link EditionPattern} defined in this {@link ViewPoint}
 	 * 
 	 * @return
 	 */
 	public List<VirtualModel<?>> getVirtualModels() {
+		loadVirtualModelsWhenUnloaded();
 		return virtualModels;
 	}
 
 	public void setVirtualModels(Vector<VirtualModel<?>> virtualModels) {
+		loadVirtualModelsWhenUnloaded();
 		this.virtualModels = virtualModels;
 	}
 
 	public void addToVirtualModels(VirtualModel<?> virtualModel) {
+		loadVirtualModelsWhenUnloaded();
 		virtualModel.setViewPoint(this);
 		virtualModels.add(virtualModel);
 		setChanged();
@@ -248,6 +283,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public void removeFromVirtualModels(VirtualModel<?> virtualModel) {
+		loadVirtualModelsWhenUnloaded();
 		virtualModel.setViewPoint(null);
 		virtualModels.remove(virtualModel);
 		setChanged();
@@ -260,6 +296,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * @return
 	 */
 	public VirtualModel getVirtualModelNamed(String virtualModelName) {
+		loadVirtualModelsWhenUnloaded();
 		for (VirtualModel vm : getVirtualModels()) {
 			if (vm.getName().equals(virtualModelName)) {
 				return vm;
@@ -268,18 +305,19 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return null;
 	}
 
-	// Return (creates if not existant) a default diagram specification (temporary hack to ensure compatibility with old versions)
+	// Return a default diagram specification (temporary hack to ensure compatibility with old versions)
 	@Deprecated
 	public DiagramSpecification getDefaultDiagramSpecification() {
+		loadVirtualModelsWhenUnloaded();
 		for (VirtualModel vm : getVirtualModels()) {
 			if (vm instanceof DiagramSpecification) {
 				return (DiagramSpecification) vm;
 			}
 		}
 		// OK, lets create a default one
-		DiagramSpecification ds = new DiagramSpecification(this);
-		addToVirtualModels(ds);
-		return ds;
+		// DiagramSpecification ds = new DiagramSpecification(this);
+		// addToVirtualModels(ds);
+		return null;
 	}
 
 	@Override

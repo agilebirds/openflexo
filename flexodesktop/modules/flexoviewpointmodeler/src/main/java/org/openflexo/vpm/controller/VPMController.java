@@ -43,6 +43,7 @@ import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -184,9 +185,9 @@ public class VPMController extends FlexoController {
 			} else if (object instanceof ViewPoint) {
 				ViewPoint viewPoint = (ViewPoint) object;
 				VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
-				/*if (viewPoint.getEditionPatterns().size() > 0) {
-					getSelectionManager().setSelectedObject(viewPoint.getEditionPatterns().firstElement());
-				}*/
+			} else if (object instanceof VirtualModel) {
+				VirtualModel<?> virtualModel = (VirtualModel<?>) object;
+				VIEW_POINT_PERSPECTIVE.focusOnVirtualModel(virtualModel);
 			} else if (object instanceof EditionPattern) {
 				EditionPattern pattern = (EditionPattern) object;
 				if (pattern.getEditionSchemes().size() > 0) {

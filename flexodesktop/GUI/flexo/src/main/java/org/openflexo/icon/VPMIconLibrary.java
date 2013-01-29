@@ -75,7 +75,13 @@ import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
+import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
@@ -133,6 +139,12 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
 	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
 	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
+
+	public static final ImageIconResource CHECKBOX_ICON = new ImageIconResource("Icons/Model/VPM/CheckBoxIcon.png");
+	public static final ImageIconResource LIST_ICON = new ImageIconResource("Icons/Model/VPM/ListIcon.png");
+	public static final ImageIconResource SPINNER_ICON = new ImageIconResource("Icons/Model/VPM/SpinnerIcon.png");
+	public static final ImageIconResource TEXT_AREA_ICON = new ImageIconResource("Icons/Model/VPM/TextAreaIcon.png");
+	public static final ImageIconResource TEXT_FIELD_ICON = new ImageIconResource("Icons/Model/VPM/TextFieldIcon.png");
 
 	/**
 	 * Return the technology-specific controller for supplied technology adapter
@@ -302,6 +314,18 @@ public class VPMIconLibrary extends IconLibrary {
 			}
 		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
+		} else if (object instanceof InspectorEntry) {
+			if (object instanceof CheckboxInspectorEntry) {
+				return CHECKBOX_ICON;
+			} else if (object instanceof FloatInspectorEntry) {
+				return SPINNER_ICON;
+			} else if (object instanceof IntegerInspectorEntry) {
+				return SPINNER_ICON;
+			} else if (object instanceof TextAreaInspectorEntry) {
+				return TEXT_AREA_ICON;
+			} else if (object instanceof TextFieldInspectorEntry) {
+				return TEXT_FIELD_ICON;
+			}
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;

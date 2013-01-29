@@ -36,6 +36,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
@@ -52,6 +53,7 @@ import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
 import org.openflexo.vpm.widget.FIBExampleDiagramBrowser;
 import org.openflexo.vpm.widget.FIBViewPointBrowser;
 import org.openflexo.vpm.widget.FIBViewPointLibraryBrowser;
+import org.openflexo.vpm.widget.FIBVirtualModelBrowser;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
@@ -65,6 +67,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	private FIBViewPointLibraryBrowser viewPointLibraryBrowser = null;
 	private FIBViewPointBrowser viewPointBrowser = null;
+	private FIBVirtualModelBrowser virtualModelBrowser = null;
 	private FIBExampleDiagramBrowser exampleDiagramBrowser = null;
 	private FIBDiagramPaletteBrowser diagramPaletteBrowser = null;
 
@@ -74,12 +77,13 @@ public class ViewPointPerspective extends FlexoPerspective {
 	 * @param name
 	 */
 	public ViewPointPerspective(VPMController controller) {
-		super("calc_perspective");
+		super("viewpoint_perspective");
 		_controller = controller;
 
 		viewPointLibraryBrowser = new FIBViewPointLibraryBrowser(controller.getViewPointLibrary(), controller);
 
 		viewPointBrowser = new FIBViewPointBrowser(null, controller);
+		virtualModelBrowser = new FIBVirtualModelBrowser(null, controller);
 		exampleDiagramBrowser = new FIBExampleDiagramBrowser(null, controller);
 		diagramPaletteBrowser = new FIBDiagramPaletteBrowser(null, controller);
 
@@ -96,13 +100,16 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	public void focusOnViewPoint(ViewPoint viewPoint) {
 		logger.info("focusOnViewPoint " + viewPoint);
-		// calcBrowser.deleteBrowserListener(_browserView);
-		// calcBrowser.setRepresentedObject(viewPoint);
-		// calcBrowser.update();
-		// calcBrowser.addBrowserListener(_browserView);
 
 		viewPointBrowser.setRootObject(viewPoint);
 		setBottomLeftView(viewPointBrowser);
+	}
+
+	public void focusOnVirtualModel(VirtualModel<?> virtualModel) {
+		logger.info("focusOnVirtualModel " + virtualModel);
+
+		virtualModelBrowser.setRootObject(virtualModel);
+		setBottomLeftView(virtualModelBrowser);
 	}
 
 	public void focusOnPalette(DiagramPalette palette) {
