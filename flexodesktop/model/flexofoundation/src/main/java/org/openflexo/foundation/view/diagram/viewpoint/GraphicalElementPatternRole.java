@@ -15,7 +15,6 @@ import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;

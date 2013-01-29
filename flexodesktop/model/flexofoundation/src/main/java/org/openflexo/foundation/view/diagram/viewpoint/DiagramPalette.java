@@ -41,7 +41,6 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;

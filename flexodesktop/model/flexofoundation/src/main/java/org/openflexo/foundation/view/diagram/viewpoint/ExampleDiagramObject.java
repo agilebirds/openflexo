@@ -27,7 +27,6 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorInserted;

@@ -20,7 +20,6 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 

@@ -604,11 +604,6 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getVirtualModel().getViewPoint();
-	}
-
-	@Override
 	public String toString() {
 		return "EditionPattern:" + getName();
 	}

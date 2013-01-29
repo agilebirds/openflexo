@@ -29,7 +29,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.foundation.view.diagram.rm.DiagramResourceImpl;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
 /**

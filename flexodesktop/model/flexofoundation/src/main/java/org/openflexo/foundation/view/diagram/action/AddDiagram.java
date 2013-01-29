@@ -33,7 +33,7 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.rm.DiagramResource;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;

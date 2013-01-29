@@ -37,7 +37,10 @@ public abstract class EditionPatternObject extends NamedViewPointObject {
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return getVirtualModel().getViewPoint();
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
+		return null;
 	}
 
 	public VirtualModel getVirtualModel() {

@@ -3,7 +3,9 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.VirtualModelResource;
 
 public class TestLoadViewPoints extends FlexoTestCase {
 
@@ -34,6 +36,14 @@ public class TestLoadViewPoints extends FlexoTestCase {
 
 		ViewPoint vp = vpRes.getViewPoint();
 		assertTrue(vpRes.isLoaded());
+
+		for (FlexoResource<?> r : vpRes.getContents()) {
+			assertTrue(r instanceof VirtualModelResource);
+			VirtualModelResource<?> vmRes = (VirtualModelResource<?>) r;
+			assertFalse(vmRes.isLoaded());
+			VirtualModel<?> vm = vmRes.getVirtualModel();
+			assertTrue(vmRes.isLoaded());
+		}
 
 	}
 

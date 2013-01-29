@@ -50,7 +50,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	@Override
 	public final DiagramPaletteBuilder instanciateNewBuilder() {
 		// TODO: use a dedicated builder for ExampleDiagram instead of ViewPointBuilder
-		return new DiagramPaletteBuilder(getContainer().getViewPoint().getDefaultDiagramSpecification(), this);
+		return new DiagramPaletteBuilder(getContainer().getDiagramSpecification(), this);
 	}
 
 	@Override
@@ -94,8 +94,8 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		DiagramPalette returned = super.loadResourceData(progress);
-		returned.init(getContainer().getViewPoint().getDefaultDiagramSpecification(), getFile());
-		getContainer().getViewPoint().getDefaultDiagramSpecification().addToPalettes(returned);
+		returned.init(getContainer().getDiagramSpecification(), getFile());
+		getContainer().getDiagramSpecification().addToPalettes(returned);
 		return returned;
 	}
 

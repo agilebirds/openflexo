@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 
 /**
  * Notify that a new palette has been added

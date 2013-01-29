@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
 
 /**
  * Notify that a new view has been added

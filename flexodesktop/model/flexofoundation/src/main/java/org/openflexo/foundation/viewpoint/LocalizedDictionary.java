@@ -39,7 +39,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	private static final Logger logger = Logger.getLogger(LocalizedDictionary.class.getPackage().getName());
 
-	private ViewPoint _viewPoint;
+	private ViewPointObject owner;
 	private Vector<LocalizedEntry> _entries;
 	private final Hashtable<Language, Hashtable<String, String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
@@ -48,18 +48,22 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		super(builder);
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
-		if (builder != null) {
+		/*if (builder != null) {
 			_viewPoint = builder.getViewPoint();
-		}
+		}*/
 	}
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return _viewPoint;
+		return getOwner().getViewPoint();
 	}
 
-	public void setViewPoint(ViewPoint viewPoint) {
-		_viewPoint = viewPoint;
+	public ViewPointObject getOwner() {
+		return owner;
+	}
+
+	public void setOwner(ViewPointObject owner) {
+		this.owner = owner;
 	}
 
 	public Vector<LocalizedEntry> getEntries() {

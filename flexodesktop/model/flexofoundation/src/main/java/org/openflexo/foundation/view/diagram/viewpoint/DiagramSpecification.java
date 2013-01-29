@@ -17,26 +17,34 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
 import org.openflexo.toolbox.ChainedCollection;
+import org.openflexo.toolbox.FlexoVersion;
 
 /**
  * A {@link DiagramSpecification} is the specification of a Diagram
@@ -178,14 +186,14 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	public void addToEditionPatterns(EditionPattern pattern) {
 		_allEditionPatternWithDropScheme = null;
 		_allEditionPatternWithLinkScheme = null;
-		addToEditionPatterns(pattern);
+		super.addToEditionPatterns(pattern);
 	}
 
 	@Override
 	public void removeFromEditionPatterns(EditionPattern pattern) {
 		_allEditionPatternWithDropScheme = null;
 		_allEditionPatternWithLinkScheme = null;
-		removeFromEditionPatterns(pattern);
+		super.removeFromEditionPatterns(pattern);
 	}
 
 	public Vector<LinkScheme> getAllConnectors() {
@@ -217,6 +225,67 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 					getExampleDiagrams());
 		}
 		return validableObjects;
+	}
+
+	@Override
+	public final void finalizeDeserialization(Object builder) {
+		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
+			// There were no model slots before 1.0, please add them
+			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
+		}
+		super.finalizeDeserialization(builder);
+	}
+
+	@Deprecated
+	private void convertTo_1_0(ViewPointLibrary viewPointLibrary) {
+		logger.info("Converting diagram specification from Openflexo 1.4.5 version");
+		// For all "old" viewpoints, we consider a OWL model slot
+		try {
+			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
+			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getFlexoServiceManager().getTechnologyAdapterService()
+					.getTechnologyAdapter(owlTechnologyAdapterClass);
+
+			String importedOntology = null;
+			for (File owlFile : getResource().getDirectory().listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return (name.endsWith(".owl"));
+				}
+			})) {
+				if (owlFile.exists()) {
+					importedOntology = ViewPoint.findOntologyImports(owlFile);
+					owlFile.delete();
+				}
+			}
+
+			FlexoMetaModelResource r = OWL.getMetaModelResource(importedOntology);
+			if (r == null) {
+				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
+			}
+			if (r != null) {
+				logger.info("************************ For ViewPoint " + getURI() + " declaring OWL model slot targetting meta-model "
+						+ r.getURI());
+			}
+
+			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
+			ms.setName("owl");
+			ms.setMetaModelResource(r);
+			addToModelSlots(ms);
+			DiagramTechnologyAdapter diagramTA = null;
+			if (viewPointLibrary.getFlexoServiceManager() != null
+					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
+				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
+						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
+			} else {
+				diagramTA = new DiagramTechnologyAdapter();
+			}
+			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
+			diagramMS.setName("diagram");
+			addToModelSlots(diagramMS);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

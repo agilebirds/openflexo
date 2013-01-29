@@ -36,7 +36,10 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -48,6 +51,7 @@ import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
 import org.openflexo.toolbox.ChainedCollection;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -71,6 +75,9 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	private Vector<EditionPattern> editionPatterns;
 	private List<ModelSlot<?, ?>> modelSlots;
 	private BindingModel bindingModel;
+	private VirtualModelResource<VM> resource;
+	private String version;
+	private LocalizedDictionary localizedDictionary;
 
 	private boolean readOnly = false;
 
@@ -81,6 +88,14 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	// Used during deserialization, do not use it
 	public VirtualModel(ViewPointBuilder builder) {
+		/*super(builder);
+		if (builder != null) {
+			builder.setViewPoint(this);
+			resource = builder.resource;
+		}
+		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		virtualModels = new ArrayList<VirtualModel<?>>();*/
+
 		super(builder);
 		viewPoint = builder.getViewPoint();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
@@ -88,8 +103,29 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	@Override
+	public void finalizeDeserialization(Object builder) {
+		for (EditionPattern ep : getEditionPatterns()) {
+			ep.finalizeEditionPatternDeserialization();
+		}
+		super.finalizeDeserialization(builder);
+	}
+
+	@Override
 	public String getURI() {
 		return getViewPoint().getURI() + "." + getName();
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String aVersion) {
+		if (requireChange(version, aVersion)) {
+			String old = this.version;
+			this.version = aVersion;
+			setChanged();
+			notifyObservers(new OntologyDataModification("version", old, version));
+		}
 	}
 
 	@Override
@@ -427,22 +463,54 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		readOnly = b;
 	}
 
+	public FlexoVersion getModelVersion() {
+		return getResource().getModelVersion();
+	}
+
+	public void setModelVersion(FlexoVersion aVersion) {
+	}
+
+	// Implementation of XMLStorageResourceData
+
 	@Override
-	public FlexoResource<VM> getResource() {
-		// TODO Auto-generated method stub
-		return null;
+	public VirtualModelResource<VM> getResource() {
+		return resource;
 	}
 
 	@Override
 	public void setResource(FlexoResource<VM> resource) {
-		// TODO Auto-generated method stub
+		this.resource = (VirtualModelResource<VM>) resource;
+	}
 
+	@Override
+	public void save() {
+		logger.info("Saving ViewPoint to " + getResource().getFile().getAbsolutePath() + "...");
+
+		try {
+			getResource().save(null);
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public LocalizedDictionary getLocalizedDictionary() {
+		if (localizedDictionary == null) {
+			localizedDictionary = new LocalizedDictionary(null);
+			localizedDictionary.setOwner(this);
+		}
+		return localizedDictionary;
+	}
+
+	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
+		localizedDictionary.setOwner(this);
+		this.localizedDictionary = localizedDictionary;
 	}
 
 }

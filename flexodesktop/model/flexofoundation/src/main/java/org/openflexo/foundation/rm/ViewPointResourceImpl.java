@@ -2,6 +2,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -10,13 +11,11 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResourceImpl;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResourceImpl;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -90,28 +89,28 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			if (StringUtils.isNotEmpty(vpi.version)) {
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
+			if (StringUtils.isEmpty(vpi.modelVersion)) {
+				// This is the old model, convert to new model
+				restructureViewPointFrom0_1(viewPointDirectory, xmlFile);
+			}
+
 			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 
-			// Now look for example diagrams
-			if (viewPointDirectory.exists() && viewPointDirectory.isDirectory()) {
-				for (File f : viewPointDirectory.listFiles()) {
-					if (f.getName().endsWith(".diagram")) {
-						ExampleDiagramResource exampleDiagramResource = ExampleDiagramResourceImpl.makeExampleDiagramResource(f,
-								viewPointLibrary);
-						returned.addToContents(exampleDiagramResource);
-					}
-				}
-			}
+			System.out.println("ViewPointResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
-			// Now look for palettes
+			// Now look for virtual models
 			if (viewPointDirectory.exists() && viewPointDirectory.isDirectory()) {
 				for (File f : viewPointDirectory.listFiles()) {
-					if (f.getName().endsWith(".palette")) {
-						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.makeDiagramPaletteResource(f,
-								viewPointLibrary);
-						returned.addToContents(diagramPaletteResource);
+					if (f.isDirectory()) {
+						File virtualModelFile = new File(f, f.getName() + ".xml");
+						if (virtualModelFile.exists()) {
+							// TODO: check other VirtualModel types
+							DiagramSpecificationResource diagramSpecificationResource = DiagramSpecificationResourceImpl
+									.retrieveDiagramSpecificationResource(f, virtualModelFile, viewPointLibrary);
+							returned.addToContents(diagramSpecificationResource);
+						}
 					}
 				}
 			}
@@ -180,35 +179,6 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	@Override
 	public Class<ViewPoint> getResourceDataClass() {
 		return ViewPoint.class;
-	}
-
-	/**
-	 * Manually converts resource file from version v1 to version v2. This methods only warns and does nothing, and must be overriden in
-	 * subclasses !
-	 * 
-	 * @param v1
-	 * @param v2
-	 * @return boolean indicating if conversion was sucessfull
-	 */
-	@Override
-	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
-		if (v1.equals(new FlexoVersion("0.1")) && v2.equals(new FlexoVersion("0.2"))) {
-			logger.info("Converting from 0.1 a 0.2");
-			if (getDirectory().exists() && getDirectory().isDirectory()) {
-				for (File f : getDirectory().listFiles()) {
-					if (f.getName().endsWith(".shema")) {
-						try {
-							FileUtils.rename(f,
-									new File(f.getParentFile(), f.getName().substring(0, f.getName().length() - 6) + ".diagram"));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -288,4 +258,57 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		return null;
 	}
 
+	private static void restructureViewPointFrom0_1(File viewPointDirectory, File xmlFile) {
+
+		System.out.println("converting " + viewPointDirectory.getAbsolutePath());
+
+		File diagramSpecificationDir = new File(viewPointDirectory, "DiagramSpecification");
+		diagramSpecificationDir.mkdir();
+
+		System.out.println("Creating directory " + diagramSpecificationDir.getAbsolutePath());
+
+		try {
+			Document viewPointDocument = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
+			Document diagramSpecificationDocument = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
+
+			for (File f : viewPointDirectory.listFiles()) {
+				if (!f.equals(xmlFile) && !f.equals(diagramSpecificationDir) && !f.getName().endsWith("~")) {
+					if (f.getName().endsWith(".shema")) {
+						try {
+							File renamedExampleDiagramFile = new File(f.getParentFile(), f.getName().substring(0, f.getName().length() - 6)
+									+ ".diagram");
+							FileUtils.rename(f, renamedExampleDiagramFile);
+							f = renamedExampleDiagramFile;
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					File destFile = new File(diagramSpecificationDir, f.getName());
+					FileUtils.rename(f, destFile);
+					System.out.println("Moving file " + f.getAbsolutePath() + " to " + destFile.getAbsolutePath());
+				}
+				if (f.getName().endsWith("~")) {
+					f.delete();
+				}
+			}
+
+			Element diagramSpecification = FlexoXMLFileResourceImpl.getElement(diagramSpecificationDocument, "ViewPoint");
+			diagramSpecification.setName("DiagramSpecification");
+			FileOutputStream fos = new FileOutputStream(new File(diagramSpecificationDir, "DiagramSpecification.xml"));
+			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			try {
+				outputter.output(diagramSpecificationDocument, fos);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			fos.flush();
+			fos.close();
+		} catch (JDOMException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 }

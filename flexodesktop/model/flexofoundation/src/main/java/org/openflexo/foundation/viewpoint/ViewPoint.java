@@ -50,10 +50,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.foundation.view.diagram.DiagramModelSlot;
-import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
@@ -106,7 +104,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
 	private List<ModelSlot<?, ?>> modelSlots;
-	private List<VirtualModel> virtualModels;
+	private List<VirtualModel<?>> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
 
@@ -192,6 +190,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			resource = builder.resource;
 		}
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		virtualModels = new ArrayList<VirtualModel<?>>();
 	}
 
 	// Used during deserialization, do not use it
@@ -273,22 +272,22 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * 
 	 * @return
 	 */
-	public List<VirtualModel> getVirtualModels() {
+	public List<VirtualModel<?>> getVirtualModels() {
 		return virtualModels;
 	}
 
-	public void setVirtualModels(Vector<VirtualModel> virtualModels) {
+	public void setVirtualModels(Vector<VirtualModel<?>> virtualModels) {
 		this.virtualModels = virtualModels;
 	}
 
-	public void addToVirtualModels(VirtualModel virtualModel) {
+	public void addToVirtualModels(VirtualModel<?> virtualModel) {
 		virtualModel.setViewPoint(this);
 		virtualModels.add(virtualModel);
 		setChanged();
 		notifyObservers(new VirtualModelCreated(virtualModel));
 	}
 
-	public void removeFromVirtualModels(VirtualModel virtualModel) {
+	public void removeFromVirtualModels(VirtualModel<?> virtualModel) {
 		virtualModel.setViewPoint(null);
 		virtualModels.remove(virtualModel);
 		setChanged();
@@ -327,17 +326,18 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
 			localizedDictionary = new LocalizedDictionary(null);
-			localizedDictionary.setViewPoint(this);
+			localizedDictionary.setOwner(this);
 		}
 		return localizedDictionary;
 	}
 
 	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
-		localizedDictionary.setViewPoint(this);
+		localizedDictionary.setOwner(this);
 		this.localizedDictionary = localizedDictionary;
 	}
 
-	private static String findOntologyImports(File aFile) {
+	@Deprecated
+	public static String findOntologyImports(File aFile) {
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
@@ -400,17 +400,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			ms.setName("owl");
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);
-			DiagramTechnologyAdapter diagramTA = null;
-			if (viewPointLibrary.getFlexoServiceManager() != null
-					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
-				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
-						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			} else {
-				diagramTA = new DiagramTechnologyAdapter();
-			}
-			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
-			diagramMS.setName("diagram");
-			addToModelSlots(diagramMS);
+
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -422,11 +412,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
 			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
-		}
-		for (VirtualModel<?> vm : getVirtualModels()) {
-			for (EditionPattern ep : vm.getEditionPatterns()) {
-				ep.finalizeEditionPatternDeserialization();
-			}
 		}
 		super.finalizeDeserialization(builder);
 	}

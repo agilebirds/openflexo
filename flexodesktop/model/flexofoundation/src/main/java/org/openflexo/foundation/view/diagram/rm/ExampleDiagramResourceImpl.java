@@ -55,7 +55,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 
 	@Override
 	public final ExampleDiagramBuilder instanciateNewBuilder() {
-		return new ExampleDiagramBuilder(getContainer().getViewPoint().getDefaultDiagramSpecification(), this);
+		return new ExampleDiagramBuilder(getContainer().getDiagramSpecification(), this);
 	}
 
 	@Override
@@ -94,8 +94,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		ExampleDiagram returned = super.loadResourceData(progress);
-		returned.init(getContainer().getViewPoint().getDefaultDiagramSpecification(), getFile());
-		getContainer().getViewPoint().getDefaultDiagramSpecification().addToExampleDiagrams(returned);
+		returned.init(getContainer().getDiagramSpecification(), getFile());
+		getContainer().getDiagramSpecification().addToExampleDiagrams(returned);
 		return returned;
 	}
 

@@ -8,7 +8,7 @@ import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 
 /**
  * Default implementation for {@link DiagramResource}
