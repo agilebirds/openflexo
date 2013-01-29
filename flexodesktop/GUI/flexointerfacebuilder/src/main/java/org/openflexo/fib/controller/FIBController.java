@@ -20,7 +20,10 @@
 package org.openflexo.fib.controller;
 
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -40,6 +43,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
@@ -328,28 +332,82 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		return getViewFactory().makeContainer(fibContainer);
 	}
 
+	/**
+	 * Implementation of a MouseAdapter which ignore SingleClick events when DoubleClick was performed<br>
+	 * Also perform mouse binding execution
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	protected class FIBMouseAdapter extends MouseAdapter {
+
+		private boolean wasDoubleClick = false;
+		private Timer timer;
+		private FIBWidgetView widgetView;
+		private FIBWidget fibWidget;
+
+		public FIBMouseAdapter(FIBWidgetView widgetView, FIBWidget fibWidget) {
+			this.widgetView = widgetView;
+			this.fibWidget = fibWidget;
+		}
+
+		protected void fireSingleClick(MouseEvent e) {
+			mouseEvent = e;
+			fireMouseClicked(widgetView.getDynamicModel(), 1);
+			if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
+				// Detected right-click associated with action
+				widgetView.applyRightClickAction(e);
+			} else if (fibWidget.hasClickAction()) {
+				// Detected click associated with action
+				widgetView.applySingleClickAction(e);
+			}
+		}
+
+		protected void fireDoubleClick(MouseEvent e) {
+			mouseEvent = e;
+			fireMouseClicked(widgetView.getDynamicModel(), 2);
+			if (fibWidget.hasDoubleClickAction()) {
+				// Detected double-click associated with action
+				widgetView.applyDoubleClickAction(e);
+			}
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			mouseEvent = e;
+			if (e.getClickCount() == 2) {
+				wasDoubleClick = true;
+				fireDoubleClick(mouseEvent);
+			} else {
+				Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
+				timer = new Timer(timerinterval.intValue(), new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent evt) {
+						if (wasDoubleClick) {
+							wasDoubleClick = false; // reset flag
+						} else {
+							fireSingleClick(mouseEvent);
+						}
+					}
+				});
+				timer.setRepeats(false);
+				timer.start();
+			}
+		}
+	}
+
+	/**
+	 * Build FIBWidgetView given supplied {@link FIBWidget}
+	 * 
+	 * Also add MouseListenener and KeyListener
+	 * 
+	 * @param fibWidget
+	 * @return
+	 */
 	protected final FIBWidgetView buildWidget(final FIBWidget fibWidget) {
 		final FIBWidgetView returned = makeWidget(fibWidget);
-		returned.getDynamicJComponent().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				mouseEvent = e;
-				fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
-				if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
-					// Detected right-click associated with action
-					returned.applyRightClickAction(e);
-					// fibWidget.getRightClickAction().execute(FIBController.this);
-				} else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
-					// Detected click associated with action
-					returned.applySingleClickAction(e);
-					// fibWidget.getClickAction().execute(FIBController.this);
-				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
-					// Detected double-click associated with action
-					returned.applyDoubleClickAction(e);
-					// fibWidget.getDoubleClickAction().execute(FIBController.this);
-				}
-			}
-		});
+		returned.getDynamicJComponent().addMouseListener(new FIBMouseAdapter(returned, fibWidget));
+
 		returned.getDynamicJComponent().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
