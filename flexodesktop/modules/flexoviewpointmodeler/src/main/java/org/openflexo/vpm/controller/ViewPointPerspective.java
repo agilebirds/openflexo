@@ -22,7 +22,6 @@ package org.openflexo.vpm.controller;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -43,11 +42,9 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
-import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
-import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
-import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.ViewPointView;
 import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
 import org.openflexo.vpm.widget.FIBExampleDiagramBrowser;
@@ -72,9 +69,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	private FIBDiagramPaletteBrowser diagramPaletteBrowser = null;
 
 	/**
-	 * @param controller
-	 *            TODO
-	 * @param name
+	 * Default constructor taking controller as argument
 	 */
 	public ViewPointPerspective(VPMController controller) {
 		super("viewpoint_perspective");
@@ -182,7 +177,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public JComponent getTopRightView() {
 		if (getCurrentModuleView() instanceof DiagramPaletteModuleView) {
 			return ((DiagramPaletteModuleView) getCurrentModuleView()).getController().getPaletteView();
@@ -190,7 +185,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return ((ExampleDiagramModuleView) getCurrentModuleView()).getController().getPaletteView();
 		}
 		return EMPTY_RIGHT_VIEW;
-	}
+	}*/
 
 	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof ViewPointLibrary) {
@@ -199,14 +194,14 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object instanceof ViewPoint) {
 			return ((ViewPoint) object).getName();
 		}
+		if (object instanceof VirtualModel) {
+			return ((VirtualModel<?>) object).getName();
+		}
 		if (object instanceof DiagramPalette) {
 			return ((DiagramPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";
 		}
 		if (object instanceof ExampleDiagram) {
 			return ((ExampleDiagram) object).getName() + " (" + FlexoLocalization.localizedForKey("example_diagram") + ")";
-		}
-		if (object instanceof ViewPoint) {
-			return ((ViewPoint) object).getName();
 		}
 		if (object instanceof EditionPattern) {
 			return ((EditionPattern) object).getName();

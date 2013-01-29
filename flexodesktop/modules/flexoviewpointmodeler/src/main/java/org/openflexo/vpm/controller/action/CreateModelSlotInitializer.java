@@ -68,7 +68,7 @@ public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlo
 		return new FlexoActionFinalizer<CreateModelSlot>() {
 			@Override
 			public boolean run(EventObject e, CreateModelSlot action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewModelSlot(), getController().VIEW_POINT_PERSPECTIVE);
+				// getController().setCurrentEditedObjectAsModuleView(action.getNewModelSlot(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}
 		};
