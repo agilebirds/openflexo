@@ -99,7 +99,10 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	@Override
 	public String getURI() {
-		return getVirtualModel().getURI() + "." + getName();
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getURI() + "." + getName();
+		}
+		return null;
 	}
 
 	/**
@@ -139,12 +142,20 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return virtualModel;
 	}
 
+	public void setVirtualModel(VirtualModel<?> virtualModel) {
+		this.virtualModel = virtualModel;
+	}
+
 	@Override
 	public ViewPoint getViewPoint() {
 		if (getVirtualModel() != null) {
 			return getVirtualModel().getViewPoint();
 		}
 		return viewPoint;
+	}
+
+	public void setViewPoint(ViewPoint viewPoint) {
+		this.viewPoint = viewPoint;
 	}
 
 	public final FlexoResource<M> createEmptyModel(View view, FlexoResource<MM> metaModelResource) {

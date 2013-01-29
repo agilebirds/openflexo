@@ -349,6 +349,22 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				}
 			}
 
+			if (importedOntology == null) {
+				File dsDir = new File(getResource().getDirectory(), "DiagramSpecification");
+				if (dsDir.exists()) {
+					for (File owlFile : dsDir.listFiles(new FilenameFilter() {
+						@Override
+						public boolean accept(File dir, String name) {
+							return (name.endsWith(".owl"));
+						}
+					})) {
+						if (owlFile.exists()) {
+							importedOntology = findOntologyImports(owlFile);
+						}
+					}
+				}
+			}
+
 			FlexoMetaModelResource r = OWL.getMetaModelResource(importedOntology);
 			if (r == null) {
 				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
@@ -371,10 +387,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof VirtualModel.VirtualModelBuilder
-				&& ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
+		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
-			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
+			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
 		}
 		super.finalizeDeserialization(builder);
 	}
@@ -426,12 +441,14 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
+		modelSlot.setViewPoint(this);
 		setChanged();
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
 	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.remove(modelSlot);
+		modelSlot.setViewPoint(null);
 		setChanged();
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}

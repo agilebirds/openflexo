@@ -98,7 +98,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 
-			System.out.println("ViewPointResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
+			logger.fine("ViewPointResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
 			// Now look for virtual models
 			if (viewPointDirectory.exists() && viewPointDirectory.isDirectory()) {
@@ -260,12 +260,12 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 
 	private static void restructureViewPointFrom0_1(File viewPointDirectory, File xmlFile) {
 
-		System.out.println("converting " + viewPointDirectory.getAbsolutePath());
+		logger.info("Converting " + viewPointDirectory.getAbsolutePath());
 
 		File diagramSpecificationDir = new File(viewPointDirectory, "DiagramSpecification");
 		diagramSpecificationDir.mkdir();
 
-		System.out.println("Creating directory " + diagramSpecificationDir.getAbsolutePath());
+		logger.fine("Creating directory " + diagramSpecificationDir.getAbsolutePath());
 
 		try {
 			Document viewPointDocument = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
@@ -285,7 +285,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 					}
 					File destFile = new File(diagramSpecificationDir, f.getName());
 					FileUtils.rename(f, destFile);
-					System.out.println("Moving file " + f.getAbsolutePath() + " to " + destFile.getAbsolutePath());
+					logger.fine("Moving file " + f.getAbsolutePath() + " to " + destFile.getAbsolutePath());
 				}
 				if (f.getName().endsWith("~")) {
 					f.delete();

@@ -229,12 +229,14 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.add(modelSlot);
+		modelSlot.setVirtualModel(this);
 		setChanged();
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
 	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
 		modelSlots.remove(modelSlot);
+		modelSlot.setVirtualModel(null);
 		setChanged();
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}

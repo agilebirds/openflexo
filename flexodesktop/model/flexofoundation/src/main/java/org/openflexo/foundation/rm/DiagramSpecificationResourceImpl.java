@@ -68,7 +68,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
 			returned.setViewPointLibrary(viewPointLibrary);
 
-			System.out.println("DiagramSpecificationResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
+			logger.fine("DiagramSpecificationResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
 			// Now look for example diagrams
 			if (diagramSpecificationDirectory.exists() && diagramSpecificationDirectory.isDirectory()) {
@@ -77,7 +77,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 						ExampleDiagramResource exampleDiagramResource = ExampleDiagramResourceImpl.makeExampleDiagramResource(f,
 								viewPointLibrary);
 						returned.addToContents(exampleDiagramResource);
-						System.out.println("ExampleDiagramResource " + exampleDiagramResource.getFile().getAbsolutePath() + " version "
+						logger.fine("ExampleDiagramResource " + exampleDiagramResource.getFile().getAbsolutePath() + " version "
 								+ exampleDiagramResource.getModelVersion());
 					}
 				}
@@ -90,7 +90,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.makeDiagramPaletteResource(f,
 								viewPointLibrary);
 						returned.addToContents(diagramPaletteResource);
-						System.out.println("DiagramPaletteResource " + diagramPaletteResource.getFile().getAbsolutePath() + " version "
+						logger.fine("DiagramPaletteResource " + diagramPaletteResource.getFile().getAbsolutePath() + " version "
 								+ diagramPaletteResource.getModelVersion());
 					}
 				}
