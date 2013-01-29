@@ -6,6 +6,8 @@ public interface ResourceData<RD extends ResourceData<RD>> {
 
 	public void setResource(FlexoResource<RD> resource);
 
+	public boolean isModified();
+
 	public void setIsModified();
 
 	public void clearIsModified();

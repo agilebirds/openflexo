@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.toolbox.IProgress;
 
@@ -26,6 +27,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 
 	static final Logger logger = Logger.getLogger(FlexoResourceImpl.class.getPackage().getName());
 
+	private FlexoServiceManager serviceManager = null;
 	protected RD resourceData = null;
 
 	/**
@@ -72,20 +74,27 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	 * Called to notify that a resource has successfully been loaded
 	 */
 	public void notifyResourceLoaded() {
-		logger.info("***************** notify resource loaded !!!!!!!!!!!!!!!!!");
+		logger.info("notifyResourceLoaded(), resource=" + this);
+
+		ResourceLoaded notification = new ResourceLoaded(this, resourceData);
 		setChanged();
-		notifyObservers(new ResourceLoaded(this, resourceData));
+		notifyObservers(notification);
 		// Also notify that the contents of the resource may also have changed
 		setChanged();
 		notifyObservers(new DataModification("contents", null, getContents()));
+		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
 	}
 
 	/**
 	 * Called to notify that a resource has successfully been saved
 	 */
 	public void notifyResourceSaved() {
+		logger.info("notifyResourceSaved(), resource=" + this);
+
+		ResourceSaved notification = new ResourceSaved(this, resourceData);
 		setChanged();
-		notifyObservers(new ResourceSaved(this, resourceData));
+		notifyObservers(notification);
+		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
 	}
 
 	public void notifyResourceStatusChanged() {
@@ -112,4 +121,14 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		return returned;
 	}
 
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
+	}
+
+	@Override
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+		getServiceManager().getResourceManager().registerResource(this);
+	}
 }

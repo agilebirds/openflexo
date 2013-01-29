@@ -25,6 +25,7 @@ import java.util.List;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceManager;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -119,6 +120,10 @@ public abstract class FlexoServiceManager extends FlexoObject {
 		return getService(XMLSerializationService.class);
 	}
 
+	public ResourceManager getResourceManager() {
+		return getService(ResourceManager.class);
+	}
+
 	public class ServiceRegistered implements ServiceNotification {
 	}
 
@@ -135,5 +140,7 @@ public abstract class FlexoServiceManager extends FlexoObject {
 	protected abstract ViewPointLibrary createViewPointLibraryService();
 
 	protected abstract InformationSpace createInformationSpace();
+
+	protected abstract ResourceManager createResourceManager();
 
 }

@@ -20,6 +20,7 @@
 package org.openflexo.foundation.resource;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoService.ServiceNotification;
 
 /**
  * This {@link DataModification} is thrown when a {@link FlexoResource} has just been saved
@@ -27,7 +28,7 @@ import org.openflexo.foundation.DataModification;
  * @author sylvain
  * 
  */
-public class ResourceSaved extends DataModification {
+public class ResourceSaved extends DataModification implements ServiceNotification {
 
 	/**
 	 * @param resource

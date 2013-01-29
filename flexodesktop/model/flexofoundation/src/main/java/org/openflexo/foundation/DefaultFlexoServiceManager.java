@@ -23,6 +23,7 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceManager;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
@@ -43,8 +44,10 @@ import org.openflexo.foundation.xml.XMLSerializationService;
 public abstract class DefaultFlexoServiceManager extends FlexoServiceManager {
 
 	public DefaultFlexoServiceManager() {
-		XMLSerializationService xmlSerializationService = XMLSerializationService.createInstance();
+		XMLSerializationService xmlSerializationService = createXMLSerializationService();
 		registerService(xmlSerializationService);
+		ResourceManager resourceManager = createResourceManager();
+		registerService(resourceManager);
 		FlexoProjectReferenceLoader projectReferenceLoader = createProjectReferenceLoader();
 		if (projectReferenceLoader != null) {
 			registerService(projectReferenceLoader);
@@ -62,6 +65,11 @@ public abstract class DefaultFlexoServiceManager extends FlexoServiceManager {
 	@Override
 	protected XMLSerializationService createXMLSerializationService() {
 		return XMLSerializationService.createInstance();
+	}
+
+	@Override
+	protected ResourceManager createResourceManager() {
+		return ResourceManager.createInstance();
 	}
 
 	@Override
