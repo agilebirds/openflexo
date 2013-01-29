@@ -321,6 +321,11 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		_tree.setAutoscrolls(true);
 		ToolTipManager.sharedInstance().registerComponent(_tree);
 
+		// If a double-click action is set, desactivate tree expanding/collabsing with double-click
+		if (getBrowser().getDoubleClickAction().isSet()) {
+			_tree.setToggleClickCount(-1);
+		}
+
 		if (_fibBrowser.getRowHeight() != null) {
 			_tree.setRowHeight(_fibBrowser.getRowHeight());
 		}
