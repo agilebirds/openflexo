@@ -518,7 +518,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
-		logger.info("ModuleLoader service received notification " + notification + " from " + caller);
+		logger.fine("ModuleLoader service received notification " + notification + " from " + caller);
 	}
 
 	@Override

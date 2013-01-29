@@ -513,7 +513,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
-		logger.info("ProjectLoader service received notification " + notification + " from " + caller);
+		logger.fine("ProjectLoader service received notification " + notification + " from " + caller);
 	}
 
 	@Override

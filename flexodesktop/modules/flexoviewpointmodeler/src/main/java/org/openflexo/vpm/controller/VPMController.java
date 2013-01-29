@@ -25,14 +25,8 @@ package org.openflexo.vpm.controller;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.Icon;
-
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -44,17 +38,14 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
-import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.action.VPMControllerActionInitializer;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.VPMMainPane;
@@ -91,11 +82,6 @@ public class VPMController extends FlexoController {
 
 	@Override
 	protected void initializePerspectives() {
-		// resourceCenter = getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter();
-		// viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
-		// baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
-
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new InformationSpacePerspective(this));
 	}
@@ -234,137 +220,6 @@ public class VPMController extends FlexoController {
 			return ((ViewPointObject) getCurrentDisplayedObjectAsModuleView()).getViewPoint();
 		}
 		return null;
-	}
-
-	// ================================================
-	// ============ Resources management ==============
-	// ================================================
-
-	private List<ResourceSavingInfo> resourceSavingInfo;
-
-	public void manageResource(FlexoObject o) {
-		boolean alreadyRegistered = false;
-		for (ResourceSavingInfo i : resourceSavingInfo) {
-			if (i.resource == o) {
-				alreadyRegistered = true;
-			}
-		}
-		if (!alreadyRegistered) {
-			resourceSavingInfo.add(new ResourceSavingInfo(o));
-		}
-	}
-
-	public void unregisterResource(FlexoObject o) {
-		logger.info("Unregister " + o);
-		List<ResourceSavingInfo> deleteThis = new ArrayList<VPMController.ResourceSavingInfo>();
-		for (ResourceSavingInfo i : resourceSavingInfo) {
-			if (i.resource == o) {
-				deleteThis.add(i);
-			}
-		}
-		for (ResourceSavingInfo i : deleteThis) {
-			i.delete();
-			resourceSavingInfo.remove(i);
-		}
-
-	}
-
-	public List<ResourceSavingInfo> getResourceSavingInfo() {
-		return resourceSavingInfo;
-	}
-
-	public void saveModified() {
-		System.out.println("registered resources: " + getApplicationContext().getResourceManager().getRegisteredResources().size() + " : "
-				+ getApplicationContext().getResourceManager().getRegisteredResources());
-		System.out.println("loaded resources: " + getApplicationContext().getResourceManager().getLoadedResources().size() + " : "
-				+ getApplicationContext().getResourceManager().getLoadedResources());
-		System.out.println("unsaved resources: " + getApplicationContext().getResourceManager().getUnsavedResources().size() + " : "
-				+ getApplicationContext().getResourceManager().getUnsavedResources());
-		for (ResourceSavingInfo i : resourceSavingInfo) {
-			i.saveModified();
-		}
-	}
-
-	public boolean reviewModifiedResources() {
-		for (ResourceSavingInfo i : resourceSavingInfo) {
-			i.reviewModifiedResource();
-		}
-		FIBDialog<VPMController> dialog = FIBDialog.instanciateAndShowDialog(VPMCst.SAVE_VPM_DIALOG_FIB, this, FlexoFrame.getActiveFrame(),
-				true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getStatus() == Status.VALIDATED) {
-			saveModified();
-			return true;
-		}
-		return false;
-	}
-
-	public static class ResourceSavingInfo {
-		protected FlexoObject resource;
-		protected boolean saveThisResource = true;
-
-		public ResourceSavingInfo(FlexoObject r) {
-			resource = r;
-		}
-
-		public void delete() {
-			resource = null;
-		}
-
-		public Icon getIcon() {
-			/*if (resource instanceof OWLMetaModel) {
-				return OntologyIconLibrary.ONTOLOGY_ICON;
-			} else*/if (resource instanceof ViewPoint) {
-				return VPMIconLibrary.VIEWPOINT_ICON;
-			} else if (resource instanceof DiagramPalette) {
-				return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
-			} else if (resource instanceof ExampleDiagram) {
-				return VPMIconLibrary.EXAMPLE_DIAGRAM_ICON;
-			}
-			return VPMIconLibrary.UNKNOWN_ICON;
-		}
-
-		public String getName() {
-			return resource.toString() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
-		}
-
-		public String getType() {
-			return resource.getLocalizedClassName();
-		}
-
-		public boolean isModified() {
-			return resource.isModified();
-		}
-
-		public boolean saveThisResource() {
-			return saveThisResource;
-		}
-
-		public void setSaveThisResource(boolean saveThisResource) {
-			this.saveThisResource = saveThisResource;
-		}
-
-		public void reviewModifiedResource() {
-			saveThisResource = resource.isModified();
-		}
-
-		public void saveModified() {
-			if (saveThisResource) {
-				// try {
-				/*if (resource instanceof OWLMetaModel) {
-					((OWLMetaModel) resource).save();
-				} else*/if (resource instanceof ViewPoint) {
-					((ViewPoint) resource).save();
-				} else if (resource instanceof DiagramPalette) {
-					((DiagramPalette) resource).save();
-				} else if (resource instanceof ExampleDiagram) {
-					((ExampleDiagram) resource).save();
-				}
-				/*} catch (SaveResourceException e) {
-					e.printStackTrace();
-				}*/
-			}
-		}
-
 	}
 
 	@Override

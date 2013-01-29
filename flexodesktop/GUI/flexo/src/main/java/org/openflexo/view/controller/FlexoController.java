@@ -1956,6 +1956,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return null;
 	}
 
+	// ================================================
+	// ============ Icons management ==============
+	// ================================================
+
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
@@ -2070,5 +2074,40 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
+	}
+
+	// ================================================
+	// ============ Resources management ==============
+	// ================================================
+
+	private ResourceSavingInfo resourceSavingInfo = null;
+
+	public ResourceSavingInfo getResourceSavingInfo() {
+		if (resourceSavingInfo == null) {
+			resourceSavingInfo = new ResourceSavingInfo(getApplicationContext().getResourceManager());
+		}
+		return resourceSavingInfo;
+	}
+
+	public void saveModifiedResources() {
+		System.out.println("registered resources: " + getApplicationContext().getResourceManager().getRegisteredResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getRegisteredResources());
+		System.out.println("loaded resources: " + getApplicationContext().getResourceManager().getLoadedResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getLoadedResources());
+		System.out.println("unsaved resources: " + getApplicationContext().getResourceManager().getUnsavedResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getUnsavedResources());
+		System.out.println("TODO: implement this");
+	}
+
+	public boolean reviewModifiedResources() {
+		ResourceSavingInfo savingInfo = getResourceSavingInfo();
+		savingInfo.update();
+		FIBDialog<ResourceSavingInfo> dialog = FIBDialog.instanciateAndShowDialog(FlexoCst.REVIEW_UNSAVED_DIALOG_FIB, savingInfo,
+				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+		if (dialog.getStatus() == Status.VALIDATED) {
+			savingInfo.saveSelectedResources(getEditor().getFlexoProgressFactory());
+			return true;
+		}
+		return false;
 	}
 }

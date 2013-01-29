@@ -35,7 +35,7 @@ public abstract class FlexoServiceImpl implements FlexoService {
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
-		logger.info(getClass().getSimpleName() + " service received notification " + notification + " from " + caller);
+		logger.fine(getClass().getSimpleName() + " service received notification " + notification + " from " + caller);
 	}
 
 	@Override

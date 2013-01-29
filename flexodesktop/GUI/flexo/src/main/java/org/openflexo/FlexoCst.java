@@ -37,6 +37,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -152,5 +153,8 @@ public class FlexoCst extends ColorCst {
 	public static Color otherLineColor = new Color(232, 237, 215);
 
 	public static final int LOADING_PROGRESS_STEPS = 26;
+
+	// Saving operations
+	public static File REVIEW_UNSAVED_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedDialog.fib");
 
 }

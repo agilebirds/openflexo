@@ -45,7 +45,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 		if (retrievedResource instanceof FlexoFileResource) {
 			selectedFile = ((FlexoFileResource<?>) retrievedResource).getFile();
 			retrievedFromResourceCenter = true;
-	}
+		}
 		ProjectChooserComponent projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
 		};
 		projectChooser.setOpenMode();
@@ -65,24 +65,24 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 			try {
 				editor = applicationContext.getProjectLoader().loadProject(selectedFile, true);
 			} catch (ProjectLoadingCancelledException e) {
-			return null;
+				return null;
 			} catch (ProjectInitializerException e) {
 				e.printStackTrace();
 				if (!retrievedFromResourceCenter) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_project_at") + " "
 							+ selectedFile.getAbsolutePath());
 					selectedFile = null;
-		}
 				}
-									FlexoProject project = editor.getProject();
+			}
+			FlexoProject project = editor.getProject();
 			if (project.getProjectURI().equals(ref.getURI())) {
 				// Project URI do match
 				boolean versionEqual = project.getVersion() == null && ref.getVersion() == null || project.getVersion() != null
 						&& project.getVersion().equals(ref.getVersion());
 
-										if (versionEqual) {
+				if (versionEqual) {
 					return project;
-										} else {
+				} else {
 					boolean ok = FlexoController.confirm(FlexoLocalization.localizedForKey("project_version_do_not_match") + ". "
 							+ project.getVersion() + " " + FlexoLocalization.localizedForKey("was_found")
 							+ FlexoLocalization.localizedForKey("but") + " " + ref.getVersion() + " "
@@ -91,26 +91,26 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 					if (ok) {
 						return project;
 					} else if (openedProject) {
-												applicationContext.getProjectLoader().closeProject(project);
-											}
-										}
-									} else {
+						applicationContext.getProjectLoader().closeProject(project);
+					}
+				}
+			} else {
 				if (retrievedFromResourceCenter) {
 					selectedFile = null;
 					continue;
 				}
 				FlexoController.notify(FlexoLocalization.localizedForKey("project_uri_do_not_match") + ".\n"
-												+ FlexoLocalization.localizedForKey("uri") + " " + project.getProjectURI() + " "
+						+ FlexoLocalization.localizedForKey("uri") + " " + project.getProjectURI() + " "
 						+ FlexoLocalization.localizedForKey("was_found") + "\n" + FlexoLocalization.localizedForKey("but") + " " + ref
 						+ " " + FlexoLocalization.localizedForKey("was_expected"));
-									}
+			}
 			selectedFile = null;
-								}
+		}
 	}
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
-		logger.info("FlexoProjectReferenceLoader service received notification " + notification + " from " + caller);
+		logger.fine("FlexoProjectReferenceLoader service received notification " + notification + " from " + caller);
 	}
 
 	@Override

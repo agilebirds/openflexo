@@ -92,10 +92,14 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	@Override
 	public boolean close() {
-		if (getCEDController().reviewModifiedResources()) {
+		if (getApplicationContext().getResourceManager().getUnsavedResources().size() == 0) {
 			return super.close();
 		} else {
-			return false;
+			if (getCEDController().reviewModifiedResources()) {
+				return super.close();
+			} else {
+				return false;
+			}
 		}
 	}
 

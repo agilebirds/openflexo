@@ -111,7 +111,7 @@ public abstract class DefaultTechnologyAdapterControllerService extends FlexoSer
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
-		logger.info("TechnologyAdapterController service received notification " + notification + " from " + caller);
+		logger.fine("TechnologyAdapterController service received notification " + notification + " from " + caller);
 		if (notification instanceof ModuleLoaded) {
 			// When a module is loaded, register all loaded technology adapter controllers with new new loaded module action initializer
 			// The newly loaded module will be able to provide all tooling provided by the technology adapter
