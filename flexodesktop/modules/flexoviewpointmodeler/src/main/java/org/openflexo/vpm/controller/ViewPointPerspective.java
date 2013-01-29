@@ -153,7 +153,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
-		return _controller.getCalcLibrary();
+		return _controller.getViewPointLibrary();
 	}
 
 	@Override

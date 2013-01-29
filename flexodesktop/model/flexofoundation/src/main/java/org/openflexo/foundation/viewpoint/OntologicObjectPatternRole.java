@@ -21,7 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
@@ -59,12 +59,23 @@ public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject>
 
 	@Override
 	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		FlexoOntologyModelSlot<?, ?> returned = null;
+		ModelSlot<?, ?> superMS = super.getModelSlot();
+		if (superMS instanceof FlexoOntologyModelSlot) {
+			returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+		}
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
 			}
 		}
 		return returned;
+	}
+
+	@Override
+	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+		if (modelSlot instanceof FlexoOntologyModelSlot) {
+			super.setModelSlot(modelSlot);
+		}
 	}
 }
