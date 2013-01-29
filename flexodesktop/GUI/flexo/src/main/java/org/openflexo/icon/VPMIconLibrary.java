@@ -146,6 +146,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource TEXT_AREA_ICON = new ImageIconResource("Icons/Model/VPM/TextAreaIcon.png");
 	public static final ImageIconResource TEXT_FIELD_ICON = new ImageIconResource("Icons/Model/VPM/TextFieldIcon.png");
 
+	public static final IconMarker MODEL_SLOT_ICON_MARKER = new IconMarker(new ImageIconResource("Icons/Model/VPM/ModelSlot.png"), 2, 6);
+
 	/**
 	 * Return the technology-specific controller for supplied technology adapter
 	 * 
@@ -185,6 +187,10 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof VirtualModel) {
 			return VIRTUAL_MODEL_ICON;
 		} else if (object instanceof ModelSlot) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ModelSlot) object).getTechnologyAdapter());
+			if (tac != null) {
+				return IconFactory.getImageIcon(tac.getTechnologyIcon(), MODEL_SLOT_ICON_MARKER);
+			}
 			return MODEL_SLOT_ICON;
 		} else if (object instanceof EditionPatternInspector) {
 			return INSPECT_ICON;
