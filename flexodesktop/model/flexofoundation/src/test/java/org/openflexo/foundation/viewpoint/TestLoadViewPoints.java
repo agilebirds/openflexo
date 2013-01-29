@@ -45,7 +45,6 @@ public class TestLoadViewPoints extends FlexoTestCase {
 		for (FlexoResource<?> r : vpRes.getContents()) {
 			assertTrue(r instanceof VirtualModelResource);
 			VirtualModelResource<?> vmRes = (VirtualModelResource<?>) r;
-			assertFalse(vmRes.isLoaded());
 			VirtualModel<?> vm = vmRes.getVirtualModel();
 			assertNotNull(vm);
 			assertTrue(vmRes.isLoaded());

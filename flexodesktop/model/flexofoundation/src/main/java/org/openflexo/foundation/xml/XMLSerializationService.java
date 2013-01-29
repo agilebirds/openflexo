@@ -151,6 +151,9 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 				return modelsForClass.getAvailableVersions();
 			}
 		}
+		if (aClass.getSuperclass() != null) {
+			return getAvailableVersionsForClass(aClass.getSuperclass());
+		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find latest model file version for class " + aClass.getName());
 		}
@@ -173,7 +176,15 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 	}
 
 	public ClassModels getModelsForClass(Class<?> aClass) {
-		return modelVersions.classModels.get(aClass.getName());
+		ClassModels returned = modelVersions.classModels.get(aClass.getName());
+		if (returned != null) {
+			return returned;
+		}
+		if (returned == null && aClass.getSuperclass() != null) {
+			return getModelsForClass(aClass.getSuperclass());
+		}
+		logger.warning("Cannot find model for class " + aClass);
+		return null;
 	}
 
 	public ClassModelVersion getClassModelVersion(Class<?> aClass, FlexoVersion version) {
@@ -191,6 +202,9 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 					return foundFlexoVersion;
 				}
 			}
+			if (aClass.getSuperclass() != null) {
+				return getClassModelVersion(aClass.getSuperclass(), version);
+			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find model file for class " + aClass.getName() + " and version " + version);
@@ -203,6 +217,9 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
 				return modelsForClass.latestVersion;
+			}
+			if (aClass.getSuperclass() != null) {
+				return getLatestVersionForClass(aClass.getSuperclass());
 			}
 		}
 		return null;

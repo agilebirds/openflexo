@@ -6,12 +6,14 @@
    <description>Root class for all objects of ViewPoint model</description>
   </entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.VirtualModel" abstract="yes" finalizer="finalizeDeserialization">
+	<entity name="org.openflexo.foundation.viewpoint.VirtualModel" xmlTag="VirtualModel" finalizer="finalizeDeserialization">
 		<property name="description" xmlTag="description" />
+		<property name="version" xmlTag="version" attribute="YES" />
 		<property name="editionPatterns" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
 		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
+		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification"
@@ -28,6 +30,24 @@
 		<property name="key" xmlTag="key" attribute="YES" />
 		<property name="language" xmlTag="lang" attribute="YES" />
 		<property name="value" text="yes" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
+		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
+		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
+		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.view.diagram.DiagramModelSlot" xmlTag="DiagramModelSlot">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.EMFModelSlot" xmlTag="EMFModelSlot">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.owl.OWLModelSlot" xmlTag="OWLModelSlot">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionPattern"
@@ -72,6 +92,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" xmlTag="Individual">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
+		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" xmlTag="Class">
@@ -220,6 +241,9 @@
 		xmlTag="CreationScheme" contexts="Executed">
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.CloningScheme" xmlTag="CloningScheme">
+	</entity>
+
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DropScheme"
 		xmlTag="DropScheme">
 		<property name="target" xmlTag="target" attribute="YES" />
@@ -297,6 +321,7 @@
 		name="org.openflexo.foundation.viewpoint.IndividualParameter" xmlTag="IndividualParameter">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
+		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity
@@ -408,8 +433,7 @@
 		abstract="yes">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddIndividual"
-		xmlTag="AddIndividual">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual" xmlTag="AddIndividual">
 		<property name="individualName" xmlTag="individualName"
 			attribute="YES" />
 		<property name="dataAssertions" type="vector" xmlTag="DataPropertyAssertion"
@@ -420,8 +444,10 @@
 		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddClass"
-		xmlTag="AddClass">
+	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" abstract="yes">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass" xmlTag="AddClass">
 		<property name="className" xmlTag="newClassName"
 			attribute="YES" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
@@ -458,7 +484,6 @@
 			attribute="YES" />
 		<property name="cardinality" xmlTag="cardinality" attribute="YES" />
 	</entity>
-
 
 	<entity name="org.openflexo.foundation.viewpoint.AbstractAssertion"
 		abstract="yes">

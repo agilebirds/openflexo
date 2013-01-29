@@ -34,7 +34,14 @@ import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
@@ -97,14 +104,6 @@ public class TestXMLMappings extends FlexoTestCase {
 		checkClassModels(FlexoWSLibrary.class);
 	}
 
-	public void testShemaLibraryMappings() {
-		checkClassModels(ViewLibrary.class);
-	}
-
-	public void testShemaMappings() {
-		// checkClassModels(View.class);
-	}
-
 	public void testGeneratedCodeMappings() {
 		checkClassModels(GeneratedCode.class);
 	}
@@ -115,6 +114,38 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	public void testTOCDataMappings() {
 		checkClassModels(TOCData.class);
+	}
+
+	public void testViewPointMappings() {
+		checkClassModels(ViewPoint.class);
+	}
+
+	public void testVirtualModelMappings() {
+		checkClassModels(VirtualModel.class);
+	}
+
+	public void testDiagramSpecificationModelMappings() {
+		checkClassModels(DiagramSpecification.class);
+	}
+
+	public void testExampleDiagramModelMappings() {
+		checkClassModels(ExampleDiagram.class);
+	}
+
+	public void testDiagramPaletteModelMappings() {
+		checkClassModels(DiagramPalette.class);
+	}
+
+	public void testViewMappings() {
+		checkClassModels(View.class);
+	}
+
+	public void testVirtualModelInstanceMappings() {
+		checkClassModels(VirtualModelInstance.class);
+	}
+
+	public void testDiagramMappings() {
+		checkClassModels(Diagram.class);
 	}
 
 	private void checkClassModels(Class aClass) {

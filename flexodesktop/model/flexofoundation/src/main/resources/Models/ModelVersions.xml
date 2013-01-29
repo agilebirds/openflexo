@@ -142,9 +142,8 @@
     <version id="1.0" modelFile="ViewPointModel/viewpoint_model_1.0.xml"/>
   </class>
   
-  <class name="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" latestVersion="1.0"> 
+  <class name="org.openflexo.foundation.viewpoint.VirtualModel" latestVersion="1.0"> 
     <version id="0.1" modelFile="ViewPointModel/VirtualModel/virtual_model_0.1.xml"/>
-    <version id="0.2" modelFile="ViewPointModel/VirtualModel/virtual_model_0.2.xml"/>
     <version id="1.0" modelFile="ViewPointModel/VirtualModel/virtual_model_1.0.xml"/>
   </class>
   

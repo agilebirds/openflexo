@@ -11,7 +11,7 @@
 		<property name="description" xmlTag="description" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.VirtualModel" abstract="yes" finalizer="finalizeDeserialization">
+	<entity name="org.openflexo.foundation.viewpoint.VirtualModel" xmlTag="VirtualModel" finalizer="finalizeDeserialization">
 		<property name="version" xmlTag="version" attribute="YES" />
 		<property name="modelVersion" xmlTag="modelVersion" attribute="YES" />
 		<property name="editionPatterns" type="vector"
@@ -479,7 +479,7 @@
 	</entity>
 
 
-	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" xmlTag="CloneIndividual">
+	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" abstract="yes">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddClass" abstract="yes">
