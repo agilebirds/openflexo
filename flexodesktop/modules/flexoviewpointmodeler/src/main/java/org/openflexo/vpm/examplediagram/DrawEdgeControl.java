@@ -39,12 +39,12 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.foundation.view.diagram.action.AddExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.action.AddExampleDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {
@@ -129,7 +129,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		private void performAddDefaultConnector(DrawingController<?> controller) {
-			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
+			AddExampleDiagramConnector action = AddExampleDiagramConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
 					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
@@ -153,7 +153,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		private void performAddConnector(DrawingController<?> controller, ConnectorGraphicalRepresentation<?> connectorGR, String text) {
-			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
+			AddExampleDiagramConnector action = AddExampleDiagramConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
 					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 			action.graphicalRepresentation = connectorGR;

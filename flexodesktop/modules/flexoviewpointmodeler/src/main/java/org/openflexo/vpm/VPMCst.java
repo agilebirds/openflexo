@@ -68,8 +68,4 @@ public class VPMCst {
 			"Fib/Dialog/DeclareConnectorInEditionPatternDialog.fib");
 	public static File PUSH_TO_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/PushToPaletteDialog.fib");
 
-	// Saving operations
-	public static File REVIEW_UNSAVED_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedViewPointModelerDialog.fib");
-	public static File SAVE_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/SaveViewPointModelerDialog.fib");
-
 }

@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.security.InvalidParameterException;
 import java.util.Vector;
@@ -34,19 +34,19 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
-public class AddPaletteElement extends FlexoAction<AddPaletteElement, DiagramPalette, ViewPointObject> {
+public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(AddPaletteElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddDiagramPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<AddPaletteElement, DiagramPalette, ViewPointObject> actionType = new FlexoActionType<AddPaletteElement, DiagramPalette, ViewPointObject>(
+	public static FlexoActionType<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> actionType = new FlexoActionType<AddDiagramPaletteElement, DiagramPalette, ViewPointObject>(
 			"add_new_palette_element", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddPaletteElement makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
-			return new AddPaletteElement(focusedObject, globalSelection, editor);
+		public AddDiagramPaletteElement makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+			return new AddDiagramPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -62,14 +62,14 @@ public class AddPaletteElement extends FlexoAction<AddPaletteElement, DiagramPal
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddPaletteElement.actionType, DiagramPalette.class);
+		FlexoModelObject.addActionForClass(AddDiagramPaletteElement.actionType, DiagramPalette.class);
 	}
 
 	private String _newElementName;
 	private DiagramPaletteElement _newElement;
 	private Object _graphicalRepresentation;
 
-	AddPaletteElement(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	AddDiagramPaletteElement(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

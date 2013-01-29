@@ -32,7 +32,9 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
-import org.openflexo.foundation.viewpoint.action.PushToPalette;
+import org.openflexo.foundation.view.diagram.action.PushToPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -41,7 +43,7 @@ import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 
-public class PushToPaletteInitializer extends ActionInitializer {
+public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

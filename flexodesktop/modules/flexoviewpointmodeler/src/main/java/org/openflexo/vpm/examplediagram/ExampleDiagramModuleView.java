@@ -49,7 +49,6 @@ public class ExampleDiagramModuleView extends JPanel implements ModuleView<Examp
 		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();
 
-		controller.getCEDController().manageResource(controller.getShema());
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
@@ -70,7 +69,7 @@ public class ExampleDiagramModuleView extends JPanel implements ModuleView<Examp
 
 	@Override
 	public ExampleDiagram getRepresentedObject() {
-		return _controller.getShema();
+		return _controller.getExampleDiagram();
 	}
 
 	@Override

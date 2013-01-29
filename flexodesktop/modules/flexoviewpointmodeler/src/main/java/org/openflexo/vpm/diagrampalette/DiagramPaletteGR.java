@@ -44,16 +44,16 @@ public class DiagramPaletteGR extends DrawingGraphicalRepresentation<DiagramPale
 	public DiagramPaletteGR(DiagramPaletteRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null && aDrawing.getPalette() != null && aDrawing.getPalette().getGraphicalRepresentation() != null) {
+		if (aDrawing != null && aDrawing.getDiagramPalette() != null && aDrawing.getDiagramPalette().getGraphicalRepresentation() != null) {
 
-			setsWith(aDrawing.getPalette().getGraphicalRepresentation());
+			setsWith(aDrawing.getDiagramPalette().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl());
 
-		if (aDrawing != null && aDrawing.getPalette() != null) {
-			aDrawing.getPalette().setGraphicalRepresentation(this);
-			aDrawing.getPalette().addObserver(this);
+		if (aDrawing != null && aDrawing.getDiagramPalette() != null) {
+			aDrawing.getDiagramPalette().setGraphicalRepresentation(this);
+			aDrawing.getDiagramPalette().addObserver(this);
 		}
 
 	}
@@ -73,7 +73,7 @@ public class DiagramPaletteGR extends DrawingGraphicalRepresentation<DiagramPale
 	}
 
 	public DiagramPalette getPalette() {
-		return getDrawing().getPalette();
+		return getDrawing().getDiagramPalette();
 	}
 
 	@Override

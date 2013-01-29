@@ -26,14 +26,17 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class DeclareConnectorInEditionPatternInitializer extends ActionInitializer {
+public class DeclareConnectorInEditionPatternInitializer extends
+		ActionInitializer<DeclareConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

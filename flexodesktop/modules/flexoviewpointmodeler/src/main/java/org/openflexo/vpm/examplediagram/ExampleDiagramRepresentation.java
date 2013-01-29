@@ -71,8 +71,8 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
 		}
-		if (getShema() != null) {
-			getShema().deleteObserver(this);
+		if (getExampleDiagram() != null) {
+			getExampleDiagram().deleteObserver(this);
 		}
 		super.delete();
 	}
@@ -98,7 +98,7 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 
 	@Override
 	protected void buildGraphicalObjectsHierarchy() {
-		buildGraphicalObjectsHierarchyFor(getShema());
+		buildGraphicalObjectsHierarchyFor(getExampleDiagram());
 	}
 
 	private void buildGraphicalObjectsHierarchyFor(ExampleDiagramObject parent) {
@@ -118,7 +118,7 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 		}
 	}
 
-	public ExampleDiagram getShema() {
+	public ExampleDiagram getExampleDiagram() {
 		return getModel();
 	}
 

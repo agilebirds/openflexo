@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.io.File;
 import java.io.IOException;

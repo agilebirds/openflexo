@@ -34,6 +34,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.diagram.action.AddExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -44,7 +45,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 
@@ -185,7 +185,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 							}
 							shapeGR.setLocation(dropLocation);
 						}
-						AddExampleDrawingShape addShapeAction = AddExampleDrawingShape.actionType.makeNewAction(container, null,
+						AddExampleDiagramShape addShapeAction = AddExampleDiagramShape.actionType.makeNewAction(container, null,
 								getController().getCEDController().getEditor());
 						addShapeAction.graphicalRepresentation = shapeGR;
 						addShapeAction.newShapeName = role.getPatternRoleName();
@@ -206,7 +206,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				shapeGR.setLayer(containerGR.getLayer() + 1);
 				shapeGR.setAllowToLeaveBounds(true);
 
-				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(container, null, getController()
+				AddExampleDiagramShape action = AddExampleDiagramShape.actionType.makeNewAction(container, null, getController()
 						.getCEDController().getEditor());
 				action.graphicalRepresentation = shapeGR;
 				action.newShapeName = shapeGR.getText();

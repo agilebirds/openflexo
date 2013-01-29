@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.util.Vector;
 import java.util.logging.Level;
@@ -31,21 +31,21 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
-public class DeleteExampleDrawingElements extends
-		FlexoUndoableAction<DeleteExampleDrawingElements, ExampleDiagramObject, ExampleDiagramObject> {
+public class DeleteExampleDiagramElements extends
+		FlexoUndoableAction<DeleteExampleDiagramElements, ExampleDiagramObject, ExampleDiagramObject> {
 
-	private static final Logger logger = Logger.getLogger(DeleteExampleDrawingElements.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteExampleDiagramElements.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteExampleDrawingElements, ExampleDiagramObject, ExampleDiagramObject> actionType = new FlexoActionType<DeleteExampleDrawingElements, ExampleDiagramObject, ExampleDiagramObject>(
+	public static FlexoActionType<DeleteExampleDiagramElements, ExampleDiagramObject, ExampleDiagramObject> actionType = new FlexoActionType<DeleteExampleDiagramElements, ExampleDiagramObject, ExampleDiagramObject>(
 			"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteExampleDrawingElements makeNewAction(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
+		public DeleteExampleDiagramElements makeNewAction(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
 				FlexoEditor editor) {
-			return new DeleteExampleDrawingElements(focusedObject, globalSelection, editor);
+			return new DeleteExampleDiagramElements(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -62,8 +62,8 @@ public class DeleteExampleDrawingElements extends
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteExampleDrawingElements.actionType, ExampleDiagramShape.class);
-		FlexoModelObject.addActionForClass(DeleteExampleDrawingElements.actionType, ExampleDiagramConnector.class);
+		FlexoModelObject.addActionForClass(DeleteExampleDiagramElements.actionType, ExampleDiagramShape.class);
+		FlexoModelObject.addActionForClass(DeleteExampleDiagramElements.actionType, ExampleDiagramConnector.class);
 	}
 
 	protected static Vector<ExampleDiagramObject> objectsToDelete(ExampleDiagramObject focusedObject,
@@ -95,7 +95,7 @@ public class DeleteExampleDrawingElements extends
 		return returned;
 	}
 
-	protected DeleteExampleDrawingElements(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
+	protected DeleteExampleDiagramElements(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
 			FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		logger.info("Created DeleteCalcShemaElements action focusedObject=" + focusedObject + "globalSelection=" + globalSelection);

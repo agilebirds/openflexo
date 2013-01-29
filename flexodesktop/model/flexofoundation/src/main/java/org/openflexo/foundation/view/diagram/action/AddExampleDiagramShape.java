@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -33,20 +33,20 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
-public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, ExampleDiagramObject, ExampleDiagramObject> {
+public class AddExampleDiagramShape extends FlexoAction<AddExampleDiagramShape, ExampleDiagramObject, ExampleDiagramObject> {
 
-	private static final Logger logger = Logger.getLogger(AddExampleDrawingShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddExampleDiagramShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddExampleDrawingShape, ExampleDiagramObject, ExampleDiagramObject> actionType = new FlexoActionType<AddExampleDrawingShape, ExampleDiagramObject, ExampleDiagramObject>(
+	public static FlexoActionType<AddExampleDiagramShape, ExampleDiagramObject, ExampleDiagramObject> actionType = new FlexoActionType<AddExampleDiagramShape, ExampleDiagramObject, ExampleDiagramObject>(
 			"add_new_shape", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddExampleDrawingShape makeNewAction(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
+		public AddExampleDiagramShape makeNewAction(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection,
 				FlexoEditor editor) {
-			return new AddExampleDrawingShape(focusedObject, globalSelection, editor);
+			return new AddExampleDiagramShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -62,8 +62,8 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddExampleDrawingShape.actionType, ExampleDiagram.class);
-		FlexoModelObject.addActionForClass(AddExampleDrawingShape.actionType, ExampleDiagramShape.class);
+		FlexoModelObject.addActionForClass(AddExampleDiagramShape.actionType, ExampleDiagram.class);
+		FlexoModelObject.addActionForClass(AddExampleDiagramShape.actionType, ExampleDiagramShape.class);
 	}
 
 	private ExampleDiagramShape _newShape;
@@ -72,7 +72,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 	public ShapeGraphicalRepresentation<?> graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
-	AddExampleDrawingShape(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
+	AddExampleDiagramShape(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -28,19 +28,20 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawingElements;
+import org.openflexo.foundation.view.diagram.action.DeleteExampleDiagramElements;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
+public class DeleteExampleDiagramElementsInitializer extends ActionInitializer<DeleteExampleDiagramElements, ExampleDiagramObject, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcShemaElementsInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeleteExampleDrawingElements.actionType, actionInitializer);
+	DeleteExampleDiagramElementsInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(DeleteExampleDiagramElements.actionType, actionInitializer);
 	}
 
 	@Override
@@ -49,20 +50,20 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeleteExampleDrawingElements> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeleteExampleDrawingElements>() {
+	protected FlexoActionInitializer<DeleteExampleDiagramElements> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeleteExampleDiagramElements>() {
 			@Override
-			public boolean run(EventObject e, DeleteExampleDrawingElements action) {
+			public boolean run(EventObject e, DeleteExampleDiagramElements action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteExampleDrawingElements> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeleteExampleDrawingElements>() {
+	protected FlexoActionFinalizer<DeleteExampleDiagramElements> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteExampleDiagramElements>() {
 			@Override
-			public boolean run(EventObject e, DeleteExampleDrawingElements action) {
+			public boolean run(EventObject e, DeleteExampleDiagramElements action) {
 				if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();

@@ -19,26 +19,42 @@
  */
 package org.openflexo.vpm.controller.action;
 
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.viewpoint.action.DeletePaletteElement;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.view.diagram.action.DeleteExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
-public class DeleteCalcPaletteElementInitializer extends ActionInitializer {
+public class DeleteExampleDiagramInitializer extends ActionInitializer<DeleteExampleDiagram, ExampleDiagram, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeletePaletteElement.actionType, actionInitializer);
+	DeleteExampleDiagramInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(DeleteExampleDiagram.actionType, actionInitializer);
 	}
 
 	@Override
 	protected VPMControllerActionInitializer getControllerActionInitializer() {
 		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<DeleteExampleDiagram> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeleteExampleDiagram>() {
+			@Override
+			public boolean run(EventObject e, DeleteExampleDiagram action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_example_diagram"));
+			}
+		};
 	}
 
 	@Override

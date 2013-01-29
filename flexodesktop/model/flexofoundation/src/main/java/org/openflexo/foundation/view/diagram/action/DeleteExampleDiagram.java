@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -29,20 +29,20 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
-public class DeleteExampleDrawing extends FlexoAction<DeleteExampleDrawing, ExampleDiagram, ViewPointObject> {
+public class DeleteExampleDiagram extends FlexoAction<DeleteExampleDiagram, ExampleDiagram, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(DeleteExampleDrawing.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteExampleDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteExampleDrawing, ExampleDiagram, ViewPointObject> actionType = new FlexoActionType<DeleteExampleDrawing, ExampleDiagram, ViewPointObject>(
+	public static FlexoActionType<DeleteExampleDiagram, ExampleDiagram, ViewPointObject> actionType = new FlexoActionType<DeleteExampleDiagram, ExampleDiagram, ViewPointObject>(
 			"delete_calc_drawing_shema", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteExampleDrawing makeNewAction(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection,
+		public DeleteExampleDiagram makeNewAction(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection,
 				FlexoEditor editor) {
-			return new DeleteExampleDrawing(focusedObject, globalSelection, editor);
+			return new DeleteExampleDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -58,10 +58,10 @@ public class DeleteExampleDrawing extends FlexoAction<DeleteExampleDrawing, Exam
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteExampleDrawing.actionType, ExampleDiagram.class);
+		FlexoModelObject.addActionForClass(DeleteExampleDiagram.actionType, ExampleDiagram.class);
 	}
 
-	DeleteExampleDrawing(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	DeleteExampleDiagram(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

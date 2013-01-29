@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.components.widget.FIBOntologyEditor;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.selection.SelectionListener;
@@ -46,7 +45,6 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	public OntologyView(IFlexoOntology object, VPMController controller, FlexoPerspective perspective) {
 		super(object, controller);
 		declaredPerspective = perspective;
-		controller.manageResource((FlexoObject) object);
 	}
 
 	@Override

@@ -43,8 +43,6 @@ public class ViewPointView extends FIBModuleView<ViewPoint> implements FIBMouseC
 
 	public ViewPointView(ViewPoint viewPoint, VPMController controller) {
 		super(viewPoint, controller, VPMCst.VIEWPOINT_VIEW_FIB);
-
-		controller.manageResource(viewPoint);
 	}
 
 	@Override

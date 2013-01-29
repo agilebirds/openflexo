@@ -35,9 +35,9 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.view.diagram.action.AddExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
@@ -84,7 +84,7 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 				/*System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);*/
 
-				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(getShema(), null, getCEDController()
+				AddExampleDiagramShape action = AddExampleDiagramShape.actionType.makeNewAction(getExampleDiagram(), null, getCEDController()
 						.getEditor());
 				action.graphicalRepresentation = graphicalRepresentation;
 				action.newShapeName = graphicalRepresentation.getText();
@@ -101,8 +101,8 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 
 	@Override
 	public void delete() {
-		if (getShema() != null && getShema().getVirtualModel() != null) {
-			getShema().getVirtualModel().deleteObserver(this);
+		if (getExampleDiagram() != null && getExampleDiagram().getVirtualModel() != null) {
+			getExampleDiagram().getVirtualModel().deleteObserver(this);
 		}
 		if (_controller != null) {
 			if (getDrawingView() != null && _moduleView != null) {
@@ -175,7 +175,7 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		logger.fine("dataModification=" + dataModification);
-		if (observable == getShema().getVirtualModel()) {
+		if (observable == getExampleDiagram().getVirtualModel()) {
 			if (dataModification instanceof DiagramPaletteInserted) {
 				DiagramPalette palette = ((DiagramPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);
@@ -206,8 +206,8 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 		paletteView.repaint();
 	}
 
-	public ExampleDiagram getShema() {
-		return getDrawing().getShema();
+	public ExampleDiagram getExampleDiagram() {
+		return getDrawing().getExampleDiagram();
 	}
 
 }

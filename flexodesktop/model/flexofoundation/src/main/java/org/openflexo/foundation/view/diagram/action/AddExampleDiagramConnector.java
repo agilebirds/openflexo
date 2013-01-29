@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -31,20 +31,20 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
-public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingConnector, ExampleDiagramShape, ExampleDiagramObject> {
+public class AddExampleDiagramConnector extends FlexoAction<AddExampleDiagramConnector, ExampleDiagramShape, ExampleDiagramObject> {
 
-	private static final Logger logger = Logger.getLogger(AddExampleDrawingConnector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddExampleDiagramConnector.class.getPackage().getName());
 
-	public static FlexoActionType<AddExampleDrawingConnector, ExampleDiagramShape, ExampleDiagramObject> actionType = new FlexoActionType<AddExampleDrawingConnector, ExampleDiagramShape, ExampleDiagramObject>(
+	public static FlexoActionType<AddExampleDiagramConnector, ExampleDiagramShape, ExampleDiagramObject> actionType = new FlexoActionType<AddExampleDiagramConnector, ExampleDiagramShape, ExampleDiagramObject>(
 			"add_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddExampleDrawingConnector makeNewAction(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
+		public AddExampleDiagramConnector makeNewAction(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
 				FlexoEditor editor) {
-			return new AddExampleDrawingConnector(focusedObject, globalSelection, editor);
+			return new AddExampleDiagramConnector(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -60,7 +60,7 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddExampleDrawingConnector.actionType, ExampleDiagramShape.class);
+		FlexoModelObject.addActionForClass(AddExampleDiagramConnector.actionType, ExampleDiagramShape.class);
 	}
 
 	private ExampleDiagramShape _fromShape;
@@ -71,7 +71,7 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 
 	private ExampleDiagramConnector _newConnector;
 
-	AddExampleDrawingConnector(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
+	AddExampleDiagramConnector(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

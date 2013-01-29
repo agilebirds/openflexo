@@ -45,9 +45,6 @@ public class EditionPatternView extends FIBModuleView<EditionPattern> {
 
 	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
 		super(editionPattern, controller, VPMCst.EDITION_PATTERN_VIEW_FIB);
-
-		controller.manageResource(editionPattern.getVirtualModel());
-
 	}
 
 	@Override

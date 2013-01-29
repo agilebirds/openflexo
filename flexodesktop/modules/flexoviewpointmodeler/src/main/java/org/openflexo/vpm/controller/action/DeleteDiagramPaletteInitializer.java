@@ -25,18 +25,20 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.viewpoint.action.DeleteViewPointPalette;
+import org.openflexo.foundation.view.diagram.action.DeleteDiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.controller.VPMController;
 
-public class DeleteCalcPaletteInitializer extends ActionInitializer {
+public class DeleteDiagramPaletteInitializer extends ActionInitializer<DeleteDiagramPalette, DiagramPalette, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeleteViewPointPalette.actionType, actionInitializer);
+	DeleteDiagramPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(DeleteDiagramPalette.actionType, actionInitializer);
 	}
 
 	@Override
@@ -55,11 +57,10 @@ public class DeleteCalcPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteViewPointPalette> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeleteViewPointPalette>() {
+	protected FlexoActionFinalizer<DeleteDiagramPalette> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteDiagramPalette>() {
 			@Override
-			public boolean run(EventObject e, DeleteViewPointPalette action) {
-				getController().unregisterResource(action.getFocusedObject());
+			public boolean run(EventObject e, DeleteDiagramPalette action) {
 				return true;
 			}
 		};

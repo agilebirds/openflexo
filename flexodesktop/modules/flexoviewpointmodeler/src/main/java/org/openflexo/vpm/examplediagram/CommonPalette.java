@@ -36,8 +36,8 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.foundation.view.diagram.action.AddExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.localization.FlexoLocalization;
 
 public class CommonPalette extends DrawingPalette {
@@ -200,7 +200,7 @@ public class CommonPalette extends DrawingPalette {
 					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
 
-					AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(container, null, getController()
+					AddExampleDiagramShape action = AddExampleDiagramShape.actionType.makeNewAction(container, null, getController()
 							.getCEDController().getEditor());
 					action.graphicalRepresentation = shapeGR;
 					action.newShapeName = shapeGR.getText();

@@ -48,15 +48,15 @@ public class ExampleDiagramGR extends DrawingGraphicalRepresentation<ExampleDiag
 	public ExampleDiagramGR(ExampleDiagramRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith(aDrawing.getShema().getGraphicalRepresentation());
+		if (aDrawing != null && aDrawing.getExampleDiagram() != null && aDrawing.getExampleDiagram().getGraphicalRepresentation() != null) {
+			setsWith(aDrawing.getExampleDiagram().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl());
 
-		if (aDrawing != null && aDrawing.getShema() != null) {
-			aDrawing.getShema().setGraphicalRepresentation(this);
-			aDrawing.getShema().addObserver(this);
+		if (aDrawing != null && aDrawing.getExampleDiagram() != null) {
+			aDrawing.getExampleDiagram().setGraphicalRepresentation(this);
+			aDrawing.getExampleDiagram().addObserver(this);
 		}
 
 	}
@@ -68,7 +68,7 @@ public class ExampleDiagramGR extends DrawingGraphicalRepresentation<ExampleDiag
 
 	public ExampleDiagram getShema() {
 		if (getDrawing() != null) {
-			return getDrawing().getShema();
+			return getDrawing().getExampleDiagram();
 		}
 		return null;
 	}

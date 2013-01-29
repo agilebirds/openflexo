@@ -28,9 +28,9 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.view.diagram.action.AddDiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -39,12 +39,12 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteElementGR;
 
-public class AddPaletteElementInitializer extends ActionInitializer<AddPaletteElement, DiagramPalette, ViewPointObject> {
+public class AddDiagramPaletteElementInitializer extends ActionInitializer<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(AddPaletteElement.actionType, actionInitializer);
+	AddDiagramPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(AddDiagramPaletteElement.actionType, actionInitializer);
 	}
 
 	@Override
@@ -53,10 +53,10 @@ public class AddPaletteElementInitializer extends ActionInitializer<AddPaletteEl
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddPaletteElement> getDefaultInitializer() {
-		return new FlexoActionInitializer<AddPaletteElement>() {
+	protected FlexoActionInitializer<AddDiagramPaletteElement> getDefaultInitializer() {
+		return new FlexoActionInitializer<AddDiagramPaletteElement>() {
 			@Override
-			public boolean run(EventObject e, AddPaletteElement action) {
+			public boolean run(EventObject e, AddDiagramPaletteElement action) {
 				/*if (action.getNewElementName() != null && (action.getFocusedObject() != null))
 					return true;*/
 
@@ -87,10 +87,10 @@ public class AddPaletteElementInitializer extends ActionInitializer<AddPaletteEl
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddPaletteElement> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<AddPaletteElement>() {
+	protected FlexoActionFinalizer<AddDiagramPaletteElement> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AddDiagramPaletteElement>() {
 			@Override
-			public boolean run(EventObject e, AddPaletteElement action) {
+			public boolean run(EventObject e, AddDiagramPaletteElement action) {
 				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewElement());
 				return true;
 			}

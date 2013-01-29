@@ -19,42 +19,28 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.action.DeleteDiagramPaletteElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawing;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 
-public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExampleDrawing, ExampleDiagram, ViewPointObject> {
+public class DeleteDiagramPaletteElementInitializer extends ActionInitializer<DeleteDiagramPaletteElement, DiagramPaletteElement, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteExampleDrawingInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeleteExampleDrawing.actionType, actionInitializer);
+	DeleteDiagramPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(DeleteDiagramPaletteElement.actionType, actionInitializer);
 	}
 
 	@Override
 	protected VPMControllerActionInitializer getControllerActionInitializer() {
 		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
-	}
-
-	@Override
-	protected FlexoActionInitializer<DeleteExampleDrawing> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeleteExampleDrawing>() {
-			@Override
-			public boolean run(EventObject e, DeleteExampleDrawing action) {
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_example_diagram"));
-			}
-		};
 	}
 
 	@Override

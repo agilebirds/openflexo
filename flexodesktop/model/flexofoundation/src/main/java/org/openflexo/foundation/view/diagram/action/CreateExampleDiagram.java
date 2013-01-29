@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.io.File;
 import java.security.InvalidParameterException;
@@ -32,26 +32,26 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {
+public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, DiagramSpecification, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(CreateDiagramPalette.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateExampleDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<CreateDiagramPalette, DiagramSpecification, ViewPointObject> actionType = new FlexoActionType<CreateDiagramPalette, DiagramSpecification, ViewPointObject>(
-			"create_new_palette", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateExampleDiagram, DiagramSpecification, ViewPointObject> actionType = new FlexoActionType<CreateExampleDiagram, DiagramSpecification, ViewPointObject>(
+			"create_example_diagram", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateDiagramPalette makeNewAction(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection,
+		public CreateExampleDiagram makeNewAction(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection,
 				FlexoEditor editor) {
-			return new CreateDiagramPalette(focusedObject, globalSelection, editor);
+			return new CreateExampleDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -67,28 +67,28 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateDiagramPalette.actionType, DiagramSpecification.class);
+		FlexoModelObject.addActionForClass(CreateExampleDiagram.actionType, DiagramSpecification.class);
 	}
 
-	public String newPaletteName;
+	public String newShemaName;
 	public String description;
-	public Object graphicalRepresentation;
+	public DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation;
 
-	private DiagramPalette _newPalette;
+	private ExampleDiagram _newShema;
 
-	CreateDiagramPalette(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateExampleDiagram(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc palette");
+		logger.info("Add example diagram");
 
-		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
-				.getDirectory(), newPaletteName + ".palette"), (DrawingGraphicalRepresentation<?>) graphicalRepresentation);
-		_newPalette.setDescription(description);
-		getFocusedObject().addToPalettes(_newPalette);
-		_newPalette.save();
+		_newShema = ExampleDiagram.newExampleDiagram(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
+				.getDirectory(), newShemaName + ".shema"), graphicalRepresentation);
+		_newShema.setDescription(description);
+		getFocusedObject().addToExampleDiagrams(_newShema);
+		_newShema.save();
 
 	}
 
@@ -99,8 +99,8 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 		return null;
 	}
 
-	public DiagramPalette getNewPalette() {
-		return _newPalette;
+	public ExampleDiagram getNewShema() {
+		return _newShema;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
@@ -114,10 +114,10 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 	}
 
 	public boolean isNameValid() {
-		if (StringUtils.isEmpty(newPaletteName)) {
+		if (StringUtils.isEmpty(newShemaName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getPalette(newPaletteName) != null) {
+		} else if (getFocusedObject().getExampleDiagram(newShemaName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
 		} else {
@@ -125,4 +125,5 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 			return true;
 		}
 	}
+
 }

@@ -87,7 +87,7 @@ public class DiagramPaletteController extends SelectionManagingDrawingController
 		return paletteView;
 	}
 
-	public DiagramPalette getCalcPalette() {
+	public DiagramPalette getDiagramPalette() {
 		return getDrawing().getModel();
 	}
 

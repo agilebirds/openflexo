@@ -84,8 +84,8 @@ public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette>
 		if (paletteGR != null) {
 			paletteGR.delete();
 		}
-		if (getPalette() != null) {
-			getPalette().deleteObserver(this);
+		if (getDiagramPalette() != null) {
+			getDiagramPalette().deleteObserver(this);
 		}
 		paletteElementsGR.clear();
 		super.delete();
@@ -93,7 +93,7 @@ public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette>
 
 	@Override
 	protected void buildGraphicalObjectsHierarchy() {
-		buildGraphicalObjectsHierarchyFor(getPalette());
+		buildGraphicalObjectsHierarchyFor(getDiagramPalette());
 	}
 
 	private void buildGraphicalObjectsHierarchyFor(DiagramPalette parent) {
@@ -102,7 +102,7 @@ public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette>
 		}
 	}
 
-	public DiagramPalette getPalette() {
+	public DiagramPalette getDiagramPalette() {
 		return getModel();
 	}
 

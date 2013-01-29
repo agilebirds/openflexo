@@ -46,7 +46,6 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 		add(controller.getDrawingView(), BorderLayout.CENTER);
 		validate();
 
-		controller.getCEDController().manageResource(controller.getCalcPalette());
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
@@ -71,7 +70,7 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 
 	@Override
 	public DiagramPalette getRepresentedObject() {
-		return _controller.getCalcPalette();
+		return _controller.getDiagramPalette();
 	}
 
 	@Override

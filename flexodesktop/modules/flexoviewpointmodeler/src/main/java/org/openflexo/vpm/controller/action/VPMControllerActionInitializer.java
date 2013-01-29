@@ -65,17 +65,17 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 
 		// ExampleDiagram edition
 		new CreateExampleDiagramInitializer(this);
-		new DeleteExampleDrawingInitializer(this);
+		new DeleteExampleDiagramInitializer(this);
 		new PushToPaletteInitializer(this);
 		new DeclareShapeInEditionPatternInitializer(this);
 		new DeclareConnectorInEditionPatternInitializer(this);
-		new DeleteCalcShemaElementsInitializer(this);
+		new DeleteExampleDiagramElementsInitializer(this);
 
 		// DiagramPalette edition
 		new CreateDiagramPaletteInitializer(this);
-		new DeleteCalcPaletteInitializer(this);
-		new AddPaletteElementInitializer(this);
-		new DeleteCalcPaletteElementInitializer(this);
+		new DeleteDiagramPaletteInitializer(this);
+		new AddDiagramPaletteElementInitializer(this);
+		new DeleteDiagramPaletteElementInitializer(this);
 
 	}
 
