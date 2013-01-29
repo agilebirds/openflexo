@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoint, RepositoryFolder, ViewPointObject> {
@@ -53,7 +53,7 @@ public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoin
 		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
 			public boolean run(EventObject e, CreateViewPoint action) {
-				return instanciateAndShowDialog(action, CEDCst.CREATE_VIEW_POINT_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.CREATE_VIEW_POINT_DIALOG_FIB);
 			}
 		};
 	}

@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class PushToPaletteDialogEDITOR extends FIBAbstractEditor {
 
@@ -48,7 +48,7 @@ public class PushToPaletteDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.PUSH_TO_PALETTE_DIALOG_FIB;
+		return VPMCst.PUSH_TO_PALETTE_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

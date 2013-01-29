@@ -27,7 +27,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreatePatternRole;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class CreatePatternRoleDialogEDITOR extends FIBAbstractEditor {
 
@@ -45,7 +45,7 @@ public class CreatePatternRoleDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.CREATE_PATTERN_ROLE_DIALOG_FIB;
+		return VPMCst.CREATE_PATTERN_ROLE_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

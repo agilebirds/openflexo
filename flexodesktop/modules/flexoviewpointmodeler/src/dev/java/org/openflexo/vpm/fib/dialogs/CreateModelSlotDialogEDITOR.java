@@ -27,7 +27,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
 
@@ -44,7 +44,7 @@ public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.CREATE_MODEL_SLOT_DIALOG_FIB;
+		return VPMCst.CREATE_MODEL_SLOT_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

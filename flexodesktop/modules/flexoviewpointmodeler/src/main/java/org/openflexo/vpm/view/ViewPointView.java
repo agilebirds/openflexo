@@ -29,7 +29,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
@@ -42,7 +42,7 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
 public class ViewPointView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener {
 
 	public ViewPointView(ViewPoint viewPoint, VPMController controller) {
-		super(viewPoint, controller, CEDCst.VIEWPOINT_VIEW_FIB);
+		super(viewPoint, controller, VPMCst.VIEWPOINT_VIEW_FIB);
 
 		controller.manageResource(viewPoint);
 	}

@@ -45,7 +45,7 @@ import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 
 /**
- * CalcEditor module
+ * ViewPointModeller module
  * 
  * @author sylvain
  */
@@ -61,11 +61,11 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	public VPMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
-		CEDPreferences.init();
+		VPMPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
-		getCEDController().setCurrentEditedObjectAsModuleView(getCEDController().getCalcLibrary());
+		getCEDController().setCurrentEditedObjectAsModuleView(getCEDController().getViewPointLibrary());
 
 		// Retain here all necessary resources
 		// retain(<the_required_resource_data>);
@@ -101,7 +101,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	@Override
 	public float getScreenshotQuality() {
-		float reply = Float.valueOf(CEDPreferences.getScreenshotQuality()) / 100f;
+		float reply = Float.valueOf(VPMPreferences.getScreenshotQuality()) / 100f;
 		if (reply > 1) {
 			return 1f;
 		}

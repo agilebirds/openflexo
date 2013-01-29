@@ -26,7 +26,7 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class ViewPointViewEDITOR extends FIBAbstractEditor {
 
@@ -50,7 +50,7 @@ public class ViewPointViewEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.VIEWPOINT_VIEW_FIB;
+		return VPMCst.VIEWPOINT_VIEW_FIB;
 	}
 
 	public static void main(String[] args) {

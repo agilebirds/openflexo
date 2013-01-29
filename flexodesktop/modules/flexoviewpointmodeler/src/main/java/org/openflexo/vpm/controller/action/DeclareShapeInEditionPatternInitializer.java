@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
@@ -57,7 +57,7 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
 
-				return instanciateAndShowDialog(action, CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}

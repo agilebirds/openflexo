@@ -36,7 +36,7 @@ import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
@@ -78,7 +78,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				return instanciateAndShowDialog(action, CEDCst.PUSH_TO_PALETTE_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.PUSH_TO_PALETTE_DIALOG_FIB);
 			}
 		};
 	}

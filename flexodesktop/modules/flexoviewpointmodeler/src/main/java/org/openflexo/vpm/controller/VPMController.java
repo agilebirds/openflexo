@@ -54,10 +54,10 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.action.VPMControllerActionInitializer;
-import org.openflexo.vpm.view.VPMMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.view.VPMMainPane;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
 
 /**
@@ -236,18 +236,6 @@ public class VPMController extends FlexoController {
 		return null;
 	}
 
-	@Deprecated
-	public ViewPointLibrary getCalcLibrary() {
-		return getViewPointLibrary();
-	}
-
-	@Override
-	@Deprecated
-	public FlexoProject getProject() {
-		// logger.warning("Could not access to any project in this module (outside project scope module)");
-		return super.getProject();
-	}
-
 	// ================================================
 	// ============ Resources management ==============
 	// ================================================
@@ -286,6 +274,12 @@ public class VPMController extends FlexoController {
 	}
 
 	public void saveModified() {
+		System.out.println("registered resources: " + getApplicationContext().getResourceManager().getRegisteredResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getRegisteredResources());
+		System.out.println("loaded resources: " + getApplicationContext().getResourceManager().getLoadedResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getLoadedResources());
+		System.out.println("unsaved resources: " + getApplicationContext().getResourceManager().getUnsavedResources().size() + " : "
+				+ getApplicationContext().getResourceManager().getUnsavedResources());
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.saveModified();
 		}
@@ -295,7 +289,7 @@ public class VPMController extends FlexoController {
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.reviewModifiedResource();
 		}
-		FIBDialog<VPMController> dialog = FIBDialog.instanciateAndShowDialog(CEDCst.SAVE_VPM_DIALOG_FIB, this, FlexoFrame.getActiveFrame(),
+		FIBDialog<VPMController> dialog = FIBDialog.instanciateAndShowDialog(VPMCst.SAVE_VPM_DIALOG_FIB, this, FlexoFrame.getActiveFrame(),
 				true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			saveModified();

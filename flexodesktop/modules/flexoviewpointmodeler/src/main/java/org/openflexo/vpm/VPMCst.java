@@ -28,7 +28,7 @@ import org.openflexo.toolbox.FileResource;
  * 
  * @author yourname
  */
-public class CEDCst {
+public class VPMCst {
 
 	public static String CED_MODULE_VERSION = "0.0.1";
 

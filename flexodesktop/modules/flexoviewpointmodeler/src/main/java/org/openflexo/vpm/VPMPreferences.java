@@ -34,11 +34,11 @@ import org.openflexo.toolbox.FileResource;
  * @author yourname
  * 
  */
-public final class CEDPreferences extends ModulePreferences {
+public final class VPMPreferences extends ModulePreferences {
 
-	private static final Logger logger = Logger.getLogger(CEDPreferences.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VPMPreferences.class.getPackage().getName());
 
-	private static final Class CED_PREFERENCES = CEDPreferences.class;
+	private static final Class CED_PREFERENCES = VPMPreferences.class;
 
 	protected static final String SCREENSHOT_QUALITY = "screenshotQuality";
 
@@ -52,7 +52,7 @@ public final class CEDPreferences extends ModulePreferences {
 		return preferences(CED_PREFERENCES);
 	}
 
-	public CEDPreferences() {
+	public VPMPreferences() {
 		super(Module.VPM_MODULE);
 	}
 

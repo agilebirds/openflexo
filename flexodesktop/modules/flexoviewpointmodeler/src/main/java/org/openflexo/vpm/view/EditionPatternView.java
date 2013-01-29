@@ -31,7 +31,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
@@ -44,7 +44,7 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
 public class EditionPatternView extends FIBModuleView<EditionPattern> {
 
 	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
-		super(editionPattern, controller, CEDCst.EDITION_PATTERN_VIEW_FIB);
+		super(editionPattern, controller, VPMCst.EDITION_PATTERN_VIEW_FIB);
 
 		controller.manageResource(editionPattern.getVirtualModel());
 

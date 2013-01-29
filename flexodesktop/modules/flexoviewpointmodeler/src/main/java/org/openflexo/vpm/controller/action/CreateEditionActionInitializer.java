@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.action.CreateEditionAction;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class CreateEditionActionInitializer extends ActionInitializer<CreateEditionAction, EditionSchemeObject, ViewPointObject> {
@@ -58,7 +58,7 @@ public class CreateEditionActionInitializer extends ActionInitializer<CreateEdit
 		return new FlexoActionInitializer<CreateEditionAction>() {
 			@Override
 			public boolean run(EventObject e, CreateEditionAction action) {
-				return instanciateAndShowDialog(action, CEDCst.CREATE_EDITION_ACTION_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.CREATE_EDITION_ACTION_DIALOG_FIB);
 			}
 		};
 	}

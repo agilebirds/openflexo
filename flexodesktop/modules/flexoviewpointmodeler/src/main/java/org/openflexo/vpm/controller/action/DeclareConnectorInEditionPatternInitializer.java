@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPatter
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareConnectorInEditionPatternInitializer extends ActionInitializer {
@@ -57,7 +57,7 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 			@Override
 			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
 
-				return instanciateAndShowDialog(action, CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}

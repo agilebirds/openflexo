@@ -27,7 +27,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class CreateViewPointDialogEDITOR extends FIBAbstractEditor {
 
@@ -44,7 +44,7 @@ public class CreateViewPointDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.CREATE_VIEW_POINT_DIALOG_FIB;
+		return VPMCst.CREATE_VIEW_POINT_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

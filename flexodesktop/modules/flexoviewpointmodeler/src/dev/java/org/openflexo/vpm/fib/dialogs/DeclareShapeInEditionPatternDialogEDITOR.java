@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 
 public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor {
 
@@ -48,7 +48,7 @@ public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor 
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
+		return VPMCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

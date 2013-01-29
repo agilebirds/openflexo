@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.VPMModule;
 import org.openflexo.vpm.controller.VPMController;
 
@@ -44,7 +44,7 @@ public class ReviewUnsavedViewPointModelerDialogEDITOR extends FIBAbstractEditor
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB;
+		return VPMCst.REVIEW_UNSAVED_VPM_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

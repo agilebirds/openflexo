@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.action.CreateDiagramPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteGR;
 
@@ -61,7 +61,7 @@ public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDia
 			public boolean run(EventObject e, CreateDiagramPalette action) {
 
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
-				return instanciateAndShowDialog(action, CEDCst.CREATE_PALETTE_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.CREATE_PALETTE_DIALOG_FIB);
 			}
 		};
 	}

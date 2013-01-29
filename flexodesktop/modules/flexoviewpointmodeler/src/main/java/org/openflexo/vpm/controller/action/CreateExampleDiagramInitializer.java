@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.action.CreateExampleDiagram;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class CreateExampleDiagramInitializer extends ActionInitializer<CreateExampleDiagram, DiagramSpecification, ViewPointObject> {
@@ -59,7 +59,7 @@ public class CreateExampleDiagramInitializer extends ActionInitializer<CreateExa
 			@Override
 			public boolean run(EventObject e, CreateExampleDiagram action) {
 
-				return instanciateAndShowDialog(action, CEDCst.CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.CREATE_EXAMPLE_DIAGRAM_DIALOG_FIB);
 			}
 		};
 	}

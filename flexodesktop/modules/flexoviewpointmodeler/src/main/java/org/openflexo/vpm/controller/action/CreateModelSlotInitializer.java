@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlot, ViewPoint, ViewPointObject> {
@@ -58,7 +58,7 @@ public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlo
 		return new FlexoActionInitializer<CreateModelSlot>() {
 			@Override
 			public boolean run(EventObject e, CreateModelSlot action) {
-				return instanciateAndShowDialog(action, CEDCst.CREATE_MODEL_SLOT_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VPMCst.CREATE_MODEL_SLOT_DIALOG_FIB);
 			}
 		};
 	}
