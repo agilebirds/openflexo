@@ -113,6 +113,8 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	 */
 	public RepositoryFolder<R> createNewFolder(String folderName, RepositoryFolder<R> parentFolder) {
 		RepositoryFolder<R> newFolder = new RepositoryFolder<R>(folderName, parentFolder, this);
+		newFolder.getFile().mkdirs();
+
 		return newFolder;
 	}
 
@@ -134,6 +136,9 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	public void deleteFolder(RepositoryFolder<R> folder) {
 		RepositoryFolder<R> parentFolder = getParentFolder(folder);
 		if (parentFolder != null && folder.getResources().size() == 0) {
+			if (folder.getFile().exists()) {
+				folder.getFile().delete();
+			}
 			parentFolder.removeFromChildren(folder);
 			folder.delete();
 		}

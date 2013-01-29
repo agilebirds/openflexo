@@ -46,11 +46,15 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 	public void addToChildren(RepositoryFolder<R> aFolder) {
 		children.add(aFolder);
 		aFolder.parent = this;
+		setChanged();
+		notifyObservers(new RepositoryFolderAdded(this, aFolder));
 	}
 
 	public void removeFromChildren(RepositoryFolder<R> aFolder) {
 		children.remove(aFolder);
 		aFolder.parent = null;
+		setChanged();
+		notifyObservers(new RepositoryFolderRemoved(this, aFolder));
 	}
 
 	public RepositoryFolder<R> getParentFolder() {
@@ -129,4 +133,11 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 		return false;
 	}
 
+	@Override
+	public void delete() {
+		if (getFile().exists()) {
+			getFile().delete();
+		}
+		super.delete();
+	}
 }

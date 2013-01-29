@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.resource;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
-import org.openflexo.foundation.ontology.dm.OntologyDataModification;
 
-public class ResourceRegistered extends OntologyDataModification implements ServiceNotification {
+public class ResourceRegistered extends DataModification implements ServiceNotification {
 
 	private RepositoryFolder<?> folder;
 
