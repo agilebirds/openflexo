@@ -117,6 +117,7 @@ import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -129,7 +130,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
-import org.openflexo.foundation.view.diagram.model.DiagramObject;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
@@ -2012,12 +2013,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ViewPointObject) object);
 		} else if (object instanceof ViewPointResource) {
 			return VPMIconLibrary.iconForObject((ViewPointResource) object);
+		} else if (object instanceof VirtualModelResource) {
+			return VPMIconLibrary.iconForObject((VirtualModelResource) object);
 		} else if (object instanceof ExampleDiagramResource) {
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
-		} else if (object instanceof DiagramObject) {
-			return VEIconLibrary.iconForObject((DiagramObject) object);
+		} else if (object instanceof ViewObject) {
+			return VEIconLibrary.iconForObject((ViewObject) object);
 		} else if (object instanceof RepositoryFolder) {
 			if (((RepositoryFolder) object).isRootFolder()) {
 				return IconLibrary.RESOURCE_CENTER_ICON;

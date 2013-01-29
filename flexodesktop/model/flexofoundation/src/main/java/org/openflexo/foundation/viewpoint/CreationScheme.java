@@ -19,11 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class CreationScheme extends AbstractCreationScheme {
 
-	public CreationScheme(ViewPointBuilder builder) {
+	public CreationScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

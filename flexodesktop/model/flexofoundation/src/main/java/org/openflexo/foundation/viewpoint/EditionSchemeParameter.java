@@ -34,7 +34,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeParameter extends EditionSchemeObject {
@@ -68,7 +68,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject {
 	private DataBinding<Boolean> conditional;
 	private DataBinding<Object> defaultValue;
 
-	public EditionSchemeParameter(ViewPointBuilder builder) {
+	public EditionSchemeParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

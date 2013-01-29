@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an integer
@@ -29,7 +30,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class IntegerInspectorEntry extends InspectorEntry {
 
-	public IntegerInspectorEntry(ViewPointBuilder builder) {
+	public IntegerInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

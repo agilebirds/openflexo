@@ -4,7 +4,8 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.ViewBuilder;
@@ -15,7 +16,7 @@ import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 @Deprecated
 public class RestrictionStatementPatternRole extends StatementPatternRole {
 
-	public RestrictionStatementPatternRole(ViewPointBuilder builder) {
+	public RestrictionStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

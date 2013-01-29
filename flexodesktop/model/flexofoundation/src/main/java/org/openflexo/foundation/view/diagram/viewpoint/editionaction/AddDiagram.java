@@ -32,13 +32,14 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
-	public AddDiagram(ViewPointBuilder builder) {
+	public AddDiagram(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

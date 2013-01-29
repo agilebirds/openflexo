@@ -21,14 +21,14 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class EditionPatternParameter extends InnerModelSlotParameter {
 
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
 
-	public EditionPatternParameter(ViewPointBuilder builder) {
+	public EditionPatternParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

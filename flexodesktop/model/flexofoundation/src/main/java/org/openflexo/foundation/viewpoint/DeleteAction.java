@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, FlexoModelObject> {
 
@@ -37,7 +37,7 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 
 	private DataBinding<Object> object;
 
-	public DeleteAction(ViewPointBuilder builder) {
+	public DeleteAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

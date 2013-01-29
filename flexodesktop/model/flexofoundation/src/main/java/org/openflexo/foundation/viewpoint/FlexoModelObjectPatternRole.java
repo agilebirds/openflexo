@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -24,7 +24,7 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 
 	private FlexoModelObjectType flexoModelObjectType;
 
-	public FlexoModelObjectPatternRole(ViewPointBuilder builder) {
+	public FlexoModelObjectPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

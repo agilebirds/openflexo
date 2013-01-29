@@ -19,11 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ActionScheme extends AbstractActionScheme {
 
-	public ActionScheme(ViewPointBuilder builder) {
+	public ActionScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

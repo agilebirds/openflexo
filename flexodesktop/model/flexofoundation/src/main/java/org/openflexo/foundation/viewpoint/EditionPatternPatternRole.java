@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class EditionPatternPatternRole extends PatternRole<EditionPatternReference> {
 
@@ -12,7 +12,7 @@ public class EditionPatternPatternRole extends PatternRole<EditionPatternReferen
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public EditionPatternPatternRole(ViewPointBuilder builder) {
+	public EditionPatternPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

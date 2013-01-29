@@ -10,7 +10,8 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.ViewBuilder;
@@ -25,7 +26,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 
 	static final Logger logger = FlexoLogger.getLogger(ObjectPropertyStatementPatternRole.class.getPackage().toString());
 
-	public ObjectPropertyStatementPatternRole(ViewPointBuilder builder) {
+	public ObjectPropertyStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

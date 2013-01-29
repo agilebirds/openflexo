@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.StringEncoder;
@@ -30,8 +30,8 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	}
 
 	@Override
-	public final ViewPointBuilder instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPointLibrary(), getContainer(), getModelVersion());
+	public final VirtualModelBuilder instanciateNewBuilder() {
+		return new VirtualModelBuilder(getViewPointLibrary(), getContainer().getViewPoint(), this, getModelVersion());
 	}
 
 	@Override

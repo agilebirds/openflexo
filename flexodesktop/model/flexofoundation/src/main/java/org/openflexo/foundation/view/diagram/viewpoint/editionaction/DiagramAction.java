@@ -23,11 +23,12 @@ import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class DiagramAction<T> extends AssignableAction<Diagram, DiagramSpecification, T> {
 
-	public DiagramAction(ViewPointBuilder builder) {
+	public DiagramAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an object which is part of the model of an EditionPattern
@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public abstract class EditionPatternObject extends NamedViewPointObject {
 
-	public EditionPatternObject(ViewPointBuilder builder) {
+	public EditionPatternObject(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -19,11 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DeletionScheme extends AbstractActionScheme {
 
-	public DeletionScheme(ViewPointBuilder builder) {
+	public DeletionScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -20,7 +20,8 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -41,7 +42,7 @@ public class FlexoObjectInspectorEntry extends InspectorEntry {
 		Process, ProcessFolder, Role, Activity, Operation, Action
 	}
 
-	public FlexoObjectInspectorEntry(ViewPointBuilder builder) {
+	public FlexoObjectInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

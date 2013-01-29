@@ -29,7 +29,8 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
@@ -43,7 +44,7 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 
 	private String dataPropertyURI = null;
 
-	public AddOWLIndividual(ViewPointBuilder builder) {
+	public AddOWLIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

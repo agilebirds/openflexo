@@ -46,7 +46,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This edition primitive addresses the creation of a new connector linking two shapes in a diagram
@@ -58,7 +59,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public AddConnector(ViewPointBuilder builder) {
+	public AddConnector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

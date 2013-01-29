@@ -34,7 +34,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
 
@@ -42,7 +42,7 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 
 	private String iteratorName = "item";
 
-	public IterationAction(ViewPointBuilder builder) {
+	public IterationAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

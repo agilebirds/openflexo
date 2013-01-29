@@ -30,7 +30,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
 		AssignableAction<M, MM, FlexoModelObject> {
@@ -39,7 +39,7 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	private DataBinding<Object> object;
 
-	public DeclarePatternRole(ViewPointBuilder builder) {
+	public DeclarePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

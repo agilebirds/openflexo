@@ -23,9 +23,15 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
-import org.openflexo.foundation.view.diagram.model.DiagramObject;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -54,18 +60,41 @@ public class VEIconLibrary extends IconLibrary {
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
 	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/View.png");
+	public static final ImageIconResource VIRTUAL_MODEL_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/VirtualModelInstance.png");
+	public static final ImageIconResource EDITION_PATTERN_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/EditionPatternInstance.png");
+	public static final ImageIconResource MODEL_SLOT_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/ModelSlotInstance.png");
+
+	public static final ImageIconResource DIAGRAM_ICON = new ImageIconResource("Icons/Model/VE/Diagram.png");
 	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/DiagramShape.png");
-	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/DiagramConnector.gif");
+	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/DiagramConnector.png");
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 
-	public static ImageIcon iconForObject(DiagramObject object) {
-		if (object instanceof View) {
+	public static ImageIcon iconForObject(DiagramElement object) {
+		if (object instanceof DiagramRootPane) {
 			return VIEW_ICON;
 		} else if (object instanceof DiagramConnector) {
 			return CONNECTOR_ICON;
 		} else if (object instanceof DiagramShape) {
 			return SHAPE_ICON;
+		}
+		logger.warning("No icon for " + object.getClass());
+		return UNKNOWN_ICON;
+	}
+
+	public static ImageIcon iconForObject(ViewObject object) {
+		if (object instanceof DiagramElement) {
+			return iconForObject((DiagramElement) object);
+		} else if (object instanceof View) {
+			return VIEW_ICON;
+		} else if (object instanceof ModelSlotInstance) {
+			return MODEL_SLOT_INSTANCE_ICON;
+		} else if (object instanceof Diagram) {
+			return DIAGRAM_ICON;
+		} else if (object instanceof VirtualModelInstance) {
+			return VIRTUAL_MODEL_INSTANCE_ICON;
+		} else if (object instanceof EditionPatternInstance) {
+			return EDITION_PATTERN_INSTANCE_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;

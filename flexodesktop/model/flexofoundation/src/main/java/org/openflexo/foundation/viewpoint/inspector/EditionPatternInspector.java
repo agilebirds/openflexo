@@ -27,9 +27,9 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
 import org.openflexo.logging.FlexoLogger;
@@ -55,7 +55,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		return returned;
 	}
 
-	public EditionPatternInspector(ViewPointBuilder builder) {
+	public EditionPatternInspector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		entries = new Vector<InspectorEntry>();
 	}

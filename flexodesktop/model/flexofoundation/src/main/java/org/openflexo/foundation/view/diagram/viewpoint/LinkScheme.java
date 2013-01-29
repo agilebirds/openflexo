@@ -31,7 +31,8 @@ import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 public class LinkScheme extends AbstractCreationScheme {
@@ -46,7 +47,7 @@ public class LinkScheme extends AbstractCreationScheme {
 
 	private boolean isAvailableWithFloatingPalette = true;
 
-	public LinkScheme(ViewPointBuilder builder) {
+	public LinkScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

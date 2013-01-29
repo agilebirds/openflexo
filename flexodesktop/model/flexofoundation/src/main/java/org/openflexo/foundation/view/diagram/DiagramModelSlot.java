@@ -22,7 +22,7 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
@@ -52,7 +52,7 @@ public class DiagramModelSlot extends ModelSlot<Diagram, DiagramSpecification> {
 		super(diagramSpecification, adapter);
 	}
 
-	public DiagramModelSlot(ViewPointBuilder builder) {
+	public DiagramModelSlot(VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -25,13 +25,13 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class AbstractActionScheme extends EditionScheme {
 
 	private DataBinding<Boolean> conditional;
 
-	public AbstractActionScheme(ViewPointBuilder builder) {
+	public AbstractActionScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

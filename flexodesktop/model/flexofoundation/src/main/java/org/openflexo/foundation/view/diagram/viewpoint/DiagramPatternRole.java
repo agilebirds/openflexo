@@ -6,14 +6,15 @@ import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DiagramPatternRole extends PatternRole<View> {
 
 	private DiagramSpecification diagramSpecification;
 
-	public DiagramPatternRole(ViewPointBuilder builder) {
+	public DiagramPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

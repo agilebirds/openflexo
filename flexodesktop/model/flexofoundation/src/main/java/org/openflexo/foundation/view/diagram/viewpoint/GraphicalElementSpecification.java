@@ -15,8 +15,8 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This class represent a constraint of graphical feature that is to be applied on a DiagramElement
@@ -37,7 +37,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private boolean mandatory;
 
 	// Use it only for deserialization
-	public GraphicalElementSpecification(ViewPointBuilder builder) {
+	public GraphicalElementSpecification(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

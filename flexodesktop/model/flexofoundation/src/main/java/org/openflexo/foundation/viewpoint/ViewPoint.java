@@ -142,46 +142,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public void setModelVersion(FlexoVersion aVersion) {
 	}
 
-	public static class ViewPointBuilder {
-		private ViewPoint viewPoint;
-		private FlexoVersion modelVersion;
-		private ViewPointLibrary viewPointLibrary;
-		private ViewPointResource resource;
-
-		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource) {
-			this.viewPointLibrary = vpLibrary;
-			this.resource = resource;
-		}
-
-		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint) {
-			this.viewPoint = viewPoint;
-			this.viewPointLibrary = vpLibrary;
-			this.resource = viewPoint.getResource();
-		}
-
-		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource, FlexoVersion modelVersion) {
-			this.modelVersion = modelVersion;
-			this.viewPointLibrary = vpLibrary;
-			this.resource = resource;
-		}
-
-		public ViewPointLibrary getViewPointLibrary() {
-			return viewPointLibrary;
-		}
-
-		public FlexoVersion getModelVersion() {
-			return modelVersion;
-		}
-
-		public ViewPoint getViewPoint() {
-			return viewPoint;
-		}
-
-		public void setViewPoint(ViewPoint viewPoint) {
-			this.viewPoint = viewPoint;
-		}
-	}
-
 	// Used during deserialization, do not use it
 	public ViewPoint(ViewPointBuilder builder) {
 		super(builder);
@@ -325,7 +285,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary(null);
+			localizedDictionary = new LocalizedDictionary((ViewPointBuilder) null);
 			localizedDictionary.setOwner(this);
 		}
 		return localizedDictionary;
@@ -345,14 +305,16 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			Element root = FlexoXMLFileResourceImpl.getElement(document, "Ontology");
 			if (root != null) {
 				Element importElement = FlexoXMLFileResourceImpl.getElement(document, "imports");
-				Iterator it = importElement.getAttributes().iterator();
-				while (it.hasNext()) {
-					Attribute at = (Attribute) it.next();
-					if (at.getName().equals("resource")) {
-						System.out.println("Returned " + at.getValue());
-						String returned = at.getValue();
-						if (StringUtils.isNotEmpty(returned)) {
-							return returned;
+				if (importElement != null) {
+					Iterator it = importElement.getAttributes().iterator();
+					while (it.hasNext()) {
+						Attribute at = (Attribute) it.next();
+						if (at.getName().equals("resource")) {
+							// System.out.println("Returned " + at.getValue());
+							String returned = at.getValue();
+							if (StringUtils.isNotEmpty(returned)) {
+								return returned;
+							}
 						}
 					}
 				}
@@ -409,9 +371,10 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
+		if (builder instanceof VirtualModel.VirtualModelBuilder
+				&& ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
-			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
+			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
 		}
 		super.finalizeDeserialization(builder);
 	}
@@ -569,6 +532,52 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			getResource().save(null);
 		} catch (SaveResourceException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * This is the builder used to deserialize VirtualModel objects.
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static class ViewPointBuilder {
+		private ViewPoint viewPoint;
+		private FlexoVersion modelVersion;
+		private ViewPointLibrary viewPointLibrary;
+		ViewPointResource resource;
+
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource) {
+			this.viewPointLibrary = vpLibrary;
+			this.resource = resource;
+		}
+
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+			this.viewPointLibrary = vpLibrary;
+			this.resource = viewPoint.getResource();
+		}
+
+		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource, FlexoVersion modelVersion) {
+			this.modelVersion = modelVersion;
+			this.viewPointLibrary = vpLibrary;
+			this.resource = resource;
+		}
+
+		public ViewPointLibrary getViewPointLibrary() {
+			return viewPointLibrary;
+		}
+
+		public FlexoVersion getModelVersion() {
+			return modelVersion;
+		}
+
+		public ViewPoint getViewPoint() {
+			return viewPoint;
+		}
+
+		public void setViewPoint(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
 		}
 	}
 

@@ -33,7 +33,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ObjectPropertyAssertion extends AbstractAssertion {
 
@@ -41,7 +41,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	private String objectPropertyURI;
 
-	public ObjectPropertyAssertion(ViewPointBuilder builder) {
+	public ObjectPropertyAssertion(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

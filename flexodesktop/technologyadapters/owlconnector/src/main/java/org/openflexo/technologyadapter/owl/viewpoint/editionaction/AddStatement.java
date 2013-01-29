@@ -29,7 +29,8 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
@@ -38,7 +39,7 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	public AddStatement(ViewPointBuilder builder) {
+	public AddStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

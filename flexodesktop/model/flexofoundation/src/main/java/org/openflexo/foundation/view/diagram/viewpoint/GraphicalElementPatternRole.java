@@ -16,7 +16,8 @@ import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 
@@ -33,7 +34,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 
 	private Vector<GraphicalElementAction> actions;
 
-	public GraphicalElementPatternRole(ViewPointBuilder builder) {
+	public GraphicalElementPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		initDefaultSpecifications();
 	}

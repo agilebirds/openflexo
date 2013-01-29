@@ -27,7 +27,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
 
@@ -35,7 +35,7 @@ public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	private DataBinding<Boolean> condition;
 
-	public ConditionalAction(ViewPointBuilder builder) {
+	public ConditionalAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

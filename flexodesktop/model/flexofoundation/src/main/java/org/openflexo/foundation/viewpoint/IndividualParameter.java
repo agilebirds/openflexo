@@ -30,7 +30,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class IndividualParameter extends InnerModelSlotParameter {
 
@@ -39,7 +39,7 @@ public class IndividualParameter extends InnerModelSlotParameter {
 	private String renderer;
 	private boolean isDynamicConceptValueSet = false;
 
-	public IndividualParameter(ViewPointBuilder builder) {
+	public IndividualParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

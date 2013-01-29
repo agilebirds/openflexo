@@ -29,7 +29,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class PropertyParameter extends InnerModelSlotParameter {
 
@@ -39,7 +39,7 @@ public class PropertyParameter extends InnerModelSlotParameter {
 
 	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	public PropertyParameter(ViewPointBuilder builder) {
+	public PropertyParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

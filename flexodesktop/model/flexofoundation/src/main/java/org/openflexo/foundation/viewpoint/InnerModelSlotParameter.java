@@ -20,13 +20,13 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class InnerModelSlotParameter extends EditionSchemeParameter {
 
 	private ModelSlot<?, ?> modelSlot;
 
-	public InnerModelSlotParameter(ViewPointBuilder builder) {
+	public InnerModelSlotParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

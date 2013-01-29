@@ -43,7 +43,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternHierarchyChanged;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
@@ -151,7 +151,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		}
 	}
 
-	public EditionPattern(ViewPointBuilder builder) {
+	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();

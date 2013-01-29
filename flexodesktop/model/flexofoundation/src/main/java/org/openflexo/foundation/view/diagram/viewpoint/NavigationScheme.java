@@ -26,13 +26,14 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class NavigationScheme extends AbstractActionScheme {
 
 	private DataBinding<Object> targetObject;
 
-	public NavigationScheme(ViewPointBuilder builder) {
+	public NavigationScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

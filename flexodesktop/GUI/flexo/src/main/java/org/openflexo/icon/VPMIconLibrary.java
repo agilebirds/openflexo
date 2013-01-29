@@ -26,7 +26,9 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
@@ -35,6 +37,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
@@ -71,6 +74,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -120,6 +124,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource EDITION_PATTERN_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ActionIcon.png");
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
+	public static final ImageIconResource VIRTUAL_MODEL_ICON = new ImageIconResource("Icons/Model/VPM/VirtualModel.png");
+	public static final ImageIconResource DIAGRAM_SPECIFICATION_ICON = new ImageIconResource("Icons/Model/VPM/DiagramSpecification.png");
 	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.png");
 	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
 	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
@@ -160,7 +166,13 @@ public class VPMIconLibrary extends IconLibrary {
 				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
 			}
 		}
-		if (object instanceof ModelSlot) {
+		if (object instanceof ViewPoint) {
+			return VIEWPOINT_ICON;
+		} else if (object instanceof DiagramSpecification) {
+			return DIAGRAM_SPECIFICATION_ICON;
+		} else if (object instanceof VirtualModel) {
+			return VIRTUAL_MODEL_ICON;
+		} else if (object instanceof ModelSlot) {
 			return MODEL_SLOT_ICON;
 		} else if (object instanceof EditionPatternInspector) {
 			return INSPECT_ICON;
@@ -245,8 +257,6 @@ public class VPMIconLibrary extends IconLibrary {
 			return NAVIGATION_SCHEME_ICON;
 		} else if (object instanceof DeletionScheme) {
 			return DELETION_SCHEME_ICON;
-		} else if (object instanceof ViewPoint) {
-			return VIEWPOINT_ICON;
 		} else if (object instanceof PaletteElementPatternParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
 		} else if (object instanceof FlexoModelObjectPatternRole) {
@@ -307,6 +317,13 @@ public class VPMIconLibrary extends IconLibrary {
 
 	public static ImageIcon iconForObject(DiagramPaletteResource object) {
 		return DIAGRAM_PALETTE_ICON;
+	}
+
+	public static ImageIcon iconForObject(VirtualModelResource object) {
+		if (object instanceof DiagramSpecificationResource) {
+			return DIAGRAM_SPECIFICATION_ICON;
+		}
+		return VIRTUAL_MODEL_ICON;
 	}
 
 }

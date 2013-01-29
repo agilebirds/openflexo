@@ -33,7 +33,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -81,7 +81,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	private BindingModel inferedBindingModel = null;
 
-	public EditionAction(ViewPointBuilder builder) {
+	public EditionAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

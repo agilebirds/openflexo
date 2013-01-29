@@ -1,6 +1,5 @@
 package org.openflexo.foundation.view;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -8,7 +7,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class ActorReference<T> extends FlexoModelObject {
+public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	private PatternRole<T> patternRole;
 	private String patternRoleName;
 	private ModelSlot<?, ?> modelSlot;
@@ -74,4 +73,11 @@ public abstract class ActorReference<T> extends FlexoModelObject {
 		this.patternRoleName = patternRoleName;
 	}
 
+	@Override
+	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+		if (getPatternReference() != null) {
+			return getPatternReference().getEditionPatternInstance().getVirtualModelInstance();
+		}
+		return null;
+	}
 }

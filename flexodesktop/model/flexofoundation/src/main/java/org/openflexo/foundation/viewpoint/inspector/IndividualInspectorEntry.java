@@ -29,7 +29,8 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an ontology individual
@@ -43,7 +44,7 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private String renderer;
 
-	public IndividualInspectorEntry(ViewPointBuilder builder) {
+	public IndividualInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

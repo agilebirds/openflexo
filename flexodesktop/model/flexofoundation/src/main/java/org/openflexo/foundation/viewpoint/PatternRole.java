@@ -31,7 +31,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -48,7 +48,7 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	private ModelSlot<?, ?> modelSlot;
 
-	public PatternRole(ViewPointBuilder builder) {
+	public PatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

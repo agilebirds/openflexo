@@ -45,7 +45,6 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
@@ -87,16 +86,12 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
 	// Used during deserialization, do not use it
-	public VirtualModel(ViewPointBuilder builder) {
-		/*super(builder);
-		if (builder != null) {
-			builder.setViewPoint(this);
-			resource = builder.resource;
-		}
-		modelSlots = new ArrayList<ModelSlot<?, ?>>();
-		virtualModels = new ArrayList<VirtualModel<?>>();*/
-
+	public VirtualModel(VirtualModelBuilder builder) {
 		super(builder);
+		if (builder != null) {
+			builder.setVirtualModel(this);
+			resource = (VirtualModelResource<VM>) builder.resource;
+		}
 		viewPoint = builder.getViewPoint();
 		modelSlots = new ArrayList<ModelSlot<?, ?>>();
 		editionPatterns = new Vector<EditionPattern>();
@@ -502,7 +497,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary(null);
+			localizedDictionary = new LocalizedDictionary((VirtualModelBuilder) null);
 			localizedDictionary.setOwner(this);
 		}
 		return localizedDictionary;
@@ -511,6 +506,61 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
 		localizedDictionary.setOwner(this);
 		this.localizedDictionary = localizedDictionary;
+	}
+
+	/**
+	 * This is the builder used to deserialize {@link VirtualModel} objects.
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static class VirtualModelBuilder {
+		private VirtualModel<?> virtualModel;
+		private FlexoVersion modelVersion;
+		private ViewPointLibrary viewPointLibrary;
+		private ViewPoint viewPoint;
+		VirtualModelResource<?> resource;
+
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource<?> resource) {
+			this.viewPointLibrary = vpLibrary;
+			this.viewPoint = viewPoint;
+			this.resource = resource;
+		}
+
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModel<?> virtualModel) {
+			this.virtualModel = virtualModel;
+			this.viewPointLibrary = vpLibrary;
+			this.viewPoint = viewPoint;
+			this.resource = virtualModel.getResource();
+		}
+
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource<?> resource,
+				FlexoVersion modelVersion) {
+			this.modelVersion = modelVersion;
+			this.viewPointLibrary = vpLibrary;
+			this.viewPoint = viewPoint;
+			this.resource = resource;
+		}
+
+		public ViewPointLibrary getViewPointLibrary() {
+			return viewPointLibrary;
+		}
+
+		public FlexoVersion getModelVersion() {
+			return modelVersion;
+		}
+
+		public VirtualModel<?> getVirtualModel() {
+			return virtualModel;
+		}
+
+		public void setVirtualModel(VirtualModel<?> virtualModel) {
+			this.virtualModel = virtualModel;
+		}
+
+		public ViewPoint getViewPoint() {
+			return viewPoint;
+		}
 	}
 
 }

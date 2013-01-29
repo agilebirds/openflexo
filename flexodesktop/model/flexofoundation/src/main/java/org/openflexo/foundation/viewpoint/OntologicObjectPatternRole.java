@@ -21,11 +21,11 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
-	public OntologicObjectPatternRole(ViewPointBuilder builder) {
+	public OntologicObjectPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

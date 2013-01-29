@@ -24,6 +24,7 @@ import java.util.Collection;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class LocalizedEntry extends ViewPointObject {
 
@@ -33,12 +34,16 @@ public class LocalizedEntry extends ViewPointObject {
 	private String language;
 	private String value;
 
+	public LocalizedEntry(VirtualModelBuilder builder) {
+		super(builder);
+	}
+
 	public LocalizedEntry(ViewPointBuilder builder) {
 		super(builder);
 	}
 
 	public LocalizedEntry(LocalizedDictionary localizedDictionary, String key, String language, String value) {
-		super((ViewPointBuilder) null);
+		super((VirtualModel.VirtualModelBuilder) null);
 		setLocalizedDictionary(localizedDictionary);
 		this.key = key;
 		this.language = language;

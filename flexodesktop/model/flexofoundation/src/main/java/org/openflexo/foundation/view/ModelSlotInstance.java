@@ -1,6 +1,5 @@
 package org.openflexo.foundation.view;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -17,7 +16,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
  * @see View
  * 
  */
-public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends FlexoModelObject {
+public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends VirtualModelInstanceObject {
 
 	private View view;
 	private VirtualModelInstance<?, ?> vmInstance;
@@ -25,13 +24,13 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	private M model;
 
 	public ModelSlotInstance(View view, ModelSlot<M, MM> modelSlot) {
-		super();
+		super(view.getProject());
 		this.view = view;
 		this.modelSlot = modelSlot;
 	}
 
 	public ModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, ModelSlot<M, MM> modelSlot) {
-		super();
+		super(vmInstance.getProject());
 		this.vmInstance = vmInstance;
 		this.view = vmInstance.getView();
 		this.modelSlot = modelSlot;
@@ -52,10 +51,12 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		this.view = view;
 	}
 
+	@Override
 	public View getView() {
 		return view;
 	}
 
+	@Override
 	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
 		return vmInstance;
 	}

@@ -53,7 +53,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class EditionPatternInstance extends FlexoModelObject implements Bindable, BindingEvaluationContext {
+public class EditionPatternInstance extends VirtualModelInstanceObject implements Bindable, BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
@@ -71,7 +71,7 @@ public class EditionPatternInstance extends FlexoModelObject implements Bindable
 	 */
 
 	public EditionPatternInstance(EditionPatternReference aPattern) {
-		super();
+		super(aPattern.getProject());
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init1> actors="+actors);
 		_project = aPattern.getProject();
 		pattern = aPattern.getEditionPattern();
@@ -87,7 +87,7 @@ public class EditionPatternInstance extends FlexoModelObject implements Bindable
 	}
 
 	public EditionPatternInstance(EditionPattern aPattern, FlexoProject project) {
-		super();
+		super(project);
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init2> actors="+actors);
 		_project = project;
 		instanceId = _project.getNewFlexoID();
@@ -390,6 +390,7 @@ public class EditionPatternInstance extends FlexoModelObject implements Bindable
 		return getVirtualModelInstance();
 	}
 
+	@Override
 	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
 		return vmInstance;
 	}

@@ -36,7 +36,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
@@ -56,7 +57,7 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 * 
 	 * @param builder
 	 */
-	public RemoveEMFObjectIndividual(ViewPointBuilder builder) {
+	public RemoveEMFObjectIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

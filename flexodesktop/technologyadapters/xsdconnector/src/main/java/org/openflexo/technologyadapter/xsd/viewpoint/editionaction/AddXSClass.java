@@ -26,7 +26,8 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
@@ -37,7 +38,7 @@ public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 
 	private String dataPropertyURI = null;
 
-	public AddXSClass(ViewPointBuilder builder) {
+	public AddXSClass(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

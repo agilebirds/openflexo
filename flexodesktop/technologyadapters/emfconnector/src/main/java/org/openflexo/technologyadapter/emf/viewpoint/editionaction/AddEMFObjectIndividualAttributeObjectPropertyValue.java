@@ -32,7 +32,8 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -53,7 +54,7 @@ public class AddEMFObjectIndividualAttributeObjectPropertyValue<T> extends
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualAttributeObjectPropertyValue(ViewPointBuilder builder) {
+	public AddEMFObjectIndividualAttributeObjectPropertyValue(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

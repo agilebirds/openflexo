@@ -23,7 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -51,8 +52,8 @@ public abstract class XMLSerializableFlexoObject extends FlexoObject implements 
 	public abstract XMLMapping getXMLMapping();
 
 	@Override
-	public final ViewPointBuilder instanciateNewBuilder() {
-		return (ViewPointBuilder) getXMLResourceData().getFlexoXMLFileResource().instanciateNewBuilder();
+	public final VirtualModel.VirtualModelBuilder instanciateNewBuilder() {
+		return (VirtualModel.VirtualModelBuilder) getXMLResourceData().getFlexoXMLFileResource().instanciateNewBuilder();
 	}
 
 	@Override

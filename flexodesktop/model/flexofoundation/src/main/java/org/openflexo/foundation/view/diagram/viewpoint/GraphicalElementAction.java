@@ -30,8 +30,8 @@ import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class GraphicalElementAction extends EditionPatternObject {
 
@@ -45,7 +45,7 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	private DataBinding<Boolean> conditional;
 
-	public GraphicalElementAction(ViewPointBuilder builder) {
+	public GraphicalElementAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

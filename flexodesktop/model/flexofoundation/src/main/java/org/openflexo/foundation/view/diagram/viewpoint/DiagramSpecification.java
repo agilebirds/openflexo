@@ -35,10 +35,10 @@ import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
@@ -65,7 +65,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
 	// Used during deserialization, do not use it
-	public DiagramSpecification(ViewPointBuilder builder) {
+	public DiagramSpecification(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		exampleDiagrams = new ArrayList<ExampleDiagram>();
 		palettes = new ArrayList<DiagramPalette>();
@@ -77,7 +77,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	 * @param viewPoint
 	 */
 	public DiagramSpecification(ViewPoint viewPoint) {
-		this((ViewPointBuilder) null);
+		this((VirtualModel.VirtualModelBuilder) null);
 		if (viewPoint.getViewPointLibrary().getFlexoServiceManager() != null
 				&& viewPoint.getViewPointLibrary().getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
 			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getFlexoServiceManager()
@@ -229,9 +229,9 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
+		if (builder instanceof VirtualModel.VirtualModelBuilder && ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
-			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
+			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
 		}
 		super.finalizeDeserialization(builder);
 	}

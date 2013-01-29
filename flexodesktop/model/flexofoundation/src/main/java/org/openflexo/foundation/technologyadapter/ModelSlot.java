@@ -26,6 +26,7 @@ import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -58,19 +59,32 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	private List<Class<? extends EditionAction>> availableEditionActionTypes;
 
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
-		super((ViewPointBuilder) null);
+		super((VirtualModel.VirtualModelBuilder) null);
 		this.viewPoint = viewPoint;
 		this.technologyAdapter = technologyAdapter;
 	}
 
 	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter<M, MM> technologyAdapter) {
-		super((ViewPointBuilder) null);
+		super((VirtualModel.VirtualModelBuilder) null);
 		this.virtualModel = virtualModel;
 		this.viewPoint = virtualModel.getViewPoint();
 		this.technologyAdapter = technologyAdapter;
 	}
 
-	protected ModelSlot(ViewPointBuilder builder) {
+	protected ModelSlot(VirtualModelBuilder builder) {
+		super(builder);
+
+		if (builder != null) {
+			this.viewPoint = builder.getViewPoint();
+			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
+					&& builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService() != null) {
+				this.technologyAdapter = builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService()
+						.getTechnologyAdapter(getTechnologyAdapterClass());
+			}
+		}
+	}
+
+	public ModelSlot(ViewPointBuilder builder) {
 		super(builder);
 
 		if (builder != null) {
@@ -147,7 +161,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 */
 	public <A extends EditionAction<M, MM, ?>> A createAction(Class<A> actionClass) {
 		Class[] constructorParams = new Class[1];
-		constructorParams[0] = ViewPointBuilder.class;
+		constructorParams[0] = VirtualModel.VirtualModelBuilder.class;
 		try {
 			Constructor<A> c = actionClass.getConstructor(constructorParams);
 			return c.newInstance(null);

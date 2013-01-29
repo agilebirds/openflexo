@@ -28,7 +28,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ClassParameter extends InnerModelSlotParameter {
 
@@ -36,7 +36,7 @@ public class ClassParameter extends InnerModelSlotParameter {
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private boolean isDynamicConceptValueSet = false;
 
-	public ClassParameter(ViewPointBuilder builder) {
+	public ClassParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

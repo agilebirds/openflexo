@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * A CloningScheme represents a behavioural feature encoding the cloning of an EditionPattern
@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class CloningScheme extends AbstractCreationScheme {
 
-	public CloningScheme(ViewPointBuilder builder) {
+	public CloningScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

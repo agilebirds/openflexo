@@ -22,7 +22,8 @@ package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This edition primitive addresses the duplication of a connector
@@ -34,7 +35,7 @@ public class CloneConnector extends AddConnector {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public CloneConnector(ViewPointBuilder builder) {
+	public CloneConnector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

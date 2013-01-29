@@ -26,7 +26,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -43,7 +44,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 
 	private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
 
-	public AddEMFObjectIndividual(ViewPointBuilder builder) {
+	public AddEMFObjectIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

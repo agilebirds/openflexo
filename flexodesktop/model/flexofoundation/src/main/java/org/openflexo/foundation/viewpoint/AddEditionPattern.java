@@ -41,7 +41,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		AssignableAction<M, MM, EditionPatternInstance> {
@@ -52,7 +52,7 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public AddEditionPattern(ViewPointBuilder builder) {
+	public AddEditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
@@ -225,7 +225,7 @@ public class AddEditionPattern<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		private DataBinding<Object> value;
 
 		// Use it only for deserialization
-		public AddEditionPatternParameter(ViewPointBuilder builder) {
+		public AddEditionPatternParameter(VirtualModel.VirtualModelBuilder builder) {
 			super(builder);
 		}
 

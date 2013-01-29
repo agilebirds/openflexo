@@ -7,7 +7,8 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> {
@@ -18,7 +19,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 
 	private ShapePatternRole parentShapePatternRole;
 
-	public ShapePatternRole(ViewPointBuilder builder) {
+	public ShapePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

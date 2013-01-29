@@ -38,7 +38,8 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
@@ -52,7 +53,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	private String objectPropertyURI = null;
 
-	public AddObjectPropertyStatement(ViewPointBuilder builder) {
+	public AddObjectPropertyStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

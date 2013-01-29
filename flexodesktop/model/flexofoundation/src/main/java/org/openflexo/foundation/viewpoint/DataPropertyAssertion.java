@@ -27,14 +27,14 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
 	private DataBinding<Object> value;
 
-	public DataPropertyAssertion(ViewPointBuilder builder) {
+	public DataPropertyAssertion(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

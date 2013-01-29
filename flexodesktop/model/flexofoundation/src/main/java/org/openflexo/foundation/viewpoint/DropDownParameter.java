@@ -22,11 +22,11 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.Vector;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DropDownParameter extends EditionSchemeParameter {
 
-	public DropDownParameter(ViewPointBuilder builder) {
+	public DropDownParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

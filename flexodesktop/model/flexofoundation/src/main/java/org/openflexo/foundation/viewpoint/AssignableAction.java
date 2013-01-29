@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -40,7 +40,7 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	private DataBinding<Object> assignation;
 
-	public AssignableAction(ViewPointBuilder builder) {
+	public AssignableAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

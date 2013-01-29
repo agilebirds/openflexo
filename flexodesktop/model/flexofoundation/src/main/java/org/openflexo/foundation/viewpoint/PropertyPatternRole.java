@@ -9,14 +9,14 @@ import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
 
 	private String parentPropertyURI;
 	private String domainURI;
 
-	public PropertyPatternRole(ViewPointBuilder builder) {
+	public PropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

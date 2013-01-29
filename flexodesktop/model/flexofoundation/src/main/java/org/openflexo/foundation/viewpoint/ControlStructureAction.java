@@ -27,7 +27,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		EditionAction<M, MM, Object> implements ActionContainer {
@@ -36,7 +36,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 
 	private Vector<EditionAction<?, ?, ?>> actions;
 
-	public ControlStructureAction(ViewPointBuilder builder) {
+	public ControlStructureAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		actions = new Vector<EditionAction<?, ?, ?>>();
 	}

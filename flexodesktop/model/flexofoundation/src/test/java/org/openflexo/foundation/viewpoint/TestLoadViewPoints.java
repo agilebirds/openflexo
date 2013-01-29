@@ -6,6 +6,10 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 
 public class TestLoadViewPoints extends FlexoTestCase {
 
@@ -35,6 +39,7 @@ public class TestLoadViewPoints extends FlexoTestCase {
 		assertFalse(vpRes.isLoaded());
 
 		ViewPoint vp = vpRes.getViewPoint();
+		assertNotNull(vp);
 		assertTrue(vpRes.isLoaded());
 
 		for (FlexoResource<?> r : vpRes.getContents()) {
@@ -42,7 +47,25 @@ public class TestLoadViewPoints extends FlexoTestCase {
 			VirtualModelResource<?> vmRes = (VirtualModelResource<?>) r;
 			assertFalse(vmRes.isLoaded());
 			VirtualModel<?> vm = vmRes.getVirtualModel();
+			assertNotNull(vm);
 			assertTrue(vmRes.isLoaded());
+			for (FlexoResource<?> r2 : vmRes.getContents()) {
+				assertTrue(r2 instanceof ExampleDiagramResource || r2 instanceof DiagramPaletteResource);
+				if (r2 instanceof ExampleDiagramResource) {
+					ExampleDiagramResource edRes = (ExampleDiagramResource) r2;
+					assertFalse(edRes.isLoaded());
+					ExampleDiagram ed = edRes.getExampleDiagram();
+					assertNotNull(ed);
+					assertTrue(edRes.isLoaded());
+				}
+				if (r2 instanceof DiagramPaletteResource) {
+					DiagramPaletteResource dpRes = (DiagramPaletteResource) r2;
+					assertFalse(dpRes.isLoaded());
+					DiagramPalette dp = dpRes.getDiagramPalette();
+					assertNotNull(dp);
+					assertTrue(dpRes.isLoaded());
+				}
+			}
 		}
 
 	}

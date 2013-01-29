@@ -28,7 +28,8 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -39,7 +40,7 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 
 	private static final Logger logger = Logger.getLogger(AddSubClassStatement.class.getPackage().getName());
 
-	public AddSubClassStatement(ViewPointBuilder builder) {
+	public AddSubClassStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

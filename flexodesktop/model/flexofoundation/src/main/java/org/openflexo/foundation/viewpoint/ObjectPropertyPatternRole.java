@@ -7,13 +7,13 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectProperty> extends PropertyPatternRole<P> {
 
 	private String rangeURI;
 
-	public ObjectPropertyPatternRole(ViewPointBuilder builder) {
+	public ObjectPropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

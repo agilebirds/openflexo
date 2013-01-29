@@ -7,7 +7,8 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector> {
@@ -21,7 +22,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	private Object artifactFromGraphicalRepresentation;
 	private Object artifactToGraphicalRepresentation;
 
-	public ConnectorPatternRole(ViewPointBuilder builder) {
+	public ConnectorPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

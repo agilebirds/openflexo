@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
@@ -19,7 +19,7 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 
 	private PrimitiveType primitiveType;
 
-	public PrimitivePatternRole(ViewPointBuilder builder) {
+	public PrimitivePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

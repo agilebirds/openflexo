@@ -28,7 +28,7 @@ import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -36,7 +36,7 @@ public class URIParameter extends EditionSchemeParameter {
 
 	private DataBinding<String> baseURI;
 
-	public URIParameter(ViewPointBuilder builder) {
+	public URIParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -32,7 +32,8 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 public class DropScheme extends AbstractCreationScheme {
@@ -40,7 +41,7 @@ public class DropScheme extends AbstractCreationScheme {
 	private String target;
 	private ShapePatternRole targetPatternRole;
 
-	public DropScheme(ViewPointBuilder builder) {
+	public DropScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

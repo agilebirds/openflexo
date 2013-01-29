@@ -6,7 +6,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.ViewBuilder;
@@ -20,7 +21,7 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 
 	static final Logger logger = FlexoLogger.getLogger(SubClassStatementPatternRole.class.getPackage().toString());
 
-	public SubClassStatementPatternRole(ViewPointBuilder builder) {
+	public SubClassStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

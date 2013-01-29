@@ -31,7 +31,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ListParameter extends EditionSchemeParameter {
 
@@ -42,7 +42,7 @@ public class ListParameter extends EditionSchemeParameter {
 	private ListType listType;
 	private DataBinding<List<?>> list;
 
-	public ListParameter(ViewPointBuilder builder) {
+	public ListParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

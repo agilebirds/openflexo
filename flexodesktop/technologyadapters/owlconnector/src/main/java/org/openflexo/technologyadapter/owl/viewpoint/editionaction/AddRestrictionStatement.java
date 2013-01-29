@@ -32,7 +32,8 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
@@ -49,7 +50,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private String propertyURI;
 
-	public AddRestrictionStatement(ViewPointBuilder builder) {
+	public AddRestrictionStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

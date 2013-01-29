@@ -39,12 +39,13 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
@@ -60,7 +61,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends FlexoModelObject implements Bindable,
+public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements Bindable,
 		PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());
@@ -86,6 +87,11 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	public DiagramElement(Diagram diagram) {
 		super(diagram.getProject());
 		this.diagram = diagram;
+	}
+
+	@Override
+	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+		return getDiagram();
 	}
 
 	public Diagram getDiagram() {
@@ -634,7 +640,8 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	/**
-	 * Return the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same EditionPattern
+	 * Return the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same
+	 * EditionPattern
 	 * 
 	 * @return
 	 */
@@ -646,7 +653,8 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	/**
-	 * Sets the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same EditionPattern
+	 * Sets the index of this DiagramElement, relative to its position in the list of DiagramElement<?> declared to be of same
+	 * EditionPattern
 	 * 
 	 * @param index
 	 */

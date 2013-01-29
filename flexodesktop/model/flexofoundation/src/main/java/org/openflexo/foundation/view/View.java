@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -56,7 +55,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class View extends FlexoModelObject implements XMLStorageResourceData<View> {
+public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
@@ -107,6 +106,11 @@ public class View extends FlexoModelObject implements XMLStorageResourceData<Vie
 		vmInstances = new ArrayList<VirtualModelInstance<?, ?>>();
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 
+	}
+
+	@Override
+	public View getView() {
+		return this;
 	}
 
 	@Override

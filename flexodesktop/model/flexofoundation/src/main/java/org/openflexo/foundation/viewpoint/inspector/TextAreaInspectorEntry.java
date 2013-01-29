@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for a text area
@@ -29,7 +30,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class TextAreaInspectorEntry extends InspectorEntry {
 
-	public TextAreaInspectorEntry(ViewPointBuilder builder) {
+	public TextAreaInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

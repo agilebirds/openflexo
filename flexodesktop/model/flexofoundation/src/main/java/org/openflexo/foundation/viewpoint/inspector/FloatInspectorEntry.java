@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an float
@@ -29,7 +30,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class FloatInspectorEntry extends InspectorEntry {
 
-	public FloatInspectorEntry(ViewPointBuilder builder) {
+	public FloatInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

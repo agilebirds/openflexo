@@ -52,7 +52,7 @@ import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
@@ -135,7 +135,8 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				break;
 			case CREATES_EDITION_PATTERN:
 
-				ViewPointBuilder builder = new ViewPointBuilder(getFocusedObject().getViewPointLibrary(), getFocusedObject().getViewPoint());
+				VirtualModel.VirtualModelBuilder builder = new VirtualModel.VirtualModelBuilder(getFocusedObject().getViewPointLibrary(),
+						getFocusedObject().getViewPoint(), getFocusedObject().getVirtualModel().getResource());
 
 				// Create new edition pattern
 				newEditionPattern = new EditionPattern(builder);

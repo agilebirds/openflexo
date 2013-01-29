@@ -7,13 +7,13 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProperty> extends PropertyPatternRole<P> {
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyPatternRole(ViewPointBuilder builder) {
+	public DataPropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

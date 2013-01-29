@@ -44,7 +44,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalFeature;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, DiagramElement> {
 
@@ -53,7 +54,7 @@ public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private DataBinding<Object> value;
 
-	public GraphicalAction(ViewPointBuilder builder) {
+	public GraphicalAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

@@ -44,7 +44,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This edition primitive addresses the creation of a new shape in a diagram
@@ -58,7 +59,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 
 	private boolean extendParentBoundsToHostThisShape = false;
 
-	public AddShape(ViewPointBuilder builder) {
+	public AddShape(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

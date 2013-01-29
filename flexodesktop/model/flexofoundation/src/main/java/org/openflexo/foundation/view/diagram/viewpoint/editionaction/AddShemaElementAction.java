@@ -20,11 +20,12 @@
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class AddShemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
-	public AddShemaElementAction(ViewPointBuilder builder) {
+	public AddShemaElementAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

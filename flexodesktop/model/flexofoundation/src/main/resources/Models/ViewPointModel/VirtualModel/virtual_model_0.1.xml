@@ -1,46 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree">
+<model builder="org.openflexo.foundation.viewpoint.VirtualModel$VirtualModelBuilder"  handlesReferences="yes" serializationMode="pseudoTree">
 
   <entity name="org.openflexo.foundation.viewpoint.ViewPointObject" abstract="YES" finalizer="finalizeDeserialization">
    <description>Root class for all objects of ViewPoint model</description>
   </entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.NamedViewPointObject" abstract="yes">
-		<property name="name" xmlTag="name" attribute="YES" />
-		<property name="description" xmlTag="description" />
-	</entity>
-
 	<entity name="org.openflexo.foundation.viewpoint.VirtualModel" abstract="yes" finalizer="finalizeDeserialization">
-		<property name="version" xmlTag="version" attribute="YES" />
-		<property name="modelVersion" xmlTag="modelVersion" attribute="YES" />
+		<property name="description" xmlTag="description" />
 		<property name="editionPatterns" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />
 		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
-		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification"
 		xmlTag="DiagramSpecification" finalizer="finalizeDeserialization">
-	</entity>
-
-	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
-		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
-		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
-		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
-	</entity>
-
-	<entity name="org.openflexo.foundation.view.diagram.DiagramModelSlot" xmlTag="DiagramModelSlot">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.emf.EMFModelSlot" xmlTag="EMFModelSlot">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.owl.OWLModelSlot" xmlTag="OWLModelSlot">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"
@@ -97,7 +72,6 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" xmlTag="Individual">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
-		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" xmlTag="Class">
@@ -180,49 +154,28 @@
 	<entity name="org.openflexo.foundation.viewpoint.OntologicObjectPatternRole" abstract="yes">
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole" xmlTag="OWLPropertyPatternRole">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole" xmlTag="PropertyPatternRole">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole" abstract="yes">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.ClassPatternRole" abstract="yes">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="ClassPatternRole">
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole" xmlTag="OWLClassPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole" xmlTag="XSClassPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.IndividualPatternRole" abstract="yes">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole" xmlTag="IndividualPatternRole">
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLIndividualPatternRole" xmlTag="OWLIndividualPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole" xmlTag="EMFObjectIndividualPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" abstract="yes">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole" xmlTag="DataPropertyPatternRole">
 			<property name="dataType" xmlTag="dataType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole" xmlTag="OWLDataPropertyPatternRole">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole" abstract="yes">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole" xmlTag="ObjectPropertyPatternRole">
 			<property name="rangeURI" xmlTag="range" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.OWLObjectPropertyPatternRole" xmlTag="OWLObjectPropertyPatternRole">
+	<entity name="org.openflexo.technologyadapter.owl.viewpoint.StatementPatternRole" abstract="yes">
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole" xmlTag="SubClassStatementPatternRole"/>
@@ -265,9 +218,6 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.CreationScheme"
 		xmlTag="CreationScheme" contexts="Executed">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.CloningScheme" xmlTag="CloningScheme">
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DropScheme"
@@ -347,7 +297,6 @@
 		name="org.openflexo.foundation.viewpoint.IndividualParameter" xmlTag="IndividualParameter">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="conceptValue" xmlTag="conceptValue" attribute="YES" />
-		<property name="renderer" xmlTag="renderer" attribute="YES" />
 	</entity>
 
 	<entity
@@ -459,7 +408,8 @@
 		abstract="yes">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddIndividual" abstract="yes">
+	<entity name="org.openflexo.foundation.viewpoint.AddIndividual"
+		xmlTag="AddIndividual">
 		<property name="individualName" xmlTag="individualName"
 			attribute="YES" />
 		<property name="dataAssertions" type="vector" xmlTag="DataPropertyAssertion"
@@ -467,30 +417,15 @@
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
-		<property name="modelSlot" contains="org.openflexo.foundation.technologyadapter.ModelSlot" context="Addressed" />
+		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual"
-		xmlTag="AddOWLIndividual">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual"
-		xmlTag="AddEMFObjectIndividual">
-	</entity>
-
-
-	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" xmlTag="CloneIndividual">
-	</entity>
-
-	<entity name="org.openflexo.foundation.viewpoint.AddClass" abstract="yes">
+	<entity name="org.openflexo.foundation.viewpoint.AddClass"
+		xmlTag="AddClass">
 		<property name="className" xmlTag="newClassName"
 			attribute="YES" />
 		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
 		<property name="modelSlot" xmlTag="modelSlot" attribute="YES" />
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass"
-		xmlTag="AddOWLClass">
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddStatement"
@@ -523,6 +458,7 @@
 			attribute="YES" />
 		<property name="cardinality" xmlTag="cardinality" attribute="YES" />
 	</entity>
+
 
 	<entity name="org.openflexo.foundation.viewpoint.AbstractAssertion"
 		abstract="yes">

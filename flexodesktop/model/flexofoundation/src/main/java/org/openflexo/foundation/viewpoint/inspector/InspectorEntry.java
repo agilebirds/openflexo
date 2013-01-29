@@ -29,8 +29,8 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -50,7 +50,7 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	private DataBinding<Object> data;
 	private DataBinding<Boolean> conditional;
 
-	public InspectorEntry(ViewPointBuilder builder) {
+	public InspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

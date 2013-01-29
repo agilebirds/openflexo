@@ -26,7 +26,8 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an ontology object property
@@ -40,7 +41,7 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private DataBinding<IFlexoOntologyClass> rangeValue;
 
-	public ObjectPropertyInspectorEntry(ViewPointBuilder builder) {
+	public ObjectPropertyInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

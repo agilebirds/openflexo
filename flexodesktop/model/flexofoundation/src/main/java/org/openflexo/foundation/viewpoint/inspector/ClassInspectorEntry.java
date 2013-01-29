@@ -25,7 +25,8 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an ontology class
@@ -40,7 +41,7 @@ public class ClassInspectorEntry extends InspectorEntry {
 
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 
-	public ClassInspectorEntry(ViewPointBuilder builder) {
+	public ClassInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
