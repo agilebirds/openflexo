@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.util.logging.Logger;
 
@@ -33,20 +33,20 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.toolbox.ToolBox;
 
-public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDiagramConnector> implements GraphicalFlexoObserver,
-		CalcDrawingShemaConstants {
+public class ExampleDiagramConnectorGR extends ConnectorGraphicalRepresentation<ExampleDiagramConnector> implements GraphicalFlexoObserver,
+		ExampleDiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingConnectorGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramConnectorGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public CalcDrawingConnectorGR() {
+	public ExampleDiagramConnectorGR() {
 		super(ConnectorType.LINE, null, null, null, null);
 	}
 
-	public CalcDrawingConnectorGR(ExampleDiagramConnector aConnector, Drawing<?> aDrawing) {
+	public ExampleDiagramConnectorGR(ExampleDiagramConnector aConnector, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
 				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
 				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
@@ -54,9 +54,9 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 		setStartObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getStartShape()));
 		setEndObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getEndShape()));
 
-		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl(true));
 		}
 
 		if (aConnector != null) {
@@ -74,8 +74,8 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 	}
 
 	@Override
-	public CalcDrawingShemaRepresentation getDrawing() {
-		return (CalcDrawingShemaRepresentation) super.getDrawing();
+	public ExampleDiagramRepresentation getDrawing() {
+		return (ExampleDiagramRepresentation) super.getDrawing();
 	}
 
 	public ExampleDiagramConnector getCalcDrawingConnector() {

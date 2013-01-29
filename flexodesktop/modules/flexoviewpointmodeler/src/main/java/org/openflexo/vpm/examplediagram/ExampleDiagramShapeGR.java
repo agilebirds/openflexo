@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.util.logging.Logger;
 
@@ -36,25 +36,25 @@ import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiagramShape> implements GraphicalFlexoObserver,
-		CalcDrawingShemaConstants {
+public class ExampleDiagramShapeGR extends ShapeGraphicalRepresentation<ExampleDiagramShape> implements GraphicalFlexoObserver,
+		ExampleDiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingShapeGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramShapeGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public CalcDrawingShapeGR() {
+	public ExampleDiagramShapeGR() {
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public CalcDrawingShapeGR(ExampleDiagramShape aShape, Drawing<?> aDrawing) {
+	public ExampleDiagramShapeGR(ExampleDiagramShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
-		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl(true));
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
@@ -73,8 +73,8 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiag
 	}
 
 	@Override
-	public CalcDrawingShemaRepresentation getDrawing() {
-		return (CalcDrawingShemaRepresentation) super.getDrawing();
+	public ExampleDiagramRepresentation getDrawing() {
+		return (ExampleDiagramRepresentation) super.getDrawing();
 	}
 
 	public ExampleDiagramShape getCalcDrawingShape() {
@@ -86,7 +86,8 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiag
 		if (observable == getCalcDrawingShape()) {
 			// logger.info("Notified " + dataModification);
 			if (dataModification instanceof ExampleDiagramShapeInserted || dataModification instanceof ExampleDiagramShapeRemoved
-					|| dataModification instanceof ExampleDiagramConnectorInserted || dataModification instanceof ExampleDiagramConnectorRemoved) {
+					|| dataModification instanceof ExampleDiagramConnectorInserted
+					|| dataModification instanceof ExampleDiagramConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof NameChanged) {
 				// logger.info("received NameChanged notification");
@@ -120,8 +121,8 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDiag
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null && getCalcDrawingShape().getExampleDiagram() != null
-				&& !getCalcDrawingShape().getExampleDiagram().ignoreNotifications()) {
+				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null
+				&& getCalcDrawingShape().getExampleDiagram() != null && !getCalcDrawingShape().getExampleDiagram().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();
 		}
 	}

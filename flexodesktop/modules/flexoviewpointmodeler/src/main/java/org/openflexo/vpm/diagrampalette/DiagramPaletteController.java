@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import javax.swing.JTabbedPane;
 
@@ -27,18 +27,18 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CalcPaletteController extends SelectionManagingDrawingController<CalcPaletteRepresentation> {
+public class DiagramPaletteController extends SelectionManagingDrawingController<DiagramPaletteRepresentation> {
 
 	private VPMController _controller;
-	private PalettePalette _commonPalette;
-	private CalcPaletteModuleView _moduleView;
+	private DiagramPalettePalette _commonPalette;
+	private DiagramPaletteModuleView _moduleView;
 
-	public CalcPaletteController(VPMController controller, DiagramPalette palette, boolean readOnly) {
-		super(new CalcPaletteRepresentation(palette, readOnly), controller.getSelectionManager());
+	public DiagramPaletteController(VPMController controller, DiagramPalette palette, boolean readOnly) {
+		super(new DiagramPaletteRepresentation(palette, readOnly), controller.getSelectionManager());
 		_controller = controller;
 
 		if (!readOnly) {
-			_commonPalette = new PalettePalette(controller.getEditor());
+			_commonPalette = new DiagramPalettePalette(controller.getEditor());
 			registerPalette(_commonPalette);
 			activatePalette(_commonPalette);
 		}
@@ -57,22 +57,22 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	}
 
 	@Override
-	public DrawingView<CalcPaletteRepresentation> makeDrawingView(CalcPaletteRepresentation drawing) {
-		return new DrawingView<CalcPaletteRepresentation>(drawing, this);
+	public DrawingView<DiagramPaletteRepresentation> makeDrawingView(DiagramPaletteRepresentation drawing) {
+		return new DrawingView<DiagramPaletteRepresentation>(drawing, this);
 	}
 
 	public VPMController getCEDController() {
 		return _controller;
 	}
 
-	public CalcPaletteModuleView getModuleView() {
+	public DiagramPaletteModuleView getModuleView() {
 		if (_moduleView == null) {
-			_moduleView = new CalcPaletteModuleView(this);
+			_moduleView = new DiagramPaletteModuleView(this);
 		}
 		return _moduleView;
 	}
 
-	public PalettePalette getCommonPalette() {
+	public DiagramPalettePalette getCommonPalette() {
 		return _commonPalette;
 	}
 

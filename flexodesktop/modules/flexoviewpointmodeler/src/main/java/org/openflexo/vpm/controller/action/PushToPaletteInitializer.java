@@ -38,8 +38,8 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaModuleView;
+import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 
 public class PushToPaletteInitializer extends ActionInitializer {
 
@@ -64,9 +64,9 @@ public class PushToPaletteInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<PushToPalette>() {
 			@Override
 			public boolean run(EventObject e, PushToPalette action) {
-				if (getController().getCurrentModuleView() instanceof CalcDrawingShemaModuleView
+				if (getController().getCurrentModuleView() instanceof ExampleDiagramModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					CalcDrawingShemaController c = ((CalcDrawingShemaModuleView) getController().getCurrentModuleView()).getController();
+					ExampleDiagramController c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
 					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
 					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
 					BufferedImage image = shapeView.getScreenshot();

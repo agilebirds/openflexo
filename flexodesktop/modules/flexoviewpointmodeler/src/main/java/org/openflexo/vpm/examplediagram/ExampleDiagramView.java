@@ -17,26 +17,26 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.awt.Graphics;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.vpm.drawingshema.DrawEdgeControl.DrawEdgeAction;
+import org.openflexo.vpm.examplediagram.DrawEdgeControl.DrawEdgeAction;
 
-public class CalcDrawingShemaView extends DrawingView<CalcDrawingShemaRepresentation> {
+public class ExampleDiagramView extends DrawingView<ExampleDiagramRepresentation> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingShemaView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramView.class.getPackage().getName());
 
-	public CalcDrawingShemaView(CalcDrawingShemaRepresentation aDrawing, CalcDrawingShemaController controller) {
+	public ExampleDiagramView(ExampleDiagramRepresentation aDrawing, ExampleDiagramController controller) {
 		super(aDrawing, controller);
 	}
 
 	@Override
-	public CalcDrawingShemaController getController() {
-		return (CalcDrawingShemaController) super.getController();
+	public ExampleDiagramController getController() {
+		return (ExampleDiagramController) super.getController();
 	}
 
 	private DrawEdgeAction _drawEdgeAction;

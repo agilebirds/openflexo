@@ -28,6 +28,8 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -35,13 +37,13 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.palette.PaletteElementGR;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteElementGR;
 
-public class AddCalcPaletteElementInitializer extends ActionInitializer {
+public class AddPaletteElementInitializer extends ActionInitializer<AddPaletteElement, DiagramPalette, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddCalcPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
+	AddPaletteElementInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(AddPaletteElement.actionType, actionInitializer);
 	}
 
@@ -67,8 +69,8 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 		};
 	}
 
-	protected PaletteElementGR makePaletteElementGraphicalRepresentation(ShapeType st) {
-		final PaletteElementGR gr = new PaletteElementGR(null, null);
+	protected DiagramPaletteElementGR makePaletteElementGraphicalRepresentation(ShapeType st) {
+		final DiagramPaletteElementGR gr = new DiagramPaletteElementGR(null, null);
 		gr.setShapeType(st);
 		gr.setX(100);
 		gr.setY(100);

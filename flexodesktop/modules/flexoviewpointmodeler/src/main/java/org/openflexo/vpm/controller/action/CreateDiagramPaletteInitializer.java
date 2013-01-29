@@ -34,7 +34,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.palette.PaletteGR;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteGR;
 
 public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {
 
@@ -82,8 +82,8 @@ public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDia
 		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
-	protected PaletteGR makePaletteGraphicalRepresentation() {
-		final PaletteGR gr = new PaletteGR();
+	protected DiagramPaletteGR makePaletteGraphicalRepresentation() {
+		final DiagramPaletteGR gr = new DiagramPaletteGR();
 		gr.setDrawWorkingArea(true);
 		gr.setWidth(260);
 		gr.setHeight(300);

@@ -41,8 +41,8 @@ import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
-import org.openflexo.vpm.palette.CalcPaletteController;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 
 /**
  * CalcEditor module
@@ -126,7 +126,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcDrawingShemaController(getCEDController(), target, true);
+		screenshotController = new ExampleDiagramController(getCEDController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
@@ -158,7 +158,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcPaletteController(getCEDController(), target, true);
+		screenshotController = new DiagramPaletteController(getCEDController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();

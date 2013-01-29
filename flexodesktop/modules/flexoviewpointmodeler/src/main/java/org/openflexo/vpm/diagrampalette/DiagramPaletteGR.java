@@ -17,12 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -30,27 +29,27 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 
-public class PaletteGR extends DrawingGraphicalRepresentation<DiagramPalette> implements GraphicalFlexoObserver {
+public class DiagramPaletteGR extends DrawingGraphicalRepresentation<DiagramPalette> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(PaletteGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPaletteGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public PaletteGR() {
+	public DiagramPaletteGR() {
 		this(null);
 	}
 
-	public PaletteGR(CalcPaletteRepresentation aDrawing) {
+	public DiagramPaletteGR(DiagramPaletteRepresentation aDrawing) {
 		super(aDrawing);
 
 		if (aDrawing != null && aDrawing.getPalette() != null && aDrawing.getPalette().getGraphicalRepresentation() != null) {
 
-			setsWith((GraphicalRepresentation<?>) aDrawing.getPalette().getGraphicalRepresentation());
+			setsWith(aDrawing.getPalette().getGraphicalRepresentation());
 		}
 
-		addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
+		addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl());
 
 		if (aDrawing != null && aDrawing.getPalette() != null) {
 			aDrawing.getPalette().setGraphicalRepresentation(this);
@@ -69,8 +68,8 @@ public class PaletteGR extends DrawingGraphicalRepresentation<DiagramPalette> im
 	}
 
 	@Override
-	public CalcPaletteRepresentation getDrawing() {
-		return (CalcPaletteRepresentation) super.getDrawing();
+	public DiagramPaletteRepresentation getDrawing() {
+		return (DiagramPaletteRepresentation) super.getDrawing();
 	}
 
 	public DiagramPalette getPalette() {

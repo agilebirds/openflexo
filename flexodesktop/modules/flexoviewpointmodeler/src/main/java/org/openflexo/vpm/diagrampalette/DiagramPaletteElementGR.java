@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import java.util.logging.Logger;
 
@@ -34,24 +34,24 @@ import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPaletteElement> implements GraphicalFlexoObserver {
+public class DiagramPaletteElementGR extends ShapeGraphicalRepresentation<DiagramPaletteElement> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(PaletteElementGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPaletteElementGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public PaletteElementGR() {
+	public DiagramPaletteElementGR() {
 		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public PaletteElementGR(DiagramPaletteElement aShape, Drawing<?> aDrawing) {
+	public DiagramPaletteElementGR(DiagramPaletteElement aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
-		addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
+		addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl(true));
 		}
 
 		if (aShape != null) {
@@ -62,7 +62,7 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPalett
 
 	@Override
 	public void delete() {
-		// logger.info("Delete PaletteElementGR");
+		// logger.info("Delete DiagramPaletteElementGR");
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
 		}
@@ -70,8 +70,8 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<DiagramPalett
 	}
 
 	@Override
-	public CalcPaletteRepresentation getDrawing() {
-		return (CalcPaletteRepresentation) super.getDrawing();
+	public DiagramPaletteRepresentation getDrawing() {
+		return (DiagramPaletteRepresentation) super.getDrawing();
 	}
 
 	public DiagramPaletteElement getCalcPaletteElement() {

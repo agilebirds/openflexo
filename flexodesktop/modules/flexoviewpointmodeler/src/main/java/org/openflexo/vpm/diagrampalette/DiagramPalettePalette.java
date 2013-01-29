@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -40,9 +40,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
-public class PalettePalette extends DrawingPalette {
+public class DiagramPalettePalette extends DrawingPalette {
 
-	private static final Logger logger = Logger.getLogger(PalettePalette.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPalettePalette.class.getPackage().getName());
 
 	private static final int GRID_WIDTH = 80;
 	private static final int GRID_HEIGHT = 60;
@@ -51,7 +51,7 @@ public class PalettePalette extends DrawingPalette {
 
 	private FlexoEditor _editor;
 
-	public PalettePalette(FlexoEditor editor) {
+	public DiagramPalettePalette(FlexoEditor editor) {
 		super(260, 400, "default");
 		_editor = editor;
 		int px = 0;
@@ -99,8 +99,8 @@ public class PalettePalette extends DrawingPalette {
 	}
 
 	@Override
-	public CalcPaletteController getController() {
-		return (CalcPaletteController) super.getController();
+	public DiagramPaletteController getController() {
+		return (DiagramPaletteController) super.getController();
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
@@ -210,7 +210,7 @@ public class PalettePalette extends DrawingPalette {
 
 			@Override
 			public DrawingPalette getPalette() {
-				return PalettePalette.this;
+				return DiagramPalettePalette.this;
 			}
 
 		};

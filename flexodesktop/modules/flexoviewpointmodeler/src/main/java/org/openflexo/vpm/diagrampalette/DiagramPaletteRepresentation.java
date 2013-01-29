@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import java.util.Hashtable;
 import java.util.logging.Logger;
@@ -31,22 +31,22 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 
-public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> implements GraphicalFlexoObserver {
+public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette> implements GraphicalFlexoObserver {
 
-	private static final Logger logger = Logger.getLogger(CalcPaletteRepresentation.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPaletteRepresentation.class.getPackage().getName());
 
-	private PaletteGR paletteGR;
+	private DiagramPaletteGR paletteGR;
 
-	private Hashtable<DiagramPaletteElement, PaletteElementGR> paletteElementsGR;
+	private Hashtable<DiagramPaletteElement, DiagramPaletteElementGR> paletteElementsGR;
 
 	private Boolean ignoreNotifications = true;
 
 	private boolean readOnly = false;
 
-	public CalcPaletteRepresentation(DiagramPalette aPalette, boolean readOnly) {
+	public DiagramPaletteRepresentation(DiagramPalette aPalette, boolean readOnly) {
 		super(aPalette);
 
-		paletteElementsGR = new Hashtable<DiagramPaletteElement, PaletteElementGR>();
+		paletteElementsGR = new Hashtable<DiagramPaletteElement, DiagramPaletteElementGR>();
 
 		this.readOnly = readOnly;
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
@@ -107,9 +107,9 @@ public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> im
 	}
 
 	@Override
-	public PaletteGR getDrawingGraphicalRepresentation() {
+	public DiagramPaletteGR getDrawingGraphicalRepresentation() {
 		if (paletteGR == null) {
-			paletteGR = new PaletteGR(this);
+			paletteGR = new DiagramPaletteGR(this);
 		}
 		return paletteGR;
 	}
@@ -119,7 +119,7 @@ public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> im
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof DiagramPaletteElement) {
 			DiagramPaletteElement element = (DiagramPaletteElement) aDrawable;
-			PaletteElementGR returned = paletteElementsGR.get(element);
+			DiagramPaletteElementGR returned = paletteElementsGR.get(element);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(element);
 				paletteElementsGR.put(element, returned);
@@ -131,9 +131,9 @@ public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> im
 		return null;
 	}
 
-	private PaletteElementGR buildGraphicalRepresentation(DiagramPaletteElement element) {
+	private DiagramPaletteElementGR buildGraphicalRepresentation(DiagramPaletteElement element) {
 		if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
+			DiagramPaletteElementGR graphicalRepresentation = new DiagramPaletteElementGR(element, this);
 			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) element.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!readOnly) {
@@ -141,15 +141,15 @@ public class CalcPaletteRepresentation extends DefaultDrawing<DiagramPalette> im
 			}
 			return graphicalRepresentation;
 		}
-		PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
+		DiagramPaletteElementGR graphicalRepresentation = new DiagramPaletteElementGR(element, this);
 		if (!readOnly) {
 			element.setGraphicalRepresentation(graphicalRepresentation);
 		}
 		return graphicalRepresentation;
 
 		/*if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			logger.info("TODO: faire ici comme dans CalcDrawingShemaRepresentation");
-			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element,this);
+			logger.info("TODO: faire ici comme dans ExampleDiagramRepresentation");
+			DiagramPaletteElementGR graphicalRepresentation = new DiagramPaletteElementGR(element,this);
 			graphicalRepresentation.setsWith(
 					(ShapeGraphicalRepresentation)element.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);

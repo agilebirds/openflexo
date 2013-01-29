@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.util.Collections;
 import java.util.Hashtable;
@@ -44,18 +44,18 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CalcDrawingShemaController extends SelectionManagingDrawingController<CalcDrawingShemaRepresentation> implements
+public class ExampleDiagramController extends SelectionManagingDrawingController<ExampleDiagramRepresentation> implements
 		GraphicalFlexoObserver {
 
-	private static final Logger logger = Logger.getLogger(CalcDrawingShemaController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramController.class.getPackage().getName());
 
 	private VPMController _controller;
 	private CommonPalette _commonPalette;
-	private CalcDrawingShemaModuleView _moduleView;
+	private ExampleDiagramModuleView _moduleView;
 	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
-	public CalcDrawingShemaController(VPMController controller, ExampleDiagram shema, boolean readOnly) {
-		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller.getSelectionManager());
+	public ExampleDiagramController(VPMController controller, ExampleDiagram shema, boolean readOnly) {
+		super(new ExampleDiagramRepresentation(shema, readOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -114,8 +114,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	}
 
 	@Override
-	public DrawingView<CalcDrawingShemaRepresentation> makeDrawingView(CalcDrawingShemaRepresentation drawing) {
-		return new CalcDrawingShemaView(drawing, this);
+	public DrawingView<ExampleDiagramRepresentation> makeDrawingView(ExampleDiagramRepresentation drawing) {
+		return new ExampleDiagramView(drawing, this);
 	}
 
 	public VPMController getCEDController() {
@@ -123,13 +123,13 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	}
 
 	@Override
-	public CalcDrawingShemaView getDrawingView() {
-		return (CalcDrawingShemaView) super.getDrawingView();
+	public ExampleDiagramView getDrawingView() {
+		return (ExampleDiagramView) super.getDrawingView();
 	}
 
-	public CalcDrawingShemaModuleView getModuleView() {
+	public ExampleDiagramModuleView getModuleView() {
 		if (_moduleView == null) {
-			_moduleView = new CalcDrawingShemaModuleView(this);
+			_moduleView = new ExampleDiagramModuleView(this);
 		}
 		return _moduleView;
 	}

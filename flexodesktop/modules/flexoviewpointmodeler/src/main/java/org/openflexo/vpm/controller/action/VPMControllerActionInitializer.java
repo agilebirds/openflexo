@@ -74,7 +74,7 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		// DiagramPalette edition
 		new CreateDiagramPaletteInitializer(this);
 		new DeleteCalcPaletteInitializer(this);
-		new AddCalcPaletteElementInitializer(this);
+		new AddPaletteElementInitializer(this);
 		new DeleteCalcPaletteElementInitializer(this);
 
 	}

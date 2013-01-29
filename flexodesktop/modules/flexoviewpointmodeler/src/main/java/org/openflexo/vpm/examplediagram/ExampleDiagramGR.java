@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.util.logging.Logger;
 
@@ -32,27 +32,27 @@ import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeRemoved;
 
-public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDiagram> implements GraphicalFlexoObserver,
-		CalcDrawingShemaConstants {
+public class ExampleDiagramGR extends DrawingGraphicalRepresentation<ExampleDiagram> implements GraphicalFlexoObserver,
+		ExampleDiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingShemaGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public CalcDrawingShemaGR() {
+	public ExampleDiagramGR() {
 		this(null);
 	}
 
-	public CalcDrawingShemaGR(CalcDrawingShemaRepresentation aDrawing) {
+	public ExampleDiagramGR(ExampleDiagramRepresentation aDrawing) {
 		super(aDrawing);
 
 		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
 			setsWith(aDrawing.getShema().getGraphicalRepresentation());
 		}
 
-		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
+		addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl());
 
 		if (aDrawing != null && aDrawing.getShema() != null) {
 			aDrawing.getShema().setGraphicalRepresentation(this);
@@ -62,8 +62,8 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDi
 	}
 
 	@Override
-	public CalcDrawingShemaRepresentation getDrawing() {
-		return (CalcDrawingShemaRepresentation) super.getDrawing();
+	public ExampleDiagramRepresentation getDrawing() {
+		return (ExampleDiagramRepresentation) super.getDrawing();
 	}
 
 	public ExampleDiagram getShema() {
@@ -78,7 +78,8 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDi
 		if (observable == getShema()) {
 			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof ExampleDiagramShapeInserted || dataModification instanceof ExampleDiagramShapeRemoved
-					|| dataModification instanceof ExampleDiagramConnectorInserted || dataModification instanceof ExampleDiagramConnectorRemoved) {
+					|| dataModification instanceof ExampleDiagramConnectorInserted
+					|| dataModification instanceof ExampleDiagramConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}

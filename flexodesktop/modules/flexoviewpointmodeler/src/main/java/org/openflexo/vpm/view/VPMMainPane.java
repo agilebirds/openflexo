@@ -33,9 +33,9 @@ import org.openflexo.vpm.controller.VPMController;
  * 
  * @author yourname
  */
-public class CEDMainPane extends FlexoMainPane {
+public class VPMMainPane extends FlexoMainPane {
 
-	public CEDMainPane(VPMController controller) {
+	public VPMMainPane(VPMController controller) {
 		super(controller);
 	}
 

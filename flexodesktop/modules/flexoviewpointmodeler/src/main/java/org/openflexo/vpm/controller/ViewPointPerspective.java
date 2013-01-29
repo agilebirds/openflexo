@@ -42,11 +42,11 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaModuleView;
-import org.openflexo.vpm.palette.CalcPaletteController;
-import org.openflexo.vpm.palette.CalcPaletteModuleView;
-import org.openflexo.vpm.view.CalcLibraryView;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
+import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
+import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.ViewPointView;
 import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
@@ -165,7 +165,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	@Override
 	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof ViewPointLibrary) {
-			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
+			return new ViewPointLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
 		if (object instanceof ViewPoint) {
 			return new ViewPointView((ViewPoint) object, (VPMController) controller);
@@ -174,20 +174,20 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof DiagramPalette) {
-			return new CalcPaletteController(_controller, (DiagramPalette) object, false).getModuleView();
+			return new DiagramPaletteController(_controller, (DiagramPalette) object, false).getModuleView();
 		}
 		if (object instanceof ExampleDiagram) {
-			return new CalcDrawingShemaController(_controller, (ExampleDiagram) object, false).getModuleView();
+			return new ExampleDiagramController(_controller, (ExampleDiagram) object, false).getModuleView();
 		}
 		return null;
 	}
 
 	@Override
 	public JComponent getTopRightView() {
-		if (getCurrentModuleView() instanceof CalcPaletteModuleView) {
-			return ((CalcPaletteModuleView) getCurrentModuleView()).getController().getPaletteView();
-		} else if (getCurrentModuleView() instanceof CalcDrawingShemaModuleView) {
-			return ((CalcDrawingShemaModuleView) getCurrentModuleView()).getController().getPaletteView();
+		if (getCurrentModuleView() instanceof DiagramPaletteModuleView) {
+			return ((DiagramPaletteModuleView) getCurrentModuleView()).getController().getPaletteView();
+		} else if (getCurrentModuleView() instanceof ExampleDiagramModuleView) {
+			return ((ExampleDiagramModuleView) getCurrentModuleView()).getController().getPaletteView();
 		}
 		return EMPTY_RIGHT_VIEW;
 	}

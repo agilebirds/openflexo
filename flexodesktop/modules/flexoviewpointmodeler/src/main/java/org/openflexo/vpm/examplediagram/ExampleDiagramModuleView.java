@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -32,14 +32,14 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDiagram>, PropertyChangeListener {
+public class ExampleDiagramModuleView extends JPanel implements ModuleView<ExampleDiagram>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramModuleView.class.getPackage().getName());
 
-	private CalcDrawingShemaController _controller;
+	private ExampleDiagramController _controller;
 
-	public CalcDrawingShemaModuleView(CalcDrawingShemaController controller) {
+	public ExampleDiagramModuleView(ExampleDiagramController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
@@ -53,7 +53,7 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Exa
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
-	public CalcDrawingShemaController getController() {
+	public ExampleDiagramController getController() {
 		return _controller;
 	}
 

@@ -56,7 +56,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.action.VPMControllerActionInitializer;
-import org.openflexo.vpm.view.CEDMainPane;
+import org.openflexo.vpm.view.VPMMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
 
@@ -134,7 +134,7 @@ public class VPMController extends FlexoController {
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new CEDMainPane(this);
+		return new VPMMainPane(this);
 	}
 
 	/**

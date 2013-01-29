@@ -17,12 +17,12 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.awt.Color;
 import java.awt.Font;
 
-public interface CalcDrawingShemaConstants {
+public interface ExampleDiagramConstants {
 
 	public static final int ENTITY_BORDER = 10;
 	public static final int PROPERTY_BORDER = 5;

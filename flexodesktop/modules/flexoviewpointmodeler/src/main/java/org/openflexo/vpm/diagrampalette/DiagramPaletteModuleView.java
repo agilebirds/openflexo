@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.palette;
+package org.openflexo.vpm.diagrampalette;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -31,14 +31,14 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcPaletteModuleView extends JPanel implements ModuleView<DiagramPalette>, PropertyChangeListener {
+public class DiagramPaletteModuleView extends JPanel implements ModuleView<DiagramPalette>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcPaletteModuleView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramPaletteModuleView.class.getPackage().getName());
 
-	private CalcPaletteController _controller;
+	private DiagramPaletteController _controller;
 
-	public CalcPaletteModuleView(final CalcPaletteController controller) {
+	public DiagramPaletteModuleView(final DiagramPaletteController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
@@ -50,7 +50,7 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<DiagramP
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
-	public CalcPaletteController getController() {
+	public DiagramPaletteController getController() {
 		return _controller;
 	}
 

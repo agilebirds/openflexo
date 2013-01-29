@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -97,8 +97,8 @@ public class CommonPalette extends DrawingPalette {
 	}
 
 	@Override
-	public CalcDrawingShemaController getController() {
-		return (CalcDrawingShemaController) super.getController();
+	public ExampleDiagramController getController() {
+		return (ExampleDiagramController) super.getController();
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
@@ -170,7 +170,7 @@ public class CommonPalette extends DrawingPalette {
 		PaletteElement returned = new PaletteElement() {
 			@Override
 			public boolean acceptDragging(GraphicalRepresentation target) {
-				return target instanceof CalcDrawingShemaGR || target instanceof CalcDrawingShapeGR;
+				return target instanceof ExampleDiagramGR || target instanceof ExampleDiagramShapeGR;
 			}
 
 			@Override

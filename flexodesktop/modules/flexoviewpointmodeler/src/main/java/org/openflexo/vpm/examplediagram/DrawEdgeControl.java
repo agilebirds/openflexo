@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -53,8 +53,8 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected Point currentDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
-	protected CalcDrawingShapeGR fromShape = null;
-	protected CalcDrawingShapeGR toShape = null;
+	protected ExampleDiagramShapeGR fromShape = null;
+	protected ExampleDiagramShapeGR toShape = null;
 
 	public DrawEdgeControl() {
 		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
@@ -65,10 +65,10 @@ public class DrawEdgeControl extends MouseDragControl {
 		@Override
 		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
-			if (graphicalRepresentation instanceof CalcDrawingShapeGR) {
+			if (graphicalRepresentation instanceof ExampleDiagramShapeGR) {
 				drawEdge = true;
-				fromShape = (CalcDrawingShapeGR) graphicalRepresentation;
-				((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(this);
+				fromShape = (ExampleDiagramShapeGR) graphicalRepresentation;
+				((ExampleDiagramView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
 			return false;
@@ -122,7 +122,7 @@ public class DrawEdgeControl extends MouseDragControl {
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;
-				((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
+				((ExampleDiagramView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 			}
 			return false;
@@ -130,7 +130,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		private void performAddDefaultConnector(DrawingController<?> controller) {
 			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
-					((CalcDrawingShemaController) controller).getCEDController().getEditor());
+					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
 			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDiagramConnector>();
@@ -138,8 +138,8 @@ public class DrawEdgeControl extends MouseDragControl {
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);
 			connectorGR.setIsReadOnly(false);
-			connectorGR.setForeground(((CalcDrawingShemaController) controller).getCurrentForegroundStyle());
-			connectorGR.setTextStyle(((CalcDrawingShemaController) controller).getCurrentTextStyle());
+			connectorGR.setForeground(((ExampleDiagramController) controller).getCurrentForegroundStyle());
+			connectorGR.setTextStyle(((ExampleDiagramController) controller).getCurrentTextStyle());
 
 			action.graphicalRepresentation = connectorGR;
 
@@ -148,13 +148,13 @@ public class DrawEdgeControl extends MouseDragControl {
 			drawEdge = false;
 			fromShape = null;
 			toShape = null;
-			((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
+			((ExampleDiagramView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 		}
 
 		private void performAddConnector(DrawingController<?> controller, ConnectorGraphicalRepresentation<?> connectorGR, String text) {
 			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
-					((CalcDrawingShemaController) controller).getCEDController().getEditor());
+					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 			action.graphicalRepresentation = connectorGR;
 			action.newConnectorName = text;
@@ -163,7 +163,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			drawEdge = false;
 			fromShape = null;
 			toShape = null;
-			((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
+			((ExampleDiagramView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 		}
 
@@ -172,8 +172,8 @@ public class DrawEdgeControl extends MouseDragControl {
 				MouseEvent event) {
 			if (drawEdge) {
 				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof CalcDrawingShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
-					toShape = (CalcDrawingShapeGR) gr;
+				if (gr instanceof ExampleDiagramShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
+					toShape = (ExampleDiagramShapeGR) gr;
 				} else {
 					toShape = null;
 				}

@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.drawingshema;
+package org.openflexo.vpm.examplediagram;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -106,8 +106,8 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 	}
 
 	@Override
-	public CalcDrawingShemaController getController() {
-		return (CalcDrawingShemaController) super.getController();
+	public ExampleDiagramController getController() {
+		return (ExampleDiagramController) super.getController();
 	}
 
 	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) {
@@ -152,7 +152,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 
 		@Override
 		public boolean acceptDragging(GraphicalRepresentation target) {
-			return target instanceof CalcDrawingShemaGR || target instanceof CalcDrawingShapeGR;
+			return target instanceof ExampleDiagramGR || target instanceof ExampleDiagramShapeGR;
 		}
 
 		@Override
