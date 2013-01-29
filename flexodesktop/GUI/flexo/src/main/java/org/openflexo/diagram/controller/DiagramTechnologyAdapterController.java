@@ -34,7 +34,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	@Override
 	public ImageIcon getTechnologyBigIcon() {
 		// TODO
-		return VEIconLibrary.VIEW_ICON;
+		return VEIconLibrary.DIAGRAM_ICON;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	 */
 	@Override
 	public ImageIcon getTechnologyIcon() {
-		return VEIconLibrary.VIEW_ICON;
+		return VEIconLibrary.DIAGRAM_ICON;
 	}
 
 	/**
