@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl" modelVersion="1.0">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl" modelVersion="1.0" name="OrganizationalUnitDefinition.owl">
   <LocalizedDictionary id="2">
     <Localized id="3" key="position" lang="en">Position</Localized>
     <Localized id="4" key="Position" lang="en">Position</Localized>

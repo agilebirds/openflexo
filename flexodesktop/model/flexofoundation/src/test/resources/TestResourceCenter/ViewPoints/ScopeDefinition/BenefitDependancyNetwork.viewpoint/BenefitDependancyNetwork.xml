@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/BenefitDependancyNetwork.owl" modelVersion="1.0">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/BenefitDependancyNetwork.owl" modelVersion="1.0" name="BenefitDependancyNetwork.owl">
   <LocalizedDictionary id="2" />
   <OWLModelSlot id="3" isRequired="false" isReadOnly="false" metaModelURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/BenefitDependancyNetwork.owl" name="owl" />
 </ViewPoint>

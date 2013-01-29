@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl" modelVersion="1.0">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl" modelVersion="1.0" name="SKOSThesaurusEditor.owl">
   <LocalizedDictionary id="2">
     <Localized id="3" key="preferred_label" lang="en">Preferred label</Localized>
     <Localized id="4" key="alternative_label" lang="en">Alternative label</Localized>
