@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.view.diagram.action.DeleteDiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeleteDiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;

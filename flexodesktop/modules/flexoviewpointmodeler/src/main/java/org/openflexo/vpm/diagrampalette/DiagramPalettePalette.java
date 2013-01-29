@@ -37,8 +37,8 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.view.diagram.action.AddDiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.action.AddDiagramPaletteElement;
 
 public class DiagramPalettePalette extends DrawingPalette {
 

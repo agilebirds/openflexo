@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.diagram.action;
+package org.openflexo.foundation.view.diagram.viewpoint.action;
 
 import java.util.Vector;
 import java.util.logging.Logger;
