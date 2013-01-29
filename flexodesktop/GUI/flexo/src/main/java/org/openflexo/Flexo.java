@@ -57,6 +57,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
+import org.openflexo.module.Module;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
@@ -253,7 +255,13 @@ public class Flexo {
 					splashWindow.dispose();
 					splashWindow = null;
 				}
-
+				Module module = Modules.getInstance().getModule(GeneralPreferences.getFavoriteModuleName());
+				if (module == null) {
+					if (Modules.getInstance().getAvailableModules().size() > 0) {
+						module = Modules.getInstance().getAvailableModules().get(0);
+					}
+				}
+				applicationContext.getModuleLoader().getModuleInstance(module).activateModule();
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.
@@ -262,6 +270,10 @@ public class Flexo {
 				e.printStackTrace();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
 						+ e.getProjectDirectory().getAbsolutePath());
+				showWelcomDialog(applicationContext, null);
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 				showWelcomDialog(applicationContext, null);
 			}
 		}
