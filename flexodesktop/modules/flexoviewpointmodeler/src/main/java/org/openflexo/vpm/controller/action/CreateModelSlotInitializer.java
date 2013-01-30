@@ -26,7 +26,6 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.icon.VPMIconLibrary;
@@ -35,7 +34,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlot, ViewPoint, ViewPointObject> {
+public class CreateModelSlotInitializer extends ActionInitializer<CreateModelSlot, ViewPointObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

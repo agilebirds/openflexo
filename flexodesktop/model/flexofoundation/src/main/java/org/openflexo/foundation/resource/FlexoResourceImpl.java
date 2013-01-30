@@ -74,6 +74,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	/**
 	 * Called to notify that a resource has successfully been loaded
 	 */
+	@Override
 	public void notifyResourceLoaded() {
 		logger.info("notifyResourceLoaded(), resource=" + this);
 
@@ -83,12 +84,17 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		// Also notify that the contents of the resource may also have changed
 		setChanged();
 		notifyObservers(new DataModification("contents", null, getContents()));
-		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
+		if (getServiceManager() != null) {
+			getServiceManager().notify(getServiceManager().getResourceManager(), notification);
+		} else {
+			logger.warning("Resource " + this + " does not refer to any ServiceManager. Please investigate...");
+		}
 	}
 
 	/**
 	 * Called to notify that a resource has successfully been saved
 	 */
+	@Override
 	public void notifyResourceSaved() {
 		logger.info("notifyResourceSaved(), resource=" + this);
 
@@ -102,6 +108,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	 * Called to notify that a resource has been added to contents TODO: integrate this in setContents() when this interface will extends
 	 * {@link AccessibleProxyObject}
 	 */
+	@Override
 	public void notifyContentsAdded(FlexoResource<?> resource) {
 		logger.info("notifyResourceLoaded(), resource=" + this);
 

@@ -2,8 +2,14 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -12,8 +18,10 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> extends FlexoXMLFileResourceImpl<VM> implements
@@ -38,6 +46,39 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
 			viewPointResource.addToContents(returned);
 			viewPointResource.notifyContentsAdded(returned);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static VirtualModelResource retrieveVirtualModelResource(File virtualModelDirectory, File virtualModelXMLFile,
+			ViewPointLibrary viewPointLibrary) {
+		try {
+			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
+			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			String baseName = virtualModelDirectory.getName();
+			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
+			VirtualModelInfo vpi = findVirtualModelInfo(virtualModelDirectory);
+			if (vpi == null) {
+				// Unable to retrieve infos, just abort
+				return null;
+			}
+			returned.setFile(xmlFile);
+			returned.setDirectory(virtualModelDirectory);
+			returned.setName(vpi.name);
+			if (StringUtils.isNotEmpty(vpi.version)) {
+				returned.setVersion(new FlexoVersion(vpi.version));
+			}
+			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
+			returned.setViewPointLibrary(viewPointLibrary);
+
+			logger.fine("VirtualModelResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
+
+			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -79,6 +120,11 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 		return null;
 	}
 
+	@Override
+	public Class<VM> getResourceDataClass() {
+		return (Class<VM>) VirtualModel.class;
+	}
+
 	/**
 	 * Load the &quot;real&quot; load resource data of this resource.
 	 * 
@@ -103,6 +149,58 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	 */
 	@Override
 	public FlexoResourceTree update() {
+		return null;
+	}
+
+	private static class VirtualModelInfo {
+		public String version;
+		public String name;
+		public String modelVersion;
+	}
+
+	private static VirtualModelInfo findVirtualModelInfo(File virtualModelDirectory) {
+		Document document;
+		try {
+			logger.fine("Try to find infos for " + virtualModelDirectory);
+
+			String baseName = virtualModelDirectory.getName();
+			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
+
+			if (xmlFile.exists()) {
+
+				document = readXMLFile(xmlFile);
+				Element root = getElement(document, "VirtualModel");
+				if (root != null) {
+					VirtualModelInfo returned = new VirtualModelInfo();
+					Iterator<Attribute> it = root.getAttributes().iterator();
+					while (it.hasNext()) {
+						Attribute at = it.next();
+						if (at.getName().equals("name")) {
+							logger.fine("Returned " + at.getValue());
+							returned.name = at.getValue();
+						} else if (at.getName().equals("version")) {
+							logger.fine("Returned " + at.getValue());
+							returned.version = at.getValue();
+						} else if (at.getName().equals("modelVersion")) {
+							logger.fine("Returned " + at.getValue());
+							returned.modelVersion = at.getValue();
+						}
+					}
+					if (StringUtils.isEmpty(returned.name)) {
+						returned.name = virtualModelDirectory.getName();
+					}
+					return returned;
+				}
+			} else {
+				logger.warning("While analysing virtual model candidate: " + virtualModelDirectory.getAbsolutePath() + " cannot find file "
+						+ xmlFile.getAbsolutePath());
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
 		return null;
 	}
 

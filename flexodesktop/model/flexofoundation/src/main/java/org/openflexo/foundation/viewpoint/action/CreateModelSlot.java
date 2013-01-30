@@ -34,38 +34,40 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPoint, ViewPointObject> {
+public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateModelSlot.class.getPackage().getName());
 
-	public static FlexoActionType<CreateModelSlot, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateModelSlot, ViewPoint, ViewPointObject>(
+	public static FlexoActionType<CreateModelSlot, ViewPointObject, ViewPointObject> actionType = new FlexoActionType<CreateModelSlot, ViewPointObject, ViewPointObject>(
 			"create_model_slot", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateModelSlot makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public CreateModelSlot makeNewAction(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new CreateModelSlot(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+		public boolean isVisibleForSelection(ViewPointObject object, Vector<ViewPointObject> globalSelection) {
+			return object instanceof VirtualModel || object instanceof ViewPoint;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+		public boolean isEnabledForSelection(ViewPointObject object, Vector<ViewPointObject> globalSelection) {
+			return object instanceof VirtualModel || object instanceof ViewPoint;
 		}
 
 	};
 
 	static {
 		FlexoModelObject.addActionForClass(CreateModelSlot.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
 	}
 
 	public String modelSlotName;
@@ -77,7 +79,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPoint, Vie
 
 	private ModelSlot newModelSlot;
 
-	CreateModelSlot(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateModelSlot(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -86,13 +88,21 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPoint, Vie
 		logger.info("Add model slot");
 
 		if (technologyAdapter != null) {
-			newModelSlot = technologyAdapter.createNewModelSlot(getFocusedObject());
+			if (getFocusedObject() instanceof VirtualModel) {
+				newModelSlot = technologyAdapter.createNewModelSlot((VirtualModel) getFocusedObject());
+			} else if (getFocusedObject() instanceof ViewPoint) {
+				newModelSlot = technologyAdapter.createNewModelSlot((ViewPoint) getFocusedObject());
+			}
 			newModelSlot.setName(modelSlotName);
 			newModelSlot.setMetaModelResource(mmRes);
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);
 			newModelSlot.setDescription(description);
-			getFocusedObject().addToModelSlots(newModelSlot);
+			if (getFocusedObject() instanceof VirtualModel) {
+				((VirtualModel) getFocusedObject()).addToModelSlots(newModelSlot);
+			} else if (getFocusedObject() instanceof ViewPoint) {
+				((ViewPoint) getFocusedObject()).addToModelSlots(newModelSlot);
+			}
 		}
 
 	}
@@ -116,7 +126,10 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPoint, Vie
 		if (StringUtils.isEmpty(modelSlotName)) {
 			validityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getModelSlot(modelSlotName) != null) {
+		} else if (getFocusedObject() instanceof VirtualModel && ((VirtualModel) getFocusedObject()).getModelSlot(modelSlotName) != null) {
+			validityMessage = DUPLICATED_NAME;
+			return false;
+		} else if (getFocusedObject() instanceof ViewPoint && ((ViewPoint) getFocusedObject()).getModelSlot(modelSlotName) != null) {
 			validityMessage = DUPLICATED_NAME;
 			return false;
 		} else if (technologyAdapter == null) {

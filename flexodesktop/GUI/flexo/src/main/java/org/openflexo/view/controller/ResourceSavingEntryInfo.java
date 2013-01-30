@@ -1,13 +1,18 @@
 package org.openflexo.view.controller;
 
+import java.util.logging.Logger;
+
 import javax.swing.Icon;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.IProgress;
 
 public class ResourceSavingEntryInfo {
+	private static final Logger logger = FlexoLogger.getLogger(ResourceSavingEntryInfo.class.getPackage().getName());
+
 	protected FlexoResource<?> resource;
 	protected boolean saveThisResource = true;
 
@@ -29,6 +34,10 @@ public class ResourceSavingEntryInfo {
 	}
 
 	public String getType() {
+		if (resource.getResourceDataClass() == null) {
+			logger.warning("Resource " + this + " has no resource data class");
+			return null;
+		}
 		return resource.getResourceDataClass().getSimpleName();
 	}
 
