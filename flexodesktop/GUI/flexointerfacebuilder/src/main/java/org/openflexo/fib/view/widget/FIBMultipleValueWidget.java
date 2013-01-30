@@ -313,7 +313,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	public FIBMultipleValueModel getListModel() {
-		updateListModelWhenRequired();
+		if (listModel == null) {
+			updateListModelWhenRequired();
+		}
 		return listModel;
 	}
 
@@ -351,7 +353,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			returned = lastKnownValues != null;
 			lastKnownValues = null;
 		}
-		return returned || true;
+		return returned /*|| true*/;
 	}
 
 	/*protected final FIBListModel rebuildListModel()
