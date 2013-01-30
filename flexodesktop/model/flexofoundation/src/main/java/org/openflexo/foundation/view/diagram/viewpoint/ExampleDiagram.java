@@ -34,15 +34,16 @@ import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResourceImpl;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.toolbox.StringUtils;
 
 public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageResourceData<ExampleDiagram> {
 
@@ -56,12 +57,17 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	private ScreenshotImage screenshotImage;
 	private File expectedScreenshotImageFile = null;
 
-	public static ExampleDiagram newExampleDiagram(DiagramSpecification diagramSpecification, File shemaFile,
-			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation) {
-		ExampleDiagram shema = new ExampleDiagram(null);
-		shema.setGraphicalRepresentation(graphicalRepresentation);
-		shema.init(diagramSpecification, shemaFile);
-		return shema;
+	public static ExampleDiagram newExampleDiagram(DiagramSpecification diagramSpecification, String exampleDiagramName,
+			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
+		ExampleDiagramResource edRes = ExampleDiagramResourceImpl.makeExampleDiagramResource(diagramSpecification.getResource(),
+				exampleDiagramName, viewPointLibrary);
+		ExampleDiagram exampleDiagram = new ExampleDiagram(null);
+		exampleDiagram.setGraphicalRepresentation(graphicalRepresentation);
+		exampleDiagram.init(diagramSpecification, exampleDiagramName);
+		edRes.setResourceData(exampleDiagram);
+		exampleDiagram.setResource(edRes);
+		exampleDiagram.save();
+		return exampleDiagram;
 	}
 
 	public ExampleDiagram(ExampleDiagramBuilder builder) {
@@ -78,14 +84,27 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
-	public void init(DiagramSpecification diagramSpecification, File diagramFile) {
-		if (StringUtils.isEmpty(getName())) {
-			setName(diagramFile.getName().substring(0, diagramFile.getName().length() - 6));
-		}
+	public void init(DiagramSpecification diagramSpecification, String exampleDiagramName) {
+		setName(exampleDiagramName);
 		this.diagramSpecification = diagramSpecification;
 		logger.info("Registering example diagram for viewpoint " + diagramSpecification.getViewPoint().getName());
 		tryToLoadScreenshotImage();
 		initialized = true;
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+		if (!isDeserializing() && getResource() != null && getResource().getFile() != null
+				&& !getResource().getFile().getName().startsWith(name)) {
+			try {
+				getResource().renameFileTo(name + ".palette");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InvalidFileNameException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -107,11 +126,6 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
-		return getVirtualModel().getViewPoint();
-	}
-
-	@Override
 	public ExampleDiagram getExampleDiagram() {
 		return this;
 	}
@@ -122,7 +136,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	private File getExpectedScreenshotImageFile() {
-		if (expectedScreenshotImageFile == null) {
+		if (expectedScreenshotImageFile == null && getResource() != null) {
 			expectedScreenshotImageFile = new File(getResource().getFile().getParentFile(), getName() + ".diagram.png");
 		}
 		return expectedScreenshotImageFile;
@@ -170,7 +184,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	private ScreenshotImage tryToLoadScreenshotImage() {
-		if (getExpectedScreenshotImageFile().exists()) {
+		if (getExpectedScreenshotImageFile() != null && getExpectedScreenshotImageFile().exists()) {
 			BufferedImage bi = ImageUtils.loadImageFromFile(getExpectedScreenshotImageFile());
 			if (bi != null) {
 				logger.info("Read " + getExpectedScreenshotImageFile().getAbsolutePath());

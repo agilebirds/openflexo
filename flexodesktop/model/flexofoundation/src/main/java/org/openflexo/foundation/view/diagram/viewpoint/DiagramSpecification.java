@@ -112,6 +112,11 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	}
 
 	@Override
+	public DiagramSpecificationResource getResource() {
+		return (DiagramSpecificationResource) super.getResource();
+	}
+
+	@Override
 	public String toString() {
 		return "DiagramSpecification:" + getURI();
 	}

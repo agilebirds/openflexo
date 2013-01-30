@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -84,8 +83,8 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add calc palette");
 
-		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
-				.getDirectory(), newPaletteName + ".palette"), (DrawingGraphicalRepresentation<?>) graphicalRepresentation);
+		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), newPaletteName,
+				(DrawingGraphicalRepresentation<?>) graphicalRepresentation, getFocusedObject().getViewPoint().getViewPointLibrary());
 		_newPalette.setDescription(description);
 		getFocusedObject().addToPalettes(_newPalette);
 		_newPalette.save();

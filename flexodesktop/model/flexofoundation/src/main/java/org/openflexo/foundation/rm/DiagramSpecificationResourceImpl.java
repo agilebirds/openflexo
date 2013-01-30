@@ -76,9 +76,8 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			if (diagramSpecificationDirectory.exists() && diagramSpecificationDirectory.isDirectory()) {
 				for (File f : diagramSpecificationDirectory.listFiles()) {
 					if (f.getName().endsWith(".diagram")) {
-						ExampleDiagramResource exampleDiagramResource = ExampleDiagramResourceImpl.makeExampleDiagramResource(f,
-								viewPointLibrary);
-						returned.addToContents(exampleDiagramResource);
+						ExampleDiagramResource exampleDiagramResource = ExampleDiagramResourceImpl.retrieveExampleDiagramResource(returned,
+								f, viewPointLibrary);
 						logger.fine("ExampleDiagramResource " + exampleDiagramResource.getFile().getAbsolutePath() + " version "
 								+ exampleDiagramResource.getModelVersion());
 					}
@@ -89,9 +88,8 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			if (diagramSpecificationDirectory.exists() && diagramSpecificationDirectory.isDirectory()) {
 				for (File f : diagramSpecificationDirectory.listFiles()) {
 					if (f.getName().endsWith(".palette")) {
-						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.makeDiagramPaletteResource(f,
-								viewPointLibrary);
-						returned.addToContents(diagramPaletteResource);
+						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.retrieveDiagramPaletteResource(returned,
+								f, viewPointLibrary);
 						logger.fine("DiagramPaletteResource " + diagramPaletteResource.getFile().getAbsolutePath() + " version "
 								+ diagramPaletteResource.getModelVersion());
 					}

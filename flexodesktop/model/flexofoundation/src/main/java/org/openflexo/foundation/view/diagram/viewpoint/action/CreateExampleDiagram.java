@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -84,8 +83,8 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, Diag
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add example diagram");
 
-		_newShema = ExampleDiagram.newExampleDiagram(getFocusedObject(), new File(getFocusedObject().getViewPoint().getResource()
-				.getDirectory(), newShemaName + ".shema"), graphicalRepresentation);
+		_newShema = ExampleDiagram.newExampleDiagram(getFocusedObject(), newShemaName, graphicalRepresentation, getFocusedObject()
+				.getViewPoint().getViewPointLibrary());
 		_newShema.setDescription(description);
 		getFocusedObject().addToExampleDiagrams(_newShema);
 		_newShema.save();

@@ -133,6 +133,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes" contexts="Contained,PrimaryConcept,PrimaryRepresentation">
 		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
 		<property name="description" xmlTag="description" />
+		<property name="modelSlot" contains="org.openflexo.foundation.technologyadapter.ModelSlot" context="Addressed" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole" abstract="yes">

@@ -10,9 +10,6 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
@@ -70,18 +67,17 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return (PR) new EditionPatternPatternRole(null);
+		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
 	}
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "diagram";
-		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "shape";
-		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "connector";
+		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return "editionPatternInstance";
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;

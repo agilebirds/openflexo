@@ -22,6 +22,7 @@ package org.openflexo.vpm.controller;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -42,7 +43,9 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.ViewPointView;
@@ -111,12 +114,20 @@ public class ViewPointPerspective extends FlexoPerspective {
 		logger.info("focusOnPalette " + palette);
 		diagramPaletteBrowser.setRootObject(palette);
 		setBottomLeftView(diagramPaletteBrowser);
+		/*System.out.println("Current module view = " + getCurrentModuleView());
+		if (getCurrentModuleView() instanceof DiagramPaletteModuleView) {
+			setTopRightView(((DiagramPaletteModuleView) getCurrentModuleView()).getController().getPaletteView());
+		}*/
 	}
 
 	public void focusOnExampleDiagram(ExampleDiagram exampleDiagram) {
 		logger.info("focusOnExampleDiagram " + exampleDiagram);
 		exampleDiagramBrowser.setRootObject(exampleDiagram);
 		setBottomLeftView(exampleDiagramBrowser);
+		/*System.out.println("Current module view = " + getCurrentModuleView());
+		if (getCurrentModuleView() instanceof ExampleDiagramModuleView) {
+			setTopRightView(((ExampleDiagramModuleView) getCurrentModuleView()).getController().getPaletteView());
+		}*/
 	}
 
 	public void hideBottomBrowser() {
@@ -177,7 +188,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		return null;
 	}
 
-	/*@Override
+	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentModuleView() instanceof DiagramPaletteModuleView) {
 			return ((DiagramPaletteModuleView) getCurrentModuleView()).getController().getPaletteView();
@@ -185,7 +196,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return ((ExampleDiagramModuleView) getCurrentModuleView()).getController().getPaletteView();
 		}
 		return EMPTY_RIGHT_VIEW;
-	}*/
+	}
 
 	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof ViewPointLibrary) {

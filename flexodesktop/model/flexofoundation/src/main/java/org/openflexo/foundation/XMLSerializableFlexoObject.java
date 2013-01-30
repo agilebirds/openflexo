@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -134,6 +133,39 @@ public abstract class XMLSerializableFlexoObject extends FlexoObject implements 
 			}
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public void setChanged() {
+		setChanged(true);
+	}
+
+	public final void setChanged(boolean propagateModified) {
+		/*
+		 * The final keyword is added here mainly because this part of the code
+		 * is highly sensitive. A synchronized modifier could cause many
+		 * problems (essentially with the auto-saving thread)
+		 */
+
+		// logger.info("called setChanged in "+getClass().getName()+" isDeserializing()="+isDeserializing());
+
+		if (isSerializing()) {
+			return;
+		}
+		synchronized (this) {
+			super.setChanged();
+			if (!isDeserializing() && !isSerializing()) {
+				if (propagateModified) {
+					setIsModified();
+				}
+				if (getXMLResourceData() != null && getXMLResourceData() != this) {
+					// This object is embedded in an XMLResourceData
+					if (propagateModified) {
+						getXMLResourceData().setIsModified();
+					}
+				}
+			}
 		}
 	}
 

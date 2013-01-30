@@ -673,6 +673,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	 * Override when required
 	 */
 	protected boolean isAcceptableValue(Object o) {
+		System.out.println("acceptable ? " + o);
 		if (o == null) {
 			return false;
 		}

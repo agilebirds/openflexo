@@ -41,6 +41,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
@@ -49,7 +50,6 @@ import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.RelativePathFileConverter;
-import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class DiagramPalette extends DiagramPaletteObject implements XMLStorageResourceData<DiagramPalette>, Comparable<DiagramPalette> {
@@ -69,13 +69,17 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	private File expectedScreenshotImageFile = null;
 	private boolean screenshotModified = false;
 
-	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, File paletteFile,
-			DrawingGraphicalRepresentation<?> graphicalRepresentation) {
-		DiagramPalette palette = new DiagramPalette(null);
-		palette.setIndex(diagramSpecification.getPalettes().size());
-		palette.setGraphicalRepresentation(graphicalRepresentation);
-		palette.init(diagramSpecification, paletteFile);
-		return palette;
+	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, String diagramPaletteName,
+			DrawingGraphicalRepresentation<?> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
+		DiagramPaletteResource edRes = DiagramPaletteResourceImpl.makeDiagramPaletteResource(diagramSpecification.getResource(),
+				diagramPaletteName, viewPointLibrary);
+		DiagramPalette diagramPalette = new DiagramPalette(null);
+		diagramPalette.setGraphicalRepresentation(graphicalRepresentation);
+		diagramPalette.init(diagramSpecification, diagramPaletteName);
+		edRes.setResourceData(diagramPalette);
+		diagramPalette.setResource(edRes);
+		diagramPalette.save();
+		return diagramPalette;
 	}
 
 	// Used during deserialization, do not use it
@@ -94,10 +98,8 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 		return this;
 	}
 
-	public void init(DiagramSpecification diagramSpecification, File paletteFile) {
-		if (StringUtils.isEmpty(getName())) {
-			setName(paletteFile.getName().substring(0, paletteFile.getName().length() - 8));
-		}
+	public void init(DiagramSpecification diagramSpecification, String diagramPaletteName) {
+		setName(diagramPaletteName);
 		this.diagramSpecification = diagramSpecification;
 		// xmlFile = paletteFile;
 		logger.info("Registering diagram palette for viewpoint " + getViewPoint().getName());
@@ -150,7 +152,8 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	@Override
 	public void setName(String name) {
 		super.setName(name);
-		if (!isDeserializing() && getResource().getFile() != null && !getResource().getFile().getName().startsWith(name)) {
+		if (!isDeserializing() && getResource() != null && getResource().getFile() != null
+				&& !getResource().getFile().getName().startsWith(name)) {
 			try {
 				getResource().renameFileTo(name + ".palette");
 			} catch (IOException e) {
@@ -219,7 +222,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	private File getExpectedScreenshotImageFile() {
-		if (expectedScreenshotImageFile == null) {
+		if (expectedScreenshotImageFile == null && getResource() != null) {
 			expectedScreenshotImageFile = new File(getResource().getFile().getParentFile(), getName() + ".palette.png");
 		}
 		return expectedScreenshotImageFile;
@@ -262,7 +265,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	private ScreenshotImage tryToLoadScreenshotImage() {
-		if (getExpectedScreenshotImageFile().exists()) {
+		if (getExpectedScreenshotImageFile() != null && getExpectedScreenshotImageFile().exists()) {
 			BufferedImage bi = ImageUtils.loadImageFromFile(getExpectedScreenshotImageFile());
 			if (bi != null) {
 				logger.fine("Read " + getExpectedScreenshotImageFile().getAbsolutePath());

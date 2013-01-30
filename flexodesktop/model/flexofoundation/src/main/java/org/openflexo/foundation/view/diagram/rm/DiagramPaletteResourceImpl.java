@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
@@ -31,7 +32,27 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 		return encoder;
 	}
 
-	public static DiagramPaletteResource makeDiagramPaletteResource(File diagramPaletteFile, ViewPointLibrary viewPointLibrary) {
+	public static DiagramPaletteResource makeDiagramPaletteResource(DiagramSpecificationResource dsResource, String diagramPaletteName,
+			ViewPointLibrary viewPointLibrary) {
+		try {
+			File diagramPaletteFile = new File(dsResource.getDirectory(), diagramPaletteName + ".palette");
+			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
+			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
+			returned.setName(diagramPaletteFile.getName());
+			returned.setFile(diagramPaletteFile);
+			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
+			dsResource.addToContents(returned);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static DiagramPaletteResource retrieveDiagramPaletteResource(DiagramSpecificationResource dsResource, File diagramPaletteFile,
+			ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
 			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
@@ -40,6 +61,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
+			dsResource.addToContents(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -94,7 +116,8 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			FileNotFoundException, ResourceDependencyLoopException {
 
 		DiagramPalette returned = super.loadResourceData(progress);
-		returned.init(getContainer().getDiagramSpecification(), getFile());
+		returned.init(getContainer().getDiagramSpecification(), getFile().getName().substring(0, getFile().getName().length() - 8));
+		System.out.println("DiagramPalette = " + returned);
 		getContainer().getDiagramSpecification().addToPalettes(returned);
 		return returned;
 	}
