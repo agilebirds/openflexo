@@ -26,6 +26,12 @@
 		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.view.diagram.DiagramModelSlot" xmlTag="DiagramModelSlot">
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.VirtualModelModelSlot" xmlTag="VirtualModelModelSlot">
+	</entity>
+
 	<entity name="org.openflexo.technologyadapter.emf.EMFModelSlot" xmlTag="EMFModelSlot">
 	</entity>
 

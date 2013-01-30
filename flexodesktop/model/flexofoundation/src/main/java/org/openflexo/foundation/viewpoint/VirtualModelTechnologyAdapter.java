@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.diagram;
+package org.openflexo.foundation.viewpoint;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -32,38 +32,35 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
+import org.openflexo.foundation.view.VirtualModelInstance;
 
 /**
- * This class defines and implements the Openflexo built-in diagram technology adapter
+ * This class defines and implements the Openflexo built-in virtual model technology adapter
  * 
  * @author sylvain
  * 
  */
-public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diagram, DiagramSpecification> {
+public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
+		TechnologyAdapter<VMI, VM> {
 
-	private static final Logger logger = Logger.getLogger(DiagramTechnologyAdapter.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VirtualModelTechnologyAdapter.class.getPackage().getName());
 
-	public DiagramTechnologyAdapter() throws TechnologyAdapterInitializationException {
+	public VirtualModelTechnologyAdapter() throws TechnologyAdapterInitializationException {
 	}
 
 	@Override
 	public String getName() {
-		return "Openflexo built-in diagram technology adapter";
+		return "Openflexo built-in virtual model technology adapter";
 	}
 
 	@Override
-	public DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
-		return new DiagramModelSlot(viewPoint, this);
+	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(ViewPoint viewPoint) {
+		return new VirtualModelModelSlot<VMI, VM>(viewPoint, this);
 	}
 
 	@Override
-	public DiagramModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
-		return new DiagramModelSlot((DiagramSpecification) virtualModel, this);
+	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(VirtualModel<?> virtualModel) {
+		return new VirtualModelModelSlot<VMI, VM>(virtualModel, this);
 	}
 
 	/**
@@ -73,8 +70,7 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 	 * @return
 	 */
 	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
 		return false;
 	}
 
@@ -85,7 +81,7 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 	 * @return
 	 */
 	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
 		return null;
 	}
 
@@ -97,8 +93,8 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 	 * @return
 	 */
 	@Override
-	public boolean isValidModelFile(File aModelFile, FlexoResource<DiagramSpecification> metaModelResource,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public boolean isValidModelFile(File aModelFile, FlexoResource<VM> metaModelResource,
+			TechnologyContextManager<VMI, VM> technologyContextManager) {
 		return false;
 	}
 
@@ -110,8 +106,8 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 	 * @return
 	 */
 	@Override
-	public FlexoResource<Diagram> createEmptyModel(FlexoProject project, FlexoResource<DiagramSpecification> metaModel,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public FlexoResource<VMI> createEmptyModel(FlexoProject project, FlexoResource<VM> metaModel,
+			TechnologyContextManager<VMI, VM> technologyContextManager) {
 		logger.info("Add view");
 		logger.warning("Not implemented yet");
 		return null;
@@ -154,44 +150,42 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 	}
 
 	@Override
-	public FlexoResource<DiagramSpecification> retrieveMetaModelResource(File aMetaModelFile,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public FlexoResource<VM> retrieveMetaModelResource(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String retrieveModelURI(File aModelFile, FlexoResource<DiagramSpecification> metaModelResource,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public String retrieveModelURI(File aModelFile, FlexoResource<VM> metaModelResource,
+			TechnologyContextManager<VMI, VM> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public FlexoResource<Diagram> retrieveModelResource(File aModelFile, FlexoResource<DiagramSpecification> metaModelResource,
-			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+	public FlexoResource<VMI> retrieveModelResource(File aModelFile, FlexoResource<VM> metaModelResource,
+			TechnologyContextManager<VMI, VM> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends Diagram>> ModelRepository<R, Diagram, DiagramSpecification, ? extends TechnologyAdapter<Diagram, DiagramSpecification>> createModelRepository(
+	public <R extends FlexoResource<? extends VM>> MetaModelRepository<R, VMI, VM, ? extends TechnologyAdapter<VMI, VM>> createMetaModelRepository(
 			FlexoResourceCenter resourceCenter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends DiagramSpecification>> MetaModelRepository<R, Diagram, DiagramSpecification, ? extends TechnologyAdapter<Diagram, DiagramSpecification>> createMetaModelRepository(
+	public <R extends FlexoResource<? extends VMI>> ModelRepository<R, VMI, VM, ? extends TechnologyAdapter<VMI, VM>> createModelRepository(
 			FlexoResourceCenter resourceCenter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TechnologyContextManager<Diagram, DiagramSpecification> createTechnologyContextManager(FlexoResourceCenterService service) {
+	public TechnologyContextManager<VMI, VM> createTechnologyContextManager(FlexoResourceCenterService service) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

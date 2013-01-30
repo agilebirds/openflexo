@@ -8,7 +8,6 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
@@ -22,7 +21,9 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
@@ -40,7 +41,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 		@DeclareEditionAction(GraphicalAction.class), // Graphical action
 		@DeclareEditionAction(DeleteAction.class) // Delete action
 })
-public class DiagramModelSlot extends ModelSlot<Diagram, DiagramSpecification> {
+public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
 
@@ -53,6 +54,10 @@ public class DiagramModelSlot extends ModelSlot<Diagram, DiagramSpecification> {
 	}
 
 	public DiagramModelSlot(VirtualModelBuilder builder) {
+		super(builder);
+	}
+
+	public DiagramModelSlot(ViewPointBuilder builder) {
 		super(builder);
 	}
 
