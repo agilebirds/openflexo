@@ -428,7 +428,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				// setChanged();
 			}
 			if (!isRegistered) {
-				getProject().register(this);
+				registerObject(getProject());
 				isRegistered = true;
 			}
 		} else {
