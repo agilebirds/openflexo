@@ -134,7 +134,7 @@ class XMLDeserializer {
 				throw new ModelExecutionException(e);
 			}
 		} else {
-			returned = modelFactory.newInstance(modelEntity.getImplementedInterface());
+			returned = modelFactory._newInstance(modelEntity.getImplementedInterface(), policy == DeserializationPolicy.EXTENSIVE);
 		}
 
 		if (currentDeserializedReference != null) {
@@ -198,12 +198,13 @@ class XMLDeserializer {
 					break;
 				case EXTENSIVE:
 					if (entityName != null) {
-						modelFactory.importClass(implementedInterface);
+						entity = modelFactory.importClass(implementedInterface);
 						if (className != null) {
 							try {
 								implementingClass = Class.forName(className);
 								if (implementedInterface.isAssignableFrom(implementingClass)) {
-									modelFactory.setImplementingClassForInterface((Class) implementingClass, implementedInterface);
+									modelFactory.setImplementingClassForInterface((Class) implementingClass, implementedInterface,
+											policy == DeserializationPolicy.EXTENSIVE);
 								} else {
 									throw new ModelExecutionException(className + " does not implement " + implementedInterface
 											+ " for node " + child.getName());
@@ -216,7 +217,11 @@ class XMLDeserializer {
 					break;
 				}
 				if (implementedInterface != null) {
-					entity = modelFactory.getModelContext().getModelEntity(implementedInterface);
+					if (policy == DeserializationPolicy.EXTENSIVE) {
+						entity = modelFactory.getExtendedContext().getModelEntity(implementedInterface);
+					} else {
+						entity = modelFactory.getModelContext().getModelEntity(implementedInterface);
+					}
 				}
 				if (entity == null && policy == DeserializationPolicy.RESTRICTIVE) {
 					if (entityName != null) {

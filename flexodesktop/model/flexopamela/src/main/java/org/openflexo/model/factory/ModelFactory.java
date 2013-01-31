@@ -41,6 +41,8 @@ public class ModelFactory {
 	private StringEncoder stringEncoder;
 	private ModelContext modelContext;
 
+	private ModelContext extendedContext;
+
 	public class PAMELAProxyFactory<I> extends ProxyFactory {
 		private final ModelEntity<I> modelEntity;
 		private boolean locked = false;
@@ -153,6 +155,10 @@ public class ModelFactory {
 		return modelContext;
 	}
 
+	ModelContext getExtendedContext() {
+		return extendedContext != null ? extendedContext : modelContext;
+	}
+
 	public <I> I newInstance(ModelEntity<I> modelEntity) {
 		return newInstance(modelEntity, (Object[]) null);
 	}
@@ -190,14 +196,53 @@ public class ModelFactory {
 		}
 	}
 
+	<I> I _newInstance(Class<I> implementedInterface, boolean useExtended) {
+		return _newInstance(implementedInterface, useExtended, (Object[]) null);
+	}
+
+	<I> I _newInstance(Class<I> implementedInterface, boolean useExtended, Object... args) {
+		try {
+			PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true, useExtended);
+			return proxyFactory.newInstance(args);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		}
+	}
+
 	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface) throws ModelDefinitionException {
 		return getProxyFactory(implementedInterface, true);
 	}
 
 	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface, boolean create) throws ModelDefinitionException {
+		return getProxyFactory(implementedInterface, create, false);
+	}
+
+	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface, boolean create, boolean useExtended)
+			throws ModelDefinitionException {
 		PAMELAProxyFactory<I> proxyFactory = proxyFactories.get(implementedInterface);
 		if (proxyFactory == null) {
-			ModelEntity<I> entity = modelContext.getModelEntity(implementedInterface);
+			ModelEntity<I> entity;
+			if (useExtended) {
+				entity = getExtendedContext().getModelEntity(implementedInterface);
+			} else {
+				entity = getModelContext().getModelEntity(implementedInterface);
+			}
 			if (entity == null) {
 				throw new ModelExecutionException("Unknown entity '" + implementedInterface.getName()
 						+ "'! Did you forget to import it or to annotated it with @ModelEntity?");
@@ -230,9 +275,22 @@ public class ModelFactory {
 		proxyFactory.setSuperclass(implementingClass);
 	}
 
+	<I> void setImplementingClassForInterface(Class<? extends I> implementingClass, Class<I> implementedInterface, boolean useExtended)
+			throws ModelDefinitionException {
+		PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true, useExtended);
+		if (proxyFactory != null) {
+			proxyFactory.setSuperclass(implementingClass);
+		}
+	}
+
 	public <I> void setImplementingClassForEntity(Class<? extends I> implementingClass, ModelEntity<I> entity)
 			throws ModelDefinitionException {
 		setImplementingClassForInterface(implementingClass, entity.getImplementedInterface());
+	}
+
+	<I> void setImplementingClassForEntity(Class<? extends I> implementingClass, ModelEntity<I> entity, boolean useExtended)
+			throws ModelDefinitionException {
+		setImplementingClassForInterface(implementingClass, entity.getImplementedInterface(), useExtended);
 	}
 
 	public Class<? extends List> getListImplementationClass() {
@@ -273,8 +331,8 @@ public class ModelFactory {
 	<I> ModelEntity<I> importClass(Class<I> klass) throws ModelDefinitionException {
 		ModelEntity<I> modelEntity = modelContext.getModelEntity(klass);
 		if (modelEntity == null) {
-			modelContext = new ModelContext(klass, modelContext);
-			modelEntity = modelContext.getModelEntity(klass);
+			extendedContext = new ModelContext(klass, getExtendedContext());
+			modelEntity = extendedContext.getModelEntity(klass);
 		}
 		return modelEntity;
 	}
