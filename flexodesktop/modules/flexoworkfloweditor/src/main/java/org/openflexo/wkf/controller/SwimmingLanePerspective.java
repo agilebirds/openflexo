@@ -32,6 +32,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -73,7 +74,11 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentProcessView() != null) {
-			return getCurrentProcessView().getController().getPaletteView();
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return getCurrentProcessView().getController().getPaletteView();
+			} else {
+				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
 		}
 		return topRightDummy;
 	}

@@ -29,6 +29,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -73,7 +74,11 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentRoleListView() != null) {
-			return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			} else {
+				return new GlassPaneWrapper(getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane());
+			}
 		}
 		return topRightDummy;
 	}
