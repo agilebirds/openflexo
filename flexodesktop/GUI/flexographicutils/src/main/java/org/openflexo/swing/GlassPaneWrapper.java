@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 public class GlassPaneWrapper extends JPanel {
 
@@ -25,6 +26,17 @@ public class GlassPaneWrapper extends JPanel {
 	@Override
 	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
 		return false;
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				repaint();
+			}
+		});
 	}
 
 	@Override
