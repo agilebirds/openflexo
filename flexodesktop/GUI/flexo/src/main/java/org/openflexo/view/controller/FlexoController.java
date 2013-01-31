@@ -1229,6 +1229,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
+	public boolean isEditable(Object object) {
+		return !getModule().getModule().requireProject() || !(object instanceof FlexoModelObject)
+				|| ((FlexoModelObject) object).getProject() == getProject();
+	}
+
 	/**
 	 * Sets supplied object to be the main object represented as the current view for this module (for example the process for WKF module).
 	 * Does nothing if supplied object is not representable in this module
