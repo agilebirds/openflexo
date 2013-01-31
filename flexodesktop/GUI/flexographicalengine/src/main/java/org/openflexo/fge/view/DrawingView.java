@@ -164,6 +164,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		setToolTipText(getClass().getSimpleName() + hashCode());
 		// setDoubleBuffered(true);
 		setFocusable(true);
+		// GPO: no LayoutManager here, so next line is useless?
 		revalidate();
 	}
 
