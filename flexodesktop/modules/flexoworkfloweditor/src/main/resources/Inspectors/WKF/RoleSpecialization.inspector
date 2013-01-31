@@ -5,9 +5,9 @@
       <Label label="annotation" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AnnotationLabel" localize="true" />
       <TextField index="1" data="data.annotation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Annotation" localize="true" validateOnReturn="true" columns="10" />
       <Label label="role" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleLabel" localize="true" />
-      <TextField index="3" data="data.role.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Role" readOnly="true" format="object.name" localize="true" />
+      <TextField index="3" data="data.role.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Role" readOnly="true" localize="true" />
       <Label label="specialize" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ParentRoleLabel" localize="true" />
-      <TextField index="5" data="data.parentRole.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ParentRole" readOnly="true" format="object.name" localize="true" />
+      <TextField index="5" data="data.parentRole.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ParentRole" readOnly="true" localize="true" />
     </Tab>
     <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab" />
   </TabPanel>
@@ -17,12 +17,12 @@
     <Localized key="annotation" lang="English">Annotation</Localized>
     <Localized key="annotation" lang="French">Annotation</Localized>
     <Localized key="annotation" lang="Dutch">Annotation</Localized>
-    <Localized key="role" lang="English">Role</Localized>
-    <Localized key="role" lang="French">Rôle</Localized>
-    <Localized key="role" lang="Dutch">Role</Localized>
-    <Localized key="specialize" lang="English">Includes</Localized>
-    <Localized key="specialize" lang="French">Inclut</Localized>
-    <Localized key="specialize" lang="Dutch">Includes</Localized>
+    <Localized key="role" lang="English">From</Localized>
+    <Localized key="role" lang="French">De</Localized>
+    <Localized key="role" lang="Dutch">From</Localized>
+    <Localized key="specialize" lang="English">To</Localized>
+    <Localized key="specialize" lang="French">A</Localized>
+    <Localized key="specialize" lang="Dutch">To</Localized>
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
     <Localized key="Graphics" lang="English">Graphics</Localized>
