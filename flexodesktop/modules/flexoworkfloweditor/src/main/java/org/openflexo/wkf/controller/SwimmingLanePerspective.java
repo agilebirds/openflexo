@@ -68,7 +68,6 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	@Override
@@ -81,6 +80,19 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 			}
 		}
 		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	public SwimmingLaneEditorController getControllerForProcess(FlexoProcess process) {

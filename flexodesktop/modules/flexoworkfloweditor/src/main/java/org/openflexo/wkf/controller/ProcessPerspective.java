@@ -62,7 +62,6 @@ public class ProcessPerspective extends FlexoPerspective {
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 
 	}
 
@@ -73,6 +72,19 @@ public class ProcessPerspective extends FlexoPerspective {
 				return getCurrentProcessView().getController().getPaletteView();
 			} else {
 				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
+		} else {
+			return topRightDummy;
+		}
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
 			}
 		} else {
 			return topRightDummy;

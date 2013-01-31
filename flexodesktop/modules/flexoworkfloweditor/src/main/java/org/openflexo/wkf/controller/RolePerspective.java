@@ -59,7 +59,6 @@ public class RolePerspective extends FlexoPerspective {
 		importedRoleView = new ImportedRoleView(controller);
 		infoLabel.setText(FlexoLocalization.localizedForKey("CTRL-drag to create role specialization", infoLabel));
 		setTopLeftView(_controller.getRoleListBrowserView());
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		setFooter(infoLabel);
 
 	}
@@ -81,6 +80,19 @@ public class RolePerspective extends FlexoPerspective {
 			}
 		}
 		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	/**
