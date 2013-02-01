@@ -28,5 +28,5 @@
     <Localized key="Graphics" lang="English">Graphics</Localized>
     <Localized key="Graphics" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Role specialization" />
+  <Parameter name="title" value="Role link" />
 </Panel>
