@@ -63,11 +63,14 @@ import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRemovingNotification;
+import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
+import org.openflexo.fib.view.container.FIBTabPanelView;
+import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
@@ -291,6 +294,18 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 				if (n.getAttribute() == FIBContainer.Parameters.subComponents) {
 					((FIBContainerView) view).updateLayout();
+				}
+			}
+		}
+
+		if (o instanceof FIBTab && view instanceof FIBTabView) {
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBTab.Parameters.title) {
+					if (view.getParentView() instanceof FIBTabPanelView) {
+						// Arghlll how do we update titles on this.
+					}
+
 				}
 			}
 		}
