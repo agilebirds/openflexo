@@ -367,7 +367,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 			@Override
 			public void treeStructureChanged(TreeModelEvent e) {
-
+				ensureRootExpanded();
 			}
 
 			@Override
@@ -377,6 +377,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 			@Override
 			public void treeNodesInserted(TreeModelEvent e) {
+				ensureRootExpanded();
+			}
+
+			private void ensureRootExpanded() {
 				if (!getBrowser().getRootVisible() && (BrowserCell) getBrowserModel().getRoot() != null
 						&& ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
 					// Only one cell and roots are hidden, expand this first cell

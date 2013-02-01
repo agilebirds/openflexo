@@ -398,8 +398,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			if (removedChildren.size() > 0 || newChildren.size() > 0) {
 				structureChanged = true;
-				/*if (oldChildren.size() == 0) {
+				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
+					// OK, issue seems to be MacOS only but workaround works on all platforms.
+					// To observe the issue, load WKF module on a project that imports other projects
+					// Imported workflow tree is not correctly initiated after reload of project.
 					try {
 						nodeStructureChanged(this);
 					} catch (Exception e) {
@@ -410,24 +413,24 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 						logger.warning("Unexpected " + e.getClass().getSimpleName()
 								+ " when refreshing browser, no severity but please investigate");
 					}
-				} else {*/
-				if (removedChildren.size() > 0) {
-					int[] childIndices = new int[removedChildren.size()];
-					Object[] removedChildrenObjects = new Object[removedChildren.size()];
-					for (int i = 0; i < removedChildren.size(); i++) {
-						childIndices[i] = oldChildren.indexOf(removedChildren.get(i));
-						removedChildrenObjects[i] = removedChildren.get(i);
+				} else {
+					if (removedChildren.size() > 0) {
+						int[] childIndices = new int[removedChildren.size()];
+						Object[] removedChildrenObjects = new Object[removedChildren.size()];
+						for (int i = 0; i < removedChildren.size(); i++) {
+							childIndices[i] = oldChildren.indexOf(removedChildren.get(i));
+							removedChildrenObjects[i] = removedChildren.get(i);
+						}
+						nodesWereRemoved(this, childIndices, removedChildrenObjects);
 					}
-					nodesWereRemoved(this, childIndices, removedChildrenObjects);
-				}
-				if (newChildren.size() > 0) {
-					int[] childIndices = new int[newChildren.size()];
-					for (int i = 0; i < newChildren.size(); i++) {
-						childIndices[i] = children.indexOf(newChildren.get(i));
+					if (newChildren.size() > 0) {
+						int[] childIndices = new int[newChildren.size()];
+						for (int i = 0; i < newChildren.size(); i++) {
+							childIndices[i] = children.indexOf(newChildren.get(i));
+						}
+						nodesWereInserted(this, childIndices);
 					}
-					nodesWereInserted(this, childIndices);
 				}
-				// }
 			}
 
 			try {
