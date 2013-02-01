@@ -35,7 +35,6 @@ import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.WKFArtefact;
-import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.WKFNode;
@@ -202,7 +201,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 			getDrawable().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
 		if (getDrawable().getTextAlignment() instanceof ParagraphAlignment) {
-			setParagraphAlignment((ParagraphAlignment) getDrawable().getTextAlignment());
+			setParagraphAlignment(getDrawable().getTextAlignment());
 		}
 	}
 
@@ -228,11 +227,9 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 				}
 				updatePropertiesFromWKFPreferences();
 				notifyShapeNeedsToBeRedrawn();
-			} else if (dataModification instanceof ObjectLocationChanged) {
-				notifyObjectMoved();
-				notifyShapeNeedsToBeRedrawn();
 			}
 		}
+		super.update(observable, dataModification);
 	}
 
 }

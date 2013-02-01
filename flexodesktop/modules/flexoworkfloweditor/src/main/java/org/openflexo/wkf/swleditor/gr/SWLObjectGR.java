@@ -22,9 +22,14 @@ package org.openflexo.wkf.swleditor.gr;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
+import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
+import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
@@ -74,6 +79,20 @@ public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraph
 			setShadowStyle(ShadowStyle.makeDefault());
 		} else {
 			setShadowStyle(ShadowStyle.makeNone());
+		}
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getModel()) {
+			if (dataModification instanceof ObjectSizeChanged) {
+				notifyObjectResized();
+			} else if (dataModification instanceof ObjectLocationChanged) {
+				notifyObjectMoved();
+			} else if (dataModification instanceof LabelLocationChanged) {
+				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
+				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextY);
+			}
 		}
 	}
 

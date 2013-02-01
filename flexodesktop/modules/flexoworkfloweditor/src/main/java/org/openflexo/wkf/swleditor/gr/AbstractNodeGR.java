@@ -35,9 +35,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.wkf.FlexoLevel;
-import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
 import org.openflexo.foundation.wkf.dm.NodeRemoved;
-import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenClosed;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
@@ -97,13 +95,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
-			} else if (dataModification instanceof ObjectLocationChanged) {
-				handlePositionChanged();
-			} else if (dataModification instanceof LabelLocationChanged) {
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 			}
 		}
+		super.update(observable, dataModification);
 	}
 
 	private void handlePositionChanged() {
