@@ -303,6 +303,16 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? InputEvent.CTRL_MASK
 				: InputEvent.META_MASK));
 
+		JMenuItem paletteItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "show_palette"));
+		paletteItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				palette.setVisible(true);
+			}
+		});
+		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? InputEvent.CTRL_MASK
+				: InputEvent.META_MASK));
+
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
 			@Override
@@ -351,6 +361,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		});
 
 		toolsMenu.add(inspectItem);
+		toolsMenu.add(paletteItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
 		toolsMenu.add(displayFileItem);
@@ -491,8 +502,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				loadFIB();
-				frame.setVisible(true);
+				init(FIBAbstractEditor.this);
 			}
 		});
 	}
@@ -512,14 +522,18 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		return true;
 	}
 
+	public static <T extends FIBAbstractEditor> void init(T abstractEditor) {
+		abstractEditor.loadFIB();
+		abstractEditor.getFrame().setVisible(true);
+	}
+
 	public static <T extends FIBAbstractEditor> void main(final Class<T> klass) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					T abstractEditor = klass.newInstance();
-					abstractEditor.loadFIB();
-					abstractEditor.getFrame().setVisible(true);
+					init(abstractEditor);
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -528,6 +542,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 					e.printStackTrace();
 				}
 			}
+
 		});
 	}
 }
