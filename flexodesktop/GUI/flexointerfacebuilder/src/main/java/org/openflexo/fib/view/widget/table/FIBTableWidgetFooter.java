@@ -195,7 +195,7 @@ public class FIBTableWidgetFooter extends JPanel {
 		optionsActionMenuNeedsRecomputed = true;
 
 		if (hasMultiplePlusActions()) {
-			plusButton.setEnabled(true);
+			plusButton.setEnabled(true && _widget.isEnabled());
 		} else {
 			boolean isActive = false;
 			for (FIBTableAction action : _addActions.keySet()) {
@@ -204,7 +204,7 @@ public class FIBTableWidgetFooter extends JPanel {
 					isActive = true;
 				}
 			}
-			plusButton.setEnabled(isActive);
+			plusButton.setEnabled(isActive && _widget.isEnabled());
 		}
 
 		boolean isMinusActive = false;
@@ -214,9 +214,9 @@ public class FIBTableWidgetFooter extends JPanel {
 				isMinusActive = true;
 			}
 		}
-		minusButton.setEnabled(isMinusActive);
+		minusButton.setEnabled(isMinusActive && _widget.isEnabled());
 
-		optionsButton.setEnabled(_otherActions.size() > 0);
+		optionsButton.setEnabled(_otherActions.size() > 0 && _widget.isEnabled());
 
 		/*FlexoModelObject focusedObject = getFocusedObject();
 		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();

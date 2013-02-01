@@ -55,7 +55,7 @@ public class WorkflowElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		// We add the roles
 		addToChilds(getFlexoWorkflow().getRoleList());
-		if (getFlexoWorkflow().getImportedRoleList() != null) {
+		if (getFlexoWorkflow().getImportedRoleList() != null && getFlexoWorkflow().getImportedRoleList().getRoles().size() > 0) {
 			addToChilds(getFlexoWorkflow().getImportedRoleList());
 		}
 		/*if (getFlexoWorkflow().getProject().getProjectData() != null) {

@@ -96,7 +96,7 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	@Override
 	public String getName() {
 		if (getRoleList().isImportedRoleList()) {
-			return FlexoLocalization.localizedForKey("imported_role_library");
+			return "[PPM]" + FlexoLocalization.localizedForKey("imported_role_library");
 		} else {
 			return super.getName();
 		}

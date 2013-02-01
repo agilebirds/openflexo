@@ -167,6 +167,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_listModels = new Hashtable<DMType, BindingColumnListModel>();
 		_rootBindingColumnListModel = null;
 		_lists = new Vector<FilteredJList>();
+
 	}
 
 	@Override
@@ -981,6 +982,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			bindingValueRepresentation.setLineWrap(true);
 			topPane.add(bindingValueRepresentation, BorderLayout.CENTER);
 			topPane.add(labelPanel, BorderLayout.SOUTH);
+			updateUI();
 		} else {
 			topPane = labelPanel;
 		}
@@ -1543,7 +1545,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				bindingValueRepresentation.setText(_bindingSelector.renderedString(bindingValue));
-				bindingValueRepresentation.setForeground(bindingValue.isBindingValid() ? Color.BLACK : Color.RED);
+				bindingValueRepresentation.setForeground(bindingValue.isBindingValid() ? defaultTextareaForeground : Color.RED);
 				updateMethodCallPanel();
 			}
 
@@ -1579,7 +1581,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			}
 		}
 		if (binding != null) {
-			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? defaultTextfieldForeground : Color.RED);
 		}
 
 		if (_bindingSelector.getAllowsStaticValues() && staticBindingPanel != null) {
@@ -2441,7 +2443,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (textValue == null || !textValue.equals(_bindingSelector.renderedString(_bindingSelector.getEditedObject()))) {
 				_bindingSelector.getTextField().setForeground(Color.RED);
 			} else {
-				_bindingSelector.getTextField().setForeground(Color.BLACK);
+				_bindingSelector.getTextField().setForeground(defaultTextfieldForeground);
 			}
 
 		} finally {
@@ -2501,6 +2503,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	}
 
 	private CompletionInfo completionInfo;
+
+	private Color defaultTextareaForeground;
+
+	private Color defaultTextfieldForeground;
 
 	protected class CompletionInfo {
 		String validPath = null;
@@ -2649,7 +2655,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		BindingColumnListModel listModel = listAtIndex(dotCount).getModel();
 		String subPartialPath = inputText.substring(inputText.lastIndexOf(".") + 1);
 		Vector<Integer> pathElementIndex = new Vector<Integer>();
-		;
 		BindingColumnElement pathElement = findElementMatching(listModel, subPartialPath, pathElementIndex);
 		return pathElement != null;
 	}
@@ -2689,4 +2694,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		return (BindingValue) _bindingSelector.getEditedObject();
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (bindingValueRepresentation != null) {
+			defaultTextareaForeground = bindingValueRepresentation.getForeground();
+		}
+		if (_bindingSelector != null && _bindingSelector.getTextField() != null) {
+			defaultTextfieldForeground = _bindingSelector.getTextField().getForeground();
+		}
+	}
 }

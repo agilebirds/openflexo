@@ -31,6 +31,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -61,14 +62,30 @@ public class ProcessPerspective extends FlexoPerspective {
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 
 	}
 
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentProcessView() != null) {
-			return getCurrentProcessView().getController().getPaletteView();
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return getCurrentProcessView().getController().getPaletteView();
+			} else {
+				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
+		} else {
+			return topRightDummy;
+		}
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
 		} else {
 			return topRightDummy;
 		}

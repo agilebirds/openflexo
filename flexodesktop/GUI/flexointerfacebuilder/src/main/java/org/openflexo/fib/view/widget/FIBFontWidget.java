@@ -84,7 +84,7 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 		// if (notEquals(getValue(),getSelectedFont())) {
 		widgetUpdating = true;
 		checkBox.setSelected(getValue() == null);
-		_selector.setEnabled(getValue() != null || !getWidget().getAllowsNull());
+		_selector.setEnabled((getValue() != null || !getWidget().getAllowsNull()) && isEnabled());
 		setFont(getValue());
 		widgetUpdating = false;
 		return true;

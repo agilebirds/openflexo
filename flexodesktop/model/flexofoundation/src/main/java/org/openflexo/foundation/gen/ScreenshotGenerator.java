@@ -75,11 +75,6 @@ public class ScreenshotGenerator {
 
 	private static final String REPLACEMENT = "-";
 
-	public static void main(String[] args) {
-		String s = "ABSTRA\tCTACTIVITY\n-TestDM.BE\r\n\rGIN1062";
-		System.out.println(s + "=" + formatImageName(s));
-	}
-
 	public static String getScreenshotName(Object o) {
 		if (o instanceof FlexoProcess) {
 			return getImageNameForProcess((FlexoProcess) o);
@@ -108,11 +103,11 @@ public class ScreenshotGenerator {
 	}
 
 	private static String getImageNameForWorkflow(FlexoWorkflow o) {
-		return "Workflow";
+		return getImageName("WORKFLOW", o.getName(), o.getFlexoID());
 	}
 
 	private static String getImageNameForRoleList(RoleList o) {
-		return "RoleList";
+		return getImageName("ROLES", o.getWorkflow().getName(), o.getFlexoID());
 	}
 
 	/**
@@ -120,15 +115,7 @@ public class ScreenshotGenerator {
 	 * @return
 	 */
 	private static String getImageNameForComponent(ComponentDefinition definition) {
-		return getImageNameForComponent(definition.getComponentName());
-	}
-
-	/**
-	 * @param componentName
-	 * @return
-	 */
-	private static String getImageNameForComponent(String componentName) {
-		return IEWOComponent.getTypeName() + "-" + formatImageName(componentName);
+		return getImageName(IEWOComponent.getTypeName(), definition.getComponentName(), definition.getFlexoID());
 	}
 
 	/**
@@ -136,26 +123,15 @@ public class ScreenshotGenerator {
 	 * @return
 	 */
 	private static String getImageNameForActivity(AbstractActivityNode node) {
-		return getImageNameForActivity(node, node.getName() + node.getFlexoID());
-	}
-
-	/**
-	 * @param node
-	 * @return
-	 */
-	private static String getImageNameForActivity(AbstractActivityNode node, String activityName) {
-		String imageName = formatImageName(node.getProcess().getName() + "-" + activityName);
-		return AbstractActivityNode.getTypeName() + "-" + imageName;
+		return getImageName(AbstractActivityNode.getTypeName(), node.getProcess().getName() + "-" + node.getName(), node.getFlexoID());
 	}
 
 	private static String getImageNameForLoopOperator(LOOPOperator node) {
-		String imageName = formatImageName(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
-		return LOOPOperator.getTypeName() + "-" + imageName;
+		return getImageName(LOOPOperator.getTypeName(), node.getProcess().getName() + "-" + node.getName(), node.getFlexoID());
 	}
 
 	private static String getImageNameForERDiagram(ERDiagram node) {
-		String imageName = formatImageName(node.getName() + "-" + node.getFlexoID());
-		return "ERDiagram-" + imageName;
+		return getImageName("ERDiagram", node.getName(), node.getFlexoID());
 	}
 
 	/**
@@ -163,15 +139,7 @@ public class ScreenshotGenerator {
 	 * @return
 	 */
 	private static String getImageNameForOperation(OperationNode node) {
-		return getImageNameForOperation(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
-	}
-
-	/**
-	 * @param operationName
-	 * @return
-	 */
-	private static String getImageNameForOperation(String operationName) {
-		return OperationNode.getTypeName() + "-" + formatImageName(operationName);
+		return getImageName(OperationNode.getTypeName(), node.getProcess().getName() + "-" + node.getName(), node.getFlexoID());
 	}
 
 	/**
@@ -179,15 +147,7 @@ public class ScreenshotGenerator {
 	 * @return
 	 */
 	private static String getImageNameForProcess(FlexoProcess process) {
-		return getImageNameForProcess(process.getName() + process.getFlexoID());
-	}
-
-	/**
-	 * @param processName
-	 * @return
-	 */
-	private static String getImageNameForProcess(String processName) {
-		return FlexoProcess.getTypeName() + "-" + formatImageName(processName);
+		return getImageName(FlexoProcess.getTypeName(), process.getName(), process.getFlexoID());
 	}
 
 	/**
@@ -195,15 +155,23 @@ public class ScreenshotGenerator {
 	 * @return
 	 */
 	private static String getImageNameForShema(ViewDefinition shema) {
-		return getImageNameForShema(shema.getName() + shema.getFlexoID());
+		return getImageName(View.getTypeName(), shema.getName(), shema.getFlexoID());
 	}
 
-	/**
-	 * @param shemaName
-	 * @return
-	 */
-	private static String getImageNameForShema(String shemaName) {
-		return View.getTypeName() + "-" + formatImageName(shemaName);
+	private static String getImageName(String type, String name, long flexoID) {
+		return trim(formatImageName(type + "-" + name)) + flexoID;
+	}
+
+	private static String trim(String name) {
+		// Max-length is 255 chars
+		// We need to remove 20 characters for the flexoID Long.MAX_VALUE is 20 digits
+		// We need to remove 4 chars for the extension (.png)
+		// Let's be cautious and add an extra 30 chars security
+		if (name.length() > 200) {
+			return name.substring(0, 200).trim();
+		} else {
+			return name;
+		}
 	}
 
 	private static String formatImageName(String imageName) {

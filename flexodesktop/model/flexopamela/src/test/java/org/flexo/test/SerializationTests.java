@@ -101,5 +101,28 @@ public class SerializationTests extends AbstractPAMELATest {
 		Assert.assertTrue(aNode instanceof MyNode);
 		Assert.assertEquals(PROPERTY_VALUE, ((MyNode) aNode).getMyProperty());
 
+		// The next block is necessary to ensure that serialization remains consistent when using EXTENSIVE policy (ie, class names and
+		// stuffs remain serialized)
+		try {
+			fos = new FileOutputStream(file);
+			factory.serialize(process, fos, SerializationPolicy.EXTENSIVE);
+		} catch (RestrictiveSerializationException e) {
+			Assert.fail("Extensive serialization should allow the serialization of a " + MyNode.class.getName());
+		} finally {
+			IOUtils.closeQuietly(fos);
+		}
+		factory = new ModelFactory(FlexoProcess.class);
+		try {
+			fis = new FileInputStream(file);
+			process = (FlexoProcess) factory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
+		} catch (RestrictiveDeserializationException e) {
+			Assert.fail("Extensive deserialization should allow the deserialization of a " + MyNode.class.getName());
+		} finally {
+			IOUtils.closeQuietly(fis);
+		}
+		Assert.assertEquals(1, process.getNodes().size());
+		aNode = process.getNodeNamed(NODE_NAME);
+		Assert.assertTrue(aNode instanceof MyNode);
+		Assert.assertEquals(PROPERTY_VALUE, ((MyNode) aNode).getMyProperty());
 	}
 }

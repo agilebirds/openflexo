@@ -33,15 +33,20 @@ import org.openflexo.foundation.FlexoEditor;
  * @author sguerin
  * 
  */
-public class RoleListBrowser extends ProjectBrowser {
+public class RoleBrowser extends ProjectBrowser {
 
-	private static final Logger logger = Logger.getLogger(RoleListBrowser.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RoleBrowser.class.getPackage().getName());
 
 	protected WKFController _controller;
 
-	public RoleListBrowser(WKFController controller) {
+	public RoleBrowser(WKFController controller) {
 		super(controller);
 		_controller = controller;
+	}
+
+	@Override
+	public boolean showRootNode() {
+		return false;
 	}
 
 	@Override

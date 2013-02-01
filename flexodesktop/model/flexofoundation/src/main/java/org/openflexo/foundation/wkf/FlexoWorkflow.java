@@ -794,6 +794,21 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		return null;
 	}
 
+	public FlexoProcessNode getLocalFlexoProcessNodeWithFlexoID(long flexoID) {
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode process = e.nextElement();
+			if (process != null) {
+				if (process.getFlexoID() == flexoID) {
+					return process;
+				}
+			}
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Could not find process node with ID " + flexoID);
+		}
+		return null;
+	}
+
 	public FlexoProcess getLocalFlexoProcessWithFlexoID(long flexoID) {
 		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
 			FlexoProcess process = e.nextElement().getProcess();

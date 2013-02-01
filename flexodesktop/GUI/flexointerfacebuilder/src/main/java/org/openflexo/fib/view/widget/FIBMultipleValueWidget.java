@@ -353,7 +353,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			returned = lastKnownValues != null;
 			lastKnownValues = null;
 		}
-		return returned /*|| true*/;
+		return returned;
 	}
 
 	/*protected final FIBListModel rebuildListModel()

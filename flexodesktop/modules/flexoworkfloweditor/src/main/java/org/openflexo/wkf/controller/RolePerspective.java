@@ -29,6 +29,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -58,7 +59,6 @@ public class RolePerspective extends FlexoPerspective {
 		importedRoleView = new ImportedRoleView(controller);
 		infoLabel.setText(FlexoLocalization.localizedForKey("CTRL-drag to create role specialization", infoLabel));
 		setTopLeftView(_controller.getRoleListBrowserView());
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		setFooter(infoLabel);
 
 	}
@@ -73,9 +73,26 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentRoleListView() != null) {
-			return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			} else {
+				return new GlassPaneWrapper(getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane());
+			}
 		}
 		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	/**
