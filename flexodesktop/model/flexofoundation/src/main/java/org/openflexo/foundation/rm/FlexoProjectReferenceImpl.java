@@ -43,6 +43,9 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 			FlexoWorkflowResource importedWorkflowResource = getReferringProject().getImportedWorkflowResource(this, true);
 			importedWorkflowResource.replaceWithWorkflow(project.getWorkflow());
 			getPropertyChangeSupport().firePropertyChange(WORKFLOW, null, project.getWorkflow());
+			getPropertyChangeSupport().firePropertyChange(NAME, getInternalName(), getName());
+			getPropertyChangeSupport().firePropertyChange(REVISION, getInternalRevision(), getRevision());
+			getPropertyChangeSupport().firePropertyChange(NAME, getInternalVersion(), getVersion());
 		}
 	}
 
@@ -66,8 +69,12 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	@Override
 	public String getName() {
 		if (getReferredProject() != null) {
-			return getReferredProject().getDisplayableName();
+			return getReferredProject().getDisplayName();
 		}
+		return getInternalName();
+	}
+
+	private String getInternalName() {
 		return (String) performSuperGetter(NAME);
 	}
 
@@ -90,6 +97,10 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (getReferredProject() != null) {
 			return getReferredProject().getVersion();
 		}
+		return getInternalVersion();
+	}
+
+	private String getInternalVersion() {
 		return (String) performSuperGetter(VERSION);
 	}
 
@@ -101,6 +112,10 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (getReferredProject() != null) {
 			return getReferredProject().getRevision();
 		}
+		return getInternalRevision();
+	}
+
+	private Long getInternalRevision() {
 		return (Long) performSuperGetter(REVISION);
 	}
 

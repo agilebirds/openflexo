@@ -59,7 +59,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 			public boolean handleException(FlexoException exception, ImportProject action) {
 				if (action.getThrownException() instanceof ProjectImportLoopException) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("project_already_imported") + " "
-							+ action.getProjectToImport().getName());
+							+ action.getProjectToImport().getDisplayName());
 				}
 				return true;
 			}
@@ -73,7 +73,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 			public boolean run(EventObject event, ImportProject action) {
 				if (action.hasActionExecutionSucceeded()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("successfully_imported_project") + " "
-							+ action.getProjectToImport().getName());
+							+ action.getProjectToImport().getDisplayName());
 				}
 				return true;
 			}
