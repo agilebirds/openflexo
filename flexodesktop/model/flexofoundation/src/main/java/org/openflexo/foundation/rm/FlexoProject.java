@@ -55,6 +55,7 @@ import javax.imageio.ImageIO;
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
@@ -200,9 +201,11 @@ import org.openflexo.xmlcode.XMLMapping;
 public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>>, ResourceData<FlexoProject> {
 
+	public static final String PROJECT_DIRECTORY = "projectDirectory";
 	public static final String PROJECT_DATA = "projectData";
-	private static final String REVISION = "revision";
-	private static final String VERSION = "version";
+	public static final String REVISION = "revision";
+	public static final String VERSION = "version";
+	public static final String PROJECT_URI = "projectURI";
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
 	private static final String HTML_DIRECTORY = "HTML";
 	private static final String DOCX_DIRECTORY = "Docx";
@@ -346,7 +349,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public static interface FlexoProjectReferenceLoader {
 
-		public FlexoProject loadProject(FlexoProjectReference reference);
+		/**
+		 * 
+		 * @param reference
+		 *            the referense to load
+		 * @param silentlyOnly
+		 *            if true, the loading should be silent. This flag is typically meant for interactive loaders.
+		 * @return
+		 */
+		public FlexoProject loadProject(FlexoProjectReference reference, boolean silentlyOnly);
 
 	}
 
@@ -869,7 +880,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			if (resourceSaved) {
 				// Revision is incremented only if a FlexoStorageResource has been changed. This is allows essentially to track if the
 				// model of the project has changed.
-				revision++;
+				setRevision(revision + 1);
 			}
 			if (resourceSaved || getFlexoRMResource().isModified()) {
 				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
@@ -1980,7 +1991,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		clearCachedFiles();
 		if (notify) {
 			setChanged();
-			notifyObservers(new DataModification("projectDirectory", null, projectDirectory));
+			notifyObservers(new DataModification(PROJECT_DIRECTORY, null, projectDirectory));
 		}
 	}
 
@@ -3879,7 +3890,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public void setProjectURI(String projectURI) {
+		String old = projectURI;
 		this.projectURI = projectURI;
+		if (!isDeserializing()) {
+			setChanged();
+			notifyObservers(new AttributeDataModification(PROJECT_URI, old, projectURI));
+		}
 	}
 
 	@Override
@@ -3991,6 +4007,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		} else {
 			return null;
 		}
+	}
+
+	public boolean importsProject(FlexoProject project) {
+		return project != null && importsProjectWithURI(project.getProjectURI());
+	}
+
+	public boolean importsProjectWithURI(String projectURI) {
+		return getProjectData() != null && getProjectData().getProjectReferenceWithURI(projectURI, true) != null;
 	}
 
 	public FlexoWorkflowResource getImportedWorkflowResource(FlexoProjectReference ref) {
@@ -4318,9 +4342,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		objectReferences.remove(objectReference);
 	}
 
-	public FlexoProject loadProjectReference(FlexoProjectReference reference) {
+	public FlexoProject loadProjectReference(FlexoProjectReference reference, boolean silentlyOnly) {
 		if (projectReferenceLoader != null) {
-			FlexoProject loadProject = projectReferenceLoader.loadProject(reference);
+			FlexoProject loadProject = projectReferenceLoader.loadProject(reference, silentlyOnly);
 			if (loadProject != null) {
 				setChanged();
 				notifyObservers(new ImportedProjectLoaded(loadProject));

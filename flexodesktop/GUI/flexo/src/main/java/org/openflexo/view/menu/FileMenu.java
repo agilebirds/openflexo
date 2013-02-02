@@ -532,7 +532,7 @@ public class FileMenu extends FlexoMenu {
 				Cursor c = getController().getFlexoFrame().getCursor();
 				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
 				try {
-					getProjectLoader().saveProjects(getProjectLoader().getModifiedProjects());
+					getProjectLoader().saveAllProjects();
 				} catch (SaveResourceExceptionList e) {
 					e.printStackTrace();
 					FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),

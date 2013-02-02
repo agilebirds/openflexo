@@ -31,7 +31,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	}
 
 	@Override
-	public FlexoProject loadProject(FlexoProjectReference ref) {
+	public FlexoProject loadProject(FlexoProjectReference ref, boolean silentlyOnly) {
 		boolean retrievedFromResourceCenter = false;
 		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
 				.retrieveResource(ref.getURI(), ref.getVersion(), ref.getResourceDataClass(), null);
@@ -47,6 +47,9 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " " + ref.getVersion());
 		while (true) {
 			if (selectedFile == null || !selectedFile.exists()) {
+				if (silentlyOnly) {
+					return null;
+				}
 				int ret = projectChooser.showOpenDialog();
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					selectedFile = projectChooser.getSelectedFile();
