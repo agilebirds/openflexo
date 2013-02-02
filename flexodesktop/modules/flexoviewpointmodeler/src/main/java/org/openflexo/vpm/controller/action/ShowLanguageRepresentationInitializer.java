@@ -27,6 +27,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.ShowLanguageRepresentation;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.vpm.VPMCst;
 
 public class ShowLanguageRepresentationInitializer extends ActionInitializer<ShowLanguageRepresentation, ViewPointObject, ViewPointObject> {
 
@@ -46,9 +47,7 @@ public class ShowLanguageRepresentationInitializer extends ActionInitializer<Sho
 		return new FlexoActionInitializer<ShowLanguageRepresentation>() {
 			@Override
 			public boolean run(EventObject e, ShowLanguageRepresentation action) {
-				// System.out.println("Language representation for " + action.getFocusedObject());
-				System.out.println(action.getFocusedObject().getLanguageRepresentation());
-				return true;
+				return instanciateAndShowDialog(action, VPMCst.SHOW_LANGUAGE_REPRESENTATION_DIALOG_FIB);
 			}
 
 		};

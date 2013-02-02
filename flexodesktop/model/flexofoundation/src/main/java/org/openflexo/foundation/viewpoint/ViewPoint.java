@@ -377,7 +377,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			for (File owlFile : getResource().getDirectory().listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
-					return (name.endsWith(".owl"));
+					return name.endsWith(".owl");
 				}
 			})) {
 				if (owlFile.exists()) {
@@ -391,7 +391,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					for (File owlFile : dsDir.listFiles(new FilenameFilter() {
 						@Override
 						public boolean accept(File dir, String name) {
-							return (name.endsWith(".owl"));
+							return name.endsWith(".owl");
 						}
 					})) {
 						if (owlFile.exists()) {
@@ -529,10 +529,10 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
 			}
 		}*/
-		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
+		sb.append("viewdefinition " + getName() + " uri=\"" + getURI() + "\"");
 		sb.append(" {" + StringUtils.LINE_SEPARATOR);
 		// TODO iterate on slots here
-		sb.append("ModelSlot defaultModelSlot implements toto;");
+		sb.append("modelslot defaultModelSlot implements toto;");
 		sb.append(StringUtils.LINE_SEPARATOR);
 		/*for (EditionPattern ep : getEditionPatterns()) {
 			sb.append(ep.getLanguageRepresentation());
