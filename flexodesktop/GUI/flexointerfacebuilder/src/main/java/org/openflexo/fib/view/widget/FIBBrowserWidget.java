@@ -156,9 +156,11 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					getJTree().expandPath(
-							new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
-									((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+					if (((BrowserCell) getBrowserModel().getRoot()).getChildCount() > 0) {
+						getJTree().expandPath(
+								new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
+										((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+					}
 				}
 			});
 		}

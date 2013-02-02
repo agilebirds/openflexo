@@ -28,7 +28,6 @@ import org.openflexo.components.widget.FIBInformationSpaceBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
@@ -114,17 +113,16 @@ public class InformationSpacePerspective extends FlexoPerspective {
 		if (object instanceof IFlexoOntology) {
 			// ((IFlexoOntology) object).loadWhenUnloaded();
 			OntologyView returned = new OntologyView((IFlexoOntology) object, (VPMController) controller, this);
-			if (object instanceof FlexoMetaModel) {
-				returned.setShowClasses(true);
-				returned.setShowDataProperties(true);
-				returned.setShowObjectProperties(true);
-				returned.setShowAnnotationProperties(true);
-			}
-			if (object instanceof FlexoModel) {
+			if (!(object instanceof FlexoMetaModel)) {
 				returned.setShowClasses(false);
 				returned.setShowDataProperties(false);
 				returned.setShowObjectProperties(false);
 				returned.setShowAnnotationProperties(false);
+			} else {
+				returned.setShowClasses(true);
+				returned.setShowDataProperties(true);
+				returned.setShowObjectProperties(true);
+				returned.setShowAnnotationProperties(true);
 			}
 			return returned;
 		}
