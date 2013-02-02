@@ -372,6 +372,8 @@ public abstract class TokenMarker {
 			return new WODTokenMarker();
 		} else if (tokenMarkerStyle == TokenMarkerStyle.XML) {
 			return new XMLTokenMarker();
+		} else if (tokenMarkerStyle == TokenMarkerStyle.FML) {
+			return new FMLTokenMarker();
 		} else {
 			return null;
 		}

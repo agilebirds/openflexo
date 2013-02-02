@@ -139,12 +139,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	protected boolean _hasFocus;
 
 	public void gainFocus() {
-		if (getController().getFocusedWidget() != null && getController().getFocusedWidget()._hasFocus == true) {
-			getController().getFocusedWidget().looseFocus();
+		if (getController() != null) {
+			if (getController().getFocusedWidget() != null && getController().getFocusedWidget()._hasFocus == true) {
+				getController().getFocusedWidget().looseFocus();
+			}
+			logger.fine("Getting focus: " + getWidget());
+			_hasFocus = true;
+			getController().setFocusedWidget(this);
 		}
-		logger.fine("Getting focus: " + getWidget());
-		_hasFocus = true;
-		getController().setFocusedWidget(this);
 	}
 
 	public void looseFocus() {

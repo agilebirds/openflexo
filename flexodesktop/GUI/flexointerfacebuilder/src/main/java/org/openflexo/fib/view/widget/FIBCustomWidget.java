@@ -293,7 +293,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		private JLabel label;
 
 		public NotFoundComponent() {
-			label = new JLabel("Component not defined");
+			label = new JLabel("< Custom component >");
 		}
 
 		@Override

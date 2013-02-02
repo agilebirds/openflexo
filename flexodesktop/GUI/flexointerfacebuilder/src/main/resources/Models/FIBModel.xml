@@ -199,6 +199,14 @@
     <property name="text" xmlTag="text" attribute="YES"/> 
   </entity>
   
+  <entity name="org.openflexo.fib.model.FIBEditor" xmlTag="Editor"> 
+    <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="rows" xmlTag="rows" attribute="YES"/> 
+    <property name="text" xmlTag="text" attribute="YES"/> 
+    <property name="tokenMarkerStyle" xmlTag="tokenMarkerStyle" attribute="YES"/> 
+  </entity>
+  
   <entity name="org.openflexo.fib.model.FIBHtmlEditor" xmlTag="HTMLEditor"> 
    	<property name="optionsInLine1" type="vector" contains="org.openflexo.fib.model.FIBHtmlEditorOption" context="Line1"/> 
    	<property name="optionsInLine2" type="vector" contains="org.openflexo.fib.model.FIBHtmlEditorOption" context="Line2"/> 

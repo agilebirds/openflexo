@@ -1,0 +1,31 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBEditor">
+	<Parameter name="title" value="Editor"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="columns" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType" data="data.columns"/>
+				
+				<Label label="rows" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType" data="data.rows"/>
+				
+			    <Label label="markers_style" constraints="twocols(location=left)" />
+			    <DropDown data="data.tokenMarkerStyle" showReset="false" constraints="twocols(location=right)" />
+				
+			</Tab>
+						
+			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
+			
+				<CheckBox data="data.validateOnReturn" constraints="twocols(location=left)" columns="15"/>
+				<Label label="validate_on_return" constraints="twocols(location=right;expandHorizontally=true)"/>
+				
+			</Tab>
+
+		</TabPanel>
+
+</Panel>

@@ -59,6 +59,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBEditor;
 import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
@@ -92,6 +93,7 @@ import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
+import org.openflexo.fib.view.widget.FIBEditorWidget;
 import org.openflexo.fib.view.widget.FIBFileWidget;
 import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.fib.view.widget.FIBHtmlEditorWidget;
@@ -751,6 +753,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			}
 			if (fibWidget instanceof FIBTextArea) {
 				return new FIBTextAreaWidget((FIBTextArea) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBEditor) {
+				return new FIBEditorWidget((FIBEditor) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBHtmlEditor) {
 				return new FIBHtmlEditorWidget((FIBHtmlEditor) fibWidget, FIBController.this);

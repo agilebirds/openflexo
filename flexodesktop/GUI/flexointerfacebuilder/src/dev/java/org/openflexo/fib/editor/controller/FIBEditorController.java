@@ -57,6 +57,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableCheckboxWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableColorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableCustomWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableDropDownWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableEditorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFileWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFontWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableHtmlEditorWidget;
@@ -77,6 +78,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBEditor;
 import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
@@ -359,6 +361,9 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			}
 			if (fibWidget instanceof FIBTextArea) {
 				return new FIBEditableTextAreaWidget((FIBTextArea) fibWidget, FIBEditorController.this);
+			}
+			if (fibWidget instanceof FIBEditor) {
+				return new FIBEditableEditorWidget((FIBEditor) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBHtmlEditor) {
 				return new FIBEditableHtmlEditorWidget((FIBHtmlEditor) fibWidget, FIBEditorController.this);
