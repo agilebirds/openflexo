@@ -148,6 +148,7 @@ public class TabbedPane<J> {
 				close.setOpaque(false);
 				close.setBorderPainted(false);
 				close.setRolloverIcon(UtilsIconLibrary.CLOSE_HOVER_ICON);
+				close.setPressedIcon(UtilsIconLibrary.CLOSE_PRESSED_ICON);
 				close.addActionListener(this);
 				close.setFocusable(false);
 				close.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
