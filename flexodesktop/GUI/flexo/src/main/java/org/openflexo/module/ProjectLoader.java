@@ -117,6 +117,15 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		return editors.get(project);
 	}
 
+	public FlexoEditor editorForProjectURIAndRevision(String projectURI, long revision) {
+		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+			if (e.getKey().getProjectURI().equals(projectURI) && e.getKey().getRevision() == revision) {
+				return e.getValue();
+			}
+		}
+		return null;
+	}
+
 	public boolean hasEditorForProjectDirectory(File projectDirectory) {
 		if (projectDirectory == null) {
 			return false;
