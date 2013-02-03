@@ -4342,6 +4342,24 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		objectReferences.remove(objectReference);
 	}
 
+	public boolean areAllImportedProjectsLoaded() {
+		return areAllImportedProjectsLoaded(this);
+	}
+
+	private static boolean areAllImportedProjectsLoaded(FlexoProject project) {
+		if (project.getProjectData() == null) {
+			return true;
+		}
+		for (FlexoProjectReference ref : project.getProjectData().getImportedProjects()) {
+			if (ref.getReferredProject() == null) {
+				return false;
+			} else if (!ref.getReferredProject().areAllImportedProjectsLoaded()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public FlexoProject loadProjectReference(FlexoProjectReference reference, boolean silentlyOnly) {
 		if (projectReferenceLoader != null) {
 			FlexoProject loadProject = projectReferenceLoader.loadProject(reference, silentlyOnly);

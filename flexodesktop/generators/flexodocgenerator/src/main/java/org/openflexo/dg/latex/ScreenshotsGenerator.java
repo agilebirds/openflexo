@@ -102,7 +102,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 
 		// Now the OEShemas
 		if (getProject().getFlexoShemaLibraryResource(false) != null && getProject().getResourceCenter() != null) {
-			Enumeration<ViewDefinition> en5 = getProject().getShemaLibrary().retrieveAllShemas().elements();
+			Enumeration<ViewDefinition> en5 = getProject().getViewLibrary().retrieveAllShemas().elements();
 			while (en5.hasMoreElements()) {
 				ViewDefinition sd = en5.nextElement();
 				FlexoCopiedResource cdCopy = getResourceForShema(sd, true);

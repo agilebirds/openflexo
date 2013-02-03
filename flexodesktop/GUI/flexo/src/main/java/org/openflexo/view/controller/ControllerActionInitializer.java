@@ -53,6 +53,7 @@ import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.HelpActionizer;
 import org.openflexo.view.controller.action.InspectActionizer;
+import org.openflexo.view.controller.action.LoadAllImportedProjectInitializer;
 import org.openflexo.view.controller.action.RefreshImportedProcessesActionInitializer;
 import org.openflexo.view.controller.action.RefreshImportedRolesActionInitializer;
 import org.openflexo.view.controller.action.SortFlexoPropertiesActionizer;
@@ -123,6 +124,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		new RefreshImportedProcessesActionInitializer(this);
 		new UploadPrjInitializer(this);
 		new ProjectExcelExportInitializer(this);
+		new LoadAllImportedProjectInitializer(this);
 
 		new AddFlexoPropertyActionizer(this);
 		new DeleteFlexoPropertyActionizer(this);
