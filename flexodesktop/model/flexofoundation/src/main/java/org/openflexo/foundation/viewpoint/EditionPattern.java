@@ -43,8 +43,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
+import org.openflexo.foundation.viewpoint.dm.EditionPatternConstraintInserted;
+import org.openflexo.foundation.viewpoint.dm.EditionPatternConstraintRemoved;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternHierarchyChanged;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
@@ -76,6 +77,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	private Vector<PatternRole> patternRoles;
 	private Vector<EditionScheme> editionSchemes;
+	private Vector<EditionPatternConstraint> editionPatternConstraints;
 	private EditionPatternInspector inspector;
 
 	private OntologicObjectPatternRole primaryConceptRole;
@@ -155,6 +157,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
+		editionPatternConstraints = new Vector<EditionPatternConstraint>();
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
 	}
@@ -248,6 +251,37 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeRemoved(anEditionScheme, this));
+	}
+
+	public Vector<EditionPatternConstraint> getEditionPatternConstraints() {
+		return editionPatternConstraints;
+	}
+
+	public void setEditionPatternConstraints(Vector<EditionPatternConstraint> someEditionPatternConstraint) {
+		editionPatternConstraints = someEditionPatternConstraint;
+	}
+
+	public void addToEditionPatternConstraints(EditionPatternConstraint anEditionPatternConstraint) {
+		anEditionPatternConstraint.setEditionPattern(this);
+		editionPatternConstraints.add(anEditionPatternConstraint);
+		setChanged();
+		notifyObservers(new EditionPatternConstraintInserted(anEditionPatternConstraint, this));
+	}
+
+	public void removeFromEditionPatternConstraints(EditionPatternConstraint anEditionPatternConstraint) {
+		anEditionPatternConstraint.setEditionPattern(null);
+		editionPatternConstraints.remove(anEditionPatternConstraint);
+		setChanged();
+		notifyObservers(new EditionPatternConstraintRemoved(anEditionPatternConstraint, this));
+	}
+
+	public void createConstraint() {
+		EditionPatternConstraint constraint = new EditionPatternConstraint(null);
+		addToEditionPatternConstraints(constraint);
+	}
+
+	public void deleteConstraint(EditionPatternConstraint constraint) {
+		removeFromEditionPatternConstraints(constraint);
 	}
 
 	public Vector<PatternRole> getPatternRoles() {

@@ -7,7 +7,16 @@
           <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
           <Assignment variable="component.viewPoint" value="data.viewPoint" />
         </Custom>
-    </Tab>
+       <Label label="constraints" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" localize="true" />
+                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternConstraint" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConstraintsTable" index="5" data="data.editionPatternConstraints" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)">
+                    <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="30" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+                     <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.constraint" format="" title="constraint" columnWidth="80" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="value">
+                      <ColumnAssignment variable="component.bindable" value="data" />
+                    </CustomColumn>
+                     <AddAction method="data.createConstraint" isAvailable="" name="add_constraint" />
+                    <RemoveAction method="data.deleteConstraint(selected)" isAvailable="" name="delete_constraint" />
+                  </Table>
+     </Tab>
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>

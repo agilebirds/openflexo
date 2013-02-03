@@ -444,7 +444,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		EditionMode oldEditionMode = editionMode;
 		EditionMode newEditionMode = editionMode;
 
-		if (dataBinding.isSet()) {
+		if (dataBinding != null && dataBinding.isSet()) {
 			if (dataBinding.isConstant()) {
 				newEditionMode = EditionMode.STATIC_BINDING;
 			} else if (dataBinding.isBindingValue()) {

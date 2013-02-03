@@ -63,6 +63,7 @@ import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternConstraint;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
@@ -139,6 +140,7 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
 	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
 	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
+	public static final ImageIconResource CONSTRAINT_ICON = new ImageIconResource("Icons/Model/VPM/ConstraintIcon.png");
 
 	public static final ImageIconResource CHECKBOX_ICON = new ImageIconResource("Icons/Model/VPM/CheckBoxIcon.png");
 	public static final ImageIconResource LIST_ICON = new ImageIconResource("Icons/Model/VPM/ListIcon.png");
@@ -194,8 +196,9 @@ public class VPMIconLibrary extends IconLibrary {
 			return MODEL_SLOT_ICON;
 		} else if (object instanceof EditionPatternInspector) {
 			return INSPECT_ICON;
-		}
-		if (object instanceof DiagramPalette) {
+		} else if (object instanceof EditionPatternConstraint) {
+			return CONSTRAINT_ICON;
+		} else if (object instanceof DiagramPalette) {
 			return DIAGRAM_PALETTE_ICON;
 		} else if (object instanceof DiagramPaletteElement) {
 			return SHAPE_ICON;

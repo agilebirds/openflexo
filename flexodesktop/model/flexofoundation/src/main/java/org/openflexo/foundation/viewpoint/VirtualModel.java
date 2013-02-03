@@ -276,10 +276,12 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	public List<ModelSlot<?, ?>> getModelSlots() {
+		// System.out.println("getModelSlots=" + modelSlots);
 		return modelSlots;
 	}
 
 	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
+		// System.out.println("Add to model slots " + modelSlot);
 		modelSlots.add(modelSlot);
 		modelSlot.setVirtualModel(this);
 		setChanged();
@@ -287,6 +289,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
+		// System.out.println("Remove from model slots " + modelSlot);
 		modelSlots.remove(modelSlot);
 		modelSlot.setVirtualModel(null);
 		setChanged();
@@ -319,7 +322,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 				requiredModelSlots.add(modelSlot);
 			}
 		}
-		return modelSlots;
+		return requiredModelSlots;
 	}
 
 	/**
