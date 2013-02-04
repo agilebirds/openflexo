@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import org.openflexo.dg.file.DGLatexFile;
 import org.openflexo.dg.file.DGScreenshotFile;
 import org.openflexo.dgmodule.view.DGFileModuleView;
 import org.openflexo.dgmodule.view.DGRepositoryModuleView;
@@ -71,7 +70,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
+		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof CGFile
 				|| object instanceof DGScreenshotFile || object instanceof CGTemplate || object instanceof TOCEntry;
 	}
 
