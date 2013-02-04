@@ -70,7 +70,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 					serverLogin = args[i].substring(SERVER_LOGIN.length());
 				} else if (args[i].startsWith(SERVER_PASSWORD)) {
 					serverPassword = args[i].substring(SERVER_PASSWORD.length());
-				} else {
+				} else if (projectDirectory == null) {
 
 					if (args[i].startsWith("\"")) {
 						args[i] = args[i].substring(1);
