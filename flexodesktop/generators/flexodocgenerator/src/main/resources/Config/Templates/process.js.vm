@@ -545,8 +545,9 @@
 		#if(!${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 			#set($index=${node.getIndex()})
 		#end
+		#if(${node.getLevel()} == "PROCESS")
         FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
-        
+        #end
         #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
             #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
                 #generateNodesCreation($subNode ${node.getURI()})

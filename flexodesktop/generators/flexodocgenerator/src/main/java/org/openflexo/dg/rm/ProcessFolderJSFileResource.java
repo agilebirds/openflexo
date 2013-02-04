@@ -76,7 +76,8 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 	}
 
 	public static String nameForRepositoryAndProcessFolder(GenerationRepository repository, ProcessFolder processFolder) {
-		return repository.getName() + ".PROCESSFOLDER_JS." + processFolder.getName() + "-" + processFolder.getFlexoID();
+		return repository.getName() + ".PROCESSFOLDER_JS." + processFolder.getName() + "-" + processFolder.getFlexoID()
+				+ (repository.getProject() == processFolder.getProject() ? "" : " " + processFolder.getProject().getProjectURI());
 	}
 
 	public ProcessFolder getProcessFolder() {
