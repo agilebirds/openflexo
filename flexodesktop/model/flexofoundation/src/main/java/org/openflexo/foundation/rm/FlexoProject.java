@@ -1005,6 +1005,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		if (getGeneratedDocResource(false) != null && getGeneratedDocResource(false).isLoaded()) {
 			getGeneratedDoc().setFactory(null);
 		}
+		setModuleLoader(null);
 		getDataModel().close();
 		_resource = null;
 		resources = null;
@@ -1112,6 +1113,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public synchronized void setResourceForKey(FlexoResource<? extends FlexoResourceData> resource, String resourceIdentifier) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Registering resource " + resourceIdentifier + " with object " + resource);
+		}
+		if (resourceIdentifier
+				.equals("COPIED_FILE.COPY_OF_WORKFLOW-BicsRoles43_IN_REPOSITORY_Generated documentation http://www.agilebirds.com/projects/2013/1/BicsRoles_1359069091265")) {
+			System.err.println("Coucou");
+		}
+		if (resource
+				.getResourceIdentifier()
+				.equals("COPIED_FILE.COPY_OF_WORKFLOW-BicsRoles43_IN_REPOSITORY_Generated documentation http://www.agilebirds.com/projects/2013/1/BicsRoles_1359069091265")) {
+			System.err.println("Coucou2");
 		}
 		resources.put(resourceIdentifier, resource);
 		setChanged();

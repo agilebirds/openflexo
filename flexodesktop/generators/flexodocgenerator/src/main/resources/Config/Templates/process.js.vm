@@ -573,8 +573,8 @@
 #end
 
 #set($process = $object)
-
-function initProcess${process.getFlexoID()}()
+#set($pName = ${javaUtils.getVariableName("${process.getProject().getDisplayName()}_${process.getName()}_${process.getFlexoID()}")})
+function initProcess${pName}()
 {
     var fctCreateDivDescription = null;
     var fctCreateContent = null;
@@ -582,5 +582,5 @@ function initProcess${process.getFlexoID()}()
     #generateNodesCreation($process ${process.getParentProcess().getURI()})
 }
 
-initProcess${process.getFlexoID()}();
+initProcess${pName}();
 

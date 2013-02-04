@@ -59,6 +59,9 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 				}
 			}
 			boolean openedProject = applicationContext.getProjectLoader().hasEditorForProjectDirectory(selectedFile);
+			if (!openedProject && silentlyOnly) {
+				return null;
+			}
 			FlexoEditor editor = null;
 			try {
 				editor = applicationContext.getProjectLoader().loadProject(selectedFile, true);
@@ -88,7 +91,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 							+ FlexoLocalization.localizedForKey("would_you_like_to_switch_to_version:") + " " + project.getVersion());
 					if (ok) {
 						return project;
-					} else if (openedProject) {
+					} else if (!openedProject) {
 						applicationContext.getProjectLoader().closeProject(project);
 					}
 				}

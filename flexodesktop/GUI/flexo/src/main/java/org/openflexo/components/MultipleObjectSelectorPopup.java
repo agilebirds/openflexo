@@ -20,10 +20,8 @@
 package org.openflexo.components;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -177,10 +175,8 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		getRootPane().setDefaultButton(confirmButton);
 		setModal(true);
-		validate();
 		pack();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+		setLocationRelativeTo(owner);
 	}
 
 	public void delete() {

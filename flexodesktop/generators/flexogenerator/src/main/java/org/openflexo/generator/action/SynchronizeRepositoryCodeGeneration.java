@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.LoadAllImportedProject;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.GeneratedOutput;
@@ -97,6 +98,16 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Synchronize repository code generation " + getFocusedObject());
 		PlaySound.tryToPlayRandomSound();
+
+		if (!getProjectGenerator().getProject().areAllImportedProjectsLoaded()) {
+			LoadAllImportedProject loadAllImportedProject = LoadAllImportedProject.actionType.makeNewEmbeddedAction(getFocusedObject(),
+					null, this);
+			loadAllImportedProject.doAction();
+			if (!loadAllImportedProject.hasActionExecutionSucceeded()) {
+				throw new FlexoException(FlexoLocalization.localizedForKey("missing_imported_projects"));
+			}
+		}
+
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
 

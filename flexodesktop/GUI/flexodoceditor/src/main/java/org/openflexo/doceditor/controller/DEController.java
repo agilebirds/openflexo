@@ -187,7 +187,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof GeneratedOutput) {
-			return FlexoLocalization.localizedForKey("generated_code");
+			return FlexoLocalization.localizedForKey("generated_doc");
 		} else if (object instanceof GenerationRepository) {
 			return ((GenerationRepository) object).getName();
 		} else if (object instanceof CGFile) {

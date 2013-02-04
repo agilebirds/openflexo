@@ -255,6 +255,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 				}
 			}
 		}
+		editor.getProject().setModuleLoader(applicationContext.getModuleLoader());
 	}
 
 	public void closeProject(FlexoProject project) {
@@ -264,9 +265,11 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			autoSaveServices.remove(project);
 		}
 		FlexoEditor editor = editors.remove(project);
-		project.close();
-		removeFromRootProjects(project);
-		getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
+		if (project != null) {
+			project.close();
+			removeFromRootProjects(project);
+			getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
+		}
 	}
 
 	public AutoSaveService getAutoSaveService(FlexoProject project) {

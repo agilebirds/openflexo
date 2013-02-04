@@ -76,7 +76,9 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		buildResourcesAndSetGeneratorsForProject(getProject(), resources, newGenerators);
 		if (getProject().getProjectData() != null && getProject().getProjectData().getImportedProjects().size() > 0) {
 			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
-				buildResourcesAndSetGeneratorsForProject(ref.getReferredProject(), resources, newGenerators);
+				if (ref.getReferredProject() != null) {
+					buildResourcesAndSetGeneratorsForProject(ref.getReferredProject(), resources, newGenerators);
+				}
 			}
 		}
 		if (getProject().getFlexoComponentLibrary(false) != null) {
@@ -164,10 +166,16 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 	}
 
 	private FlexoCopiedResource getResourceForFlexoModelObject(FlexoModelObject flexoModelObject, boolean createIfNull) {
+		System.err.print("Looking for "
+				+ ResourceType.COPIED_FILE
+				+ "."
+				+ FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), flexoModelObject.getProject()
+						.getScreenshotResource(flexoModelObject, true)));
 		FlexoCopiedResource pCopy = (FlexoCopiedResource) getProject().resourceForKey(
 				ResourceType.COPIED_FILE,
 				FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), flexoModelObject.getProject()
 						.getScreenshotResource(flexoModelObject, true)));
+		System.err.println(pCopy != null ? "Found" : "Not found");
 		if (pCopy != null && pCopy.getCGFile() == null) {
 			pCopy.delete(false);
 			pCopy = null;

@@ -36,6 +36,11 @@ public class EditionAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoMod
 	}
 
 	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && getEditor() != null && getEditor().isActionEnabled(actionType, focusedObject, globalSelection);
+	}
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		getEditor().performActionType(actionType, getFocusedObject(), getGlobalSelection(), e);
 	}

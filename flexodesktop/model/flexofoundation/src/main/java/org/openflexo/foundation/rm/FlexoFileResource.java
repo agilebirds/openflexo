@@ -104,8 +104,8 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("The name " + ((FlexoFileResource) res).getResourceFile().getStringRepresentation()
 							+ " is equivalent to " + aFile.getStringRepresentation() + " and can therefore not be used twice!!");
-					logger.severe("The existing resource is " + ((FlexoFileResource) res).getName()
-							+ "\n The resource we try to associate to the same file is " + getName());
+					logger.severe("The existing resource is " + ((FlexoFileResource) res).getFullyQualifiedName()
+							+ "\n The resource we try to associate to the same file is " + getFullyQualifiedName());
 				}
 				throw new InvalidFileNameException(aFile.getRelativePath());
 			}

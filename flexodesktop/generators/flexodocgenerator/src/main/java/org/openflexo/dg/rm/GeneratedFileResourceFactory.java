@@ -636,7 +636,7 @@ public class GeneratedFileResourceFactory {
 
 	public static FlexoCopiedResource createNewCopiedFileResource(GenerationRepository repository, CGFile cgFile,
 			CGSymbolicDirectory symbolicDirectory, FlexoFileResource resourceToCopy, String folderPath) {
-		FlexoProject project = resourceToCopy.getProject();
+		FlexoProject project = repository.getProject();
 		FlexoCopiedResource returned = new FlexoCopiedResource(project, resourceToCopy);
 
 		if (repository.getSymbolicDirectories().get(symbolicDirectory.getName()) != symbolicDirectory) {

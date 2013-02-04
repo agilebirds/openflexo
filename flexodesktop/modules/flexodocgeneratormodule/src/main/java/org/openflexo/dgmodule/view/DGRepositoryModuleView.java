@@ -60,6 +60,7 @@ import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 import org.openflexo.foundation.cg.dm.LogAdded;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
+import org.openflexo.foundation.rm.ImportedProjectLoaded;
 import org.openflexo.generator.action.GenerateAndWrite;
 import org.openflexo.generator.action.GenerateZip;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
@@ -141,6 +142,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		super(new BorderLayout());
 		codeRepository = repository;
 		repository.addObserver(this);
+		repository.getProject().addObserver(this);
 		this.controller = ctrl;
 
 		declaredPerspective = perspective;
@@ -447,6 +449,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 				removeConsoleListener();
 				console.setRefreshOnlyInSwingEventDispatchingThread(true);
 			}
+		} else if (observable == codeRepository.getProject() && dataModification instanceof ImportedProjectLoaded) {
+			updateButtonsWhenPossible();
 		}
 	}
 
@@ -469,6 +473,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	public void deleteModuleView() {
 		controller.removeModuleView(this);
 		codeRepository.deleteObserver(this);
+		codeRepository.getProject().deleteObserver(this);
 		removeConsoleListener();
 		projectGenerator = null;
 	}

@@ -68,6 +68,11 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 	}
 
 	@Override
+	public Vector<FlexoModelObject> getSelectedObjects() {
+		return new Vector<FlexoModelObject>(getModel().getSelectionColumn().getSelectedObjects());
+	}
+
+	@Override
 	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
 		getModel()._selectionColumn.setSelectedObjects((Vector<E>) objects);
 		// getTreeTable().getTree().treeStructureChanged();

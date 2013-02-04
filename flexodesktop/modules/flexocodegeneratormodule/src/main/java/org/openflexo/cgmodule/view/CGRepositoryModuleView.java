@@ -189,7 +189,6 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		});
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
 		secondPanel.add(warButton);
 		bigButtonsPanel.add(secondPanel);
 		if (repository.includeReader()) {
@@ -215,7 +214,6 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 
 		// chooseFileButton.setEnabled(repository.isEnabled());
 		// chooseWarLocationButton.setEnabled(repository.isEnabled());
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository, null));
 		console = new JConsole();
 		if (controller.getProjectGenerator(codeRepository) != null) {
 			controller.getProjectGenerator(codeRepository).addToLogListeners(this);
@@ -238,9 +236,14 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			consolePanel = new ConsolePanel(console);
 			add(consolePanel, BorderLayout.CENTER);
 		}
-
-		validate();
+		updateButtons();
+		revalidate();
 		// repaint();
+	}
+
+	private void updateButtons() {
+		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null));
+		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
 	}
 
 	private class GeneratorButton extends JButton {
@@ -321,8 +324,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		}
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null));
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
+		updateButtons();
 	}
 
 	/**

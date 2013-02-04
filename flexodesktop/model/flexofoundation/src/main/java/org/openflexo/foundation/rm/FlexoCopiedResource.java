@@ -215,7 +215,8 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	 * @return
 	 */
 	public static String nameForCopiedResource(GenerationRepository repository, FlexoFileResource res) {
-		return "COPY_OF_" + res.getName() + "_IN_REPOSITORY_" + repository.getName();
+		return "COPY_OF_" + res.getName() + "_IN_REPOSITORY_" + repository.getName()
+				+ (repository.getProject() == res.getProject() ? "" : " " + res.getProject().getProjectURI());
 	}
 
 	/**

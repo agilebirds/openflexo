@@ -141,40 +141,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 			}
 			return null;
 		}
-		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
-			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
-			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-				@Override
-				protected Void doInBackground() throws Exception {
-					try {
-						executeAction(action, e);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return null;
-				}
 
-				@Override
-				protected void done() {
-					super.done();
-					if (!action.isEmbedded()) {
-						if (ProgressWindow.hasInstance()) {
-							ProgressWindow.hideProgressWindow();
-						}
-					}
-				}
-			};
-			worker.execute();
-			return action;
-		} else {
-			executeAction(action, e);
-			return action;
-		}
+		executeAction(action, e);
+		return action;
 	}
 
 	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A executeAction(
-			A action, EventObject event) {
+			final A action, final EventObject event) {
 		boolean progressIsShowing = ProgressWindow.hasInstance();
 		boolean confirmDoAction = true;
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
@@ -189,14 +162,48 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmDoAction) {
 			actionWillBePerformed(action);
 			try {
-				if (getProject() != null) {
-					getProject().clearRecentlyCreatedObjects();
+				if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+					ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						@Override
+						protected Void doInBackground() throws Exception {
+							try {
+								if (getProject() != null) {
+									getProject().clearRecentlyCreatedObjects();
+								}
+								action.doActionInContext();
+								if (getProject() != null) {
+									getProject().notifyRecentlyCreatedObjects();
+								}
+								actionHasBeenPerformed(action, true); // Action succeeded
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							return null;
+						}
+
+						@Override
+						protected void done() {
+							super.done();
+							if (!action.isEmbedded()) {
+								if (ProgressWindow.hasInstance()) {
+									ProgressWindow.hideProgressWindow();
+								}
+							}
+						}
+					};
+					worker.execute();
+					return action;
+				} else {
+					if (getProject() != null) {
+						getProject().clearRecentlyCreatedObjects();
+					}
+					action.doActionInContext();
+					if (getProject() != null) {
+						getProject().notifyRecentlyCreatedObjects();
+					}
+					actionHasBeenPerformed(action, true); // Action succeeded
 				}
-				action.doActionInContext();
-				if (getProject() != null) {
-					getProject().notifyRecentlyCreatedObjects();
-				}
-				actionHasBeenPerformed(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenPerformed(action, false); // Action failed
 				ProgressWindow.hideProgressWindow();
