@@ -516,6 +516,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public CreationScheme createCreationScheme() {
 		CreationScheme newCreationScheme = new CreationScheme(null);
+		newCreationScheme.setEditionPattern(this);
 		newCreationScheme.setName("creation");
 		addToEditionSchemes(newCreationScheme);
 		return newCreationScheme;
@@ -523,6 +524,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public CloningScheme createCloningScheme() {
 		CloningScheme newCloningScheme = new CloningScheme(null);
+		newCloningScheme.setEditionPattern(this);
 		newCloningScheme.setName("clone");
 		addToEditionSchemes(newCloningScheme);
 		return newCloningScheme;
@@ -530,6 +532,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme(null);
+		newDropScheme.setEditionPattern(this);
 		newDropScheme.setName("drop");
 		addToEditionSchemes(newDropScheme);
 		return newDropScheme;
@@ -537,6 +540,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public LinkScheme createLinkScheme() {
 		LinkScheme newLinkScheme = new LinkScheme(null);
+		newLinkScheme.setEditionPattern(this);
 		newLinkScheme.setName("link");
 		addToEditionSchemes(newLinkScheme);
 		return newLinkScheme;
@@ -544,6 +548,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public ActionScheme createActionScheme() {
 		ActionScheme newActionScheme = new ActionScheme(null);
+		newActionScheme.setEditionPattern(this);
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
@@ -551,6 +556,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public NavigationScheme createNavigationScheme() {
 		NavigationScheme newNavigationScheme = new NavigationScheme(null);
+		newNavigationScheme.setEditionPattern(this);
 		newNavigationScheme.setName("navigation");
 		addToEditionSchemes(newNavigationScheme);
 		return newNavigationScheme;
