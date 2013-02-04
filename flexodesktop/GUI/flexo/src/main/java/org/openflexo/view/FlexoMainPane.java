@@ -131,7 +131,8 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			@Override
 			public Icon getTabHeaderIcon(Location tab) {
 				ImageIcon iconForObject = getController().iconForObject(tab.getObject());
-				if (tab.getObject() != null && tab.getObject().getProject() != getController().getControllerModel().getCurrentProject()) {
+				if (iconForObject != null && tab.getObject() != null
+						&& tab.getObject().getProject() != getController().getControllerModel().getCurrentProject()) {
 					iconForObject = IconFactory.getImageIcon(iconForObject, IconLibrary.LOCKED);
 				}
 				return iconForObject;
