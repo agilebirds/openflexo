@@ -96,6 +96,8 @@ import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
@@ -126,6 +128,8 @@ import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
@@ -1905,6 +1909,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
+		} else if (object instanceof CGFile) {
+			return FilesIconLibrary.smallIconForFileFormat(((CGFile) object).getFileFormat());
 		} else if (object instanceof CGTemplateObject) {
 			return DGIconLibrary.iconForObject((CGTemplateObject) object);
 		} else if (object instanceof DocType) {
@@ -1917,5 +1923,4 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
-
 }
