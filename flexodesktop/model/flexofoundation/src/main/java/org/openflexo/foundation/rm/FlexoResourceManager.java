@@ -190,6 +190,9 @@ public class FlexoResourceManager {
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
 			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader,
 			FlexoResourceCenterService resourceCenterService) throws ProjectInitializerException, ProjectLoadingCancelledException {
+		if (loadingHandler == null) {
+			loadingHandler = new DefaultProjectLoadingHandler();
+		}
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
