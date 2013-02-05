@@ -63,7 +63,7 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 			if (param != null && param.size() > 0) {
 				boolean first = true;
 				for (Entry<String, String> e : param.entrySet()) {
-					paramsAsString.append(first ? "?" : "&");
+					paramsAsString.append(first ? "" : "&");
 					try {
 						paramsAsString.append(URLEncoder.encode(e.getKey(), "UTF-8")).append("=")
 								.append(URLEncoder.encode(e.getValue(), "UTF-8"));
