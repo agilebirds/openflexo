@@ -138,7 +138,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 
 	@Override
 	public void externalResourceNotFound(ExternalResource externalResource) {
-		
+
 	}
 
 	/**
@@ -216,10 +216,10 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 		if (!isDeleted() && !project.isDeserializing() && getProject() != null && getProject().getResourceManagerInstance() != null
 				&& !getProject().getResourceManagerInstance().isLoadingAProject()) {
 			if (resourceToCopy == null) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("This copied resource is no more acceptable because resourceToCopy is null");
-				}
 				if (externalResourceToCopy == null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("This copied resource is no more acceptable because resourceToCopy is null");
+					}
 					return false;
 				} else {
 					return true;
