@@ -166,16 +166,10 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 	}
 
 	private FlexoCopiedResource getResourceForFlexoModelObject(FlexoModelObject flexoModelObject, boolean createIfNull) {
-		System.err.print("Looking for "
-				+ ResourceType.COPIED_FILE
-				+ "."
-				+ FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), flexoModelObject.getProject()
-						.getScreenshotResource(flexoModelObject, true)));
 		FlexoCopiedResource pCopy = (FlexoCopiedResource) getProject().resourceForKey(
 				ResourceType.COPIED_FILE,
 				FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), flexoModelObject.getProject()
 						.getScreenshotResource(flexoModelObject, true)));
-		System.err.println(pCopy != null ? "Found" : "Not found");
 		if (pCopy != null && pCopy.getCGFile() == null) {
 			pCopy.delete(false);
 			pCopy = null;
