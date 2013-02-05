@@ -155,6 +155,10 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		return _resourceData;
 	}
 
+	public boolean isLoading() {
+		return _isLoading;
+	}
+
 	/**
 	 * Load resource data by applying a special scheme handling XML versionning, ie to find right XML version of current resource file.<br>
 	 * If version of stored file is not conform to latest declared version, convert resource file and update it to latest version.

@@ -24,18 +24,18 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.action.ReindexViewElements;
+import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.ve.VECst;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ReindexViewElementsInitializer extends ActionInitializer<ReindexViewElements, DiagramElement<?>, DiagramElement<?>> {
+public class ReindexDiagramElementsInitializer extends ActionInitializer<ReindexDiagramElements, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ReindexViewElementsInitializer(VEControllerActionInitializer actionInitializer) {
-		super(ReindexViewElements.actionType, actionInitializer);
+	ReindexDiagramElementsInitializer(VEControllerActionInitializer actionInitializer) {
+		super(ReindexDiagramElements.actionType, actionInitializer);
 	}
 
 	@Override
@@ -44,23 +44,23 @@ public class ReindexViewElementsInitializer extends ActionInitializer<ReindexVie
 	}
 
 	@Override
-	protected FlexoActionInitializer<ReindexViewElements> getDefaultInitializer() {
-		return new FlexoActionInitializer<ReindexViewElements>() {
+	protected FlexoActionInitializer<ReindexDiagramElements> getDefaultInitializer() {
+		return new FlexoActionInitializer<ReindexDiagramElements>() {
 			@Override
-			public boolean run(EventObject e, ReindexViewElements action) {
+			public boolean run(EventObject e, ReindexDiagramElements action) {
 				if (action.skipDialog) {
 					return true;
 				}
-				return instanciateAndShowDialog(action, VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB);
+				return instanciateAndShowDialog(action, VECst.REINDEX_DIAGRAM_ELEMENTS_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ReindexViewElements> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<ReindexViewElements>() {
+	protected FlexoActionFinalizer<ReindexDiagramElements> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ReindexDiagramElements>() {
 			@Override
-			public boolean run(EventObject e, ReindexViewElements action) {
+			public boolean run(EventObject e, ReindexDiagramElements action) {
 				return true;
 			}
 		};

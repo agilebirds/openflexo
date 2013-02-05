@@ -19,15 +19,12 @@
  */
 package org.openflexo.foundation.view;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -41,9 +38,9 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -68,17 +65,21 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	private final FlexoProject project;
 
 	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<FlexoViewResource> folder,
-			FlexoProject project) throws InvalidFileNameException {
+			FlexoProject project) throws InvalidFileNameException, SaveResourceException {
 
-		FlexoViewResource newViewResource = new FlexoViewResource(project, viewName, new FlexoProjectFile(new File(folder.getFile(),
-				viewName + ".view"), project), viewPoint);
+		FlexoViewResource newViewResource = new FlexoViewResource(project, viewName, folder, viewPoint);
 
 		View newView = new View(project);
 		newViewResource.setResourceData(newView);
 		newView.setResource(newViewResource);
 
+		newView.setTitle(viewTitle);
+
 		// And register it to the library
 		project.getViewLibrary().registerResource(newViewResource, folder);
+
+		// Save it
+		newView.save();
 
 		return newView;
 	}
@@ -161,7 +162,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	@Override
 	public String getClassNameKey() {
-		return "oe_shema";
+		return "view";
 	}
 
 	@Override
@@ -172,16 +173,18 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		return null;
 	}
 
-	// TODO: big issue with renaming, don't call this !!!
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+	public void setName(String name) {
+		if (getFlexoResource() != null) {
+			getFlexoResource().setName(name);
+		}
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
+	public void setTitle(String title) {
 		String oldTitle = this.title;
 		if (requireChange(oldTitle, title)) {
 			this.title = title;
@@ -221,7 +224,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	@Override
 	public String toString() {
-		return "View[name=" + getName() + "/viewpoint=" + getViewPoint().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
+		return "View[name=" + getName() + "/viewpoint=" + (getViewPoint() != null ? getViewPoint().getName() : "null") + "/hash="
+				+ Integer.toHexString(hashCode()) + "]";
 	}
 
 	// ==========================================================================
@@ -391,6 +395,28 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 			return getViewLibrary().getParentFolder(getFlexoResource());
 		}
 		return null;
+	}
+
+	public String getViewPointURI() {
+		if (getViewPoint() != null) {
+			return getViewPoint().getURI();
+		}
+		return null;
+	}
+
+	// Not applicable
+	public void setViewPointURI(String viewPointURI) {
+	}
+
+	public FlexoVersion getViewPointVersion() {
+		if (getViewPoint() != null) {
+			return getViewPoint().getVersion();
+		}
+		return null;
+	}
+
+	// Not applicable
+	public void setViewPointVersion(FlexoVersion viewPointVersion) {
 	}
 
 }

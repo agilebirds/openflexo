@@ -19,9 +19,17 @@
  */
 package org.openflexo.foundation.rm;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -35,6 +43,7 @@ import org.openflexo.foundation.view.ViewLoaded;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
 /**
@@ -48,12 +57,52 @@ public class FlexoViewResource extends FlexoXMLStorageResource<View> {
 	private static final Logger logger = Logger.getLogger(FlexoViewResource.class.getPackage().getName());
 
 	protected String name;
+	private ViewPointResource vpResource;
+	private File viewDirectory;
 
-	public FlexoViewResource(FlexoProject aProject, String aName, FlexoProjectFile viewFile, ViewPoint viewPoint)
+	/**
+	 * Constructor used for explicit construction of a new View when the {@link ViewPoint} is known.<br>
+	 * Supplied file does't exist or is empty
+	 * 
+	 * @param aProject
+	 * @param aName
+	 * @param viewFile
+	 * @param viewPoint
+	 * @throws InvalidFileNameException
+	 */
+	public FlexoViewResource(FlexoProject aProject, String aName, RepositoryFolder<FlexoViewResource> folder, ViewPoint viewPoint)
 			throws InvalidFileNameException {
 		this(aProject);
+
+		viewDirectory = new File(folder.getFile(), aName + ".view");
+		FlexoProjectFile viewFile = new FlexoProjectFile(new File(viewDirectory, aName + ".xml"), aProject);
 		setName(aName);
 		setResourceFile(viewFile);
+		vpResource = viewPoint.getResource();
+	}
+
+	/**
+	 * Constructor used for {@link FlexoViewResource} instanciation from file stored on disk<br>
+	 * ViewPoint informations are retrieved from file on disk which should exists
+	 * 
+	 * @param aProject
+	 * @param aName
+	 * @param viewFile
+	 * @throws InvalidFileNameException
+	 */
+	public FlexoViewResource(FlexoProject aProject, File viewDirectory) throws InvalidFileNameException {
+		this(aProject);
+		ViewInfo viewInfo = findViewPointInfo(viewDirectory);
+		if (StringUtils.isNotEmpty(viewInfo.viewPointURI)) {
+			vpResource = project.getServiceManager().getViewPointLibrary().getViewPointResource(viewInfo.viewPointURI);
+		}
+		setName(viewInfo.name);
+
+		String baseName = viewDirectory.getName().substring(0, viewDirectory.getName().length() - 5);
+		File xmlFile = new File(viewDirectory, baseName + ".xml");
+
+		setResourceFile(new FlexoProjectFile(xmlFile, aProject));
+
 	}
 
 	/**
@@ -76,7 +125,7 @@ public class FlexoViewResource extends FlexoXMLStorageResource<View> {
 	 * @return
 	 */
 	public ViewPointResource getViewPointResource() {
-		return null;
+		return vpResource;
 	}
 
 	/**
@@ -168,6 +217,13 @@ public class FlexoViewResource extends FlexoXMLStorageResource<View> {
 		return view;
 	}
 
+	@Override
+	protected void saveResourceData(boolean clearIsModified)
+			throws org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException, SaveResourcePermissionDeniedException {
+		viewDirectory.mkdirs();
+		super.saveResourceData(clearIsModified);
+	}
+
 	/**
 	 * Returns a boolean indicating if this resource needs a builder to be loaded Returns true to indicate that process deserializing
 	 * requires a FlexoProcessBuilder instance: in this case: YES !
@@ -214,11 +270,61 @@ public class FlexoViewResource extends FlexoXMLStorageResource<View> {
 
 	@Override
 	public ResourceType getResourceType() {
-		return ResourceType.OE_SHEMA;
+		return ResourceType.VIEW;
 	}
 
 	public RepositoryFolder<FlexoViewResource> getParentFolder() {
 		return getProject().getViewLibrary().getParentFolder(this);
+	}
+
+	@Override
+	public String getURI() {
+		return getProject().getURI() + "/" + getName();
+	}
+
+	private static class ViewInfo {
+		public String viewPointURI;
+		public String viewPointVersion;
+		public String name;
+	}
+
+	private static ViewInfo findViewPointInfo(File viewDirectory) {
+		Document document;
+		try {
+			logger.fine("Try to find infos for " + viewDirectory);
+
+			String baseName = viewDirectory.getName().substring(0, viewDirectory.getName().length() - 5);
+			File xmlFile = new File(viewDirectory, baseName + ".xml");
+
+			if (xmlFile.exists()) {
+				document = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
+				Element root = FlexoXMLFileResourceImpl.getElement(document, "View");
+				if (root != null) {
+					ViewInfo returned = new ViewInfo();
+					returned.name = baseName;
+					Iterator<Attribute> it = root.getAttributes().iterator();
+					while (it.hasNext()) {
+						Attribute at = it.next();
+						if (at.getName().equals("viewPointURI")) {
+							logger.fine("Returned " + at.getValue());
+							returned.viewPointURI = at.getValue();
+						} else if (at.getName().equals("viewPointVersion")) {
+							logger.fine("Returned " + at.getValue());
+							returned.viewPointVersion = at.getValue();
+						}
+					}
+					return returned;
+				}
+			} else {
+				logger.warning("Cannot find file: " + xmlFile.getAbsolutePath());
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
+		return null;
 	}
 
 }

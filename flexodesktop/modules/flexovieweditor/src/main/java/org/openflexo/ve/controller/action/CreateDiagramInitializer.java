@@ -25,14 +25,14 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.action.AddView;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -40,12 +40,12 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class AddViewInitializer extends ActionInitializer<AddView, RepositoryFolder, DiagramElement<?>> {
+public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, View, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddViewInitializer(VEControllerActionInitializer actionInitializer) {
-		super(AddView.actionType, actionInitializer);
+	CreateDiagramInitializer(VEControllerActionInitializer actionInitializer) {
+		super(CreateDiagram.actionType, actionInitializer);
 	}
 
 	@Override
@@ -54,14 +54,14 @@ public class AddViewInitializer extends ActionInitializer<AddView, RepositoryFol
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddView> getDefaultInitializer() {
-		return new FlexoActionInitializer<AddView>() {
+	protected FlexoActionInitializer<CreateDiagram> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateDiagram>() {
 			@Override
-			public boolean run(EventObject e, AddView action) {
+			public boolean run(EventObject e, CreateDiagram action) {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
-					return instanciateAndShowDialog(action, VECst.ADD_VIEW_DIALOG_FIB);
+					return instanciateAndShowDialog(action, VECst.CREATE_DIAGRAM_DIALOG_FIB);
 				}
 
 			}
@@ -69,27 +69,27 @@ public class AddViewInitializer extends ActionInitializer<AddView, RepositoryFol
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddView> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<AddView>() {
+	protected FlexoActionFinalizer<CreateDiagram> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDiagram>() {
 			@Override
-			public boolean run(EventObject e, AddView action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewView());
+			public boolean run(EventObject e, CreateDiagram action) {
+				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<AddView> getDefaultExceptionHandler() {
-		return new FlexoExceptionHandler<AddView>() {
+	protected FlexoExceptionHandler<CreateDiagram> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateDiagram>() {
 			@Override
-			public boolean handleException(FlexoException exception, AddView action) {
+			public boolean handleException(FlexoException exception, CreateDiagram action) {
 				if (exception instanceof NotImplementedException) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("not_implemented_yet"));
 					return true;
 				}
 				if (exception instanceof DuplicateResourceException) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_view_with_this_name_already_exists"));
+					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_diagram_with_this_name_already_exists"));
 					return true;
 				}
 				return false;
@@ -99,7 +99,7 @@ public class AddViewInitializer extends ActionInitializer<AddView, RepositoryFol
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VEIconLibrary.VIEW_ICON;
+		return VEIconLibrary.DIAGRAM_ICON;
 	}
 
 }

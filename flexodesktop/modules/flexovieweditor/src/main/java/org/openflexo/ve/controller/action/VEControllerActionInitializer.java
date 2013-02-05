@@ -65,18 +65,20 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		}
 
 		// View library perspective
-		new AddViewInitializer(this);
+		new CreateViewInitializer(this);
 		new DeleteViewInitializer(this);
-		new ResetGraphicalRepresentationInitializer(this);
+		new CreateVirtualModelInstanceInitializer(this);
 
 		// Diagram perspective
+		new CreateDiagramInitializer(this);
 		new AddShapeInitializer(this);
 		new AddConnectorInitializer(this);
-		new DeleteViewElementsInitializer(this);
+		new DeleteDiagramElementsInitializer(this);
 		new DropSchemeActionInitializer(this);
 		new LinkSchemeActionInitializer(this);
 		new ActionSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
+		new ResetGraphicalRepresentationInitializer(this);
 
 	}
 

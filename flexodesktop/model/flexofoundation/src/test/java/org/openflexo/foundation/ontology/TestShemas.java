@@ -29,7 +29,7 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.view.action.AddView;
+import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.toolbox.FileUtils;
 
 public class TestShemas extends FlexoTestCase {
@@ -116,7 +116,7 @@ public class TestShemas extends FlexoTestCase {
 
 		logger.info("Hop " + folder3);
 
-		AddView addShema = AddView.actionType.makeNewAction(folder3, null, _editor);
+		CreateView addShema = CreateView.actionType.makeNewAction(folder3, null, _editor);
 		addShema.newViewName = "TestShema";
 		addShema.doAction();
 

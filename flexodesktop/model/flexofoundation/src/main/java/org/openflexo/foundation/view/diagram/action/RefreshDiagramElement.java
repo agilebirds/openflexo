@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.security.InvalidParameterException;
 import java.util.Vector;
@@ -40,20 +40,20 @@ import org.openflexo.foundation.view.diagram.model.DiagramShape;
  * @author sylvain
  * 
  */
-public class RefreshViewElement extends FlexoAction<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> {
+public class RefreshDiagramElement extends FlexoAction<RefreshDiagramElement, DiagramElement<?>, DiagramElement<?>> {
 
-	private static final Logger logger = Logger.getLogger(RefreshViewElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RefreshDiagramElement.class.getPackage().getName());
 
-	public static FlexoActionType<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<RefreshViewElement, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<RefreshDiagramElement, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<RefreshDiagramElement, DiagramElement<?>, DiagramElement<?>>(
 			"refresh", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RefreshViewElement makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+		public RefreshDiagramElement makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
 				FlexoEditor editor) {
-			return new RefreshViewElement(focusedObject, globalSelection, editor);
+			return new RefreshDiagramElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -69,12 +69,12 @@ public class RefreshViewElement extends FlexoAction<RefreshViewElement, DiagramE
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramRootPane.class);
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramShape.class);
-		FlexoModelObject.addActionForClass(RefreshViewElement.actionType, DiagramConnector.class);
+		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramRootPane.class);
+		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramConnector.class);
 	}
 
-	RefreshViewElement(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	RefreshDiagramElement(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

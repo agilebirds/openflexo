@@ -201,10 +201,21 @@ public abstract class FlexoTestCase extends TestCase {
 
 			@Override
 			protected FlexoResourceCenterService createResourceCenterService() {
-				FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-				rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(new FileResource(
-						"src/test/resources/TestResourceCenter")));
-				return rcService;
+				File tempFile;
+				try {
+					tempFile = File.createTempFile("TestResourceCenter", "");
+					File testResourceCenterDirectory = new File(tempFile.getParentFile(), "TestResourceCenter");
+					testResourceCenterDirectory.mkdirs();
+					FileUtils.copyContentDirToDir(new FileResource("src/test/resources/TestResourceCenter"), testResourceCenterDirectory);
+					FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
+					rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(testResourceCenterDirectory));
+					return rcService;
+				} catch (IOException e) {
+					e.printStackTrace();
+					fail();
+					return null;
+				}
+
 			}
 		};
 		return serviceManager;
@@ -288,6 +299,7 @@ public abstract class FlexoTestCase extends TestCase {
 			// without having a severe impact on many resources and importer projects. I therefore now comment this line which made me lost
 			// hundreds of hours
 			// _editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
+			_project = _editor.getProject();
 			return _editor;
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();

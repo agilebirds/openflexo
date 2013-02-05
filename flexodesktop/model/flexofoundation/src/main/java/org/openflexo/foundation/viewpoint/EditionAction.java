@@ -339,8 +339,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return newAction;
 	}
 
-	public AddDiagram createAddDiagramAction() {
-		AddDiagram newAction = new AddDiagram(null);
+	public CreateDiagram createAddDiagramAction() {
+		CreateDiagram newAction = new CreateDiagram(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}

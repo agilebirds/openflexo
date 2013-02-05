@@ -37,19 +37,19 @@ import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 
-public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, DiagramElement, DiagramElement> {
+public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElements, DiagramElement, DiagramElement> {
 
-	private static final Logger logger = Logger.getLogger(DeleteViewElements.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteDiagramElements.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteViewElements, DiagramElement, DiagramElement> actionType = new FlexoActionType<DeleteViewElements, DiagramElement, DiagramElement>(
+	public static FlexoActionType<DeleteDiagramElements, DiagramElement, DiagramElement> actionType = new FlexoActionType<DeleteDiagramElements, DiagramElement, DiagramElement>(
 			"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteViewElements makeNewAction(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
-			return new DeleteViewElements(focusedObject, globalSelection, editor);
+		public DeleteDiagramElements makeNewAction(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
+			return new DeleteDiagramElements(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -66,8 +66,8 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, DiagramShape.class);
-		FlexoModelObject.addActionForClass(DeleteViewElements.actionType, DiagramConnector.class);
+		FlexoModelObject.addActionForClass(DeleteDiagramElements.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(DeleteDiagramElements.actionType, DiagramConnector.class);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	private Vector<EditionPatternInstance> epiThatWillBeDeleted;
 	private Vector<FlexoModelObject> allObjectsThatWillBeDeleted;
 
-	protected DeleteViewElements(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
+	protected DeleteDiagramElements(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		logger.info("Created DeleteShemaElements action focusedObject=" + focusedObject + "globalSelection=" + globalSelection);
 	}

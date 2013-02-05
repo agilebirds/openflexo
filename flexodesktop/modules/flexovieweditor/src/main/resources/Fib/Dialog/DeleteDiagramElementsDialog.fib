@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" borderTop="5" borderBottom="5" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.action.DeleteViewElements" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="500" height="400">
+<Panel layout="gridbag" borderTop="5" borderBottom="5" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.action.DeleteDiagramElements" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="500" height="400">
   <Label label="delete_view_elements" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
   <Label label="confirmation_text" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,11">
     <LocalizedDictionary />

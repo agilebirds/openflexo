@@ -26,7 +26,7 @@ import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.diagram.action.DeleteViewElements;
+import org.openflexo.foundation.view.diagram.action.DeleteDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -53,13 +53,13 @@ public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 		selection.add(b);
 		selection.add(x);
 		selection.add(c);
-		DeleteViewElements action = DeleteViewElements.actionType.makeNewAction(null, selection, null);
+		DeleteDiagramElements action = DeleteDiagramElements.actionType.makeNewAction(null, selection, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
+		return VECst.DELETE_DIAGRAM_ELEMENTS_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

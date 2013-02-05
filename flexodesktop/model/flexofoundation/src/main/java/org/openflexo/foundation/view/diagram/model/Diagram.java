@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.diagram.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.view.View;
@@ -47,13 +48,17 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	private DiagramRootPane rootPane;
 
 	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, DiagramSpecification diagramSpecification,
-			View view) throws InvalidFileNameException {
+			View view) throws InvalidFileNameException, SaveResourceException {
 
 		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view);
 
 		Diagram newDiagram = new Diagram(view, diagramSpecification);
 		newDiagramResource.setResourceData(newDiagram);
 		newDiagram.setResource(newDiagramResource);
+
+		newDiagram.setTitle(diagramTitle);
+
+		newDiagram.save();
 
 		return newDiagramResource;
 	}

@@ -34,7 +34,7 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.action.AddShape;
-import org.openflexo.foundation.view.action.ReindexViewElements;
+import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
@@ -177,7 +177,7 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 				o = getSelectionManager().getFocusedObject();
 			}
 			if (o instanceof DiagramElement) {
-				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
+				ReindexDiagramElements action = ReindexDiagramElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
 				action.initAsUpReindexing((DiagramElement) o);
 				action.doAction();
 				return true;
@@ -196,7 +196,7 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 				o = getSelectionManager().getFocusedObject();
 			}
 			if (o instanceof DiagramElement) {
-				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
+				ReindexDiagramElements action = ReindexDiagramElements.actionType.makeNewAction((DiagramElement) o, null, getEditor());
 				action.initAsDownReindexing((DiagramElement) o);
 				action.doAction();
 				return true;

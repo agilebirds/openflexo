@@ -101,7 +101,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 	}
 
-	private String viewPointURI;
+	// private String viewPointURI;
 
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
@@ -120,7 +120,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		ViewPoint viewpoint = new ViewPoint();
 		vpRes.setResourceData(viewpoint);
 		viewpoint.setResource(vpRes);
-		viewpoint._setViewPointURI(viewpointURI);
 
 		// And register it to the library
 		library.registerViewPoint(vpRes);
@@ -188,15 +187,20 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	public String getViewPointURI() {
-		return viewPointURI;
+		if (getResource() != null) {
+			return getResource().getURI();
+		}
+		return null;
 	}
 
-	public void _setViewPointURI(String vpURI) {
+	public void setViewPointURI(String vpURI) {
 		if (vpURI != null) {
 			// We prevent ',' so that we can use it as a delimiter in tags.
 			vpURI = vpURI.replace(",", "");
 		}
-		this.viewPointURI = vpURI;
+		if (getResource() != null) {
+			getResource().setURI(vpURI);
+		}
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public interface ActionContainer {
 
 	public GraphicalAction createGraphicalAction();
 
-	public AddDiagram createAddDiagramAction();
+	public CreateDiagram createAddDiagramAction();
 
 	public AddEditionPattern createAddEditionPatternAction();
 

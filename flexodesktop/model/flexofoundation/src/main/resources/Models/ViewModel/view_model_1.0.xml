@@ -26,6 +26,8 @@
 
 	<entity name="org.openflexo.foundation.view.View" xmlTag="View">
 		<description>View</description>
+		<property name="viewPointURI" xmlTag="viewPointURI" attribute="yes" />
+		<property name="viewPointVersion" xmlTag="viewPointVersion" attribute="yes" />
 		<property name="title" xmlTag="title" attribute="yes" />
 		<property name="modelSlotInstances" xmlTag="modelSlotInstances"
 			type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />

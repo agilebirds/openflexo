@@ -215,8 +215,8 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 		}
 
 		@Override
-		public AddDiagram createAddDiagramAction() {
-			AddDiagram newAction = new AddDiagram(null);
+		public CreateDiagram createAddDiagramAction() {
+			CreateDiagram newAction = new CreateDiagram(null);
 			addToActions(newAction);
 			return newAction;
 		}

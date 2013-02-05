@@ -370,8 +370,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public AddDiagram createAddDiagramAction() {
-		AddDiagram newAction = new AddDiagram(null);
+	public CreateDiagram createAddDiagramAction() {
+		CreateDiagram newAction = new CreateDiagram(null);
 		addToActions(newAction);
 		return newAction;
 	}

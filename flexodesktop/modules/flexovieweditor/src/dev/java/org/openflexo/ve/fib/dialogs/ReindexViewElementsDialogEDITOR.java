@@ -25,7 +25,7 @@ import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.action.ReindexViewElements;
+import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
@@ -38,13 +38,13 @@ public class ReindexViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 		FlexoProject project = editor.getProject();
 		View view = project.getViewLibrary().getViewResourceNamed("R&DDefinition").getView();
 		Diagram diagram = (Diagram) view.getVirtualModelInstances().get(0);
-		ReindexViewElements action = ReindexViewElements.actionType.makeNewAction(diagram.getRootPane().getChilds().get(0), null, null);
+		ReindexDiagramElements action = ReindexDiagramElements.actionType.makeNewAction(diagram.getRootPane().getChilds().get(0), null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VECst.REINDEX_VIEW_ELEMENTS_DIALOG_FIB;
+		return VECst.REINDEX_DIAGRAM_ELEMENTS_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

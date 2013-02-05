@@ -36,7 +36,6 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 
 /**
  * The {@link ViewLibrary} contains all {@link FlexoViewResource} referenced in a {@link FlexoProject}
@@ -124,14 +123,16 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 	 */
 	private boolean exploreDirectoryLookingForViews(File directory, RepositoryFolder<FlexoViewResource> folder) {
 		boolean returned = false;
+		System.out.println("Exploring " + directory.getAbsolutePath());
 		logger.fine("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (f.isDirectory() && f.getName().endsWith(".view")) {
 					FlexoViewResource vRes;
 					try {
-						vRes = new FlexoViewResource(getProject(), f.getName(), new FlexoProjectFile(f, getProject()), null);
-						logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath());
+						vRes = new FlexoViewResource(getProject(), f);
+						logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath() + " folder="
+								+ folder + " path=" + folder.getFile());
 						registerResource(vRes, folder);
 						returned = true;
 					} catch (InvalidFileNameException e) {

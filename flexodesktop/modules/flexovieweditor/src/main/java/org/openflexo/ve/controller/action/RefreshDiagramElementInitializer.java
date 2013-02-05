@@ -23,18 +23,18 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.view.action.RefreshViewElement;
+import org.openflexo.foundation.view.diagram.action.RefreshDiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class RefreshViewElementInitializer extends ActionInitializer<RefreshViewElement, DiagramElement<?>, DiagramElement<?>> {
+public class RefreshDiagramElementInitializer extends ActionInitializer<RefreshDiagramElement, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RefreshViewElementInitializer(VEControllerActionInitializer actionInitializer) {
-		super(RefreshViewElement.actionType, actionInitializer);
+	RefreshDiagramElementInitializer(VEControllerActionInitializer actionInitializer) {
+		super(RefreshDiagramElement.actionType, actionInitializer);
 	}
 
 	@Override

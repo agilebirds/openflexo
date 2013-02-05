@@ -113,7 +113,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	public Diagram performAction(EditionSchemeAction action) {
 		Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
 		FlexoViewResource viewResource = initialDiagram.getView().getResource();
-		org.openflexo.foundation.view.diagram.action.AddDiagram addDiagramAction = org.openflexo.foundation.view.diagram.action.AddDiagram.actionType
+		org.openflexo.foundation.view.diagram.action.CreateDiagram addDiagramAction = org.openflexo.foundation.view.diagram.action.CreateDiagram.actionType
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
 		addDiagramAction.newDiagramTitle = getDiagramName(action);
 		addDiagramAction.diagramSpecification = getPatternRole().getDiagramSpecification();

@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.action.AddView;
+import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
@@ -34,13 +34,13 @@ public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		AddView action = AddView.actionType.makeNewAction(project.getViewLibrary().getRootFolder(), null, editor);
+		CreateView action = CreateView.actionType.makeNewAction(project.getViewLibrary().getRootFolder(), null, editor);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VECst.ADD_VIEW_DIALOG_FIB;
+		return VECst.CREATE_VIEW_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

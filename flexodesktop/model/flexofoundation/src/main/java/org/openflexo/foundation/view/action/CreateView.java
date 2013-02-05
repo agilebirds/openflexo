@@ -27,11 +27,10 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
@@ -41,19 +40,19 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddView extends FlexoAction<AddView, RepositoryFolder, DiagramElement<?>> {
+public class CreateView extends FlexoAction<CreateView, RepositoryFolder, DiagramElement<?>> {
 
-	private static final Logger logger = Logger.getLogger(AddView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateView.class.getPackage().getName());
 
-	public static FlexoActionType<AddView, RepositoryFolder, DiagramElement<?>> actionType = new FlexoActionType<AddView, RepositoryFolder, DiagramElement<?>>(
+	public static FlexoActionType<CreateView, RepositoryFolder, DiagramElement<?>> actionType = new FlexoActionType<CreateView, RepositoryFolder, DiagramElement<?>>(
 			"create_view", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddView makeNewAction(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
-			return new AddView(focusedObject, globalSelection, editor);
+		public CreateView makeNewAction(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+			return new CreateView(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -69,7 +68,7 @@ public class AddView extends FlexoAction<AddView, RepositoryFolder, DiagramEleme
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddView.actionType, RepositoryFolder.class);
+		FlexoModelObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
 	}
 
 	private View newView;
@@ -81,13 +80,12 @@ public class AddView extends FlexoAction<AddView, RepositoryFolder, DiagramEleme
 
 	public boolean skipChoosePopup = false;
 
-	AddView(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	CreateView(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException,
-			InvalidFileNameException {
+	protected void doAction(Object context) throws SaveResourceException, InvalidFileNameException {
 		logger.info("Add view in folder " + getFolder());
 
 		if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {

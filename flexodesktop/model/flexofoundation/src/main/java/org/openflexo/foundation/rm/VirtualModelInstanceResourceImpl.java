@@ -31,7 +31,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			String baseName = name;
 			File xmlFile = new File(view.getFlexoResource().getFile().getParentFile(), baseName + ".vmxml");
 			returned.setName(name);
-			returned.setURI(view.getProject().getURI() + "." + baseName);
+			returned.setURI(view.getProject().getURI() + "/" + baseName);
 			returned.setFile(xmlFile);
 			returned.setVirtualModel(virtualModel);
 			return returned;
@@ -57,4 +57,8 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 		return null;
 	}
 
+	@Override
+	public Class<VMI> getResourceDataClass() {
+		return (Class<VMI>) VirtualModelInstance.class;
+	}
 }

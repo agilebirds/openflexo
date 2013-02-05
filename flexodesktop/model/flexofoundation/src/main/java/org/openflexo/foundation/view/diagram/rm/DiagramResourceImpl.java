@@ -1,5 +1,6 @@
 package org.openflexo.foundation.view.diagram.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoException;
@@ -9,6 +10,8 @@ import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 
 /**
  * Default implementation for {@link DiagramResource}
@@ -19,8 +22,22 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
  */
 public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceImpl<Diagram> implements DiagramResource {
 
-	public static DiagramResource makeDiagramResource(String name, DiagramSpecification virtualModel, View view) {
-		return (DiagramResource) VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(name, virtualModel, view);
+	public static DiagramResource makeDiagramResource(String name, DiagramSpecification diagramSpecification, View view) {
+		try {
+			ModelFactory factory = new ModelFactory(DiagramResource.class);
+			DiagramResourceImpl returned = (DiagramResourceImpl) factory.newInstance(DiagramResource.class);
+			returned.setServiceManager(view.getProject().getServiceManager());
+			String baseName = name;
+			File xmlFile = new File(view.getFlexoResource().getFile().getParentFile(), baseName + ".diagram");
+			returned.setName(name);
+			returned.setURI(view.getProject().getURI() + "/" + baseName);
+			returned.setFile(xmlFile);
+			returned.setVirtualModel(diagramSpecification);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -37,6 +54,11 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Class<Diagram> getResourceDataClass() {
+		return Diagram.class;
 	}
 
 }

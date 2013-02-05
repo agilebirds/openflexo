@@ -112,6 +112,8 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	 * @return the newly created folder
 	 */
 	public RepositoryFolder<R> createNewFolder(String folderName, RepositoryFolder<R> parentFolder) {
+		System.out.println("Create folder " + folderName + " parent=" + parentFolder);
+		System.out.println("parent file = " + parentFolder.getFile());
 		RepositoryFolder<R> newFolder = new RepositoryFolder<R>(folderName, parentFolder, this);
 		newFolder.getFile().mkdirs();
 

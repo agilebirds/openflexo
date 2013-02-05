@@ -86,7 +86,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 		OWL_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("OWL_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML, "owl");
 		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY", "application/openflexo/oelib", TextSyntax.XML,
 				"oelib");
-		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/view", TextSyntax.XML, "view");
+		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("VIEW", "application/openflexo/view", TextSyntax.XML, "view");
 		DKV_FORMAT = FileFormat.registerTextFileFormat("DKV", "application/openflexo/dkv", TextSyntax.XML, "dkv");
 		WS_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("WS_LIBRARY", "application/openflexo/ws", TextSyntax.XML, "ws");
 
@@ -228,7 +228,7 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 
 	public static final ResourceType OWL_ONTOLOGY = new OWLOntologyResourceType();
 	public static final ResourceType OE_SHEMA_LIBRARY = new OEShemaLibraryResourceType();
-	public static final ResourceType OE_SHEMA = new OEShemaResourceType();
+	public static final ResourceType VIEW = new ViewResourceType();
 
 	public static final ResourceType JAR = new JarResourceType();
 
@@ -1055,8 +1055,8 @@ public abstract class ResourceType extends KVCFlexoObject implements StringConve
 
 	}
 
-	private static class OEShemaResourceType extends ResourceType {
-		OEShemaResourceType() {
+	private static class ViewResourceType extends ResourceType {
+		ViewResourceType() {
 			super();
 		}
 

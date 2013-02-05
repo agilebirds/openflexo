@@ -27,9 +27,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.rm.DiagramResource;
@@ -38,19 +37,19 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddDiagram extends FlexoAction<AddDiagram, View, FlexoModelObject> {
+public class CreateDiagram extends FlexoAction<CreateDiagram, View, FlexoModelObject> {
 
-	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<AddDiagram, View, FlexoModelObject> actionType = new FlexoActionType<AddDiagram, View, FlexoModelObject>(
+	public static FlexoActionType<CreateDiagram, View, FlexoModelObject> actionType = new FlexoActionType<CreateDiagram, View, FlexoModelObject>(
 			"create_diagram", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddDiagram makeNewAction(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-			return new AddDiagram(focusedObject, globalSelection, editor);
+		public CreateDiagram makeNewAction(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new CreateDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -66,7 +65,7 @@ public class AddDiagram extends FlexoAction<AddDiagram, View, FlexoModelObject> 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddDiagram.actionType, View.class);
+		FlexoModelObject.addActionForClass(CreateDiagram.actionType, View.class);
 	}
 
 	private Diagram newDiagram;
@@ -77,13 +76,12 @@ public class AddDiagram extends FlexoAction<AddDiagram, View, FlexoModelObject> 
 
 	public boolean skipChoosePopup = false;
 
-	AddDiagram(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	CreateDiagram(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException,
-			InvalidFileNameException {
+	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException {
 		logger.info("Add diagram in view " + getFocusedObject());
 
 		if (StringUtils.isNotEmpty(newDiagramTitle) && StringUtils.isEmpty(newDiagramName)) {

@@ -1380,7 +1380,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoViewResource getShemaResource(String shemaName) {
-		return (FlexoViewResource) resourceForKey(ResourceType.OE_SHEMA, shemaName);
+		return (FlexoViewResource) resourceForKey(ResourceType.VIEW, shemaName);
 	}
 
 	public ImplementationModelResource getImplementationModelResource(String modelName) {

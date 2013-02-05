@@ -80,7 +80,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	private View view;
 
 	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
-			VirtualModel virtualModel, View view) throws InvalidFileNameException {
+			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
 
 		VirtualModelInstanceResource newVirtualModelResource = VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(
 				virtualModelName, virtualModel, view);
@@ -89,6 +89,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		newVirtualModelResource.setResourceData(newVirtualModelInstance);
 		newVirtualModelInstance.setResource(newVirtualModelResource);
 		newVirtualModelInstance.setTitle(virtualModelTitle);
+
+		newVirtualModelInstance.save();
 
 		return newVirtualModelResource;
 	}
@@ -233,7 +235,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	@Override
 	public void save() throws SaveResourceException {
-		getFlexoResource().saveResourceData();
+		getResource().save(null);
+		// getFlexoResource().saveResourceData();
 	}
 
 	@Override

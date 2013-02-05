@@ -48,8 +48,10 @@ public class VECst {
 	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
 
 	// Shema edition
-	public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
-	public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
-	public static File REINDEX_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexViewElementsDialog.fib");
+	public static File CREATE_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewDialog.fib");
+	public static File CREATE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramDialog.fib");
+	public static File CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/CreateVirtualModelInstanceDialog.fib");
+	public static File DELETE_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteDiagramElementsDialog.fib");
+	public static File REINDEX_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexDiagramElementsDialog.fib");
 
 }

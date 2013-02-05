@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.action;
+package org.openflexo.foundation.view.diagram.action;
 
 import java.beans.PropertyChangeSupport;
 import java.security.InvalidParameterException;
@@ -51,20 +51,20 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class ReindexViewElements extends FlexoAction<ReindexViewElements, DiagramElement<?>, DiagramElement<?>> {
+public class ReindexDiagramElements extends FlexoAction<ReindexDiagramElements, DiagramElement<?>, DiagramElement<?>> {
 
-	private static final Logger logger = Logger.getLogger(ReindexViewElements.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ReindexDiagramElements.class.getPackage().getName());
 
-	public static FlexoActionType<ReindexViewElements, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<ReindexViewElements, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<ReindexDiagramElements, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<ReindexDiagramElements, DiagramElement<?>, DiagramElement<?>>(
 			"reindex_contents", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ReindexViewElements makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+		public ReindexDiagramElements makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
 				FlexoEditor editor) {
-			return new ReindexViewElements(focusedObject, globalSelection, editor);
+			return new ReindexDiagramElements(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -80,11 +80,11 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, Diagra
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, DiagramRootPane.class);
-		FlexoModelObject.addActionForClass(ReindexViewElements.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(ReindexDiagramElements.actionType, DiagramRootPane.class);
+		FlexoModelObject.addActionForClass(ReindexDiagramElements.actionType, DiagramShape.class);
 	}
 
-	ReindexViewElements(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	ReindexDiagramElements(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		init();
 	}
