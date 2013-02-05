@@ -1235,6 +1235,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public boolean isEditable(Object object) {
+		if (isDisposed()) {
+			return false;
+		}
 		return !getModule().getModule().requireProject() || !(object instanceof FlexoModelObject)
 				|| ((FlexoModelObject) object).getProject() == getProject();
 	}
