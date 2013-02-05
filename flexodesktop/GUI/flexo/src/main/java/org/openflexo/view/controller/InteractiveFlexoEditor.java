@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,6 +65,7 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.ws.WSObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -149,92 +151,111 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A executeAction(
 			final A action, final EventObject event) {
 		boolean progressIsShowing = ProgressWindow.hasInstance();
-		boolean confirmDoAction = true;
-		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
-		FlexoActionInitializer<A> initializer = null;
-		if (actionInitializer != null) {
-			initializer = actionInitializer.getDefaultInitializer();
-			if (initializer != null) {
-				confirmDoAction = initializer.run(event, action);
-			}
-		}
-
+		boolean confirmDoAction = runInitializer(action, event);
 		if (confirmDoAction) {
 			actionWillBePerformed(action);
-			try {
-				if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
-					ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
-					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-						@Override
-						protected Void doInBackground() throws Exception {
-							try {
-								if (getProject() != null) {
-									getProject().clearRecentlyCreatedObjects();
-								}
-								action.doActionInContext();
-								if (getProject() != null) {
-									getProject().notifyRecentlyCreatedObjects();
-								}
-								actionHasBeenPerformed(action, true); // Action succeeded
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							return null;
-						}
+			if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+				ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						runAction(action);
+						return null;
+					}
 
-						@Override
-						protected void done() {
-							super.done();
-							if (!action.isEmbedded()) {
-								if (ProgressWindow.hasInstance()) {
-									ProgressWindow.hideProgressWindow();
+					@Override
+					protected void done() {
+						super.done();
+						try {
+							get();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							e.printStackTrace();
+							if (e.getCause() instanceof FlexoException) {
+								if (!runExceptionHandler((FlexoException) e.getCause(), action)) {
+									return;
 								}
+							} else {
+								throw new RuntimeException(FlexoLocalization.localizedForKey("action_failed") + " "
+										+ action.getLocalizedName(), e.getCause());
 							}
 						}
-					};
-					worker.execute();
-					return action;
-				} else {
-					if (getProject() != null) {
-						getProject().clearRecentlyCreatedObjects();
+						runFinalizer(action, event);
 					}
-					action.doActionInContext();
-					if (getProject() != null) {
-						getProject().notifyRecentlyCreatedObjects();
-					}
-					actionHasBeenPerformed(action, true); // Action succeeded
+				};
+				worker.execute();
+				return action;
+			} else {
+				try {
+					runAction(action);
+				} catch (FlexoException exception) {
+					runExceptionHandler(exception, action);
 				}
-			} catch (FlexoException exception) {
-				actionHasBeenPerformed(action, false); // Action failed
-				ProgressWindow.hideProgressWindow();
-				FlexoExceptionHandler<A> exceptionHandler = null;
-				if (actionInitializer != null) {
-					exceptionHandler = actionInitializer.getDefaultExceptionHandler();
-				}
-				if (exceptionHandler != null) {
-					if (exceptionHandler.handleException(exception, action)) {
-						// The exception has been handled, we may still have to execute finalizer, if any
-					} else {
-						return action;
-					}
-
-				} else {
-					return action;
-				}
-			}
-
-			FlexoActionFinalizer<A> finalizer = null;
-			if (actionInitializer != null) {
-				finalizer = actionInitializer.getDefaultFinalizer();
-				if (finalizer != null) {
-					confirmDoAction = finalizer.run(event, action);
+				if (!progressIsShowing) {
+					ProgressWindow.hideProgressWindow();
 				}
 			}
 		}
-		if (!progressIsShowing) {
-			ProgressWindow.hideProgressWindow();
-		}
+
 		return action;
+	}
+
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean runInitializer(A action,
+			EventObject event) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			FlexoActionInitializer<A> initializer = actionInitializer.getDefaultInitializer();
+			if (initializer != null) {
+				return initializer.run(event, action);
+			}
+		}
+		return true;
+	}
+
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void runAction(
+			final A action) throws FlexoException {
+		if (getProject() != null) {
+			getProject().clearRecentlyCreatedObjects();
+		}
+		action.doActionInContext();
+		if (getProject() != null) {
+			getProject().notifyRecentlyCreatedObjects();
+		}
+		actionHasBeenPerformed(action, true); // Action succeeded
+	}
+
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void runFinalizer(
+			final A action, EventObject event) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			FlexoActionFinalizer<A> finalizer = actionInitializer.getDefaultFinalizer();
+			if (finalizer != null) {
+				finalizer.run(event, action);
+			}
+		}
+	}
+
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean runExceptionHandler(
+			FlexoException exception, final A action) {
+		actionHasBeenPerformed(action, false); // Action failed
+		ProgressWindow.hideProgressWindow();
+		FlexoExceptionHandler<A> exceptionHandler = null;
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			exceptionHandler = actionInitializer.getDefaultExceptionHandler();
+		}
+		if (exceptionHandler != null) {
+			if (exceptionHandler.handleException(exception, action)) {
+				// The exception has been handled, we may still have to execute finalizer, if any
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
 	}
 
 	@Override
