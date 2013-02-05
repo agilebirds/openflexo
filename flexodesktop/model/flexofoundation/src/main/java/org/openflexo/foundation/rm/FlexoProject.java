@@ -1114,15 +1114,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Registering resource " + resourceIdentifier + " with object " + resource);
 		}
-		if (resourceIdentifier
-				.equals("COPIED_FILE.COPY_OF_WORKFLOW-BicsRoles43_IN_REPOSITORY_Generated documentation http://www.agilebirds.com/projects/2013/1/BicsRoles_1359069091265")) {
-			System.err.println("Coucou");
-		}
-		if (resource
-				.getResourceIdentifier()
-				.equals("COPIED_FILE.COPY_OF_WORKFLOW-BicsRoles43_IN_REPOSITORY_Generated documentation http://www.agilebirds.com/projects/2013/1/BicsRoles_1359069091265")) {
-			System.err.println("Coucou2");
-		}
 		resources.put(resourceIdentifier, resource);
 		setChanged();
 		notifyObservers(new ResourceAdded(resource));
@@ -1239,7 +1230,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		}
 		if (identifier != null) {
-			removeResourceWithKey(identifier);
+			if (resourceForKey(identifier) == resource) {
+				removeResourceWithKey(identifier);
+			}
 			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
 				res.removeFromDependentResources(resource);
 			}

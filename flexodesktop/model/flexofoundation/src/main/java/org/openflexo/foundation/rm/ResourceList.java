@@ -24,9 +24,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.rm.ExternalResource.ExternalResourceOwner;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -35,76 +33,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable {
+public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable, ExternalResourceOwner {
 	private static final Logger logger = Logger.getLogger(ResourceList.class.getPackage().getName());
-
-	public static class ExternalResource implements FlexoObserver, XMLSerializable {
-		private ResourceList resourceList;
-		private String projectURI;
-		private String resourceIdentifier;
-		private FlexoProject project;
-
-		// Created by deserialization
-		public ExternalResource(FlexoProjectBuilder builder) {
-			this.project = builder.project;
-			this.project.addObserver(this);
-		}
-
-		// Created during serialization
-		public ExternalResource(FlexoResource<?> resource) {
-			this.projectURI = resource.getProject().getProjectURI();
-			this.resourceIdentifier = resource.getResourceIdentifier();
-		}
-
-		public void delete() {
-			if (project != null) {
-				project.deleteObserver(this);
-			}
-			if (getResourceList() != null) {
-				getResourceList().removeFromExternalResources(this);
-			}
-		}
-
-		public String getProjectURI() {
-			return projectURI;
-		}
-
-		public void setProjectURI(String projectURI) {
-			this.projectURI = projectURI;
-		}
-
-		public String getResourceIdentifier() {
-			return resourceIdentifier;
-		}
-
-		public void setResourceIdentifier(String resourceIdentifier) {
-			this.resourceIdentifier = resourceIdentifier;
-		}
-
-		public ResourceList getResourceList() {
-			return resourceList;
-		}
-
-		public void setResourceList(ResourceList resourceList) {
-			if (resourceList != null) {
-				this.resourceList = resourceList;
-			}
-		}
-
-		@Override
-		public void update(FlexoObservable observable, DataModification dataModification) {
-			if (dataModification instanceof ImportedProjectLoaded && ((ImportedProjectLoaded) dataModification).getProject() != null
-					&& ((ImportedProjectLoaded) dataModification).getProject().getURI().equals(getProjectURI())) {
-				FlexoProject project = ((ImportedProjectLoaded) dataModification).getProject();
-				FlexoResource<FlexoResourceData> resource = (FlexoResource<FlexoResourceData>) project
-						.resourceForKey(getResourceIdentifier());
-				if (resource != null) {
-					getResourceList().addToResources(resource);
-					delete();
-				}
-			}
-		}
-	}
 
 	private FlexoResource<? extends FlexoResourceData> relatedResource;
 
@@ -112,7 +42,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 
 	public ResourceList() {
 		super();
-		externalResources = new ArrayList<ResourceList.ExternalResource>();
+		externalResources = new ArrayList<ExternalResource>();
 	}
 
 	public ResourceList(FlexoResource<? extends FlexoResourceData> relatedResource) {
@@ -205,7 +135,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	}
 
 	public List<ExternalResource> getExternalResources() {
-		List<ExternalResource> returned = new ArrayList<ResourceList.ExternalResource>(externalResources);
+		List<ExternalResource> returned = new ArrayList<ExternalResource>(externalResources);
 		for (FlexoResource<?> resource : this) {
 			if (resource.getProject() != getProject()) {
 				returned.add(new ExternalResource(resource));
@@ -221,15 +151,28 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	public void addToExternalResources(ExternalResource externalResource) {
 		if (!externalResources.contains(externalResource)) {
 			externalResources.add(externalResource);
-			externalResource.setResourceList(this);
+			externalResource.setOwner(this);
 		}
 	}
 
 	public void removeFromExternalResources(ExternalResource externalResource) {
 		if (externalResources.contains(externalResource)) {
 			externalResources.remove(externalResource);
-			externalResource.setResourceList(null);
+			externalResource.setOwner(null);
+			externalResource.delete();
 		}
+	}
+
+	@Override
+	public void externalResourceFound(ExternalResource externalResource, FlexoResource resource) {
+		addToResources(resource);
+		removeFromExternalResources(externalResource);
+	}
+
+	@Override
+	public void externalResourceNotFound(ExternalResource externalResource) {
+		removeFromExternalResources(externalResource);
+		externalResource.delete();
 	}
 
 	public abstract void update();
