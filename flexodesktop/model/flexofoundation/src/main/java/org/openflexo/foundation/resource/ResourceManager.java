@@ -57,12 +57,12 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 
 	public void registerResource(FlexoResource<?> resource) {
 		resources.add(resource);
-		getFlexoServiceManager().notify(this, new ResourceRegistered(resource, null));
+		getServiceManager().notify(this, new ResourceRegistered(resource, null));
 	}
 
 	public void unregisterResource(FlexoResource<?> resource) {
 		resources.remove(resource);
-		getFlexoServiceManager().notify(this, new ResourceUnregistered(resource, null));
+		getServiceManager().notify(this, new ResourceUnregistered(resource, null));
 	}
 
 	public List<FlexoResource<?>> getRegisteredResources() {

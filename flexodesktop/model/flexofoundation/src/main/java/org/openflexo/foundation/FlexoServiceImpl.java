@@ -44,7 +44,7 @@ public abstract class FlexoServiceImpl implements FlexoService {
 	}
 
 	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
+	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
 	}
 

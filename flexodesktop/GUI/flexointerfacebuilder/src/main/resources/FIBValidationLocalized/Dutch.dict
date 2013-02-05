@@ -1,5 +1,3 @@
-#Dutch
-#Wed Jul 04 09:17:13 CEST 2012
 'action'_binding_is_not_valid='action'_binding_is_not_valid
 'action'_binding_is_not_valid_description='action'_binding_is_not_valid_description
 'array'_binding_is_not_valid='array'_binding_is_not_valid
@@ -20,6 +18,8 @@
 'list'_binding_is_not_valid_description='list'_binding_is_not_valid_description
 'right_click_action'_binding_is_not_valid='right_click_action'_binding_is_not_valid
 'right_click_action'_binding_is_not_valid_description='right_click_action'_binding_is_not_valid_description
+'root'_binding_is_not_valid='root'_binding_is_not_valid
+'root'_binding_is_not_valid_description='root'_binding_is_not_valid_description
 'tooltip'_binding_is_not_valid='tooltip'_binding_is_not_valid
 'tooltip'_binding_is_not_valid_description='tooltip'_binding_is_not_valid_description
 'value_change_acion'_binding_is_not_valid='value_change_acion'_binding_is_not_valid

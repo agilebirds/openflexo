@@ -30,10 +30,11 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
  * 
  * @author yourname
  */
-public interface ExternalCEDModule extends ExternalModule {
-	public JComponent createScreenshotForShema(ExampleDiagram shema);
+public interface ExternalVPMModule extends ExternalModule {
 
-	public JComponent createScreenshotForPalette(DiagramPalette palette);
+	public JComponent createScreenshotForExampleDiagram(ExampleDiagram shema);
+
+	public JComponent createScreenshotForDiagramPalette(DiagramPalette palette);
 
 	public float getScreenshotQuality();
 

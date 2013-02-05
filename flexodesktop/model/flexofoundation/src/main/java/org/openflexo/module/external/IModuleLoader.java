@@ -19,13 +19,15 @@
  */
 package org.openflexo.module.external;
 
+import org.openflexo.foundation.FlexoService;
 import org.openflexo.module.ModuleLoadingException;
 
 /**
  * @author gpolet
  * 
  */
-public interface IModuleLoader {
+public interface IModuleLoader extends FlexoService {
+
 	public IModule getActiveModule();
 
 	public ExternalIEModule getIEModuleInstance() throws ModuleLoadingException;
@@ -34,7 +36,7 @@ public interface IModuleLoader {
 
 	public ExternalWKFModule getWKFModuleInstance() throws ModuleLoadingException;
 
-	public ExternalCEDModule getVPMModuleInstance() throws ModuleLoadingException;
+	public ExternalVPMModule getVPMModuleInstance() throws ModuleLoadingException;
 
 	public ExternalVEModule getVEModuleInstance() throws ModuleLoadingException;
 

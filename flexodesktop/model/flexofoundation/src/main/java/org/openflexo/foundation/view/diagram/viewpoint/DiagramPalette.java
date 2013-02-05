@@ -46,7 +46,8 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.ExternalVPMModule;
+import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -229,21 +230,24 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	private ScreenshotImage buildAndSaveScreenshotImage() {
-		ExternalCEDModule cedModule = null;
+		ExternalVPMModule vpmModule = null;
 		try {
-			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
+			IModuleLoader moduleLoader = getViewPointLibrary().getServiceManager().getService(IModuleLoader.class);
+			if (moduleLoader != null) {
+				vpmModule = moduleLoader.getVPMModuleInstance();
+			}
 		} catch (ModuleLoadingException e) {
-			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
+			logger.warning("cannot load VPM module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();
 		}
 
-		if (cedModule == null) {
+		if (vpmModule == null) {
 			return null;
 		}
 
 		logger.info("Building " + getExpectedScreenshotImageFile().getAbsolutePath());
 
-		JComponent c = cedModule.createScreenshotForPalette(this);
+		JComponent c = vpmModule.createScreenshotForDiagramPalette(this);
 		BufferedImage bi = ImageUtils.createImageFromComponent(c);
 		// Do not trim, we want all palette
 		screenshotImage = ScreenshotGenerator.makeImage(bi);
@@ -256,7 +260,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 			logger.warning("Could not save " + getExpectedScreenshotImageFile().getAbsolutePath());
 		}
 
-		cedModule.finalizeScreenshotGeneration();
+		vpmModule.finalizeScreenshotGeneration();
 
 		screenshotModified = false;
 

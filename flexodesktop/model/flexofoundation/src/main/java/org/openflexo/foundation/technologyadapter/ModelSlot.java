@@ -77,9 +77,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 		if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
-			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
-					&& builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService() != null) {
-				this.technologyAdapter = builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService()
+			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getServiceManager() != null
+					&& builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService() != null) {
+				this.technologyAdapter = builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService()
 						.getTechnologyAdapter(getTechnologyAdapterClass());
 			}
 		}
@@ -90,9 +90,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 		if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
-			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getFlexoServiceManager() != null
-					&& builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService() != null) {
-				this.technologyAdapter = builder.getViewPointLibrary().getFlexoServiceManager().getTechnologyAdapterService()
+			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getServiceManager() != null
+					&& builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService() != null) {
+				this.technologyAdapter = builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService()
 						.getTechnologyAdapter(getTechnologyAdapterClass());
 			}
 		}

@@ -42,7 +42,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			returned.setDirectory(virtualModelDirectory);
 			returned.setFile(virtualModelXMLFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
 			viewPointResource.addToContents(returned);
 			viewPointResource.notifyContentsAdded(returned);
@@ -58,7 +58,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = virtualModelDirectory.getName();
 			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
 			VirtualModelInfo vpi = findVirtualModelInfo(virtualModelDirectory);

@@ -3,6 +3,7 @@ package org.openflexo.foundation.rm;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.jdom2.Attribute;
@@ -36,7 +37,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setFile(diagramSpecificationXMLFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramSpecificationDirectory);
 			viewPointResource.addToContents(returned);
 			viewPointResource.notifyContentsAdded(returned);
@@ -53,7 +54,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
 					.newInstance(DiagramSpecificationResource.class);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = diagramSpecificationDirectory.getName();
 			File xmlFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 			DiagramSpecificationInfo vpi = findDiagramSpecificationInfo(diagramSpecificationDirectory);
@@ -165,6 +166,18 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 		}
 		logger.fine("Returned null");
 		return null;
+	}
+
+	@Override
+	public List<ExampleDiagramResource> getExampleDiagramResources() {
+		DiagramSpecification ds = getDiagramSpecification();
+		return getContents(ExampleDiagramResource.class);
+	}
+
+	@Override
+	public List<DiagramPaletteResource> getDiagramPaletteResources() {
+		DiagramSpecification ds = getDiagramSpecification();
+		return getContents(DiagramPaletteResource.class);
 	}
 
 }

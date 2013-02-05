@@ -119,7 +119,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
 		OWLOntologyResource ontologyResource = new OWLOntologyResource(aMetaModelFile, ontologyLibrary);
-		ontologyResource.setServiceManager(getTechnologyAdapterService().getFlexoServiceManager());
+		ontologyResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 		logger.info("Found OWL ontology " + ontologyResource.getURI() + " file:" + aMetaModelFile.getAbsolutePath());
 		return ontologyResource;
 

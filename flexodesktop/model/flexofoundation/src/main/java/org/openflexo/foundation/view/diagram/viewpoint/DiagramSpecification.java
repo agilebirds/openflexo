@@ -101,9 +101,9 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	 */
 	public DiagramSpecification(ViewPoint viewPoint) {
 		this((VirtualModel.VirtualModelBuilder) null);
-		if (viewPoint.getViewPointLibrary().getFlexoServiceManager() != null
-				&& viewPoint.getViewPointLibrary().getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
-			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getFlexoServiceManager()
+		if (viewPoint.getViewPointLibrary().getServiceManager() != null
+				&& viewPoint.getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
+			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getServiceManager()
 					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
 			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
 			diagramMS.setName("diagram");
@@ -271,7 +271,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		// For all "old" viewpoints, we consider a OWL model slot
 		try {
 			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getFlexoServiceManager().getTechnologyAdapterService()
+			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 
 			String importedOntology = null;
@@ -301,9 +301,9 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);
 			DiagramTechnologyAdapter diagramTA = null;
-			if (viewPointLibrary.getFlexoServiceManager() != null
-					&& viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class) != null) {
-				diagramTA = viewPointLibrary.getFlexoServiceManager().getService(TechnologyAdapterService.class)
+			if (viewPointLibrary.getServiceManager() != null
+					&& viewPointLibrary.getServiceManager().getService(TechnologyAdapterService.class) != null) {
+				diagramTA = viewPointLibrary.getServiceManager().getService(TechnologyAdapterService.class)
 						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
 			} else {
 				diagramTA = new DiagramTechnologyAdapter();

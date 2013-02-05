@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.jdom2.Attribute;
@@ -51,7 +52,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			returned.setName(name);
@@ -74,7 +75,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			ViewPointInfo vpi = findViewPointInfo(viewPointDirectory);
@@ -324,4 +325,11 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			e1.printStackTrace();
 		}
 	}
+
+	@Override
+	public List<VirtualModelResource> getVirtualModelResources() {
+		ViewPoint vp = getViewPoint();
+		return getContents(VirtualModelResource.class);
+	}
+
 }

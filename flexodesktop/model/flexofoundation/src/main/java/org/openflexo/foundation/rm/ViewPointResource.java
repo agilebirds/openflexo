@@ -1,6 +1,7 @@
 package org.openflexo.foundation.rm;
 
 import java.io.File;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
@@ -35,5 +36,7 @@ public interface ViewPointResource extends FlexoXMLFileResource<ViewPoint> {
 
 	@Setter(DIRECTORY)
 	public void setDirectory(File file);
+
+	public List<VirtualModelResource> getVirtualModelResources();
 
 }

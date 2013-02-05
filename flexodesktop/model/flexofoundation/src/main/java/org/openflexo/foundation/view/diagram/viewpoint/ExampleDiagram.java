@@ -41,7 +41,8 @@ import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.ExternalVPMModule;
+import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 
@@ -143,21 +144,24 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	private ScreenshotImage buildAndSaveScreenshotImage() {
-		ExternalCEDModule cedModule = null;
+		ExternalVPMModule vpmModule = null;
 		try {
-			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
+			IModuleLoader moduleLoader = getViewPointLibrary().getServiceManager().getService(IModuleLoader.class);
+			if (moduleLoader != null) {
+				vpmModule = moduleLoader.getVPMModuleInstance();
+			}
 		} catch (ModuleLoadingException e) {
-			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
+			logger.warning("cannot load VPM module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();
 		}
 
-		if (cedModule == null) {
+		if (vpmModule == null) {
 			return null;
 		}
 
 		logger.info("Building " + getExpectedScreenshotImageFile().getAbsolutePath());
 
-		JComponent c = cedModule.createScreenshotForShema(this);
+		JComponent c = vpmModule.createScreenshotForExampleDiagram(this);
 		c.setOpaque(true);
 		c.setBackground(Color.WHITE);
 		JFrame frame = new JFrame();
@@ -176,7 +180,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			e.printStackTrace();
 			logger.warning("Could not save " + getExpectedScreenshotImageFile().getAbsolutePath());
 		}
-		cedModule.finalizeScreenshotGeneration();
+		vpmModule.finalizeScreenshotGeneration();
 		screenshotModified = false;
 		getPropertyChangeSupport().firePropertyChange("screenshotImage", null, screenshotImage);
 		return screenshotImage;

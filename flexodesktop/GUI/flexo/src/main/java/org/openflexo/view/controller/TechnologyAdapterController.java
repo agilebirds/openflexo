@@ -68,7 +68,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 * @return
 	 */
 	public final TA getTechnologyAdapter() {
-		return technologyAdapterControllerService.getFlexoServiceManager().getService(TechnologyAdapterService.class)
+		return technologyAdapterControllerService.getServiceManager().getService(TechnologyAdapterService.class)
 				.getTechnologyAdapter(getTechnologyAdapterClass());
 	}
 

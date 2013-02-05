@@ -31,11 +31,10 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -57,7 +56,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 
 		@Override
 		public boolean isVisibleForSelection(RepositoryFolder object, Vector<DiagramElement<?>> globalSelection) {
-			return object.getResourceRepository() instanceof ViewPointRepository;
+			return object.getResourceRepository() instanceof ViewLibrary;
 		}
 
 		@Override
@@ -76,7 +75,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 	public boolean useViewPoint = true;
 	public String newViewName;
 	public String newViewTitle;
-	public ViewPoint viewpoint;
+	public ViewPointResource viewpointResource;
 
 	public boolean skipChoosePopup = false;
 
@@ -110,7 +109,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 			index++;
 		}
 
-		newView = View.newView(newViewName, newViewTitle, viewpoint, getFolder(), getProject());
+		newView = View.newView(newViewName, newViewTitle, viewpointResource.getViewPoint(), getFolder(), getProject());
 
 		logger.info("Added view " + newView + " in folder " + getFolder() + " for project " + getProject());
 		// Creates the resource here
@@ -140,7 +139,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 		if (getFolder() == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_folder_defined");
 			return false;
-		} else if (viewpoint == null && useViewPoint) {
+		} else if (viewpointResource == null && useViewPoint) {
 			errorMessage = FlexoLocalization.localizedForKey("no_view_point_selected");
 			return false;
 		}

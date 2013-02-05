@@ -29,8 +29,8 @@ public class InformationSpace extends FlexoServiceImpl {
 	}
 
 	public List<TechnologyAdapter<?, ?>> getTechnologyAdapters() {
-		if (getFlexoServiceManager() != null) {
-			return getFlexoServiceManager().getTechnologyAdapterService().getTechnologyAdapters();
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapters();
 		}
 		return null;
 	}
@@ -43,8 +43,8 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return
 	 */
 	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
-		if (getFlexoServiceManager() != null) {
-			return getFlexoServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter);
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter);
 		}
 		return null;
 	}
@@ -57,14 +57,14 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return
 	 */
 	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
-		if (getFlexoServiceManager() != null) {
-			return getFlexoServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter);
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter);
 		}
 		return null;
 	}
 
 	public FlexoMetaModelResource<?, ?> getMetaModel(String uri) {
-		for (TechnologyAdapter ta : getFlexoServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
+		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoMetaModelResource<?, ?> returned = getMetaModel(uri, ta);
 			if (returned != null) {
 				return returned;
@@ -84,7 +84,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	}
 
 	public FlexoModelResource<?, ?> getModel(String uri) {
-		for (TechnologyAdapter ta : getFlexoServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
+		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoModelResource<?, ?> returned = getModel(uri, ta);
 			if (returned != null) {
 				return returned;

@@ -101,7 +101,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 	public InformationSpace getInformationSpace() {
 		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getFlexoServiceManager().getInformationSpace();
+			return getViewPointLibrary().getServiceManager().getInformationSpace();
 		}
 		return null;
 	}

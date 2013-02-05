@@ -130,6 +130,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
@@ -1945,7 +1946,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 */
 	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
-			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
 			if (sm != null) {
 				TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
 				if (service != null) {
@@ -2023,6 +2024,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
+		} else if (object instanceof ViewLibrary) {
+			return VEIconLibrary.VIEW_LIBRARY_ICON;
 		} else if (object instanceof ViewObject) {
 			return VEIconLibrary.iconForObject((ViewObject) object);
 		} else if (object instanceof RepositoryFolder) {

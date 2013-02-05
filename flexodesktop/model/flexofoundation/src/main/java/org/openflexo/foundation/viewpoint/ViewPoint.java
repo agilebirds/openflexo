@@ -377,7 +377,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		// For all "old" viewpoints, we consider a OWL model slot
 		try {
 			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getFlexoServiceManager().getTechnologyAdapterService()
+			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 
 			String importedOntology = null;

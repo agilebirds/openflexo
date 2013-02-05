@@ -308,12 +308,12 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	}
 
 	@Override
-	public FlexoServiceManager getFlexoServiceManager() {
+	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
 	}
 
 	public FlexoResourceCenterService getResourceCenterService() {
-		return getFlexoServiceManager().getService(FlexoResourceCenterService.class);
+		return getServiceManager().getService(FlexoResourceCenterService.class);
 	}
 
 	@Override

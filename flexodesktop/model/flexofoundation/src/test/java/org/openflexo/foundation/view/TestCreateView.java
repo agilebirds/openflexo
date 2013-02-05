@@ -97,7 +97,7 @@ public class TestCreateView extends FlexoTestCase {
 		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
 		addView.newViewName = "TestNewView";
 		addView.newViewTitle = "A nice title for a new view";
-		addView.viewpoint = basicOntologyEditor;
+		addView.viewpointResource = basicOntologyEditor.getResource();
 		addView.doAction();
 		assertTrue(addView.hasActionExecutionSucceeded());
 		View newView = addView.getNewView();
@@ -105,7 +105,7 @@ public class TestCreateView extends FlexoTestCase {
 		assertNotNull(newView);
 		assertEquals(addView.newViewName, newView.getName());
 		assertEquals(addView.newViewTitle, newView.getTitle());
-		assertEquals(addView.viewpoint, basicOntologyEditor);
+		assertEquals(addView.viewpointResource.getViewPoint(), basicOntologyEditor);
 		assertTrue(newView.getResource().getFile().exists());
 	}
 

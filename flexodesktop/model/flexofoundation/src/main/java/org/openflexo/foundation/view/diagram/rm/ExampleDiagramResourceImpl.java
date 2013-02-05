@@ -41,7 +41,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			returned.setName(exampleDiagramFile.getName());
 			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
 			dsResource.addToContents(returned);
 
@@ -60,7 +60,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			returned.setName(exampleDiagramFile.getName());
 			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
-			returned.setServiceManager(viewPointLibrary.getFlexoServiceManager());
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
 			dsResource.addToContents(returned);
 

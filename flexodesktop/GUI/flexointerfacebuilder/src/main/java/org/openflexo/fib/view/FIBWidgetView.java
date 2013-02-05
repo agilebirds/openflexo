@@ -443,6 +443,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 					componentEnabled = isEnabled;
 				}
 			} catch (TypeMismatchException e) {
+				logger.warning("Cannot evaluate: " + getComponent().getEnable());
 				e.printStackTrace();
 				componentEnabled = true;
 			} catch (NullReferenceException e) {

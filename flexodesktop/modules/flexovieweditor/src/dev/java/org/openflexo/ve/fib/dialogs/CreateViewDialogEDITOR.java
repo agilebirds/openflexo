@@ -28,11 +28,11 @@ import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
-public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
+public class CreateViewDialogEDITOR extends ProjectDialogEDITOR {
 
 	@Override
 	public Object[] getData() {
-		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoEditor editor = loadProject(new FileResource("TestProjects/1.6/Test1.6.prj"));
 		FlexoProject project = editor.getProject();
 		CreateView action = CreateView.actionType.makeNewAction(project.getViewLibrary().getRootFolder(), null, editor);
 		return makeArray(action);
@@ -44,7 +44,7 @@ public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
 	}
 
 	public static void main(String[] args) {
-		main(AddViewDialogEDITOR.class);
+		main(CreateViewDialogEDITOR.class);
 	}
 
 }

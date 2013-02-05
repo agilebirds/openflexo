@@ -91,8 +91,8 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	@Override
 	public void addToResourceCenters(FlexoResourceCenter resourceCenter) {
 		performSuperAdder(RESOURCE_CENTERS, resourceCenter);
-		if (getFlexoServiceManager() != null) {
-			getFlexoServiceManager().notify(this, new ResourceCenterAdded(resourceCenter));
+		if (getServiceManager() != null) {
+			getServiceManager().notify(this, new ResourceCenterAdded(resourceCenter));
 		}
 	}
 

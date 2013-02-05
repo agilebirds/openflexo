@@ -159,7 +159,7 @@ public class VPMIconLibrary extends IconLibrary {
 	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
 			try {
-				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getFlexoServiceManager();
+				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
 				if (sm != null) {
 					TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
 					if (service != null) {

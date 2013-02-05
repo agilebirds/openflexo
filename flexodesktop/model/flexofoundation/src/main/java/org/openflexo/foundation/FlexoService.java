@@ -42,7 +42,7 @@ public interface FlexoService {
 	 * 
 	 * @return
 	 */
-	public FlexoServiceManager getFlexoServiceManager();
+	public FlexoServiceManager getServiceManager();
 
 	/**
 	 * Called after registration, after all services have been notified that this service has been registered

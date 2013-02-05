@@ -52,7 +52,7 @@ import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.module.external.ExternalVEModule;
@@ -202,7 +202,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			ProgressWindow.hideProgressWindow();
 		}
 		propertyChangeSupport.firePropertyChange(MODULE_LOADED, null, module);
-		getFlexoServiceManager().notify(this, new ModuleLoaded(flexoModule));
+		getServiceManager().notify(this, new ModuleLoaded(flexoModule));
 		return flexoModule;
 	}
 
@@ -326,8 +326,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		return (ExternalDMModule) getModuleInstance(Module.DM_MODULE);
 	}
 
-	public ExternalCEDModule getCEDModule() throws ModuleLoadingException {
-		return (ExternalCEDModule) getModuleInstance(Module.VPM_MODULE);
+	public ExternalVPMModule getCEDModule() throws ModuleLoadingException {
+		return (ExternalVPMModule) getModuleInstance(Module.VPM_MODULE);
 	}
 
 	public ExternalVEModule getOEModule() throws ModuleLoadingException {
@@ -356,7 +356,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
 			}
 			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
-			getFlexoServiceManager().notify(this, new ModuleActivated(activeModule));
+			getServiceManager().notify(this, new ModuleActivated(activeModule));
 			return moduleInstance;
 		}
 		throw new ModuleLoadingException(module);
@@ -459,7 +459,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	}
 
 	@Override
-	public ExternalCEDModule getVPMModuleInstance() throws ModuleLoadingException {
+	public ExternalVPMModule getVPMModuleInstance() throws ModuleLoadingException {
 		return getCEDModule();
 	}
 

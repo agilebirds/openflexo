@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
@@ -49,7 +49,7 @@ import org.openflexo.vpm.examplediagram.ExampleDiagramController;
  * 
  * @author sylvain
  */
-public class VPMModule extends FlexoModule implements ExternalCEDModule {
+public class VPMModule extends FlexoModule implements ExternalVPMModule {
 
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
@@ -116,7 +116,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ExampleDiagram target) {
+	public JComponent createScreenshotForExampleDiagram(ExampleDiagram target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -148,7 +148,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForPalette(DiagramPalette target) {
+	public JComponent createScreenshotForDiagramPalette(DiagramPalette target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");

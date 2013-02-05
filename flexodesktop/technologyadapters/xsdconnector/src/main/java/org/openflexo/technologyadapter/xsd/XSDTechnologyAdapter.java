@@ -163,7 +163,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		XSDMetaModelResource xsdMetaModelResource = makeXSDMetaModelResource(aMetaModelFile,
 				retrieveMetaModelURI(aMetaModelFile, technologyContextManager));
-		xsdMetaModelResource.setServiceManager(getTechnologyAdapterService().getFlexoServiceManager());
+		xsdMetaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerMetaModel(xsdMetaModelResource);
 		return xsdMetaModelResource;
@@ -180,7 +180,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		logger.warning("Not implemented yet");
 		XMLModelResource xmlModelResource = new XMLModelResource((FlexoProjectBuilder) null);
-		xmlModelResource.setServiceManager(getTechnologyAdapterService().getFlexoServiceManager());
+		xmlModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerModel(xmlModelResource);
