@@ -216,7 +216,7 @@ public class ScreenshotGenerator {
 
 	}
 
-	public static ScreenshotImage getScreenshotImage(FlexoModelObject object) {
+	private static ScreenshotImage getScreenshotImage(FlexoModelObject object) {
 		ScreenshotImage i = null;
 		JFrame frame = null;
 		ExternalWKFModule wkfModule = null;
