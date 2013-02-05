@@ -392,18 +392,29 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	}
 
 	@Override
-	public void finalizeScreenshotGeneration(JComponent screenshot) {
-		if (screenshot != null) {
-			if (screenshot instanceof DrawingView) {
-				DrawingController<?> controller = ((DrawingView<?>) screenshot).getController();
-				drawingControllers.remove(controller.getDrawing());
-				controller.delete();
-			} else if (screenshot instanceof FlexoJTree) {
-				((FlexoJTree) screenshot).getBrowserView().getBrowser().delete();
+	public void finalizeScreenshotGeneration(final JComponent screenshot) {
+		class FinalizeScreenshot implements Callable<Void> {
+			@Override
+			public Void call() throws Exception {
+				if (screenshot != null) {
+					if (screenshot instanceof DrawingView) {
+						DrawingController<?> controller = ((DrawingView<?>) screenshot).getController();
+						drawingControllers.remove(controller.getDrawing());
+						controller.delete();
+					} else if (screenshot instanceof FlexoJTree) {
+						((FlexoJTree) screenshot).getBrowserView().getBrowser().delete();
+					}
+					if (screenshot.getParent() != null) {
+						screenshot.getParent().remove(screenshot);
+					}
+				}
+				return null;
 			}
-			if (screenshot.getParent() != null) {
-				screenshot.getParent().remove(screenshot);
-			}
+		}
+		try {
+			FlexoSwingUtils.syncRunInEDT(new FinalizeScreenshot());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -433,11 +444,24 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	}
 
 	@Override
-	public void disposeProcessRepresentation(Object processRepresentation) {
-		DrawingController<? extends Drawing<? extends FlexoModelObject>> drawingController = drawingControllers
-				.remove(processRepresentation);
-		if (drawingController != null) {
-			drawingController.delete();
+	public void disposeProcessRepresentation(final Object processRepresentation) {
+		class DisposeProcessRepresentation implements Callable<Void> {
+
+			@Override
+			public Void call() throws Exception {
+				DrawingController<? extends Drawing<? extends FlexoModelObject>> drawingController = drawingControllers
+						.remove(processRepresentation);
+				if (drawingController != null) {
+					drawingController.delete();
+				}
+				return null;
+			}
+		}
+		try {
+			FlexoSwingUtils.syncRunInEDT(new DisposeProcessRepresentation());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
+
 }
