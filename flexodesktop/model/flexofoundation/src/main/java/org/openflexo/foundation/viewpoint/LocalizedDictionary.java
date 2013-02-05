@@ -349,7 +349,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

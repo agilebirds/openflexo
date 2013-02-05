@@ -849,7 +849,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
 		StringBuffer sb = new StringBuffer();
 		sb.append("EditionPattern " + getName());

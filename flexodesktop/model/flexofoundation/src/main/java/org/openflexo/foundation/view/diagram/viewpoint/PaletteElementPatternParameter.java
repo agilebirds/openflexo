@@ -114,7 +114,7 @@ public class PaletteElementPatternParameter extends DiagramPaletteObject {
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

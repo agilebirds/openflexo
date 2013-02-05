@@ -42,8 +42,16 @@ public class FMLTokenMarker extends CTokenMarker {
 	public static KeywordMap getKeywords() {
 		if (javaKeywords == null) {
 			javaKeywords = new KeywordMap(false);
-			javaKeywords.add("viewdefinition", Token.KEYWORD1);
-			javaKeywords.add("modelslot", Token.KEYWORD1);
+			javaKeywords.add("ViewDefinition", Token.KEYWORD1);
+			javaKeywords.add("ModelSlot", Token.KEYWORD1);
+			javaKeywords.add("VirtualModel", Token.KEYWORD1);
+			javaKeywords.add("EditionPattern", Token.KEYWORD1);
+			javaKeywords.add("PatternRole", Token.KEYWORD1);
+
+			javaKeywords.add("conformTo", Token.KEYWORD2);
+			javaKeywords.add("type", Token.KEYWORD2);
+			javaKeywords.add("uri", Token.KEYWORD2);
+
 			javaKeywords.add("byte", Token.KEYWORD1);
 			javaKeywords.add("char", Token.KEYWORD1);
 			javaKeywords.add("short", Token.KEYWORD1);

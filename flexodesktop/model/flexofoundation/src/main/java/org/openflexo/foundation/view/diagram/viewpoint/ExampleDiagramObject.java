@@ -224,7 +224,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
