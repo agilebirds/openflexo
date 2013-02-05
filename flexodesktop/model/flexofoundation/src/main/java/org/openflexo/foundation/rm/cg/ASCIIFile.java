@@ -428,8 +428,8 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 
 		if (getGenerationMerge() != null) {
-			_resultFileMerge = new ResultFileMerge(_getLastAcceptedContent(), getGenerationMerge(), getProject().isComputeDiff()
-					|| hasCurrentDiskContent() ? currentDiskContent : new DiffSource(""));
+			_resultFileMerge = new ResultFileMerge(_getLastAcceptedContent(), getGenerationMerge(),
+					hasCurrentDiskContent() ? currentDiskContent : new DiffSource(""));
 		}
 
 	}
