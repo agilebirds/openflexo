@@ -102,7 +102,6 @@ public class FIBEditorPalette extends JDialog {
 				FIBPreferences.setPaletteBounds(bounds);
 			}
 		};
-		validate();
 
 	}
 

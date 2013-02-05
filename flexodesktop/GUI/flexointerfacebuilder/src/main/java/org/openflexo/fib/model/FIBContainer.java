@@ -216,7 +216,6 @@ public abstract class FIBContainer extends FIBComponent {
 				}
 			}
 		}
-
 		for (int i = 0; i < container.getSubComponents().size(); i++) {
 			FIBComponent child = container.getSubComponents().get(i);
 			if (mergedComponents.contains(child)) {
@@ -330,8 +329,13 @@ public abstract class FIBContainer extends FIBComponent {
 						if (insert) {
 							i++;
 							overridingComponent = getSubComponentNamed(child.getName());
-							insert &= overridingComponent == null || overridingComponent.getParameter("hidden") != null
-									&& overridingComponent.getParameter("hidden").equalsIgnoreCase("true");
+							if (overridingComponent != null) {
+								insert = false;
+								if (overridingComponent.getParameter("hidden") != null
+										&& overridingComponent.getParameter("hidden").equalsIgnoreCase("true")) {
+									removeFromSubComponents(overridingComponent);
+								}
+							}
 						} else {
 							break;
 						}

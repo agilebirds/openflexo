@@ -48,6 +48,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
@@ -60,6 +61,7 @@ import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.Cloner;
@@ -465,9 +467,14 @@ public class FIBInspector extends FIBPanel {
 		String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
 		newTab.setName(epIdentifier + "Panel");
 		int index = 0;
+		LocalizedDictionary localizedDictionary = ep.getViewPoint().getLocalizedDictionary();
 		for (final InspectorEntry entry : ep.getInspector().getEntries()) {
 			FIBLabel label = new FIBLabel();
-			label.setLabel(entry.getLabel());
+			String entryLabel = localizedDictionary.getLocalizedForKeyAndLanguage(entry.getLabel(), FlexoLocalization.getCurrentLanguage());
+			if (entryLabel == null) {
+				entryLabel = entry.getLabel();
+			}
+			label.setLabel(entryLabel);
 			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
 			FIBWidget widget = makeWidget(entry, newTab, index++);
 			widget.setData(new DataBinding<Object>(epIdentifier + "." + entry.getData().toString()));

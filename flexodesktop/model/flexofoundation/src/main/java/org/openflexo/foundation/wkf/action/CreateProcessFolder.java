@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoFolderContainerNode;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
 public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoModelObject, FlexoModelObject> {
@@ -96,6 +97,8 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 			return ((FlexoProcess) getFocusedObject()).getProcessNode();
 		} else if (getFocusedObject() instanceof ProcessFolder) {
 			return (ProcessFolder) getFocusedObject();
+		} else if (getFocusedObject() instanceof FlexoWorkflow) {
+			return (FlexoWorkflow) getFocusedObject();
 		}
 		return null;
 	}

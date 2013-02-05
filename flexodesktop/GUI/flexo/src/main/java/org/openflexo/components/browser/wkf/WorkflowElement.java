@@ -33,6 +33,7 @@ import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.icon.WKFIconLibrary;
 
 /**
@@ -54,7 +55,7 @@ public class WorkflowElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		// We add the roles
 		addToChilds(getFlexoWorkflow().getRoleList());
-		if (getFlexoWorkflow().getImportedRoleList() != null) {
+		if (getFlexoWorkflow().getImportedRoleList() != null && getFlexoWorkflow().getImportedRoleList().getRoles().size() > 0) {
 			addToChilds(getFlexoWorkflow().getImportedRoleList());
 		}
 		/*if (getFlexoWorkflow().getProject().getProjectData() != null) {
@@ -65,8 +66,13 @@ public class WorkflowElement extends BrowserElement {
 
 			}
 		}*/
+
+		for (Enumeration<ProcessFolder> en = getFlexoWorkflow().getSortedFolders(); en.hasMoreElements();) {
+			ProcessFolder next = en.nextElement();
+			addToChilds(next);
+		}
 		// We add top-level processes
-		for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedTopLevelProcesses(); en.hasMoreElements();) {
+		for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedOrphanSubprocesses(); en.hasMoreElements();) {
 			FlexoProcess next = en.nextElement().getProcess();
 			addToChilds(next);
 		}

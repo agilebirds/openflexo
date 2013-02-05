@@ -20,10 +20,28 @@
 package org.openflexo.fib.controller;
 
 public class FIBMultipleValuesDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
-	public O selected;
-	public int selectedIndex;
+	private O selected;
+	private int selectedIndex;
 
 	public FIBMultipleValuesDynamicModel(T data) {
 		super(data);
+	}
+
+	public O getSelected() {
+		return selected;
+	}
+
+	public void setSelected(O selected) {
+		this.selected = selected;
+		getPropertyChangeSupport().firePropertyChange("selected", null, selected);
+	}
+
+	public int getSelectedIndex() {
+		return selectedIndex;
+	}
+
+	public void setSelectedIndex(int selectedIndex) {
+		this.selectedIndex = selectedIndex;
+		getPropertyChangeSupport().firePropertyChange("selectedIndex", null, selectedIndex);
 	}
 }

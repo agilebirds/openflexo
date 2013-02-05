@@ -32,9 +32,7 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
 import org.openflexo.foundation.wkf.dm.NodeRemoved;
-import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenClosed;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PreInserted;
@@ -80,33 +78,13 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			} else if (dataModification instanceof PetriGraphHasBeenClosed) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				/*if ((((WKFAttributeDataModification)dataModification).getAttributeName().equals("posX"))
-						|| (((WKFAttributeDataModification)dataModification).getAttributeName().equals("posY"))) {
-					if (!isUpdatingPosition) {
-						notifyObjectMoved();
-					}
-				}
-				else {*/
 				notifyShapeNeedsToBeRedrawn();
-				// }
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
-			} else if (dataModification instanceof ObjectLocationChanged) {
-				if (!isUpdatingPosition) {
-					handlePositionChanged();
-				}
-			} else if (dataModification instanceof LabelLocationChanged) {
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextY);
 			}
 		}
-	}
-
-	private void handlePositionChanged() {
-		checkAndUpdateLocationIfRequired();
-		notifyObjectMoved();
-		notifyShapeNeedsToBeRedrawn();
+		super.update(observable, dataModification);
 	}
 
 	@Override

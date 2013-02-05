@@ -164,7 +164,11 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 					return add.doAction().hasActionExecutionSucceeded();
 				}
 			} else if (targetWKF != null) {
-				if (srcProcess.isAcceptableAsParentProcess(null)) {
+				if (srcNode.getParentFolder() != null && srcNode.getParentFolder().getProcessNode() == null
+						&& srcNode.getFatherProcessNode() == null) {
+					RemoveFromProcessFolder remove = RemoveFromProcessFolder.actionType.makeNewAction(srcNode, null, _browser.getEditor());
+					return remove.doAction().hasActionExecutionSucceeded();
+				} else if (srcProcess.isAcceptableAsParentProcess(null)) {
 					MoveFlexoProcess moveProcessAction = MoveFlexoProcess.actionType.makeNewAction(srcProcess, null, _browser.getEditor());
 					moveProcessAction.setNewParentProcess(null);
 					moveProcessAction.setDoImmediately(true);

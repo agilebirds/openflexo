@@ -136,9 +136,18 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 		resources.add(propertiesRes);
 
 		// A JS file per process
-		Vector<FlexoProcess> processes = getProject().getAllLocalFlexoProcesses();
+		buildResourcesForProject(repository, resources, getProject());
+
+		buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
+		buildResourcesAndSetGeneratorsForCopiedResources(resources);
+		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
+	}
+
+	public void buildResourcesForProject(DGRepository repository, Vector<CGRepositoryFileResource> resources, FlexoProject project) {
+		Vector<FlexoProcess> processes = project.getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(processes.size());
 		Set<ProcessFolder> allFolders = new HashSet<ProcessFolder>();
+		allFolders.addAll(project.getWorkflow().getFolders());
 		for (FlexoProcess process : processes) {
 			if (process == null) {
 				continue;
@@ -180,10 +189,6 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 				}
 			}
 		}
-
-		buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
-		buildResourcesAndSetGeneratorsForCopiedResources(resources);
-		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
 	}
 
 	protected static final Vector<FileResource> fileResourceToCopy = new Vector<FileResource>();

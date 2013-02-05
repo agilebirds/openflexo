@@ -28,15 +28,18 @@ import javax.swing.JSplitPane;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
+import org.openflexo.wkf.view.ImportedWorkflowView;
 
 public class SwimmingLanePerspective extends FlexoPerspective {
 
@@ -47,6 +50,8 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	private final Hashtable<SwimmingLaneEditorController, JSplitPane> _splitPaneForProcess;
 
 	private JPanel topRightDummy;
+
+	private ImportedWorkflowView importedWorkflowView;
 
 	/**
 	 * @param controller
@@ -59,19 +64,36 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		_controllerForProcess = new Hashtable<FlexoProcess, SwimmingLaneEditorController>();
 		_splitPaneForProcess = new Hashtable<SwimmingLaneEditorController, JSplitPane>();
 		topRightDummy = new JPanel();
+		importedWorkflowView = new ImportedWorkflowView(controller);
 		setTopLeftView(_controller.getWkfBrowserView());
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
 			return getCurrentProcessView().getController().getPaletteView();
+			} else {
+				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
 		}
 		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+		}
+		} else {
+		return topRightDummy;
+	}
 	}
 
 	public SwimmingLaneEditorController getControllerForProcess(FlexoProcess process) {
@@ -96,16 +118,6 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WKFIconLibrary.WKF_SWLP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_SWLP_SELECTED_ICON;
 	}
 
 	@Override
@@ -164,7 +176,20 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
+			importedWorkflowView.setSelected(process.getProcessNode());
 		}
+	}
+
+	protected void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedWorkflowView);
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }

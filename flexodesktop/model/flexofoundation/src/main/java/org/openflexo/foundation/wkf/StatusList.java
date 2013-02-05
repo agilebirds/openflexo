@@ -80,7 +80,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		if (createDefaultStatus) {
 			Status defaultStatus;
 			try {
-				defaultStatus = new Status(process, FlexoLocalization.localizedForKey("default"));
+				defaultStatus = new Status(process, FlexoLocalization.localizedForKey("new"));
 				defaultStatus.setDontGenerate(true);
 				addToStatus(defaultStatus);
 				setDefaultStatus(defaultStatus);

@@ -25,9 +25,12 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.module.UserType;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Browser for WKF module, browse all processes without details
@@ -38,6 +41,7 @@ import org.openflexo.module.UserType;
 public class WorkflowBrowser extends ProjectBrowser {
 
 	protected static final Logger logger = Logger.getLogger(WorkflowBrowser.class.getPackage().getName());
+	private final WKFController wkfController;
 
 	public WorkflowBrowser(FlexoProject project) {
 		this((WKFController) null);
@@ -45,7 +49,13 @@ public class WorkflowBrowser extends ProjectBrowser {
 	}
 
 	public WorkflowBrowser(WKFController controller) {
-		super(controller);
+		super((FlexoController) null);
+		wkfController = controller;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
+		return wkfController.getEditor();
 	}
 
 	@Override
@@ -55,9 +65,11 @@ public class WorkflowBrowser extends ProjectBrowser {
 
 	@Override
 	protected boolean activateBrowsingFor(BrowserElement newElement) {
-		return newElement.getObject() instanceof FlexoProjectObject && getRootObject() instanceof FlexoProjectObject
+		return newElement.getObject() instanceof FlexoProjectObject
+				&& getRootObject() instanceof FlexoProjectObject
 				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
-				&& super.activateBrowsingFor(newElement);
+				&& (!(newElement.getObject() instanceof WorkflowModelObject) || !((WorkflowModelObject) newElement.getObject())
+						.getWorkflow().isCache()) && super.activateBrowsingFor(newElement);
 	}
 
 	@Override

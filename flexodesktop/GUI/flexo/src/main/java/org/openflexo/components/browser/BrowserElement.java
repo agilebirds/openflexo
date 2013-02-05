@@ -458,14 +458,19 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		_browser.setIsRebuildingStructure();
 		try {
 			Vector<FlexoObject> expanded = _browser.getExpandedObjects();
+			Vector<FlexoObject> selectedObjects = _browser.getSelectedObjects();
 			_browser.fireResetSelection();// Clears the selection in the JTree
 			recursiveDeleteChilds();
 			_childs = new Vector<BrowserElement>();
 			buildChildrenVector();
 			_browser.reload(this);
-			_browser.updateSelection(); // Resynch this project browser with the Selection manager-->Jtree will then be resynched with this
-										// browser
-
+			if (_browser.getSelectionManager() != null) {
+				_browser.updateSelection(); // Resynch this project browser with the Selection manager-->Jtree will then be resynched with
+											// this
+				// browser
+			} else {
+				_browser.setSelectedObjects(selectedObjects);
+			}
 			Enumeration<FlexoObject> en1 = expanded.elements();
 			while (en1.hasMoreElements()) {
 				FlexoObject o = en1.nextElement();

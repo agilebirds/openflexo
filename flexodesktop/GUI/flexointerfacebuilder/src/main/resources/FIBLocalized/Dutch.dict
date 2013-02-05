@@ -44,5 +44,6 @@ string=String
 trigonometric=Trigonometric
 true=true
 type=Type
+undefined_operand_for_operator=undefined_operand_for_operator
 validate=Validate
 value=Value

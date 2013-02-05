@@ -25,6 +25,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProjectObject;
 
 /**
@@ -33,15 +34,25 @@ import org.openflexo.foundation.FlexoProjectObject;
  * @author sguerin
  * 
  */
-public class RoleListBrowser extends ProjectBrowser {
+public class RoleBrowser extends ProjectBrowser {
 
-	private static final Logger logger = Logger.getLogger(RoleListBrowser.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RoleBrowser.class.getPackage().getName());
 
 	protected WKFController _controller;
 
-	public RoleListBrowser(WKFController controller) {
+	public RoleBrowser(WKFController controller) {
 		super(controller);
 		_controller = controller;
+	}
+
+	@Override
+	public boolean showRootNode() {
+		return false;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
+		return _controller.getEditor();
 	}
 
 	@Override
@@ -58,18 +69,11 @@ public class RoleListBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-		// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-		// setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE, true);
-	}
-
-	@Override
-	public boolean showRootNode() {
-		return false;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.openflexo.foundation.rm;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -8,7 +10,7 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FlexoVersion;
 
-public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference {
+public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
 
@@ -19,15 +21,19 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	}
 
 	@Override
-	public FlexoProject getReferredProject(boolean tryToLoadIfNotLoaded) {
-		FlexoProject project = getReferredProject();
-		if (project == null && tryToLoadIfNotLoaded) {
-			project = getReferringProject().loadProjectReference(this);
+	public FlexoProject getReferredProject(boolean force) {
+		FlexoProject project = getInternalReferredProject();
+		if (project == null && getReferringProject() != null) {
+			project = getReferringProject().loadProjectReference(this, !force);
 			if (project != null) {
 				setReferredProject(project);
 			}
 		}
 		return project;
+	}
+
+	private FlexoProject getInternalReferredProject() {
+		return (FlexoProject) performSuperGetter(REFERRED_PROJECT);
 	}
 
 	@Override
@@ -44,6 +50,24 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 			FlexoWorkflowResource importedWorkflowResource = getReferringProject().getImportedWorkflowResource(this, true);
 			importedWorkflowResource.replaceWithWorkflow(project.getWorkflow());
 			getPropertyChangeSupport().firePropertyChange("workflow", null, project.getWorkflow());
+		}
+	}
+
+	private void firePropertyChange(String name, Object old, Object value) {
+		if (old == null && value == old) {
+			return;
+		}
+		if (old != null && old.equals(value)) {
+			return;
+		}
+		setModified(true);
+		getPropertyChangeSupport().firePropertyChange(name, old, value);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getReferredProject()) {
+			setModified(true);
 		}
 	}
 
@@ -67,10 +91,14 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	@Override
 	public String getName() {
 		if (getReferredProject() != null) {
-			return getReferredProject().getProjectName();
+			return getReferredProject().getDisplayName();
 		}
-			return (String) performSuperGetter(NAME);
-		}
+		return getInternalName();
+	}
+
+	private String getInternalName() {
+		return (String) performSuperGetter(NAME);
+	}
 
 	/**
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getURI()
@@ -80,8 +108,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (getReferredProject() != null) {
 			return getReferredProject().getProjectURI();
 		}
-			return (String) performSuperGetter(URI);
-		}
+		return (String) performSuperGetter(URI);
+	}
 
 	/**
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectVersion()
@@ -91,8 +119,8 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (getReferredProject() != null) {
 			return getReferredProject().getVersion();
 		}
-			return (FlexoVersion) performSuperGetter(VERSION);
-		}
+		return (FlexoVersion) performSuperGetter(VERSION);
+	}
 
 	/**
 	 * @see org.openflexo.foundation.rm.FlexoProjectReference#getProjectRevision()
@@ -102,16 +130,20 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 		if (getReferredProject() != null) {
 			return getReferredProject().getRevision();
 		}
-			return (Long) performSuperGetter(REVISION);
-		}
+		return getInternalRevision();
+	}
+
+	private Long getInternalRevision() {
+		return (Long) performSuperGetter(REVISION);
+	}
 
 	@Override
 	public File getFile() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getProjectDirectory();
 		}
-			return (File) performSuperGetter(FILE);
-		}
+		return (File) performSuperGetter(FILE);
+	}
 
 	@Override
 	public Class<FlexoProject> getResourceDataClass() {

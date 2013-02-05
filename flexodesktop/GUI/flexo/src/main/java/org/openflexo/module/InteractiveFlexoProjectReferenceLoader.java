@@ -36,7 +36,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 	}
 
 	@Override
-	public FlexoProject loadProject(FlexoProjectReference ref) {
+	public FlexoProject loadProject(FlexoProjectReference ref, boolean silentlyOnly) {
 		boolean retrievedFromResourceCenter = false;
 		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
 				.retrieveResource(ref.getURI(), ref.getVersion(), ref.getResourceDataClass(), null);
@@ -52,6 +52,9 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 		projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " " + ref.getVersion());
 		while (true) {
 			if (selectedFile == null || !selectedFile.exists()) {
+				if (silentlyOnly) {
+					return null;
+				}
 				int ret = projectChooser.showOpenDialog();
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					selectedFile = projectChooser.getSelectedFile();
@@ -61,6 +64,9 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 				}
 			}
 			boolean openedProject = applicationContext.getProjectLoader().hasEditorForProjectDirectory(selectedFile);
+			if (!openedProject && silentlyOnly) {
+				return null;
+			}
 			FlexoEditor editor = null;
 			try {
 				editor = applicationContext.getProjectLoader().loadProject(selectedFile, true);
@@ -90,7 +96,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 							+ FlexoLocalization.localizedForKey("would_you_like_to_switch_to_version:") + " " + project.getVersion());
 					if (ok) {
 						return project;
-					} else if (openedProject) {
+					} else if (!openedProject) {
 						applicationContext.getProjectLoader().closeProject(project);
 					}
 				}

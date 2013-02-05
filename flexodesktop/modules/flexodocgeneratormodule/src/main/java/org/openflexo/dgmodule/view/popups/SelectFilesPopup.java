@@ -106,11 +106,10 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 		public DGFilesSet(Vector<AbstractCGFile> files) {
 			super();
 			_symbDirs = new Hashtable<CGSymbolicDirectory, CGFolder>();
-			_selectedFiles = new Vector<AbstractCGFile>();
+			_selectedFiles = new Vector<AbstractCGFile>(files);
 			_allObjects = new Vector<FlexoModelObject>();
 			for (AbstractCGFile file : files) {
 				add(file);
-				_selectedFiles.add(file);
 			}
 			_allObjects.add(this);
 		}

@@ -44,5 +44,6 @@ string=Texte
 trigonometric=Trigonom\u00E9trique
 true=true
 type=Type
+undefined_operand_for_operator=undefined_operand_for_operator
 validate=Valider
 value=Valeur

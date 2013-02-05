@@ -24,23 +24,19 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileResource;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.roleeditor.RoleEditorController;
 import org.openflexo.wkf.roleeditor.RoleEditorView;
+import org.openflexo.wkf.view.ImportedRoleView;
 
 public class RolePerspective extends FlexoPerspective {
 
@@ -50,7 +46,7 @@ public class RolePerspective extends FlexoPerspective {
 
 	private JPanel topRightDummy;
 
-	private FIBView<?, ?> importedRoleView;
+	private ImportedRoleView importedRoleView;
 
 	/**
 	 * @param controller
@@ -61,13 +57,11 @@ public class RolePerspective extends FlexoPerspective {
 		super("role_editor");
 		_controller = controller;
 		topRightDummy = new JPanel();
+		importedRoleView = new ImportedRoleView(controller);
 		infoLabel.setText(FlexoLocalization.localizedForKey("CTRL-drag to create role specialization", infoLabel));
 		setTopLeftView(_controller.getRoleListBrowserView());
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		setFooter(infoLabel);
-		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedRole.fib"));
-		importedRoleView = FIBController.makeView(comp, new FlexoFIBController(comp, _controller));
-		importedRoleView.getController().setDataObject(controller.getControllerModel());
+
 	}
 
 	public RoleEditorView getCurrentRoleListView() {
@@ -80,9 +74,26 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
 			return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			} else {
+				return new GlassPaneWrapper(getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane());
+			}
 		}
 		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+		}
+		} else {
+		return topRightDummy;
+	}
 	}
 
 	/**
@@ -93,16 +104,6 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WKFIconLibrary.WKF_RP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_RP_SELECTED_ICON;
 	}
 
 	@Override
@@ -147,9 +148,16 @@ public class RolePerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		if (moduleView instanceof RoleEditorView) {
+			importedRoleView.setSelected(((RoleEditorView) moduleView).getRepresentedObject());
+		}
+	}
+
 	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
-			setMiddleLeftView(importedRoleView.getResultingJComponent());
+			setMiddleLeftView(importedRoleView);
 		} else {
 			setMiddleLeftView(null);
 		}

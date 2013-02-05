@@ -57,6 +57,11 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new AddIndividual.AddIndividualActionMustDefineAnOntologyClass());
 		registerRule(new AddIndividual.URIBindingIsRequiredAndMustBeValid());
 
+		registerRule(new DataPropertyAssertion.DataPropertyAssertionMustDefineAnOntologyProperty());
+		registerRule(new DataPropertyAssertion.ValueBindingIsRequiredAndMustBeValid());
+		registerRule(new ObjectPropertyAssertion.ObjectPropertyAssertionMustDefineAnOntologyProperty());
+		registerRule(new ObjectPropertyAssertion.ObjectBindingIsRequiredAndMustBeValid());
+
 		registerRule(new AddClass.AddClassActionMustDefineAnOntologyClass());
 		registerRule(new AddClass.URIBindingIsRequiredAndMustBeValid());
 

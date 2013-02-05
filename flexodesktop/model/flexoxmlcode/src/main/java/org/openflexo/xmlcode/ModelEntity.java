@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -53,7 +55,7 @@ public class ModelEntity {
 	protected String[] derivedXMLTags = null;
 
 	/** Hashtable of ModelProperty objects (key is the name of the property) */
-	protected Hashtable<String, ModelProperty> modelProperties;
+	protected Map<String, ModelProperty> modelProperties;
 
 	/** Hashtable of ModelProperty objects (key is the name of the property) */
 	protected Vector<ModelProperty> orderedModelProperties;
@@ -61,7 +63,7 @@ public class ModelEntity {
 	/**
 	 * Hashtable of ModelProperty objects (key is the name of the property and value is the ModelEntity related property inherits from)
 	 */
-	protected Hashtable<String, ModelEntity> inheritedModelProperties;
+	protected Map<String, ModelEntity> inheritedModelProperties;
 
 	/**
 	 * Stores a boolean indicating if this entity is abstract (won't never be instancied directly)
@@ -315,9 +317,9 @@ public class ModelEntity {
 			throw new InvalidModelException("Class " + getName() + " MUST implement XMLSerializable interface");
 		}
 
-		modelProperties = new Hashtable<String, ModelProperty>();
+		modelProperties = new LinkedHashMap<String, ModelProperty>();
 		orderedModelProperties = new Vector<ModelProperty>();
-		inheritedModelProperties = new Hashtable<String, ModelEntity>();
+		inheritedModelProperties = new LinkedHashMap<String, ModelEntity>();
 
 		locallyDefinedContexts = new Vector<String>();
 		if (contextsAsString != null) {

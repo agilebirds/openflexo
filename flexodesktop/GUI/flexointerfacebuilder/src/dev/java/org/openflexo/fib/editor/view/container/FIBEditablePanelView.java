@@ -210,9 +210,9 @@ public class FIBEditablePanelView extends FIBPanelView<FIBPanel> implements FIBE
 				PlaceHolder beginLeftPlaceHolder = new PlaceHolder(this, "<left>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints, 0);
 						FIBEditablePanelView.this.getComponent().addToSubComponents(new FIBLabel("<right>"),
 								beginRightPlaceHolderConstraints, 0);
+						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints, 0);
 					}
 				};
 				registerComponentWithConstraints(beginLeftPlaceHolder, beginLeftPlaceHolderConstraints, 0);

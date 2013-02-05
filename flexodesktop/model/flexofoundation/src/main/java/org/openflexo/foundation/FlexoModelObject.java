@@ -224,6 +224,19 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
+	public boolean isCache() {
+		return false;
+	}
+
+	public FlexoModelObject getUncachedObject() {
+		if (!isCache()) {
+			return this;
+		} else {
+			throw new RuntimeException("Object of type " + getClass().getName()
+					+ " is cached but does not properly override getUncachedObject()! (" + this + ")");
+		}
+	}
+
 	public Class<? extends PPMObject> getEquivalentPPMClass() {
 		return null;
 	}
@@ -371,7 +384,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				// setChanged();
 			}
 			if (!isRegistered) {
-				getProject().register(this);
+				registerObject(getProject());
 				isRegistered = true;
 			}
 		} else {

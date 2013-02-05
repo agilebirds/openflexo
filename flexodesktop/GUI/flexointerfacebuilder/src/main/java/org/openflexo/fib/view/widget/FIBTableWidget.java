@@ -20,7 +20,10 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -128,7 +131,17 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		boolean returned = false;
 
 		// logger.info("----------> updateWidgetFromModel() for " + getTable().getName());
-
+		if (_fibTable.getEnable().isSet() && _fibTable.getEnable().isValid()) {
+			Boolean enabledValue = true;
+			try {
+				enabledValue = _fibTable.getEnable().getBindingValue(getController());
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			}
+			_table.setEnabled(enabledValue != null && enabledValue);
+		}
 		if (notEquals(getValue(), getTableModel().getValues())) {
 
 			returned = true;
@@ -350,7 +363,14 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		_table = new JXTable(getTableModel()) {
 			@Override
 			public Dimension getPreferredScrollableViewportSize() {
+				if (getTable().getVisibleRowCount() != null) {
+					return super.getPreferredScrollableViewportSize();
+				}
 				return super.getPreferredSize();
+			}
+
+			@Override
+			protected void resetDefaultTableCellRendererColors(Component renderer, int row, int column) {
 			}
 		};
 		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
@@ -382,12 +402,14 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				col.setCellEditor(getTableModel().columnAt(i).getCellEditor());
 			}
 		}
-		if (getTable().getVisibleRowCount() != null) {
-			_table.setVisibleRowCount(getTable().getVisibleRowCount());
-		}
-
 		if (_fibTable.getRowHeight() != null) {
 			_table.setRowHeight(_fibTable.getRowHeight());
+		}
+		if (getTable().getVisibleRowCount() != null) {
+			_table.setVisibleRowCount(getTable().getVisibleRowCount());
+			if (_table.getRowHeight() == 0) {
+				_table.setRowHeight(18);
+			}
 		}
 
 		_table.setSelectionMode(_fibTable.getSelectionMode().getMode());
@@ -401,7 +423,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		scrollPane = new JScrollPane(_table);
 
 		if (_fibTable.getCreateNewRowOnClick()) {
-			scrollPane.addMouseListener(new MouseAdapter() {
+			_table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (_table.getCellEditor() != null) {
@@ -415,7 +437,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 							while (en.hasMoreElements()) {
 								FIBTableActionListener action = en.nextElement();
 								if (action.isAddAction()) {
-									action.actionPerformed(null);
+									action.actionPerformed(new ActionEvent(_table, ActionEvent.ACTION_PERFORMED, null, EventQueue
+											.getMostRecentEventTime(), e.getModifiers()));
 									break;
 								}
 							}

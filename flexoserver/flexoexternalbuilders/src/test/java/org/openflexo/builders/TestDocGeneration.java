@@ -1,7 +1,6 @@
 package org.openflexo.builders;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
@@ -15,12 +14,12 @@ public class TestDocGeneration extends AbstractTestExternalBuilders<FlexoDocGene
 		super(FlexoDocGeneratorMain.class);
 	}
 
-	@Test
-	public void testPDFGeneration() {
-		Format format = Format.LATEX;
-		createDocForFormat(format, false);
-	}
-
+	/*	@Test
+		public void testPDFGeneration() {
+			Format format = Format.LATEX;
+			createDocForFormat(format, false);
+		}
+	*/
 	@Test
 	public void testHTMLGeneration() {
 		Format format = Format.HTML;

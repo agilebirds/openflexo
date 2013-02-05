@@ -207,7 +207,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		for (ObserverRegistation registration : new ArrayList<ObserverRegistation>(observerRegistations)) {
 			registration.removeFromObservers();
 		}
-		if (getParent() != null) {
+		if (getParent() instanceof JComponent) {
+			((JComponent) getParent()).revalidate();
+			((JComponent) getParent()).repaint();
 			getParent().remove(this);
 		}
 		Component[] comp = getComponents();
@@ -218,11 +220,6 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		}
 		_componentView.removeFrowWidgetViews(getModel());
 		removeAll();
-		if (getParent() instanceof JComponent) {
-			((JComponent) getParent()).revalidate();
-			getParent().repaint();
-		}
-
 	}
 
 	public void setDefaultBorder() {

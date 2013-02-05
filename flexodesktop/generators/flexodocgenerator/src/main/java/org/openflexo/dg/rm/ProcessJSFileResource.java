@@ -81,7 +81,8 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	}
 
 	public static String nameForRepositoryAndProcess(GenerationRepository repository, FlexoProcess process) {
-		return repository.getName() + ".PROCESS_JS." + process.getName();
+		return repository.getName() + ".PROCESS_JS." + process.getName()
+				+ (repository.getProject() == process.getProject() ? "" : " " + process.getProject().getProjectURI());
 	}
 
 	public FlexoProcess getProcess() {

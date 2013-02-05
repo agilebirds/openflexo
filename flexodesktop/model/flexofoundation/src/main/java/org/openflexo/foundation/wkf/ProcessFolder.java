@@ -131,6 +131,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 				if (getProcessNode() != null) {
 					getProcessNode().setChanged();
 					getProcessNode().notifyObservers(new ProcessAddedToFolder(process));
+				} else {
+					getWorkflow().setChanged();
+					getWorkflow().notifyObservers(new ProcessAddedToFolder(process));
 				}
 			}
 		}
@@ -146,6 +149,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 				if (getProcessNode() != null) {
 					getProcessNode().setChanged();
 					getProcessNode().notifyObservers(new ProcessRemovedFromFolder(process));
+				} else {
+					getWorkflow().setChanged();
+					getWorkflow().notifyObservers(new ProcessRemovedFromFolder(process));
 				}
 			}
 		}

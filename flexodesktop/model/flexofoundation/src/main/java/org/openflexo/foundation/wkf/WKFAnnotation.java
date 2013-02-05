@@ -21,6 +21,7 @@ package org.openflexo.foundation.wkf;
 
 import java.awt.Color;
 
+import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoColor;
@@ -126,11 +127,11 @@ public class WKFAnnotation extends WKFArtefact implements InspectableObject, Del
 		}
 	}
 
-	public Object getDashStyle() {
-		return _graphicalPropertyForKey(DASH_STYLE + "_" + DEFAULT);
+	public DashStyle getDashStyle() {
+		return (DashStyle) _graphicalPropertyForKey(DASH_STYLE + "_" + DEFAULT);
 	}
 
-	public void setDashStyle(Object dashStyle) {
+	public void setDashStyle(DashStyle dashStyle) {
 		if (requireChange(getDashStyle(), dashStyle)) {
 			Object oldDashStyle = getDashStyle();
 			_setGraphicalPropertyForKey(dashStyle, DASH_STYLE + "_" + DEFAULT);

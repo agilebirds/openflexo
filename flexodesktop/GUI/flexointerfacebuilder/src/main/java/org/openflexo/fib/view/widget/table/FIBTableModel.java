@@ -471,6 +471,11 @@ public class FIBTableModel extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * @return the table widget associated with this model.
+	 * @deprecated model should not have access to its view nor its controller
+	 */
+	@Deprecated
 	protected FIBTableWidget getTableWidget() {
 		return _widget;
 	}

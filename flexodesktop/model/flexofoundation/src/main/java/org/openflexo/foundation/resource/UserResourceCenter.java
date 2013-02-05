@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
@@ -32,6 +33,9 @@ import org.openflexo.toolbox.IProgress;
 
 public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(UserResourceCenter.class
+			.getPackage().getName());
+
 	private ModelFactory modelFactory;
 	private Storage storage;
 	private File userResourceCenterStorageFile;
@@ -51,6 +55,8 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else if (!userResourceCenterStorageFile.canRead() || !userResourceCenterStorageFile.canWrite()) {
+			System.err.println("Permission denied for file " + userResourceCenterStorageFile.getAbsolutePath());
 		}
 		if (storage == null) {
 			storage = modelFactory.newInstance(Storage.class);
@@ -170,6 +176,9 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 			try {
 				try {
 					storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Loaded " + storage.getResources().size() + " resources from user resource cente file");
+				}
 				} catch (JDOMException e) {
 					e.printStackTrace();
 					throw new IOException("Parsing XML data failed: " + e.getMessage(), e);

@@ -1456,7 +1456,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof VectorKeyValueProperty) {
 
 					List<?> values = KeyValueDecoder.vectorForKey(anObject, (VectorKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.size() > 0) {
 						for (Object o : values) {
 							returnedElement.addContent(buildNewElementFrom(o, aDocument, modelProperty));
 						}
@@ -1466,7 +1466,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof ArrayKeyValueProperty) {
 
 					Object[] values = KeyValueDecoder.arrayForKey(anObject, (ArrayKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.length > 0) {
 						for (int i = 0; i < values.length; i++) {
 							returnedElement.addContent(buildNewElementFrom(values[i], aDocument, modelProperty));
 						}
@@ -1477,7 +1477,7 @@ public class XMLCoder {
 
 					if (modelProperty.isProperties()) {
 						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
-						if (values != null) {
+						if (values != null && values.size() > 0) {
 							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
 							for (Entry<?, ?> e : values.entrySet()) {
 								Object keyAsObject = e.getKey();
@@ -1536,7 +1536,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof HashtableKeyValueProperty) {
 
 					Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.size() > 0) {
 						if (modelProperty.getKeyToUse() == null) {
 							for (Entry<?, ?> e : values.entrySet()) {
 								Object key = e.getKey();

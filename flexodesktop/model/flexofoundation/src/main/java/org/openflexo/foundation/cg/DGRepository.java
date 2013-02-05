@@ -162,8 +162,8 @@ public class DGRepository extends GenerationRepository {
 		switch (getFormat()) {
 		case HTML:
 			return Inspectors.DG.DG_REPOSITORY_HTML_INSPECTOR;
-		case LATEX:
-			return Inspectors.DG.DG_REPOSITORY_LATEX_INSPECTOR;
+			/*case LATEX:
+				return Inspectors.DG.DG_REPOSITORY_LATEX_INSPECTOR;*/
 		case DOCX:
 			return Inspectors.DG.DG_REPOSITORY_DOCX_INSPECTOR;
 		default:
@@ -196,16 +196,16 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public CGSymbolicDirectory getSrcSymbolicDirectory() {
-		if (getFormat() == Format.LATEX) {
+		/*if (getFormat() == Format.LATEX) {
 			return getLatexSymbolicDirectory();
-		}
+		}*/
 		return getHTMLSymbolicDirectory();
 	}
 
 	public CGSymbolicDirectory getResourcesSymbolicDirectory() {
-		if (getFormat() == Format.LATEX) {
+		/*if (getFormat() == Format.LATEX) {
 			return getFiguresSymbolicDirectory();
-		}
+		}*/
 		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
 	}
 
@@ -508,7 +508,7 @@ public class DGRepository extends GenerationRepository {
 	@Override
 	public Format getFormat() {
 		if (format == null) {
-			format = Format.LATEX; // For compatibility reason
+			format = Format.DOCX; // For compatibility reason
 		}
 		return format;
 	}

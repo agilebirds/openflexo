@@ -26,8 +26,10 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
@@ -98,6 +100,36 @@ public class DataPropertyAssertion extends AbstractAssertion {
 			value.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.value = value;
+	}
+
+	public static class DataPropertyAssertionMustDefineAnOntologyProperty extends
+			ValidationRule<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> {
+		public DataPropertyAssertionMustDefineAnOntologyProperty() {
+			super(DataPropertyAssertion.class, "data_property_assertion_must_define_an_ontology_property");
+		}
+
+		@Override
+		public ValidationIssue<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> applyValidation(
+				DataPropertyAssertion assertion) {
+			if (assertion.getOntologyProperty() == null) {
+				return new ValidationError<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion>(this, assertion,
+						"data_property_assertion_does_not_define_an_ontology_property");
+			}
+			return null;
+		}
+
+	}
+
+	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DataPropertyAssertion> {
+		public ValueBindingIsRequiredAndMustBeValid() {
+			super("'value'_binding_is_required_and_must_be_valid", DataPropertyAssertion.class);
+		}
+
+		@Override
+		public DataBinding<Object> getBinding(DataPropertyAssertion object) {
+			return object.getValue();
+		}
+
 	}
 
 }

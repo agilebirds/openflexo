@@ -346,7 +346,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			List<BrowserCell> oldChildren = new ArrayList<BrowserCell>(children);
 			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
 			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
-			boolean isEnabled = browserElementType.isEnabled(representedObject);
 			final List<?> newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
 
@@ -409,6 +408,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				structureChanged = true;
 				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
+					// OK, issue seems to be MacOS only but workaround works on all platforms.
+					// To observe the issue, load WKF module on a project that imports other projects
+					// Imported workflow tree is not correctly initiated after reload of project.
 					try {
 						nodeStructureChanged(this);
 					} catch (Exception e) {

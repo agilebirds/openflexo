@@ -26,27 +26,26 @@ public class FIBEmbeddedEditor {
 	private File fibFile;
 	private Object[] data;
 
+	private class Editor extends FIBAbstractEditor {
+
+		@Override
+		public Object[] getData() {
+			return FIBEmbeddedEditor.this.getData();
+		}
+
+		@Override
+		public File getFIBFile() {
+			return FIBEmbeddedEditor.this.getFIBFile();
+		}
+
+	}
+
 	public FIBEmbeddedEditor(File aFile, Object object) {
 		super();
 		this.fibFile = aFile;
 		this.data = new Object[1];
 		this.data[0] = object;
-		new FIBAbstractEditor() {
-			@Override
-			public File getFIBFile() {
-				return fibFile;
-			}
-
-			@Override
-			public Object[] getData() {
-				return data;
-			}
-
-			@Override
-			public boolean showExitMenuItem() {
-				return false;
-			};
-		}.launch();
+		FIBAbstractEditor.init(new Editor());
 	}
 
 	public Object[] getData() {

@@ -32,19 +32,15 @@ import java.util.Vector;
 public class BindingModel {
 
 	private List<BindingVariable> _bindingVariables;
+	private final BindingModel mainBindingModel;
 
 	public BindingModel() {
-		super();
-		_bindingVariables = new Vector<BindingVariable>();
+		this(null);
 	}
 
 	public BindingModel(BindingModel mainBindingModel) {
-		this();
-		if (mainBindingModel != null) {
-			for (int i = 0; i < mainBindingModel.getBindingVariablesCount(); i++) {
-				addToBindingVariables(mainBindingModel.getBindingVariableAt(i));
-			}
-		}
+		_bindingVariables = new Vector<BindingVariable>();
+		this.mainBindingModel = mainBindingModel;
 	}
 
 	public void clear() {
@@ -52,11 +48,15 @@ public class BindingModel {
 	}
 
 	public int getBindingVariablesCount() {
-		return _bindingVariables.size();
+		return _bindingVariables.size() + (mainBindingModel != null ? mainBindingModel.getBindingVariablesCount() : 0);
 	}
 
 	public BindingVariable getBindingVariableAt(int index) {
-		return _bindingVariables.get(index);
+		if (mainBindingModel == null || index < _bindingVariables.size()) {
+			return _bindingVariables.get(index);
+		} else {
+			return mainBindingModel.getBindingVariableAt(index - _bindingVariables.size());
+		}
 	}
 
 	public void addToBindingVariables(BindingVariable variable) {
@@ -74,11 +74,14 @@ public class BindingModel {
 				return next;
 			}
 		}
+		if (mainBindingModel != null) {
+			return mainBindingModel.bindingVariableNamed(variableName);
+		}
 		return null;
 	}
 
 	@Override
 	public String toString() {
-		return "BindingModel: " + _bindingVariables;
+		return "BindingModel: " + _bindingVariables + (mainBindingModel != null ? "Combined with:\n" + mainBindingModel : "");
 	}
 }

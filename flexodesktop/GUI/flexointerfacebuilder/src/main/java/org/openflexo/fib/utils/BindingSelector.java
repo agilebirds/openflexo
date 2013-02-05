@@ -46,7 +46,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -138,6 +137,10 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	public KeyAdapter shortcutsKeyAdapter;
 	private DocumentListener documentListener;
 
+	private Color defaultForeground;
+
+	private Color defaultSelectedColor;
+
 	public BindingSelector(DataBinding<?> editedObject) {
 		this(editedObject, -1);
 	}
@@ -160,9 +163,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("focus lost for " + (opposite != null ? SwingUtils.getComponentPath(opposite) : "null"));
 				}
-				if (opposite != null && !(opposite instanceof JRootPane)
-						&& !SwingUtils.isComponentContainedInContainer(opposite, getParent())
-						&& !SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel)) {
+				if (opposite == null || !SwingUtilities.isDescendingFrom(opposite, BindingSelector.this)
+						&& !SwingUtilities.isDescendingFrom(opposite, _selectorPanel)) {
 					// Little hook used to automatically apply a valid value which has generally been edited
 					// By typing text in text field
 					if (getEditedObject() != null && getEditedObject().isValid()) {
@@ -280,7 +282,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 		getTextField().addKeyListener(shortcutsKeyAdapter);
 		getTextField().getDocument().addDocumentListener(documentListener);
-
+		updateUI(); // Just to initiate the default color values
 		// setEditedObjectAndUpdateBDAndOwner(editedObject);
 		setEditedObject(editedObject);
 
@@ -301,6 +303,15 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			}
 		}).start();*/
 
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (getTextField() != null) {
+			defaultForeground = getTextField().getForeground();
+			defaultSelectedColor = getTextField().getSelectedTextColor();
+		}
 	}
 
 	@Override
@@ -325,8 +336,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Decoded as VALID binding: " + newEditedBinding);
 					}
-					getTextField().setForeground(Color.BLACK);
-					getTextField().setSelectedTextColor(Color.BLACK);
+					getTextField().setForeground(defaultForeground);
+					getTextField().setSelectedTextColor(defaultSelectedColor);
 					if (!newEditedBinding.equals(getEditedObject())) {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("This is a new one, i take this");
@@ -430,8 +441,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 		super.setEditedObject(dataBinding);
 
 		if (getEditedObject() != null && getEditedObject().isValid()) {
-			getTextField().setForeground(Color.BLACK);
-			getTextField().setSelectedTextColor(Color.BLACK);
+			getTextField().setForeground(defaultForeground);
+			getTextField().setSelectedTextColor(defaultSelectedColor);
 		} else {
 			getTextField().setForeground(Color.RED);
 			getTextField().setSelectedTextColor(Color.RED);
@@ -542,8 +553,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				getTextField().setText(renderedString(getEditedObject()));
 			}
 			if (getEditedObject() != null) {
-				getTextField().setForeground(getEditedObject().isValid() ? Color.BLACK : Color.RED);
-				getTextField().setSelectedTextColor(getEditedObject().isValid() ? Color.BLACK : Color.RED);
+				getTextField().setForeground(getEditedObject().isValid() ? defaultForeground : Color.RED);
+				getTextField().setSelectedTextColor(getEditedObject().isValid() ? defaultSelectedColor : Color.RED);
 			} else {
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
@@ -1076,8 +1087,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					((BindingValue) bindingValue).connect();
 				}*/
 				connect();
-				getTextField().setForeground(Color.BLACK);
-				getTextField().setSelectedTextColor(Color.BLACK);
+				getTextField().setForeground(defaultForeground);
+				getTextField().setSelectedTextColor(defaultSelectedColor);
 			} else {
 				getTextField().setForeground(Color.RED);
 				getTextField().setSelectedTextColor(Color.RED);
@@ -1406,7 +1417,6 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 		dialog.setPreferredSize(new Dimension(550, 600));
 		dialog.getContentPane().add(panel);
-		dialog.validate();
 		dialog.pack();
 
 		dialog.setVisible(true);

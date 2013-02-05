@@ -39,7 +39,6 @@ public class WSEIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon WSE_WSEP_ACTIVE_ICON = new ImageIconResource("Icons/WSE/WSPerspective_A.png");
-	public static final ImageIcon WSE_WSEP_SELECTED_ICON = new ImageIconResource("Icons/WSE/WSPerspective_S.gif");
 
 	// Model icons
 	public static final ImageIcon WS_LIBRARY_ICON = new ImageIconResource("Icons/Model/WS/Library_WS.gif");

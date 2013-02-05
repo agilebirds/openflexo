@@ -25,6 +25,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -116,7 +117,19 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 		return editors.get(project);
 	}
 
+	public FlexoEditor editorForProjectURIAndRevision(String projectURI, long revision) {
+		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+			if (e.getKey().getProjectURI().equals(projectURI) && e.getKey().getRevision() == revision) {
+				return e.getValue();
+			}
+		}
+		return null;
+	}
+
 	public boolean hasEditorForProjectDirectory(File projectDirectory) {
+		if (projectDirectory == null) {
+			return false;
+		}
 		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
 			if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
 				return true;
@@ -235,6 +248,14 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 				e.printStackTrace();
 			}
 		}
+		for (FlexoProject project : new ArrayList<FlexoProject>(editors.keySet())) {
+			if (project.getProjectData() != null) {
+				for (FlexoProjectReference reference : project.getProjectData().getImportedProjects()) {
+					reference.getReferredProject(false);
+				}
+			}
+		}
+		editor.getProject().setModuleLoader(applicationContext.getModuleLoader());
 	}
 
 	public void closeProject(FlexoProject project) {
@@ -244,9 +265,11 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 			autoSaveServices.remove(project);
 		}
 		FlexoEditor editor = editors.remove(project);
-		project.close();
-		removeFromRootProjects(project);
-		getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
+		if (project != null) {
+			project.close();
+			removeFromRootProjects(project);
+			getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
+		}
 	}
 
 	public AutoSaveService getAutoSaveService(FlexoProject project) {
@@ -421,11 +444,31 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 
 	public List<FlexoProject> getModifiedProjects() {
 		List<FlexoProject> projects = new ArrayList<FlexoProject>(editors.size());
-		for (FlexoEditor editor : editors.values()) {
-			if (editor.getProject().getUnsavedStorageResources().size() > 0) {
-				projects.add(editor.getProject());
+		// 1. compute all modified projects
+		for (FlexoProject project : getRootProjects()) {
+			if (project.hasUnsaveStorageResources()) {
+				projects.add(project);
 			}
 		}
+		// 2. we now add all the projects that depend on a modified project
+		// to the list of modified projects (so that they also get saved
+		for (FlexoProject modifiedProject : new ArrayList<FlexoProject>(projects)) {
+			for (FlexoProject project : getRootProjects()) {
+				if (project.importsProject(modifiedProject)) {
+					if (!projects.contains(project)) {
+						projects.add(project);
+					}
+				}
+			}
+		}
+		// 3. We restore the order of projects according to the one in rootProjects
+		Collections.sort(projects, new Comparator<FlexoProject>() {
+
+			@Override
+			public int compare(FlexoProject o1, FlexoProject o2) {
+				return rootProjects.indexOf(o1) - rootProjects.indexOf(o2);
+			}
+		});
 		return projects;
 	}
 
@@ -447,12 +490,32 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 		getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, project, null);
 	}
 
+	public void saveAllProjects() throws SaveResourceExceptionList {
+		// Saves all projects. It is necessary to save all projects because during serialization, a project may increment its revision which
+		// in turn can modify project that import the former one.
+		List<FlexoProject> projects = new ArrayList<FlexoProject>(rootProjects);
+		saveProjects(projects);
+
+	}
+
 	public void saveProjects(List<FlexoProject> projects) throws SaveResourceExceptionList {
 		List<SaveResourceException> exceptions = new ArrayList<SaveResourceException>();
+		Collections.sort(projects, new Comparator<FlexoProject>() {
+			@Override
+			public int compare(FlexoProject o1, FlexoProject o2) {
+				if (o1.importsProject(o2)) {
+					return 1;
+				} else if (o2.importsProject(o1)) {
+					return -1;
+				}
+				return 0;
+			}
+		});
 		try {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), projects.size());
 			for (FlexoProject project : projects) {
 				try {
+					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("saving") + " " + project.getDisplayName());
 					project.save(ProgressWindow.instance());
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
@@ -465,14 +528,6 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 		} finally {
 			ProgressWindow.hideProgressWindow();
 		}
-
-	}
-
-	/**
-	 * Return boolean indicating if some resources need saving
-	 */
-	public static boolean someResourcesNeedsSaving(FlexoProject project) {
-		return project != null && project.getUnsavedStorageResources(false).size() > 0;
 	}
 
 	static void informUserAboutSaveResourceException(SaveResourceException e) {
@@ -508,6 +563,11 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 	}
 
 	public boolean someProjectsAreModified() {
+		for (FlexoProject project : getRootProjects()) {
+			if (project.hasUnsaveStorageResources()) {
+				return true;
+			}
+		}
 		return false;
 	}
 

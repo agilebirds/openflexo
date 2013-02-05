@@ -48,16 +48,6 @@ class DREPerspective extends FlexoPerspective {
 		return DREIconLibrary.DRE_DRE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DREIconLibrary.DRE_DRE_SELECTED_ICON;
-	}
-
 	@Override
 	public DRMObject getDefaultObject(FlexoObject proposedObject) {
 		return null;

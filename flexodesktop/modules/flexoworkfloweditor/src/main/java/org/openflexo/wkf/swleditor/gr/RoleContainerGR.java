@@ -62,7 +62,6 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.ConvertedIntoLocalObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.dm.NodeInserted;
 import org.openflexo.foundation.wkf.dm.NodeRemoved;
@@ -102,7 +101,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		// setDimensionConstraints(DimensionConstraints.CONTAINER);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
+		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
 
 		/*mainColor = role.getColor();
 		backColor = new Color ((255*3+mainColor.getRed())/4,(255*3+mainColor.getGreen())/4,(255*3+mainColor.getBlue())/4);
@@ -202,39 +201,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				(int) (rect.getWidth() * controller.getScale()), (int) (rect.getHeight() * controller.getScale()));
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);
 		return boxRect.contains(clickLocation);
-	}
-
-	private double roleNameX = -1;
-
-	@Override
-	public double getAbsoluteTextX() {
-		if (roleNameX == -1) {
-			roleNameX = 40 + getNormalizedLabelSize().width / 2;
-		}
-		return roleNameX;
-	}
-
-	@Override
-	public double getAbsoluteTextY() {
-		return 15;
-	}
-
-	@Override
-	public String getText() {
-		return getRole().getName();
-	}
-
-	@Override
-	public void setTextNoNotification(String text) {
-		if (!getRole().isImported()) {
-			try {
-				getRole().setName(text);
-				roleNameX = -1;
-			} catch (DuplicateRoleException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public Role getRole() {

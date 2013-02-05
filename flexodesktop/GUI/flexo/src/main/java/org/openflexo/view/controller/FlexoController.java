@@ -58,6 +58,7 @@ import java.util.regex.Pattern;
 
 import javax.naming.InvalidNameException;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -100,6 +101,10 @@ import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.GeneratedCode;
+import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
@@ -146,6 +151,7 @@ import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
@@ -647,6 +653,38 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public void registerActionForKeyStroke(AbstractAction action, KeyStroke accelerator, String actionName) {
 		String key = actionName;
+		Object object = getFlexoFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).get(accelerator);
+		Action action2 = null;
+		if (object != null) {
+			action2 = getFlexoFrame().getRootPane().getActionMap().get(object);
+		}
+		if (action2 != null) {
+			class CompoundAction extends AbstractAction {
+
+				private List<Action> actions = new ArrayList<Action>();
+
+				void addToAction(Action action) {
+					actions.add(action);
+				}
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for (Action action : actions) {
+						action.actionPerformed(e);
+					}
+				}
+			}
+			if (action2 instanceof CompoundAction) {
+				((CompoundAction) action2).addToAction(action);
+				return;
+			} else {
+				CompoundAction compoundAction = new CompoundAction();
+				compoundAction.addToAction(action2);
+				compoundAction.addToAction(action);
+				action = compoundAction;
+				key = "compound-" + accelerator.toString();
+			}
+		}
 		getFlexoFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(accelerator, key);
 		getFlexoFrame().getRootPane().getActionMap().put(key, action);
 		if (accelerator.getKeyCode() == FlexoCst.DELETE_KEY_CODE) {
@@ -1216,6 +1254,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 			return perspective.createModuleViewForObject(object, this, editable);
 		}
+	}
+
+	public boolean isEditable(Object object) {
+		if (isDisposed()) {
+			return false;
+		}
+		return !getModule().getModule().requireProject() || !(object instanceof FlexoModelObject)
+				|| ((FlexoModelObject) object).getProject() == getProject();
 	}
 
 	/**
@@ -1978,11 +2024,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public ImageIcon iconForWorkflow(boolean imported) {
-		ImageIcon workflowIcon = WKFIconLibrary.WORKFLOW_ICON;
 		if (imported) {
-			workflowIcon = IconFactory.getImageIcon(workflowIcon, new IconMarker[] { IconLibrary.IMPORT });
+			return WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON;
+		} else {
+			return WKFIconLibrary.WORKFLOW_ICON;
 		}
-		return workflowIcon;
+
 	}
 
 	public static ImageIcon statelessIconForObject(Object object) {
@@ -2066,6 +2113,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
+		} else if (object instanceof CGFile) {
+			return FilesIconLibrary.smallIconForFileFormat(((CGFile) object).getFileFormat());
 		} else if (object instanceof CGTemplateObject) {
 			return DGIconLibrary.iconForObject((CGTemplateObject) object);
 		} else if (object instanceof DocType) {
@@ -2073,7 +2122,13 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		} else if (object instanceof FlexoProject) {
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		} else if (object instanceof FlexoProjectReference) {
-			return WKFIconLibrary.PROCESS_ICON;
+			return WKFIconLibrary.OPENFLEXO_NOTEXT_16;
+		} else if (object instanceof GeneratedDoc) {
+			return DGIconLibrary.GENERATED_DOC_ICON;
+		} else if (object instanceof GeneratedCode) {
+			return CGIconLibrary.GENERATED_CODE_ICON;
+		} else if (object instanceof GenerationRepository) {
+			return CGIconLibrary.GENERATED_CODE_REPOSITORY_ICON;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;

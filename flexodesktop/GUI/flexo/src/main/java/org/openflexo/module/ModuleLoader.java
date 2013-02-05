@@ -334,10 +334,27 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		return (ExternalVEModule) getModuleInstance(Module.VE_MODULE);
 	}
 
-	public FlexoModule switchToModule(Module module) throws ModuleLoadingException {
-		if (activeModule != null && activeModule.getModule() == module) {
+	private boolean ignoreSwitch = false;
+
+	public FlexoModule switchToModule(final Module module) throws ModuleLoadingException {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						switchToModule(module);
+					} catch (ModuleLoadingException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			return null;
+		}
+		if (ignoreSwitch || activeModule != null && activeModule.getModule() == module) {
 			return activeModule;
 		}
+		ignoreSwitch = true;
+		try {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Switch to module " + module.getName());
 		}
@@ -360,6 +377,14 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			return moduleInstance;
 		}
 		throw new ModuleLoadingException(module);
+		} finally {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					ModuleLoader.this.ignoreSwitch = false;
+	}
+			});
+		}
 	}
 
 	/**
@@ -392,7 +417,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 					proceedQuitWithoutConfirmation();
 				}
 			}
-
+			proceedQuitWithoutConfirmation();
 		} else {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("really_quit"))) {
 				proceedQuitWithoutConfirmation();
@@ -403,7 +428,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	}
 
 	public void saveModifiedProjects() throws OperationCancelledException, SaveResourceExceptionList {
-		SaveProjectsDialog dialog = new SaveProjectsDialog(applicationContext.getProjectLoader().getModifiedProjects());
+		SaveProjectsDialog dialog = new SaveProjectsDialog(getActiveModule() != null ? getActiveModule().getController() : null,
+				applicationContext.getProjectLoader().getModifiedProjects());
 		if (dialog.isOk()) {
 			applicationContext.getProjectLoader().saveProjects(dialog.getSelectedProject());
 		} else { // CANCEL

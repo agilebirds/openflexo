@@ -61,16 +61,6 @@ class MenuPerspective extends FlexoPerspective {
 		return SEIconLibrary.MENU_PERSPECTIVE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return SEIconLibrary.MENU_PERSPECTIVE_SELECTED_ICON;
-	}
-
 	@Override
 	public FlexoItemMenu getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof FlexoItemMenu) {

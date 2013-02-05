@@ -68,6 +68,11 @@ public class MultipleObjectSelector<E extends FlexoObject> extends TabularBrowse
 	}
 
 	@Override
+	public Vector<FlexoObject> getSelectedObjects() {
+		return new Vector<FlexoObject>(getModel().getSelectionColumn().getSelectedObjects());
+	}
+
+	@Override
 	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
 		getModel()._selectionColumn.setSelectedObjects((Vector<E>) objects);
 		// getTreeTable().getTree().treeStructureChanged();

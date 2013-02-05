@@ -50,7 +50,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 
 		@Override
 		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+			return false;
 		}
 
 		@Override

@@ -61,6 +61,9 @@ public class VPMModule extends FlexoModule implements ExternalVPMModule {
 
 	public VPMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
+		// UGLIEST HACK EVER TO BE REMOVED ASAP:
+		// DiagramPalette.setModuleLoader(applicationContext.getModuleLoader());
+		// Hack removed : guillaume, what about that ?
 		VPMPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 

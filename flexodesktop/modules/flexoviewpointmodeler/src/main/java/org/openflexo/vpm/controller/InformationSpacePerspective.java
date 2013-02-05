@@ -84,16 +84,6 @@ public class InformationSpacePerspective extends FlexoPerspective {
 		return VPMIconLibrary.INFORMATION_SPACE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return VPMIconLibrary.INFORMATION_SPACE_ICON;
-	}
-
 	@Override
 	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {

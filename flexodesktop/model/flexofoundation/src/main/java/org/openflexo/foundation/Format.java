@@ -48,7 +48,7 @@ public enum Format {
 		}
 
 	},
-	LATEX {
+	/*LATEX {
 		@Override
 		public String getPostBuildFileExtension() {
 			return ".pdf";
@@ -59,7 +59,7 @@ public enum Format {
 			return "PDF";
 		}
 
-	},
+	},*/
 	WEBOBJECTS {
 
 		@Override

@@ -270,7 +270,9 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 	}
 
 	private void insertActionAtCurrentIndex(EditionAction editionAction) {
+		if (getActionContainer() != null) {
 		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+	}
 	}
 
 	/*public AddShape createAddShapeAction() {

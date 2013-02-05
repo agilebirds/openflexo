@@ -301,12 +301,14 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public class RepairProjectAction extends AbstractAction implements GraphicalFlexoObserver {
+	public class RepairProjectAction extends AbstractAction implements GraphicalFlexoObserver, PropertyChangeListener {
 		public RepairProjectAction() {
 			super();
-			if (getController().getProject() == null) {
-				setEnabled(false);
+			if (getController() != null) {
+				getController().getControllerModel().getPropertyChangeSupport()
+						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 			}
+			updateEnability();
 		}
 
 		@Override
@@ -355,6 +357,20 @@ public class ToolsMenu extends FlexoMenu {
 			}
 		}
 
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getController() != null) {
+				if (evt.getSource() == getController().getControllerModel()) {
+					if (ControllerModel.CURRENT_EDITOR.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
+
+		private void updateEnability() {
+			setEnabled(getController() != null && getController().getProject() != null);
+		}
 	}
 
 	private ConsistencyCheckDialog repairProjectWindow = null;

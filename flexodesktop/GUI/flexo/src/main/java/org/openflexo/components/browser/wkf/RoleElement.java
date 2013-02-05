@@ -124,10 +124,7 @@ public class RoleElement extends BrowserElement {
 	private IconMarker[] getIconMarkers() {
 		int count = 0;
 		if (getRole().isImported()) {
-			count++;
-			if (getRole().isDeletedOnServer()) {
-				count++;
-			}
+			count = 2;
 		}
 		IconMarker[] markers = null;
 		if (count > 0) {
@@ -135,9 +132,7 @@ public class RoleElement extends BrowserElement {
 		}
 		if (getRole().isImported()) {
 			markers[0] = IconLibrary.IMPORT;
-			if (getRole().isDeletedOnServer()) {
-				markers[1] = IconLibrary.WARNING;
-			}
+			markers[1] = IconLibrary.WARNING;
 		}
 		return markers;
 	}

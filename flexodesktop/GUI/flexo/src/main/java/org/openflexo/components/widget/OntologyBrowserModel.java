@@ -691,7 +691,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			return false;
 		} else {
 			for (IFlexoOntologyClass c2 : someClasses) {
-				if (c2.isSuperConceptOf(c) && c2 != c) {
+				if (c2.isSuperConceptOf(c) /*&& c2 != c*/&& (!c2.getURI().equals(c.getURI()))) {
 					return true;
 				}
 			}

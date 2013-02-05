@@ -66,7 +66,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
-				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
+				getController().getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -82,8 +82,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends
 		return new FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
-				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
-				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
@@ -98,8 +98,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends
 		return new FlexoExceptionHandler<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean handleException(FlexoException exception, SynchronizeRepositoryCodeGeneration action) {
-				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
-				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				if (exception instanceof PermissionDeniedException) {
 					if (action.getRepository().getDirectory() != null && !action.getRepository().getDirectory().exists()) {
 						if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "

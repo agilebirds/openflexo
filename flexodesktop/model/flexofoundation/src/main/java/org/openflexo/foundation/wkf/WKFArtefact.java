@@ -22,6 +22,7 @@ package org.openflexo.foundation.wkf;
 import java.awt.Color;
 import java.util.Vector;
 
+import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -190,11 +191,18 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 		}
 	}
 
-	public Object getTextAlignment() {
-		return _graphicalPropertyForKey(TEXT_ALIGNMENT + "_" + DEFAULT);
+	public ParagraphAlignment getTextAlignment() {
+		Object textAlignement = _graphicalPropertyForKey(TEXT_ALIGNMENT + "_" + DEFAULT);
+		if (textAlignement instanceof ParagraphAlignment) {
+			return (ParagraphAlignment) textAlignement;
+		} else {
+			_setGraphicalPropertyForKey(ParagraphAlignment.LEFT, TEXT_ALIGNMENT + "_" + DEFAULT);
+			setChanged();
+		}
+		return ParagraphAlignment.LEFT;
 	}
 
-	public void setTextAlignment(Object textAlign) {
+	public void setTextAlignment(ParagraphAlignment textAlign) {
 		if (requireChange(getTextAlignment(), textAlign)) {
 			Object oldTextAlignment = getTextAlignment();
 			_setGraphicalPropertyForKey(textAlign, TEXT_ALIGNMENT + "_" + DEFAULT);

@@ -32,8 +32,10 @@ import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class ObjectPropertyAssertion extends AbstractAssertion {
 
@@ -122,6 +124,36 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static class ObjectPropertyAssertionMustDefineAnOntologyProperty extends
+			ValidationRule<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> {
+		public ObjectPropertyAssertionMustDefineAnOntologyProperty() {
+			super(ObjectPropertyAssertion.class, "object_property_assertion_must_define_an_ontology_property");
+		}
+
+		@Override
+		public ValidationIssue<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> applyValidation(
+				ObjectPropertyAssertion assertion) {
+			if (assertion.getOntologyProperty() == null) {
+				return new ValidationError<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion>(this, assertion,
+						"object_property_assertion_must_define_an_ontology_property");
+			}
+			return null;
+		}
+
+	}
+
+	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ObjectPropertyAssertion> {
+		public ObjectBindingIsRequiredAndMustBeValid() {
+			super("'object'_binding_is_required_and_must_be_valid", ObjectPropertyAssertion.class);
+		}
+
+		@Override
+		public DataBinding<Object> getBinding(ObjectPropertyAssertion object) {
+			return object.getObject();
+		}
+
 	}
 
 }

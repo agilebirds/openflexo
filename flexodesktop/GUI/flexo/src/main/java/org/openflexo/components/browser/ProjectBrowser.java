@@ -392,6 +392,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	private BrowserView leadingView;
 
+	private boolean deleted;
+
 	protected BrowserView getLeadingView() {
 		return leadingView;
 	}
@@ -442,7 +444,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public BrowserElement getRootElement() {
-		if (_rootElement == null && this._rootObject != null) {
+		if (_rootElement == null && this.getRootObject() != null) {
 			rebuildTree();
 		}
 		return _rootElement;
@@ -505,6 +507,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+					if (deleted) {
+						return;
+					}
 					if (showRootNode()) {
 						expand(_rootObject, false);
 					} else {
@@ -535,7 +540,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete browser " + getClass().getName());
 		}
-
+		deleted = true;
 		clearTree();
 		_project = null;
 		_rootElement = null;

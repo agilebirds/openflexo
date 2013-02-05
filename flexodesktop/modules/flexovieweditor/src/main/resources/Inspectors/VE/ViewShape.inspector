@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.model.DiagramShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="IntegerType" columns="10" data="data.indexRelativeToEPType" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-        <Tab index="0" title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="ShapeTab">
-          <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
+      <TabPanel name="GRTab" index="2" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+        <Tab title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="ShapeTab">
+          <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" localize="true" manageDynamicModel="true" index="0" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
             <Assignment variable="component.panelWidth" value="120" />
             <Assignment variable="component.panelHeight" value="80" />
             <Assignment variable="component.foregroundStyle" value="GRTab.data.foreground" />
@@ -17,156 +17,117 @@
             <Dependancy componentName="ShadowStyleSelector" />
             <Dependancy componentName="ShapeSelector" />
           </Custom>
-          <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" constraints="gridbag(anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=10;padY=10;weightX=0.0;weightY=0.0)">
-            <Label label="foreground" localize="true" name="ForegroundLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left)" />
-            <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" data="GRTab.data.foreground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ForegroundSelector" localize="true" manageDynamicModel="true" />
-            <Label label="background" localize="true" name="BackgroundLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-            <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" data="GRTab.data.background" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BackgroundSelector" localize="true" manageDynamicModel="true" />
-            <Label label="shadow" localize="true" name="ShadowStyleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-            <Custom componentClassName="org.openflexo.fge.view.widget.FIBShadowStyleSelector" data="GRTab.data.shadowStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ShadowStyleSelector" localize="true" manageDynamicModel="true" />
-            <Label label="shape" localize="true" name="ShapeTypeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-            <Custom componentClassName="org.openflexo.fge.view.widget.FIBShapeSelector" data="GRTab.data.shape" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ShapeSelector" localize="true" manageDynamicModel="true" />
+          <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="1" constraints="gridbag(anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=10;padY=10;weightX=0.0;weightY=0.0)">
+            <Label label="foreground" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left)" name="ForegroundLabel" localize="true" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" manageDynamicModel="true" name="ForegroundSelector" index="1" data="GRTab.data.foreground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+            <Label label="background" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BackgroundLabel" localize="true" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" manageDynamicModel="true" name="BackgroundSelector" index="3" data="GRTab.data.background" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+            <Label label="shadow" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ShadowStyleLabel" localize="true" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBShadowStyleSelector" localize="true" manageDynamicModel="true" name="ShadowStyleSelector" index="5" data="GRTab.data.shadowStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+            <Label label="shape" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ShapeTypeLabel" localize="true" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBShapeSelector" localize="true" manageDynamicModel="true" name="ShapeSelector" index="7" data="GRTab.data.shape" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
           </Panel>
         </Tab>
-        <Tab index="1" title="Text" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
-          <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <CheckBox selected="false" localize="true" name="IsFloatingLabel" data="GRTab.data.isFloatingLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-          <Label label="line_wrap" localize="true" name="LineWrapLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)"/>
-          <CheckBox selected="false" localize="true" name="LineWrap" data="GRTab.data.lineWrap" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)"/>
-          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
-          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
-          <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
-          <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=28;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=29;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(expandHorizontally=false;expandVertically=false;index=30;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=31;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=32;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=33;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+        <Tab title="Text" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
+          <Label label="floating_label" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsFloatingLabelLabel" localize="true" />
+          <CheckBox selected="false" index="19" data="GRTab.data.isFloatingLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsFloatingLabel" localize="true" />
+          <Label label="line_wrap" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" name="LineWrapLabel" localize="true" />
+          <CheckBox selected="false" index="21" data="GRTab.data.lineWrap" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="LineWrap" localize="true" />
+          <Label label="absolute_text_x" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextXLabel" localize="true" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="23" data="GRTab.data.absoluteTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
+          <Label label="absolute_text_y" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextYLabel" localize="true" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="25" data="GRTab.data.absoluteTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
+          <Label label="relative_text_x" index="26" constraints="twocols(expandHorizontally=false;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextXLabel" localize="true" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" index="27" data="GRTab.data.relativeTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
+          <Label label="relative_text_y" index="28" constraints="twocols(expandHorizontally=false;expandVertically=false;index=28;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextYLabel" localize="true" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" index="29" data="GRTab.data.relativeTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=29;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
+          <CheckBox selected="false" index="30" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(expandHorizontally=false;expandVertically=false;index=30;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AdjustMinimalWidthToLabelWidth" localize="true" />
+          <Label label="adjust_minimal_width_to_label_width" index="31" constraints="twocols(expandHorizontally=false;expandVertically=false;index=31;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="AdjustMinimalWidthToLabelWidthLabel" localize="true" />
+          <CheckBox selected="false" index="32" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=32;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AdjustMinimalHeightToLabelHeight" localize="true" />
+          <Label label="adjust_minimal_height_to_label_height" index="33" constraints="twocols(expandHorizontally=false;expandVertically=false;index=33;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="AdjustMinimalHeightToLabelHeightLabel" localize="true" />
         </Tab>
-        <Tab index="2" title="Location/Size" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LocationSizeTab">
-          <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="10" data="GRTab.data.layer" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Layer" localize="true" />
-          <Label label="position" localize="true" name="PositionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="GRTab.data.x" constraints="flow(index=0)" name="X" localize="true" />
-            <Label label=";" localize="true" name="Space" constraints="flow(index=1)" />
-            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="GRTab.data.y" constraints="flow(index=2)" name="Y" localize="true" />
+        <Tab title="Location/Size" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LocationSizeTab">
+          <Label label="layer" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="LayerLabel" localize="true" />
+          <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="10" index="1" data="GRTab.data.layer" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Layer" localize="true" />
+          <Label label="position" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="PositionLabel" localize="true" />
+          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="0" data="GRTab.data.x" constraints="flow(index=0)" name="X" localize="true" />
+            <Label label=";" index="1" constraints="flow(index=1)" name="Space" localize="true" />
+            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="2" data="GRTab.data.y" constraints="flow(index=2)" name="Y" localize="true" />
           </Panel>
-          <Label label="location_constraints" localize="true" name="LocationConstraintsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="LocationConstraints" data="GRTab.data.locationConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$LocationConstraints" autoSelectFirstRow="false" />
-          <Label label="dimensions" localize="true" name="DimensionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="GRTab.data.width" constraints="flow(index=0)" name="Width" localize="true" />
-            <Label label="x" name="X" constraints="flow(index=1)" />
-            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="GRTab.data.height" constraints="flow(index=2)" name="Height" localize="true" />
+          <Label label="location_constraints" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="LocationConstraintsLabel" localize="true" />
+          <DropDown index="5" data="GRTab.data.locationConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="LocationConstraints" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$LocationConstraints" autoSelectFirstRow="false" />
+          <Label label="dimensions" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DimensionLabel" localize="true" />
+          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="0" data="GRTab.data.width" constraints="flow(index=0)" name="Width" localize="true" />
+            <Label label="x" index="1" constraints="flow(index=1)" name="X" localize="true" />
+            <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="2" data="GRTab.data.height" constraints="flow(index=2)" name="Height" localize="true" />
           </Panel>
-          <Label label="dimensions_constraints" localize="true" name="DimensionConstraintsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="DimensionConstraints" data="GRTab.data.dimensionConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" autoSelectFirstRow="false" />
-          <Label label="x_constraints" localize="true" constraints="twocols(expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.xConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xConstraints)">
+          <Label label="dimensions_constraints" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DimensionConstraintsLabel" localize="true" />
+          <DropDown index="9" data="GRTab.data.dimensionConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="DimensionConstraints" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" autoSelectFirstRow="false" />
+          <Label label="x_constraints" index="10" constraints="twocols(expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xConstraints)" index="11" data="GRTab.data.xConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
             <Assignment variable="component.bindingDefinition" value="GRTab.data.X_CONSTRAINTS" />
           </Custom>
-          <Label label="y_constraints" localize="true" constraints="twocols(expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.yConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yConstraints)">
+          <Label label="y_constraints" index="12" constraints="twocols(expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yConstraints)" index="13" data="GRTab.data.yConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
             <Assignment variable="component.bindingDefinition" value="GRTab.data.Y_CONSTRAINTS" />
           </Custom>
-          <Label label="width_constraints" localize="true" constraints="twocols(expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.widthConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthConstraints)">
+          <Label label="width_constraints" index="14" constraints="twocols(expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthConstraints)" index="15" data="GRTab.data.widthConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
             <Assignment variable="component.bindingDefinition" value="GRTab.data.WIDTH_CONSTRAINTS" />
           </Custom>
-          <Label label="height_constraints" localize="true" constraints="twocols(expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.heightConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightConstraints)">
+          <Label label="height_constraints" index="16" constraints="twocols(expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightConstraints)" index="17" data="GRTab.data.heightConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
             <Assignment variable="component.bindingDefinition" value="GRTab.data.HEIGHT_CONSTRAINTS" />
           </Custom>
-          <Label label="border" localize="true" name="BorderLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Label label="top" localize="true" name="BorderTopLabel" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;location=left)" />
-            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="GRTab.data.border.top" constraints="flow(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Bordertop" localize="true" />
-            <Label label="bottom" localize="true" name="BorderBottomLabel" constraints="flow(expandHorizontally=false;expandVertically=false;index=2;location=left)" />
-            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="GRTab.data.border.bottom" constraints="flow(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Borderbottom" localize="true" />
-            <Label label="left" localize="true" name="BorderLeftLabel" constraints="flow(expandHorizontally=false;expandVertically=false;index=4;location=left)" />
-            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="GRTab.data.border.left" constraints="flow(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Borderleft" localize="true" />
-            <Label label="right" localize="true" name="BorderRightLabel" constraints="flow(expandHorizontally=false;expandVertically=false;index=6;location=left)" />
-            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="GRTab.data.border.right" constraints="flow(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Borderright" localize="true" />
+          <Label label="border" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BorderLabel" localize="true" />
+          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Label label="top" index="0" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="BorderTopLabel" localize="true" />
+            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="1" data="GRTab.data.border.top" constraints="flow(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Bordertop" localize="true" />
+            <Label label="bottom" index="2" constraints="flow(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="BorderBottomLabel" localize="true" />
+            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="3" data="GRTab.data.border.bottom" constraints="flow(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Borderbottom" localize="true" />
+            <Label label="left" index="4" constraints="flow(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="BorderLeftLabel" localize="true" />
+            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="5" data="GRTab.data.border.left" constraints="flow(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Borderleft" localize="true" />
+            <Label label="right" index="6" constraints="flow(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="BorderRightLabel" localize="true" />
+            <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="7" data="GRTab.data.border.right" constraints="flow(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Borderright" localize="true" />
           </Panel>
-          <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-          <CheckBox selected="false" localize="true" name="IsVisible" data="GRTab.data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-          <Label label="allows_to_leave_bounds" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
-          <CheckBox selected="true" localize="true" name="checkbox" data="GRTab.data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-          <Label label="index" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
-          <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" data="GRTab.data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
+          <Label label="is_visible" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsVisibleLabel" localize="true" />
+          <CheckBox selected="false" index="21" data="GRTab.data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsVisible" localize="true" />
+          <Label label="allows_to_leave_bounds" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <CheckBox selected="true" index="23" data="GRTab.data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" />
+          <Label label="index" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" index="25" data="GRTab.data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
         </Tab>
-        <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
-	<Label label="is_selectable" localize="true" name="IsSelectableLabel"
-		constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)"
-		useScrollBar="false" />
-	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
-		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
-		darkLevel="0"
-		constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
-		<CheckBox selected="false" localize="true" name="IsSelectable"
-			data="GRTab.data.isSelectable" useScrollBar="false" />
-		<CheckBox data="GRTab.data.hasSelectedForeground" enable="GRTab.data.isSelectable"
-			selected="true" localize="true" constraints="flow(index=1)" />
-		<Label label="use" localize="true" enable="GRTab.data.isSelectable"
-			constraints="flow(index=2;location=east)" />
-		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
-			enable="GRTab.data.isSelectable &amp;&amp; GRTab.data.hasSelectedForeground"
-			data="GRTab.data.selectedForeground" constraints="flow(index=3)" />
-		<CheckBox data="GRTab.data.hasSelectedBackground" enable="GRTab.data.isSelectable"
-			selected="true" localize="true" constraints="flow(index=4)" />
-		<Label label="use" localize="true" enable="GRTab.data.isSelectable"
-			constraints="flow(index=5)" />
-		<Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"
-			enable="GRTab.data.isSelectable &amp;&amp; GRTab.data.hasSelectedBackground"
-			data="GRTab.data.selectedBackground" constraints="flow(index=6)" />
-		<Label label="cp" enable="GRTab.data.isSelectable" localize="true"
-			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
-			useScrollBar="false" />
-		<CheckBox selected="false" enable="GRTab.data.isSelectable"
-			localize="true" data="GRTab.data.drawControlPointsWhenSelected"
-			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
-			useScrollBar="false" />
-	</Panel>
-	<Label label="is_focusable" localize="true" name="IsFocusableLabel"
-		constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)"
-		useScrollBar="false" />
-	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
-		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
-		darkLevel="0"
-		constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
-		<CheckBox selected="false" localize="true" name="IsFocusable"
-			data="GRTab.data.isFocusable"
-			constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
-		<CheckBox data="GRTab.data.hasFocusedForeground" selected="true"
-			localize="true" enable="GRTab.data.isFocusable" constraints="flow(index=1)" />
-		<Label label="use" localize="true" enable="GRTab.data.isFocusable"
-			constraints="flow(index=2;location=east)" />
-		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
-			enable="GRTab.data.isFocusable &amp;&amp; GRTab.data.hasFocusedForeground"
-			data="GRTab.data.focusedForeground" constraints="flow(index=3)" />
-		<CheckBox data="GRTab.data.hasFocusedBackground" selected="true"
-			localize="true" enable="GRTab.data.isFocusable" constraints="flow(index=4)" />
-		<Label label="use" localize="true" enable="GRTab.data.isFocusable"
-			constraints="flow(index=5)" />
-		<Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"
-			enable="GRTab.data.isFocusable &amp;&amp; GRTab.data.hasFocusedBackground"
-			data="GRTab.data.focusedBackground" constraints="flow(index=6)" />
-		<Label label="cp" enable="GRTab.data.isFocusable" localize="true"
-			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
-			useScrollBar="false" />
-		<CheckBox selected="false" enable="GRTab.data.isFocusable"
-			localize="true" data="GRTab.data.drawControlPointsWhenFocused"
-			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
-			useScrollBar="false" />
-	</Panel>
+        <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+          <Label label="is_selectable" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsSelectableLabel" localize="true" />
+          <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+            <CheckBox selected="false" data="GRTab.data.isSelectable" constraints="flow()" name="IsSelectable" localize="true" />
+            <CheckBox selected="true" index="1" data="GRTab.data.hasSelectedForeground" constraints="flow(index=1)" localize="true" enable="GRTab.data.isSelectable" />
+            <Label label="use" index="2" constraints="flow(index=2;location=east)" localize="true" enable="GRTab.data.isSelectable" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" enable="(GRTab.data.isSelectable &amp; GRTab.data.hasSelectedForeground)" manageDynamicModel="true" index="3" data="GRTab.data.selectedForeground" constraints="flow(index=3)" />
+            <CheckBox selected="true" index="4" data="GRTab.data.hasSelectedBackground" constraints="flow(index=4)" localize="true" enable="GRTab.data.isSelectable" />
+            <Label label="use" index="5" constraints="flow(index=5)" localize="true" enable="GRTab.data.isSelectable" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" enable="(GRTab.data.isSelectable &amp; GRTab.data.hasSelectedBackground)" manageDynamicModel="true" index="6" data="GRTab.data.selectedBackground" constraints="flow(index=6)" />
+            <Label label="cp" index="10" constraints="flow(expandHorizontally=false;expandVertically=false;index=10;location=left)" localize="true" enable="GRTab.data.isSelectable" />
+            <CheckBox selected="false" index="11" data="GRTab.data.drawControlPointsWhenSelected" constraints="flow(expandHorizontally=false;expandVertically=false;index=11;location=right)" localize="true" enable="GRTab.data.isSelectable" />
+          </Panel>
+          <Label label="is_focusable" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsFocusableLabel" localize="true" />
+          <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" index="5" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+            <CheckBox selected="false" index="0" data="GRTab.data.isFocusable" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="IsFocusable" localize="true" />
+            <CheckBox selected="true" index="1" data="GRTab.data.hasFocusedForeground" constraints="flow(index=1)" localize="true" enable="GRTab.data.isFocusable" />
+            <Label label="use" index="2" constraints="flow(index=2;location=east)" localize="true" enable="GRTab.data.isFocusable" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" enable="(GRTab.data.isFocusable &amp; GRTab.data.hasFocusedForeground)" manageDynamicModel="true" index="3" data="GRTab.data.focusedForeground" constraints="flow(index=3)" />
+            <CheckBox selected="true" index="4" data="GRTab.data.hasFocusedBackground" constraints="flow(index=4)" localize="true" enable="GRTab.data.isFocusable" />
+            <Label label="use" index="5" constraints="flow(index=5)" localize="true" enable="GRTab.data.isFocusable" />
+            <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" enable="(GRTab.data.isFocusable &amp; GRTab.data.hasFocusedBackground)" manageDynamicModel="true" index="6" data="GRTab.data.focusedBackground" constraints="flow(index=6)" />
+            <Label label="cp" index="10" constraints="flow(expandHorizontally=false;expandVertically=false;index=10;location=left)" localize="true" enable="GRTab.data.isFocusable" />
+            <CheckBox selected="false" index="11" data="GRTab.data.drawControlPointsWhenFocused" constraints="flow(expandHorizontally=false;expandVertically=false;index=11;location=right)" localize="true" enable="GRTab.data.isFocusable" />
+          </Panel>
         </Tab>
       </TabPanel>
     </Tab>
@@ -188,7 +149,7 @@
     <Localized key="contained_in_shape" lang="English">Contained in shape</Localized>
     <Localized key="contained_in_shape" lang="French">Contenu dans la forme</Localized>
     <Localized key="contained_in_shape" lang="Dutch">Contained in shape</Localized>
-    <Localized key="unmovable" lang="French">non déplaçable</Localized>
+    <Localized key="unmovable" lang="French">Non déplaçable</Localized>
     <Localized key="relative_to_parent" lang="English">Relative to parent</Localized>
     <Localized key="relative_to_parent" lang="French">Relatif au parent</Localized>
     <Localized key="relative_to_parent" lang="Dutch">Relative to parent</Localized>
@@ -197,9 +158,9 @@
     <Localized key="x_fixed" lang="Dutch">x fixed</Localized>
     <Localized key="y_fixed" lang="English">y fixed</Localized>
     <Localized key="y_fixed" lang="Dutch">y fixed</Localized>
-    <Localized key="area_constrained" lang="English">area constrained</Localized>
-    <Localized key="area_constrained" lang="French">espace contraint</Localized>
-    <Localized key="area_constrained" lang="Dutch">area constrained</Localized>
+    <Localized key="area_constrained" lang="English">Area constrained</Localized>
+    <Localized key="area_constrained" lang="French">Espace contraint</Localized>
+    <Localized key="area_constrained" lang="Dutch">Area constrained</Localized>
     <Localized key="location_constraints" lang="English">Location constraints</Localized>
     <Localized key="location_constraints" lang="French">Contraintes de positionnement</Localized>
     <Localized key="location_constraints" lang="Dutch">Location constraints</Localized>
@@ -212,20 +173,20 @@
     <Localized key="freely_resizable" lang="English">Freely resizable</Localized>
     <Localized key="freely_resizable" lang="French">Peut être redimensionné</Localized>
     <Localized key="freely_resizable" lang="Dutch">Freely resizable</Localized>
-    <Localized key="unresizable" lang="French">non redimensionnable</Localized>
+    <Localized key="unresizable" lang="French">Non redimensionnable</Localized>
     <Localized key="constrained_dimensions" lang="English">Constrained dimensions</Localized>
     <Localized key="constrained_dimensions" lang="French">Dimensions contraintes</Localized>
     <Localized key="constrained_dimensions" lang="Dutch">Constrained dimensions</Localized>
-    <Localized key="step_constrained" lang="English">step constrained</Localized>
-    <Localized key="step_constrained" lang="French">pas contraint</Localized>
-    <Localized key="step_constrained" lang="Dutch">step constrained</Localized>
+    <Localized key="step_constrained" lang="English">Step constrained</Localized>
+    <Localized key="step_constrained" lang="French">Contraint par le pas</Localized>
+    <Localized key="step_constrained" lang="Dutch">Step constrained</Localized>
     <Localized key="width_fixed" lang="English">Fixed width</Localized>
     <Localized key="width_fixed" lang="French">Largeur fixe</Localized>
     <Localized key="width_fixed" lang="Dutch">Fixed width</Localized>
     <Localized key="height_fixed" lang="English">Fixed height</Localized>
     <Localized key="height_fixed" lang="French">Hauteur fixe</Localized>
     <Localized key="height_fixed" lang="Dutch">Fixed height</Localized>
-    <Localized key="container" lang="French">conteneur</Localized>
+    <Localized key="container" lang="French">Conteneur</Localized>
     <Localized key="dimensions_constraints" lang="English">Dimensions contraints</Localized>
     <Localized key="dimensions_constraints" lang="French">Contraintes de dimensionnement</Localized>
     <Localized key="dimensions_constraints" lang="Dutch">Dimensions contraints</Localized>
@@ -249,16 +210,16 @@
     <Localized key="floating_label" lang="French">Label flottant</Localized>
     <Localized key="floating_label" lang="Dutch">Floating label</Localized>
     <Localized key="absolute_text_x" lang="English">Absolute text X</Localized>
-    <Localized key="absolute_text_x" lang="French">texte x absolu</Localized>
+    <Localized key="absolute_text_x" lang="French">Texte x absolu</Localized>
     <Localized key="absolute_text_x" lang="Dutch">Absolute text X</Localized>
     <Localized key="absolute_text_y" lang="English">Absolute text Y</Localized>
-    <Localized key="absolute_text_y" lang="French">texte y absolu</Localized>
+    <Localized key="absolute_text_y" lang="French">Texte y absolu</Localized>
     <Localized key="absolute_text_y" lang="Dutch">Absolute text Y</Localized>
     <Localized key="relative_text_x" lang="English">Relative text x</Localized>
-    <Localized key="relative_text_x" lang="French">Text relatif à X</Localized>
+    <Localized key="relative_text_x" lang="French">Texte relatif à X</Localized>
     <Localized key="relative_text_x" lang="Dutch">Relative text x</Localized>
     <Localized key="relative_text_y" lang="English">Relative text y</Localized>
-    <Localized key="relative_text_y" lang="French">Text relatif à Y</Localized>
+    <Localized key="relative_text_y" lang="French">Texte relatif à Y</Localized>
     <Localized key="relative_text_y" lang="Dutch">Relative text y</Localized>
     <Localized key="adjust_minimal_width_to_label_width" lang="English">Adjust the minimal width to label width</Localized>
     <Localized key="adjust_minimal_width_to_label_width" lang="French">Ajuster la largeur minimale à la largeur du label</Localized>
@@ -288,9 +249,9 @@
     <Localized key="triangle" lang="English">Triangle</Localized>
     <Localized key="triangle" lang="French">Triangle</Localized>
     <Localized key="triangle" lang="Dutch">Triangle</Localized>
-    <Localized key="losange" lang="English">Losange</Localized>
+    <Localized key="losange" lang="English">Diamond</Localized>
     <Localized key="losange" lang="French">Losange</Localized>
-    <Localized key="losange" lang="Dutch">Losange</Localized>
+    <Localized key="losange" lang="Dutch">Diamond</Localized>
     <Localized key="oval" lang="English">Oval</Localized>
     <Localized key="oval" lang="French">Ovale</Localized>
     <Localized key="oval" lang="Dutch">Oval</Localized>
@@ -315,17 +276,25 @@
     <Localized key="arc_size" lang="English">Arc size</Localized>
     <Localized key="arc_size" lang="French">Taille de l'arc</Localized>
     <Localized key="arc_size" lang="Dutch">Arc size</Localized>
-    <Localized key="ratio" lang="French">rapport</Localized>
-    <Localized key="angle_start" lang="English">angle start</Localized>
-    <Localized key="angle_start" lang="French">début d'angle</Localized>
-    <Localized key="angle_start" lang="Dutch">angle start</Localized>
-    <Localized key="angle_extent" lang="English">angle extent</Localized>
-    <Localized key="angle_extent" lang="French">extension d'angle</Localized>
-    <Localized key="angle_extent" lang="Dutch">angle extent</Localized>
+    <Localized key="ratio" lang="French">Rapport</Localized>
+    <Localized key="angle_start" lang="English">Angle start</Localized>
+    <Localized key="angle_start" lang="French">Début d'angle</Localized>
+    <Localized key="angle_start" lang="Dutch">Angle start</Localized>
+    <Localized key="angle_extent" lang="English">Angle extent</Localized>
+    <Localized key="angle_extent" lang="French">Extension d'angle</Localized>
+    <Localized key="angle_extent" lang="Dutch">Angle extent</Localized>
     <Localized key="arc_type" lang="English">Arc type</Localized>
     <Localized key="arc_type" lang="French">Type d'arc</Localized>
     <Localized key="arc_type" lang="Dutch">Arc type</Localized>
+    <Localized key="container" lang="English">Container</Localized>
+    <Localized key="container" lang="Dutch">Container</Localized>
+    <Localized key="y_fixed" lang="French">y fixe</Localized>
+    <Localized key="unmovable" lang="English">Unmovable</Localized>
+    <Localized key="unmovable" lang="Dutch">Unmovable</Localized>
+    <Localized key="unresizable" lang="English">Unresizable</Localized>
+    <Localized key="unresizable" lang="Dutch">Unresizable</Localized>
+    <Localized key="ratio" lang="English">Ratio</Localized>
+    <Localized key="ratio" lang="Dutch">Ratio</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Shape" />
 </Panel>
-

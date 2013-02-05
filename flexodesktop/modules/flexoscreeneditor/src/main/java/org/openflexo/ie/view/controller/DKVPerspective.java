@@ -62,16 +62,6 @@ class DKVPerspective extends FlexoPerspective {
 		return SEIconLibrary.DKV_PERSPECTIVE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return SEIconLibrary.DKV_PERSPECTIVE_SELECTED_ICON;
-	}
-
 	@Override
 	public DKVModel getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof DKVObject) {

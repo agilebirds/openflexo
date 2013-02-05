@@ -32,7 +32,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
@@ -70,12 +72,29 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 			}
 			return true;
 		}
+
 		if (!getShowOWLAndRDFConcepts() && StringUtils.isNotEmpty(object.getURI()) && object instanceof IFlexoOntologyConcept
 				&& ((IFlexoOntologyConcept) object).getOntology() != getContext()) {
 			if (object.getURI().startsWith(RDFURIDefinitions.RDF_ONTOLOGY_URI)
 					|| object.getURI().startsWith(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)
 					|| object.getURI().startsWith(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
 				return false;
+			}
+		}
+
+		if (object instanceof IFlexoOntologyStructuralProperty && getDomain() != null) {
+			IFlexoOntologyStructuralProperty p = (IFlexoOntologyStructuralProperty) object;
+			if (p instanceof OWLProperty && (((OWLProperty) p).getDomainList().size() > 0)) {
+				OWLProperty owlProperty = (OWLProperty) p;
+				boolean hasASuperClass = false;
+				for (OWLObject d : owlProperty.getDomainList()) {
+					if (((OWLClass) d).isSuperClassOf(getDomain())) {
+						hasASuperClass = true;
+					}
+				}
+				if (!hasASuperClass) {
+					return false;
+				}
 			}
 		}
 
@@ -93,6 +112,20 @@ public class OWLOntologyBrowserModel extends OntologyBrowserModel {
 	@Override
 	protected List<IFlexoOntologyClass> getPreferredStorageLocations(IFlexoOntologyStructuralProperty p, IFlexoOntology searchedOntology) {
 		List<IFlexoOntologyClass> potentialStorageClasses = super.getPreferredStorageLocations(p, searchedOntology);
+
+		if (p instanceof OWLProperty && ((OWLProperty) p).getDomainList().size() > 0) {
+			OWLProperty owlProperty = (OWLProperty) p;
+			for (OWLObject d : owlProperty.getDomainList()) {
+				OWLClass domainClass = (OWLClass) (searchedOntology != null ? searchedOntology : getContext()).getClass(d.getURI());
+				if (domainClass != null && (searchedOntology == null || domainClass.getFlexoOntology() == searchedOntology)) {
+					if (getDomain() == null || domainClass.isSuperClassOf(getDomain())) {
+						potentialStorageClasses.add(domainClass);
+					} else {
+						// Do not add it, it does not concern this
+					}
+				}
+			}
+		}
 
 		for (IFlexoOntologyClass c : getContext().getAccessibleClasses()) {
 			if (c.isNamedClass()) {

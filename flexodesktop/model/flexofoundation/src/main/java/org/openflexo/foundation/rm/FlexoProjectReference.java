@@ -23,6 +23,7 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	public static final String REFERRING_PROJECT = "referringProject";
 	public static final String REFERRED_PROJECT = "referredProject";
 	public static final String PROJECT = "project";
+	public static final String WORKFLOW = "workflow";
 
 	@Initializer
 	public FlexoProjectReference init(@Parameter(REFERRED_PROJECT) FlexoProject referredProject);
@@ -66,10 +67,13 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	/**
 	 * Returns the referred project, the project to which this reference refers to.
 	 * 
+	 * @param force
+	 *            flag to indicate whether all measures should be taken to load the project or not. Yet, passing <code>true</code> does not
+	 *            guarantee that the project will eventually be loaded and callers should handle a <code>null</code> value.
 	 * @return the referred project
 	 * 
 	 */
-	public FlexoProject getReferredProject(boolean tryToLoadIfNotLoaded);
+	public FlexoProject getReferredProject(boolean force);
 
 	/**
 	 * Sets the referred project.

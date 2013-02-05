@@ -81,16 +81,6 @@ class RepositoryPerspective extends DMPerspective {
 		return DMEIconLibrary.DME_RP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DMEIconLibrary.DME_RP_SELECTED_ICON;
-	}
-
 	@Override
 	public DMObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {

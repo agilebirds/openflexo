@@ -70,6 +70,16 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	private File expectedScreenshotImageFile = null;
 	private boolean screenshotModified = false;
 
+	/*private static IModuleLoader moduleLoader;
+
+	public static IModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
+	public static void setModuleLoader(IModuleLoader moduleLoader) {
+		DiagramPalette.moduleLoader = moduleLoader;
+	}*/
+
 	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, String diagramPaletteName,
 			DrawingGraphicalRepresentation<?> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
 		DiagramPaletteResource edRes = DiagramPaletteResourceImpl.makeDiagramPaletteResource(diagramSpecification.getResource(),

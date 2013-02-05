@@ -78,6 +78,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public static final Dimension MINIMUM_SIZE = new Dimension(30, 25);
 
 	private final DynamicFormatter formatter;
+	private DynamicValueBindingContext valueBindingContext;
 	private final DynamicEventListener eventListener;
 
 	private DependingObjects dependingObjects;
@@ -85,6 +86,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	protected FIBWidgetView(M model, FIBController aController) {
 		super(model, aController);
 		formatter = new DynamicFormatter();
+		valueBindingContext = new DynamicValueBindingContext();
 		eventListener = new DynamicEventListener();
 	}
 
@@ -210,6 +212,54 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			return;
 		}
 
+		if (getWidget().getValueTransform() != null && getWidget().getValueTransform().isValid()) {
+			T old = aValue;
+			try {
+				aValue = (T) getWidget().getValueTransform().getBindingValue(getValueBindingContext(aValue));
+			} catch (TypeMismatchException e) {
+				logger.warning("Unexpected TypeMismatchException " + e.getMessage());
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				logger.warning("Unexpected NullReferenceException " + e.getMessage());
+				e.printStackTrace();
+			}
+			if (!equals(old, aValue)) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						updateWidgetFromModel();
+					}
+				});
+			}
+		}
+
+		boolean isValid = true;
+		if (getWidget().getValueValidator() != null && getWidget().getValueValidator().isValid()) {
+			Object object = null;
+			try {
+				object = getWidget().getValueValidator().getBindingValue(getValueBindingContext(aValue));
+			} catch (TypeMismatchException e) {
+				logger.warning("Unexpected TypeMismatchException " + e.getMessage());
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				logger.warning("Unexpected NullReferenceException " + e.getMessage());
+				e.printStackTrace();
+			}
+			if (object == null) {
+				isValid = false;
+			} else if (object instanceof Boolean) {
+				isValid = (Boolean) object;
+			}
+		}
+		if (!isValid) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateWidgetFromModel();
+				}
+			});
+			return;
+		}
 		if (getDynamicModel() != null) {
 			logger.fine("Sets dynamic model value with " + aValue + " for " + getComponent());
 			getDynamicModel().setData(aValue);
@@ -348,7 +398,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				if (updateWidgetFromModel()) {
 					updateDependancies(callers);
 				}
-			} else if ((dependingObjects == null || !dependingObjects.areDependingObjectsComputed()) && checkValidDataPath()) {
+			} else if (checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
 				// it self from some depending component (which in that situation,
 				// are very important to know, aren'they ?)
@@ -407,6 +457,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 	}
 
+	private DynamicValueBindingContext getValueBindingContext(T aValue) {
+		if (valueBindingContext == null) {
+			valueBindingContext = new DynamicValueBindingContext();
+		}
+		valueBindingContext.setValue(aValue);
+		return valueBindingContext;
+	}
+
 	/**
 	 * Return the effective base component to be added to swing hierarchy This component may be encapsulated in a JScrollPane
 	 * 
@@ -416,7 +474,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public abstract JComponent getJComponent();
 
 	/**
-	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective
+	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective. This component must be
+	 * either the same or a child of the one returned by {@link #getJComponent()}.
 	 * 
 	 * @return J
 	 */
@@ -488,7 +547,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 		}
 		if (value instanceof Enum) {
-			String returned = value != null ? ((Enum) value).name() : null;
+			String returned = value != null ? ((Enum<?>) value).name() : null;
 			if (getWidget().getLocalize() && returned != null) {
 				return getLocalized(returned);
 			} else {
@@ -616,6 +675,23 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (component instanceof Container) {
 			for (Component c : ((Container) component).getComponents()) {
 				disableComponent(c);
+			}
+		}
+	}
+
+	protected class DynamicValueBindingContext implements BindingEvaluationContext {
+		private Object value;
+
+		private void setValue(Object aValue) {
+			value = aValue;
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("value")) {
+				return value;
+			} else {
+				return getController().getValue(variable);
 			}
 		}
 	}

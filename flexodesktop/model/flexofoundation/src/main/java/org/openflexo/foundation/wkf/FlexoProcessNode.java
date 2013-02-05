@@ -257,6 +257,8 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 			parentFolders.add(parent);
 			if (getFatherProcessNode() != null) {
 				getFatherProcessNode().clearOrphanProcesses();
+			} else {
+				getWorkflow().clearOrphanProcesses();
 			}
 		}
 	}
@@ -268,14 +270,15 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 				getFatherProcessNode().clearOrphanProcesses();
 				getFatherProcessNode().setChanged();
 				getFatherProcessNode().notifyObservers(new ChildrenOrderChanged());
+			} else {
+				getWorkflow().clearOrphanProcesses();
+				getWorkflow().setChanged();
+				getWorkflow().notifyObservers(new ChildrenOrderChanged());
 			}
 		}
 	}
 
 	public ProcessFolder getParentFolder() {
-		if (getFatherProcessNode() == null) {
-			return null;
-		}
 		if (parentFolders.size() > 0) {
 			return parentFolders.firstElement();
 		} else {
@@ -400,7 +403,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 					if (ref != null) {
 						FlexoProject referredProject = ref.getReferredProject(true);
 						if (referredProject != null) {
-							return referredProject.getWorkflow().getLocalFlexoProcessWithName(getName());
+							return process = referredProject.getWorkflow().getLocalFlexoProcessNodeWithFlexoID(getFlexoID()).getProcess();
 						}
 					}
 				}
@@ -472,6 +475,21 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 			else
 				return getWorkflow().getTopLevelFlexoProcesses().indexOf(this);
 			}*/
+	}
+
+	public boolean isAncestorOf(FlexoProcessNode processNode) {
+		FlexoProcessNode current = processNode;
+		while (current != null) {
+			if (current == this) {
+				return true;
+			}
+			current = current.getFatherProcessNode();
+		}
+		return false;
+	}
+
+	public boolean isTopLevelProcess() {
+		return getFatherProcessNode() == null;
 	}
 
 }

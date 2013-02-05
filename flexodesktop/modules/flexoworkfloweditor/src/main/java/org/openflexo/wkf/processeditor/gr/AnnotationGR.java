@@ -216,7 +216,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			if (getAnnotation().getDashStyle() == null) {
 				getAnnotation().setDashStyle(DashStyle.DOT_LINES_DASHES);
 			}
-			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, (DashStyle) getAnnotation().getDashStyle()));
+			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, getAnnotation().getDashStyle()));
 			((Rectangle) getShape()).setIsRounded(getAnnotation().getIsRounded());
 			setIsFloatingLabel(true);
 			setAdjustMinimalWidthToLabelWidth(false);
@@ -228,9 +228,9 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		setIsMultilineAllowed(true);
 		// setTextStyle(TextStyle.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
 		if (getAnnotation().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {
-			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
+			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.LEFT);
 		}
-		setParagraphAlignment((ParagraphAlignment) getAnnotation().getTextAlignment());
+		setParagraphAlignment(getAnnotation().getTextAlignment());
 	}
 
 	@Override

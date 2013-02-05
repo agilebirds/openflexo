@@ -36,7 +36,7 @@ public class TestProjectReuse extends FlexoTestCase {
 	class ProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
 		@Override
-		public FlexoProject loadProject(FlexoProjectReference reference) {
+		public FlexoProject loadProject(FlexoProjectReference reference, boolean silentlyOnly) {
 			if (importedProject == null) {
 				importedProject = reloadProject(importedProjectDirectory).getProject();
 			}

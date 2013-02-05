@@ -31,7 +31,6 @@ import org.openflexo.dg.exception.PDFGenerationFailedException;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.Format;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
@@ -61,17 +60,18 @@ public class GeneratePDF extends GenerateArtefact<GeneratePDF, DGRepository> imp
 
 		@Override
 		public boolean isVisibleForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
-			return repository.getFormat() == Format.LATEX;
+			return false;// repository.getFormat() == Format.LATEX;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
-			if (repository.getFormat() != Format.LATEX) {
+			/*if (repository.getFormat() != Format.LATEX) {
 				return false;
 			}
 			ProjectDocLatexGenerator pg = (ProjectDocLatexGenerator) getProjectGenerator(repository);
 			return pg != null && repository.getPostBuildDirectory() != null && pg.getProjectDocResource() != null
-					&& pg.getProjectDocResource().getFile() != null && pg.getProjectDocResource().getFile().exists();
+					&& pg.getProjectDocResource().getFile() != null && pg.getProjectDocResource().getFile().exists();*/
+			return false;
 		}
 
 	};

@@ -8,10 +8,7 @@ import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import org.openflexo.dg.file.DGLatexFile;
 import org.openflexo.dg.file.DGScreenshotFile;
-import org.openflexo.dgmodule.controller.browser.DGBrowser;
-import org.openflexo.dgmodule.view.DGBrowserView;
 import org.openflexo.dgmodule.view.DGFileModuleView;
 import org.openflexo.dgmodule.view.DGRepositoryModuleView;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
@@ -33,9 +30,6 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DocGeneratorPerspective extends FlexoPerspective {
 
-	private DGBrowser browser;
-	private DGBrowserView dgBrowserView;
-
 	private final DGController dgController;
 
 	/**
@@ -46,8 +40,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	public DocGeneratorPerspective(DGController dgController) {
 		super("doc_generation");
 		this.dgController = dgController;
-		browser = new DGBrowser(dgController);
-		setTopLeftView(dgBrowserView = new DGBrowserView(dgController, browser));
+		setTopLeftView(dgController.getDgBrowserView());
 	}
 
 	/**
@@ -58,16 +51,6 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	@Override
 	public ImageIcon getActiveIcon() {
 		return DGIconLibrary.DG_DGP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DGIconLibrary.DG_DGP_SELECTED_ICON;
 	}
 
 	@Override
@@ -87,7 +70,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
+		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof CGFile
 				|| object instanceof DGScreenshotFile || object instanceof CGTemplate || object instanceof TOCEntry;
 	}
 
@@ -121,14 +104,6 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 		if (moduleView instanceof DGFileModuleView) {
 			((DGFileModuleView) moduleView).refresh();
 		}
-	}
-
-	public DGBrowserView getDGBrowserView() {
-		return dgBrowserView;
-	}
-
-	public DGBrowser getBrowser() {
-		return browser;
 	}
 
 }

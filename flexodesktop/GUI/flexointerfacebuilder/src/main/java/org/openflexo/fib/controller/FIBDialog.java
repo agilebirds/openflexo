@@ -19,9 +19,6 @@
  */
 package org.openflexo.fib.controller;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.File;
 import java.util.List;
@@ -136,7 +133,6 @@ public class FIBDialog<T> extends JDialog {
 		if (!defaultButtonSet) {
 			// TODO: choose a button
 		}
-		validate();
 		pack();
 	}
 
@@ -156,22 +152,13 @@ public class FIBDialog<T> extends JDialog {
 	 * @param flexoFrame
 	 */
 	public void center() {
-		Point center;
-		if (getOwner() != null && getOwner().isVisible() && !getOwner().getBounds().isEmpty()) {
-			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
-					+ getOwner().getHeight() / 2);
-		} else {
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			center = new Point(screenSize.width / 2, screenSize.height / 2);
-		}
-		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
+		setLocationRelativeTo(getOwner());
 	}
 
 	public void showDialog() {
 		pack();
 		center();
 		setVisible(true);
-		toFront();
 	}
 
 }

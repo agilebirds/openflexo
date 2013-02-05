@@ -162,7 +162,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return pamelaProxyFactory.getOverridingSuperClass();
 	}
 
-	public ModelContext getModelMapping() {
+	private ModelContext getModelContext() {
 		return getModelFactory().getModelContext();
 	}
 
@@ -340,7 +340,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private @Nonnull
 	ModelEntity<? super I> getModelEntityFromArg(Class<?> class1) throws ModelDefinitionException {
-		ModelEntity<?> e = getModelMapping().getModelEntity(class1);
+		ModelEntity<?> e = getModelContext().getModelEntity(class1);
 		if (e == null) {
 			throw new NoSuchEntityException(class1);
 		}

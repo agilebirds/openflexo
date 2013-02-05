@@ -14,7 +14,6 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
-import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -69,9 +68,9 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 				try {
 
 					switch (repository.getFormat()) {
-					case LATEX:
+					/*case LATEX:
 						projectDocGenerator = new ProjectDocLatexGenerator(this.getProject(), (DGRepository) repository);
-						break;
+						break;*/
 					case HTML:
 						projectDocGenerator = new ProjectDocHTMLGenerator(this.getProject(), (DGRepository) repository);
 						break;

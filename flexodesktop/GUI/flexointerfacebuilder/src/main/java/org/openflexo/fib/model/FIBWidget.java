@@ -32,6 +32,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -61,10 +62,10 @@ public abstract class FIBWidget extends FIBComponent {
 	public static BindingDefinition DOUBLE_CLICK_ACTION = new BindingDefinition("doubleClickAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
+	public static final BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition ENTER_PRESSED_ACTION = new BindingDefinition("enterPressedAction", Void.class,
+	public static final BindingDefinition ENTER_PRESSED_ACTION = new BindingDefinition("enterPressedAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
@@ -98,13 +99,17 @@ public abstract class FIBWidget extends FIBComponent {
 	private DataBinding<?> rightClickAction;
 	private DataBinding<?> enterPressedAction;
 	private DataBinding<?> valueChangedAction;
+	private DataBinding<Boolean> valueValidator;
 
 	private final FIBFormatter formatter;
+	private final FIBValueBindable valueBindable;
 	private final FIBEventListener eventListener;
+	private DataBinding<Object> valueTransform;
 
 	public FIBWidget() {
 		super();
 		formatter = new FIBFormatter();
+		valueBindable = new FIBValueBindable();
 		eventListener = new FIBEventListener();
 	}
 
@@ -135,7 +140,7 @@ public abstract class FIBWidget extends FIBComponent {
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return 0;
+		return -1;
 	}
 
 	@Override
@@ -206,6 +211,12 @@ public abstract class FIBWidget extends FIBComponent {
 		if (valueChangedAction != null) {
 			valueChangedAction.decode();
 		}
+		if (valueTransform != null) {
+			valueTransform.decode();
+		}
+		if (valueValidator != null) {
+			valueValidator.decode();
+		}
 	}
 
 	@Override
@@ -270,6 +281,36 @@ public abstract class FIBWidget extends FIBComponent {
 			this.tooltipText = tooltipText;
 			hasChanged(notification);
 		}
+	}
+
+	public DataBinding<Object> getValueTransform() {
+		if (valueTransform == null) {
+			valueTransform = new DataBinding<Object>(valueBindable, getDataType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
+		}
+		return valueTransform;
+	}
+
+	public void setValueTransform(DataBinding<Object> valueTransform) {
+		if (valueTransform != null) {
+			this.valueTransform = new DataBinding<Object>(valueTransform.toString(), this, valueTransform.getDeclaredType(),
+					valueTransform.getBindingDefinitionType()) {
+				@Override
+				public Type getDeclaredType() {
+					return getDataType();
+				}
+			};
+		} else {
+			this.valueTransform = null;
+		}
+	}
+
+	public FIBValueBindable getValueBindable() {
+		return valueBindable;
 	}
 
 	public DataBinding<String> getFormat() {
@@ -383,10 +424,63 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 	}
 
+	private class FIBValueBindable extends FIBModelObject implements Bindable {
+		private BindingModel valueTransformerBindingModel = null;
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (valueTransformerBindingModel == null) {
+				createValueTransformerBindingModel();
+			}
+			return valueTransformerBindingModel;
+		}
+
+		private void createValueTransformerBindingModel() {
+			valueTransformerBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
+			valueTransformerBindingModel.addToBindingVariables(new BindingVariable("value", Object.class) {
+				@Override
+				public Type getType() {
+					return getDataType();
+				}
+			});
+		}
+
+		@Override
+		public FIBComponent getRootComponent() {
+			return FIBWidget.this.getRootComponent();
+		}
+
+		@Override
+		public String toString() {
+			if (FIBWidget.this instanceof FIBDropDown) {
+				return "FIBValueBindable[" + FIBWidget.this + "] iteratorClass=" + ((FIBDropDown) FIBWidget.this).getIteratorClass()
+						+ " dataType=" + ((FIBDropDown) FIBWidget.this).getDataType() + " obtained from "
+						+ ((FIBDropDown) FIBWidget.this).getDescription();
+			}
+			return "FIBValueBindable[" + FIBWidget.this + "]" + " dataType=" + FIBWidget.this.getDataType();
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> binding) {
+			if (binding == getValueTransform()) {
+				FIBWidget.this.notifiedBindingChanged(binding);
+			} else if (binding == getValueValidator()) {
+				FIBWidget.this.notifiedBindingChanged(binding);
+			}
+			super.notifiedBindingChanged(binding);
+		}
+
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+	}
+
 	@Override
 	public void updateBindingModel() {
 		super.updateBindingModel();
 		getEventListener().createEventListenerBindingModel();
+		getFormatter().createFormatterBindingModel();
 	}
 
 	public FIBEventListener getEventListener() {
@@ -432,6 +526,22 @@ public abstract class FIBWidget extends FIBComponent {
 		public List<? extends FIBModelObject> getEmbeddedObjects() {
 			return null;
 		}
+	}
+
+	public DataBinding<Boolean> getValueValidator() {
+		if (valueValidator == null) {
+			valueValidator = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+		}
+		return valueValidator;
+	}
+
+	public void setValueValidator(DataBinding<Boolean> valueValidator) {
+		if (valueValidator != null) {
+			valueValidator.setOwner(this);
+			valueValidator.setDeclaredType(Boolean.class);
+			valueValidator.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		}
+		this.valueValidator = valueValidator;
 	}
 
 	public DataBinding<?> getValueChangedAction() {

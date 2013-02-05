@@ -5,10 +5,15 @@
       <Children data="controllerModel.currentEditor.project.projectData.importedProjects" cast="child.workflow" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" label="workflow.name" icon="controller.iconForObject(workflow)" isEditable="false" filtered="false" defaultVisible="true" name="workflow">
-      <Children data="workflow.sortedTopLevelProcesses" name="children" />
+      <Children data="workflow.sortedOrphanSubprocesses" name="children" />
+      <Children data="workflow.folders" name="children1" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcessNode" label="process.name" icon="controller.iconForObject(process)" isEditable="false" filtered="false" defaultVisible="true" name="process">
       <Children data="process.sortedSubprocesses" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.ProcessFolder" label="processFolder.name" icon="controller.iconForObject(processFolder)" isEditable="false" filtered="false" defaultVisible="true" name="processFolder">
+      <Children data="processFolder.sortedFolders" name="children" />
+      <Children data="processFolder.processes" name="children1" />
     </BrowserElement>
   </Browser>
 </Panel>

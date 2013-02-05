@@ -215,13 +215,6 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		return "View " + getName() + (getViewPoint() != null ? " (calc " + getViewPoint().getName() + ")" : "");
 	}
 
-	/**
-	 * @return
-	 */
-	public static final String getTypeName() {
-		return "VIEW";
-	}
-
 	@Override
 	public String toString() {
 		return "View[name=" + getName() + "/viewpoint=" + (getViewPoint() != null ? getViewPoint().getName() : "null") + "/hash="

@@ -127,6 +127,8 @@ public abstract class ValidationModel extends FlexoListModel {
 		// Get all the objects to validate
 		Collection<Validable> allEmbeddedValidableObjects = retrieveAllEmbeddedValidableObjects(object);
 
+		// logger.info("For object " + object + " objects to validate are: " + allEmbeddedValidableObjects);
+
 		// Remove duplicated objects
 		Vector<Validable> objectsToValidate = new Vector<Validable>();
 		for (Validable next : allEmbeddedValidableObjects) {

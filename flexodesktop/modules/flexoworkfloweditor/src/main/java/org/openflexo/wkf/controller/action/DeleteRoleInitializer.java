@@ -24,7 +24,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
+import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.Role;
@@ -107,4 +109,8 @@ public class DeleteRoleInitializer extends ActionInitializer {
 		return IconLibrary.DELETE_ICON;
 	}
 
+	@Override
+	protected KeyStroke getShortcut() {
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
+	}
 }

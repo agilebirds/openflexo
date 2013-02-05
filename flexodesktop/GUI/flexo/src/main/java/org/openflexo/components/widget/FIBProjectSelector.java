@@ -57,7 +57,7 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 	@Override
 	public String renderedString(FlexoProject editedObject) {
 		if (editedObject != null) {
-			return editedObject.getName();
+			return editedObject.getDisplayName();
 		}
 		return "";
 	}

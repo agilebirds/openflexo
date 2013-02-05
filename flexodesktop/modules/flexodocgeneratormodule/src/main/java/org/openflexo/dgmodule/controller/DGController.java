@@ -43,7 +43,6 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
-import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
 import org.openflexo.dgmodule.controller.browser.DGBrowser;
@@ -147,6 +146,10 @@ public class DGController extends DEController implements FlexoObserver, Project
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 	}
 
+	public DGBrowser getBrowser() {
+		return browser;
+	}
+
 	public DGBrowserView getDgBrowserView() {
 		return dgBrowserView;
 	}
@@ -155,13 +158,13 @@ public class DGController extends DEController implements FlexoObserver, Project
 	public void updateEditor(FlexoEditor from, FlexoEditor to) {
 		super.updateEditor(from, to);
 		if (from != null && from.getProject() != null) {
-			from.getProject().getGeneratedCode().setFactory(null);
+			from.getProject().getGeneratedDoc().setFactory(null);
 		}
 		if (to != null && to.getResourceUpdateHandler() != null) {
 			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
 		if (to != null && getEditor().getProject() != null) {
-			to.getProject().getGeneratedCode().setFactory(this);
+			to.getProject().getGeneratedDoc().setFactory(this);
 		}
 		browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getGeneratedDoc() : null);
 	}
@@ -235,9 +238,9 @@ public class DGController extends DEController implements FlexoObserver, Project
 		if (returned == null) {
 			try {
 				switch (repository.getFormat()) {
-				case LATEX:
+				/*case LATEX:
 					returned = new ProjectDocLatexGenerator(getProject(), repository);
-					break;
+					break;*/
 				case HTML:
 					returned = new ProjectDocHTMLGenerator(getProject(), repository);
 					break;

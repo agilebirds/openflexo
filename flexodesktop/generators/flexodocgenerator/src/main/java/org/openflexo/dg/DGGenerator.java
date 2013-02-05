@@ -155,11 +155,16 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String nameForProcessNoExt(FlexoProcess process, DGRepository repository) {
-		return cleanFileName(repository.getName() + ".process." + process.getName());
+		return cleanFileName(repository.getName() + ".process." + process.getName() + externalObjectExtension(process, repository));
+	}
+
+	public static String externalObjectExtension(FlexoModelObject object, DGRepository repository) {
+		return repository.getProject() == object.getProject() ? "" : object.getProject().getDisplayName();
 	}
 
 	public static String nameForProcessFolderNoExt(ProcessFolder processFolder, DGRepository repository) {
-		return cleanFileName(repository.getName() + ".processfolder." + processFolder.getName() + "-" + processFolder.getFlexoID());
+		return cleanFileName(repository.getName() + ".processfolder." + processFolder.getName() + "-"
+				+ externalObjectExtension(processFolder, repository) + "-" + processFolder.getFlexoID());
 	}
 
 	public static String nameForDKVNoExt(DGRepository repository) {

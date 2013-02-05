@@ -60,11 +60,6 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return SGIconLibrary.SG_SGP_SELECTED_ICON;
-	}
-
-	@Override
 	public JComponent getFooter() {
 		return _controller.getFooter();
 	}

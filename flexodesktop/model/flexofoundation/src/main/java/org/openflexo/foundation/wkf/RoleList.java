@@ -36,6 +36,8 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.imported.dm.RoleAlreadyImportedException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.Validable;
@@ -105,6 +107,31 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		return getWorkflow() != null && getWorkflow().getImportedRoleList() == this;
 	}
 
+	private RoleList roleList;
+
+	@Override
+	public RoleList getUncachedObject() {
+		if (roleList != null) {
+			return roleList;
+		}
+		if (!getWorkflow().isCache()) {
+			return roleList = this;
+		}
+		if (true) {
+			ProjectData projectData = getProject().getProjectData();
+			if (projectData != null) {
+				FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+				if (ref != null) {
+					FlexoProject referredProject = ref.getReferredProject(true);
+					if (referredProject != null) {
+						return roleList = referredProject.getWorkflow().getRoleList();
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Overrides getClassNameKey
 	 * 
@@ -132,6 +159,15 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	@Override
 	public Collection<Role> getEmbeddedValidableObjects() {
 		return getRoles();
+	}
+
+	public Role getRoleWithFlexoID(long flexoID) {
+		for (Role role : getRoles()) {
+			if (role.getFlexoID() == flexoID) {
+				return role;
+			}
+		}
+		return null;
 	}
 
 	/**

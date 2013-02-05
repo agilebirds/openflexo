@@ -198,7 +198,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		setIsMultilineAllowed(true);
 		// setTextStyle(TextStyle.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
 		if (getAnnotation().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {
-			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
+			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.LEFT);
 		}
 		setParagraphAlignment((ParagraphAlignment) getAnnotation().getTextAlignment());
 	}

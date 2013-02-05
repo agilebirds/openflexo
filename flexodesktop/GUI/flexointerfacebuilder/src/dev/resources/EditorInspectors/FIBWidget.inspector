@@ -25,6 +25,19 @@
 				<Label label="read_only_component" constraints="twocols(location=right;expandHorizontally=true)"/>
 
 			</Tab>
+			
+			<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
+                <Label label="value_transform" constraints="twocols(location=left)"/>
+                <Custom data="data.valueTransform.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+                    <Assignment variable="component.bindable" value="data.valueBindable"/>
+                    <Assignment variable="component.bindingDefinition" value="data.valueTransformBindingDefinition"/>
+                </Custom>
+                <Label label="value_validator" constraints="twocols(location=left)"/>
+                <Custom data="data.valueValidator.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+                    <Assignment variable="component.bindable" value="data.valueBindable"/>
+                    <Assignment variable="component.bindingDefinition" value="data.valueValidatorDefinition"/>
+                </Custom>
+            </Tab>
 
 			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
 			

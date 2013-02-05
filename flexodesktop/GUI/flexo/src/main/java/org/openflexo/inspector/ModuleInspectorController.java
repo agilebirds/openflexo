@@ -38,6 +38,7 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
@@ -51,6 +52,8 @@ import org.openflexo.view.controller.FlexoController;
  * 
  */
 public class ModuleInspectorController extends Observable implements Observer {
+
+	private static final String CONTROLLER_EDITABLE_BINDING = "controller.flexoController.isEditable(data)";
 
 	static final Logger logger = Logger.getLogger(ModuleInspectorController.class.getPackage().getName());
 
@@ -111,6 +114,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				appendVisibleFor(inspector);
+				appendEditableCondition(inspector);
 				if (inspector.getDataClass() != null) {
 					// try {
 					inspectors.put(inspector.getDataClass(), inspector);
@@ -141,6 +145,22 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 		setChanged();
 		notifyObservers(new NewInspectorsLoaded());
+	}
+
+	private void appendEditableCondition(FIBComponent component) {
+		if (component instanceof FIBWidget) {
+			FIBWidget widget = (FIBWidget) component;
+			if (widget.getEnable() != null && widget.getEnable().isValid()) {
+				DataBinding<Boolean> enable = widget.getEnable();
+				widget.setEnable(new DataBinding<Boolean>(enable.toString() + " & " + CONTROLLER_EDITABLE_BINDING));
+			} else {
+				widget.setEnable(new DataBinding<Boolean>(CONTROLLER_EDITABLE_BINDING));
+			}
+		} else if (component instanceof FIBContainer) {
+			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
+				appendEditableCondition(child);
+			}
+		}
 	}
 
 	private void appendVisibleFor(FIBComponent component) {

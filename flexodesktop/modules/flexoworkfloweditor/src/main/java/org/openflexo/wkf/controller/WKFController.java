@@ -70,6 +70,7 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
@@ -114,7 +115,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	// Browsers
 	private ProcessBrowser _processBrowser;
 	private WorkflowBrowser _workflowBrowser;
-	private RoleListBrowser _roleListBrowser;
+	private RoleBrowser _roleListBrowser;
 
 	// External browser
 	private ProcessBrowser _externalProcessBrowser;
@@ -148,7 +149,15 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public WKFController(FlexoModule module) {
 		super(module);
 		initWithWKFPreferences();
-		manager.new PropertyChangeListenerRegistration(AdvancedPrefs.SHOW_ALL_TABS, this, WKFPreferences.getPreferences());
+		manager.new PropertyChangeListenerRegistration(AdvancedPrefs.SHOW_ALL_TABS, this, AdvancedPrefs.getPreferences());
+		manager.addListener(null, this, WKFPreferences.getPreferences());
+		manager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_LOCATION, this, getControllerModel());
+	}
+
+	@Override
+	public void dispose() {
+		((WKFControllerActionInitializer) getControllerActionInitializer()).disposeActionizer();
+		super.dispose();
 	}
 
 	@Override
@@ -156,7 +165,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);
 		_workflowBrowser = new WorkflowBrowser(this);
-		_roleListBrowser = new RoleListBrowser(this);
+		_roleListBrowser = new RoleBrowser(this);
 
 		wkfBrowserView = new WorkflowBrowserView(this);
 		processBrowserView = new ProcessBrowserView(_processBrowser, this);
@@ -210,8 +219,9 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
-		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow().getRoleList() : null);
+		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
+		SWIMMING_LANE_PERSPECTIVE.setProject(getProject());
 		ROLE_EDITOR_PERSPECTIVE.setProject(getProject());
 	}
 
@@ -352,6 +362,18 @@ public class WKFController extends FlexoController implements PrintManagingContr
 				return;
 			}
 		}
+		if (object instanceof Role) {
+			object = ((Role) object).getRoleList().getUncachedObject();
+			if (object == null) {
+				return;
+			}
+		}
+		if (object instanceof RoleList) {
+			object = ((RoleList) object).getUncachedObject();
+			if (object == null) {
+				return;
+			}
+		}
 		if (object instanceof RoleList || object instanceof FlexoProcess) {
 			super.setCurrentEditedObjectAsModuleView(object);
 		}
@@ -397,15 +419,11 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 	}
 
-	// ==========================================================================
-	// ============================= Browsers ==================================
-	// ==========================================================================
-
 	public ProcessBrowser getProcessBrowser() {
 		return _processBrowser;
 	}
 
-	public RoleListBrowser getRoleListBrowser() {
+	public RoleBrowser getRoleListBrowser() {
 		return _roleListBrowser;
 	}
 
@@ -777,6 +795,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		} else {
 			super.propertyChange(evt);
 		}
-
 	}
+
 }

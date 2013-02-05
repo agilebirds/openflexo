@@ -49,23 +49,16 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
-import org.openflexo.module.InteractiveFlexoProjectReferenceLoader;
+import org.openflexo.module.Module;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
@@ -76,10 +69,7 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -304,7 +294,13 @@ public class Flexo {
 					splashWindow.dispose();
 					splashWindow = null;
 				}
-
+				Module module = Modules.getInstance().getModule(GeneralPreferences.getFavoriteModuleName());
+				if (module == null) {
+					if (Modules.getInstance().getAvailableModules().size() > 0) {
+						module = Modules.getInstance().getAvailableModules().get(0);
+					}
+				}
+				applicationContext.getModuleLoader().getModuleInstance(module).activateModule();
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.
@@ -313,6 +309,10 @@ public class Flexo {
 				e.printStackTrace();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
 						+ e.getProjectDirectory().getAbsolutePath());
+				showWelcomDialog(applicationContext, null);
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 				showWelcomDialog(applicationContext, null);
 			}
 		}

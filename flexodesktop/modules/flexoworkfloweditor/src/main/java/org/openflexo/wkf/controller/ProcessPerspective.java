@@ -25,10 +25,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -36,13 +32,13 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
-import org.openflexo.toolbox.FileResource;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
+import org.openflexo.wkf.view.ImportedWorkflowView;
 
 public class ProcessPerspective extends FlexoPerspective {
 	static final Logger logger = Logger.getLogger(ProcessPerspective.class.getPackage().getName());
@@ -51,7 +47,7 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	private JComponent topRightDummy;
 
-	private FIBView<?, ?> importedWorkflowView;
+	private ImportedWorkflowView importedWorkflowView;
 
 	/**
 	 * @param controller
@@ -62,20 +58,35 @@ public class ProcessPerspective extends FlexoPerspective {
 		super("process_edition");
 		_controller = controller;
 		topRightDummy = new JPanel();
+		importedWorkflowView = new ImportedWorkflowView(controller);
 		setTopLeftView(_controller.getWkfBrowserView());
 		if (!UserType.isLite()) {
 			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
-		FIBComponent comp = FIBLibrary.instance().retrieveFIBComponent(new FileResource("Fib/FIBImportedWorkflowTree.fib"));
-		importedWorkflowView = FIBController.makeView(comp, new FlexoFIBController(comp, _controller));
-		importedWorkflowView.getController().setDataObject(controller.getControllerModel());
+
 	}
 
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
 			return getCurrentProcessView().getController().getPaletteView();
+		} else {
+				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
+		} else {
+			return topRightDummy;
+		}
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
 		} else {
 			return topRightDummy;
 		}
@@ -89,16 +100,6 @@ public class ProcessPerspective extends FlexoPerspective {
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WKFIconLibrary.WKF_BPEP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_BPEP_SELECTED_ICON;
 	}
 
 	@Override
@@ -158,12 +159,13 @@ public class ProcessPerspective extends FlexoPerspective {
 			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
+			importedWorkflowView.setSelected(process.getProcessNode());
 		}
 	}
 
 	protected void updateMiddleLeftView() {
 		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
-			setMiddleLeftView(importedWorkflowView.getResultingJComponent());
+			setMiddleLeftView(importedWorkflowView);
 		} else {
 			setMiddleLeftView(null);
 		}

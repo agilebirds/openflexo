@@ -22,6 +22,7 @@ public class UtilsIconLibrary {
 
 	public static final ImageIcon CLOSE_ICON = new ImageIconResource("Icons/Actions/Close.png");
 	public static final ImageIcon CLOSE_HOVER_ICON = new ImageIconResource("Icons/Actions/CloseHover.png");
+	public static final ImageIcon CLOSE_PRESSED_ICON = new ImageIconResource("Icons/Actions/ClosePressed.png");
 
 	public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
 	public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");

@@ -51,7 +51,8 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 		@Override
 		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof ProcessFolder
-					&& !((ProcessFolder) object).getProcessNode().isImported() || object instanceof FlexoWorkflow;
+					&& (((ProcessFolder) object).getProcessNode() == null || !((ProcessFolder) object).getProcessNode().isImported())
+					|| object instanceof FlexoWorkflow;
 		}
 
 		@Override
@@ -65,6 +66,7 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 	private FlexoProcess _parentProcess;
 	private FlexoProcess _newProcess;
 	private FlexoProject _project;
+	private boolean showNewProcess = true;
 
 	static {
 		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoWorkflow.class);
@@ -109,6 +111,14 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 
 	public FlexoProcess getNewProcess() {
 		return _newProcess;
+	}
+
+	public boolean isShowNewProcess() {
+		return showNewProcess;
+	}
+
+	public void setShowNewProcess(boolean showNewProcess) {
+		this.showNewProcess = showNewProcess;
 	}
 
 }

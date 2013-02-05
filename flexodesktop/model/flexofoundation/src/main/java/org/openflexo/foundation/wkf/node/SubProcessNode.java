@@ -36,6 +36,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.PortMapInserted;
@@ -134,6 +135,28 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 			return /* !aProcess.isRootProcess() */true;// Allowed to invoke the root process
 		} else {
 			return parentProcess.isAncestorOf(getProcess());
+		}
+	}
+
+	public boolean isAcceptableAsSubProcess(FlexoProcessNode existingProcessNode) {
+		if (existingProcessNode == null) {
+			return true; // Null value is allowed in the context of edition
+		}
+		return isAcceptableAsSubProcess(existingProcessNode, existingProcessNode.getFatherProcessNode());
+	}
+
+	public boolean isAcceptableAsSubProcess(FlexoProcessNode aProcess, FlexoProcessNode parentProcess) {
+		if (parentProcess != null && parentProcess.isImported()) {
+			return false;
+		}
+		if (aProcess.isTopLevelProcess()) {
+			return true;
+		}
+
+		if (parentProcess == null) {
+			return /* !aProcess.isRootProcess() */true;// Allowed to invoke the root process
+		} else {
+			return parentProcess.isAncestorOf(getProcess().getProcessNode());
 		}
 	}
 

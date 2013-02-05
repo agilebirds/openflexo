@@ -515,6 +515,7 @@ public abstract class ContextualMenuManager {
 			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, focusedObject,
 					_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null, getEditor());
 			JMenuItem item = menu.add(action);
+
 			item.setText(actionType.getLocalizedName());
 			if (getEditor().getKeyStrokeFor(actionType) != null) {
 				item.setAccelerator(getEditor().getKeyStrokeFor(actionType));

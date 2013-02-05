@@ -109,6 +109,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Represent the controller of an instantiation of a FIBComponent in a particular Window Toolkit context (eg Swing)
@@ -167,6 +168,10 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			dataObject = null;
 			deleted = true;
 		}
+	}
+
+	public boolean isDeleted() {
+		return deleted;
 	}
 
 	public FIBView<FIBComponent, ?> buildView() {
@@ -347,6 +352,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		private Timer timer;
 		private FIBWidgetView widgetView;
 		private FIBWidget fibWidget;
+		private boolean isPopupTrigger = false;
 
 		public FIBMouseAdapter(FIBWidgetView widgetView, FIBWidget fibWidget) {
 			this.widgetView = widgetView;
@@ -356,7 +362,8 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		protected void fireSingleClick(MouseEvent e) {
 			mouseEvent = e;
 			fireMouseClicked(widgetView.getDynamicModel(), 1);
-			if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
+			if (fibWidget.hasRightClickAction()
+					&& (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3 || ToolBox.isMacOS() && isPopupTrigger)) {
 				// Detected right-click associated with action
 				widgetView.applyRightClickAction(e);
 			} else if (fibWidget.hasClickAction()) {
@@ -394,8 +401,16 @@ public class FIBController extends Observable implements BindingEvaluationContex
 				});
 				timer.setRepeats(false);
 				timer.start();
+
 			}
+			isPopupTrigger = false;
 		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			isPopupTrigger = true;
+		}
+
 	}
 
 	/**

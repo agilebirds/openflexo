@@ -12,9 +12,9 @@
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
-    <Localized key="display_thumb" lang="English">DIsplay embedded subprocess</Localized>
+    <Localized key="display_thumb" lang="English">Display embedded</Localized>
     <Localized key="display_thumb" lang="French">Afficher le sous-processus</Localized>
-    <Localized key="display_thumb" lang="Dutch">DIsplay embedded subprocess</Localized>
+    <Localized key="display_thumb" lang="Dutch">Display embedded</Localized>
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
     <Localized key="Advanced" lang="English">Advanced</Localized>

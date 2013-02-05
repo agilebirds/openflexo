@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.wkf.controller.RoleListBrowser;
+import org.openflexo.wkf.controller.RoleBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
 /**
@@ -44,7 +44,7 @@ public class RoleListBrowserView extends BrowserView {
 	// ================================
 	// ==========================================================================
 
-	public RoleListBrowserView(RoleListBrowser roleListBrowser, WKFController controller) {
+	public RoleListBrowserView(RoleBrowser roleListBrowser, WKFController controller) {
 		super(roleListBrowser, controller);
 		_controller = controller;
 		FCH.setHelpItem(this, "rolelist-browser");

@@ -29,7 +29,6 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
@@ -158,6 +157,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
+		notifyObservers();
 		notifyChange("actions", null, actions);
 	}
 

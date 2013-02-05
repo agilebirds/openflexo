@@ -83,6 +83,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AttributeSet;
@@ -232,6 +233,10 @@ public class MetaphaseEditorPanel extends JPanel {
 	private HTMLEditorKit editorKit = new HTMLEditorKit();
 
 	private JPopupMenu contextMenu;
+
+	public static interface ImageInsertRequestHandler {
+		public void insertImage(JTextPane htmlTextPane);
+	}
 
 	private List<ContextMenuListener> contextMenuListeners = new ArrayList<ContextMenuListener>();
 	private List<EditorMouseMotionListener> editorMouseMotionListeners = new ArrayList<EditorMouseMotionListener>();
@@ -424,12 +429,14 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private javax.swing.JPanel aboutPanel;
 	private javax.swing.JButton aboutButton;
+	private ImageInsertRequestHandler insertImageRequestHandler;
 
 	public void documentWasEdited() {
 	}
 
 	/** Creates new form MetaphaseEditorPanel */
 	public MetaphaseEditorPanel(MetaphaseEditorConfiguration configuration) {
+		insertImageRequestHandler = new DefaultImageInsertRequestHandler();
 		initComponents();
 		updateComponents(configuration);
 
@@ -1658,22 +1665,7 @@ public class MetaphaseEditorPanel extends JPanel {
 	}// GEN-LAST:event_anchorButtonActionPerformed
 
 	private void insertImageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_insertImageActionPerformed
-		try {
-			ImageDialog imageDialog = new ImageDialog(null, true);
-			String html = imageDialog.showDialog();
-			if (html != null) {
-				if (imageDialog.isLink()) {
-					editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.A);
-				} else {
-					editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.IMG);
-				}
-				refreshAfterAction();
-			}
-		} catch (BadLocationException e) {
-			throw new MetaphaseEditorException(e.getMessage(), e);
-		} catch (IOException e) {
-			throw new MetaphaseEditorException(e.getMessage(), e);
-		}
+		insertImageRequestHandler.insertImage(htmlTextPane);
 	}// GEN-LAST:event_insertImageActionPerformed
 
 	private void insertRemoveBulletedListButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_insertRemoveBulletedListButtonActionPerformed
@@ -1790,6 +1782,18 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	public void removeContextMenuListener(ContextMenuListener contextMenuListener) {
 		contextMenuListeners.remove(contextMenuListener);
+	}
+
+	public ImageInsertRequestHandler getInsertImageRequestHandler() {
+		return insertImageRequestHandler;
+	}
+
+	public void setInsertImageRequestHandler(ImageInsertRequestHandler insertImageRequestHandler) {
+		if (insertImageRequestHandler != null) {
+			this.insertImageRequestHandler = insertImageRequestHandler;
+		} else {
+			this.insertImageRequestHandler = new DefaultImageInsertRequestHandler();
+		}
 	}
 
 	public void initSpellChecker() {
@@ -2120,6 +2124,28 @@ public class MetaphaseEditorPanel extends JPanel {
 				for (int i = 0; i < editorMouseMotionListeners.size(); i++) {
 					editorMouseMotionListeners.get(i).mouseMoved(editorMouseEvent);
 				}
+			}
+		}
+	}
+
+	class DefaultImageInsertRequestHandler implements ImageInsertRequestHandler {
+		@Override
+		public void insertImage(JTextPane htmlTextPane) {
+			try {
+				ImageDialog imageDialog = new ImageDialog(SwingUtilities.windowForComponent(htmlTextPane), true);
+				String html = imageDialog.showDialog();
+				if (html != null) {
+					if (imageDialog.isLink()) {
+						editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.A);
+					} else {
+						editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.IMG);
+					}
+					refreshAfterAction();
+				}
+			} catch (BadLocationException e) {
+				throw new MetaphaseEditorException(e.getMessage(), e);
+			} catch (IOException e) {
+				throw new MetaphaseEditorException(e.getMessage(), e);
 			}
 		}
 	}

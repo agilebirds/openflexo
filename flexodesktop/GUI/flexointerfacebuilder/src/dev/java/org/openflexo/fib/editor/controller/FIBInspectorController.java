@@ -120,7 +120,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 
 		switchToEmptyContent();
 		inspectorDialog.setResizable(true);
-		inspectorDialog.validate();
+		rootPane.revalidate();
 		inspectorDialog.setVisible(true);
 	}
 
@@ -155,7 +155,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		currentInspectorView = null;
 		rootPane.removeAll();
 		rootPane.add(EMPTY_CONTENT, BorderLayout.CENTER);
-		rootPane.validate();
+		rootPane.revalidate();
 		rootPane.repaint();
 	}
 
@@ -175,7 +175,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			currentInspectorView = view;
 			rootPane.removeAll();
 			rootPane.add(currentInspectorView.getResultingJComponent(), BorderLayout.CENTER);
-			rootPane.validate();
+			rootPane.revalidate();
 			rootPane.repaint();
 			currentInspector = newInspector;
 			inspectorDialog.setTitle(newInspector.getParameter("title"));

@@ -132,6 +132,7 @@ public class FIBCustom extends FIBWidget {
 		if (notification != null) {
 			this.componentClass = componentClass;
 			if (componentClass != null) {
+				customComponentBindingModel = null;
 				createCustomComponentBindingModel();
 				for (Method m : componentClass.getMethods()) {
 					FIBCustomComponent.CustomComponentParameter annotation = m

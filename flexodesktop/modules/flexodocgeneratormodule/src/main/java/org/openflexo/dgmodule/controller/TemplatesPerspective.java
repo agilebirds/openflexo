@@ -59,16 +59,6 @@ public class TemplatesPerspective extends FlexoPerspective {
 		return DGIconLibrary.DG_TEMPLATES_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DGIconLibrary.DG_TEMPLATES_SELECTED_ICON;
-	}
-
 	@Override
 	public JComponent getFooter() {
 		return infoLabel;

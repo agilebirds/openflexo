@@ -440,7 +440,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			((TwoColsLayoutConstraints) titleLabel.getConstraints()).setInsetsBottom(10);
 		}
 
-		int index = 2;
+		int index = 1;
 		Hashtable<EditionSchemeParameter, FIBComponent> widgets = new Hashtable<EditionSchemeParameter, FIBComponent>();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			FIBLabel label = new FIBLabel();

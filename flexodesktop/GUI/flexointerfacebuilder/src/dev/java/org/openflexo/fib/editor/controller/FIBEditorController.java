@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -163,7 +164,17 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) {
 		this(fibComponent, editor, null);
 		// Class testClass = null;
-		if (fibComponent.getDataClass() != null) {
+		boolean instantiable = fibComponent.getDataClass() != null && !Modifier.isAbstract(fibComponent.getDataClass().getModifiers());
+		if (instantiable) {
+			try {
+				instantiable = fibComponent.getDataClass().getConstructor(new Class[0]) != null;
+			} catch (SecurityException e) {
+				instantiable = false;
+			} catch (NoSuchMethodException e) {
+				instantiable = false;
+			}
+		}
+		if (instantiable) {
 			try {
 				// testClass = Class.forName(fibComponent.getDataClassName());
 				Object testData = fibComponent.getDataClass().newInstance();

@@ -545,8 +545,7 @@
 		#if(!${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 			#set($index=${node.getIndex()})
 		#end
-        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
-        
+        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()} || ${node.getLevel()} != "PROCESS") false #else true #end);
         #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
             #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
                 #generateNodesCreation($subNode ${node.getURI()})
@@ -573,8 +572,8 @@
 #end
 
 #set($process = $object)
-
-function initProcess${process.getFlexoID()}()
+#set($pName = ${javaUtils.getVariableName("${process.getProject().getDisplayName()}_${process.getName()}_${process.getFlexoID()}")})
+function initProcess${pName}()
 {
     var fctCreateDivDescription = null;
     var fctCreateContent = null;
@@ -582,5 +581,5 @@ function initProcess${process.getFlexoID()}()
     #generateNodesCreation($process ${process.getParentProcess().getURI()})
 }
 
-initProcess${process.getFlexoID()}();
+initProcess${pName}();
 

@@ -116,7 +116,7 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 
 		@Override
 		public boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
-			return isEnabledForSelection(focusedObject, globalSelection);
+			return !(focusedObject instanceof FlexoProcess);
 		}
 
 		@Override

@@ -113,4 +113,12 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	public DiagramSpecification getDiagramSpecification() {
 		return getVirtualModel();
 	}
+
+	/**
+	 * @return
+	 */
+	public static final String getTypeName() {
+		return "DIAGRAM";
+	}
+
 }

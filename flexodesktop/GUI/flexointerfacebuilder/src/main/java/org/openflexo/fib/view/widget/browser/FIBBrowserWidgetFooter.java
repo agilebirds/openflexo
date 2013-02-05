@@ -249,7 +249,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 			optionsButton.setEnabled(false);
 		} else {
 			if (hasMultiplePlusActions(element)) {
-				plusButton.setEnabled(true);
+				plusButton.setEnabled(true && _widget.isEnabled());
 			} else {
 				boolean isActive = false;
 				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions.get(element);
@@ -259,7 +259,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 						isActive = true;
 					}
 				}
-				plusButton.setEnabled(isActive);
+				plusButton.setEnabled(isActive && _widget.isEnabled());
 			}
 
 			boolean isMinusActive = false;
@@ -270,8 +270,8 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 					isMinusActive = true;
 				}
 			}
-			minusButton.setEnabled(isMinusActive);
-			optionsButton.setEnabled(_otherActions.size() > 0);
+			minusButton.setEnabled(isMinusActive && _widget.isEnabled());
+			optionsButton.setEnabled(_otherActions.size() > 0 && _widget.isEnabled());
 		}
 	}
 

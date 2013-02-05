@@ -144,16 +144,6 @@ public class ViewPointPerspective extends FlexoPerspective {
 		return VPMIconLibrary.VPM_VPE_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return VPMIconLibrary.VPM_VPE_SELECTED_ICON;
-	}
-
 	@Override
 	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
@@ -170,6 +160,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
+		if (object.isDeleted()) {
+			return null;
+		}
 		if (object instanceof ViewPointLibrary) {
 			return new ViewPointLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
@@ -177,6 +170,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new ViewPointView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
+			if (((EditionPattern) object).getViewPoint() != null) {
+			}
 			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof DiagramPalette) {

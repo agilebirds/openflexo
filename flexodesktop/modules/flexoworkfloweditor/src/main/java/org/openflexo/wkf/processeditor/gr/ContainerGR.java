@@ -55,11 +55,8 @@ import org.openflexo.foundation.wkf.dm.ArtefactInserted;
 import org.openflexo.foundation.wkf.dm.ArtefactRemoved;
 import org.openflexo.foundation.wkf.dm.NodeInserted;
 import org.openflexo.foundation.wkf.dm.NodeRemoved;
-import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
-import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
-import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.AnnotationMouseClickControl;
 import org.openflexo.wkf.processeditor.ProcessGraphicalRepresentation;
@@ -307,29 +304,15 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 				notifyShapeNeedsToBeRedrawn();
 				notifyObjectMoved();
 				notifyObjectResized();
-			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX")
-						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY")) {
-					notifyObjectMoved();
-				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("width")
-						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("height")) {
-					notifyObjectResized();
-				} else {
-					notifyShapeNeedsToBeRedrawn();
-				}
-			} else if (dataModification instanceof ObjectLocationChanged) {
-				notifyObjectMoved();
-			} else if (dataModification instanceof ObjectSizeChanged) {
-				notifyObjectResized();
 			} else if (dataModification instanceof PetriGraphHasBeenOpened) {
 				if (getParentGraphicalRepresentation() != null) {
 					getParentGraphicalRepresentation().moveToTop(this);
 				}
 				switchToSelectionLayer();
 				restoreNormalLayer();
-
 			}
 		}
+		super.update(observable, dataModification);
 	}
 
 	private int regularLayer;

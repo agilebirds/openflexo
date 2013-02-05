@@ -29,6 +29,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * @author gpolet
@@ -71,10 +73,13 @@ public class SaveProjectsDialog {
 
 	private boolean ok = false;
 
-	public SaveProjectsDialog(List<FlexoProject> modifiedProjects) {
+	public SaveProjectsDialog(FlexoController controller, List<FlexoProject> modifiedProjects) {
 		data = new ProjectList(modifiedProjects);
 		FIBDialog<ProjectList> dialog = FIBDialog.instanciateDialog(FIB_FILE, data, FlexoFrame.getActiveFrame(), true,
 				FlexoLocalization.getMainLocalizer());
+		if (dialog.getController() instanceof FlexoFIBController) {
+			((FlexoFIBController) dialog.getController()).setFlexoController(controller);
+		}
 		dialog.setTitle(FlexoLocalization.localizedForKey("project_has_unsaved_changes"));
 		dialog.showDialog();
 		ok = dialog.getController().getStatus() == Status.YES;

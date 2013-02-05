@@ -19,11 +19,9 @@
  */
 package org.openflexo.fib.view.widget.table;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -75,7 +73,6 @@ public class TextFieldColumn extends StringColumn implements EditableColumn<Stri
 				@Override
 				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {

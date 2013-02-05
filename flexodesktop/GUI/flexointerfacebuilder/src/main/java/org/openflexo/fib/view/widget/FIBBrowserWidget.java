@@ -20,6 +20,10 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.MouseListener;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +40,8 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -52,14 +58,14 @@ import org.openflexo.fib.view.widget.browser.FIBBrowserCellRenderer;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel.BrowserCell;
 import org.openflexo.fib.view.widget.browser.FIBBrowserWidgetFooter;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Widget allowing to display a browser (a tree of various objects)
  * 
  * @author sguerin
  */
-public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeModelListener,
-		TreeSelectionListener {
+public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> implements FIBSelectable, TreeSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserWidget.class.getPackage().getName());
 
@@ -151,7 +157,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
-		if (!getBrowser().getRootVisible() && ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
+		/*if (!getBrowser().getRootVisible() && ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
 			// Only one cell and roots are hidden, expand this first cell
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -163,7 +169,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 					}
 				}
 			});
-		}
+		}*/
 		// getBrowserModel().setModel(getDataObject());
 
 		// We restore value if and only if we represent same browser
@@ -286,7 +292,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		deleteBrowser();
 
 		if (_browserModel != null) {
-			_browserModel.removeTreeModelListener(this);
 			_browserModel.delete();
 			_browserModel = null;
 		}
@@ -306,22 +311,62 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	private void buildBrowser() {
-		getBrowserModel().addTreeModelListener(this);
-
-		_tree = new JTree(getBrowserModel());
+		_tree = new JTree(getBrowserModel()) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (ToolBox.isMacOSLaf()) {
+					if (getSelectionRows() != null && getSelectionRows().length > 0) {
+						for (int selected : getSelectionRows()) {
+							Rectangle rowBounds = getRowBounds(selected);
+							if (getVisibleRect().contains(rowBounds)) {
+								Object value = getPathForRow(selected).getLastPathComponent();
+								Component treeCellRendererComponent = getCellRenderer().getTreeCellRendererComponent(this, value, true,
+										isExpanded(selected), getModel().isLeaf(value), selected, getLeadSelectionRow() == selected);
+								Color bgColor = treeCellRendererComponent.getBackground();
+								if (treeCellRendererComponent instanceof DefaultTreeCellRenderer) {
+									bgColor = ((DefaultTreeCellRenderer) treeCellRendererComponent).getBackgroundSelectionColor();
+								}
+								if (bgColor != null) {
+									g.setColor(bgColor);
+									g.fillRect(0, rowBounds.y, getWidth(), rowBounds.height);
+								}
+								Graphics g2 = g.create(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+								treeCellRendererComponent.setBounds(rowBounds);
+								treeCellRendererComponent.paint(g2);
+								g2.dispose();
+							}
+						}
+					}
+				}
+			}
+		};
+		if (ToolBox.isMacOS()) {
+			_tree.setSelectionModel(new DefaultTreeSelectionModel() {
+				@Override
+				public int[] getSelectionRows() {
+					int[] selectionRows = super.getSelectionRows();
+					// MacOS X does not support that we return null here during DnD operations.
+					if (selectionRows == null) {
+						return new int[0];
+					}
+					return selectionRows;
+				}
+			});
+		}
 		_tree.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_tree.addFocusListener(this);
+		_tree.setEditable(true);
+		_tree.setScrollsOnExpand(true);
 		FIBBrowserCellRenderer renderer = new FIBBrowserCellRenderer(this);
 		_tree.setCellRenderer(renderer);
 		_tree.setCellEditor(new FIBBrowserCellEditor(_tree, renderer));
+		ToolTipManager.sharedInstance().registerComponent(_tree);
+		_tree.setAutoscrolls(true);
 
-		_tree.setEditable(true);
-		_tree.setScrollsOnExpand(true);
-		// _tree.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 0));
+		/** Beginning of model dependent settings */
 		_tree.setRootVisible(getBrowser().getRootVisible());
 		_tree.setShowsRootHandles(getBrowser().getShowRootsHandle());
-		_tree.setAutoscrolls(true);
-		ToolTipManager.sharedInstance().registerComponent(_tree);
 
 		// If a double-click action is set, desactivate tree expanding/collabsing with double-click
 		if (getBrowser().getDoubleClickAction().isSet()) {
@@ -330,6 +375,11 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		if (_fibBrowser.getRowHeight() != null) {
 			_tree.setRowHeight(_fibBrowser.getRowHeight());
+		} else {
+			_tree.setRowHeight(0);
+		}
+		if (_fibBrowser.getVisibleRowCount() != null) {
+			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
 		}
 
 		getTreeSelectionModel().setSelectionMode(getBrowser().getSelectionMode().getMode());
@@ -337,26 +387,52 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		scrollPane = new JScrollPane(_tree);
 
-		/*_tree.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				getController().fireMouseClicked(getDynamicModel(),e.getClickCount());
-			}
-		});*/
-
 		_dynamicComponent.removeAll();
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
 
 		if (_fibBrowser.getShowFooter()) {
 			_dynamicComponent.add(getFooter(), BorderLayout.SOUTH);
 		}
-		if (_fibBrowser.getVisibleRowCount() != null) {
-			_tree.setVisibleRowCount(_fibBrowser.getVisibleRowCount());
-		}
-
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
+		getBrowserModel().addTreeModelListener(new TreeModelListener() {
+
+			@Override
+			public void treeStructureChanged(TreeModelEvent e) {
+				ensureRootExpanded();
+			}
+
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {
+
+			}
+
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {
+				ensureRootExpanded();
+			}
+
+			private void ensureRootExpanded() {
+				if (!getBrowser().getRootVisible() && (BrowserCell) getBrowserModel().getRoot() != null
+						&& ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
+					// Only one cell and roots are hidden, expand this first cell
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getJTree().expandPath(
+									new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
+											((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+						}
+					});
+				}
+		}
+
+			@Override
+			public void treeNodesChanged(TreeModelEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	@Override
@@ -386,27 +462,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	@Override
 	public void selectionResetted() {
 		resetSelectionNoNotification();
-	}
-
-	@Override
-	public void treeNodesChanged(TreeModelEvent e) {
-		// logger.fine("treeNodesChanged "+e);
-	}
-
-	@Override
-	public void treeNodesInserted(TreeModelEvent e) {
-		// logger.fine("treeNodesInserted "+e);
-	}
-
-	@Override
-	public void treeNodesRemoved(TreeModelEvent e) {
-		// logger.fine("treeNodesRemoved "+e);
-		// Here maybe check if objects represented by the removed nodes should be removed from current selection/selectedObject
-	}
-
-	@Override
-	public void treeStructureChanged(TreeModelEvent e) {
-		// logger.fine("treeStructureChanged "+e);
 	}
 
 	@Override
