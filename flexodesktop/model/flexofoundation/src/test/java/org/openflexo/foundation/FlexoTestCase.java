@@ -184,6 +184,8 @@ public abstract class FlexoTestCase extends TestCase {
 		return null;
 	}
 
+	// TODO: create a project where all those tests don't need a manual import of projects
+	// TODO: copy all test VP in tmp dir and work with those VP instead of polling GIT workspace
 	protected static FlexoServiceManager instanciateTestServiceManager() {
 		serviceManager = new DefaultFlexoServiceManager() {
 

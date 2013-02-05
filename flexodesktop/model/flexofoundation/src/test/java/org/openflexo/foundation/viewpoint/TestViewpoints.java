@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationReport;
@@ -33,9 +32,6 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMu
 public class TestViewpoints extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
-
-	private static UserResourceCenter resourceCenter;
-	private static ViewPointLibrary viewPointLibrary;
 
 	public TestViewpoints(String name) {
 		super(name);
@@ -48,6 +44,8 @@ public class TestViewpoints extends FlexoTestCase {
 
 		log("test0InstantiateResourceCenter()");
 
+		// TODO: create a project where all those tests don't need a manual import of projects
+		// TODO: copy all test VP in tmp dir and work with those VP instead of polling GIT workspace
 		instanciateTestServiceManager();
 
 	}
@@ -55,6 +53,9 @@ public class TestViewpoints extends FlexoTestCase {
 	private ViewPoint testLoadViewPoint(String viewPointURI) {
 
 		log("Testing ViewPoint loading: " + viewPointURI);
+
+		System.out.println("resourceCenter=" + resourceCenter);
+		System.out.println("resourceCenter.getViewPointRepository()=" + resourceCenter.getViewPointRepository());
 
 		ViewPointResource vpRes = resourceCenter.getViewPointRepository().getResource(viewPointURI);
 
@@ -92,7 +93,14 @@ public class TestViewpoints extends FlexoTestCase {
 		ViewPoint basicOntologyEditor = testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 		assertNotNull(basicOntologyEditor);
 
+		System.out.println("Read resource " + basicOntologyEditor.getResource().getFile().getAbsolutePath());
+
 		EditionPattern conceptEP = basicOntologyEditor.getDefaultDiagramSpecification().getEditionPattern("Concept");
+
+		for (EditionPattern ep : basicOntologyEditor.getDefaultDiagramSpecification().getEditionPatterns()) {
+			System.out.println("ep=" + ep);
+		}
+
 		assertNotNull(conceptEP);
 
 		DropScheme ds = (DropScheme) conceptEP.getEditionScheme("DropConceptAtTopLevel");

@@ -26,12 +26,17 @@ public class TestLoadViewPoints extends FlexoTestCase {
 
 		log("test0InstantiateResourceCenter()");
 
+		// TODO: create a project where all those tests don't need a manual import of projects
+		// TODO: copy all test VP in tmp dir and work with those VP instead of polling GIT workspace
 		instanciateTestServiceManager();
 	}
 
 	private void testLoadViewPoint(String viewPointURI) {
 
 		log("Testing ViewPoint loading: " + viewPointURI);
+
+		System.out.println("resourceCenter=" + resourceCenter);
+		System.out.println("resourceCenter.getViewPointRepository()=" + resourceCenter.getViewPointRepository());
 
 		ViewPointResource vpRes = resourceCenter.getViewPointRepository().getResource(viewPointURI);
 
