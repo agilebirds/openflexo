@@ -265,7 +265,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 					ProjectData data = getReferringProject().getProjectData();
 					if (data != null) {
 						FlexoProjectReference projectReference = data.getProjectReferenceWithURI(enclosingProjectIdentifier);
-						return projectReference.getReferredProject(force);
+						if (projectReference != null) {
+							return projectReference.getReferredProject(force);
+						} else {
+							return getReferringProject();
+						}
 					}
 				}
 			} else {
