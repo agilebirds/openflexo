@@ -59,6 +59,7 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 			param.put("password", password);
 			param.put("uri", reference.getURI());
 			param.put("revision", String.valueOf(reference.getRevision()));
+			param.put("greaterOrEqual", "true");
 			StringBuilder paramsAsString = new StringBuilder();
 			if (param != null && param.size() > 0) {
 				boolean first = true;
