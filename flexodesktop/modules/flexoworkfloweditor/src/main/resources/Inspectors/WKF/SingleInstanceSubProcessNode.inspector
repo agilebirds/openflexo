@@ -20,5 +20,5 @@
     <Localized key="Advanced" lang="English">Advanced</Localized>
     <Localized key="Advanced" lang="Dutch">Advanced</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Single sub-process instance" />
+  <Parameter name="title" value="Sub-process (Call activity)" />
 </Panel>

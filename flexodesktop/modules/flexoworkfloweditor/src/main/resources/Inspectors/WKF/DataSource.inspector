@@ -10,5 +10,5 @@
     <Localized key="Advanced" lang="French">Avancé</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Data source" />
+  <Parameter name="title" value="Data store" />
 </Panel>

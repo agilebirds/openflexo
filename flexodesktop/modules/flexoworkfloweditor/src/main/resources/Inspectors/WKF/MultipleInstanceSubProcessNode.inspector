@@ -25,5 +25,5 @@
     <Localized key="Advanced" lang="English">Advanced</Localized>
     <Localized key="Advanced" lang="Dutch">Advanced</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Multiple sub-process instances" />
+  <Parameter name="title" value="Parallell sub-process" />
 </Panel>
