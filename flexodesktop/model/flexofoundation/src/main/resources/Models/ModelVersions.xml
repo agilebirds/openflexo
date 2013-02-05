@@ -113,7 +113,11 @@
   </class>-->
    
   <class name="org.openflexo.foundation.view.View" latestVersion="1.0"> 
-    <version id="1.0" modelFile="ShemaModel/shema_model_1.0.xml"/>
+    <version id="1.0" modelFile="ViewModel/view_model_1.0.xml"/>
+  </class>
+   
+  <class name="org.openflexo.foundation.view.diagram.model.Diagram" latestVersion="1.0"> 
+    <version id="1.0" modelFile="DiagramModel/diagram_model_1.0.xml"/>
   </class>
    
   <class name="org.openflexo.foundation.cg.GeneratedCode" latestVersion="0.1">
