@@ -97,7 +97,9 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.CGObject;
+import org.openflexo.foundation.cg.GeneratedCode;
+import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
@@ -129,7 +131,6 @@ import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
-import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
@@ -1919,6 +1920,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		} else if (object instanceof FlexoProjectReference) {
 			return WKFIconLibrary.OPENFLEXO_NOTEXT_16;
+		} else if (object instanceof GeneratedDoc) {
+			return DGIconLibrary.GENERATED_DOC_ICON;
+		} else if (object instanceof GeneratedCode) {
+			return CGIconLibrary.GENERATED_CODE_ICON;
+		} else if (object instanceof GenerationRepository) {
+			return CGIconLibrary.GENERATED_CODE_REPOSITORY_ICON;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
