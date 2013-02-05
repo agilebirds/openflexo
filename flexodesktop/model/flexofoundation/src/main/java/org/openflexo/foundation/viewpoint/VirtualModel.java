@@ -46,6 +46,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
@@ -138,7 +139,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	@Override
 	public String getURI() {
-		return getViewPoint().getURI() + "." + getName();
+		return getViewPoint().getURI() + "/" + getName();
 	}
 
 	@Override
@@ -618,6 +619,30 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		public ViewPoint getViewPoint() {
 			return viewPoint;
 		}
+	}
+
+	@Override
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
+		out.append("VirtualModel " + getName() + " type=" + getClass().getSimpleName() + " uri=\"" + getURI() + "\"");
+		out.append(" {" + StringUtils.LINE_SEPARATOR);
+
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+			// out.append("Prout");
+			if (modelSlot.getMetaModelResource() != null) {
+				out.append(modelSlot);
+			}
+			// out.append("Hop");
+		}
+
+		out.append(StringUtils.LINE_SEPARATOR);
+		for (EditionPattern ep : getEditionPatterns()) {
+			out.append(ep);
+			out.append(StringUtils.LINE_SEPARATOR);
+		}
+		out.append("}" + StringUtils.LINE_SEPARATOR);
+		return out.toString();
 	}
 
 }

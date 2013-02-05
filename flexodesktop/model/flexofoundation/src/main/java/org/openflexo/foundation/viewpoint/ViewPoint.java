@@ -24,8 +24,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -53,6 +55,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
@@ -518,28 +521,42 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return modelSlots;
 	}
 
-	@Override
-	public String getLanguageRepresentation() {
-		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		StringBuffer sb = new StringBuffer();
-		/*System.out.println("loaded: " + getViewpointOntology().isLoaded());
-		for (IFlexoOntology o : getViewpointOntology().getImportedOntologies()) {
-			if (o != getOntologyLibrary().getOWLOntology()) {
-				String modelName = JavaUtils.getVariableName(o.getName());
-				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
+	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
+		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+			if (modelSlot.getMetaModelResource() != null) {
+				allMetaModels.add(modelSlot.getMetaModelResource());
 			}
-		}*/
-		sb.append("viewdefinition " + getName() + " uri=\"" + getURI() + "\"");
-		sb.append(" {" + StringUtils.LINE_SEPARATOR);
-		// TODO iterate on slots here
-		sb.append("modelslot defaultModelSlot implements toto;");
-		sb.append(StringUtils.LINE_SEPARATOR);
-		/*for (EditionPattern ep : getEditionPatterns()) {
-			sb.append(ep.getLanguageRepresentation());
-			sb.append(StringUtils.LINE_SEPARATOR);
-		}*/
-		sb.append("}" + StringUtils.LINE_SEPARATOR);
-		return sb.toString();
+		}
+		return allMetaModels;
+	}
+
+	@Override
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
+
+		for (FlexoMetaModelResource<?, ?> mm : getAllMetaModels()) {
+			out.append("import " + mm.getURI() + ";");
+			out.append(StringUtils.LINE_SEPARATOR);
+		}
+
+		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
+		out.append(" {" + StringUtils.LINE_SEPARATOR);
+
+		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+			if (modelSlot.getMetaModelResource() != null) {
+				out.append(modelSlot);
+			}
+		}
+
+		out.append(StringUtils.LINE_SEPARATOR);
+		for (VirtualModel<?> vm : getVirtualModels()) {
+			out.append(vm);
+			out.append(StringUtils.LINE_SEPARATOR);
+		}
+		out.append("}" + StringUtils.LINE_SEPARATOR);
+		return out.toString();
 	}
 
 	@Override

@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-
 /**
  * Represents an object which is part of the model of an EditionPattern
  * 
@@ -57,7 +55,7 @@ public abstract class EditionPatternObject extends NamedViewPointObject {
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

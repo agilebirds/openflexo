@@ -349,7 +349,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
 		@Override
-		public String getLanguageRepresentation() {
+		public String getLanguageRepresentation(LanguageRepresentationContext context) {
 			return "<not_implemented:" + getFullyQualifiedName() + ">";
 		}
 
@@ -438,7 +438,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
+	public String getLanguageRepresentation(LanguageRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

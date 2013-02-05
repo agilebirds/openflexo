@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -38,6 +39,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.Diag
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -163,7 +165,64 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 	public abstract ViewPoint getViewPoint();
 
-	public abstract String getLanguageRepresentation();
+	public abstract String getLanguageRepresentation(LanguageRepresentationContext context);
+
+	public final String getLanguageRepresentation() {
+		return getLanguageRepresentation(new LanguageRepresentationContext());
+	}
+
+	public static class LanguageRepresentationContext {
+
+		private int indentation = 0;
+		private HashMap<String, NamedViewPointObject> nameSpaces;
+
+		public LanguageRepresentationContext() {
+			indentation = 0;
+			nameSpaces = new HashMap<String, NamedViewPointObject>();
+		}
+
+		public void addToNameSpaces(NamedViewPointObject object) {
+			nameSpaces.put(object.getURI(), object);
+		}
+
+		public LanguageRepresentationContext makeSubContext() {
+			LanguageRepresentationContext returned = new LanguageRepresentationContext();
+			for (String uri : nameSpaces.keySet()) {
+				returned.nameSpaces.put(uri, nameSpaces.get(uri));
+			}
+			returned.indentation = indentation + 1;
+			return returned;
+		}
+
+		public static class LanguageRepresentationOutput {
+
+			StringBuffer sb;
+			LanguageRepresentationContext context;
+
+			public LanguageRepresentationOutput(LanguageRepresentationContext aContext) {
+				sb = new StringBuffer();
+				context = aContext;
+			}
+
+			public void append(String s) {
+				sb.append(StringUtils.buildWhiteSpaceIndentation(context.indentation * 2) + s);
+			}
+
+			public void append(ViewPointObject o) {
+				LanguageRepresentationContext subContext = context.makeSubContext();
+				String lr = o.getLanguageRepresentation(subContext);
+				for (int i = 0; i < StringUtils.linesNb(lr); i++) {
+					String l = StringUtils.extractStringFromLine(lr, i);
+					sb.append(StringUtils.buildWhiteSpaceIndentation(context.indentation * 2) + l);
+				}
+			}
+
+			@Override
+			public String toString() {
+				return sb.toString();
+			}
+		}
+	}
 
 	@Override
 	public String getFullyQualifiedName() {
