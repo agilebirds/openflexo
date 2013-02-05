@@ -64,7 +64,7 @@ public class DocType extends TargetType implements ChoiceList, StringRepresentab
 		this(project);
 		availableFormats = new Vector<Format>();
 		availableFormats.add(Format.HTML);
-		availableFormats.add(Format.LATEX);
+		// availableFormats.add(Format.LATEX);
 		availableFormats.add(Format.DOCX);
 		name = FileUtils.getValidFileName(name).replace(',', ' '); // Target name are used to build directory structure
 		this.name = name;

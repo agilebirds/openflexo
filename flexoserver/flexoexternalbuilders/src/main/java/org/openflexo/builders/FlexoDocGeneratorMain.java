@@ -29,7 +29,6 @@ import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.LatexUtils;
 
 public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
@@ -56,7 +55,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	// Variables
 	private File templates = null;
 	private String docType = DefaultDocType.Business.name();
-	private Format format = Format.LATEX;
+	private Format format = Format.DOCX;
 	private String outputPath = null;
 	private boolean noPostBuild = false;
 	private String tocUserID;
@@ -145,7 +144,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			logger.info("Working directory is: " + output.getAbsolutePath());
 		}
 		File latexDir = new File(output, "Doc" + format.name() + "Source");
-		File pdfDir = new File(output, format == Format.LATEX ? "PDF" : "ZIP");
+		File pdfDir = new File(output, /*format == Format.LATEX ? "PDF" :*/"ZIP");
 		latexDir.mkdirs();
 		pdfDir.mkdirs();
 		if (project != null) {
@@ -241,7 +240,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			final GenerateArtefact<?, ?> generateArtefact;
 			if (!noPostBuild) {
 				switch (format) {
-				case LATEX:
+				/*case LATEX:
 					String latexCommand = LatexUtils.getDefaultLatex2PDFCommand(false); // Little hack for server (see bug #1006055)
 					GeneratePDF pdf = GeneratePDF.actionType
 							.makeNewAction((DGRepository) add.getNewGeneratedCodeRepository(), null, editor);
@@ -250,7 +249,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					pdf.setLatexTimeOutInSeconds(120);
 					actions.add(pdf);
 					generateArtefact = pdf;
-					break;
+					break;*/
 				case HTML:
 					GenerateZip zip = GenerateZip.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
 					zip.setSaveBeforeGenerating(false);

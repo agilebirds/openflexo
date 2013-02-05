@@ -41,7 +41,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.action.GenerateDocx;
-import org.openflexo.dg.action.GeneratePDF;
 import org.openflexo.dg.action.ReinjectDocx;
 import org.openflexo.dgmodule.DGCst;
 import org.openflexo.dgmodule.DGPreferences;
@@ -235,12 +234,12 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		});
 		buttonPanel.add(chooseWarLocationButton);
 		switch (repository.getFormat()) {
-		case LATEX:
+		/*case LATEX:
 			postBuildButton = new FlexoActionButton(GeneratePDF.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_PDF);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
-			break;
+			break;*/
 		case DOCX:
 			postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
@@ -299,22 +298,18 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		openPostBuildFileCheckBox = new JCheckBox();
 
 		switch (repository.getFormat()) {
-		case LATEX:
+		/*case LATEX:
 			openPostBuildFileCheckBox.setText(FlexoLocalization.localizedForKey("automatically_open_PDF", openPostBuildFileCheckBox));
 			openPostBuildFileCheckBox.setSelected(DGPreferences.getOpenPDF());
 			openPostBuildFileCheckBox.addActionListener(new ActionListener() {
-				/**
-				 * Overrides actionPerformed
-				 * 
-				 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-				 */
+				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					DGPreferences.setOpenPDF(openPostBuildFileCheckBox.isSelected());
 					FlexoPreferences.savePreferences(true);
 				}
 			});
-			break;
+			break;*/
 		case DOCX:
 			openPostBuildFileCheckBox.setText(FlexoLocalization.localizedForKey("automatically_open_docx", openPostBuildFileCheckBox));
 			openPostBuildFileCheckBox.setSelected(DGPreferences.getOpenDocx());

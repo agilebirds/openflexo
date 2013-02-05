@@ -186,10 +186,10 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 					createJavascriptSymbolicDir(project, srcSymbDirType);
 					createFiguresSymbolicDir(project);
 					break;
-				case LATEX:
+				/*case LATEX:
 					srcSymbDirType = CGSymbolicDirectory.LATEX;
 					createFiguresSymbolicDir(project);
-					break;
+					break;*/
 				case DOCX:
 					srcSymbDirType = CGSymbolicDirectory.DOCX;
 					createFiguresSymbolicDir(project, "/./word/media/figures/");

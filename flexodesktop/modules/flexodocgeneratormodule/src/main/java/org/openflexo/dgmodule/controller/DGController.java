@@ -43,7 +43,6 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
-import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
 import org.openflexo.dgmodule.controller.browser.DGBrowser;
@@ -238,9 +237,9 @@ public class DGController extends DEController implements FlexoObserver, Project
 		if (returned == null) {
 			try {
 				switch (repository.getFormat()) {
-				case LATEX:
+				/*case LATEX:
 					returned = new ProjectDocLatexGenerator(getProject(), repository);
-					break;
+					break;*/
 				case HTML:
 					returned = new ProjectDocHTMLGenerator(getProject(), repository);
 					break;
