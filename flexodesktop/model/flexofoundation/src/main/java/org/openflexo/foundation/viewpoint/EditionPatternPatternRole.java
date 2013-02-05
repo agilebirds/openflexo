@@ -2,11 +2,10 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
-public class EditionPatternPatternRole extends PatternRole<EditionPatternReference> {
+public class EditionPatternPatternRole extends PatternRole<EditionPatternInstance> {
 
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
@@ -95,9 +94,8 @@ public class EditionPatternPatternRole extends PatternRole<EditionPatternReferen
 	}
 
 	@Override
-	public ModelObjectActorReference<EditionPatternReference> makeActorReference(EditionPatternReference object,
-			EditionPatternReference epRef) {
-		return new ModelObjectActorReference<EditionPatternReference>(object, this, epRef);
+	public ModelObjectActorReference<EditionPatternInstance> makeActorReference(EditionPatternInstance object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<EditionPatternInstance>(object, this, epi);
 	}
 
 }

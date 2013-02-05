@@ -2,12 +2,11 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DiagramPatternRole extends PatternRole<View> {
@@ -55,7 +54,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	@Override
-	public ModelObjectActorReference<View> makeActorReference(View object, EditionPatternReference epRef) {
-		return new ModelObjectActorReference<View>(object, this, epRef);
+	public ModelObjectActorReference<View> makeActorReference(View object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<View>(object, this, epi);
 	}
 }

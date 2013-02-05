@@ -11,12 +11,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -66,8 +63,8 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 	}
 
 	@Override
-	public DataPropertyStatementActorReference makeActorReference(DataPropertyStatement object, EditionPatternReference epRef) {
-		return new DataPropertyStatementActorReference(object, this, epRef);
+	public DataPropertyStatementActorReference makeActorReference(DataPropertyStatement object, EditionPatternInstance epi) {
+		return new DataPropertyStatementActorReference(object, this, epi);
 	}
 
 	public static class DataPropertyStatementPatternRoleMustDefineAValidProperty extends
@@ -95,9 +92,9 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 		public String value;
 
 		public DataPropertyStatementActorReference(DataPropertyStatement o, DataPropertyStatementPatternRole aPatternRole,
-				EditionPatternReference ref) {
-			super(ref.getProject());
-			setPatternReference(ref);
+				EditionPatternInstance epi) {
+			super(epi.getProject());
+			setEditionPatternInstance(epi);
 			setPatternRole(aPatternRole);
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -106,19 +103,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 		}
 
 		// Constructor used during deserialization
-		public DataPropertyStatementActorReference(ViewBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public DataPropertyStatementActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public DataPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+		public DataPropertyStatementActorReference(VirtualModelInstanceBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

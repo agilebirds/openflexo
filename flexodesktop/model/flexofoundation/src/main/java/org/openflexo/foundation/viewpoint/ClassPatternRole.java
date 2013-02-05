@@ -8,8 +8,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ConceptActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
 
 public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
 
@@ -73,7 +72,7 @@ public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends On
 	}
 
 	@Override
-	public ConceptActorReference<IFlexoOntologyClass> makeActorReference(IFlexoOntologyClass object, EditionPatternReference epRef) {
-		return new ConceptActorReference<IFlexoOntologyClass>(object, this, epRef);
+	public ConceptActorReference<IFlexoOntologyClass> makeActorReference(IFlexoOntologyClass object, EditionPatternInstance epi) {
+		return new ConceptActorReference<IFlexoOntologyClass>(object, this, epi);
 	}
 }

@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
@@ -38,8 +37,6 @@ import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -163,14 +160,6 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		notifyObservers(new URINameChanged(oldName, newName));
 		setChanged();
 		notifyObservers(new URIChanged(oldURI, newURI));
-		for (EditionPatternReference ref : getEditionPatternReferences()) {
-			EditionPatternInstance i = ref.getEditionPatternInstance();
-			for (FlexoModelObject o : i.getActors().values()) {
-				if (o.getXMLResourceData() != null && !o.getXMLResourceData().getFlexoResource().isModified()) {
-					o.getXMLResourceData().setIsModified();
-				}
-			}
-		}
 		return returned;
 	}
 
@@ -1034,17 +1023,6 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		for (OWLOntology o : ontology.getImportedOntologies()) {
 			searchRangeAndDomains(rangeProperties, domainProperties, o, alreadyDone);
 		}
-	}
-
-	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
-	// All of this will be refactored and this method will be removed from next versions
-	@Deprecated
-	public Vector<EditionPatternReference> getEditionPatternReferences() {
-		return null;
-		/*	if (getProject() != null) {
-				getProject()._retrievePendingEditionPatternReferences(this);
-			}
-			return super.getEditionPatternReferences();*/
 	}
 
 	public String getHTMLDescription() {

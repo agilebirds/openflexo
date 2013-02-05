@@ -45,13 +45,13 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
@@ -192,14 +192,15 @@ public class FIBInspector extends FIBPanel {
 		}
 
 		if (object.getEditionPatternReferences() != null) {
-			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-				editionPatternsToDisplay.add(ref.getEditionPattern());
-				if (ensureCreationOfTabForEP(ref.getEditionPattern())) {
+			for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+				EditionPatternInstance epi = ref.getObject();
+				editionPatternsToDisplay.add(epi.getEditionPattern());
+				if (ensureCreationOfTabForEP(epi.getEditionPattern())) {
 					returned = true;
 				}
-				FIBTab tab = tabsForEP.get(ref.getEditionPattern());
+				FIBTab tab = tabsForEP.get(epi.getEditionPattern());
 				tab.setVisible(DataBinding.makeTrueBinding());
-				currentEditionPatterns.add(ref.getEditionPattern());
+				currentEditionPatterns.add(epi.getEditionPattern());
 			}
 			updateBindingModel();
 		}
@@ -234,86 +235,6 @@ public class FIBInspector extends FIBPanel {
 
 		return returned;
 	}
-
-	/**
-	 * This method looks after object's EditionPattern references to know if we need to structurally change inspector by adding or removing
-	 * tabs, which all correspond to one and only one EditionPattern
-	 * 
-	 * Note: only object providing support as primary role are handled here
-	 * 
-	 * @param object
-	 * @return
-	 */
-	@Deprecated
-	protected boolean updateEditionPatternReferences2(FlexoModelObject object) {
-
-		boolean needsChanges = false;
-
-		if (object.getEditionPatternReferences() == null) {
-			needsChanges = currentEditionPatterns.size() > 0;
-		} else {
-			/*System.out.println("*********** Object " + object);
-			System.out.println("References: " + object.getEditionPatternReferences().size());
-			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-				System.out.println(">>>>>>>>> Reference \n" + ref.getEditionPatternInstance().debug());
-			}*/
-			if (currentEditionPatterns.size() != object.getEditionPatternReferences().size()) {
-				needsChanges = true;
-			} else {
-				for (int i = 0; i < currentEditionPatterns.size(); i++) {
-					if (currentEditionPatterns.get(i) != object.getEditionPatternReferences().get(i).getEditionPattern()) {
-						needsChanges = true;
-						break;
-					}
-				}
-			}
-		}
-
-		/*if (object.providesSupportAsPrimaryRole() != previousObjectWasProvidingSupportAsPrimaryRole) {
-			needsChanges = true;
-		}*/
-
-		if (!needsChanges) {
-			// No changes detected, i can return
-			return false;
-		}
-
-		for (FIBTab tab : tabsForEP.values()) {
-			getTabPanel().removeFromSubComponents(tab);
-		}
-
-		currentEditionPatterns.clear();
-		tabsForEP.clear();
-
-		// if (object.providesSupportAsPrimaryRole()) {
-		if (object.getEditionPatternReferences() != null) {
-			for (int refIndex = 0; refIndex < object.getEditionPatternReferences().size(); refIndex++) {
-				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
-				if (ref == null) {
-					logger.warning("Cannot find reference for EditionPattern refIndex=" + refIndex + ". Please investigate...");
-				} else {
-					if (ref.getEditionPattern() == null) {
-						logger.warning("Found reference for null EditionPattern refIndex=" + refIndex + ". Please investigate...");
-					} else {
-						EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-						FIBTab newTab = makeFIBTab(ref.getEditionPattern(), refIndex);
-						currentEditionPatterns.add(ref.getEditionPattern());
-						tabsForEP.put(ref.getEditionPattern(), newTab);
-						getTabPanel().addToSubComponents(newTab);
-					}
-				}
-			}
-			updateBindingModel();
-		}
-		// }
-
-		// previousObjectWasProvidingSupportAsPrimaryRole = object.providesSupportAsPrimaryRole();
-
-		return true;
-
-	}
-
-	// private boolean previousObjectWasProvidingSupportAsPrimaryRole = false;
 
 	@Override
 	protected void createBindingModel() {

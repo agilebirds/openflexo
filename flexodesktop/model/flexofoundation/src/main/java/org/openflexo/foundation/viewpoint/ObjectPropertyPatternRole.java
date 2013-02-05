@@ -4,10 +4,6 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.ConceptActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectProperty> extends PropertyPatternRole<P> {
 
@@ -56,11 +52,6 @@ public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectPr
 
 	public void setRange(IFlexoOntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
-	}
-
-	@Override
-	public ActorReference<P> makeActorReference(P object, EditionPatternReference epRef) {
-		return new ConceptActorReference<P>(object, this, epRef);
 	}
 
 }

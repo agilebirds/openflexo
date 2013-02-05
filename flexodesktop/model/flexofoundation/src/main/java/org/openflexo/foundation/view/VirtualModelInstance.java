@@ -95,8 +95,6 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	/**
 	 * Constructor invoked during deserialization
-	 * 
-	 * @param componentDefinition
 	 */
 	public VirtualModelInstance(VirtualModelInstanceBuilder builder) {
 		this(builder.getView(), builder.getVirtualModel());
@@ -115,6 +113,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		this.view = view;
 	}
 
+	@Override
 	public View getView() {
 		return view;
 	}

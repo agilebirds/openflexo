@@ -30,8 +30,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -119,7 +118,7 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	public abstract boolean defaultBehaviourIsToBeDeleted();
 
-	public abstract ActorReference<T> makeActorReference(T object, EditionPatternReference epRef);
+	public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
 
 	// @Override
 	// public abstract String getLanguageRepresentation();

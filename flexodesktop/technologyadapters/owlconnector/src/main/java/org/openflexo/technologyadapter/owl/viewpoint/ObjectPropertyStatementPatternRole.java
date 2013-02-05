@@ -9,12 +9,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
@@ -65,8 +62,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 	}
 
 	@Override
-	public ObjectPropertyStatementActorReference makeActorReference(ObjectPropertyStatement object, EditionPatternReference epRef) {
-		return new ObjectPropertyStatementActorReference(object, this, epRef);
+	public ObjectPropertyStatementActorReference makeActorReference(ObjectPropertyStatement object, EditionPatternInstance epi) {
+		return new ObjectPropertyStatementActorReference(object, this, epi);
 	}
 
 	public static class ObjectPropertyStatementPatternRoleMustDefineAValidProperty extends
@@ -94,9 +91,9 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		public String objectURI;
 
 		public ObjectPropertyStatementActorReference(ObjectPropertyStatement o, ObjectPropertyStatementPatternRole aPatternRole,
-				EditionPatternReference ref) {
-			super(ref.getProject());
-			setPatternReference(ref);
+				EditionPatternInstance epi) {
+			super(epi.getProject());
+			setEditionPatternInstance(epi);
 			setPatternRole(aPatternRole);
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -105,19 +102,7 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		}
 
 		// Constructor used during deserialization
-		public ObjectPropertyStatementActorReference(ViewBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ObjectPropertyStatementActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public ObjectPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+		public ObjectPropertyStatementActorReference(VirtualModelInstanceBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

@@ -54,7 +54,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
-			return actionType.getEditionPatternReference().getEditionPatternInstance();
+			return actionType.getEditionPatternInstance();
 		}
 		return null;
 	}
@@ -81,7 +81,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 			logger.warning("No navigation scheme. Please investigate !");
 			return false;
 		}
-		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternReference());
+		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternInstance());
 	}
 
 	public FlexoModelObject getTargetObject() {
@@ -89,7 +89,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 			logger.warning("No navigation scheme. Please investigate !");
 			return null;
 		}
-		return getNavigationScheme().evaluateTargetObject(actionType.getEditionPatternReference());
+		return getNavigationScheme().evaluateTargetObject(actionType.getEditionPatternInstance());
 	}
 
 	@Override

@@ -24,19 +24,19 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.localization.LocalizedDelegate;
 
 public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, FlexoModelObject, FlexoModelObject> {
 
 	private ActionScheme actionScheme;
-	private EditionPatternReference editionPatternReference;
+	private EditionPatternInstance editionPatternInstance;
 
-	public ActionSchemeActionType(ActionScheme actionScheme, EditionPatternReference editionPatternReference) {
+	public ActionSchemeActionType(ActionScheme actionScheme, EditionPatternInstance editionPatternInstance) {
 		super(actionScheme.getLabel(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
 		this.actionScheme = actionScheme;
-		this.editionPatternReference = editionPatternReference;
+		this.editionPatternInstance = editionPatternInstance;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, 
 
 	@Override
 	public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-		return actionScheme.evaluateCondition(editionPatternReference);
+		return actionScheme.evaluateCondition(editionPatternInstance);
 	}
 
 	@Override
@@ -68,8 +68,8 @@ public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, 
 		return actionScheme;
 	}
 
-	public EditionPatternReference getEditionPatternReference() {
-		return editionPatternReference;
+	public EditionPatternInstance getEditionPatternInstance() {
+		return editionPatternInstance;
 	}
 
 }

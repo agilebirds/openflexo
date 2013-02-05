@@ -30,7 +30,6 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
@@ -116,9 +115,6 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 				}
 			}
 			newIndividual.updateOntologyStatements();
-
-			// Register reference
-			newIndividual.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
 
 			return newIndividual;
 		} catch (DuplicateURIException e) {

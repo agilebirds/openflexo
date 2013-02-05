@@ -23,10 +23,10 @@
     <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
     <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
     <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
-    <property name="editionPatternReferences" type="vector" contains="org.openflexo.foundation.view.EditionPatternReference" primary="yes"/>
+    <property name="editionPatternReferences" type="vector" primary="yes" xmlTag="EditionPatternReference"/>
   </entity>
 
-	<entity name="org.openflexo.foundation.view.EditionPatternReference"
+	<!--  <entity name="org.openflexo.foundation.view.EditionPatternReference"
 		xmlTag="EditionPatternReference">
 		<description>EditionPattern references in which this object is
 			involved</description>
@@ -89,7 +89,6 @@
 	<entity
 		name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole$RestrictionStatementActorReference"
 		xmlTag="RestrictionStatementActorReference">
-		<!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
 		<property name="propertyURI" xmlTag="propertyURI" attribute="YES"
 			description="" />
 		<property name="objectURI" xmlTag="objectURI" attribute="YES"
@@ -103,7 +102,7 @@
 		<property name="objectReference" xmlTag="objectReference"
 			attribute="YES" description="" />
 	</entity>
-
+-->
   
   
   <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">

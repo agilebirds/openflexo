@@ -1,38 +1,30 @@
 package org.openflexo.foundation.view;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.logging.FlexoLogger;
 
 public class ModelObjectActorReference<T extends FlexoModelObject> extends ActorReference<T> {
+
+	private static final Logger logger = FlexoLogger.getLogger(ModelObjectActorReference.class.getPackage().toString());
+
 	public T object;
 	public FlexoModelObjectReference objectReference;
 
-	public ModelObjectActorReference(T o, PatternRole aPatternRole, EditionPatternReference ref) {
-		super(o.getProject());
-		setPatternReference(ref);
+	public ModelObjectActorReference(T o, PatternRole aPatternRole, EditionPatternInstance epi) {
+		super(epi.getProject());
+		setEditionPatternInstance(epi);
 		setPatternRole(aPatternRole);
 		object = o;
 		objectReference = new FlexoModelObjectReference(o);
 	}
 
 	// Constructor used during deserialization
-	public ModelObjectActorReference(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	// Constructor used during deserialization
-	public ModelObjectActorReference(FlexoProcessBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	// Constructor used during deserialization
-	public ModelObjectActorReference(FlexoWorkflowBuilder builder) {
+	public ModelObjectActorReference(VirtualModelInstanceBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}
@@ -54,7 +46,7 @@ public class ModelObjectActorReference<T extends FlexoModelObject> extends Actor
 			object = (T) objectReference.getObject(true);
 		}
 		if (object == null) {
-			EditionPatternReference.logger.warning("Could not retrieve object " + objectReference);
+			logger.warning("Could not retrieve object " + objectReference);
 		}
 		return object;
 	}

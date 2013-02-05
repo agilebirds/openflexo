@@ -33,7 +33,8 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -118,8 +119,8 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 			}
 			if (target.getDrawable() instanceof DiagramShape) {
 				DiagramShape targetShape = (DiagramShape) target.getDrawable();
-				for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
-					if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+				for (FlexoModelObjectReference<EditionPatternInstance> ref : targetShape.getEditionPatternReferences()) {
+					if (dropScheme.isValidTarget(ref.getObject().getEditionPattern(), ref.getObject().getRoleForActor(targetShape))) {
 						returned.add(dropScheme);
 					}
 				}

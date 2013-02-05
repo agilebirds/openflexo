@@ -24,10 +24,9 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class NavigationScheme extends AbstractActionScheme {
 
@@ -55,10 +54,10 @@ public class NavigationScheme extends AbstractActionScheme {
 		this.targetObject = targetObject;
 	}
 
-	public FlexoModelObject evaluateTargetObject(EditionPatternReference editionPatternReference) {
+	public FlexoModelObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
 		if (getTargetObject().isValid()) {
 			try {
-				return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternReference);
+				return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternInstance);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

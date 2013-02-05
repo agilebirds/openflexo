@@ -8,8 +8,7 @@ import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
 
 public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
 
@@ -72,8 +71,8 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	}
 
 	@Override
-	public ActorReference<T> makeActorReference(T object, EditionPatternReference epRef) {
-		return new ConceptActorReference<T>(object, this, epRef);
+	public ActorReference<T> makeActorReference(T object, EditionPatternInstance epi) {
+		return new ConceptActorReference<T>(object, this, epi);
 	}
 
 	@Override

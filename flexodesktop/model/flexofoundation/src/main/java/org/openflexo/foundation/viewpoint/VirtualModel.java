@@ -236,9 +236,12 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	public EditionPattern getEditionPattern(String editionPatternId) {
-		for (EditionPattern concept : editionPatterns) {
-			if (concept.getName().equals(editionPatternId)) {
-				return concept;
+		for (EditionPattern editionPattern : editionPatterns) {
+			if (editionPattern.getName().equals(editionPatternId)) {
+				return editionPattern;
+			}
+			if (editionPattern.getURI().equals(editionPatternId)) {
+				return editionPattern;
 			}
 		}
 		logger.warning("Not found EditionPattern:" + editionPatternId);

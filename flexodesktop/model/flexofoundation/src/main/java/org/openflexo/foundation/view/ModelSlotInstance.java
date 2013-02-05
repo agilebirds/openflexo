@@ -4,6 +4,9 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel}
@@ -22,6 +25,28 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	private VirtualModelInstance<?, ?> vmInstance;
 	private ModelSlot<M, MM> modelSlot;
 	private M model;
+	// Serialization/deserialization only, do not use
+	private String modelURI;
+	// Serialization/deserialization only, do not use
+	private String modelSlotName;
+
+	/**
+	 * Constructor invoked during deserialization
+	 * 
+	 */
+	public ModelSlotInstance(ViewBuilder builder) {
+		super(builder.getProject());
+		initializeDeserialization(builder);
+	}
+
+	/**
+	 * Constructor invoked during deserialization
+	 * 
+	 */
+	public ModelSlotInstance(VirtualModelInstanceBuilder builder) {
+		super(builder.getProject());
+		initializeDeserialization(builder);
+	}
 
 	public ModelSlotInstance(View view, ModelSlot<M, MM> modelSlot) {
 		super(view.getProject());
@@ -66,6 +91,9 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	}
 
 	public ModelSlot<M, MM> getModelSlot() {
+		if (getVirtualModelInstance() != null && modelSlot == null && StringUtils.isNotEmpty(modelSlotName)) {
+			modelSlot = (ModelSlot<M, MM>) getVirtualModelInstance().getVirtualModel().getModelSlot(modelSlotName);
+		}
 		return modelSlot;
 	}
 
@@ -74,7 +102,36 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	}
 
 	public M getModel() {
+		if (getVirtualModelInstance() != null && model == null && StringUtils.isNotEmpty(modelURI)) {
+			model = (M) getVirtualModelInstance().getInformationSpace().getModel(modelURI);
+		}
 		return model;
+	}
+
+	// Serialization/deserialization only, do not use
+	public String getModelURI() {
+		if (getModel() != null) {
+			return getModel().getURI();
+		}
+		return modelURI;
+	}
+
+	// Serialization/deserialization only, do not use
+	public void setModelURI(String modelURI) {
+		this.modelURI = modelURI;
+	}
+
+	// Serialization/deserialization only, do not use
+	public String getModelSlotName() {
+		if (getModelSlot() != null) {
+			return getModelSlot().getName();
+		}
+		return modelSlotName;
+	}
+
+	// Serialization/deserialization only, do not use
+	public void setModelSlotName(String modelSlotName) {
+		this.modelSlotName = modelSlotName;
 	}
 
 	@Override

@@ -5,12 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -36,8 +33,8 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 	}
 
 	@Override
-	public SubClassStatementActorReference makeActorReference(SubClassStatement object, EditionPatternReference epRef) {
-		return new SubClassStatementActorReference(object, this, epRef);
+	public SubClassStatementActorReference makeActorReference(SubClassStatement object, EditionPatternInstance epi) {
+		return new SubClassStatementActorReference(object, this, epi);
 	}
 
 	public static class SubClassStatementActorReference extends ActorReference<SubClassStatement> {
@@ -46,9 +43,9 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		public String subjectURI;
 		public String parentURI;
 
-		public SubClassStatementActorReference(SubClassStatement o, SubClassStatementPatternRole aPatternRole, EditionPatternReference ref) {
-			super(ref.getProject());
-			setPatternReference(ref);
+		public SubClassStatementActorReference(SubClassStatement o, SubClassStatementPatternRole aPatternRole, EditionPatternInstance epi) {
+			super(epi.getProject());
+			setEditionPatternInstance(epi);
 			setPatternRole(aPatternRole);
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -56,19 +53,7 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		}
 
 		// Constructor used during deserialization
-		public SubClassStatementActorReference(ViewBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public SubClassStatementActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public SubClassStatementActorReference(FlexoWorkflowBuilder builder) {
+		public SubClassStatementActorReference(VirtualModelInstanceBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

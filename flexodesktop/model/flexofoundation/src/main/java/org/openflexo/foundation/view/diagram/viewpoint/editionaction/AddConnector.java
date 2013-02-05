@@ -47,7 +47,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This edition primitive addresses the creation of a new connector linking two shapes in a diagram
@@ -91,7 +90,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 	public DiagramShape getFromShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
-			return (DiagramShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 		} else {
 			try {
 				return getFromShape().getBindingValue(action);
@@ -107,7 +106,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 	public DiagramShape getToShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
-			return (DiagramShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 		} else {
 			try {
 				return getToShape().getBindingValue(action);
@@ -220,7 +219,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 		parent.addToChilds(newConnector);
 
 		// Register reference
-		newConnector.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
+		newConnector.registerEditionPatternReference(action.getEditionPatternInstance());
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added connector " + newConnector + " under " + parent);

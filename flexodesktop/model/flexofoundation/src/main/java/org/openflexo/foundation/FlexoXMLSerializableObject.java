@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.Bindable;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.RMNotification;
@@ -61,6 +62,14 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	private Date lastMemoryUpdate;
 
 	private Thread serializingThread;
+
+	public FlexoXMLSerializableObject() {
+		super();
+	}
+
+	public FlexoXMLSerializableObject(FlexoProject project) {
+		super(project);
+	}
 
 	@Override
 	public abstract XMLMapping getXMLMapping();
@@ -229,6 +238,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	 * "+e.getClass().getName()+". See console for details.");
 	 * e.printStackTrace(); return null; } }
 	 */
+	@Override
 	public void initializeDeserialization(Object builder) {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("initializeDeserialization() for " + this.getClass().getName());
@@ -281,10 +291,12 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	 */
 	private boolean isBeingCloned = false;
 
+	@Override
 	public void initializeCloning() {
 		isBeingCloned = true;
 	}
 
+	@Override
 	public void finalizeCloning() {
 		isBeingCloned = false;
 	}
@@ -292,6 +304,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	/**
 	 * Property that indicates wheter the current object is currently copied to create a new clone
 	 */
+	@Override
 	public boolean isBeingCloned() {
 		if (getXMLResourceData() == this) {
 			return isBeingCloned;
@@ -304,6 +317,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		}
 	}
 
+	@Override
 	public void finalizeDeserialization(Object builder) {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("finalizeDeserialization() for " + this.getClass().getName());
@@ -333,6 +347,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		this.serializingThread = serializingThread;
 	}
 
+	@Override
 	public void initializeSerialization() {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("initializeSerialization() for " + this.getClass().getName());
@@ -346,6 +361,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		isSerializing = true;
 	}
 
+	@Override
 	public void finalizeSerialization() {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("finalizeSerialization() for " + this.getClass().getName());
@@ -354,6 +370,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		serializingThread = null;
 	}
 
+	@Override
 	public boolean isSerializing() {
 		if (getXMLResourceData() == this) {
 			return isSerializing && serializingThread == Thread.currentThread();
@@ -362,6 +379,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		}
 	}
 
+	@Override
 	public boolean isDeserializing() {
 		if (getXMLResourceData() == this) {
 			return isDeserializing;
@@ -397,10 +415,12 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		return null;
 	}
 
+	@Override
 	public boolean isModified() {
 		return isModified;
 	}
 
+	@Override
 	public Date lastMemoryUpdate() {
 		if (lastMemoryUpdate == null) {
 			if (getXMLResourceData() != null && getXMLResourceData() != this) {
@@ -412,6 +432,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 
 	private boolean ignoreNotifications = false;
 
+	@Override
 	public boolean ignoreNotifications() {
 		if (getXMLResourceData() == null || getXMLResourceData() == this) {
 			return ignoreNotifications;
@@ -424,6 +445,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	/**
 	 * Temporary method to prevent notifications. This should never be used by anyone except the screenshot generator
 	 */
+	@Override
 	public final void setIgnoreNotifications() {
 		ignoreNotifications = true;
 	}
@@ -431,10 +453,12 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	/**
 	 * Temporary method to reactivate notifications. This should never be used by anyone except the screenshot generator
 	 */
+	@Override
 	public final void resetIgnoreNotifications() {
 		ignoreNotifications = false;
 	}
 
+	@Override
 	public synchronized void setIsModified() {
 		if (ignoreNotifications) {
 			return;
@@ -474,6 +498,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 		return "???";
 	}
 
+	@Override
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		isModified = false;
 		// GPO: I commented the line hereunder because I don't think that we need to reset this date
@@ -533,6 +558,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 */
+	@Override
 	public void notifyRM(RMNotification notification) throws FlexoException {
 		if (this instanceof FlexoResourceData && ((FlexoResourceData) this).getFlexoResource() != null) {
 			((FlexoResourceData) this).getFlexoResource().notifyRM(notification);
@@ -550,6 +576,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
 	 */
+	@Override
 	public void receiveRMNotification(RMNotification notification) throws FlexoException {
 		// Ignore it at this level: please overrides this method in relevant
 		// subclasses !

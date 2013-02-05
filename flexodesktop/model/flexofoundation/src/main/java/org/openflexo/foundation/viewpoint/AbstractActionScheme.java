@@ -24,8 +24,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
 
 public abstract class AbstractActionScheme extends EditionScheme {
 
@@ -53,10 +52,10 @@ public abstract class AbstractActionScheme extends EditionScheme {
 		this.conditional = conditional;
 	}
 
-	public boolean evaluateCondition(EditionPatternReference editionPatternReference) {
+	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
 		if (getConditional().isValid()) {
 			try {
-				return getConditional().getBindingValue(editionPatternReference);
+				return getConditional().getBindingValue(editionPatternInstance);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

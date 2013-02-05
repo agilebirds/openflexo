@@ -3,9 +3,8 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -102,8 +101,8 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 	}
 
 	@Override
-	public ModelObjectActorReference<FlexoModelObject> makeActorReference(FlexoModelObject object, EditionPatternReference epRef) {
-		return new ModelObjectActorReference<FlexoModelObject>(object, this, epRef);
+	public ModelObjectActorReference<FlexoModelObject> makeActorReference(FlexoModelObject object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<FlexoModelObject>(object, this, epi);
 	}
 
 }

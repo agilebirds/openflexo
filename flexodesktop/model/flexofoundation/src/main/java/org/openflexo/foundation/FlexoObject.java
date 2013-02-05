@@ -41,8 +41,6 @@ import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HTMLUtils;
@@ -61,7 +59,7 @@ public abstract class FlexoObject extends FlexoObservable {
 
 	private static final Logger logger = Logger.getLogger(FlexoObject.class.getPackage().getName());
 
-	private boolean isDeleted = false;
+	protected boolean isDeleted = false;
 	private boolean ignoreNotifications = false;
 	private boolean isModified = false;
 	private Date lastMemoryUpdate = null;
@@ -777,16 +775,16 @@ public abstract class FlexoObject extends FlexoObservable {
 
 	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
 	// All of this will be refactored and this method will be removed from next versions
-	@Deprecated
+	/*@Deprecated
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole) {
 		logger.warning("registerEditionPatternReference(): not implemented yet: should be refactored");
-	}
+	}*/
 
 	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
 	// All of this will be refactored and this method will be removed from next versions
-	@Deprecated
+	/*@Deprecated
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole) {
 		logger.warning("unregisterEditionPatternReference(): not implemented yet: should be refactored");
-	}
+	}*/
 
 }

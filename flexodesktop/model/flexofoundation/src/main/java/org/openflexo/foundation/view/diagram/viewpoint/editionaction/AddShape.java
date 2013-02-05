@@ -45,7 +45,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * This edition primitive addresses the creation of a new shape in a diagram
@@ -71,7 +70,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 	public DiagramElement<?> getContainer(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
-			return (DiagramElement<?>) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 		} else {
 			try {
 				return getContainer().getBindingValue(action);
@@ -153,7 +152,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 		newShape.setGraphicalRepresentation(newGR);
 
 		// Register reference
-		newShape.registerEditionPatternReference(action.getEditionPatternInstance(), getPatternRole());
+		newShape.registerEditionPatternReference(action.getEditionPatternInstance());
 
 		DiagramElement<?> container = getContainer(action);
 

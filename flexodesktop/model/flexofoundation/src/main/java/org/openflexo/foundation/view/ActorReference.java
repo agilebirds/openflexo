@@ -5,18 +5,15 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	private PatternRole<T> patternRole;
 	private String patternRoleName;
 	private ModelSlot<?, ?> modelSlot;
-	private FlexoProject _project;
-	private EditionPatternReference _patternReference;
+	private EditionPatternInstance epi;
 
 	protected ActorReference(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	public ModelSlot<?, ?> getModelSlot() {
@@ -28,35 +25,26 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		// Not defined in this context, since this is cross-model object
-		return null;
-	}
-
-	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		// Not defined in this context, since this is cross-model object
+		if (getEditionPatternInstance() != null) {
+			return getEditionPatternInstance().getXMLResourceData();
+		}
 		return null;
 	}
 
 	public abstract T retrieveObject();
 
-	public EditionPatternReference getPatternReference() {
-		return _patternReference;
+	public EditionPatternInstance getEditionPatternInstance() {
+		return epi;
 	}
 
-	public void setPatternReference(EditionPatternReference _patternReference) {
-		this._patternReference = _patternReference;
+	public void setEditionPatternInstance(EditionPatternInstance epi) {
+		this.epi = epi;
 	}
 
 	public PatternRole<T> getPatternRole() {
-		if (patternRole == null && _patternReference != null && StringUtils.isNotEmpty(patternRoleName)) {
-			patternRole = _patternReference.getEditionPattern().getPatternRole(patternRoleName);
+		if (patternRole == null && epi != null && StringUtils.isNotEmpty(patternRoleName)) {
+			patternRole = epi.getEditionPattern().getPatternRole(patternRoleName);
 		}
 		return patternRole;
 	}
@@ -75,8 +63,8 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 
 	@Override
 	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
-		if (getPatternReference() != null) {
-			return getPatternReference().getEditionPatternInstance().getVirtualModelInstance();
+		if (getEditionPatternInstance() != null) {
+			return getEditionPatternInstance().getVirtualModelInstance();
 		}
 		return null;
 	}

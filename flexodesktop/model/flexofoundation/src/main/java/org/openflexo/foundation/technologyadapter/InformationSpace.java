@@ -82,4 +82,24 @@ public class InformationSpace extends FlexoServiceImpl {
 		}
 		return null;
 	}
+
+	public FlexoModelResource<?, ?> getModel(String uri) {
+		for (TechnologyAdapter ta : getFlexoServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
+			FlexoModelResource<?, ?> returned = getModel(uri, ta);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public FlexoModelResource<?, ?> getModel(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+		for (ModelRepository<?, ?, ?, ?> mRep : getAllModelRepositories(technologyAdapter)) {
+			FlexoResource<?> resource = mRep.getResource(uri);
+			if (resource != null) {
+				return (FlexoModelResource<?, ?>) resource;
+			}
+		}
+		return null;
+	}
 }

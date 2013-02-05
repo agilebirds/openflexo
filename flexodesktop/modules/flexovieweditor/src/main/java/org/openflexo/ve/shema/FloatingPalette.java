@@ -337,24 +337,24 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			targetEP = null;
 		} else if (focusedGR.getDrawable() instanceof DiagramElement) {
 			container = (DiagramElement<?>) focusedGR.getDrawable();
-			targetEP = ((DiagramElement<?>) container).getEditionPatternReference().getEditionPattern();
+			targetEP = ((DiagramElement<?>) container).getEditionPatternInstance().getEditionPattern();
 		}
 		if (container == null) {
 			return;
 		}
-		if (shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP) == null
-				|| shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).size() == 0) {
+		if (shapeGR.getDiagramShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP) == null
+				|| shapeGR.getDiagramShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).size() == 0) {
 			return;
 		}
 
-		if (shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).size() == 1) {
-			applyDropAndLinkScheme(shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).firstElement(), dropLocation,
-					container);
+		if (shapeGR.getDiagramShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).size() == 1) {
+			applyDropAndLinkScheme(shapeGR.getDiagramShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP).firstElement(),
+					dropLocation, container);
 			return;
 		}
 
 		JPopupMenu popup = new JPopupMenu();
-		for (final DropAndLinkScheme dropAndLinkScheme : shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP)) {
+		for (final DropAndLinkScheme dropAndLinkScheme : shapeGR.getDiagramShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP)) {
 			JMenuItem menuItem = new JMenuItem(
 					FlexoLocalization.localizedForKey(dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme
 							.getLabel() : dropAndLinkScheme.linkScheme.getName()));

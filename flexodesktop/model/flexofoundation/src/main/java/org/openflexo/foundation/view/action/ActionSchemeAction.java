@@ -53,7 +53,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
-			return actionType.getEditionPatternReference().getEditionPatternInstance();
+			return actionType.getEditionPatternInstance();
 		}
 		return null;
 	}
@@ -69,7 +69,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 			logger.info("Perform action " + actionType);
 		}
 
-		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternReference())) {
+		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternInstance())) {
 			applyEditionActions();
 		}
 	}

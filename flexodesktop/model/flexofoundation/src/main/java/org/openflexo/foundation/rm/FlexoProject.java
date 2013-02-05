@@ -120,10 +120,8 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
@@ -156,14 +154,11 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -4123,7 +4118,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
-	public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
+	/*public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
 		if (reference == null) {
 			return null;
 		}
@@ -4145,7 +4140,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			hash.put(reference.getInstanceId(), returned);
 		}
 		return returned;
-	}
+	}*/
 
 	public FlexoObjectIDManager getObjectIDManager() {
 		if (objectIDManager == null) {
@@ -4154,6 +4149,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return objectIDManager;
 	}
 
+	@Override
 	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
 	}
@@ -4197,7 +4193,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param conceptURI
 	 * @param actorReference
 	 */
-	public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
+	/*public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
 		logger.fine("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
 		if (values == null) {
@@ -4205,11 +4201,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			pendingEditionPatternReferences.put(conceptURI, values);
 		}
 		values.add(actorReference);
-	}
+	}*/
 
-	private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, List<ConceptActorReference>>();
+	// private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String,
+	// List<ConceptActorReference>>();
 
-	public void _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
+	/*public void _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
 		if (values == null) {
 			// No pending EditionPattern references for object
@@ -4238,12 +4235,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
 		for (String conceptURI : allKeys) {
 			logger.warning("Unresolved ontology object " + conceptURI);
-			/*OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
-			if (oo != null) {
-				_retrievePendingEditionPatternReferences(oo);
-			}*/
+			//OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
+			//if (oo != null) {
+			//	_retrievePendingEditionPatternReferences(oo);
+			//}
 		}
-	}
+	}*/
 
 	public IModuleLoader getModuleLoader() {
 		return moduleLoader;

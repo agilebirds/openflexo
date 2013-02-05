@@ -1,37 +1,29 @@
 package org.openflexo.foundation.view;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.logging.FlexoLogger;
 
 public class ConceptActorReference<T extends IFlexoOntologyObject> extends ActorReference<T> {
+
+	private static final Logger logger = FlexoLogger.getLogger(ConceptActorReference.class.getPackage().toString());
+
 	private T object;
 	private String objectURI;
 
-	public ConceptActorReference(T o, OntologicObjectPatternRole<T> aPatternRole, EditionPatternReference ref) {
-		super(ref.getProject());
-		setPatternReference(ref);
+	public ConceptActorReference(T o, OntologicObjectPatternRole<T> aPatternRole, EditionPatternInstance epi) {
+		super(epi.getProject());
+		setEditionPatternInstance(epi);
 		setPatternRole(aPatternRole);
 		object = o;
 		objectURI = o.getURI();
 	}
 
 	// Constructor used during deserialization
-	public ConceptActorReference(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	// Constructor used during deserialization
-	public ConceptActorReference(FlexoProcessBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	// Constructor used during deserialization
-	public ConceptActorReference(FlexoWorkflowBuilder builder) {
+	public ConceptActorReference(VirtualModelInstanceBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}
@@ -53,7 +45,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 			object = (T) getProject().getObject(objectURI);
 		}
 		if (object == null) {
-			EditionPatternReference.logger.warning("Could not retrieve object " + objectURI);
+			logger.warning("Could not retrieve object " + objectURI);
 		}
 		return object;
 	}

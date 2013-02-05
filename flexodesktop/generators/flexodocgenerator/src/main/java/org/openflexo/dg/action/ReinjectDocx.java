@@ -60,7 +60,6 @@ import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -263,11 +262,12 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			long instanceID = Long.valueOf(epi.getEditionPatternInstanceID());
 			if (object != null) {
 				boolean found = false;
-				for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-					if (ref.getEditionPattern() != null && ref.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
-							&& ref.getInstanceId() == instanceID) {
-						if (ref.getEditionPatternInstance() != null) {
-							epis.put(ref.getEditionPatternInstance(), epi);
+				for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+					EditionPatternInstance epi2 = ref.getObject();
+					if (epi2.getEditionPattern() != null && epi2.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
+							&& epi2.getInstanceId() == instanceID) {
+						if (epi2 != null) {
+							epis.put(epi2, epi);
 							found = true;
 							break;
 						}

@@ -34,6 +34,7 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
@@ -42,7 +43,9 @@ import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * A {@link EditionPatternInstance} is the run-time concept (instance) of an {@link EditionPattern}.<br>
@@ -55,14 +58,13 @@ import org.openflexo.logging.FlexoLogger;
  */
 public class EditionPatternInstance extends VirtualModelInstanceObject implements Bindable, BindingEvaluationContext {
 
-	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
+	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInstance.class.getPackage().toString());
 
 	protected static final String DELETED_PROPERTY = "deleted";
 
-	private FlexoProject _project;
-	private EditionPattern pattern;
+	private EditionPattern editionPattern;
 	private long instanceId;
-	private Hashtable<PatternRole<?>, FlexoModelObject> actors;
+	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
 
 	/**
@@ -70,13 +72,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 * @param aPattern
 	 */
 
-	public EditionPatternInstance(EditionPatternReference aPattern) {
+	/*public EditionPatternInstance(EditionPatternReference aPattern) {
 		super(aPattern.getProject());
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init1> actors="+actors);
-		_project = aPattern.getProject();
-		pattern = aPattern.getEditionPattern();
+		editionPattern = aPattern.getEditionPattern();
 		instanceId = aPattern.getInstanceId();
-		actors = new Hashtable<PatternRole<?>, FlexoModelObject>();
+		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
 		for (PatternRole<?> patternRole : aPattern.getActors().keySet()) {
 			ActorReference<?> actor = aPattern.getActors().get(patternRole);
 			Object object = actor.retrieveObject();
@@ -84,48 +85,67 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				actors.put(patternRole, (FlexoModelObject) object);
 			}
 		}
+	}*/
+
+	/**
+	 * Constructor invoked during deserialization
+	 */
+	public EditionPatternInstance(VirtualModelInstanceBuilder builder) {
+		super(builder.getProject());
+		vmInstance = builder.vmInstance;
+		initializeDeserialization(builder);
 	}
 
 	public EditionPatternInstance(EditionPattern aPattern, FlexoProject project) {
 		super(project);
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init2> actors="+actors);
-		_project = project;
-		instanceId = _project.getNewFlexoID();
-		this.pattern = aPattern;
-		actors = new Hashtable<PatternRole<?>, FlexoModelObject>();
+		instanceId = project.getNewFlexoID();
+		this.editionPattern = aPattern;
+		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
 	}
 
-	public FlexoModelObject getPatternActor(PatternRole<?> patternRole) {
+	public <T> T getPatternActor(PatternRole<T> patternRole) {
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
-		return actors.get(patternRole);
+		return ((ActorReference<T>) actors.get(patternRole)).retrieveObject();
 	}
 
-	public void setPatternActor(FlexoModelObject object, PatternRole<?> patternRole) {
+	public <T> void setPatternActor(T object, PatternRole<T> patternRole) {
 		setObjectForPatternRole(object, patternRole);
 	}
 
-	public void nullifyPatternActor(PatternRole<?> patternRole) {
+	public <T> void nullifyPatternActor(PatternRole<T> patternRole) {
 		setObjectForPatternRole(null, patternRole);
 	}
 
-	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
+	public <T> PatternRole<T> getRoleForActor(T actor) {
+		for (PatternRole<?> role : actors.keySet()) {
+			if (getPatternActor(role) == actor) {
+				return (PatternRole<T>) role;
+			}
+		}
+		return null;
+	}
+
+	public <T> void setObjectForPatternRole(T object, PatternRole<T> patternRole) {
 		logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
-		FlexoModelObject oldObject = getPatternActor(patternRole);
+		T oldObject = getPatternActor(patternRole);
 		if (object != oldObject) {
 			// Un-register last reference
-			if (oldObject != null) {
-				oldObject.unregisterEditionPatternReference(this, patternRole);
+			if (oldObject instanceof FlexoProjectObject) {
+				((FlexoProjectObject) oldObject).unregisterEditionPatternReference(this);
 			}
 
 			// Un-register last reference
-			if (object != null) {
-				object.registerEditionPatternReference(this, patternRole);
+			if (object instanceof FlexoProjectObject) {
+				((FlexoProjectObject) oldObject).registerEditionPatternReference(this);
 			}
 
+			ActorReference<T> actorReference = patternRole.makeActorReference(object, this);
+
 			if (object != null) {
-				actors.put(patternRole, object);
+				actors.put(patternRole, actorReference);
 			} else {
-				actors.remove(patternRole.getPatternRoleName());
+				actors.remove(patternRole);
 			}
 			setChanged();
 			notifyObservers(new EditionPatternActorChanged(this, patternRole, oldObject, object));
@@ -134,14 +154,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
 	public String debug() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("EditionPattern: " + pattern.getName() + "\n");
+		sb.append("EditionPattern: " + editionPattern.getName() + "\n");
 		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (PatternRole<?> patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
@@ -150,16 +165,38 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return sb.toString();
 	}
 
-	public EditionPattern getEditionPattern() {
-		return pattern;
-	}
-
 	public EditionPattern getPattern() {
 		return getEditionPattern();
 	}
 
 	public void setPattern(EditionPattern pattern) {
-		this.pattern = pattern;
+		setEditionPattern(pattern);
+	}
+
+	public void setEditionPattern(EditionPattern editionPattern) {
+		this.editionPattern = editionPattern;
+	}
+
+	private String editionPatternURI;
+
+	public EditionPattern getEditionPattern() {
+		if (getVirtualModelInstance() != null && editionPattern == null && StringUtils.isNotEmpty(editionPatternURI)) {
+			editionPattern = getVirtualModelInstance().getVirtualModel().getEditionPattern(editionPatternURI);
+		}
+		return editionPattern;
+	}
+
+	// Serialization/deserialization only, do not use
+	public String getEditionPatternURI() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getURI();
+		}
+		return editionPatternURI;
+	}
+
+	// Serialization/deserialization only, do not use
+	public void setEditionPatternURI(String editionPatternURI) {
+		this.editionPatternURI = editionPatternURI;
 	}
 
 	public long getInstanceId() {
@@ -170,15 +207,15 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		this.instanceId = instanceId;
 	}
 
-	public Hashtable<PatternRole<?>, FlexoModelObject> getActors() {
+	public Hashtable<PatternRole<?>, ActorReference<?>> getActors() {
 		return actors;
 	}
 
-	public void setActors(Hashtable<PatternRole<?>, FlexoModelObject> actors) {
+	public void setActors(Hashtable<PatternRole<?>, ActorReference<?>> actors) {
 		this.actors = actors;
 	}
 
-	public void setActorForKey(FlexoModelObject o, PatternRole<?> key) {
+	public void setActorForKey(ActorReference<?> o, PatternRole<?> key) {
 		actors.put(key, o);
 	}
 
@@ -282,13 +319,19 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public void delete(DeletionScheme deletionScheme) {
 		logger.warning("NEW EditionPatternInstance deletion !");
 		deleted = true;
-		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(getPatternActor(getEditionPattern()
-				.getPrimaryRepresentationRole()), null, null);
-		deletionSchemeAction.setDeletionScheme(deletionScheme);
-		deletionSchemeAction.setEditionPatternInstanceToDelete(this);
-		deletionSchemeAction.doAction();
-		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
-			logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+		Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
+		if (primaryPatternActor instanceof FlexoModelObject) {
+			DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(
+					(FlexoModelObject) primaryPatternActor, null, null);
+			deletionSchemeAction.setDeletionScheme(deletionScheme);
+			deletionSchemeAction.setEditionPatternInstanceToDelete(this);
+			deletionSchemeAction.doAction();
+			if (deletionSchemeAction.hasActionExecutionSucceeded()) {
+				logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+			}
+		} else {
+			logger.warning("Actor for role " + getEditionPattern().getPrimaryRepresentationRole() + " is not a FlexoModelObject: is "
+					+ primaryPatternActor);
 		}
 	}
 
@@ -329,9 +372,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 */
 	public List<FlexoModelObject> objectsThatWillBeDeleted() {
 		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
-		for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-			if (pr.defaultBehaviourIsToBeDeleted()) {
-				returned.add(getPatternActor(pr));
+		for (PatternRole<?> pr : getEditionPattern().getPatternRoles()) {
+			if (pr.defaultBehaviourIsToBeDeleted() && getPatternActor(pr) instanceof FlexoModelObject) {
+				returned.add((FlexoModelObject) getPatternActor(pr));
 			}
 		}
 		return returned;

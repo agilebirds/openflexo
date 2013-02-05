@@ -42,8 +42,8 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
@@ -55,6 +55,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -388,69 +389,10 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	public GraphicalElementPatternRole<?> getPatternRole() {
-		EditionPatternReference ref = getEditionPatternReference();
-		if (ref != null && ref.getPatternRole() instanceof GraphicalElementPatternRole) {
-			return (GraphicalElementPatternRole) ref.getPatternRole();
+		EditionPatternInstance epi = getEditionPatternInstance();
+		if (epi != null && epi.getRoleForActor(this) instanceof GraphicalElementPatternRole) {
+			return (GraphicalElementPatternRole) epi.getRoleForActor(this);
 		}
-		return null;
-	}
-
-	/**
-	 * Return EditionPatternReference for that object<br>
-	 * 
-	 * If many EditionPatternReferences are defined for this object, return preferabely an EditionPatternReference where this object plays a
-	 * primary role
-	 * 
-	 * @return
-	 */
-	public EditionPatternReference getEditionPatternReference() {
-		// Default behaviour is to have only one EditionPattern where
-		// this graphical element plays a representation primitive role
-		// When many, big pbs may happen !!!!
-
-		if (getEditionPatternReferences() != null) {
-			if (getEditionPatternReferences().size() > 0) {
-				EditionPatternReference returned = null;
-				for (EditionPatternReference r : getEditionPatternReferences()) {
-					if (r.getPatternRole() instanceof GraphicalElementPatternRole) {
-						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) r.getPatternRole();
-						if (grPatternRole.getIsPrimaryRepresentationRole()) {
-							if (returned != null) {
-								if (logger.isLoggable(Level.WARNING)) {
-									logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
-								}
-								for (EditionPatternReference r2 : getEditionPatternReferences()) {
-									if (logger.isLoggable(Level.WARNING)) {
-										logger.warning("> " + r2.getEditionPatternInstance().debug());
-									}
-								}
-							}
-							returned = r;
-						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
-							if (returned != null) {
-								if (logger.isLoggable(Level.WARNING)) {
-									logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
-								}
-								for (EditionPatternReference r2 : getEditionPatternReferences()) {
-									if (logger.isLoggable(Level.WARNING)) {
-										logger.warning("> " + r2.getEditionPatternInstance().debug());
-									}
-								}
-							}
-							returned = r;
-						}
-					}
-				}
-				if (returned != null) {
-					return returned;
-				}
-			}
-		}
-
-		if (getEditionPatternReferences() != null && getEditionPatternReferences().size() > 0) {
-			return getEditionPatternReferences().get(0);
-		}
-
 		return null;
 	}
 
@@ -463,19 +405,52 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	 * @return
 	 */
 	public EditionPatternInstance getEditionPatternInstance() {
-		if (getEditionPatternReference() != null) {
-			return getEditionPatternReference().getEditionPatternInstance();
+		// Default behaviour is to have only one EditionPattern where
+		// this graphical element plays a representation primitive role
+		// When many, big pbs may happen !!!!
+
+		if (getEditionPatternReferences() != null) {
+			if (getEditionPatternReferences().size() > 0) {
+				EditionPatternInstance returned = null;
+				for (FlexoModelObjectReference<EditionPatternInstance> ref : getEditionPatternReferences()) {
+					EditionPatternInstance epi = ref.getObject();
+					PatternRole<?> pr = epi.getRoleForActor(this);
+					if (pr instanceof GraphicalElementPatternRole) {
+						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) pr;
+						if (grPatternRole.getIsPrimaryRepresentationRole()) {
+							if (returned != null) {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+								}
+							}
+							returned = epi;
+						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
+							if (returned != null) {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								}
+							}
+							returned = epi;
+						}
+					}
+				}
+				if (returned != null) {
+					return returned;
+				}
+			}
 		}
+
 		if (getEditionPatternReferences() != null && getEditionPatternReferences().size() > 0) {
-			return getEditionPatternReferences().get(0).getEditionPatternInstance();
+			return getEditionPatternReferences().get(0).getObject();
 		}
+
 		return null;
 	}
 
 	@Override
 	public String getInspectorTitle() {
-		for (EditionPatternReference ref : getEditionPatternReferences()) {
-			return FlexoLocalization.localizedForKey(ref.getEditionPattern().getName());
+		if (getEditionPatternInstance() != null) {
+			return FlexoLocalization.localizedForKey(getEditionPatternInstance().getEditionPattern().getName());
 		}
 		// Otherwise, take default inspector name
 		return super.getInspectorTitle();

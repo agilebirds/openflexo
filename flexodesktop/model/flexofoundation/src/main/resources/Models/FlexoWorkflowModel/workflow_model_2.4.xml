@@ -13,19 +13,20 @@
   </mapId>
 	
   <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+   <description>Root class for all objects of Flexo</description>
   	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
   	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
-  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
     <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
     <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
     <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
     <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
     <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
     <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
-    <description>Root class for all objects of Flexo</description>
+    <property name="editionPatternReferences" type="vector" primary="yes" xmlTag="EditionPatternReference"/>
   </entity>
 
-	<entity name="org.openflexo.foundation.view.EditionPatternReference"
+<!--  	<entity name="org.openflexo.foundation.view.EditionPatternReference"
 		xmlTag="EditionPatternReference">
 		<description>EditionPattern references in which this object is
 			involved</description>
@@ -88,7 +89,6 @@
 	<entity
 		name="org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole$RestrictionStatementActorReference"
 		xmlTag="RestrictionStatementActorReference">
-		<!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
 		<property name="propertyURI" xmlTag="propertyURI" attribute="YES"
 			description="" />
 		<property name="objectURI" xmlTag="objectURI" attribute="YES"
@@ -102,7 +102,7 @@
 		<property name="objectReference" xmlTag="objectReference"
 			attribute="YES" description="" />
 	</entity>
-
+-->
   
   <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
     <property name="isDeletedOnServer" xmlTag="isDeletedOnServer" attribute="YES" description="Unique ID generated and maintained by Flexo"/>

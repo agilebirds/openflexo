@@ -121,7 +121,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			try {
 				_resourceData = loadResourceData(progress, getLoadingHandler());
 				// Now that the resource is loaded, we try to resolve pending EP refs
-				getProject().resolvePendingEditionPatternReferences();
+				// getProject().resolvePendingEditionPatternReferences();
 			} catch (LoadXMLResourceException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {

@@ -33,10 +33,6 @@ import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -122,17 +118,18 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 * href="http://www.jguru.com/faq/view.jsp?EID=251942">http://www.jguru.com/faq/view.jsp?EID=251942</A></blockquote>
 	 */
 	public FlexoModelObject() {
-		this(null);
-	}
-
-	/**
-	 *
-	 */
-	public FlexoModelObject(FlexoProject project) {
 		super();
 		referencers = new Vector<FlexoModelObjectReference<?>>();
-		_editionPatternReferences = new Vector<EditionPatternReference>();
+	}
+
+	public FlexoModelObject(FlexoProject project) {
+		super(project);
 		registerObject(project);
+	}
+
+	public FlexoModelObject(FlexoProject project, String description) {
+		this(project);
+		setDescription(description);
 	}
 
 	protected void registerObject(FlexoProject project) {
@@ -148,11 +145,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				logger.fine("No project for object of type " + getClassNameKey());
 			}
 		}
-	}
-
-	public FlexoModelObject(FlexoProject project, String description) {
-		this(project);
-		setDescription(description);
 	}
 
 	/**
@@ -428,7 +420,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public void delete() {
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("Delete
 		// "+this.getClass().getName()+" : "+this);
-		if (isDeleted) {
+		if (isDeleted()) {
 			// in some case : the delete may be called twice on a sequence (in case of deletion of last widget of the sequence)...
 			// and it will fail
 			// a good idea would be to avoid this double invocation.
@@ -436,7 +428,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return;
 
 		}
-		isDeleted = true;
 		if (getProject() != null) {
 			if (isRegistered) {
 				getProject().unregister(this);
@@ -448,25 +439,20 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 
-		for (EditionPatternReference ref : new ArrayList<EditionPatternReference>(getEditionPatternReferences())) {
-			if (ref.getEditionPatternInstance() != null) {
-				ref.getEditionPatternInstance().nullifyPatternActor(ref.getPatternRole());
-			}
-			ref.delete();
-		}
-		_editionPatternReferences.clear();
-		_editionPatternReferences = null;
-
 		for (FlexoModelObjectReference ref : new ArrayList<FlexoModelObjectReference>(referencers)) {
 			ref.notifyObjectDeletion();
 		}
 		referencers.clear();
 		referencers = null;
+
+		super.delete();
+
 		setChanged();
 		notifyObservers(new ObjectDeleted(this));
 		if (getProject() != null) {
 			getProject().notifyObjectDeleted(this);
 		}
+
 	}
 
 	@Override
@@ -493,13 +479,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			getProject().notifyObjectCreated(this);
 		}
 	}
-
-	@Override
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-
-	protected boolean isDeleted = false;
 
 	/**
 	 *
@@ -780,110 +759,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return getClass().getSimpleName() + "_" + (getName() != null ? getName() : getFlexoID());
 	}
 
-	private Vector<EditionPatternReference> _editionPatternReferences;
-
-	public Vector<EditionPatternReference> getEditionPatternReferences() {
-		return _editionPatternReferences;
-	}
-
-	public void setEditionPatternReferences(Vector<EditionPatternReference> editionPatternReferences) {
-		_editionPatternReferences = editionPatternReferences;
-	}
-
-	public boolean addToEditionPatternReferences(EditionPatternReference e) {
-		return _editionPatternReferences.add(e);
-	}
-
-	public boolean removeFromEditionPatternReferences(EditionPatternReference o) {
-		return _editionPatternReferences.remove(o);
-	}
-
-	public EditionPatternReference getEditionPatternReference(String editionPatternId, long instanceId) {
-		if (editionPatternId == null) {
-			return null;
-		}
-		if (_editionPatternReferences == null) {
-			return null;
-		}
-		for (EditionPatternReference r : _editionPatternReferences) {
-			if (r.getEditionPattern().getName().equals(editionPatternId) && r.getInstanceId() == instanceId) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	public EditionPatternReference getEditionPatternReference(EditionPatternInstance epInstance) {
-		if (_editionPatternReferences == null) {
-			logger.warning("Unexpected _editionPatternReferences=null !!!");
-			return null;
-		}
-		for (EditionPatternReference r : _editionPatternReferences) {
-			if (r.getEditionPatternInstance() == epInstance) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	// Return first one if many
-	public EditionPatternReference getEditionPatternReference(String editionPatternId) {
-		if (editionPatternId == null) {
-			return null;
-		}
-		for (EditionPatternReference r : _editionPatternReferences) {
-			if (r.getEditionPattern().getName().equals(editionPatternId)) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	// Return first one if many
-	public EditionPatternReference getEditionPatternReference(EditionPattern editionPattern) {
-		if (editionPattern == null) {
-			return null;
-		}
-		for (EditionPatternReference r : _editionPatternReferences) {
-			// System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
-			if (r.getEditionPattern().getName().equals(editionPattern.getName())) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		EditionPatternReference existingReference = getEditionPatternReference(editionPatternInstance);
-		if (existingReference == null) {
-			// logger.info("registerEditionPatternReference for " + editionPatternInstance.debug());
-			EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
-			addToEditionPatternReferences(newReference);
-			setChanged();
-		} else {
-			if (existingReference.getPatternRole() != patternRole) {
-				logger.warning("Called for register a new EditionPatternReference with an already existing EditionPatternReference with a different PatternRole");
-			}
-		}
-	}
-
-	@Override
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
-		if (referenceToRemove == null) {
-			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance EP="
-					+ editionPatternInstance.getPattern().getName() + " id=" + editionPatternInstance.getInstanceId());
-			for (EditionPatternReference ref : getEditionPatternReferences()) {
-				logger.warning("* Reference:");
-				logger.warning(ref.debug());
-			}
-		} else {
-			removeFromEditionPatternReferences(referenceToRemove);
-			setChanged();
-		}
-	}
-
 	@Deprecated
 	public Vector<TabModel> inspectionExtraTabs() {
 		return null;
@@ -905,26 +780,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	public String makeReference() {
 		return FlexoModelObjectReference.getSerializationRepresentationForObject(this, true);
-	}
-
-	/**
-	 * Return true is this object is somewhere involved as a primary representation pattern role in any of its EditionPatternReferences
-	 * 
-	 * @return
-	 */
-	public boolean providesSupportAsPrimaryRole() {
-		if (getEditionPatternReferences() != null) {
-			if (getEditionPatternReferences().size() > 0) {
-				for (EditionPatternReference r : getEditionPatternReferences()) {
-					if (r.getPatternRole() == null) {
-						logger.warning("Found an EditionPatternReference with a null pattern role. Please investigate...");
-					} else if (r.getPatternRole().getIsPrimaryRole()) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 
 }

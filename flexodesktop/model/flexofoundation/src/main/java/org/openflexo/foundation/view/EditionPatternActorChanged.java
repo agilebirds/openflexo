@@ -20,16 +20,14 @@
 package org.openflexo.foundation.view;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
 public class EditionPatternActorChanged extends DataModification {
 
 	private EditionPatternInstance editionPatternInstance;
-	private PatternRole patternRole;
+	private PatternRole<?> patternRole;
 
-	public EditionPatternActorChanged(EditionPatternInstance editionPatternInstance, PatternRole patternRole, FlexoModelObject oldActor,
-			FlexoModelObject newActor) {
+	public <T> EditionPatternActorChanged(EditionPatternInstance editionPatternInstance, PatternRole<T> patternRole, T oldActor, T newActor) {
 		super(oldActor, newActor);
 		this.editionPatternInstance = editionPatternInstance;
 		this.patternRole = patternRole;
@@ -39,7 +37,7 @@ public class EditionPatternActorChanged extends DataModification {
 		return editionPatternInstance;
 	}
 
-	public PatternRole getPatternRole() {
+	public PatternRole<?> getPatternRole() {
 		return patternRole;
 	}
 }

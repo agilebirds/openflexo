@@ -29,10 +29,8 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
-import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.ViewBuilder;
@@ -72,11 +70,9 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 
 	private void registerMouseClickControls() {
 		if (getDrawable() != null) {
-			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
-			if (epRef != null) {
-				ConnectorPatternRole patternRole = (ConnectorPatternRole) epRef.getPatternRole();
-				for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
-					addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
+			if (getDrawable().getPatternRole() != null) {
+				for (GraphicalElementAction.ActionMask mask : getDrawable().getPatternRole().getReferencedMasks()) {
+					addToMouseClickControls(new VEMouseClickControl(mask, getDrawable().getPatternRole()));
 				}
 			}
 		}
@@ -96,21 +92,21 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 		super.delete();
 	}
 
-	public DiagramConnector getOEConnector() {
+	public DiagramConnector getDiagramConnector() {
 		return getDrawable();
 	}
 
 	@Override
 	public int getIndex() {
-		if (getOEConnector() != null) {
-			return getOEConnector().getIndex();
+		if (getDiagramConnector() != null) {
+			return getDiagramConnector().getIndex();
 		}
 		return super.getIndex();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getOEConnector()) {
+		if (observable == getDiagramConnector()) {
 			/*if (dataModification instanceof NameChanged) {
 				// logger.info("received NameChanged notification");
 				// notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);

@@ -3,12 +3,9 @@ package org.openflexo.technologyadapter.owl.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 
@@ -31,7 +28,7 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 	}
 
 	@Override
-	public ActorReference makeActorReference(Object object, EditionPatternReference epRef) {
+	public ActorReference makeActorReference(Object object, EditionPatternInstance epi) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,9 +39,9 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 		public String objectURI;
 		public String propertyURI;
 
-		public RestrictionStatementActorReference(OWLRestriction o, OWLRestriction aPatternRole, EditionPatternReference ref) {
-			super(ref.getProject());
-			setPatternReference(ref);
+		public RestrictionStatementActorReference(OWLRestriction o, OWLRestriction aPatternRole, EditionPatternInstance epi) {
+			super(epi.getProject());
+			setEditionPatternInstance(epi);
 			// setPatternRole(aPatternRole);
 			restriction = o;
 			// subjectURI = o.getSubject().getURI();
@@ -52,19 +49,7 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 		}
 
 		// Constructor used during deserialization
-		public RestrictionStatementActorReference(ViewBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public RestrictionStatementActorReference(FlexoProcessBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		// Constructor used during deserialization
-		public RestrictionStatementActorReference(FlexoWorkflowBuilder builder) {
+		public RestrictionStatementActorReference(VirtualModelInstanceBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

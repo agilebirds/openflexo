@@ -10,14 +10,13 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 
@@ -297,8 +296,8 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE };
 
 	@Override
-	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternReference epRef) {
-		return new ModelObjectActorReference<T>(object, this, epRef);
+	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<T>(object, this, epi);
 	}
 
 	@Override

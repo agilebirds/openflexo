@@ -116,6 +116,10 @@
     <version id="1.0" modelFile="ViewModel/view_model_1.0.xml"/>
   </class>
    
+  <class name="org.openflexo.foundation.view.VirtualModelInstance" latestVersion="1.0"> 
+    <version id="1.0" modelFile="VirtualModelInstance/virtual_model_instance_model_1.0.xml"/>
+  </class>
+   
   <class name="org.openflexo.foundation.view.diagram.model.Diagram" latestVersion="1.0"> 
     <version id="1.0" modelFile="DiagramModel/diagram_model_1.0.xml"/>
   </class>
@@ -305,4 +309,26 @@
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
 	  <release_class name="org.openflexo.foundation.viewpoint.ViewPoint" version="1.0"/>
   </release>
+  <release identifier="1.6">
+	  <release_class name="org.openflexo.foundation.rm.FlexoProject" version="5.0"/> 
+	  <release_class name="org.openflexo.foundation.wkf.FlexoWorkflow" version="2.4"/> 
+	  <release_class name="org.openflexo.foundation.wkf.FlexoProcess" version="6.0"/> 
+	  <release_class name="org.openflexo.foundation.ie.IEWOComponent" version="3.1"/> 
+	  <release_class name="org.openflexo.foundation.ie.menu.FlexoNavigationMenu" version="2.2"/> 
+	  <release_class name="org.openflexo.foundation.ie.cl.FlexoComponentLibrary" version="2.4"/> 
+	  <release_class name="org.openflexo.foundation.dm.DMModel" version="2.9"/> 
+	  <release_class name="org.openflexo.foundation.dkv.DKVModel" version="0.2"/>
+	  <release_class name="org.openflexo.foundation.ws.FlexoWSLibrary" version="0.2"/>
+	  <release_class name="org.openflexo.foundation.cg.GeneratedCode" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.sg.GeneratedSources" version="0.1"/>
+ 	  <release_class name="org.openflexo.foundation.sg.implmodel.ImplementationModel" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.view.View" version="1.0"/>
+	  <release_class name="org.openflexo.foundation.view.VirtualModelInstance" version="1.0"/>
+	  <release_class name="org.openflexo.foundation.view.diagram.model.Diagram" version="1.0"/>
+	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
+	  <release_class name="org.openflexo.foundation.viewpoint.ViewPoint" version="1.0"/>
+  </release>
+    
 </versions>

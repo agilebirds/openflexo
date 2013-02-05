@@ -31,7 +31,6 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.EditionPatternReference;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
 import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
@@ -41,7 +40,6 @@ import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -93,13 +91,9 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 
 	private void registerMouseClickControls() {
 		if (getDrawable() != null) {
-			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
-			if (epRef != null) {
-				ShapePatternRole patternRole = (ShapePatternRole) epRef.getPatternRole();
-				if (patternRole != null) {
-					for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
-						addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
-					}
+			if (getDrawable().getPatternRole() != null) {
+				for (GraphicalElementAction.ActionMask mask : getDrawable().getPatternRole().getReferencedMasks()) {
+					addToMouseClickControls(new VEMouseClickControl(mask, getDrawable().getPatternRole()));
 				}
 			}
 		}
@@ -124,21 +118,21 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 		return (DiagramRepresentation) super.getDrawing();
 	}
 
-	public DiagramShape getOEShape() {
+	public DiagramShape getDiagramShape() {
 		return getDrawable();
 	}
 
 	@Override
 	public int getIndex() {
-		if (getOEShape() != null) {
-			return getOEShape().getIndex();
+		if (getDiagramShape() != null) {
+			return getDiagramShape().getIndex();
 		}
 		return super.getIndex();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getOEShape()) {
+		if (observable == getDiagramShape()) {
 			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof ShapeInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
@@ -226,13 +220,13 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 		if (controlAreas == null) {
 			controlAreas = new ConcatenedList<ControlArea<?>>();
 			controlAreas.addElementList(super.getControlAreas());
-			if (getOEShape().providesSupportAsPrimaryRole() && getOEShape().getAvailableLinkSchemeFromThisShape() != null
-					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
+			if (getDiagramShape().providesSupportAsPrimaryRole() && getDiagramShape().getAvailableLinkSchemeFromThisShape() != null
+					&& getDiagramShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
 				boolean northDirectionSupported = false;
 				boolean eastDirectionSupported = false;
 				boolean southDirectionSupported = false;
 				boolean westDirectionSupported = false;
-				for (LinkScheme ls : getOEShape().getAvailableLinkSchemeFromThisShape()) {
+				for (LinkScheme ls : getDiagramShape().getAvailableLinkSchemeFromThisShape()) {
 					if (ls.getNorthDirectionSupported()) {
 						northDirectionSupported = true;
 					}

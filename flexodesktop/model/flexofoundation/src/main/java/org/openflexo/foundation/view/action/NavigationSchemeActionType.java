@@ -24,7 +24,7 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.EditionPatternReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.localization.LocalizedDelegate;
@@ -32,12 +32,12 @@ import org.openflexo.localization.LocalizedDelegate;
 public class NavigationSchemeActionType extends FlexoActionType<NavigationSchemeAction, FlexoModelObject, FlexoModelObject> {
 
 	private NavigationScheme navigationScheme;
-	private EditionPatternReference editionPatternReference;
+	private EditionPatternInstance editionPatternInstance;
 
-	public NavigationSchemeActionType(NavigationScheme navigationScheme, EditionPatternReference editionPatternReference) {
+	public NavigationSchemeActionType(NavigationScheme navigationScheme, EditionPatternInstance editionPatternInstance) {
 		super(navigationScheme.getName(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
 		this.navigationScheme = navigationScheme;
-		this.editionPatternReference = editionPatternReference;
+		this.editionPatternInstance = editionPatternInstance;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class NavigationSchemeActionType extends FlexoActionType<NavigationScheme
 
 	@Override
 	public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-		return navigationScheme.evaluateCondition(editionPatternReference);
+		return navigationScheme.evaluateCondition(editionPatternInstance);
 	}
 
 	@Override
@@ -69,8 +69,8 @@ public class NavigationSchemeActionType extends FlexoActionType<NavigationScheme
 		return navigationScheme;
 	}
 
-	public EditionPatternReference getEditionPatternReference() {
-		return editionPatternReference;
+	public EditionPatternInstance getEditionPatternInstance() {
+		return editionPatternInstance;
 	}
 
 }

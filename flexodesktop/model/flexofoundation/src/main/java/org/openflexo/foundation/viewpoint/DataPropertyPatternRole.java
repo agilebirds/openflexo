@@ -6,8 +6,7 @@ import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
-import org.openflexo.foundation.view.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
 
 public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProperty> extends PropertyPatternRole<P> {
 
@@ -51,7 +50,7 @@ public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProper
 	}
 
 	@Override
-	public ActorReference<P> makeActorReference(P object, EditionPatternReference epRef) {
-		return new ConceptActorReference<P>(object, this, epRef);
+	public ActorReference<P> makeActorReference(P object, EditionPatternInstance epi) {
+		return new ConceptActorReference<P>(object, this, epi);
 	}
 }
