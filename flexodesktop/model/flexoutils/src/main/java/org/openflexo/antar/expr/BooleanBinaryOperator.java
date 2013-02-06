@@ -254,6 +254,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				return ((DurationConstant) leftArg).getDuration().lessThan(((DurationConstant) rightArg).getDuration()) ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
 			}
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass().getSimpleName() + " of " +
+			// leftArg.getEvaluationType());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getClass().getSimpleName() + " of "
+			// + rightArg.getEvaluationType());
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
 					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION);
 		}
