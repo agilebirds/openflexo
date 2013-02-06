@@ -41,14 +41,18 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			selectedFile = ((FlexoFileResource<?>) retrievedResource).getFile();
 			retrievedFromResourceCenter = true;
 		}
-		ProjectChooserComponent projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
-		};
-		projectChooser.setOpenMode();
-		projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " " + ref.getVersion());
+		ProjectChooserComponent projectChooser = null;
 		while (true) {
 			if (selectedFile == null || !selectedFile.exists()) {
 				if (silentlyOnly) {
 					return null;
+				}
+				if (projectChooser == null) {
+					projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
+					};
+					projectChooser.setOpenMode();
+					projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " "
+							+ ref.getVersion());
 				}
 				int ret = projectChooser.showOpenDialog();
 				if (ret == JFileChooser.APPROVE_OPTION) {
