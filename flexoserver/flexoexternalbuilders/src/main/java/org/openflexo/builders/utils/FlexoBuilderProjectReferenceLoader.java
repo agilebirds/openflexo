@@ -212,10 +212,16 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 					IOUtils.closeQuietly(wr);
 					IOUtils.closeQuietly(in);
 				}
-				externalMain.reportMessage("Unable to load " + reference.getName() + " " + reference.getVersion()
-						+ " because an error occured for server URL '" + url.toString() + "'" + ".\nStatus: " + httpStatus + "\n"
-						+ reply.toString());
-				return null;
+				if (httpStatus == 404) {
+					externalMain.reportMessage("Unable to find " + reference.getName() + " " + reference.getVersion() + "(Revision: "
+							+ reference.getRevision() + "). Make sure that you have uploaded that project with that revision");
+					return null;
+				} else {
+					externalMain.reportMessage("Unable to load " + reference.getName() + " " + reference.getVersion()
+							+ " because an error occured for server URL '" + url.toString() + "'" + ".\nStatus: " + httpStatus + "\n"
+							+ reply.toString());
+					return null;
+				}
 			}
 		} else {
 			externalMain.reportMessage("Unable to load " + reference.getName() + " " + reference.getVersion()
